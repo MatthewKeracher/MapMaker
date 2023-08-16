@@ -1,0 +1,66 @@
+.selection {
+position: absolute;
+z-index: 1;
+height: 50px;
+width: 50px;
+background-color: hotpink;
+opacity: 0.7;
+}
+
+.preview {
+position: absolute;
+border: 6px solid lime;
+pointer-events: none; /* Prevent the preview div from blocking interactions */
+opacity: 1; /* You can adjust the opacity as desired */
+}
+
+
+.map-image {
+position: relative;
+}
+
+
+.title-container {
+position: absolute;
+top: 20px; /* Adjust the value to position the title vertically */
+left: 20px; /* Adjust the value to position the title horizontally */
+z-index: 2; /* Display above canvas */    
+padding: 10px; /* Optional padding for better readability */
+border-radius: 5px; /* Optional border radius for rounded corners */
+font-size: 24px;
+-webkit-text-stroke: 1px black; 
+font-weight: bold;
+}
+
+.button {
+font-size: 20px;
+padding: 10px 20px;
+}
+
+.click-button {
+border: 5px solid lime;}
+
+.toolbar {
+position: fixed;
+top: 3%; /* Adjust the top value */
+right: 3%; /* Adjust the right value */
+text-align: left;
+margin: 5px;
+z-index: 5;
+}
+
+
+body {
+background-color: black;
+font-family: Helvetica, Arial, sans-serif;
+color: lime;
+overflow: hidden;
+margin: 0; /* Remove default margin */
+}
+
+
+
+
+
+
+
