@@ -21,4 +21,17 @@ return {
 
 };
 
+// Usage example
+const exLocation1 = createPositionDiv(100, 100, 200, 150, 'divId1');
+document.body.appendChild(exLocation1);
+locationArray.push(Map.getLocation(exLocation1));
+
+const exLocation2 = createPositionDiv(300, 300, 150, 100, 'divId2');
+document.body.appendChild(exLocation2);
+locationArray.push(Map.getLocation(exLocation2));
+
+// Convert the array to JSON string
+const jsonString = JSON.stringify(locationArray);
+console.log(jsonString);
+
 export default Array;
