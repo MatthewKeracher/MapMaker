@@ -1,3 +1,5 @@
+import Array from "./array.js";
+
 const Add = {
 
 //Add button; adding locations to the map. 
@@ -90,7 +92,14 @@ location.style.height = height + 'px';
 
 const imageContainer = document.querySelector('.image-container');
 imageContainer.appendChild(location);
-console.log(left + ',' + top + ' ; ' + width + ',' + height);
+//console.log(left + ',' + top + ' ; ' + width + ',' + height);
+
+// Create an object with the location information
+const locationInfo = Array.getLocation(location);
+
+// Add the locationInfo to the locationArray
+Array.locationArray.push(locationInfo);
+console.log(Array.locationArray)
 
 this.isDragging = false;
 this.previewDiv.remove();

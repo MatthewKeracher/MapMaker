@@ -15,6 +15,15 @@ case 'a':
     // Simulate a click on the Add button
     addButton.click();
     break;
+case 's':
+    // Simulate a click on the Add button
+    saveButton.click();
+    break;
+case 'l':
+    // Simulate a click on the Add button
+    loadButton.click();
+    break;
+
 // Add more cases for additional hotkeys here
 }
 });  
