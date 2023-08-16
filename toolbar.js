@@ -1,6 +1,7 @@
 //Toolbar.js
 
 import Map from "./map.js";
+import Add from "./add.js";
 
 class Toolbar{
 
@@ -20,23 +21,23 @@ Map.fetchAndProcessImage()
 
 handleAddButtonClick() {
 
-console.log(Map.addMode)
+//console.log(Add.addMode)
 const mapElement = document.getElementById('mapElement');
 
-if(!Map.addMode){
+if(!Add.addMode){
 // Add the event listeners
-Map.addMode = true;
+Add.addMode = true;
 addButton.classList.add('click-button');
-mapElement.addEventListener('mousedown', Map.handleMouseDown);
-mapElement.addEventListener('mousemove', Map.handleMouseMove);
-mapElement.addEventListener('mouseup', Map.handleMouseUp);
-}else{if(Map.addMode){
+mapElement.addEventListener('mousedown', Add.handleMouseDown);
+mapElement.addEventListener('mousemove', Add.handleMouseMove);
+mapElement.addEventListener('mouseup', Add.handleMouseUp);
+}else{if(Add.addMode){
 // Remove the event listeners
-Map.addMode = false;
+Add.addMode = false;
 addButton.classList.remove('click-button');
-mapElement.removeEventListener('mousedown', Map.handleMouseDown);
-mapElement.removeEventListener('mousemove', Map.handleMouseMove);
-mapElement.removeEventListener('mouseup', Map.handleMouseUp);
+mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+mapElement.removeEventListener('mousemove', Add.handleMouseMove);
+mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 }}
 
 
