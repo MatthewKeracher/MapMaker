@@ -17,16 +17,16 @@ previewDiv: '',
     
 handleMouseDown(e) {
 
-
+const mapElement = document.getElementById('mapElement');
 const imageContainer = document.querySelector('.image-container');
-const rect = imageContainer.getBoundingClientRect();    
+const rect = mapElement.getBoundingClientRect();    
 
 this.isDragging = true;
 this.startX = e.clientX - rect.left;
 this.startY = e.clientY - rect.top;
 
 // console.log('isDragging: ' + this.isDragging);
-// console.log('start: ' + this.startX + ',' + this.startY);
+console.log('start: ' + this.endX + ',' + this.endY);
 
 // Create a temporary preview div
 this.previewDiv = document.createElement('div');
@@ -38,11 +38,11 @@ imageContainer.insertBefore(this.previewDiv,firstChild);
 },
 
 handleMouseMove(e) {
-// const mapElement = document.getElementById('mapElement');
-// const rect = mapElement.getBoundingClientRect();
+const mapElement = document.getElementById('mapElement');
+const rect = mapElement.getBoundingClientRect();
 
-const imageContainer = document.querySelector('.image-container');
-const rect = imageContainer.getBoundingClientRect();
+// const imageContainer = document.querySelector('.image-container');
+// const rect = imageContainer.getBoundingClientRect();
 
 e.preventDefault();
 

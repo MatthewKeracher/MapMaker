@@ -29,8 +29,7 @@ overflow: auto; /* Enable scrollbars when needed */
 
             .selection {
                 position: absolute;
-                z-index: 1;
-                
+                z-index: 1;                
                 height: 50px;
                 width: 50px;
                 background-color: orange;  
