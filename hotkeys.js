@@ -7,9 +7,9 @@ document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
 
 switch (key) {
-case 'n':
+case 'm':
     // Simulate a click on the New Image button
-    newButton.click();
+    mapButton.click();
     break;
 case 'a':
     // Simulate a click on the Add button
@@ -19,9 +19,9 @@ case 's':
     // Simulate a click on the Add button
     saveButton.click();
     break;
-case 'l':
+case 'd':
     // Simulate a click on the Add button
-    loadButton.click();
+    dataButton.click();
     break;
 
 // Add more cases for additional hotkeys here

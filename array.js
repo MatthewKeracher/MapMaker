@@ -80,62 +80,71 @@ imageLink.remove();
 handleFileInputChange: (event) => {
 const file = event.target.files[0];
 if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => Array.handleFileLoad(e.target.result); // Use "Array" here
-        reader.readAsText(file);
+const reader = new FileReader();
+reader.onload = (e) => Array.handleFileLoad(e.target.result);
+reader.readAsText(file);
 }
-},
+},  
 
 handleFileLoad(fileContent) {
 try {
         const data = JSON.parse(fileContent);
-        this.displayLoadedLocations(data);
+        this.displayLoadedLocationsOnMap(data);
 } catch (error) {
         console.error('Error loading file:', error);
 }
 },
 
-displayLoadedLocations(data) {
-const imageContainer = document.querySelector('.image-container');
+        displayLoadedLocationsOnMap(data) {
+        const imageContainer = document.querySelector('.image-container');
 
-// Add the loaded locations to the array
-data.forEach((locationData) => {
-                
-        const newLoc = this.createLocation(locationData);        
+        // Add the loaded locations to the map and the array
+        data.forEach((locationData) => {
+        const newLoc = this.createLocation(locationData);
         imageContainer.appendChild(newLoc);
-        console.log("Adding: " + JSON.stringify(newLoc, null, 2));
-        this.locationArray.push(newLoc);   
+        this.addLocationToArray(locationData);
+        //console.log("Adding to Map and Array: " + JSON.stringify(newLoc, null, 2));
+        });
+        },
+
+                createLocation(locationData) {
+                const { left, top, width, height, divId } = locationData;
+
+                // Create a new location element with the specified properties
+                const newLoc = document.createElement('div');
+                newLoc.className = 'position-div selection';
+                newLoc.style.left = left + 'px';
+                newLoc.style.top = top + 'px';
+                newLoc.style.width = width + 'px';
+                newLoc.style.height = height + 'px';
+                newLoc.id = divId;
+
+                // Create a label element for the div ID
+                const labelElement = document.createElement('div');
+                labelElement.className = 'div-id-label';
+                labelElement.textContent = divId;
+                newLoc.appendChild(labelElement);
+
+                //console.log("Created: " + JSON.stringify(newLoc, null, 2));
+
+                return newLoc;
+                },   
                 
-});
+                        addLocationToArray(locationData) {
+                        const { left, top, width, height, divId } = locationData;
 
-console.log("Current Array: " + JSON.stringify(Array.locationArray, null, 2)); 
+                        // Create a new location object with the specified properties
+                        const newLocation = {
+                                left,
+                                top,
+                                width,
+                                height,
+                                divId,
+                        };
 
-},
-
-
-createLocation(locationData) {
-const { left, top, width, height, divId } = locationData;
-
-// Create a new location element with the specified properties
-const newLoc = document.createElement('div');
-newLoc.className = 'position-div selection';
-newLoc.style.left = left + 'px';
-newLoc.style.top = top + 'px';
-newLoc.style.width = width + 'px';
-newLoc.style.height = height + 'px';
-newLoc.id = divId;
-
-// Create a label element for the div ID
-const labelElement = document.createElement('div');
-labelElement.className = 'div-id-label';
-labelElement.textContent = divId;
-newLoc.appendChild(labelElement);
-
-console.log("created: " + JSON.stringify(newLoc, null, 2));
-
-return newLoc;
-},
-
+                        this.locationArray.push(newLocation);
+                        //console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
+                        },
 
 
 };

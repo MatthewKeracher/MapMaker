@@ -8,25 +8,32 @@ class Toolbar{
 
 init() {
 
-const newButton = document.getElementById('newButton');
-newButton.addEventListener('click', this.handleNewButtonClick);
+const mapButton = document.getElementById('mapButton');
+mapButton.addEventListener('click', this.handleMapButtonClick);
+
+const dataButton = document.getElementById('dataButton');
+dataButton.addEventListener('click', this.handleDataButtonClick);
 
 const addButton = document.getElementById('addButton');
 addButton.addEventListener('click', this.handleAddButtonClick); 
 
 const saveButton = document.getElementById('saveButton');
-saveButton.addEventListener('click', this.handleSaveButtonClick); 
-
-const loadButton = document.getElementById('loadButton');
-loadButton.addEventListener('click', this.handleLoadButtonClick); 
+saveButton.addEventListener('click', this.handleSaveButtonClick);  
 
 const fileInput = document.getElementById('fileInput'); // Add this line
 fileInput.addEventListener('change', Array.handleFileInputChange); // Use "Array" here
 
 }
 
-handleNewButtonClick() {  
+handleMapButtonClick() {  
 Map.fetchAndProcessImage()
+};
+
+handleDataButtonClick() {
+    // Trigger the hidden file input element
+    const fileInput = document.getElementById('fileInput');
+    fileInput.click();
+    
 };
 
 handleAddButtonClick() {
@@ -58,24 +65,14 @@ handleSaveButtonClick(){
 
 const projectName = prompt('Enter the project name:');
 if (projectName) {
-    // Update the title container with the project name
-    const projectTitleElement = document.getElementById('projectTitle');
-    projectTitleElement.textContent = projectName;
-    
+        
     // Export the array and download the image
     Array.exportArray(projectName);
-    Array.downloadImage(projectName + '.png');
+    //Array.downloadImage(projectName + '.png');
+
 }
 };
-
-handleLoadButtonClick() {
-    // Trigger the hidden file input element
-    const fileInput = document.getElementById('fileInput');
-    fileInput.click();
-};
-
-
-    
+   
 
 }
 
