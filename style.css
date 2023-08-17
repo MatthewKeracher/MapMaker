@@ -18,7 +18,6 @@ overflow: auto; /* Enable scrollbars when needed */
     overflow: auto;
     z-index: 0;
     }
-
         .preview {
         position: absolute;
         z-index: 2;
@@ -26,17 +25,14 @@ overflow: auto; /* Enable scrollbars when needed */
         pointer-events: none; /* Prevent the preview div from blocking interactions */
         opacity: 1; /* You can adjust the opacity as desired */
         }
-
             .selection {
                 position: absolute;
                 z-index: 1;                
                 height: 50px;
                 width: 50px;
-                background-color: orange;  
-                opacity: 0.8;
-                
+                background-color: white;  
+                opacity: 0.6;                
                 }
-
                     .div-id-label{
                     position: absolute;
                     color: black;
@@ -44,10 +40,8 @@ overflow: auto; /* Enable scrollbars when needed */
                     top: 50%;
                     transform: translate(-50%, -50%);
                     font-size: 1.5vh;
-                    font-weight: bold;
-                        
+                    font-weight: bold;                        
                     }
-
 
 .toolbar {
     position: fixed;
@@ -57,17 +51,17 @@ overflow: auto; /* Enable scrollbars when needed */
     z-index: 5;
     }
     
-    .button {
-    width: 5vw; /* Set the width using a percentage of viewport width */
-    height: 5vh; /* Set the height using a percentage of viewport height */
-    font-size: 2vh; /* Set the font size using a percentage of viewport height */
-    padding: 1vh 1vw; /* Set the padding using a percentage of viewport width and height */
-    border: 1px solid black; /* Set the border */
-    }
-                      
+        .button {
+        width: 5vw; /* Set the width using a percentage of viewport width */
+        height: 5vh; /* Set the height using a percentage of viewport height */
+        font-size: 2vh; /* Set the font size using a percentage of viewport height */
+        padding: 1vh 1vw; /* Set the padding using a percentage of viewport width and height */
+        border: 1px solid black; /* Set the border */
+        }
+                        
 
-        .click-button {
-        border: 5px solid lime;}
+            .click-button {
+            border: 5px solid lime;}
 
 
 
