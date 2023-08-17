@@ -2,47 +2,49 @@ import Array from "./array.js";
 
 const Map = {
 
-    async fetchAndProcessImage() {
-        // Create an input element for file upload
-        const inputElement = document.createElement("input");
-        inputElement.type = "file";
-        
-        // Listen for the 'change' event on the input element
-        inputElement.addEventListener("change", async (event) => {
-            const file = event.target.files[0];
+async fetchAndProcessImage() {
+// Create an input element for file upload
+const inputElement = document.createElement("input");
+inputElement.type = "file";
 
-            if (file) {
-                // Remove the existing map and its associated elements
-                const existingMapElement = document.getElementById("mapElement");
-                if (existingMapElement) {
-                    existingMapElement.remove();
-                }
+// Listen for the 'change' event on the input element
+inputElement.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
 
-                // Create a Blob from the uploaded file
-                const imageBlob = new Blob([file], { type: file.type });
+    if (file) {
+        // Remove the existing map and its associated elements
+        const existingMapElement = document.getElementById("mapElement");
+        if (existingMapElement) {
+            existingMapElement.remove();
+        }
 
-                // Do something with the imageBlob, such as displaying it or further processing
-                const blobUrl = URL.createObjectURL(imageBlob);
-                const mapElement = new Image();
-                mapElement.src = blobUrl;
-                mapElement.id = "mapElement";
+        // Create a Blob from the uploaded file
+        const imageBlob = new Blob([file], { type: file.type });
 
-                // Add a class to the <img> element for styling
-                mapElement.className = "map-image";
+        // Do something with the imageBlob, such as displaying it or further processing
+        const blobUrl = URL.createObjectURL(imageBlob);
+        const mapElement = new Image();
+        mapElement.src = blobUrl;
+        mapElement.id = "mapElement";
 
-                // Create a container div for the image
-                const imageContainer = document.createElement('div');
-                imageContainer.className = "image-container";
-                imageContainer.appendChild(mapElement);
+        // Add a class to the <img> element for styling
+        mapElement.className = "map-image";
 
-                // Add the container to the body
-                document.body.appendChild(imageContainer);
-            }
-        });
+        // Create a container div for the image
+        const imageContainer = document.createElement('div');
+        imageContainer.className = "image-container";
+        imageContainer.appendChild(mapElement);
 
-        // Trigger a click event on the input element to open the file dialog
-        inputElement.click();
+        // Add the container to the body
+        document.body.appendChild(imageContainer);
+
+
     }
+});
+
+// Trigger a click event on the input element to open the file dialog
+inputElement.click();
+}
 };
 
 export default Map;

@@ -63,16 +63,11 @@ mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 
 handleSaveButtonClick(){
 
-const projectName = prompt('Enter the project name:');
-if (projectName) {
-        
-    // Export the array and download the image
-    Array.exportArray(projectName);
-    //Array.downloadImage(projectName + '.png');
-
-}
+    Array.exportArray();
+    
 };
-   
+
+  
 
 }
 

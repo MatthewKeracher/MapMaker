@@ -20,28 +20,46 @@ divId,
 };
 },
 
-exportArray(projectName) {
-// Convert the locationArray to JSON format
-console.log("exportArray: " + JSON.stringify(Array.locationArray, null, 2));
-const json = JSON.stringify(this.locationArray, null, 2); // Use 2 spaces for formatting
+saveFile(content, filename, mimeType) {
+const blob = new Blob([content], { type: mimeType });
+saveAs(blob, filename);
+},
 
-// Create a Blob containing the JSON data
-const blob = new Blob([json], { type: 'application/json' });
+exportArray() {
+const json = JSON.stringify(this.locationArray, null, 2);
+const mimeType = 'application/json';
 
-// Create a download link for the Blob
-const jsonLink = document.createElement('a');
-jsonLink.href = URL.createObjectURL(blob);
-jsonLink.download = projectName + '.json'; // Use the provided project name for the JSON file name
-jsonLink.textContent = 'Download JSON';
+// Prompt the user to enter a filename
+const filename = prompt('Enter the filename for the JSON file:', 'default.json');
 
-// Append the JSON download link to the body
-document.body.appendChild(jsonLink);
+if (filename) {
+        // Call the function to save the JSON string as a file
+        this.saveFile(json, filename, mimeType);
+} else {
+        console.log('Filename not provided, file not saved.');
+}
+},  
 
-// Programmatically trigger a click event on the JSON link to start the download
-jsonLink.click();
+handleFileSave(event, blob, blobUrl) {
+const file = event.target.files[0];
+if (file) {
+// Create an anchor element for the download link
+const downloadLink = document.createElement('a');
+downloadLink.href = blobUrl;
 
-// Remove the JSON download link after the download is initiated
-jsonLink.remove();
+// Set the filename for the download
+downloadLink.download = file.name; // Use the chosen filename
+
+// Programmatically trigger a click event on the anchor element to start the download
+downloadLink.click();
+
+// Clean up: remove the anchor element and revoke the Blob URL
+downloadLink.remove();
+URL.revokeObjectURL(blobUrl);
+}
+
+// Clean up: remove the file input element
+event.target.remove();
 },
 
 downloadImage(filename) {
@@ -97,6 +115,9 @@ try {
 
         displayLoadedLocationsOnMap(data) {
         const imageContainer = document.querySelector('.image-container');
+
+         // Clear the existing content
+        imageContainer.innerHTML = '';
 
         // Add the loaded locations to the map and the array
         data.forEach((locationData) => {
