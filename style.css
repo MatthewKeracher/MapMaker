@@ -43,25 +43,28 @@ overflow: auto; /* Enable scrollbars when needed */
                     left: 50%;
                     top: 50%;
                     transform: translate(-50%, -50%);
-                    font-size: 24px;
+                    font-size: 1.5vh;
                     font-weight: bold;
                         
                     }
 
 
 .toolbar {
-position: fixed;
-top: 3%; /* Adjust the top value */
-right: 3%; /* Adjust the right value */
-text-align: left;
-margin: 5px;
-z-index: 5;
-}
-
-    .button {
-    font-size: 20px;
-    padding: 10px 20px;
+    position: fixed;
+    top: 1%; /* Adjust the top value */
+    right: 1%; /* Adjust the right value */
+    margin: 1%;
+    z-index: 5;
     }
+    
+    .button {
+    width: 5vw; /* Set the width using a percentage of viewport width */
+    height: 5vh; /* Set the height using a percentage of viewport height */
+    font-size: 2vh; /* Set the font size using a percentage of viewport height */
+    padding: 1vh 1vw; /* Set the padding using a percentage of viewport width and height */
+    border: 1px solid black; /* Set the border */
+    }
+                      
 
         .click-button {
         border: 5px solid lime;}
