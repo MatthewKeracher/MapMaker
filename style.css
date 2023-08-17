@@ -26,13 +26,14 @@ overflow: auto; /* Enable scrollbars when needed */
         opacity: 1; /* You can adjust the opacity as desired */
         }
             .selection {
-                position: absolute;
-                z-index: 1;                
-                height: 50px;
-                width: 50px;
-                background-color: white;  
-                opacity: 0.4;                
-                }
+            position: absolute;
+            z-index: 1;                
+            height: 50px;
+            width: 50px;
+            background-color: white;  
+            opacity: 0.4;                
+            }
+            
                     .div-id-label{
                     position: absolute;
                     color: black;

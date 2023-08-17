@@ -98,7 +98,7 @@ location.style.height = height + 'px';
     labelElement.textContent = divId;
        
 
-    // Append the label to the location
+    // Append the label to the location -switch around?
     location.appendChild(labelElement);
 
 const imageContainer = document.querySelector('.image-container');

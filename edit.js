@@ -19,11 +19,12 @@ const Edit = {
             const divId = e.target.id;
             //console.log('Hovering over div with ID:', divId);
             e.target.style.backgroundColor = 'lime';
-            e.target.style.opactiy = 0.9;
+            e.target.style.opacity = 0.9;
     
             // Add a listener to remove the hotpink color when hovering stops
             e.target.addEventListener('mouseleave', () => {
                 e.target.style.backgroundColor = 'white';
+                e.target.style.opacity = 0.4;
             });
         }
     }
