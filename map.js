@@ -1,10 +1,12 @@
+import Array from "./array.js";
+
 const Map = {
 
     async fetchAndProcessImage() {
         // Create an input element for file upload
         const inputElement = document.createElement("input");
         inputElement.type = "file";
-
+        
         // Listen for the 'change' event on the input element
         inputElement.addEventListener("change", async (event) => {
             const file = event.target.files[0];

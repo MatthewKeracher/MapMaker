@@ -99,7 +99,7 @@ const locationInfo = Array.getLocation(location);
 
 // Add the locationInfo to the locationArray
 Array.locationArray.push(locationInfo);
-console.log(Array.locationArray)
+console.log("Adding new entry: " + JSON.stringify(Array.locationArray, null, 2));
 
 this.isDragging = false;
 this.previewDiv.remove();

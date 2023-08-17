@@ -22,6 +22,7 @@ divId,
 
 exportArray(projectName) {
 // Convert the locationArray to JSON format
+console.log("exportArray: " + JSON.stringify(Array.locationArray, null, 2));
 const json = JSON.stringify(this.locationArray, null, 2); // Use 2 spaces for formatting
 
 // Create a Blob containing the JSON data
@@ -94,37 +95,47 @@ try {
 }
 },
 
-createLocationElement(locationData) {
-const { left, top, width, height, divId } = locationData;
-
-// Create a new location element with the specified properties
-const newLocation = document.createElement('div');
-newLocation.className = 'position-div selection';
-newLocation.style.left = left + 'px';
-newLocation.style.top = top + 'px';
-newLocation.style.width = width + 'px';
-newLocation.style.height = height + 'px';
-newLocation.id = divId;
-
-// Create a label element for the div ID
-const labelElement = document.createElement('div');
-labelElement.className = 'div-id-label';
-labelElement.textContent = divId;
-newLocation.appendChild(labelElement);
-
-return newLocation;
-},
-
 displayLoadedLocations(data) {
 const imageContainer = document.querySelector('.image-container');
 
 // Add the loaded locations to the array
 data.forEach((locationData) => {
-        const newLocation = this.createLocationElement(locationData);
-        imageContainer.appendChild(newLocation);
-        this.locationArray.push(newLocation);
+                
+        const newLoc = this.createLocation(locationData);        
+        imageContainer.appendChild(newLoc);
+        console.log("Adding: " + JSON.stringify(newLoc, null, 2));
+        this.locationArray.push(newLoc);   
+                
 });
+
+console.log("Current Array: " + JSON.stringify(Array.locationArray, null, 2)); 
+
 },
+
+
+createLocation(locationData) {
+const { left, top, width, height, divId } = locationData;
+
+// Create a new location element with the specified properties
+const newLoc = document.createElement('div');
+newLoc.className = 'position-div selection';
+newLoc.style.left = left + 'px';
+newLoc.style.top = top + 'px';
+newLoc.style.width = width + 'px';
+newLoc.style.height = height + 'px';
+newLoc.id = divId;
+
+// Create a label element for the div ID
+const labelElement = document.createElement('div');
+labelElement.className = 'div-id-label';
+labelElement.textContent = divId;
+newLoc.appendChild(labelElement);
+
+console.log("created: " + JSON.stringify(newLoc, null, 2));
+
+return newLoc;
+},
+
 
 
 };
