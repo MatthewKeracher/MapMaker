@@ -95,7 +95,8 @@ location.style.height = height + 'px';
     // Create a label element for the div ID
     var labelElement = document.createElement('div');
     labelElement.className = 'div-id-label';
-    labelElement.textContent = divId;    
+    labelElement.textContent = divId;
+       
 
     // Append the label to the location
     location.appendChild(labelElement);
