@@ -89,23 +89,33 @@ addButton.classList.remove('click-button');
 
 };
 
-handleEditButtonClick(){
+handleEditButtonClick() {
+const mapElement = document.getElementById('mapElement');
+const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
 
-//console.log(Edit.editMode)
-
-if(!Edit.editMode){
-
+if (!Edit.editMode) {
 Edit.editMode = true;
 editButton.classList.add('click-button');
 
-}else{if(Edit.editMode){
+// Add the event listeners to each .selection element
+divs.forEach((div) => {
+    div.addEventListener('mouseenter', Edit.handleMouseHover);
+    div.addEventListener('mouseleave', Edit.handleMouseHover);
+});
+} else {
+if (Edit.editMode) {
+    Edit.editMode = false;
+    editButton.classList.remove('click-button');
 
-Edit.editMode = false;
-editButton.classList.remove('click-button');
-
+    // Remove the event listeners from each .selection element
+    divs.forEach((div) => {
+        div.removeEventListener('mouseenter', Edit.handleMouseHover);
+        div.removeEventListener('mouseleave', Edit.handleMouseHover);
+    });
 }
 }
-};
+}
+
 
 handleSaveButtonClick(){
 

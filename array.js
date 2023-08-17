@@ -124,7 +124,14 @@ try {
         // Add the loaded locations to the map and the array
         data.forEach((locationData) => {
         const newLoc = this.createLocation(locationData);
-        imageContainer.appendChild(newLoc);
+
+        const imageContainer = document.querySelector('.image-container');
+        const firstChild = imageContainer.firstChild;
+        imageContainer.insertBefore(newLoc,firstChild);
+
+        //imageContainer.appendChild(newLoc);
+
+        
         this.addLocationToArray(locationData);
         //console.log("Adding to Map and Array: " + JSON.stringify(newLoc, null, 2));
         });

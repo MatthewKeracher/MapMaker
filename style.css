@@ -31,7 +31,7 @@ overflow: auto; /* Enable scrollbars when needed */
                 height: 50px;
                 width: 50px;
                 background-color: white;  
-                opacity: 0.6;                
+                opacity: 0.4;                
                 }
                     .div-id-label{
                     position: absolute;
@@ -40,7 +40,8 @@ overflow: auto; /* Enable scrollbars when needed */
                     top: 50%;
                     transform: translate(-50%, -50%);
                     font-size: 1.5vh;
-                    font-weight: bold;                        
+                    font-weight: bold;    
+                    opacity: 1;                    
                     }
 
 .toolbar {
@@ -61,7 +62,8 @@ overflow: auto; /* Enable scrollbars when needed */
                         
 
             .click-button {
-            border: 5px solid lime;}
+            background-color: lime;
+           }
 
 
 
