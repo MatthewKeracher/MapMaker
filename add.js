@@ -16,8 +16,10 @@ endY  : 0,
 previewDiv: '',
     
 handleMouseDown(e) {
-const mapElement = document.getElementById('mapElement');
-const rect = mapElement.getBoundingClientRect();
+
+
+const imageContainer = document.querySelector('.image-container');
+const rect = imageContainer.getBoundingClientRect();    
 
 this.isDragging = true;
 this.startX = e.clientX - rect.left;
@@ -29,21 +31,27 @@ this.startY = e.clientY - rect.top;
 // Create a temporary preview div
 this.previewDiv = document.createElement('div');
 this.previewDiv.className = 'position-div preview';
-const imageContainer = document.querySelector('.image-container');
-imageContainer.appendChild(this.previewDiv);
-
+       
+const firstChild = imageContainer.firstChild;
+imageContainer.insertBefore(this.previewDiv,firstChild);
 
 },
 
 handleMouseMove(e) {
-const mapElement = document.getElementById('mapElement');
-const rect = mapElement.getBoundingClientRect();
+// const mapElement = document.getElementById('mapElement');
+// const rect = mapElement.getBoundingClientRect();
+
+const imageContainer = document.querySelector('.image-container');
+const rect = imageContainer.getBoundingClientRect();
 
 e.preventDefault();
-            
+
 if (this.isDragging) {
     this.endX = e.clientX - rect.left;
     this.endY = e.clientY - rect.top;
+
+    // console.log('start: ' + this.startX + ',' + this.startY)
+    // console.log('end: ' + this.endX + ',' + this.endY)
 
     // Calculate position and size for the preview div
     const left = Math.min(this.startX, this.endX);
@@ -56,6 +64,8 @@ if (this.isDragging) {
     this.previewDiv.style.top = top + 'px';
     this.previewDiv.style.width = width + 'px';
     this.previewDiv.style.height = height + 'px';
+
+       
 }
 
 },
@@ -91,7 +101,10 @@ location.style.height = height + 'px';
     location.appendChild(labelElement);
 
 const imageContainer = document.querySelector('.image-container');
-imageContainer.appendChild(location);
+const firstChild = imageContainer.firstChild;
+imageContainer.insertBefore(location,firstChild);
+
+
 //console.log(left + ',' + top + ' ; ' + width + ',' + height);
 
 // Create an object with the location information

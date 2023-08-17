@@ -16,10 +16,12 @@ overflow: auto; /* Enable scrollbars when needed */
     .map-image {
     position: relative;
     overflow: auto;
+    z-index: 0;
     }
 
         .preview {
         position: absolute;
+        z-index: 2;
         border: 6px solid lime;
         pointer-events: none; /* Prevent the preview div from blocking interactions */
         opacity: 1; /* You can adjust the opacity as desired */
@@ -28,10 +30,11 @@ overflow: auto; /* Enable scrollbars when needed */
             .selection {
                 position: absolute;
                 z-index: 1;
+                
                 height: 50px;
                 width: 50px;
-                background-color: hotpink;  
-                opacity: 0.7;
+                background-color: orange;  
+                opacity: 0.8;
                 color: black;
                 }
 

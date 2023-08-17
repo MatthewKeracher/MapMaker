@@ -12,11 +12,11 @@ inputElement.addEventListener("change", async (event) => {
     const file = event.target.files[0];
 
     if (file) {
-        // Remove the existing map and its associated elements
-        const existingMapElement = document.getElementById("mapElement");
-        if (existingMapElement) {
-            existingMapElement.remove();
-        }
+        // // Remove the existing map and its associated elements
+        // const existingMapElement = document.getElementById("mapElement");
+        // if (existingMapElement) {
+        //     existingMapElement.remove();
+        // }
 
         // Create a Blob from the uploaded file
         const imageBlob = new Blob([file], { type: file.type });

@@ -42,19 +42,43 @@ handleAddButtonClick() {
 const mapElement = document.getElementById('mapElement');
 
 if(!Add.addMode){
-// Add the event listeners
+
 Add.addMode = true;
 addButton.classList.add('click-button');
-mapElement.addEventListener('mousedown', Add.handleMouseDown);
-mapElement.addEventListener('mousemove', Add.handleMouseMove);
-mapElement.addEventListener('mouseup', Add.handleMouseUp);
+
+    // Add the event listeners
+    mapElement.addEventListener('mousedown', Add.handleMouseDown);
+    mapElement.addEventListener('mousemove', Add.handleMouseMove);
+    mapElement.addEventListener('mouseup', Add.handleMouseUp);
+
+        // Disable pointer events on the locations and toolbar while dragging
+        const toolbar = document.querySelector('.toolbar');        
+        toolbar.style.pointerEvents = 'none';
+
+        try{
+        const selection = document.querySelector('.selection');
+        selection.style.pointerEvents = 'none';}
+        catch{}
+
+
 }else{if(Add.addMode){
-// Remove the event listeners
+
 Add.addMode = false;
 addButton.classList.remove('click-button');
-mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-mapElement.removeEventListener('mousemove', Add.handleMouseMove);
-mapElement.removeEventListener('mouseup', Add.handleMouseUp);
+
+    // Remove the event listeners
+    mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+    mapElement.removeEventListener('mousemove', Add.handleMouseMove);
+    mapElement.removeEventListener('mouseup', Add.handleMouseUp);
+
+        // Enable pointer events on the locations and toolbar after dragging
+        const toolbar = document.querySelector('.toolbar');        
+        toolbar.style.pointerEvents = 'auto';
+
+        try{
+        const selection = document.querySelector('.selection');
+        selection.style.pointerEvents = 'auto';}
+        catch{}
 }}
 
 

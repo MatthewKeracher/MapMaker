@@ -1,6 +1,8 @@
 const Array = {
 locationArray: [],
 
+//If there are problems with the load dialog freezing, try deleting unneccesary .json files in downloads folder.
+
 //For Saving...
 
 getLocation(location) {
@@ -116,8 +118,8 @@ try {
         displayLoadedLocationsOnMap(data) {
         const imageContainer = document.querySelector('.image-container');
 
-         // Clear the existing content
-        imageContainer.innerHTML = '';
+        //  // Clear the existing content
+        // imageContainer.innerHTML = '';
 
         // Add the loaded locations to the map and the array
         data.forEach((locationData) => {
