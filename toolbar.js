@@ -3,6 +3,7 @@
 import Map   from "./map.js";
 import Add   from "./add.js";
 import Array from "./array.js";
+import Edit from "./edit.js";
 
 class Toolbar{
 
@@ -16,6 +17,9 @@ dataButton.addEventListener('click', this.handleDataButtonClick);
 
 const addButton = document.getElementById('addButton');
 addButton.addEventListener('click', this.handleAddButtonClick); 
+
+const editButton = document.getElementById('editButton');
+editButton.addEventListener('click', this.handleEditButtonClick);
 
 const saveButton = document.getElementById('saveButton');
 saveButton.addEventListener('click', this.handleSaveButtonClick);  
@@ -83,6 +87,24 @@ addButton.classList.remove('click-button');
 
 
 
+};
+
+handleEditButtonClick(){
+
+//console.log(Edit.editMode)
+
+if(!Edit.editMode){
+
+Edit.editMode = true;
+editButton.classList.add('click-button');
+
+}else{if(Edit.editMode){
+
+Edit.editMode = false;
+editButton.classList.remove('click-button');
+
+}
+}
 };
 
 handleSaveButtonClick(){
