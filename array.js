@@ -1,3 +1,5 @@
+import Edit from "./edit.js";
+
 const Array = {
 locationArray: [],
 
@@ -130,10 +132,10 @@ try {
         imageContainer.insertBefore(newLoc,firstChild);
 
         //imageContainer.appendChild(newLoc);
-
         
         this.addLocationToArray(locationData);
         //console.log("Adding to Map and Array: " + JSON.stringify(newLoc, null, 2));
+      
         });
         },
 

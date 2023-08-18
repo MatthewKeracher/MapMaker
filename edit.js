@@ -13,20 +13,20 @@ const Edit = {
     
 
     handleMouseHover(e) {
-        //console.log('Is hovering :-)');
+        // //console.log('Is hovering :-)');
         
-        if (e.target && e.target.classList && e.target.classList.contains('selection')) {
-            const divId = e.target.id;
-            //console.log('Hovering over div with ID:', divId);
-            e.target.style.backgroundColor = 'lime';
-            e.target.style.opacity = 0.9;
+        // if (e.target && e.target.classList && e.target.classList.contains('selection')) {
+        //     const divId = e.target.id;
+        //     //console.log('Hovering over div with ID:', divId);
+        //     e.target.style.backgroundColor = 'lime';
+        //     e.target.style.opacity = 0.9;
     
-            // Add a listener to remove the hotpink color when hovering stops
-            e.target.addEventListener('mouseleave', () => {
-                e.target.style.backgroundColor = 'white';
-                e.target.style.opacity = 0.4;
-            });
-        }
+        //     // Add a listener to remove the hotpink color when hovering stops
+        //     e.target.addEventListener('mouseleave', () => {
+        //         e.target.style.backgroundColor = 'white';
+        //         e.target.style.opacity = 0.4;
+        //     });
+        // }
     }
 
 };

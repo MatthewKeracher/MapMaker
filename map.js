@@ -12,11 +12,14 @@ inputElement.addEventListener("change", async (event) => {
     const file = event.target.files[0];
 
     if (file) {
-        // // Remove the existing map and its associated elements
-        // const existingMapElement = document.getElementById("mapElement");
-        // if (existingMapElement) {
-        //     existingMapElement.remove();
-        // }
+
+       
+        // Remove the existing map and its associated elements
+        const existingMap = document.getElementById('imageContainer');
+        if (existingMap) {
+            existingMap.remove();
+        }
+       
 
         // Create a Blob from the uploaded file
         const imageBlob = new Blob([file], { type: file.type });
@@ -32,14 +35,13 @@ inputElement.addEventListener("change", async (event) => {
 
         // Create a container div for the image
         const imageContainer = document.createElement('div');
+        imageContainer.id = "imageContainer"
         imageContainer.className = "image-container";
         imageContainer.appendChild(mapElement);
-
+      
         // Add the container to the body
-        document.body.appendChild(imageContainer);
+        document.body.appendChild(imageContainer);}
 
-
-    }
 });
 
 // Trigger a click event on the input element to open the file dialog

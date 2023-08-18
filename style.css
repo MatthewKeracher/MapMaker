@@ -1,18 +1,86 @@
 body {
 background-color: black;
 font-family: Helvetica, Arial, sans-serif;
-color: lime;
 overflow: hidden;
 margin: 0; /* Remove default margin */
 }
 
-.image-container {
-position: relative;
-width: 100%; /* Adjust as needed */
-height: 100vh; /* Adjust as needed */
-overflow: auto; /* Enable scrollbars when needed */
+.toolbar {
+    position: fixed;
+    top: 1vh; 
+    right: 1vw; 
+    margin: 1vw;
+    z-index: 5;
+    }
+    
+        .button {
+        width: 5vw; 
+        height: 6vh; 
+        font-size: 2vh; 
+        padding: 1vh 1vw; 
+        border: 0.1vh solid black; 
+        transition: background-color 0.3s; 
 }
 
+            .button:hover {
+            background-color: hotpink; /* Change the background color when hovering */
+            }                       
+
+            .click-button {
+            background-color: lime;
+            }
+
+.sidebar {
+position: fixed; 
+top: 12vh; 
+right: 0; 
+height: 100%; 
+width: 30vw;;
+z-index:4;
+background-color: lightgray;
+overflow: auto;    
+}
+
+.locationLabelContainer {
+    padding: 10px;
+    background-color: #ddd; /* Set your desired background color */
+    border-bottom: 1px solid #ccc;
+    font-size: 5vh;
+}
+
+.textbox-container {
+    position: relative;
+    top: 2vh;        
+    height: 80vh;
+    width: 100%; 
+    color: black;
+    font-size: 2vh;
+}    
+    label {
+        position: relative;
+        left: 1vw;
+        font-weight: bold;    
+    }
+
+        textarea {
+            width: 85%;
+            padding: 10px;
+            margin: 2.5vh; 
+            font-size: 2vh;
+            border: 1px solid #ccc; 
+            text-align: left;
+            vertical-align: top;    
+            background-color: black; 
+            color: orange;
+
+        }
+
+.image-container {
+position: relative;
+width: 70vw; 
+height: 100vh; 
+overflow: auto; 
+}
     .map-image {
     position: relative;
     overflow: auto;
@@ -31,8 +99,14 @@ overflow: auto; /* Enable scrollbars when needed */
             height: 50px;
             width: 50px;
             background-color: white;  
-            opacity: 0.4;                
+            opacity: 0.4;  
+            transition: background-color 0s;               
             }
+
+                .selection:hover {
+                background-color: lime;  
+                opacity: 0.9;                
+                }
             
                     .div-id-label{
                     position: absolute;
@@ -44,28 +118,6 @@ overflow: auto; /* Enable scrollbars when needed */
                     font-weight: bold;    
                     opacity: 1;                    
                     }
-
-.toolbar {
-    position: fixed;
-    top: 1%; /* Adjust the top value */
-    right: 1%; /* Adjust the right value */
-    margin: 1%;
-    z-index: 5;
-    }
-    
-        .button {
-        width: 5vw; /* Set the width using a percentage of viewport width */
-        height: 5vh; /* Set the height using a percentage of viewport height */
-        font-size: 2vh; /* Set the font size using a percentage of viewport height */
-        padding: 1vh 1vw; /* Set the padding using a percentage of viewport width and height */
-        border: 1px solid black; /* Set the border */
-        }
-                        
-
-            .click-button {
-            background-color: lime;
-           }
-
 
 
 

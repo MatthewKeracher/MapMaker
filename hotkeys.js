@@ -5,7 +5,9 @@ init() {
 
 document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
+const textboxContainer = document.querySelector('.textbox-container');
 
+if (!textboxContainer.contains(document.activeElement)) {
 switch (key) {
 case 'm':
     mapButton.click();
@@ -25,6 +27,7 @@ case 'd':
 
 // Add more cases for additional hotkeys here
 }
+}
 });  
 
 }
@@ -34,3 +37,4 @@ case 'd':
 const hotkeys = new Hotkeys();
 hotkeys.init(); 
 export default hotkeys;
+

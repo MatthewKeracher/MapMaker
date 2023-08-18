@@ -27,6 +27,7 @@ saveButton.addEventListener('click', this.handleSaveButtonClick);
 const fileInput = document.getElementById('fileInput'); // Add this line
 fileInput.addEventListener('change', Array.handleFileInputChange); // Use "Array" here
 
+
 }
 
 handleMapButtonClick() {  
@@ -34,10 +35,12 @@ Map.fetchAndProcessImage()
 };
 
 handleDataButtonClick() {
-    // Trigger the hidden file input element
-    const fileInput = document.getElementById('fileInput');
-    fileInput.click();
-    
+
+// Trigger the hidden file input element
+const fileInput = document.getElementById('fileInput');
+fileInput.click();
+
+
 };
 
 handleAddButtonClick() {
@@ -90,7 +93,7 @@ addButton.classList.remove('click-button');
 };
 
 handleEditButtonClick() {
-const mapElement = document.getElementById('mapElement');
+
 const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
 
 if (!Edit.editMode) {
