@@ -15,15 +15,21 @@
 
 <div class = toolbar id="toolbar">
 
-    <button class= "button" id="mapButton"  >[M]ap</button>
-    <!-- Add this hidden input element -->
-    <input type="file" id="fileInput" style="display: none">
-    <button class= "button" id="dataButton" >[D]ata</button>
-    <button class= "button" id="addButton"  >[A]dd</button>
-    <button class= "button" id="editButton"  >[E]dit</button>
-    <button class= "button" id="saveButton" >[S]ave</button>
-    
-    </div>
+<button class= "button" id="mapButton"  >[M]ap</button>
+<!-- Add this hidden input element -->
+<input type="file" id="fileInput" style="display: none">
+<button class= "button" id="dataButton" >[D]ata</button>
+<button class= "button" id="addButton"  >[A]dd</button>
+<button class= "button" id="editButton"  >[E]dit</button>
+<button class= "button" id="saveButton" >[S]ave</button>
+
+</div>
+
+<!-- <div class = toolbar id="toolbarEdit"> 
+
+<button class= "button" id="editButton"  >[E]dit</button>
+        
+</div> -->
 
 
 
@@ -33,22 +39,20 @@
         
         <div class="locationLabelContainer">
             <label class="locationLabel"></label>
-        </div>
-
+        </div>        
         
-        <div id="Storyteller" class="Storyteller"></div>
-       
-
+        <textarea class="Storyteller" id="Storyteller"></textarea>    
+              
         <div class="EditorContainer">                      
             
                 <label>Player Information</label>
-                <textarea placeholder="Textbox 1"></textarea>           
+                <textarea class="editBox" placeholder="Textbox 1"></textarea>           
             
                 <label>Game Master Information</label>
-                <textarea placeholder="Textbox 2"></textarea>        
+                <textarea class="editBox" placeholder="Textbox 2"></textarea>        
             
                 <label>Miscellaneous</label>
-                <textarea placeholder="Textbox 3"></textarea>         
+                <textarea class="editBox" placeholder="Textbox 3"></textarea>         
             
         </div>
         

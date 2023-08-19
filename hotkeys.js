@@ -5,9 +5,9 @@ init() {
 
 document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
-const EditorContainer = document.querySelector('.EditorContainer');
+const Sidebar = document.querySelector('.sidebar');
 
-if (!EditorContainer.contains(document.activeElement)) {
+if (!Sidebar.contains(document.activeElement)) {
 switch (key) {
 case 'm':
     mapButton.click();

@@ -14,6 +14,9 @@ const top = parseFloat(location.style.top);
 const width = parseFloat(location.style.width);
 const height = parseFloat(location.style.height);
 const divId = location.id;
+const player = "You are in a nice place.";
+const gm = "gm";
+const misc = "misc";
 
 return {
 left,
@@ -21,6 +24,9 @@ top,
 width,
 height,
 divId,
+player,
+gm,
+misc,
 };
 },
 
@@ -182,27 +188,38 @@ try {
 addLocationEvents() {
 const locationLabel = document.querySelector('.locationLabel');
 const selectionElements = document.querySelectorAll('.selection');
+const Storyteller = document.getElementById('Storyteller');
+
 
 selectionElements.forEach((selection) => {
         if (!selection.dataset.hasListener) {
-        // Add the mouseover event listener
-        selection.addEventListener('mouseover', () => {
+            // Add the mouseover event listener
+            selection.addEventListener('mouseover', () => {
                 const divId = selection.id;
                 locationLabel.textContent = divId;
-        });
+    
+                // Find the matching entry in locationArray
+                const matchingEntry = this.locationArray.find(entry => entry.divId === divId);
+    
+                // Populate Storyteller with content from the matching entry
+                if (matchingEntry) {
+                    const player = matchingEntry.player;
+                    const gm = matchingEntry.gm;
+                    const misc = matchingEntry.misc;
 
-        // Add the mouseout event listener
-        selection.addEventListener('mouseout', () => {
-                locationLabel.textContent = '';
-        });
-
-        // Mark the element with a custom data attribute to indicate it has the event listener
-        selection.dataset.hasListener = true;
+                    // Append content to Storyteller
+                    Storyteller.textContent += `\nPlayer: ${player}\nGM: ${gm}\nMisc: ${misc}`;
+                }
+            });
+    
+            // Mark the element as having the listener
+            selection.dataset.hasListener = true;
         }
-});
-},
-                            
-
+    });
+    
+    
+    
+},  
 
 };
 

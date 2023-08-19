@@ -7,6 +7,7 @@ margin: 0; /* Remove default margin */
 
 }
 
+
 .toolbar {
 position: fixed;
 top: 1vh; 
@@ -61,17 +62,26 @@ overflow: auto;
         }
 
 .Storyteller{
-    position: fixed;
-    top: 18vh;    
-    right: 0vw; 
-    width: 30vw;   
-    height: 80vh;     
-    color: black;
-    background-color: transparent;
-    font-size: 2vh;
-    display: none;
-    flex-direction: column;
+position: fixed;
+top: 18vh;    
+right: 0.35vw; 
+width: 28vw;   
+height: 78vh;   
+background-color: lightgray; 
+color: black;
+border: 0.1vh transparent;
+font-size: 2vh;
+font-size: 2vh;
+padding: 1vh; 
+text-align: left;
+vertical-align: top; 
+resize: none;
 }
+
+    .Storyteller:focus {
+    outline: none; /* Remove the default outline */
+    border-radius: 0px; /* Adjust the border radius for rounded corners */
+    }
 
 .EditorContainer {
     position: fixed;
@@ -93,7 +103,7 @@ overflow: auto;
         color: black;   
     }
 
-        textarea {            
+        .editBox {            
             height: 30vh;
             margin: 1vh; 
             font-size: 2vh;
