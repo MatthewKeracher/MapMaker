@@ -105,10 +105,14 @@ const imageContainer = document.querySelector('.image-container');
 const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(location,firstChild);
 
+//Add Events to Divs
+Array.addLocationEvents();
+
+
 //console.log(left + ',' + top + ' ; ' + width + ',' + height);
 
 // Create an object with the location information
-const locationInfo = Array.getLocation(location);
+const locationInfo = Array.addNewLocation(location);
 
 // Add the locationInfo to the locationArray
 Array.locationArray.push(locationInfo);
@@ -122,7 +126,6 @@ addButton.click();
     }
 
 }, 
-
 
 };
 

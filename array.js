@@ -133,7 +133,10 @@ try {
         
         this.addLocationToArray(locationData);
         //console.log("Adding to Map and Array: " + JSON.stringify(newLoc, null, 2));
-      
+    
+        //Add Events to Divs
+        this.addLocationEvents()
+
         });
         },
 
@@ -175,6 +178,30 @@ try {
                         this.locationArray.push(newLocation);
                         //console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
                         },
+
+addLocationEvents() {
+const locationLabel = document.querySelector('.locationLabel');
+const selectionElements = document.querySelectorAll('.selection');
+
+selectionElements.forEach((selection) => {
+        if (!selection.dataset.hasListener) {
+        // Add the mouseover event listener
+        selection.addEventListener('mouseover', () => {
+                const divId = selection.id;
+                locationLabel.textContent = divId;
+        });
+
+        // Add the mouseout event listener
+        selection.addEventListener('mouseout', () => {
+                locationLabel.textContent = '';
+        });
+
+        // Mark the element with a custom data attribute to indicate it has the event listener
+        selection.dataset.hasListener = true;
+        }
+});
+},
+                            
 
 
 };

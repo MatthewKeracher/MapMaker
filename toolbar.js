@@ -98,14 +98,16 @@ selection.style.pointerEvents = 'auto';
 handleEditButtonClick() {
 
 const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
-const editBox = document.querySelector('.textbox-container');
+const EditorContainer = document.querySelector('.EditorContainer');
+const Storyteller = document.querySelector('.Storyteller');
 
 if (!Edit.editMode) {
 Edit.editMode = true;
 editButton.classList.add('click-button');
 
 //Show Edit Sidebar
-editBox.style.display = 'flex';
+EditorContainer.style.display = 'flex';
+Storyteller.style.display = 'none';
 
 // Add the event listeners to each .selection element
 divs.forEach((div) => {
@@ -118,7 +120,8 @@ Edit.editMode = false;
 editButton.classList.remove('click-button');
 
 //Show Edit Sidebar
-editBox.style.display = 'none';
+EditorContainer.style.display = 'none';
+Storyteller.style.display = 'flex';
 
 // Remove the event listeners from each .selection element
 divs.forEach((div) => {
@@ -128,7 +131,6 @@ div.removeEventListener('mouseleave', Edit.handleMouseHover);
 }
 }
 }
-
 
 handleSaveButtonClick(){
 

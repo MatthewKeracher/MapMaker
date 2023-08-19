@@ -46,17 +46,34 @@ background-color: lightgray;
 overflow: auto;    
 }
 
-.locationLabelContainer {
+    .locationLabelContainer {
     position: fixed;
     width: 30vw;
     padding: 1vh;
     height: 6vh;
     background-color: #ddd; /* Set your desired background color */
     border-bottom: 0.2vh solid hotpink;
-    font-size: 5vh;
+    font-size: 4vh;
+    }
+
+        .locationLabel{
+        top:1vh;
+        }
+
+.Storyteller{
+    position: fixed;
+    top: 18vh;    
+    right: 0vw; 
+    width: 30vw;   
+    height: 80vh;     
+    color: black;
+    background-color: transparent;
+    font-size: 2vh;
+    display: none;
+    flex-direction: column;
 }
 
-.textbox-container {
+.EditorContainer {
     position: fixed;
     top: 18vh;    
     right: 0vw; 
