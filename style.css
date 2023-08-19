@@ -47,6 +47,8 @@ overflow: auto;
 }
 
 .locationLabelContainer {
+    position: fixed;
+    width: 30vw;
     padding: 1vh;
     height: 6vh;
     background-color: #ddd; /* Set your desired background color */
@@ -55,31 +57,44 @@ overflow: auto;
 }
 
 .textbox-container {
-    position: absolute;
-    top: 10vh;        
+    position: fixed;
+    top: 18vh;    
+    right: 0vw; 
+    width: 30vw;   
     height: 80vh;     
     color: black;
     font-size: 2vh;
-    display: flex;
-    
+    display: none;
+    flex-direction: column;
 }    
     label {
-        position: absolute;
-        left: 1.5vw;
-        font-weight: bold;    
+        position: relative;
+        left: 0.5vw;
+        font-weight: bold;
+        margin-top: 0.5vh;
+        margin-bottom: 0.5vh;        
+        color: black;   
     }
 
-        textarea {
-            width: 25vw;
-            height: 15vh;
-            margin: 3vh; 
+        textarea {            
+            height: 30vh;
+            margin: 1vh; 
             font-size: 2vh;
             border: 0.2vh solid hotpink; 
             text-align: left;
             vertical-align: top;    
             background-color: black; 
             color: orange;
+            padding: 1vh;
 
+        }
+
+        .textbox-container textarea:focus {
+            border-color: lime; /* Change the border color */
+            outline: none; /* Remove the default outline */
+            background-color: black; /* Change the background color */
+            color: lime; /* Change the text color */
+            border-radius: 0px; /* Adjust the border radius for rounded corners */
         }
 
 .image-container {

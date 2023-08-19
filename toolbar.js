@@ -105,7 +105,7 @@ Edit.editMode = true;
 editButton.classList.add('click-button');
 
 //Show Edit Sidebar
-editBox.style.display = 'block';
+editBox.style.display = 'flex';
 
 // Add the event listeners to each .selection element
 divs.forEach((div) => {
