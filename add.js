@@ -105,7 +105,6 @@ const imageContainer = document.querySelector('.image-container');
 const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(location,firstChild);
 
-
 //console.log(left + ',' + top + ' ; ' + width + ',' + height);
 
 // Create an object with the location information

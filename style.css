@@ -1,40 +1,45 @@
 body {
+
 background-color: black;
 font-family: Helvetica, Arial, sans-serif;
 overflow: hidden;
 margin: 0; /* Remove default margin */
+
 }
 
 .toolbar {
-    position: fixed;
-    top: 1vh; 
-    right: 1vw; 
-    margin: 1vw;
-    z-index: 5;
-    }
-    
-        .button {
-        width: 5vw; 
-        height: 6vh; 
-        font-size: 2vh; 
-        padding: 1vh 1vw; 
-        border: 0.1vh solid black; 
-        transition: background-color 0.3s; 
+position: fixed;
+top: 1vh; 
+right: 0vw; 
+z-index: 5;
+width: 30vw;
+display: flex; 
+flex-direction: row; 
 }
 
-            .button:hover {
-            background-color: hotpink; /* Change the background color when hovering */
-            }                       
+    .button {
+    width: 100%; /* Make each button fill the width of the toolbar */
+    height: 6vh; 
+    font-size: 2vh; 
+    padding: 1vh 1vw; 
+    margin: 0.5vh 0; /* Add margin to control spacing */
+    border: 0.1vh solid black; 
+    transition: background-color 0.3s; 
+    }
 
-            .click-button {
-            background-color: lime;
-            }
+        .button:hover {
+        background-color: hotpink; /* Change the background color when hovering */
+        }                       
+
+        .click-button {
+        background-color: lime;
+        }
 
 .sidebar {
 position: fixed; 
-top: 12vh; 
+top: 8vh; 
 right: 0; 
-height: 100%; 
+height: 92vh; 
 width: 30vw;;
 z-index:4;
 background-color: lightgray;
@@ -42,32 +47,34 @@ overflow: auto;
 }
 
 .locationLabelContainer {
-    padding: 10px;
+    padding: 1vh;
+    height: 6vh;
     background-color: #ddd; /* Set your desired background color */
-    border-bottom: 1px solid #ccc;
+    border-bottom: 0.2vh solid hotpink;
     font-size: 5vh;
 }
 
 .textbox-container {
-    position: relative;
-    top: 2vh;        
-    height: 80vh;
-    width: 100%; 
+    position: absolute;
+    top: 10vh;        
+    height: 80vh;     
     color: black;
     font-size: 2vh;
+    display: flex;
+    
 }    
     label {
-        position: relative;
-        left: 1vw;
+        position: absolute;
+        left: 1.5vw;
         font-weight: bold;    
     }
 
         textarea {
-            width: 85%;
-            padding: 10px;
-            margin: 2.5vh; 
+            width: 25vw;
+            height: 15vh;
+            margin: 3vh; 
             font-size: 2vh;
-            border: 1px solid #ccc; 
+            border: 0.2vh solid hotpink; 
             text-align: left;
             vertical-align: top;    
             background-color: black; 
@@ -100,7 +107,7 @@ overflow: auto;
             width: 50px;
             background-color: white;  
             opacity: 0.4;  
-            transition: background-color 0s;               
+            /*transition: background-color 0s; 8*/              
             }
 
                 .selection:hover {

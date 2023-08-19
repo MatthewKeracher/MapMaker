@@ -7,7 +7,7 @@ locationArray: [],
 
 //For Saving...
 
-getLocation(location) {
+addNewLocation(location) {
 const rect = location.getBoundingClientRect();
 const left = parseFloat(location.style.left);
 const top = parseFloat(location.style.top);
@@ -118,14 +118,12 @@ try {
 },
 
         displayLoadedLocationsOnMap(data) {
-        const imageContainer = document.querySelector('.image-container');
-
         //  // Clear the existing content
         // imageContainer.innerHTML = '';
 
         // Add the loaded locations to the map and the array
         data.forEach((locationData) => {
-        const newLoc = this.createLocation(locationData);
+        const newLoc = this.addSaveLocation(locationData);
 
         const imageContainer = document.querySelector('.image-container');
         const firstChild = imageContainer.firstChild;
@@ -139,7 +137,7 @@ try {
         });
         },
 
-                createLocation(locationData) {
+                addSaveLocation(locationData) {
                 const { left, top, width, height, divId } = locationData;
 
                 // Create a new location element with the specified properties

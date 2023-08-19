@@ -58,14 +58,16 @@ addButton.classList.add('click-button');
     mapElement.addEventListener('mousemove', Add.handleMouseMove);
     mapElement.addEventListener('mouseup', Add.handleMouseUp);
 
-        // Disable pointer events on the locations and toolbar while dragging
-        const toolbar = document.querySelector('.toolbar');        
-        toolbar.style.pointerEvents = 'none';
+// Disable pointer events on the locations and toolbar while dragging
+const toolbar = document.querySelector('.toolbar');        
+toolbar.style.pointerEvents = 'none';
 
-        try{
-        const selection = document.querySelector('.selection');
-        selection.style.pointerEvents = 'none';}
-        catch{}
+
+const selectionList = document.querySelectorAll('.selection');
+selectionList.forEach((selection) => {
+    selection.style.pointerEvents = 'none';
+});
+
 
 
 }else{if(Add.addMode){
@@ -78,14 +80,15 @@ addButton.classList.remove('click-button');
     mapElement.removeEventListener('mousemove', Add.handleMouseMove);
     mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 
-        // Enable pointer events on the locations and toolbar after dragging
-        const toolbar = document.querySelector('.toolbar');        
-        toolbar.style.pointerEvents = 'auto';
+// Enable pointer events on the locations and toolbar after dragging
+const toolbar = document.querySelector('.toolbar');        
+toolbar.style.pointerEvents = 'auto';
 
-        try{
-        const selection = document.querySelector('.selection');
-        selection.style.pointerEvents = 'auto';}
-        catch{}
+const selectionList = document.querySelectorAll('.selection');
+selectionList.forEach((selection) => {
+selection.style.pointerEvents = 'auto';
+
+});
 }}
 
 
@@ -95,26 +98,33 @@ addButton.classList.remove('click-button');
 handleEditButtonClick() {
 
 const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
+const editBox = document.querySelector('.textbox-container');
 
 if (!Edit.editMode) {
 Edit.editMode = true;
 editButton.classList.add('click-button');
 
+//Show Edit Sidebar
+editBox.style.display = 'block';
+
 // Add the event listeners to each .selection element
 divs.forEach((div) => {
-    div.addEventListener('mouseenter', Edit.handleMouseHover);
-    div.addEventListener('mouseleave', Edit.handleMouseHover);
+div.addEventListener('mouseenter', Edit.handleMouseHover);
+div.addEventListener('mouseleave', Edit.handleMouseHover);
 });
 } else {
 if (Edit.editMode) {
-    Edit.editMode = false;
-    editButton.classList.remove('click-button');
+Edit.editMode = false;
+editButton.classList.remove('click-button');
 
-    // Remove the event listeners from each .selection element
-    divs.forEach((div) => {
-        div.removeEventListener('mouseenter', Edit.handleMouseHover);
-        div.removeEventListener('mouseleave', Edit.handleMouseHover);
-    });
+//Show Edit Sidebar
+editBox.style.display = 'none';
+
+// Remove the event listeners from each .selection element
+divs.forEach((div) => {
+div.removeEventListener('mouseenter', Edit.handleMouseHover);
+div.removeEventListener('mouseleave', Edit.handleMouseHover);
+});
 }
 }
 }
@@ -124,9 +134,7 @@ handleSaveButtonClick(){
 
     Array.exportArray();
     
-};
-
-  
+};  
 
 }
 
