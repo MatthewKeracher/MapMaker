@@ -1,4 +1,6 @@
 
+import Edit from "./edit.js";
+
 class Hotkeys{
 
 init() {
@@ -6,8 +8,11 @@ init() {
 document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
 const Sidebar = document.querySelector('.sidebar');
+const editMode = Edit.editMode
 
 if (!Sidebar.contains(document.activeElement)) {
+
+if (!editMode){
 switch (key) {
 case 'm':
     mapButton.click();
@@ -27,7 +32,25 @@ case 'd':
 
 // Add more cases for additional hotkeys here
 }
+}else{if(editMode){
+switch (key) {
+case 'e':
+    editButton.click();
+    break;
+case 's':
+    editSaveButton.click();
+    break;
+case 'm':
+    editMoveButton.click();
+    break;
+case 'd':
+    editDeleteButton.click();
+    break;
+
+}}}
+
 }
+
 });  
 
 }

@@ -9,6 +9,8 @@ class Toolbar{
 
 init() {
 
+
+//toolbarMain
 const mapButton = document.getElementById('mapButton');
 mapButton.addEventListener('click', this.handleMapButtonClick);
 
@@ -27,6 +29,18 @@ saveButton.addEventListener('click', this.handleSaveButtonClick);
 const fileInput = document.getElementById('fileInput'); // Add this line
 fileInput.addEventListener('change', Array.handleFileInputChange); // Use "Array" here
 
+//toolbarEdit
+const editEditButton = document.getElementById('editEditButton');
+editEditButton.addEventListener('click', this.handleEditButtonClick);
+
+const editSaveButton = document.getElementById('editSaveButton');
+editSaveButton.addEventListener('click', this.handleeditSaveButtonButtonClick);
+
+const editMoveButton = document.getElementById('editMoveButton');
+editMoveButton.addEventListener('click', this.handleeditMoveButtonButtonClick); 
+
+const editDeleteButton = document.getElementById('editDeleteButton');
+editDeleteButton.addEventListener('click', this.handleeditDeleteButtonButtonClick);
 
 }
 
@@ -58,9 +72,9 @@ addButton.classList.add('click-button');
     mapElement.addEventListener('mousemove', Add.handleMouseMove);
     mapElement.addEventListener('mouseup', Add.handleMouseUp);
 
-// Disable pointer events on the locations and toolbar while dragging
-const toolbar = document.querySelector('.toolbar');        
-toolbar.style.pointerEvents = 'none';
+// Disable pointer events on the locations and mainToolbar while dragging
+const mainToolbar = document.querySelector('.mainToolbar');        
+mainToolbar.style.pointerEvents = 'none';
 
 
 const selectionList = document.querySelectorAll('.selection');
@@ -80,9 +94,9 @@ addButton.classList.remove('click-button');
     mapElement.removeEventListener('mousemove', Add.handleMouseMove);
     mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 
-// Enable pointer events on the locations and toolbar after dragging
-const toolbar = document.querySelector('.toolbar');        
-toolbar.style.pointerEvents = 'auto';
+// Enable pointer events on the locations and mainToolbar after dragging
+const mainToolbar = document.querySelector('.mainToolbar');        
+mainToolbar.style.pointerEvents = 'auto';
 
 const selectionList = document.querySelectorAll('.selection');
 selectionList.forEach((selection) => {
@@ -100,14 +114,19 @@ handleEditButtonClick() {
 const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
 const EditorContainer = document.querySelector('.EditorContainer');
 const Storyteller = document.querySelector('.Storyteller');
+const editToolbar = document.getElementById('editToolbar');
+const mainToolbar = document.getElementById('mainToolbar');
 
 if (!Edit.editMode) {
 Edit.editMode = true;
-editButton.classList.add('click-button');
+editEditButton.classList.add('click-button');
 
 //Show Edit Sidebar
 EditorContainer.style.display = 'flex';
 Storyteller.style.display = 'none';
+//Switch Toolbars
+mainToolbar.style.display = 'none';
+editToolbar.style.display = 'flex';
 
 // Add the event listeners to each .selection element
 divs.forEach((div) => {
@@ -117,11 +136,14 @@ div.addEventListener('mouseleave', Edit.handleMouseHover);
 } else {
 if (Edit.editMode) {
 Edit.editMode = false;
-editButton.classList.remove('click-button');
+editEditButton.classList.remove('click-button');
 
 //Show Edit Sidebar
 EditorContainer.style.display = 'none';
 Storyteller.style.display = 'flex';
+//Switch Toolbars
+mainToolbar.style.display = 'flex';
+editToolbar.style.display = 'none';
 
 // Remove the event listeners from each .selection element
 divs.forEach((div) => {
@@ -137,6 +159,24 @@ handleSaveButtonClick(){
     Array.exportArray();
     
 };  
+
+handleeditSaveButtonButtonClick(){
+
+Edit.saveLocation();
+
+};
+
+handleeditMoveButtonButtonClick(){
+
+Edit.moveLocation();
+
+};
+
+handleeditDeleteButtonButtonClick(){
+
+Edit.deleteLocation();
+
+};
 
 }
 

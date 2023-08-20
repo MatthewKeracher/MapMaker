@@ -13,7 +13,7 @@
 
 </header>
 
-<div class = toolbar id="toolbar">
+<div class = "mainToolbar" id="mainToolbar">
 
 <button class= "button" id="mapButton"  >[M]ap</button>
 <!-- Add this hidden input element -->
@@ -25,11 +25,14 @@
 
 </div>
 
-<!-- <div class = toolbar id="toolbarEdit"> 
+<div class = "editToolbar" id="editToolbar"> 
 
-<button class= "button" id="editButton"  >[E]dit</button>
+<button class= "button" id="editEditButton"    >[E]dit   </button>
+<button class= "button" id="editSaveButton"    >[S]ave   </button>
+<button class= "button" id="editMoveButton"    >[M]ove   </button>
+<button class= "button" id="editDeleteButton"  >[D]elete </button>
         
-</div> -->
+</div> 
 
 
 
@@ -46,13 +49,13 @@
         <div class="EditorContainer">                      
             
                 <label>Player Information</label>
-                <textarea class="editBox" placeholder="Textbox 1"></textarea>           
+                <textarea class="editBox" id="editPlayerText" placeholder="Textbox 1"></textarea>           
             
                 <label>Game Master Information</label>
-                <textarea class="editBox" placeholder="Textbox 2"></textarea>        
+                <textarea class="editBox" id="editGMText" placeholder="Textbox 2"></textarea>        
             
                 <label>Miscellaneous</label>
-                <textarea class="editBox" placeholder="Textbox 3"></textarea>         
+                <textarea class="editBox" id="editMiscText" placeholder="Textbox 3"></textarea>         
             
         </div>
         

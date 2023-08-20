@@ -7,8 +7,17 @@ margin: 0; /* Remove default margin */
 
 }
 
+.editToolbar{
+    position: fixed;
+    top: 1vh; 
+    right: 0vw; 
+    z-index: 5;
+    width: 30vw;
+    display: none; 
+    flex-direction: row; 
+}
 
-.toolbar {
+.mainToolbar {
 position: fixed;
 top: 1vh; 
 right: 0vw; 

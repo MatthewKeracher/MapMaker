@@ -1,4 +1,5 @@
 import Edit from "./edit.js";
+import Storyteller from "./storyteller.js";
 
 const Array = {
 locationArray: [],
@@ -14,9 +15,9 @@ const top = parseFloat(location.style.top);
 const width = parseFloat(location.style.width);
 const height = parseFloat(location.style.height);
 const divId = location.id;
-const player = "You are in a nice place.";
-const gm = "gm";
-const misc = "misc";
+const player = "";
+const gm = "";
+const misc = "";
 
 return {
 left,
@@ -147,7 +148,7 @@ try {
         },
 
                 addSaveLocation(locationData) {
-                const { left, top, width, height, divId } = locationData;
+                const { left, top, width, height, divId} = locationData;
 
                 // Create a new location element with the specified properties
                 const newLoc = document.createElement('div');
@@ -170,7 +171,7 @@ try {
                 },   
                 
                         addLocationToArray(locationData) {
-                        const { left, top, width, height, divId } = locationData;
+                        const { left, top, width, height, divId, player, gm, misc } = locationData;
 
                         // Create a new location object with the specified properties
                         const newLocation = {
@@ -179,47 +180,33 @@ try {
                                 width,
                                 height,
                                 divId,
+                                player,
+                                gm,
+                                misc,
                         };
 
                         this.locationArray.push(newLocation);
                         //console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
                         },
 
+//Add Events to Divs when created or loaded. 
+
 addLocationEvents() {
 const locationLabel = document.querySelector('.locationLabel');
-const selectionElements = document.querySelectorAll('.selection');
-const Storyteller = document.getElementById('Storyteller');
+const locations = document.querySelectorAll('.selection');
+
+locations.forEach((location) => {
+if (!location.dataset.hasListener) {
 
 
-selectionElements.forEach((selection) => {
-        if (!selection.dataset.hasListener) {
-            // Add the mouseover event listener
-            selection.addEventListener('mouseover', () => {
-                const divId = selection.id;
-                locationLabel.textContent = divId;
-    
-                // Find the matching entry in locationArray
-                const matchingEntry = this.locationArray.find(entry => entry.divId === divId);
-    
-                // Populate Storyteller with content from the matching entry
-                if (matchingEntry) {
-                    const player = matchingEntry.player;
-                    const gm = matchingEntry.gm;
-                    const misc = matchingEntry.misc;
+location.addEventListener('click', () => {
+Storyteller.changeContent(location, locationLabel);
+});
 
-                    // Append content to Storyteller
-                    Storyteller.textContent += `\nPlayer: ${player}\nGM: ${gm}\nMisc: ${misc}`;
-                }
-            });
-    
-            // Mark the element as having the listener
-            selection.dataset.hasListener = true;
-        }
-    });
-    
-    
-    
-},  
+location.dataset.hasListener = true;
+}
+});
+},
 
 };
 
