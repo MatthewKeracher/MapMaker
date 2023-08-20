@@ -192,7 +192,7 @@ try {
 //Add Events to Divs when created or loaded. 
 
 addLocationEvents() {
-const locationLabel = document.querySelector('.locationLabel');
+const locationName = document.querySelector('.locationLabel');
 const locations = document.querySelectorAll('.selection');
 
 locations.forEach((location) => {
@@ -200,7 +200,9 @@ if (!location.dataset.hasListener) {
 
 
 location.addEventListener('click', () => {
-Storyteller.changeContent(location, locationLabel);
+Storyteller.changeContent(location);
+Edit.moveLocation(location);
+
 });
 
 location.dataset.hasListener = true;

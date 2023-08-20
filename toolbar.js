@@ -168,9 +168,16 @@ Edit.saveLocation();
 
 handleeditMoveButtonButtonClick(){
 
-Edit.moveLocation();
+if (!Edit.moveMode) {
+    Edit.moveMode = true;
+    editMoveButton.classList.add('click-button');
+    
+} else {
+if (Edit.editMode) {
+    Edit.moveMode = false;
+    editMoveButton.classList.remove('click-button');
 
-};
+}}};
 
 handleeditDeleteButtonButtonClick(){
 

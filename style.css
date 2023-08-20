@@ -125,7 +125,7 @@ resize: none;
 
         }
 
-        .textbox-container textarea:focus {
+        .editBox:focus {
             border-color: lime; /* Change the border color */
             outline: none; /* Remove the default outline */
             background-color: black; /* Change the background color */

@@ -89,7 +89,7 @@ location.style.width = width + 'px';
 location.style.height = height + 'px';
 
     // Prompt the user for input to set the div ID
-    const divId = prompt('What is the name of this location?');
+    const divId = prompt('What is the *unique* name of this location?');
     location.id = divId; // Set the ID based on user input 
 
     // Create a label element for the div ID
