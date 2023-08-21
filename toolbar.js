@@ -114,6 +114,7 @@ handleEditButtonClick() {
 const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
 const EditorContainer = document.querySelector('.EditorContainer');
 const editLocationName = document.querySelector('.editLocationName');
+const LocationName = document.getElementById('locationLabel');
 const Storyteller = document.querySelector('.Storyteller');
 const editToolbar = document.getElementById('editToolbar');
 const mainToolbar = document.getElementById('mainToolbar');
@@ -122,10 +123,11 @@ if (!Edit.editMode) {
 Edit.editMode = true;
 editEditButton.classList.add('click-button');
 
-//Show Edit Sidebar
+//Show Edit Sidebar, Hide Storyteller
 EditorContainer.style.display = 'flex';
 editLocationName.style.display = 'flex';
 Storyteller.style.display = 'none';
+LocationName.style.display = 'none';
 //Switch Toolbars
 mainToolbar.style.display = 'none';
 editToolbar.style.display = 'flex';
@@ -140,10 +142,11 @@ if (Edit.editMode) {
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
 
-//Show Edit Sidebar
+//Show Storyteller, Hide Edit Sidebar
 EditorContainer.style.display = 'none';
 editLocationName.style.display = 'none';
 Storyteller.style.display = 'flex';
+LocationName.style.display = 'flex';
 //Switch Toolbars
 mainToolbar.style.display = 'flex';
 editToolbar.style.display = 'none';

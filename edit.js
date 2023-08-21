@@ -69,10 +69,12 @@ saveLocation() {
 const locationLabel = document.querySelector('.locationLabel');
 const divId = locationLabel.textContent; // Get the divId for the location you're saving
 
+//Places that have info we want to save...
+const editLocationName = document.querySelector('.editLocationName').value;
 const editPlayerText = document.getElementById('editPlayerText').value; // Get the value of the input field
 const editGMText = document.getElementById('editGMText').value;
 const editMiscText = document.getElementById('editMiscText').value;
-
+//Find correct place to save...
 const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
 
 
@@ -81,6 +83,13 @@ if (matchingEntry) {
     matchingEntry.player = editPlayerText;
     matchingEntry.gm = editGMText;
     matchingEntry.misc = editMiscText;
+    matchingEntry.divId = editLocationName;
+    //Update the Existing Divs
+    const locationDiv = document.getElementById(divId);
+    locationDiv.setAttribute('id',editLocationName);
+    locationDiv.querySelector('.div-id-label').textContent = editLocationName;
+
+
     console.log("Updated Entry: " + JSON.stringify(matchingEntry, null, 2));
 
 }

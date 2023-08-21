@@ -5,13 +5,15 @@ const Storyteller = {
 changeContent(location) {
     const Storyteller = document.getElementById('Storyteller');
     const locationName = document.querySelector('.locationLabel');
+    const editLocationName = document.querySelector('.editLocationName');
     const editPlayerText = document.getElementById('editPlayerText');
     const editGMText = document.getElementById('editGMText');
     const editMiscText = document.getElementById('editMiscText');
     
     const divId = location.id;
     locationName.textContent = divId;
-    
+    editLocationName.value = divId;
+
     const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
 
     if (matchingEntry) {
