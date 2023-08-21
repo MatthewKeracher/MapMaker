@@ -1,4 +1,5 @@
 import Array from "./array.js";
+import Storyteller from "./storyteller.js";
 
 const Edit = {
 
@@ -89,8 +90,11 @@ if (matchingEntry) {
     locationDiv.setAttribute('id',editLocationName);
     locationDiv.querySelector('.div-id-label').textContent = editLocationName;
 
-
     console.log("Updated Entry: " + JSON.stringify(matchingEntry, null, 2));
+
+    //Refresh
+    const savedLocation = document.getElementById(editLocationName);
+    Storyteller.changeContent(savedLocation);
 
 }
 } 
