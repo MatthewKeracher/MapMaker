@@ -192,7 +192,6 @@ try {
 //Add Events to Divs when created or loaded. 
 
 addLocationEvents() {
-const locationName = document.querySelector('.locationLabel');
 const locations = document.querySelectorAll('.selection');
 
 locations.forEach((location) => {

@@ -58,12 +58,34 @@ overflow: auto;
 
     .locationLabelContainer {
     position: fixed;
-    width: 30vw;
+    width: 25vw;
     padding: 1vh;
     height: 10vh;
-    background-color: #ddd; /* Set your desired background color */
-    border-bottom: 0.2vh solid hotpink;
+    background-color: transparent; /* Set your desired background color */
     font-size: 4vh;
+    }
+
+    .editLocationName{
+        height: 8vh;
+        width: 27.5vw;
+        margin: 0vh; 
+        font-size: 4vh;
+        border: 0.2vh solid hotpink; 
+        text-align: left;
+        vertical-align: top;    
+        background-color: black; 
+        color: orange;
+        padding: 1vh;
+        display: none;
+        flex-direction: row;
+    }
+
+    .editLocationName:focus {
+        border-color: lime; /* Change the border color */
+        outline: none; /* Remove the default outline */
+        background-color: black; /* Change the background color */
+        color: lime; /* Change the text color */
+        border-radius: 0px; /* Adjust the border radius for rounded corners */
     }
 
         .locationLabel{
@@ -94,7 +116,7 @@ resize: none;
 
 .EditorContainer {
     position: fixed;
-    top: 18vh;    
+    top: 22vh;    
     right: 0vw; 
     width: 30vw;   
     height: 80vh;     
@@ -156,8 +178,8 @@ overflow: auto;
             z-index: 1;                
             height: 50px;
             width: 50px;
-            background-color: white;  
-            opacity: 0.4;  
+            background-color: orange;  
+            opacity: 0.5;  
             /*transition: background-color 0s; 8*/              
             }
 
