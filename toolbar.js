@@ -9,6 +9,8 @@ class Toolbar{
 
 init() {
 
+document.getElementById('MiscLabel').style.display = "none";
+document.getElementById('editMiscText').style.display = "none";
 
 //toolbarMain
 const mapButton = document.getElementById('mapButton');

@@ -66,13 +66,13 @@ overflow: auto;
     }
 
     .editLocationName{
-        height: 8vh;
+        height: 5vh;
         width: 27.5vw;
         margin: 0vh; 
         font-size: 4vh;
         border: 0.2vh solid hotpink; 
-        text-align: left;
-        vertical-align: top;    
+        text-align: center;
+        vertical-align: middle;    
         background-color: black; 
         color: orange;
         padding: 1vh;
@@ -94,7 +94,7 @@ overflow: auto;
 
 .Storyteller{
 position: fixed;
-top: 20vh;    
+top: 18vh;    
 right: 0.35vw; 
 width: 28vw;   
 height: 78vh;   
@@ -116,10 +116,10 @@ resize: none;
 
 .EditorContainer {
     position: fixed;
-    top: 22vh;    
+    top: 18vh;    
     right: 0vw; 
     width: 30vw;   
-    height: 80vh;     
+    height: 160vh;     
     color: black;
     font-size: 2vh;
     display: none;
