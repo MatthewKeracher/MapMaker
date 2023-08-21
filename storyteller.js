@@ -20,7 +20,7 @@ changeContent(location) {
         const misc = matchingEntry.misc;
 
         //Change Storyteller Content
-        Storyteller.value = `Player Information:\n\n ${player}\n\nGame Master Information:\n\n ${gm}\n\nMiscellaneous:\n\n ${misc}`;
+        Storyteller.innerHTML = `${player}\n\n${gm}\n\n ${misc}`;
         
         //Change Edit Content
         editPlayerText.value = `${player}`;
