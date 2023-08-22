@@ -269,6 +269,7 @@ overflow: auto;
     margin: 0vh 0vw; /* Add margin to control spacing */
     border: 0.1vh solid black; 
     transition: background-color 0.3s; 
+    font-family: monospace, 'Trebuchet MS', sans-serif;
     }
 
     #tableForm button:hover {
@@ -295,8 +296,8 @@ overflow: auto;
     font-size: 2vh;
     text-align: center;
     background-color: transparent;
-    color: whitesmoke;
-    font-weight: bold;
+    color: whitesmoke;    
+    font-family: monospace, 'Trebuchet MS', sans-serif;
     }
  
         .spreadsheet td {
