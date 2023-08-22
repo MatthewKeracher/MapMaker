@@ -72,6 +72,27 @@ saveLocation() {
 const locationLabel = document.querySelector('.locationLabel');
 const divId = locationLabel.textContent; // Get the divId for the location you're saving
 
+// Get the spreadsheet data
+const spreadsheetData = [];
+const spreadsheetCells = document.querySelectorAll('.spreadsheet td input');
+spreadsheetCells.forEach(input => {
+  const cell = input.parentNode;
+  const row = cell.parentNode.rowIndex //- 1; // Adjust for skipping the column headers
+  const col = cell.cellIndex //- 1; // Adjust for skipping the row numbers
+  const content = input.value.trim(); // Trim whitespace
+  console.log(content)
+  if (content !== "") { // Skip empty cells
+    const cellData = {
+      row: row,
+      col: col,
+      content: content
+    };
+    spreadsheetData.push(cellData);
+  }
+});
+
+
+
 //Places that have info we want to save...
 const editLocationName = document.querySelector('.editLocationName').value;
 const editPlayerText = document.getElementById('editPlayerText').value; // Get the value of the input field
@@ -87,6 +108,10 @@ if (matchingEntry) {
     matchingEntry.gm = editGMText;
     matchingEntry.misc = editMiscText;
     matchingEntry.divId = editLocationName;
+
+            //Update the spreadsheet data
+            matchingEntry.spreadsheetData = spreadsheetData;
+
     //Update the Existing Divs
     const locationDiv = document.getElementById(divId);
     locationDiv.setAttribute('id',editLocationName);

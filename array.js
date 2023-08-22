@@ -166,12 +166,13 @@ try {
                 newLoc.appendChild(labelElement);
 
                 //console.log("Created: " + JSON.stringify(newLoc, null, 2));
+                generateTable.click();
 
                 return newLoc;
                 },   
                 
                         addLocationToArray(locationData) {
-                        const { left, top, width, height, divId, player, gm, misc } = locationData;
+                        const { left, top, width, height, divId, player, gm, misc, spreadsheetData } = locationData;
 
                         // Create a new location object with the specified properties
                         const newLocation = {
@@ -183,10 +184,11 @@ try {
                                 player,
                                 gm,
                                 misc,
+                                spreadsheetData,
                         };
 
                         this.locationArray.push(newLocation);
-                        //console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
+                        console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
                         },
 
 //Add Events to Divs when created or loaded. 

@@ -239,7 +239,7 @@ handleeditPrevButtonButtonClick(){
 handleeditgenerateTableButtonClick(){
 
 //document.addEventListener("DOMContentLoaded", function () {
-    const generateTableButton = document.getElementById("generateTable");
+    //const generateTableButton = document.getElementById("generateTable");
   
     //generateTableButton.addEventListener("click", function () {
       const tableContainer = document.getElementById("tableContainer");
@@ -255,11 +255,11 @@ handleeditgenerateTableButtonClick(){
         const cell = document.createElement("td");
         const input = document.createElement("input");
         input.type = "text";
-        input.value = `Column ${j}`;
+        
         
         // Add an event listener for column header editing
         input.addEventListener("blur", function () {
-          cell.textContent = input.value;
+          cell.value = input.value;
         });
         
         cell.appendChild(input);
@@ -278,7 +278,7 @@ handleeditgenerateTableButtonClick(){
           
           // Add an event listener for cell editing
           input.addEventListener("blur", function () {
-            cell.textContent = input.value;
+            cell.value = input.value;
           });
           
           cell.appendChild(input);

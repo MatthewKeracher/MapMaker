@@ -1,19 +1,10 @@
 body {
 
 background-color: black;
-font-family: Helvetica, Arial, sans-serif;
+font-family: monospace, 'Trebuchet MS', sans-serif;
 overflow: hidden;
 margin: 0; /* Remove default margin */
 
-}
-
-.bottomToolbar{ 
-    position: fixed;
-    bottom: 1vh;
-    right: 1vw;
-    width: 28vw;
-    display: none; 
-    flex-direction: row; 
 }
 
 .editToolbar{
@@ -43,6 +34,7 @@ flex-direction: row;
     padding: 1vh 1vw; 
     margin: 0.5vh 0; /* Add margin to control spacing */
     border: 0.1vh solid black; 
+    font-family: monospace, 'Trebuchet MS', sans-serif;
     transition: background-color 0.3s; 
     }
 
@@ -96,7 +88,7 @@ overflow: auto;
     resize: none;
     white-space: pre-line; 
     text-align: justify;
-    font-weight: bold;
+    
             
     }
     
@@ -109,19 +101,53 @@ overflow: auto;
       }
     
                 .player{
-                    font-family: Helvetica, Arial, sans-serif;
                     color: white;
                     }
     
                 .gm{
-                    font-family: Helvetica, Arial, sans-serif;
-                    color: hotpink;    
+                    color: lime;    
                     }
     
                 .misc{
-                    font-family: Helvetica, Arial, sans-serif;
                     color: lime;
+                     }    
+                     
+                .all-caps{
+                    color: cyan;
                 }
+                
+                .inside-rounded-brackets{
+                    color: yellow;
+                }
+
+                .inside-square-brackets {
+                    color: hotpink; 
+                  }
+
+                .storyTable input {
+                    height: 3vh;
+                    width: 100%;
+                    border: 3px solid whitesmoke;
+                    background-color: transparent;
+                    color:whitesmoke;
+                    font-size: 2vh;             
+                    padding: 0;
+                    margin: 0;
+                    opacity: 1;
+                    font-family: monospace, 'Trebuchet MS', sans-serif;
+                    text-align: left;
+                    }
+                                                         
+                        .storyTable tr:nth-child(even) {
+                        background-color: black;
+                        }
+                
+                        .storyTable tr:hover {
+                        background-color: cyan;
+                        color: blue;
+                        opacity: 1;
+                        }
+                
     
         .Storyteller:focus {
         outline: none; /* Remove the default outline */
@@ -252,8 +278,15 @@ overflow: auto;
 .bottomTable{
     border-collapse: collapse;
     width: 30vw;
+    height: 75vh;
     font-size: 2vh; 
+    overflow-y: scroll;
+    scrollbar-color: black;
 }
+
+.bottomTable::-webkit-scrollbar {
+    width: 5px; /* Set the width of the scrollbar */
+    }
 
  /* Target the input elements within the form */
  .bottomTable input {
@@ -301,6 +334,15 @@ overflow: auto;
         background-color: lime;
         }
 
+        .bottomToolbar{ 
+            position: fixed;
+            bottom: 1vh;
+            right: 1vw;
+            width: 28vw;
+            display: none; 
+            flex-direction: row; 
+        }
+
 
 .image-container {
 position: relative;
@@ -345,8 +387,7 @@ overflow: auto;
                     left: 50%;
                     top: 50%;
                     transform: translate(-50%, -50%);
-                    font-size: 1.5vh;
-                    font-weight: bold;    
+                    font-size: 2vh;                       
                     opacity: 1;                    
                     }
 
