@@ -49,17 +49,23 @@
               
         <div class="EditorContainer">                      
             
-                <label>Player Information</label>
+                <label id = "playerLabel"> Read aloud for the players:</label>
                 <textarea class="editBox" id="editPlayerText" placeholder="Textbox 1"></textarea>           
             
-                <label>Game Master Information</label>
-                <textarea class="editBox" id="editGMText" placeholder="Textbox 2"></textarea>        
-            
-                <label id = "MiscLabel">Miscellaneous</label>
+                <label id = "gmLabel"> Game Master Information</label>
+                <textarea class="editBox" id="editGMText" placeholder="Textbox 2"></textarea>    
+                                             
+                <label id = "miscLabel"> Miscellaneous</label>
                 <textarea class="editBox" id="editMiscText" placeholder="Textbox 3"></textarea>         
             
         </div>
+
+        <div class = "bottomToolbar" id="bottomToolbar"> 
+
+            <button class= "button" id="prevButton"    >[Previous] </button>
+            <button class= "button" id="nextButton"    >[N]ext   </button>    
         
+      </div>
       </div>
 
 </main>

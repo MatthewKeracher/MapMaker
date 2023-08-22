@@ -9,9 +9,6 @@ class Toolbar{
 
 init() {
 
-document.getElementById('MiscLabel').style.display = "none";
-document.getElementById('editMiscText').style.display = "none";
-
 //toolbarMain
 const mapButton = document.getElementById('mapButton');
 mapButton.addEventListener('click', this.handleMapButtonClick);
@@ -43,6 +40,14 @@ editMoveButton.addEventListener('click', this.handleeditMoveButtonButtonClick);
 
 const editDeleteButton = document.getElementById('editDeleteButton');
 editDeleteButton.addEventListener('click', this.handleeditDeleteButtonButtonClick);
+
+//bottomToolbar
+
+const nextButton = document.getElementById('nextButton');
+nextButton.addEventListener('click', this.handleNextButtonClick);
+
+const prevButton = document.getElementById('prevButton');
+prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
 }
 
@@ -114,18 +119,22 @@ selection.style.pointerEvents = 'auto';
 handleEditButtonClick() {
 
 const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
-const EditorContainer = document.querySelector('.EditorContainer');
-const editLocationName = document.querySelector('.editLocationName');
 const LocationName = document.getElementById('locationLabel');
 const Storyteller = document.querySelector('.Storyteller');
 const editToolbar = document.getElementById('editToolbar');
 const mainToolbar = document.getElementById('mainToolbar');
+const bottomToolbar = document.getElementById('bottomToolbar');
+
+const EditorContainer = document.querySelector('.EditorContainer');
+const editLocationName = document.querySelector('.editLocationName');
+
 
 if (!Edit.editMode) {
 Edit.editMode = true;
 editEditButton.classList.add('click-button');
 
-//Show Edit Sidebar, Hide Storyteller
+//Hide Storyteller, pageChange()
+Edit.pageChange(Edit.editPage)
 EditorContainer.style.display = 'flex';
 editLocationName.style.display = 'flex';
 Storyteller.style.display = 'none';
@@ -133,6 +142,7 @@ LocationName.style.display = 'none';
 //Switch Toolbars
 mainToolbar.style.display = 'none';
 editToolbar.style.display = 'flex';
+bottomToolbar.style.display = 'flex';
 
 // Add the event listeners to each .selection element
 divs.forEach((div) => {
@@ -144,7 +154,8 @@ if (Edit.editMode) {
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
 
-//Show Storyteller, Hide Edit Sidebar
+//Show Storyteller, pageChange()
+Edit.pageChange(1);
 EditorContainer.style.display = 'none';
 editLocationName.style.display = 'none';
 Storyteller.style.display = 'flex';
@@ -152,6 +163,7 @@ LocationName.style.display = 'flex';
 //Switch Toolbars
 mainToolbar.style.display = 'flex';
 editToolbar.style.display = 'none';
+bottomToolbar.style.display = 'none';
 
 // Remove the event listeners from each .selection element
 divs.forEach((div) => {
@@ -193,7 +205,26 @@ Edit.deleteLocation();
 
 };
 
-}
+handleNextButtonClick(){
+
+    if (Edit.editPage < 3) {
+        Edit.editPage = Edit.editPage + 1;
+        Edit.pageChange(Edit.editPage);
+    }
+
+};
+
+handleeditPrevButtonButtonClick(){
+
+    if (Edit.editPage > 1) {
+        Edit.editPage = Edit.editPage - 1;
+        Edit.pageChange(Edit.editPage)
+        console.log(Edit.editPage)
+    }
+
+};
+
+};
 
 const toolbar = new Toolbar();
 toolbar.init(); // Initialize the toolbar

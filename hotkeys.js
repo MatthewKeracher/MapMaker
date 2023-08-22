@@ -46,6 +46,12 @@ case 'm':
 case 'd':
     editDeleteButton.click();
     break;
+case 'n':
+    nextButton.click();
+break;
+case 'p':
+    prevButton.click();
+break;
 
 }}}
 

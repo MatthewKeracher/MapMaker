@@ -5,6 +5,7 @@ const Edit = {
 
     editMode : false,
     moveMode: false,
+    editPage: 1,
 
 // Delete a Location
 deleteLocation() {
@@ -97,7 +98,71 @@ if (matchingEntry) {
     Storyteller.changeContent(savedLocation);
 
 }
-} 
+}, 
+
+//Remove or Add editContainer contents depending on editPage no.
+pageChange(newPage){
+
+const player = document.getElementById('editPlayerText')
+const playerLabel = document.getElementById('playerLabel')
+
+const gm = document.getElementById('editGMText')
+const gmLabel = document.getElementById('gmLabel')
+
+const misc = document.getElementById('editMiscText')
+const miscLabel = document.getElementById('miscLabel')
+
+switch (newPage) {
+    case 1:
+
+      //Show
+      playerLabel.style.display = "flex";
+      player.style.display = "flex";
+
+      //Hide
+      gmLabel.style.display = "none";
+      gm.style.display = "none";
+      miscLabel.style.display = "none";
+      misc.style.display = "none";
+      break;
+      
+    case 2:
+
+      //Show
+      gmLabel.style.display = "flex";
+      gm.style.display = "flex";
+
+
+      //Hide
+ 
+      playerLabel.style.display = "none";
+      player.style.display = "none";
+      miscLabel.style.display = "none";
+      misc.style.display = "none";
+      break;
+      
+    case 3:
+
+      //Show
+      miscLabel.style.display = "flex";
+      misc.style.display = "flex";
+
+      //Hide
+      playerLabel.style.display = "none";
+      player.style.display = "none";
+      gmLabel.style.display = "none";
+      gm.style.display = "none";
+
+      break;
+      
+    default:
+      // Handle any other cases
+      break;
+  }
+console.log('Changed Page to ' + newPage)
+
+
+},
 
 };
     
