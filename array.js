@@ -188,7 +188,7 @@ try {
                         };
 
                         this.locationArray.push(newLocation);
-                        console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
+                        //console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
                         },
 
 //Add Events to Divs when created or loaded. 

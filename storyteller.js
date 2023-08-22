@@ -111,7 +111,6 @@ generateSpreadsheetRows(spreadsheet) {
       for (let j = 0; j < numCols; j++) {
         const cellData = spreadsheet.find(data => data.row === i && data.col === j);
         const cellContent = cellData ? cellData.content : '';
-        console.log(cellContent);
         rowsHtml += `<td><input value="${cellContent}"></td>`;
       }
   
