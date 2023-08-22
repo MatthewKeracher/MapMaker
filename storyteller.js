@@ -87,6 +87,8 @@ generateSpreadsheetRows(spreadsheet) {
     // Determine the maximum row and column indices
     let maxRow = -1;
     let maxCol = -1;
+
+    try{
   
     spreadsheet.forEach(cellData => {
       if (cellData.row > maxRow) {
@@ -117,7 +119,11 @@ generateSpreadsheetRows(spreadsheet) {
     }
   
     return rowsHtml;
-  }
+  
+
+} catch{}
+
+}
 
 };
   
