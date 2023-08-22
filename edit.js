@@ -7,6 +7,7 @@ const Edit = {
     moveMode: false,
     editPage: 1,
 
+
 // Delete a Location
 deleteLocation() {
     const locationLabel = document.querySelector('.locationLabel');
@@ -103,6 +104,8 @@ if (matchingEntry) {
 //Remove or Add editContainer contents depending on editPage no.
 pageChange(newPage){
 
+const editLocationName = document.querySelector('.editLocationName');
+
 const player = document.getElementById('editPlayerText')
 const playerLabel = document.getElementById('playerLabel')
 
@@ -112,10 +115,14 @@ const gmLabel = document.getElementById('gmLabel')
 const misc = document.getElementById('editMiscText')
 const miscLabel = document.getElementById('miscLabel')
 
+const tableForm = document.getElementById('tableForm')
+
+
 switch (newPage) {
     case 1:
 
       //Show
+      editLocationName.style.display  = "flex";
       playerLabel.style.display = "flex";
       player.style.display = "flex";
 
@@ -124,11 +131,13 @@ switch (newPage) {
       gm.style.display = "none";
       miscLabel.style.display = "none";
       misc.style.display = "none";
+      tableForm.style.display = "none";
       break;
       
     case 2:
 
       //Show
+      editLocationName.style.display  = "flex";
       gmLabel.style.display = "flex";
       gm.style.display = "flex";
 
@@ -139,19 +148,23 @@ switch (newPage) {
       player.style.display = "none";
       miscLabel.style.display = "none";
       misc.style.display = "none";
+      tableForm.style.display = "none";
       break;
       
     case 3:
 
       //Show
-      miscLabel.style.display = "flex";
-      misc.style.display = "flex";
+      tableForm.style.display = "flex";
+      
 
       //Hide
+      editLocationName.style.display  = "none";
       playerLabel.style.display = "none";
       player.style.display = "none";
       gmLabel.style.display = "none";
       gm.style.display = "none";
+      miscLabel.style.display = "none";
+      misc.style.display = "none";
 
       break;
       
@@ -159,8 +172,6 @@ switch (newPage) {
       // Handle any other cases
       break;
   }
-console.log('Changed Page to ' + newPage)
-
 
 },
 

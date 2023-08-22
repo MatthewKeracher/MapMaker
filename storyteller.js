@@ -21,8 +21,18 @@ changeContent(location) {
         const gm = matchingEntry.gm;
         const misc = matchingEntry.misc;
 
-        //Change Storyteller Content
-        Storyteller.innerHTML = `${player}\n\n${gm}\n\n ${misc}`;
+        // //Change Storyteller Content
+        // Storyteller.innerHTML = `${player}\n\n${gm}\n\n ${misc}`;
+
+// Combine content with different colors
+const formattedStory = `
+    <span class="section player">${player}\n\n</span>
+    <span class="section gm">${gm}\n\n</span>
+    <span class="section misc">${misc}</span>
+  `;
+
+// Change Storyteller Content
+Storyteller.innerHTML = formattedStory;
         
         //Change Edit Content
         editPlayerText.value = `${player}`;

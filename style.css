@@ -18,7 +18,7 @@ margin: 0; /* Remove default margin */
 
 .editToolbar{
     position: fixed;
-    top: 1vh; 
+    top: 0vh; 
     right: 0vw; 
     z-index: 5;
     width: 30vw;
@@ -28,7 +28,7 @@ margin: 0; /* Remove default margin */
 
 .mainToolbar {
 position: fixed;
-top: 1vh; 
+top: 0vh; 
 right: 0vw; 
 z-index: 5;
 width: 30vw;
@@ -65,96 +65,125 @@ background-color: transparent;
 overflow: auto;    
 }
 
-    .locationLabelContainer {
-    position: fixed;
+.locationLabel{
+    position: absolute;
     width: 25vw;
     padding: 1vh;
     height: 10vh;
     background-color: transparent; /* Set your desired background color */
     font-size: 4vh;
+    top: 0vh;
+    right: 0vw;
     }
+ 
+.Storyteller{
+    position: fixed;
+    top: 18vh;    
+    right: 0.35vw; 
+    width: 28.5vw;   
+    height: 78vh;  
+    font-size: 1.9vh; 
+    background-color: transparent; 
+    color: white;
+    border: 0.1vh transparent;
+    padding: 1vh; 
+    text-align: left;
+    overflow: auto;
+    scrollbar-color: black;
+    vertical-align: top; 
+    display: flex;
+    flex-direction: column;
+    resize: none;
+    white-space: pre-line; 
+    text-align: justify;
+    font-weight: bold;
+            
+    }
+    
+    .Storyteller::-webkit-scrollbar {
+        width: 5px; /* Set the width of the scrollbar */
+      }
+    
+      .Storyteller .section {
+        flex: 1;
+      }
+    
+                .player{
+                    font-family: Helvetica, Arial, sans-serif;
+                    color: white;
+                    }
+    
+                .gm{
+                    font-family: Helvetica, Arial, sans-serif;
+                    color: hotpink;    
+                    }
+    
+                .misc{
+                    font-family: Helvetica, Arial, sans-serif;
+                    color: lime;
+                }
+    
+        .Storyteller:focus {
+        outline: none; /* Remove the default outline */
+        border-radius: 0px; /* Adjust the border radius for rounded corners */
+        }
+    
+    .EditorContainer {
+        position: fixed;
+        top: 7vh;    
+        right: 0vw; 
+        width: 30vw;   
+        height: 160vh;     
+        font-size: 2vh;
+        display: none;
+        flex-direction: column;
+    }    
 
     .editLocationName{
-        height: 5vh;
+        height: 4vh;
         width: 27.5vw;
         margin: 0vh; 
-        font-size: 4vh;
-        border: 0.4vh solid hotpink; 
-        text-align: center;
+        font-size: 3vh;
+        font-weight: bold;
+        border: 0.4vh solid black; 
+        text-align: left;
         vertical-align: middle;    
         background-color: transparent; 
-        color: orange;
+        color: hotpink;
         padding: 1vh;
         display: none;
         flex-direction: row;
     }
 
-    .editLocationName:focus {
-        border-color: lime; /* Change the border color */
-        outline: none; /* Remove the default outline */
-        background-color: black; /* Change the background color */
-        color: lime; /* Change the text color */
-        border-radius: 0px; /* Adjust the border radius for rounded corners */
-    }
-
-        .locationLabel{
-        top:1vh;
+        .editLocationName:focus {
+            border-color: lime; /* Change the border color */
+            outline: none; /* Remove the default outline */
+            background-color: black; /* Change the background color */
+            color: lime; /* Change the text color */
+            border-radius: 0px; /* Adjust the border radius for rounded corners */
         }
 
-.Storyteller{
-position: fixed;
-top: 18vh;    
-right: 0.35vw; 
-width: 28vw;   
-height: 78vh;   
-background-color: transparent; 
-color: orange;
-border: 0.1vh transparent;
-font-size: 2vh;
-font-size: 2vh;
-padding: 1vh; 
-text-align: left;
-vertical-align: top; 
-resize: none;
-}
-
-    .Storyteller:focus {
-    outline: none; /* Remove the default outline */
-    border-radius: 0px; /* Adjust the border radius for rounded corners */
-    }
-
-.EditorContainer {
-    position: fixed;
-    top: 18vh;    
-    right: 0vw; 
-    width: 30vw;   
-    height: 160vh;     
-    color: orange;
-    font-size: 2vh;
-    display: none;
-    flex-direction: column;
-}    
     label {
         position: relative;
         left: 0.5vw;
         font-weight: bold;
         margin-top: 0.5vh;
         margin-bottom: 0.5vh;        
-        color: orange;   
+        color: white;   
     }
+    
+    .editBox {            
+        height: 65vh;
+        margin: 1vh; 
+        font-size: 2vh;
+        border: 0.4vh solid hotpink; 
+        text-align: left;
+        vertical-align: top;    
+        background-color: transparent; 
+        color: orange;
+        padding: 1vh;
 
-        .editBox {            
-            height: 65vh;
-            margin: 1vh; 
-            font-size: 2vh;
-            border: 0.4vh solid hotpink; 
-            text-align: left;
-            vertical-align: top;    
-            background-color: transparent; 
-            color: orange;
-            padding: 1vh;
-
-        }
+    }
 
         .editBox:focus {
             border-color: lime; /* Change the border color */
@@ -163,18 +192,133 @@ resize: none;
             color: lime; /* Change the text color */
             border-radius: 0px; /* Adjust the border radius for rounded corners */
         }
+    
+
+/* Target the entire form */
+#tableForm {
+    display: flex;
+    flex-direction: column; /* Arrange elements in a column */
+    align-items: flex-start; /* Align elements to the start of the column */
+    gap: 0px; /* Add spacing between elements */
+  }
+
+    .topTable {
+    display: flex;
+    flex-direction: row; /* Arrange elements in a column */
+    align-items: flex-start; /* Align elements to the start of the column */
+    gap: 5px; /* Add spacing between elements */
+    margin: 2vh 0vw;
+    }
+
+
+    /* Target the labels within the form */
+    #tableForm label {
+    left: 0vw;
+    color: hotpink;
+    }
+
+    /* Target the input elements within the form */
+    .topTable input {
+    height: 6vh;
+    width: 6vh;
+    font-size: 5vh;
+    text-align: center;
+    background-color: black;
+    border-color: hotpink;
+    color: cyan;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    /* Target the button within the form */
+    #tableForm button {
+    width: 13vw; /* Make each button fill the width of the toolbar */
+    height: 6vh; 
+    font-size: 2vh; 
+    padding: 1vh 1vw; 
+    margin: 0vh 0vw; /* Add margin to control spacing */
+    border: 0.1vh solid black; 
+    transition: background-color 0.3s; 
+    }
+
+    #tableForm button:hover {
+    background-color: hotpink; 
+    }
+
+.bottomTable{
+    border-collapse: collapse;
+    width: 30vw;
+    font-size: 2vh; 
+}
+
+ /* Target the input elements within the form */
+ .bottomTable input {
+    height: 6vh;
+    width: 6vh;
+    font-size: 2vh;
+    text-align: center;
+    background-color: transparent;
+    color: whitesmoke;
+    font-weight: bold;
+    }
+ 
+        .spreadsheet td {
+        border: 1px solid whitesmoke;
+        color:whitesmoke;
+        width: 28vw;
+        height: 6vh;
+        font-weight: bold;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        }
+
+        .spreadsheet tr:nth-child(even) {
+        background-color: black;
+        }
+
+        .spreadsheet tr:hover {
+        background-color: cyan;
+        color: whitesmoke;
+        }
+
+        /* Add styling to input fields for editing */
+        .spreadsheet td input {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        border: none;
+        outline: none;
+        box-sizing: border-box;
+        }
+
+        /* Add styling for the editing state */
+        .spreadsheet td.editing {
+        background-color: lime;
+        }
+
 
 .image-container {
 position: relative;
 width: 70vw; 
 height: 100vh; 
+overflow: auto;    
+scrollbar-color: black;
 overflow: auto; 
 }
     .map-image {
     position: relative;
-    overflow: auto;
+    
     z-index: 0;
     }
+        .image-container::-webkit-scrollbar {
+        width: 5px; /* Set the width of the scrollbar */
+        }
+
         .preview {
         position: absolute;
         z-index: 2;
@@ -191,12 +335,10 @@ overflow: auto;
             opacity: 0.5;  
             /*transition: background-color 0s; 8*/              
             }
-
                 .selection:hover {
                 background-color: lime;  
                 opacity: 0.9;                
-                }
-            
+                }      
                     .div-id-label{
                     position: absolute;
                     color: black;

@@ -52,6 +52,9 @@ break;
 case 'p':
     prevButton.click();
 break;
+case 'g':
+    generateTable.click();
+break;
 
 }}}
 

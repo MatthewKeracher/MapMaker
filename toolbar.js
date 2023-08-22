@@ -49,6 +49,17 @@ nextButton.addEventListener('click', this.handleNextButtonClick);
 const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
+//table maker
+
+
+  
+  
+  
+  
+
+const generateTableButton = document.getElementById('generateTable');
+generateTableButton.addEventListener('click', this.handleeditgenerateTableButtonClick);
+
 }
 
 handleMapButtonClick() {  
@@ -128,6 +139,7 @@ const bottomToolbar = document.getElementById('bottomToolbar');
 const EditorContainer = document.querySelector('.EditorContainer');
 const editLocationName = document.querySelector('.editLocationName');
 
+Edit.editPage = 1;
 
 if (!Edit.editMode) {
 Edit.editMode = true;
@@ -222,6 +234,63 @@ handleeditPrevButtonButtonClick(){
         console.log(Edit.editPage)
     }
 
+};
+
+handleeditgenerateTableButtonClick(){
+
+//document.addEventListener("DOMContentLoaded", function () {
+    const generateTableButton = document.getElementById("generateTable");
+  
+    //generateTableButton.addEventListener("click", function () {
+      const tableContainer = document.getElementById("tableContainer");
+      const numRows = parseInt(document.getElementById("numRows").value);
+      const numCols = parseInt(document.getElementById("numCols").value);
+  
+      const table = document.createElement("table");
+      table.classList.add("spreadsheet");
+  
+      // Create a row for column labels
+      const labelRow = document.createElement("tr");
+      for (let j = 1; j <= numCols; j++) { // Start at 1 to skip the first column
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = `Column ${j}`;
+        
+        // Add an event listener for column header editing
+        input.addEventListener("blur", function () {
+          cell.textContent = input.value;
+        });
+        
+        cell.appendChild(input);
+        labelRow.appendChild(cell);
+      }
+      table.appendChild(labelRow);
+  
+      // Create data rows
+      for (let i = 1; i <= numRows; i++) { // Start at 1 to skip the first row
+        const row = document.createElement("tr");
+        for (let j = 1; j <= numCols; j++) {
+          const cell = document.createElement("td");
+          const input = document.createElement("input");
+          input.type = "text";
+        //   input.value = `Row ${i}, Column ${j}`;
+          
+          // Add an event listener for cell editing
+          input.addEventListener("blur", function () {
+            cell.textContent = input.value;
+          });
+          
+          cell.appendChild(input);
+          row.appendChild(cell);
+        }
+        table.appendChild(row);
+      }
+  
+      tableContainer.innerHTML = ""; // Clear previous content
+      tableContainer.appendChild(table);
+   // });
+  //});
 };
 
 };
