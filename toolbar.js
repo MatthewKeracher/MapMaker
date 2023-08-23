@@ -4,12 +4,14 @@ import Map   from "./map.js";
 import Add   from "./add.js";
 import Array from "./array.js";
 import Edit from "./edit.js";
+import Weather from "./weather.js";
 
 class Toolbar{
 
 init() {
 
-//toolbarMain
+Weather.initializeWeatherDropdowns();
+
 const mapButton = document.getElementById('mapButton');
 mapButton.addEventListener('click', this.handleMapButtonClick);
 
@@ -210,7 +212,7 @@ Edit.deleteLocation();
 
 handleNextButtonClick(){
 
-    if (Edit.editPage < 3) {
+    if (Edit.editPage < 4) {
         Edit.editPage = Edit.editPage + 1;
         Edit.pageChange(Edit.editPage);
     }

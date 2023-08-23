@@ -142,6 +142,9 @@ const miscLabel = document.getElementById('miscLabel')
 
 const tableForm = document.getElementById('tableForm')
 
+const WeatherContainer = document.querySelector('.WeatherContainer')
+
+
 
 switch (newPage) {
     case 1:
@@ -157,6 +160,7 @@ switch (newPage) {
       miscLabel.style.display = "none";
       misc.style.display = "none";
       tableForm.style.display = "none";
+      WeatherContainer.style.display = "none";
       break;
       
     case 2:
@@ -174,6 +178,7 @@ switch (newPage) {
       miscLabel.style.display = "none";
       misc.style.display = "none";
       tableForm.style.display = "none";
+      WeatherContainer.style.display = "none";
       break;
       
     case 3:
@@ -183,6 +188,25 @@ switch (newPage) {
       
 
       //Hide
+      editLocationName.style.display  = "none";
+      playerLabel.style.display = "none";
+      player.style.display = "none";
+      gmLabel.style.display = "none";
+      gm.style.display = "none";
+      miscLabel.style.display = "none";
+      misc.style.display = "none";
+      WeatherContainer.style.display = "none";
+
+      break;
+
+      case 4:
+
+      //Show
+      WeatherContainer.style.display = "flex";
+      
+
+      //Hide
+      tableForm.style.display = "none";
       editLocationName.style.display  = "none";
       playerLabel.style.display = "none";
       player.style.display = "none";

@@ -99,7 +99,10 @@ overflow: auto;
       .Storyteller .section {
         flex: 1;
       }
-    
+                .weather{
+                    color: skyblue;
+                    }
+
                 .player{
                     color: white;
                     }
@@ -364,6 +367,28 @@ overflow: auto;
         /* Add styling for the editing state */
         .spreadsheet td.editing {
         background-color: lime;
+        }
+
+
+        .WeatherContainer{
+            position: fixed;
+            top: 7vh;    
+            right: 18vw;                
+            height: 160vh;     
+            font-size: 2vh;
+            display: none;
+            flex-direction: column;
+
+        }
+
+        select {
+            padding: 8px;
+            font-size: 2vh;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: peachpuff;
+            width: 10vw;
+            font-family: monospace, 'Trebuchet MS', sans-serif;
         }
 
         .bottomToolbar{ 
