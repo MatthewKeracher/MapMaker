@@ -44,7 +44,7 @@ const Storyteller = {
   let rawStory = ``
   
   //ADD WEATHER
-  rawStory += `<span class="weather">${randomWeatherEntry.description}${chosenSenseDescription}\n\n\</span>`;
+  rawStory += `<span class="weather">${randomWeatherEntry.description}\n\n${chosenSenseDescription}\n\n</span>`;
 
   //ADD LOCATION BITS
   rawStory += `
