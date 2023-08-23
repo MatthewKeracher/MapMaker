@@ -46,7 +46,36 @@ inputElement.addEventListener("change", async (event) => {
 
 // Trigger a click event on the input element to open the file dialog
 inputElement.click();
-}
+},
+
+
+increaseOpacity() {
+    const locations = document.querySelectorAll('.selection');
+
+    locations.forEach((location) => {
+        const computedStyle = getComputedStyle(location);
+        const currentOpacity = parseFloat(computedStyle.opacity);
+        const newOpacity = isNaN(currentOpacity) ? 0.1 : currentOpacity + 0.1;
+        location.style.opacity = newOpacity;
+    });
+},
+
+decreaseOpacity() {
+    const locations = document.querySelectorAll('.selection');
+
+    locations.forEach((location) => {
+        const computedStyle = getComputedStyle(location);
+        const currentOpacity = parseFloat(computedStyle.opacity);
+        const newOpacity = isNaN(currentOpacity) ? 0.1 : currentOpacity - 0.1;
+        location.style.opacity = newOpacity;
+    });
+},
+
+
+
 };
+
+
+
 
 export default Map;

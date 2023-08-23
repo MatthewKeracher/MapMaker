@@ -55,6 +55,14 @@ insideSquareBracketsElements.forEach(element => {
   element.innerHTML = element.innerHTML.replace(/\[([^\]]+)\]/g, '<span class="inside-square-brackets">[$1]</span>');
 });
 
+// Apply enclosed-in-plus class to words enclosed in +
+const enclosedInPlusElements = Storyteller.querySelectorAll('.section');
+enclosedInPlusElements.forEach(element => {
+  element.innerHTML = element.innerHTML.replace(/\+([^+]+)\+/g, '<span class="enclosed-in-plus">+$1+</span>');
+});
+
+
+
 // Change Edit Content
 editPlayerText.value = player;
 editGMText.value = gm;

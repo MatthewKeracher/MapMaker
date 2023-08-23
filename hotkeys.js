@@ -1,5 +1,6 @@
 
 import Edit from "./edit.js";
+import Map from "./map.js";
 
 class Hotkeys{
 
@@ -29,6 +30,12 @@ case 'e':
 case 'd':
     dataButton.click();
     break;
+case ',':
+    Map.increaseOpacity();
+    break
+ case '.':
+    Map.decreaseOpacity();
+ break;
 
 // Add more cases for additional hotkeys here
 }

@@ -70,7 +70,7 @@ overflow: auto;
  
 .Storyteller{
     position: fixed;
-    top: 18vh;    
+    top: 20vh;    
     right: 0.35vw; 
     width: 28.5vw;   
     height: 78vh;  
@@ -105,7 +105,7 @@ overflow: auto;
                     }
     
                 .gm{
-                    color: lime;    
+                    color: orange;    
                     }
     
                 .misc{
@@ -117,17 +117,22 @@ overflow: auto;
                 }
                 
                 .inside-rounded-brackets{
-                    color: yellow;
+                    color: lime;
                 }
 
                 .inside-square-brackets {
                     color: hotpink; 
                   }
 
+                .inside-quotation-marks {
+                color: orange; /* Change this to the desired color */
+                /* Add other styling properties as needed */
+                }
+
                 .storyTable input {
                     height: 3vh;
                     width: 100%;
-                    border: 3px solid whitesmoke;
+                    border: 0.1px solid whitesmoke;
                     background-color: transparent;
                     color:whitesmoke;
                     font-size: 2vh;             
@@ -147,6 +152,33 @@ overflow: auto;
                         color: blue;
                         opacity: 1;
                         }
+
+                                /* Apply the 'resizable' class to the table */
+                                .resizable {
+                                table-layout: fixed; /* Set table layout to fixed for resizable columns */
+                                width: 100%; /* Ensure the table takes up the available space */
+                                }
+
+                                /* Style for the column resizer handle */
+                                .resizable th {
+                                position: relative;
+                                }
+
+                                .resizable th::after {
+                                content: '';
+                                position: absolute;
+                                top: 0;
+                                right: -5px; /* Adjust this value for the handle's position */
+                                width: 10px; /* Adjust the handle's width */
+                                height: 100%;
+                                cursor: col-resize;
+                                background: transparent;
+                                }
+
+                                /* Apply the resizable class to the input elements in the first row (header) */
+                                .resizable th input {
+                                width: 100%; /* Allow input elements to adjust based on header's width */
+                                }
                 
     
         .Storyteller:focus {
@@ -291,7 +323,7 @@ overflow: auto;
 
  /* Target the input elements within the form */
  .bottomTable input {
-    height: 6vh;
+    height: 3vh;
     width: 6vh;
     font-size: 2vh;
     text-align: center;
@@ -301,10 +333,9 @@ overflow: auto;
     }
  
         .spreadsheet td {
-        border: 1px solid whitesmoke;
+        border: 0.1px solid whitesmoke;
         color:whitesmoke;
         width: 28vw;
-        height: 6vh;
         font-weight: bold;
         padding: 0;
         margin: 0;
@@ -316,7 +347,7 @@ overflow: auto;
         }
 
         .spreadsheet tr:hover {
-        background-color: cyan;
+        background-color: lime;
         color: whitesmoke;
         }
 

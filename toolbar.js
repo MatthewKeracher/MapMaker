@@ -51,15 +51,8 @@ prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
 //table maker
 
-
-  
-  
-  
-  
-
 const generateTableButton = document.getElementById('generateTable');
 generateTableButton.addEventListener('click', this.handleeditgenerateTableButtonClick);
-
 }
 
 handleMapButtonClick() {  
@@ -123,8 +116,6 @@ selection.style.pointerEvents = 'auto';
 });
 }}
 
-
-
 };
 
 handleEditButtonClick() {
@@ -184,7 +175,7 @@ div.removeEventListener('mouseleave', Edit.handleMouseHover);
 });
 }
 }
-}
+};
 
 handleSaveButtonClick(){
 
@@ -292,6 +283,8 @@ handleeditgenerateTableButtonClick(){
    // });
   //});
 };
+
+
 
 };
 
