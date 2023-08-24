@@ -99,7 +99,7 @@ overflow: auto;
       .Storyteller .section {
         flex: 1;
       }
-                .weather{
+                .ambience{
                     color: skyblue;
                     }
 
@@ -370,15 +370,22 @@ overflow: auto;
         }
 
 
-        .WeatherContainer{
+        .AmbienceContainer{
             position: fixed;
-            top: 7vh;    
-            right: 18vw;                
+            color: whitesmoke;
+            top: 7vh;   
+            width: 30vw; 
+            right: 0vw;                
             height: 160vh;     
             font-size: 2vh;
             display: none;
             flex-direction: column;
+        }
 
+        .AmbienceContainer label{
+            color: hotpink;
+            font-size: 2.5vh;
+            left: 0;
         }
 
         select {

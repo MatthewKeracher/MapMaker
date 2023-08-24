@@ -1,5 +1,5 @@
 import Array from "./array.js";
-import Weather from "./weather.js";
+import Ambience from "./ambience.js";
 
 const Storyteller = {
     
@@ -31,24 +31,50 @@ const Storyteller = {
   const misc = matchingEntry.misc;
   const spreadsheet = matchingEntry.spreadsheetData;
 
-  //GET WEATHER DATA USING DROPDOWNS 
-  const selectedSeason = document.getElementById("seasonDropdown").value;
-  const selectedTimeOfDay = document.getElementById("timeOfDayDropdown").value; 
-  const randomWeatherEntry = await Weather.loadRandomWeatherEntry(selectedSeason, selectedTimeOfDay);
+  //GET AMBIENCE MAIN FROM DROPDOWN
+  const mainSelect = document.getElementById("mainAmbienceDropdown").value;
 
-  // Randomly choose between "sight," "smell," "touch," and "feel"
+  //GET AMBIENCE SECOND FROM CLOCK
+
+  //Morning [0], Afternoon [1], Night [2]
+  const allPhases = document.getElementById("secondAmbienceDropdown"); 
+  const currentPhase = allPhases[Ambience.phase].value;
+
+  //Within Random Selection, filter through.
   const senses = ["sight", "smell", "touch", "feel"];
-  const chosenSense = senses[Math.floor(Math.random() * senses.length)];
-  const chosenSenseDescription = randomWeatherEntry[chosenSense]; 
+  const chosenSense = senses[Ambience.hour];
+  
+  //console.log(chosenSense);  
+
+  const ambienceEntry = await Ambience.loadAmbienceEntry(mainSelect, currentPhase);
+  
+  //Retain returned entry until next phase.
+  Ambience.current = ambienceEntry;  
+
+  //-- NEED TO SEPERATE
+  // Randomly choose between "sight," "smell," "touch," and "feel"
+  let ambienceIntro = 'It is a [' + mainSelect + ' ' + currentPhase + ']. '  
+
+  //Let Time Pass
+  Ambience.clock();
+      
+ 
 
   let rawStory = ``
   
-  //ADD WEATHER
-  rawStory += `<span class="weather">${randomWeatherEntry.description}\n\n${chosenSenseDescription}\n\n</span>`;
+  //ADD AMBIENCE
+  rawStory += `<span class="ambience">
+  ${ambienceIntro}\n
+  ${ambienceEntry.description}\n
+  ${ambienceEntry[chosenSense]}\n
+  </span>`;
+
+  let playerIntro = 'You are at the [' + locationName.textContent + ']. '  
+
 
   //ADD LOCATION BITS
   rawStory += `
-  <span class="section player">${player}\n\n\</span>
+  <span class="section player"> ${playerIntro} \n\n ${player} \n\n\ </span>
   <span class="section gm">${gm}\n\n\</span>
   <span class="section misc">${misc}\n\n\</span>              
   `;     

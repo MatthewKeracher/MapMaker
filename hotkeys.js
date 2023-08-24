@@ -67,11 +67,19 @@ break;
 
 }
 
+
 });  
 
-}
+
 
 }
+
+spreadsheetHotkeys() {
+   
+
+}
+
+};
 
 const hotkeys = new Hotkeys();
 hotkeys.init(); 

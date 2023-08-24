@@ -87,18 +87,23 @@
 
 </form>
 
-<div class="WeatherContainer"> 
+<div class="AmbienceContainer"> 
 
-<label for="seasonDropdown">Select Season:</label>
-    <select id="seasonDropdown">
-        <option value="">Select a season</option>
+<label id = "AmbienceHead"> Set Ambience:</label>
+<p>Set the dynamic and continuous description style to theme each entry. These
+    are stored in a .json file.
+</p>
+
+<label for="mainAmbienceDropdown">Select Main:</label>
+    <select id="mainAmbienceDropdown">
+        <option value="">Select Main</option>
     </select>
 
     <br>
 
-    <label for="timeOfDayDropdown">Select Time of Day:</label>
-    <select id="timeOfDayDropdown">
-        <option value="">Select a time of day</option>
+    <label for="secondAmbienceDropdown">Select Second:</label>
+    <select id="secondAmbienceDropdown">
+        <option value="">Select Second</option>
     </select>
 
 </div>
@@ -123,7 +128,7 @@
     <script type="module" src="add.js"></script>
     <script type="module" src="array.js"></script>
     <script type="module" src="edit.js"></script>
-    <script type="module" src="weather.js"></script> 
+    <script type="module" src="ambience.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 

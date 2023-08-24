@@ -142,7 +142,7 @@ const miscLabel = document.getElementById('miscLabel')
 
 const tableForm = document.getElementById('tableForm')
 
-const WeatherContainer = document.querySelector('.WeatherContainer')
+const AmbienceContainer = document.querySelector('.AmbienceContainer')
 
 
 
@@ -160,7 +160,7 @@ switch (newPage) {
       miscLabel.style.display = "none";
       misc.style.display = "none";
       tableForm.style.display = "none";
-      WeatherContainer.style.display = "none";
+      AmbienceContainer.style.display = "none";
       break;
       
     case 2:
@@ -178,7 +178,7 @@ switch (newPage) {
       miscLabel.style.display = "none";
       misc.style.display = "none";
       tableForm.style.display = "none";
-      WeatherContainer.style.display = "none";
+      AmbienceContainer.style.display = "none";
       break;
       
     case 3:
@@ -195,14 +195,14 @@ switch (newPage) {
       gm.style.display = "none";
       miscLabel.style.display = "none";
       misc.style.display = "none";
-      WeatherContainer.style.display = "none";
+      AmbienceContainer.style.display = "none";
 
       break;
 
       case 4:
 
       //Show
-      WeatherContainer.style.display = "flex";
+      AmbienceContainer.style.display = "flex";
       
 
       //Hide

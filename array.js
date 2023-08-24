@@ -127,19 +127,20 @@ try {
         displayLoadedLocationsOnMap(data) {
         //  // Clear the existing content
         // imageContainer.innerHTML = '';
-        //Set Colour
-        const colorList = ["lime", "orange", "cyan", "hotpink", "gold"];
+
+                //Set Colour
+                const colorList = ["lime", "orange", "cyan", "hotpink", "gold"];
 
         // Add the loaded locations to the map and the array
         data.forEach((locationData) => {
         const newLoc = this.addSaveLocation(locationData);
 
-        // Choose a random color from the colorList
-        const randomColorIndex = Math.floor(Math.random() * colorList.length);
-        const randomColor = colorList[randomColorIndex];
+                // Choose a random color from the colorList
+                const randomColorIndex = Math.floor(Math.random() * colorList.length);
+                const randomColor = colorList[randomColorIndex];
 
-        // Set the chosen random color as the background color
-        newLoc.style.backgroundColor = randomColor;
+                // Set the chosen random color as the background color
+                newLoc.style.backgroundColor = randomColor;
 
         const imageContainer = document.querySelector('.image-container');
         const firstChild = imageContainer.firstChild;
@@ -169,6 +170,7 @@ try {
                 newLoc.id = divId;
 
                 // Create a label element for the div ID
+                const imageContainer = document.querySelector('.image-container');
                 const labelElement = document.createElement('div');
                 labelElement.className = 'div-id-label';
                 labelElement.textContent = divId;

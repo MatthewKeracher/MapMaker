@@ -4,13 +4,14 @@ import Map   from "./map.js";
 import Add   from "./add.js";
 import Array from "./array.js";
 import Edit from "./edit.js";
-import Weather from "./weather.js";
+import Ambience from "./ambience.js";
+import Hotkeys from "./hotkeys.js";
 
 class Toolbar{
 
 init() {
 
-Weather.initializeWeatherDropdowns();
+Ambience.initializeAmbienceDropdowns();
 
 const mapButton = document.getElementById('mapButton');
 mapButton.addEventListener('click', this.handleMapButtonClick);
@@ -262,26 +263,29 @@ handleeditgenerateTableButtonClick(){
   
       // Create data rows
       for (let i = 1; i <= numRows; i++) { // Start at 1 to skip the first row
-        const row = document.createElement("tr");
-        for (let j = 1; j <= numCols; j++) {
-          const cell = document.createElement("td");
-          const input = document.createElement("input");
-          input.type = "text";
-        //   input.value = `Row ${i}, Column ${j}`;
-          
-          // Add an event listener for cell editing
-          input.addEventListener("blur", function () {
-            cell.value = input.value;
-          });
-          
-          cell.appendChild(input);
-          row.appendChild(cell);
-        }
-        table.appendChild(row);
+      const row = document.createElement("tr");
+      for (let j = 1; j <= numCols; j++) {
+      const cell = document.createElement("td");
+      const input = document.createElement("input");
+      input.type = "text";
+
+      // Add an event listener for cell editing
+      input.addEventListener("blur", function () {
+      cell.textContent = input.value;
+      });
+
+      // Set the ID based on x and y coordinates
+      input.id = `cell-${i}-${j}`;
+
+      cell.appendChild(input);
+      row.appendChild(cell);
+      }
+      table.appendChild(row);
       }
   
       tableContainer.innerHTML = ""; // Clear previous content
       tableContainer.appendChild(table);
+      Hotkeys.spreadsheetHotkeys();
    // });
   //});
 };
