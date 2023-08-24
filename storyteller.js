@@ -36,6 +36,9 @@ const Storyteller = {
 
   //GET AMBIENCE SECOND FROM CLOCK
 
+  //Let Time Pass
+  Ambience.clock();
+
   //Morning [0], Afternoon [1], Night [2]
   const allPhases = document.getElementById("secondAmbienceDropdown"); 
   const currentPhase = allPhases[Ambience.phase].value;
@@ -55,8 +58,7 @@ const Storyteller = {
   // Randomly choose between "sight," "smell," "touch," and "feel"
   let ambienceIntro = 'It is a [' + mainSelect + ' ' + currentPhase + ']. '  
 
-  //Let Time Pass
-  Ambience.clock();
+  
       
  
 

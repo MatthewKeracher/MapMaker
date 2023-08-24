@@ -18,11 +18,72 @@ const Ambience = {
 
     async initializeAmbienceDropdowns() {
         const ambienceArray = await this.loadAmbienceArray();
-        const uniqueMain = [...new Set(ambienceArray.map(item => item.main))];
-        const uniqueSecond = [...new Set(ambienceArray.map(item => item.second))];
-        this.populateDropdown(document.getElementById("mainAmbienceDropdown"), uniqueMain);
-        this.populateDropdown(document.getElementById("secondAmbienceDropdown"), uniqueSecond);
-    },
+        const uniqueContext = [...new Set(ambienceArray.map(item => item.context))];
+        this.populateDropdown(document.getElementById("contextDropdown"), uniqueContext);
+      
+        const mainDropdown = document.getElementById("mainAmbienceDropdown");
+        const secondDropdown = document.getElementById("secondAmbienceDropdown");
+        const contextDropdown = document.getElementById("contextDropdown");
+        const radianceDropdown = document.getElementById("radianceDropdown");
+      
+        // Set default context, main, and second values
+        const defaultContext = uniqueContext[0];
+        const filteredByDefaultContext = ambienceArray.filter(item => item.context === defaultContext);
+        const defaultMain = filteredByDefaultContext.length > 0 ? filteredByDefaultContext[0].main : "";
+        const filteredByDefaultMain = ambienceArray.filter(item => item.main === defaultMain);
+        const defaultSecond = filteredByDefaultMain.length > 0 ? filteredByDefaultMain[0].second : "";
+      
+        // Set default values for dropdowns
+        contextDropdown.value = defaultContext;
+        this.populateDropdown(mainDropdown, [...new Set(filteredByDefaultContext.map(item => item.main))]);
+        mainDropdown.value = defaultMain;
+        this.populateDropdown(secondDropdown, [...new Set(filteredByDefaultMain.map(item => item.second))]);
+        secondDropdown.value = defaultSecond;
+
+        radianceDropdown.addEventListener("change", () => {
+            console.log('radiate');
+            this.radiateDisplay();
+        });
+      
+        contextDropdown.addEventListener("change", () => {
+          const selectedContext = contextDropdown.value;
+          const filteredByContext = ambienceArray.filter(item => item.context === selectedContext);
+          
+          if (filteredByContext.length > 0) {
+            const uniqueMain = [...new Set(filteredByContext.map(item => item.main))];
+            this.populateDropdown(mainDropdown, uniqueMain);
+            
+            //Simulate Click on Second Dropdown
+            const event = new Event("change", { bubbles: true, cancelable: true });
+            mainDropdown.dispatchEvent(event);
+          } else {
+            mainDropdown.innerHTML = '<option value="">No Data</option>';
+            secondDropdown.innerHTML = '<option value="">No Data</option>';
+          }
+        });
+      
+        mainDropdown.addEventListener("change", () => {
+          const selectedMain = mainDropdown.value;
+          const filteredByMain = ambienceArray.filter(item => item.main === selectedMain);
+          const uniqueFilteredSecond = [...new Set(filteredByMain.map(item => item.second))];
+          this.populateDropdown(secondDropdown, uniqueFilteredSecond);
+        });
+      
+        secondDropdown.addEventListener("change", () => {
+          // Handle second dropdown change
+        });
+      },
+      
+      populateDropdown(dropdown, values) {
+        dropdown.innerHTML = '<option value="">Select</option>';
+        values.forEach(value => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          dropdown.appendChild(option);
+        });
+      }
+      ,
 
     populateDropdown(dropdown, options) {
         dropdown.innerHTML = ''; // Clear existing options
@@ -51,35 +112,173 @@ const Ambience = {
             }
         }
     }
+
+this.radiateDisplay();
+
 },
 
-    async loadAmbienceEntry(main, second) {
-        
-        const ambienceArray = await this.loadAmbienceArray();
-      
-        // Filter ambienceArray based on selected values
-        const filterArray = ambienceArray.filter(entry =>
-            entry.main === main && entry.second === second
-        );
+radiateDisplay(){
 
-        
-        console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
-      
-        if(this.hour > 0){
+const overlay = document.getElementById('radiantDisplay');
+const radianceDropdown = document.getElementById('radianceDropdown').value;
 
-           return this.current;       
+if(radianceDropdown === 'exterior'){
+    switch (this.phase) {
+    case 0: // Morning
+    switch (this.hour) {
+        case 0: 
         
-        }else{
+        overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+        overlay.style.opacity = "0.2";
 
-            if(this.hour === 0){
+        break;
+
+        case 1: 
+        
+        overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+        overlay.style.opacity = "0.1";
+
+        break;
+
+        case 2: 
+        
+        overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+        overlay.style.opacity = "0.2";
+
+    
+        break;
+
+        case 3: 
+
+        overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+        overlay.style.opacity = "0.3";
+
+        break;
+
+            default:
+            break;
+        }
+    break;
+
+    case 1: // Afternoon
+        switch (this.hour) {
+            case 0: 
+        
+            overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+            overlay.style.opacity = "0.2";
+        
+            break;
+        
+            case 1: 
             
-            const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
-            console.log('New Description: ' + randomEntry.title);
-            return randomEntry;
-        }}
-
+            overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.1";
         
-      },
+            break;
+        
+            case 2: 
+            
+            overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.2";
+        
+        
+            break;
+        
+            case 3: 
+        
+            overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.3";
+        
+            break;
+
+        default:
+        break;
+        }
+    break;
+
+    case 2: // Night
+        switch (this.hour) {
+            case 0: 
+        
+            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.4";
+        
+            break;
+        
+            case 1: 
+            
+            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.5";
+        
+            break;
+        
+            case 2: 
+        
+            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.6";
+        
+        
+            break;
+        
+            case 3: 
+        
+            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.7";
+        
+            break;
+
+        default:
+        break;
+        }
+    break;
+
+    default:
+    break;
+    }
+}else{
+
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.5";
+
+}
+
+
+},
+
+
+async loadAmbienceEntry(main, second) {
+
+const ambienceArray = await this.loadAmbienceArray();
+
+// Filter ambienceArray based on selected values
+const filterArray = ambienceArray.filter(entry =>
+entry.main === main && entry.second === second
+);
+
+console.log('current: ' + this.current);
+
+if(this.current === ''){
+const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
+return randomEntry;     
+};
+
+console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
+
+if(this.hour > 0){
+
+return this.current;       
+
+}else{
+
+if(this.hour === 0){
+
+const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
+console.log('New Description: ' + randomEntry.title);
+return randomEntry;
+}}
+
+
+},
 
 
 };

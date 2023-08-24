@@ -394,7 +394,7 @@ overflow: auto;
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: peachpuff;
-            width: 10vw;
+            width: 15vw;
             font-family: monospace, 'Trebuchet MS', sans-serif;
         }
 
@@ -425,6 +425,15 @@ overflow: auto;
         width: 5px; /* Set the width of the scrollbar */
         }
 
+        .overlay-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 70vw;
+            height: 100vh;
+            pointer-events: none; /* Allow interactions with elements beneath the overlay */
+          }          
+
         .preview {
         position: absolute;
         z-index: 2;
@@ -442,9 +451,7 @@ overflow: auto;
             /*transition: background-color 0s; 8*/              
             }
                 .selection:hover {
-                outline: 1vh lime;
-                background-color: lime;  
-                opacity: 0.9;                
+                    opacity: 0.9;                
                 }      
                     .div-id-label{
                     position: absolute;
