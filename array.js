@@ -150,7 +150,8 @@ locationArray: [],
                 }
 
                 try{
-                console.log(data.npcArray)
+                NPCs.npcArray = data.npcArray;
+                console.log(NPCs.npcArray);
                 } catch (error) {
                 console.error('Error loading NPC information:', error);
                 }

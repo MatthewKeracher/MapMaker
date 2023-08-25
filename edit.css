@@ -33,7 +33,7 @@
         border-radius: 0px; /* Adjust the border radius for rounded corners */
     }
 
-label {
+    .EditorContainer label {
     position: relative;
     left: 0.5vw;
     font-weight: bold;
@@ -100,8 +100,8 @@ border-color: hotpink;
 color: cyan;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+.topTable input[type="number"]::-webkit-inner-spin-button,
+.topTable input[type="number"]::-webkit-outer-spin-button {
 -webkit-appearance: none;
 margin: 0;
 }
@@ -199,7 +199,7 @@ font-family: monospace, 'Trebuchet MS', sans-serif;
         left: 0;
     }
 
-    select {
+    .AmbienceContainer select {
         padding: 8px;
         font-size: 2vh;
         border: 1px solid #ccc;
