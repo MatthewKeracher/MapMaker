@@ -6,6 +6,7 @@ import Array from "./array.js";
 import Edit from "./edit.js";
 import Ambience from "./ambience.js";
 import Hotkeys from "./hotkeys.js";
+import NPCs from "./npcs.js";
 
 class Toolbar{
 
@@ -51,6 +52,10 @@ nextButton.addEventListener('click', this.handleNextButtonClick);
 
 const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
+
+//NPC Form
+const createNPCButton = document.getElementById('createNPCButton');
+createNPCButton.addEventListener('click', this.handleeditcreateNPCButtonClick);
 
 //table maker
 
@@ -213,7 +218,7 @@ Edit.deleteLocation();
 
 handleNextButtonClick(){
 
-    if (Edit.editPage < 4) {
+    if (Edit.editPage < 5) {
         Edit.editPage = Edit.editPage + 1;
         Edit.pageChange(Edit.editPage);
     }
@@ -289,6 +294,12 @@ handleeditgenerateTableButtonClick(){
    // });
   //});
 };
+
+handleeditcreateNPCButtonClick(){
+
+    NPCs.createNPCButtonClicked();
+
+}
 
 
 

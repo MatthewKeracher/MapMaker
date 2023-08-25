@@ -144,6 +144,8 @@ const tableForm = document.getElementById('tableForm')
 
 const AmbienceContainer = document.querySelector('.AmbienceContainer')
 
+const npcForm = document.querySelector('.npcForm')
+
 
 
 switch (newPage) {
@@ -155,6 +157,7 @@ switch (newPage) {
       player.style.display = "flex";
 
       //Hide
+      npcForm.style.display = "none"
       gmLabel.style.display = "none";
       gm.style.display = "none";
       miscLabel.style.display = "none";
@@ -173,6 +176,25 @@ switch (newPage) {
 
       //Hide
  
+      npcForm.style.display = "none"
+      playerLabel.style.display = "none";
+      player.style.display = "none";
+      miscLabel.style.display = "none";
+      misc.style.display = "none";
+      tableForm.style.display = "none";
+      AmbienceContainer.style.display = "none";
+      break;
+
+      case 3:
+
+      //Show
+      npcForm.style.display = "flex"
+
+
+      //Hide
+      editLocationName.style.display  = "none";
+      gmLabel.style.display = "none";
+      gm.style.display = "none";
       playerLabel.style.display = "none";
       player.style.display = "none";
       miscLabel.style.display = "none";
@@ -181,13 +203,14 @@ switch (newPage) {
       AmbienceContainer.style.display = "none";
       break;
       
-    case 3:
+    case 4:
 
       //Show
       tableForm.style.display = "flex";
       
 
       //Hide
+      npcForm.style.display = "none"
       editLocationName.style.display  = "none";
       playerLabel.style.display = "none";
       player.style.display = "none";
@@ -199,13 +222,14 @@ switch (newPage) {
 
       break;
 
-      case 4:
+      case 5:
 
       //Show
       AmbienceContainer.style.display = "flex";
       
 
       //Hide
+      npcForm.style.display = "none"
       tableForm.style.display = "none";
       editLocationName.style.display  = "none";
       playerLabel.style.display = "none";

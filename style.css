@@ -87,7 +87,7 @@ overflow: auto;
     flex-direction: column;
     resize: none;
     white-space: pre-line; 
-    text-align: justify;
+    text-align: left;
     
             
     }
@@ -104,11 +104,11 @@ overflow: auto;
                     }
 
                 .player{
-                    color: white;
+                    color: bisque;
                     }
     
                 .gm{
-                    color: orange;    
+                    color: bisque;    
                     }
     
                 .misc{
@@ -120,12 +120,17 @@ overflow: auto;
                 }
                 
                 .inside-rounded-brackets{
-                    color: lime;
+                    color: gold;
                 }
 
                 .inside-square-brackets {
                     color: hotpink; 
                   }
+
+                .inside-curly-brackets{
+                    color:red;
+                    font-weight: bold;
+                }
 
                 .inside-quotation-marks {
                 color: orange; /* Change this to the desired color */
@@ -245,7 +250,6 @@ overflow: auto;
         padding: 1vh;
 
     }
-
         .editBox:focus {
             border-color: lime; /* Change the border color */
             outline: none; /* Remove the default outline */
@@ -253,6 +257,47 @@ overflow: auto;
             color: lime; /* Change the text color */
             border-radius: 0px; /* Adjust the border radius for rounded corners */
         }
+
+/* Style for the form container */
+#npcForm {
+width: 30vw;
+height: 70wh;
+display: flex;
+flex-direction: column; /* Arrange elements in a column */
+align-items: flex-start; /* Align elements to the start of the column */
+border-radius: 0px;
+background-color: transparent;
+}
+        
+input[type="text"],
+input[type="number"] {
+margin: 1vh; 
+font-size: 2vh;
+border: 0.2vh solid hotpink; 
+text-align: left;
+vertical-align: top;    
+background-color: transparent; 
+color: bisque;
+padding: 1vh;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+}
+
+                /* Style for the create button */
+                #createNPCButton {
+                    width: 13vw; /* Make each button fill the width of the toolbar */
+                    height: 6vh; 
+                    font-size: 2vh; 
+                    padding: 1vh 1vw; 
+                    margin: 0vh 0vw; /* Add margin to control spacing */
+                    border: 0.1vh solid black; 
+                    transition: background-color 0.3s; 
+                    font-family: monospace, 'Trebuchet MS', sans-serif;
+                }
+
+                #createNPCButton:hover {
+                background-color: hotpink;
+                }
+
     
 
 /* Target the entire form */

@@ -59,6 +59,28 @@
                                              
                 <label id = "miscLabel"> Miscellaneous</label>
                 <textarea class="editBox" id="editMiscText" placeholder="Textbox 3"></textarea>  
+
+                <form id="npcForm" class="npcForm">
+                    <label for="npcName">NPC Name:</label>
+                    <input type="text" id="npcName" name="npcName" required>
+            
+                    <label for="npcDetails">NPC Details:</label>
+                    <input type="text" id="npcDetails" name="npcDetails" required>
+            
+                    <label for="npcHitPoints">Hit Points:</label>
+                    <input type="number" id="npcHitPoints" name="npcHitPoints" required>
+            
+                    <label for="npcEquipment">Equipment:</label>
+                    <input type="text" id="npcEquipment" name="npcEquipment" required>
+            
+                    <label for="primaryLocation">Primary Location:</label>
+                    <input type="text" id="primaryLocation" name="primaryLocation" required>
+
+                    <label for="secondaryLocation">Secondary Location:</label>
+                    <input type="text" id="secondaryLocation" name="secondaryLocation">
+            
+                    <button type="button" id="createNPCButton">Create NPC</button>
+                </form>
                 
 <form id="tableForm">
 
@@ -142,6 +164,8 @@
     <script type="module" src="array.js"></script>
     <script type="module" src="edit.js"></script>
     <script type="module" src="ambience.js"></script> 
+    <script type="module" src="monsters.js"></script> 
+    <script type="module" src="npcs.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 

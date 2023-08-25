@@ -1,3 +1,6 @@
+{
+    "monsters":
+
 [
 {
 "name": "Aerial Servant",
@@ -1082,5 +1085,5 @@
 "description": "Wild Dogs roam various regions and may overlap with wolf territories. They avoid contact and can be tamed if separated from their pack."
 }  
 
-]
+]}
   

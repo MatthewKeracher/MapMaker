@@ -49,7 +49,7 @@ inputElement.addEventListener("change", async (event) => {
         this.mapHeight = mapElement.naturalHeight;
         this.mapWidth  = mapElement.naturalWidth;
 
-        console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
+        //console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
 
         this.radiantDisplay();
         
@@ -65,7 +65,7 @@ radiantDisplay() {
     const overlay = document.createElement("div");
     overlay.className = "overlay-layer"; // You can define a class for styling
     overlay.id = "radiantDisplay"
-    console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
+    //console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
     // overlay.style.width = this.mapWidth; // Match the width
     // overlay.style.height = this.mapHeight; // Match the height
   

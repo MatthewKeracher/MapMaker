@@ -1,5 +1,6 @@
 import Array from "./array.js";
 import Ambience from "./ambience.js";
+import Monsters from "./monsters.js";
 
 const Storyteller = {
     
@@ -58,10 +59,7 @@ const Storyteller = {
   // Randomly choose between "sight," "smell," "touch," and "feel"
   let ambienceIntro = 'It is a [' + mainSelect + ' ' + currentPhase + ']. '  
 
-  
-      
  
-
   let rawStory = ``
   
   //ADD AMBIENCE
@@ -73,11 +71,13 @@ const Storyteller = {
 
   let playerIntro = 'You are at the [' + locationName.textContent + ']. '  
 
+  // Replace monster placeholders in the GM text
+  const gmTextWithMonsters = await this.replaceMonsterPlaceholders(gm);
 
   //ADD LOCATION BITS
   rawStory += `
   <span class="section player"> ${playerIntro} \n\n ${player} \n\n\ </span>
-  <span class="section gm">${gm}\n\n\</span>
+  <span class="section gm">${gmTextWithMonsters}\n\n\</span>
   <span class="section misc">${misc}\n\n\</span>              
   `;     
 
@@ -118,18 +118,55 @@ const Storyteller = {
     };
   }, 
 
+  async replaceMonsterPlaceholders(text) {
+    const monsterPlaceholderRegex = /\{([^}]+)\}/g;
+    const monstersArray = await Monsters.loadMonstersArray();
+
+    return text.replace(monsterPlaceholderRegex, (match, monsterName) => {
+        const monster = monstersArray.find(monster => monster.name === monsterName);
+        if (monster) {
+
+          const formattedMonsterName = monster.name.toUpperCase();
+
+            const attributes = [
+                `${formattedMonsterName}`,             
+                `#:{${monster.number_appearing}}`,
+                `Armour Class:{${monster.armor_class === "Nil" || monster.armor_class === "0" ? "" : monster.armor_class}}`,
+                `Move:(${monster.move === "Nil" ? "" : monster.move})`,
+                `Hit Dice:{${monster.hit_dice === "Nil" ? "" : monster.hit_dice}}`,              
+                `Attacks:{${monster.number_of_attacks}}`,
+                `Damage:{${monster.damage_attack === "Nil" ? "" : monster.damage_attack}}`,
+                `\n\n{${monster.description === "Nil" ? "" : monster.description}}`,
+                //add other fields here
+                
+            ];
+
+            const formattedAttributes = attributes
+                .filter(attribute => {
+                    const [, value] = attribute.split(": ");
+                    return value !== '""' && value !== '0' && value !== 'Nil';
+                })
+                .join("; ");
+
+            return `${formattedAttributes}`;
+        } else {
+            return match; // Keep the original placeholder if monster not found
+        }
+    });
+},
   
 applyStyling(content) {
+
 const allCapsPattern = /\b([A-Z]{2,})\b/g;
 const insideRoundedBracketsPattern = /\(([^)]+)\)/g;
 const insideSquareBracketsPattern = /\[([^\]]+)\]/g;
-const enclosedInPlusPattern = /\+([^+]+)\+/g;
+const insideCurlyBrackets = /\{([^}]+)\}/g;
 
 return content
 .replace(allCapsPattern, '<span class="all-caps">$1</span>')
 .replace(insideRoundedBracketsPattern, '<span class="inside-rounded-brackets">($1)</span>')
 .replace(insideSquareBracketsPattern, '<span class="inside-square-brackets">[$1]</span>')
-.replace(enclosedInPlusPattern, '<span class="enclosed-in-plus">+$1+</span>');
+.replace(insideCurlyBrackets, '<span class="inside-curly-brackets">{$1}</span>');
 },
 
                     

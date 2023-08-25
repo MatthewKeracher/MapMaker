@@ -5,6 +5,7 @@ const Ambience = {
     current: '',
 
     async loadAmbienceArray() {
+
         try {
             const response = await fetch('ambience.json'); // Adjust the path if needed
             const data = await response.json();
@@ -14,7 +15,28 @@ const Ambience = {
             console.error('Error loading ambience array:', error);
             return [];
         }
+
     },
+
+        simConDrop(){
+
+        //Simulate Click on Second Dropdown
+        const contextDropdown = document.getElementById("contextDropdown");
+        const event = new Event("change", { bubbles: true, cancelable: true });
+
+        contextDropdown.dispatchEvent(event);
+
+        },
+
+        simMainDrop(){
+
+        //Simulate Click on Second Dropdown
+        const mainDropdown = document.getElementById("mainAmbienceDropdown");
+        const event = new Event("change", { bubbles: true, cancelable: true });
+
+        mainDropdown.dispatchEvent(event);
+
+        },
 
     async initializeAmbienceDropdowns() {
         const ambienceArray = await this.loadAmbienceArray();
@@ -53,9 +75,8 @@ const Ambience = {
             const uniqueMain = [...new Set(filteredByContext.map(item => item.main))];
             this.populateDropdown(mainDropdown, uniqueMain);
             
-            //Simulate Click on Second Dropdown
-            const event = new Event("change", { bubbles: true, cancelable: true });
-            mainDropdown.dispatchEvent(event);
+            this.simMainDrop();
+
           } else {
             mainDropdown.innerHTML = '<option value="">No Data</option>';
             secondDropdown.innerHTML = '<option value="">No Data</option>';
@@ -255,14 +276,14 @@ const filterArray = ambienceArray.filter(entry =>
 entry.main === main && entry.second === second
 );
 
-console.log('current: ' + this.current);
+//console.log('current: ' + this.current);
 
 if(this.current === ''){
 const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
 return randomEntry;     
 };
 
-console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
+//console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
 
 if(this.hour > 0){
 
@@ -273,7 +294,7 @@ return this.current;
 if(this.hour === 0){
 
 const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
-console.log('New Description: ' + randomEntry.title);
+//console.log('New Description: ' + randomEntry.title);
 return randomEntry;
 }}
 
