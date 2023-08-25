@@ -1,0 +1,54 @@
+.image-container {
+    position: relative;
+    width: 70vw; 
+    height: 100vh; 
+    overflow: auto;    
+    scrollbar-color: black;
+    overflow: auto; 
+    }
+        .map-image {
+        position: relative;
+        
+        z-index: 0;
+        }
+            .image-container::-webkit-scrollbar {
+            width: 5px; /* Set the width of the scrollbar */
+            }
+    
+            .overlay-layer {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 70vw;
+                height: 100vh;
+                pointer-events: none; /* Allow interactions with elements beneath the overlay */
+              }          
+    
+            .preview {
+            position: absolute;
+            z-index: 2;
+            border: 6px solid lime;
+            pointer-events: none; /* Prevent the preview div from blocking interactions */
+            opacity: 1; /* You can adjust the opacity as desired */
+            }
+                .selection {
+                position: absolute;
+                z-index: 1;                
+                height: 50px;
+                width: 50px;
+                background-color: orange;  
+                opacity: 0.5;  
+                /*transition: background-color 0s; 8*/              
+                }
+                    .selection:hover {
+                        opacity: 0.9;                
+                    }      
+                        .div-id-label{
+                        position: absolute;
+                        color: black;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 2vh;                       
+                        opacity: 1;                    
+                        }

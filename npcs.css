@@ -1,0 +1,39 @@
+/* Style for the form container */
+#npcForm {
+    width: 30vw;
+    height: 70wh;
+    display: flex;
+    flex-direction: column; /* Arrange elements in a column */
+    align-items: flex-start; /* Align elements to the start of the column */
+    border-radius: 0px;
+    background-color: transparent;
+    }
+        
+    input[type="text"],
+    input[type="number"] {
+    margin: 1vh; 
+    font-size: 2vh;
+    border: 0.2vh solid hotpink; 
+    text-align: left;
+    vertical-align: top;    
+    background-color: transparent; 
+    color: bisque;
+    padding: 1vh;
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    }
+    
+                /* Style for the create button */
+                #createNPCButton {
+                    width: 13vw; /* Make each button fill the width of the toolbar */
+                    height: 6vh; 
+                    font-size: 2vh; 
+                    padding: 1vh 1vw; 
+                    margin: 0vh 0vw; /* Add margin to control spacing */
+                    border: 0.1vh solid black; 
+                    transition: background-color 0.3s; 
+                    font-family: monospace, 'Trebuchet MS', sans-serif;
+                }
+    
+                #createNPCButton:hover {
+                background-color: hotpink;
+                }

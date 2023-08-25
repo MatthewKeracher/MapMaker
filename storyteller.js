@@ -10,6 +10,7 @@ const Storyteller = {
 
   const locationName     = document.querySelector('.locationLabel');
   const editLocationName = document.querySelector('.editLocationName');
+  const primaryLocation = document.getElementById('primaryLocation')
 
   const Storyteller      = document.getElementById('Storyteller');
 
@@ -20,6 +21,9 @@ const Storyteller = {
   //CHANGE CONTENT - SIDEBAR TITLES
   locationName.textContent = divId;
   editLocationName.value   = divId;
+  
+  //CHANGE CONTENT IN NPCFORM
+  primaryLocation.value = divId;
 
   //USE TITLE TO FIND REST OF DATA
   const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
@@ -99,6 +103,8 @@ const Storyteller = {
       editPlayerText.value = player;
       editGMText.value = gm;
       editMiscText.value = misc;
+
+      
 
       try {
         // Populate the spreadsheet cells with the saved content

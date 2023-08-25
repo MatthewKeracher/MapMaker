@@ -297,7 +297,7 @@ handleeditgenerateTableButtonClick(){
 
 handleeditcreateNPCButtonClick(){
 
-    NPCs.createNPCButtonClicked();
+       NPCs.createNPCButtonClicked();
 
 }
 

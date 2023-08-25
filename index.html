@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="map.css">    
+    <link rel="stylesheet" href="toolbar.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="storyteller.css">
+    <link rel="stylesheet" href="edit.css">
+    <link rel="stylesheet" href="npcs.css">
     <link rel="icon" type="image/x-icon" href="data:," />
     <title>Excel_DM</title>
 </head>
@@ -74,10 +80,14 @@
                     <input type="text" id="npcEquipment" name="npcEquipment" required>
             
                     <label for="primaryLocation">Primary Location:</label>
-                    <input type="text" id="primaryLocation" name="primaryLocation" required>
-
+                    <select id="primaryLocation">
+                    
+                    </select>
+                    
                     <label for="secondaryLocation">Secondary Location:</label>
-                    <input type="text" id="secondaryLocation" name="secondaryLocation">
+                    <select id="secondaryLocation">
+                    
+                    </select>
             
                     <button type="button" id="createNPCButton">Create NPC</button>
                 </form>

@@ -217,6 +217,9 @@ locationArray: [],
                 //Add Events to Divs
                 this.addLocationEvents()
 
+                // Generate options for primary and secondary locations dropdowns
+                this.generateLocationOptions();
+
                 });
                 },
 
@@ -284,6 +287,28 @@ locationArray: [],
                 }
                 });
                 },
+
+                generateLocationOptions() {
+                        const primaryLocationDropdown = document.getElementById('primaryLocation');
+                        const secondaryLocationDropdown = document.getElementById('secondaryLocation');
+                
+                        // Clear existing options
+                        primaryLocationDropdown.innerHTML = '<option value=""></option>';
+                        secondaryLocationDropdown.innerHTML = '<option value="">None</option>';
+                
+                        // Generate options based on .selection div IDs
+                        this.locationArray.forEach((location) => {
+                            const option = document.createElement('option');
+                            option.value = location.divId;
+                            option.textContent = location.divId;
+                            primaryLocationDropdown.appendChild(option);
+                
+                            const secondaryOption = document.createElement('option');
+                            secondaryOption.value = location.divId;
+                            secondaryOption.textContent = location.divId;
+                            secondaryLocationDropdown.appendChild(secondaryOption);
+                        });
+                    },
 
 };
 

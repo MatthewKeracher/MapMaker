@@ -1,0 +1,13 @@
+.sidebar {
+    position: fixed; 
+    top: 8vh; 
+    right: 0; 
+    height: 92vh; 
+    width: 30vw;;
+    z-index:4;
+    background-color: transparent;
+    overflow: auto;    
+    }  
+    
+        
+       

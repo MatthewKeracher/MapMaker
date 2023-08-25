@@ -1,0 +1,55 @@
+.editToolbar{
+position: fixed;
+top: 0vh; 
+right: 0vw; 
+z-index: 5;
+width: 30vw;
+display: none; 
+flex-direction: row; 
+}
+
+.mainToolbar {
+position: fixed;
+top: 0vh; 
+right: 0vw; 
+z-index: 5;
+width: 30vw;
+display: flex; 
+flex-direction: row; 
+}
+
+.button {
+width: 100%; /* Make each button fill the width of the toolbar */
+height: 6vh; 
+font-size: 2vh; 
+padding: 1vh 1vw; 
+margin: 0.5vh 0; /* Add margin to control spacing */
+border: 0.1vh solid black; 
+font-family: monospace, 'Trebuchet MS', sans-serif;
+transition: background-color 0.3s; 
+}
+
+.button:hover {
+background-color: hotpink; /* Change the background color when hovering */
+}                       
+
+.click-button {
+background-color: lime;
+}
+
+.bottomToolbar{ 
+position: fixed;
+bottom: 1vh;
+right: 1vw;
+width: 28vw;
+display: none; 
+flex-direction: row; 
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,134 @@
+.locationLabel{
+position: absolute;
+width: 25vw;
+padding: 1vh;
+height: 10vh;
+background-color: transparent; /* Set your desired background color */
+font-size: 4vh;
+top: 0vh;
+right: 0vw;    
+}
+
+.Storyteller{
+position: fixed;
+top: 20vh;    
+right: 0.35vw; 
+width: 28.5vw;   
+height: 78vh;  
+font-size: 1.9vh; 
+background-color: transparent; 
+color: white;
+border: 0.1vh transparent;
+padding: 1vh; 
+text-align: left;
+overflow: auto;
+scrollbar-color: black;
+vertical-align: top; 
+display: flex;
+flex-direction: column;
+resize: none;
+white-space: pre-line; 
+text-align: left;
+}
+
+.Storyteller::-webkit-scrollbar {
+width: 5px; /* Set the width of the scrollbar */
+}
+
+.Storyteller .section {
+flex: 1;
+}
+.ambience{
+color: skyblue;
+}
+
+.player{
+color: bisque;
+}
+
+.gm{
+color: bisque;    
+}
+
+.misc{
+color: lime;
+}    
+
+.all-caps{
+color: cyan;
+}
+
+.inside-rounded-brackets{
+color: gold;
+}
+
+.inside-square-brackets {
+color: hotpink; 
+}
+
+.inside-curly-brackets{
+color:red;
+font-weight: bold;
+}
+
+.inside-quotation-marks {
+color: orange; /* Change this to the desired color */
+/* Add other styling properties as needed */
+}
+
+.storyTable input {
+height: 3vh;
+width: 100%;
+border: 0.1px solid whitesmoke;
+background-color: transparent;
+color:whitesmoke;
+font-size: 2vh;             
+padding: 0;
+margin: 0;
+opacity: 1;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+text-align: left;
+}
+                    
+.storyTable tr:nth-child(even) {
+background-color: black;
+}
+
+.storyTable tr:hover {
+background-color: cyan;
+color: blue;
+opacity: 1;
+}
+
+/* Apply the 'resizable' class to the table */
+.resizable {
+table-layout: fixed; /* Set table layout to fixed for resizable columns */
+width: 100%; /* Ensure the table takes up the available space */
+}
+
+/* Style for the column resizer handle */
+.resizable th {
+position: relative;
+}
+
+.resizable th::after {
+content: '';
+position: absolute;
+top: 0;
+right: -5px; /* Adjust this value for the handle's position */
+width: 10px; /* Adjust the handle's width */
+height: 100%;
+cursor: col-resize;
+background: transparent;
+}
+
+/* Apply the resizable class to the input elements in the first row (header) */
+.resizable th input {
+width: 100%; /* Allow input elements to adjust based on header's width */
+}
+
+
+.Storyteller:focus {
+outline: none; /* Remove the default outline */
+border-radius: 0px; /* Adjust the border radius for rounded corners */
+}
