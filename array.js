@@ -149,11 +149,15 @@ locationArray: [],
                 console.error('Error loading file:', error);
                 }
 
-                try{
-                NPCs.npcArray = data.npcArray;
-                console.log(NPCs.npcArray);
+                try {
+                    if (data.npcArray) {
+                        NPCs.npcArray = data.npcArray;
+                        console.log(NPCs.npcArray);
+                    } else {
+                        console.log('NPC array data is not available.');
+                    }
                 } catch (error) {
-                console.error('Error loading NPC information:', error);
+                    console.error('Error loading NPC information:', error);
                 }
         
 
@@ -292,11 +296,13 @@ locationArray: [],
                 generateLocationOptions() {
                         const primaryLocationDropdown = document.getElementById('primaryLocation');
                         const secondaryLocationDropdown = document.getElementById('secondaryLocation');
-                
+                        const tertiaryLocationDropdown = document.getElementById('tertiaryLocation');
+
                         // Clear existing options
                         primaryLocationDropdown.innerHTML = '<option value=""></option>';
                         secondaryLocationDropdown.innerHTML = '<option value="">None</option>';
-                
+                        tertiaryLocationDropdown.innerHTML = '<option value="">None</option>';
+
                         // Generate options based on .selection div IDs
                         this.locationArray.forEach((location) => {
                             const option = document.createElement('option');
@@ -308,6 +314,11 @@ locationArray: [],
                             secondaryOption.value = location.divId;
                             secondaryOption.textContent = location.divId;
                             secondaryLocationDropdown.appendChild(secondaryOption);
+
+                            const tertiaryOption = document.createElement('option');
+                            tertiaryOption.value = location.divId;
+                            tertiaryOption.textContent = location.divId;
+                            tertiaryLocationDropdown.appendChild(tertiaryOption);
                         });
                     },
 

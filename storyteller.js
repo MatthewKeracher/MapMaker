@@ -1,6 +1,7 @@
 import Array from "./array.js";
 import Ambience from "./ambience.js";
 import Monsters from "./monsters.js";
+import NPCs from "./npcs.js";
 
 const Storyteller = {
     
@@ -120,7 +121,11 @@ const Storyteller = {
         });
       } catch {
         generateTable.click();
+        
       }
+
+      NPCs.updateNPCTable();
+
     };
   }, 
 

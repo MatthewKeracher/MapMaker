@@ -54,8 +54,11 @@ const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
 //NPC Form
-const createNPCButton = document.getElementById('createNPCButton');
-createNPCButton.addEventListener('click', this.handleeditcreateNPCButtonClick);
+const saveNPCButton = document.getElementById('saveNPCButton');
+saveNPCButton.addEventListener('click', this.handleeditsaveNPCButtonClick);
+
+const loadNPCButton = document.getElementById('loadNPCButton');
+loadNPCButton.addEventListener('click', this.handleeditloadNPCButtonClick);
 
 //table maker
 
@@ -295,9 +298,15 @@ handleeditgenerateTableButtonClick(){
   //});
 };
 
-handleeditcreateNPCButtonClick(){
+handleeditsaveNPCButtonClick(){
 
-       NPCs.createNPCButtonClicked();
+       NPCs.saveNPC();
+
+}
+
+handleeditloadNPCButtonClick(){
+
+    NPCs.loadNPC();
 
 }
 

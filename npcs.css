@@ -1,6 +1,4 @@
 #npcForm {
-    width: 30vw;
-    height: 100%;
     display: none;
     flex-direction: column;
     align-items: flex-start;
@@ -15,16 +13,26 @@
     width: 5px; /* Set the width of the scrollbar */
 }
 
-#npcForm input[type="number"]:focus,
-#npcForm input[type="text"]:focus,
-#npcForm textarea:focus,
-.smallText:focus {
-    border-color: hotpink;
-    outline: none;
+.npcFormContainer{
+    width: 30vw;
+    height: 75vh;
+};
+
+#npcForm label{
+    vertical-align: middle;
+    color: bisque;}
+
+#npcForm input[type="number"] {
+    height: 4vh;
+    width: 3vw;
+    margin: 1vh;
+    font-size: 3vh;
+    color: hotpink;
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    border: 0.2vh solid cyan;
+    padding: 0.8vh;
     background-color: transparent;
-    color: bisque;
-    border-radius: 0;
-    text-align: left;
+    text-align: center;
     vertical-align: top;
 }
 
@@ -34,64 +42,96 @@
     margin: 0;
 }
 
-#npcForm input[type="number"] {
-    height: 3vh;
-    width: 3vw;
-    margin: 1vh;
-    font-size: 2vh;
-    color: bisque;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    border: 0.2vh solid cyan;
-    padding: 0.8vh;
+    .largeField{
+        height: 15vh;
+        width: 28vw;
+        margin: 1vh;
+        font-size: 2vh;
+        color: bisque;
+        font-family: monospace, 'Trebuchet MS', sans-serif;
+        border: 0.2vh solid cyan;
+        padding: 0.8vh;
+        background-color: black;
+
+    }
+    .smallField {
+        height: 4vh;
+        width: 28vw;
+        margin: 1vh;
+        font-size: 2vh;
+        color: bisque;
+        font-family: monospace, 'Trebuchet MS', sans-serif;
+        border: 0.2vh solid cyan;
+        padding: 0.8vh;
+        background-color: black;
+    }
+
+    .halfField {
+        height: 4vh;
+        width: 14vw;
+        margin: 1vh;
+        font-size: 2vh;
+        color: bisque;
+        font-family: monospace, 'Trebuchet MS', sans-serif;
+        border: 0.2vh solid cyan;
+        padding: 0.8vh;
+        background-color: black;
+    }
+
+.halfSelect{
+height: 6vh;
+width: 14.3vw;
+margin: 1vh;
+font-size: 2vh;
+color: bisque;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid cyan;
+padding: 0.8vh;
+background-color: black;
+}
+
+.smallSelect{
+height: 6vh;
+width: 29vw;
+margin: 1vh;
+font-size: 2vh;
+color: bisque;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid cyan;
+padding: 0.8vh;
+background-color: black;
+}
+
+.halfField:focus,
+.smallField:focus,
+.largeField:focus{
+    border-color: hotpink;
+    outline: none;
     background-color: transparent;
+    color: bisque;
+    border-radius: 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
-.largeText{
-    height: 30vh;
-    width: 28vw;
-    margin: 1vh;
-    font-size: 2vh;
-    color: bisque;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    border: 0.2vh solid cyan;
-    padding: 0.8vh;
-    background-color: transparent;
-
-}
-.smallText {
-    height: 3vh;
-    width: 28vw;
-    margin: 1vh;
-    font-size: 2vh;
-    color: bisque;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    border: 0.2vh solid cyan;
-    padding: 0.8vh;
-    background-color: transparent;
-}
-
-#npcForm select {
-    height: 5vh;
-    width: 29vw;
-    margin: 1vh;
-    font-size: 2vh;
-    color: bisque;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    border: 0.2vh solid cyan;
-    background-color: black;
-}
-
-#npcForm select:focus {
+#npcForm select:focus,
+#npcForm number:focus,
+#npcForm textarea:focus {
+    vertical-align: middle;
     outline: none;
     border-color: hotpink;
     border-radius: 0;
 }
 
-#createNPCButton {
-    width: 13vw;
-    height: 6vh;
+ ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: hotpink;
+    opacity: 1; /* Firefox */
+  }
+
+#npcForm Button {
+    bottom: 10vh;
+    right: 15vw;
+    width: 14vw;    
     font-size: 2vh;
     padding: 1vh 1vw;
     margin: 0;
@@ -100,6 +140,49 @@
     font-family: monospace, 'Trebuchet MS', sans-serif;
 }
 
-#createNPCButton:hover {
+.npcToolbar{
+    position: fixed;
+    bottom: 10vh;
+    right: 1vw;
+    width: 28vw;
+    height: 6vh;
+    display: flex; 
+    flex-direction: row; 
+    }
+
+#npcForm Button:hover {
     background-color: hotpink;
 }
+
+#npcNamesTable {
+    width: 30vw; /* Make the table take up the entire available width */
+    table-layout: flex; /* Lock the table layout to fix the cell widths */
+}
+
+#npcNamesTable td {
+    width: 30vw; /* Divide the row into two equal-width cells */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
+    overflow: hidden; /* Hide any overflowing content */
+    text-overflow: ellipsis; /* Display ellipsis (...) for long text */
+}
+
+  #npcNamesTable tr {
+    padding: 0vw;
+    height: 4vh;
+    width: 100%;
+    border: 1px solid hotpink;
+    background-color: black;
+    font-size: 2vh;
+    color: bisque;
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    text-align: center;
+  }
+ 
+   
+  #npcNamesTable td:nth-child(1):hover {
+    background-color: lime;
+    color: black;
+}
+  

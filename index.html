@@ -68,22 +68,68 @@
 
                 
                 <form id="npcForm" class="npcForm">
+
+                    <div class="npcFormContainer">
+
                     <label for="npcName">NPC Name:</label>
-                    <input class="smallText" type="textarea" id="npcName" name="npcName" required>
+                    <input class="smallField" type="textarea" id="npcName" name="npcName" required>
+
+                    <label for="npcOccupation">Occupation:</label>
+                    <input class="smallField" type="textarea" id="npcOccupation" name="npcOccupation"
+                    placeholder="What do other people know them as?">
+
+                    <label for="npcLevel">Level:</label>
+                    <input class="smallField" type="number" id="npcLevel" name="npcLevel">
+
+                    <label for="npcClass">Class:</label>
+                    <select class="halfSelect" id="npcClass">                    
+                    </select>
 
                     <label for="primaryLocation">Primary Location:</label>
-                    <select class="smallText" id="primaryLocation">                    
+                    <select class="smallSelect" id="primaryLocation" required>                    
                     </select>
+
+                    <label for="primaryActivity">Activity:</label>
+                    <input class="smallField" type="textarea" id="primaryActivity" name="primaryActivity"
+                    placeholder="What do the normally do here? They are...">
                     
                     <label for="secondaryLocation">Secondary Location:</label>
-                    <select class="smallText" id="secondaryLocation">                    
+                    <select class="smallSelect" id="secondaryLocation">                    
                     </select>
-            
-                    <label for="npcDetails">NPC Details:</label>
-                    <textarea class="largeText" type="textarea" id="npcDetails" name="npcDetails" required></textarea>        
 
-                    <button type="button" id="createNPCButton">Create NPC</button>
-                   
+                    <label for="secondaryActivity">Activity:</label>
+                    <input class="smallField" type="textarea" id="secondaryActivity" name="secondaryActivity"
+                    placeholder="What do the normally do here? They are...">
+
+                    <label for="tertiaryLocation">Tertiary Location:</label>
+                    <select class="smallSelect" id="tertiaryLocation">                    
+                    </select>
+
+                    <label for="tertiaryActivity">Activity:</label>
+                    <input class="smallField" type="textarea" id="tertiaryActivity" name="tertiaryActivity"
+                    placeholder="What do the normally do here? They are...">
+
+                    <label for="npcPhysicalAppearance">Physical Character:</label>
+                    <textarea class="largeField" type="textarea" id="npcPhysicalAppearance" name="npcPhysicalAppearance" 
+                    placeholder="Describe the physical appearance of this character. What do they look like, and what can the players tell about the NPC's habits and history from this?"></textarea>        
+
+                    <label for="npcEmotionalAppearance">Emotional Character:</label>
+                    <textarea class="largeField" type="textarea" id="npcEmotionalAppearance" name="npcEmotionalAppearance" 
+                    placeholder="Describe the internal emotional state of this NPC. What is their usual disposition?"></textarea>        
+
+                    <label for="npcSocialAppearance">Social Character:</label>
+                    <textarea class="largeField" type="textarea" id="npcSocialAppearance" name="npcSocialAppearance" 
+                    placeholder="How does this NPC act socially? Are they outgoing or reserved; do people know them in just one role, or many?"></textarea>        
+
+
+                </div>
+
+                <div class = "npcToolbar" id="npcToolbar"> 
+
+                    <button type="button" id="saveNPCButton">Save NPC </button>
+                    <button type="button" id="loadNPCButton">Load NPC   </button>
+                 
+                </div>
                 </form>
                 
                 
