@@ -131,40 +131,48 @@ const Storyteller = {
 
   async replaceMonsterPlaceholders(text) {
     const monsterPlaceholderRegex = /\{([^}]+)\}/g;
-    const monstersArray = await Monsters.loadMonstersArray();
-
+    const monsters = await Monsters.loadMonstersArray();
+  
     return text.replace(monsterPlaceholderRegex, (match, monsterName) => {
-        const monster = monstersArray.find(monster => monster.name === monsterName);
-        if (monster) {
+      console.log(`Searching for monster: ${monsterName}`);
+      
+      const monster = monsters.monsters[monsterName]; // Access monsters object first
+      if (monster) {
+        console.log(`Found monster: ${monsterName}`);
+  
+        const attributes = [
+          `Name: ${monsterName}`,
+          `Type: ${monster.Type}`,
+          `AC: ${monster.AC}`,
+          `Special: ${monster.Special || "None"}`,
+          `HD: ${monster.HD}`,
+          `HD Sort #: ${monster["HD Sort #"]}`,
+          `# Atk: ${monster["# Atk "]}`,
+          `Damage: ${monster["Damage "]}`,
+          `Mvmt: ${monster["Mvmt "]}`,
+          `# App: ${monster["# App "]}`,
+          `Save As: ${monster["Save As "]}`,
+          `Morale: ${monster["Morale "]}`,
+          `Treasure: ${monster.Treasure || "None"}`,
+          `XP: ${monster["XP "]}`,
+          // Add other fields here
+        ];
+  
+        const formattedAttributes = attributes
+          .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
+          .join("; ");
+        
+          console.log(`Attributes for ${monsterName}: ${formattedAttributes}`);
 
-          const formattedMonsterName = monster.name.toUpperCase();
-
-            const attributes = [
-                `${formattedMonsterName}`,             
-                `#:{${monster.number_appearing}}`,
-                `Armour Class:{${monster.armor_class === "Nil" || monster.armor_class === "0" ? "" : monster.armor_class}}`,
-                `Move:(${monster.move === "Nil" ? "" : monster.move})`,
-                `Hit Dice:{${monster.hit_dice === "Nil" ? "" : monster.hit_dice}}`,              
-                `Attacks:{${monster.number_of_attacks}}`,
-                `Damage:{${monster.damage_attack === "Nil" ? "" : monster.damage_attack}}`,
-                `\n\n{${monster.description === "Nil" ? "" : monster.description}}`,
-                //add other fields here
-                
-            ];
-
-            const formattedAttributes = attributes
-                .filter(attribute => {
-                    const [, value] = attribute.split(": ");
-                    return value !== '""' && value !== '0' && value !== 'Nil';
-                })
-                .join("; ");
-
-            return `${formattedAttributes}`;
+          return formattedAttributes;
         } else {
-            return match; // Keep the original placeholder if monster not found
+          console.log(`Monster not found: ${monsterName}`);
+          return match; // Keep the original placeholder if monster not found
         }
-    });
-},
+      });
+  },
+  
+  
   
 applyStyling(content) {
 

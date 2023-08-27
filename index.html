@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="map.css">    
-    <link rel="stylesheet" href="toolbar.css">
-    <link rel="stylesheet" href="sidebar.css">
-    <link rel="stylesheet" href="storyteller.css">
-    <link rel="stylesheet" href="edit.css">
-    <link rel="stylesheet" href="npcs.css">
-    <link rel="icon" type="image/x-icon" href="data:," />
-    <title>Excel_DM</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- List of style sheets -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="map.css">    
+<link rel="stylesheet" href="toolbar.css">
+<link rel="stylesheet" href="sidebar.css">
+<link rel="stylesheet" href="storyteller.css">
+<link rel="stylesheet" href="edit.css">
+<link rel="stylesheet" href="npcs.css">
+<link rel="icon" type="image/x-icon" href="data:," />
+<title>Excel_DM</title>
 </head>
 <body>
 
@@ -23,7 +24,7 @@
 
 <button class= "button" id="mapButton"  >[M]ap</button>
 <!-- Add this hidden input element -->
-<input type="file" id="fileInput" style="display: none">
+    <input type="file" id="fileInput" style="display: none">
 <button class= "button" id="dataButton" >[D]ata</button>
 <button class= "button" id="addButton"  >[A]dd</button>
 <button class= "button" id="editButton"  >[E]dit</button>
@@ -37,124 +38,115 @@
 <button class= "button" id="editSaveButton"    >[S]ave   </button>
 <button class= "button" id="editMoveButton"    >[M]ove   </button>
 <button class= "button" id="editDeleteButton"  >[D]elete </button>
-        
+
 </div> 
 
-
-
 <main>
-    
-    <div class="sidebar">
-        
-        
-            <label class="locationLabel" id = "locationLabel"></label>
-            
-           
-        
-        <div class="Storyteller" id="Storyteller"></div>   
-              
-        <div class="EditorContainer">                         
+
+<div class="sidebar">
+
+<label class="locationLabel" id = "locationLabel"></label>
+
+<div class="Storyteller" id="Storyteller"></div>   
+
+<div class="EditorContainer">                         
+
+    <textarea class="editLocationName" id="editLocationName"></textarea>             
+
+    <label id = "playerLabel"> Player Knowledge:</label>
+    <textarea class="editBox" id="editPlayerText" placeholder="Textbox 1"></textarea>           
+
+    <label id = "gmLabel"> Game Master Knowledge:</label>
+    <textarea class="editBox" id="editGMText" placeholder="Textbox 2"></textarea>    
                 
-                <textarea class="editLocationName" id="editLocationName"></textarea>             
-            
-                <label id = "playerLabel"> Player Knowledge:</label>
-                <textarea class="editBox" id="editPlayerText" placeholder="Textbox 1"></textarea>           
-            
-                <label id = "gmLabel"> Game Master Knowledge:</label>
-                <textarea class="editBox" id="editGMText" placeholder="Textbox 2"></textarea>    
-                                             
-                <label id = "miscLabel"> Miscellaneous</label>
-                <textarea class="editBox" id="editMiscText" placeholder="Textbox 3"></textarea>  
-
-                
-                <form id="npcForm" class="npcForm">
-
-                    <div class="npcFormContainer">
-
-                    <label for="npcName">NPC Name:</label>
-                    <input class="smallField" type="textarea" id="npcName" name="npcName" required>
-
-                    <label for="npcOccupation">Occupation:</label>
-                    <input class="smallField" type="textarea" id="npcOccupation" name="npcOccupation"
-                    placeholder="What do other people know them as?">
-
-                    <label for="npcLevel">Level:</label>
-                    <input class="smallField" type="number" id="npcLevel" name="npcLevel">
-
-                    <label for="npcClass">Class:</label>
-                    <select class="halfSelect" id="npcClass">                    
-                    </select>
-
-                    <label for="primaryLocation">Primary Location:</label>
-                    <select class="smallSelect" id="primaryLocation" required>                    
-                    </select>
-
-                    <label for="primaryActivity">Activity:</label>
-                    <input class="smallField" type="textarea" id="primaryActivity" name="primaryActivity"
-                    placeholder="What do the normally do here? They are...">
-                    
-                    <label for="secondaryLocation">Secondary Location:</label>
-                    <select class="smallSelect" id="secondaryLocation">                    
-                    </select>
-
-                    <label for="secondaryActivity">Activity:</label>
-                    <input class="smallField" type="textarea" id="secondaryActivity" name="secondaryActivity"
-                    placeholder="What do the normally do here? They are...">
-
-                    <label for="tertiaryLocation">Tertiary Location:</label>
-                    <select class="smallSelect" id="tertiaryLocation">                    
-                    </select>
-
-                    <label for="tertiaryActivity">Activity:</label>
-                    <input class="smallField" type="textarea" id="tertiaryActivity" name="tertiaryActivity"
-                    placeholder="What do the normally do here? They are...">
-
-                    <label for="npcPhysicalAppearance">Physical Character:</label>
-                    <textarea class="largeField" type="textarea" id="npcPhysicalAppearance" name="npcPhysicalAppearance" 
-                    placeholder="Describe the physical appearance of this character. What do they look like, and what can the players tell about the NPC's habits and history from this?"></textarea>        
-
-                    <label for="npcEmotionalAppearance">Emotional Character:</label>
-                    <textarea class="largeField" type="textarea" id="npcEmotionalAppearance" name="npcEmotionalAppearance" 
-                    placeholder="Describe the internal emotional state of this NPC. What is their usual disposition?"></textarea>        
-
-                    <label for="npcSocialAppearance">Social Character:</label>
-                    <textarea class="largeField" type="textarea" id="npcSocialAppearance" name="npcSocialAppearance" 
-                    placeholder="How does this NPC act socially? Are they outgoing or reserved; do people know them in just one role, or many?"></textarea>        
+    <label id = "miscLabel"> Miscellaneous</label>
+    <textarea class="editBox" id="editMiscText" placeholder="Textbox 3"></textarea>  
 
 
-                </div>
+<form id="npcForm" class="npcForm">
 
-                <div class = "npcToolbar" id="npcToolbar"> 
+<div class="npcFormContainer">
 
-                    <button type="button" id="saveNPCButton">Save NPC </button>
-                    <button type="button" id="loadNPCButton">Load NPC   </button>
-                 
-                </div>
-                </form>
-                
-                
+<label for="npcName">NPC Name:</label>
+<input class="smallField" type="textarea" id="npcName" name="npcName" required>
+
+<label for="npcOccupation">Occupation:</label>
+<input class="smallField" type="textarea" id="npcOccupation" name="npcOccupation"
+placeholder="What do other people know them as?">
+
+<label for="npcLevel">Level:</label>
+<input class="smallField" type="number" id="npcLevel" name="npcLevel">
+
+<label for="npcClass">Class:</label>
+<select class="halfSelect" id="npcClass">                    
+</select>
+
+<label for="primaryLocation">Primary Location:</label>
+<select class="smallSelect" id="primaryLocation" required>                    
+</select>
+
+<label for="primaryActivity">Activity:</label>
+<input class="smallField" type="textarea" id="primaryActivity" name="primaryActivity"
+placeholder="What do the normally do here? They are...">
+
+<label for="secondaryLocation">Secondary Location:</label>
+<select class="smallSelect" id="secondaryLocation">                    
+</select>
+
+<label for="secondaryActivity">Activity:</label>
+<input class="smallField" type="textarea" id="secondaryActivity" name="secondaryActivity"
+placeholder="What do the normally do here? They are...">
+
+<label for="tertiaryLocation">Tertiary Location:</label>
+<select class="smallSelect" id="tertiaryLocation">                    
+</select>
+
+<label for="tertiaryActivity">Activity:</label>
+<input class="smallField" type="textarea" id="tertiaryActivity" name="tertiaryActivity"
+placeholder="What do the normally do here? They are...">
+
+<label for="npcPhysicalAppearance">Physical Character:</label>
+<textarea class="largeField" type="textarea" id="npcPhysicalAppearance" name="npcPhysicalAppearance" 
+placeholder="Describe the physical appearance of this character. What do they look like, and what can the players tell about the NPC's habits and history from this?"></textarea>        
+
+<label for="npcEmotionalAppearance">Emotional Character:</label>
+<textarea class="largeField" type="textarea" id="npcEmotionalAppearance" name="npcEmotionalAppearance" 
+placeholder="Describe the internal emotional state of this NPC. What is their usual disposition?"></textarea>        
+
+<label for="npcSocialAppearance">Social Character:</label>
+<textarea class="largeField" type="textarea" id="npcSocialAppearance" name="npcSocialAppearance" 
+placeholder="How does this NPC act socially? Are they outgoing or reserved; do people know them in just one role, or many?"></textarea>        
+
+
+</div>
+
+    <div class = "npcToolbar" id="npcToolbar"> 
+
+    <button type="button" id="saveNPCButton">Save NPC </button>
+    <button type="button" id="loadNPCButton">Load NPC   </button>
+
+    </div>
+</form>
+
 <form id="tableForm">
 
-    <div class="topTable">         
+<div class="topTable">       
 
+<button type="button" id="generateTable">[G]enerate Table</button>
 
-        <button type="button" id="generateTable">[G]enerate Table</button>
-        
-        <label for="numRows">Rows:</label>
-        <input type="number" id="numRows" value=30 name="numRows" min="1" required><br><br>
+<label for="numRows">Rows:</label>
+<input type="number" id="numRows" value=30 name="numRows" min="1" required><br><br>
 
-        <label for="numCols">Columns:</label>
-        <input type="number" id="numCols" value=5 name="numCols" min="1" required><br><br>
+<label for="numCols">Columns:</label>
+<input type="number" id="numCols" value=5 name="numCols" min="1" required><br><br>
 
-        
+</div>
 
-    </div>
+<div class="bottomTable">  
 
-    <div class="bottomTable">  
+<div id="tableContainer"></div>
 
-        <div id="tableContainer"></div>
-
-    </div>
+</div>
 
 </form>
 
@@ -162,62 +154,62 @@
 
 <label id = "AmbienceHead"> Set Ambience:</label>
 <p>Set the dynamic and continuous description style to theme each entry. These
-    are stored in a .json file. Select rediance for ambient lighting.
+are stored in a .json file. Select rediance for ambient lighting.
 </p>
 
 <label for="radianceDropdown">Interior or Exterior:</label>
-    <select id="radianceDropdown">
-        <option value="exterior">Exterior</option>
-        <option value="interior">Interior</option>        
-    </select>
+<select id="radianceDropdown">
+<option value="exterior">Exterior</option>
+<option value="interior">Interior</option>        
+</select>
 
-    <br>
+<br>
 
 <label for="contextDropdown">Select Context:</label>
-    <select id="contextDropdown">
-        <option value=""></option>
-    </select>
+<select id="contextDropdown">
+<option value=""></option>
+</select>
 
-    <br>
+<br>
 
 <label for="mainAmbienceDropdown">Select Main:</label>
-    <select id="mainAmbienceDropdown">
-        <option value=""></option>
-    </select>
+<select id="mainAmbienceDropdown">
+<option value=""></option>
+</select>
 
-    <br>
+<br>
 
-    <label for="secondAmbienceDropdown">Select Second:</label>
-    <select id="secondAmbienceDropdown">
-        <option value="">Select Main</option>
-    </select>
+<label for="secondAmbienceDropdown">Select Second:</label>
+<select id="secondAmbienceDropdown">
+<option value="">Select Main</option>
+</select>
 
 </div>
 
 <div class = "bottomToolbar" id="bottomToolbar"> 
 
-    <button class= "button" id="prevButton"    >[Previous] </button>
-    <button class= "button" id="nextButton"    >[N]ext   </button>    
+<button class= "button" id="prevButton"    >[Previous] </button>
+<button class= "button" id="nextButton"    >[N]ext   </button>    
 
 </div>
-            
-        </div>
 
-        
-      </div>
+</div>
+
+
+</div>
 
 </main>
-    
-    <script type="module" src="map.js"></script> 
-    <script type="module" src="toolbar.js"></script> 
-    <script type="module" src="hotkeys.js"></script> 
-    <script type="module" src="add.js"></script>
-    <script type="module" src="array.js"></script>
-    <script type="module" src="edit.js"></script>
-    <script type="module" src="ambience.js"></script> 
-    <script type="module" src="monsters.js"></script> 
-    <script type="module" src="npcs.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script type="module" src="map.js"></script> 
+<script type="module" src="toolbar.js"></script> 
+<script type="module" src="hotkeys.js"></script> 
+<script type="module" src="add.js"></script>
+<script type="module" src="array.js"></script>
+<script type="module" src="edit.js"></script>
+<script type="module" src="ambience.js"></script> 
+<script type="module" src="monsters.js"></script> 
+<script type="module" src="npcs.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 
 </body>

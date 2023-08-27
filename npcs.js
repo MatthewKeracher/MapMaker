@@ -76,42 +76,68 @@ npcNamesTable.id = 'npcNamesTable'; // Set an ID for the div element
 // Create a table element inside the npcNamesTable div
 const table = document.createElement('table');
 
+// Clear the existing table rows
+while (table.firstChild) {
+table.removeChild(table.firstChild);
+}
+
 // Create table rows and cells for each NPC name and location
 for (const npc of NPCs.npcArray) {
+    
 const row = document.createElement('tr');
 
-// Create and populate the cell for the NPC name
-const nameCell = document.createElement('td');
-nameCell.textContent = npc.name;
+    // Create and populate the cell for the NPC name
+    const nameCell = document.createElement('td');
+    nameCell.textContent = npc.name;
 
-// Create and populate the cell for the location information
-const locationName = document.querySelector('.locationLabel').textContent;
-const currentLocation = document.createElement('td');
-if (npc.primaryLocation === locationName) {
-    currentLocation.textContent = 'Primary';
-} else if (npc.secondaryLocation === locationName) {
-    currentLocation.textContent = 'Secondary';
-} else if (npc.tertiaryLocation === locationName) {
-    currentLocation.textContent = 'Tertiary';
-} else {
-    currentLocation.textContent = 'Not here';
-}
+        // Create and populate the cell for the location information
+        const locationName = document.querySelector('.locationLabel').textContent;
+        const currentLocation = document.createElement('td');
+        if (npc.primaryLocation === locationName) {
+            row.className = 'primary-row';
+            currentLocation.textContent = 'Primary';
+        } else if (npc.secondaryLocation === locationName) {
+            row.className = 'secondary-row';
+            currentLocation.textContent = 'Secondary';
+        } else if (npc.tertiaryLocation === locationName) {
+            row.className = 'tertiary-row';
+            currentLocation.textContent = 'Tertiary';
+        } else {
+            row.className = 'not-here-row';
+            currentLocation.textContent = 'Not here';
+        }
 
+        // Add both cells to the row
+        row.appendChild(nameCell);
+        row.appendChild(currentLocation);
 
-// Add both cells to the row
-row.appendChild(nameCell);
-row.appendChild(currentLocation);
+        // Determine where to insert the row based on the location type
+        if (row.className === 'primary-row') {
+        console.log(1);
+        // Find the first row with class 'primary-row' and insert before it
+        const primaryRow = table.querySelector('.primary-row');
+        if (primaryRow) {
+        table.insertBefore(row, primaryRow);
+        } else {
+        table.insertBefore(row, table.firstChild); // If no 'primary-row' rows, just append to the end
+        }
+        } else if (row.className === 'secondary-row') {
+        console.log(2);
+        // Find the first row with class 'secondary-row' and insert before it
+        const secondaryRow = table.querySelector('.secondary-row');
+        if (secondaryRow) {
+        table.insertBefore(row, secondaryRow);
+        } else {
+        table.appendChild(row); // If no 'secondary-row' rows, just append to the end
+        }
+        } else if (row.className === 'tertiary-row') {
+        console.log(3);
+        table.appendChild(row); // Append to the end for tertiary
+        } else {
+        console.log(4);
+        table.appendChild(row); // Append to the end for unknown
+        }
 
-// Determine where to insert the row based on the location type
-if (npc.primaryLocation) {
-    table.insertBefore(row, table.querySelector('tr[data-location="Secondary"]'));
-} else if (npc.secondaryLocation) {
-    table.insertBefore(row, table.querySelector('tr[data-location="Tertiary"]'));
-} else if (npc.tertiaryLocation) {
-    table.appendChild(row); // Append to the end for tertiary
-} else {
-    table.appendChild(row); // Append to the end for unknown
-}
 }
 
 // Add the table element to the npcNamesTable div

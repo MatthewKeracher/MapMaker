@@ -168,18 +168,30 @@ background-color: black;
     text-overflow: ellipsis; /* Display ellipsis (...) for long text */
 }
 
-  #npcNamesTable tr {
+#npcNamesTable td {
     padding: 0vw;
     height: 4vh;
-    width: 100%;
-    border: 1px solid hotpink;
-    background-color: black;
+    width: 30vw; 
     font-size: 2vh;
-    color: bisque;
     font-family: monospace, 'Trebuchet MS', sans-serif;
     text-align: center;
   }
- 
+
+.primary-row {
+    color: lime;
+}
+
+.secondary-row {    
+    color: hotpink;
+}
+
+.tertiary-row {   
+    color: yellow;
+}
+
+.not-here-row {    
+    color: bisque;
+} 
    
   #npcNamesTable td:nth-child(1):hover {
     background-color: lime;
