@@ -72,17 +72,17 @@ const Storyteller = {
   ${ambienceIntro}\n
   ${ambienceEntry.description}\n
   ${ambienceEntry[chosenSense]}\n
-  </span>`;
+  <hr>\n</span>`;
 
-  let playerIntro = 'You are at the [' + locationName.textContent + ']. '  
+  let playerIntro = 'You are at [' + locationName.textContent + ']. '  
 
   // Replace monster placeholders in the GM text
   const gmTextWithMonsters = await this.replaceMonsterPlaceholders(gm);
 
   //ADD LOCATION BITS
   rawStory += `
-  <span class="section player"> ${playerIntro} \n\n ${player} \n\n\ </span>
-  <span class="section gm">${gmTextWithMonsters}\n\n\</span>
+  <span class="section player"> ${playerIntro} \n\n ${player} \n\n\  <hr>\n </span>
+  <span class="section gm">${gmTextWithMonsters}\n \n <hr> \n</span>
   <span class="section misc">${misc}\n\n\</span>              
   `;     
 
@@ -129,6 +129,7 @@ const Storyteller = {
     };
   }, 
 
+  
   async replaceMonsterPlaceholders(text) {
     const monsterPlaceholderRegex = /\{([^}]+)\}/g;
     const monsters = await Monsters.loadMonstersArray();
@@ -137,32 +138,39 @@ const Storyteller = {
       console.log(`Searching for monster: ${monsterName}`);
       
       const monster = monsters.monsters[monsterName]; // Access monsters object first
+
       if (monster) {
+
         console.log(`Found monster: ${monsterName}`);
+
+        //Format Presentation of Monster Stats
   
         const attributes = [
-          `Name: ${monsterName}`,
-          `Type: ${monster.Type}`,
-          `AC: ${monster.AC}`,
-          `Special: ${monster.Special || "None"}`,
-          `HD: ${monster.HD}`,
-          `HD Sort #: ${monster["HD Sort #"]}`,
-          `# Atk: ${monster["# Atk "]}`,
-          `Damage: ${monster["Damage "]}`,
-          `Mvmt: ${monster["Mvmt "]}`,
-          `# App: ${monster["# App "]}`,
-          `Save As: ${monster["Save As "]}`,
-          `Morale: ${monster["Morale "]}`,
-          `Treasure: ${monster.Treasure || "None"}`,
-          `XP: ${monster["XP "]}`,
+          `${monsterName.toUpperCase()}`,
+          `${monster.Type};\n\n`,
+          
+          `{# App}: ${monster.Appearing};\n`,
+          `{Morale}: ${monster.Morale};\n`,
+          `{Movement}: ${monster.Mvmt};\n`,
+          `{Armour Class}: ${monster.AC};\n`,
+          `{Hit Dice}: ${monster.HD};\n`,
+          `{Hit Dice Range}: ${monster.HDSort};\n`,
+          `{No. Attacks}: ${monster.Attacks};\n`,
+          `{Damage}: ${monster.Damage};\n`,          
+          `{Special}: ${monster.Special || "None"};\n`,
+          `{Save As}: ${monster["Save As "]};\n`,
+          `{Treasure}: ${monster.Treasure || "None"};\n`,
+          `{Experience Points}: ${monster.XP};\n\n  <hr>\n `,
+          `{Description}: \n\n ${monster.Description.replace(/\./g, '.\n\n')} <hr>`,
+
           // Add other fields here
         ];
   
         const formattedAttributes = attributes
           .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
-          .join("; ");
+          .join(" ");
         
-          console.log(`Attributes for ${monsterName}: ${formattedAttributes}`);
+          //console.log(`Attributes for ${monsterName}: ${formattedAttributes}`);
 
           return formattedAttributes;
         } else {

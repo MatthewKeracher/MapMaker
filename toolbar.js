@@ -7,12 +7,15 @@ import Edit from "./edit.js";
 import Ambience from "./ambience.js";
 import Hotkeys from "./hotkeys.js";
 import NPCs from "./npcs.js";
+import Storyteller from "./storyteller.js";
+import Monsters from "./monsters.js";
 
 class Toolbar{
 
 init() {
 
 Ambience.initializeAmbienceDropdowns();
+Monsters.addPredictiveMonsters();
 
 const mapButton = document.getElementById('mapButton');
 mapButton.addEventListener('click', this.handleMapButtonClick);

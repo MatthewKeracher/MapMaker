@@ -42,6 +42,33 @@
     color: white;   
 }
 
+#optionsList {
+    color: lime;
+    background-color: black;
+    opacity: 0.7;
+    height: 100vh;
+    border: transparent;
+    padding: 5px;
+    position: fixed; /* Use fixed position for screen coordinates */
+    top: 0;
+    left: 0;
+    z-index: 10; /* Adjust z-index as needed */
+    overflow-y: auto;
+    display: none;
+    scrollbar-color: black;
+  }
+
+  #optionsList div:hover {
+    background-color: hotpink; /* Change the background color on hover */
+    color: black;
+    cursor: pointer; /* Show pointer cursor on hover */
+  }  
+
+  #optionsList::-webkit-scrollbar {
+    width: 5px; /* Set the width of the scrollbar */
+    }
+  
+
 .editBox {            
     height: 65vh;
     margin: 1vh; 

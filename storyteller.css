@@ -53,7 +53,8 @@ color: skyblue;
 }
 
 .player{
-color: bisque;
+color: rgb(233, 205, 171);
+font-style: italic;
 }
 
 .gm{
@@ -73,11 +74,11 @@ color: gold;
 }
 
 .inside-square-brackets {
-color: hotpink; 
+color: orange; 
 }
 
 .inside-curly-brackets{
-color:red;
+color:hotpink;
 font-weight: bold;
 }
 
