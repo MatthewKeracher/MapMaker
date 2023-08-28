@@ -55,7 +55,7 @@ const NPCs = {
         console.log(this.npcArray);
     
         // Clear the form
-        document.getElementById('npcForm').reset();
+        //document.getElementById('npcForm').reset();
     },
     
     fixDisplay: function(){
@@ -71,6 +71,22 @@ const NPCs = {
     radiantDisplay.style.width = "70vw"; 
     }
     },
+
+    clearForm: function(){
+      const npcForm = document.getElementById('npcForm');
+      const inputFields = npcForm.querySelectorAll('input, textarea, select'); // Select input, textarea, and select fields within npcForm
+  
+      // Loop through the form elements and clear their values
+      inputFields.forEach(formElement => {
+          if (formElement.tagName === 'SELECT') {
+              // For select elements, set the selected index to -1 to clear the selection
+              formElement.selectedIndex = -1;
+          } else {
+              formElement.value = ''; // Clear the value of input and textarea elements
+          }
+      });
+  },
+  
 
     
 
@@ -108,9 +124,21 @@ const NPCs = {
       
           // Add click event listener to each NPC name
           npcNameDiv.addEventListener('click', () => {
-            // Populate the npcForm with the selected NPC's data
+            
             document.getElementById('npcName').value = npc.name;
-            // Populate other fields here
+            document.getElementById('npcOccupation').value = npc.occupation;
+            document.getElementById('npcLevel').value = npc.level;
+            document.getElementById('npcClass').value = npc.class;
+            document.getElementById('primaryLocation').value = npc.primaryLocation;
+            document.getElementById('primaryActivity').value = npc.primaryActivity;
+            document.getElementById('secondaryLocation').value = npc.secondaryLocation;
+            document.getElementById('secondaryActivity').value = npc.secondaryActivity;
+            document.getElementById('tertiaryLocation').value = npc.tertiaryLocation;
+            document.getElementById('tertiaryActivity').value = npc.tertiaryActivity;
+            document.getElementById('npcPhysicalAppearance').value = npc.physicalAppearance;
+            document.getElementById('npcEmotionalAppearance').value = npc.emotionalAppearance;
+            document.getElementById('npcSocialAppearance').value = npc.socialAppearance;
+
             
             npcForm.style.display = 'flex'; // Display the npcForm
           });
@@ -131,21 +159,7 @@ const NPCs = {
 
       }
       
-      
-      
-
-// updateNPCTable: function() {
-//     const npcNamesTable = document.getElementById('npcNamesTable');
-//     const npcForm = document.getElementById('npcForm');
-    
-//     if (npcNamesTable) {
-//         npcNamesTable.parentNode.removeChild(npcNamesTable);
-//         //npcForm.style.display = "flex";
-//         this.loadNPC();
-//     }
-// },
-
-
+ 
 
 };
 

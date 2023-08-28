@@ -9,27 +9,43 @@ const Edit = {
     editPage: 1,
 
 
-// Delete a Location
-deleteLocation() {
-    const locationLabel = document.querySelector('.locationLabel');
-    const divId = locationLabel.textContent;
+    deleteLocation() {
+      switch (this.editPage) {
+          case 3:
+              const npcName = document.getElementById('npcName').value;
+              const npcIndex = NPCs.npcArray.findIndex(npc => npc.name === npcName);
+              const npcForm = document.getElementById('npcForm');
 
-    const matchingEntryIndex = Array.locationArray.findIndex(entry => entry.divId === divId);
+              if (npcIndex !== -1) {
+                const confirmation = window.confirm("Are you sure you want to delete this NPC?");
+                if (confirmation) {
+                  NPCs.npcArray.splice(npcIndex, 1); // Remove NPC from npcArray
+                  NPCs.loadNPC(); // Refresh the NPC form with updated npcArray                  
+                  npcForm.reset(); // Call the reset() method to clear the form fields
+              }}
+              break;
+          default:
+              const locationLabel = document.querySelector('.locationLabel');
+              const divId = locationLabel.textContent;
 
-    if (matchingEntryIndex !== -1) {
-        const confirmation = window.confirm("Are you sure you want to delete this location?");
-        if (confirmation) {
-            // Remove the entry from locationArray
-            Array.locationArray.splice(matchingEntryIndex, 1);
+              const matchingEntryIndex = Array.locationArray.findIndex(entry => entry.divId === divId);
 
-            // Remove the corresponding <div> element from the DOM
-            const divToRemove = document.getElementById(divId);
-            if (divToRemove) {
-                divToRemove.remove();
-            }
-        }
-    }
-},
+              if (matchingEntryIndex !== -1) {
+                  const confirmation = window.confirm("Are you sure you want to delete this location?");
+                  if (confirmation) {
+                      // Remove the entry from locationArray
+                      Array.locationArray.splice(matchingEntryIndex, 1);
+
+                      // Remove the corresponding <div> element from the DOM
+                      const divToRemove = document.getElementById(divId);
+                      if (divToRemove) {
+                          divToRemove.remove();
+                      }
+                  }
+              }
+              break;
+      }
+  },
 
 // Move a Location -- Unfinished
 moveLocation(source,target) {
@@ -124,6 +140,23 @@ if (matchingEntry) {
     Storyteller.changeContent(savedLocation);
 
 }
+
+// Update the new location name in npcArray!
+
+for (const npc of NPCs.npcArray) {
+  if (npc.primaryLocation === divId) {
+    npc.primaryLocation = editLocationName;
+  }
+  if (npc.secondaryLocation === divId) {
+    npc.secondaryLocation = editLocationName;
+  }
+  if (npc.tertiaryLocation === divId) {
+    npc.tertiaryLocation = editLocationName;
+  }
+}
+
+
+
 }, 
 
 //Remove or Add editContainer contents depending on editPage no.

@@ -285,6 +285,7 @@ locationArray: [],
                 location.addEventListener('click', () => {
                 Storyteller.changeContent(location);
                 Edit.moveLocation(location);
+                NPCs.clearForm();
 
                 });
 
@@ -294,33 +295,64 @@ locationArray: [],
                 },
 
                 generateLocationOptions() {
-                        const primaryLocationDropdown = document.getElementById('primaryLocation');
-                        const secondaryLocationDropdown = document.getElementById('secondaryLocation');
-                        const tertiaryLocationDropdown = document.getElementById('tertiaryLocation');
-
-                        // Clear existing options
-                        primaryLocationDropdown.innerHTML = '<option value=""></option>';
-                        secondaryLocationDropdown.innerHTML = '<option value="">None</option>';
-                        tertiaryLocationDropdown.innerHTML = '<option value="">None</option>';
-
-                        // Generate options based on .selection div IDs
-                        this.locationArray.forEach((location) => {
-                            const option = document.createElement('option');
-                            option.value = location.divId;
-                            option.textContent = location.divId;
-                            primaryLocationDropdown.appendChild(option);
+                    const primaryLocationDropdown = document.getElementById('primaryLocation');
+                    const secondaryLocationDropdown = document.getElementById('secondaryLocation');
+                    const tertiaryLocationDropdown = document.getElementById('tertiaryLocation');
+                    
+                    // Get the current location name
+                    const currentLocationName = document.querySelector('.locationLabel').textContent;
                 
-                            const secondaryOption = document.createElement('option');
-                            secondaryOption.value = location.divId;
-                            secondaryOption.textContent = location.divId;
-                            secondaryLocationDropdown.appendChild(secondaryOption);
-
-                            const tertiaryOption = document.createElement('option');
-                            tertiaryOption.value = location.divId;
-                            tertiaryOption.textContent = location.divId;
-                            tertiaryLocationDropdown.appendChild(tertiaryOption);
-                        });
-                    },
+                    // Get the current values of secondary and tertiary locations
+                    const currentSecondaryLocation = secondaryLocationDropdown.value;
+                    const currentTertiaryLocation = tertiaryLocationDropdown.value;
+                
+                    // Clear existing options
+                    primaryLocationDropdown.innerHTML = '';
+                    secondaryLocationDropdown.innerHTML = '<option value="">None</option>';
+                    tertiaryLocationDropdown.innerHTML = '<option value="">None</option>';
+                
+                    // Flag to keep track of whether a primary location is selected
+                    let isPrimarySelected = false;
+                
+                    // Generate options based on .selection div IDs
+                    this.locationArray.forEach((location) => {
+                        const option = document.createElement('option');
+                        option.value = location.divId;
+                        option.textContent = location.divId;
+                
+                        // Check if the old primary location is available
+                        if (location.divId === currentLocationName && !isPrimarySelected) {
+                            option.setAttribute('selected', 'selected');
+                            isPrimarySelected = true;
+                        }
+                
+                        primaryLocationDropdown.appendChild(option);
+                    });
+                
+                    // Keep or randomly select secondary and tertiary locations
+                    this.locationArray.forEach((location) => {
+                        const secondaryOption = document.createElement('option');
+                        secondaryOption.value = location.divId;
+                        secondaryOption.textContent = location.divId;
+                
+                        const tertiaryOption = document.createElement('option');
+                        tertiaryOption.value = location.divId;
+                        tertiaryOption.textContent = location.divId;
+                
+                        if (location.divId === currentSecondaryLocation) {
+                            secondaryOption.setAttribute('selected', 'selected');
+                        }
+                
+                        if (location.divId === currentTertiaryLocation) {
+                            tertiaryOption.setAttribute('selected', 'selected');
+                        }
+                
+                        secondaryLocationDropdown.appendChild(secondaryOption);
+                        tertiaryLocationDropdown.appendChild(tertiaryOption);
+                    });
+                }
+                
+                
 
 };
 

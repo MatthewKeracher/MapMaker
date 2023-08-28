@@ -67,26 +67,33 @@ const Storyteller = {
   ${ambienceIntro}\n
   ${ambienceEntry.description}\n
   ${ambienceEntry[chosenSense]}\n
-  <hr>\n</span>`;
+  </span>`;
 
   let playerIntro = 'You are at [' + locationName.textContent + ']. '  
 
-  const presentNPCs = this.getNPCs(locationName.textContent);
-
-for (const npcWithStory of presentNPCs) {
-const npcStory = npcWithStory.story;
-rawStory += `${npcStory}`;
-}
-
+ 
   // Replace monster placeholders in the GM text
   const gmTextWithMonsters = await this.replaceMonsterPlaceholders(gm);
 
   //ADD LOCATION BITS
   rawStory += `
-  <span class="section player"> <hr> \n ${playerIntro} \n\n ${player} \n\n\  <hr>\n </span>
-  <span class="section gm">${gmTextWithMonsters}\n \n <hr> \n</span>
-  <span class="section misc">${misc}\n\n\</span>              
-  `;     
+  <span class="section player"> <hr> \n ${playerIntro} \n\n ${player} \n\n\  <hr> </span>`
+      
+
+  const presentNPCs = this.getNPCs(locationName.textContent);
+
+  if (presentNPCs.length === 0) {
+    rawStory += "There is nobody around.";
+} else {
+    for (const npcWithStory of presentNPCs) {
+        const npcStory = npcWithStory.story;
+        rawStory += npcStory;
+    }
+}
+
+  rawStory += 
+  `<span class="section gm"> <hr> ${gmTextWithMonsters} \n\n</span>
+   <span class="section misc">${misc} \n\n\</span>`; 
 
       //FORMAT STORYTELLER
       let formattedStory = this.applyStyling(rawStory);
@@ -133,54 +140,88 @@ rawStory += `${npcStory}`;
 
   generateNPCStory(npc, locationName) {
     let story = ``;
-    
+
+    // Check location types and set colors
+    const locationType = npc.primaryLocation === locationName ? 'primary' :
+        npc.secondaryLocation === locationName ? 'secondary' :
+        npc.tertiaryLocation === locationName ? 'tertiary' : 'wild';
+
+    // Apply different colors based on location type
+    const nameColor = locationType === 'primary' ? 'primary' :
+                      locationType === 'secondary' ? 'secondary' :
+                      locationType === 'tertiary' ? 'tertiary' : 'wild';
+
+    // Add the span around the NPC's name
+    story += `<span class="${nameColor}">${npc.name}`;
+
     if (npc.class && npc.class !== "N/A") {
-      story += `{LEVEL ${npc.level} ${npc.class.toUpperCase()}} \n`;
+        story += `{LEVEL ${npc.level} ${npc.class.toUpperCase()}} `;
     }
 
-    story +=
-    `${npc.name} the ${npc.occupation.toLowerCase()} is here.`;
-  
-    if(npc.primaryLocation === locationName){
-      story += `You see them ${npc.primaryActivity.toLowerCase()}. \n\n`;
+    if (npc.name && npc.name !== "undefined") {
+        story += `, the ${npc.occupation.toLowerCase()}, is here. `;
     }
-  
-    if(npc.secondaryLocation === locationName){
-      story += `You see them ${npc.secondaryActivity.toLowerCase()}. \n\n`;
+
+    story += `</span>`
+
+    if (npc.physicalAppearance && npc.physicalAppearance !== "undefined") {
+        story += `   ${npc.physicalAppearance} \n\n`;
     }
-  
-    if(npc.tertiaryLocation === locationName){
-      story += `You see them ${npc.tertiaryActivity.toLowerCase()}. \n\n`;
+
+    if (npc.emotionalAppearance && npc.emotionalAppearance !== "undefined") {
+        story += `   ${npc.emotionalAppearance} \n\n`;
     }
-  
-    if (npc.npcPhysicalAppearance) {
-      story += `${npc.npcPhysicalAppearance} \n\n`;
+
+    if (npc.socialAppearance && npc.socialAppearance !== "undefined") {
+        story += `   ${npc.socialAppearance} \n\n`;
     }
-  
-    if (npc.npcEmotionalAppearance) {
-      story += `${npc.npcEmotionalAppearance} \n\n`;
+
+    if (npc.primaryLocation === locationName && npc.primaryActivity && npc.primaryActivity !== "undefined") {
+        story += `   They are currently ${npc.primaryActivity.toLowerCase()}. \n\n`;
     }
-  
-    if (npc.npcSocialAppearance) {
-      story += `${npc.npcSocialAppearance} \n\n`;
+
+    if (npc.secondaryLocation === locationName && npc.secondaryActivity && npc.secondaryActivity !== "undefined") {
+        story += `   They are currently ${npc.secondaryActivity.toLowerCase()}. \n\n`;
     }
-      
+
+    if (npc.tertiaryLocation === locationName && npc.tertiaryActivity && npc.tertiaryActivity !== "undefined") {
+        story += `   They are currently ${npc.tertiaryActivity.toLowerCase()}. \n\n`;
+    }
+
+    
+
     return story;
-  },
-  
+},
+
+
 
    
    getNPCs(locationName) {
     const presentNPCs = [];
     
     for (const npc of NPCs.npcArray) {
-      if (npc.primaryLocation === locationName ||
-          npc.secondaryLocation === locationName ||
-          npc.tertiaryLocation === locationName) {
-        const npcStory = this.generateNPCStory(npc, locationName);
-        presentNPCs.push({ name: npc.name, story: npcStory });
+      if (npc.primaryLocation === locationName || npc.secondaryLocation === locationName || npc.tertiaryLocation === locationName) {
+          const chance = Math.random() * 100;
+  
+          if (npc.primaryLocation === locationName && chance <= 80) {
+              const npcStory = this.generateNPCStory(npc, locationName);
+              presentNPCs.push({ name: npc.name, story: npcStory });
+          } else if (npc.secondaryLocation === locationName && chance <= 50) {
+              const npcStory = this.generateNPCStory(npc, locationName);
+              presentNPCs.push({ name: npc.name, story: npcStory });
+          } else if (npc.tertiaryLocation === locationName && chance <= 25) {
+              const npcStory = this.generateNPCStory(npc, locationName);
+              presentNPCs.push({ name: npc.name, story: npcStory });
+          } else if (chance <= 5) {
+              const npcStory = this.generateNPCStory(npc, locationName);
+              presentNPCs.push({ name: npc.name, story: npcStory });
+          }
       }
-    }
+  }
+  
+  
+  
+  
     
     return presentNPCs;
   },
@@ -216,8 +257,8 @@ rawStory += `${npcStory}`;
           `{Special}: ${monster.Special || "None"};\n`,
           `{Save As}: ${monster["Save As "]};\n`,
           `{Treasure}: ${monster.Treasure || "None"};\n`,
-          `{Experience Points}: ${monster.XP};\n\n  <hr>\n `,
-          `{Description}: \n\n ${monster.Description.replace(/\./g, '.\n\n')} <hr>`,
+          `{Experience Points}: ${monster.XP};\n\n `,
+          `{Description}: \n\n ${monster.Description.replace(/\./g, '.\n\n')}`,
 
           // Add other fields here
         ];

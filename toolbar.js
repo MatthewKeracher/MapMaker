@@ -194,7 +194,9 @@ handleeditSaveButtonButtonClick(){
 
 Edit.saveLocation();
 NPCs.saveNPC();
+Array.generateLocationOptions();
 NPCs.loadNPC();
+
 
 };
 

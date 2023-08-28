@@ -160,11 +160,15 @@ background-color: black;
 }
 
 .secondary {    
-    color: hotpink;
+    color: orange;
 }
 
 .tertiary {   
     color: yellow;
+}
+
+.tertiary {   
+    color: hotpink;
 }
 
 
