@@ -56,13 +56,6 @@ nextButton.addEventListener('click', this.handleNextButtonClick);
 const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
-//NPC Form
-const saveNPCButton = document.getElementById('saveNPCButton');
-saveNPCButton.addEventListener('click', this.handleeditsaveNPCButtonClick);
-
-const loadNPCButton = document.getElementById('loadNPCButton');
-loadNPCButton.addEventListener('click', this.handleeditloadNPCButtonClick);
-
 //table maker
 
 const generateTableButton = document.getElementById('generateTable');
@@ -200,6 +193,8 @@ handleSaveButtonClick(){
 handleeditSaveButtonButtonClick(){
 
 Edit.saveLocation();
+NPCs.saveNPC();
+NPCs.loadNPC();
 
 };
 
@@ -300,18 +295,6 @@ handleeditgenerateTableButtonClick(){
    // });
   //});
 };
-
-handleeditsaveNPCButtonClick(){
-
-       NPCs.saveNPC();
-
-}
-
-handleeditloadNPCButtonClick(){
-
-    NPCs.loadNPC();
-
-}
 
 
 

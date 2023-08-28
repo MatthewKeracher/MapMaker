@@ -52,19 +52,14 @@ const Storyteller = {
   //Within Random Selection, filter through.
   const senses = ["sight", "smell", "touch", "feel"];
   const chosenSense = senses[Ambience.hour];
-  
-  //console.log(chosenSense);  
 
   const ambienceEntry = await Ambience.loadAmbienceEntry(mainSelect, currentPhase);
   
   //Retain returned entry until next phase.
   Ambience.current = ambienceEntry;  
-
-  //-- NEED TO SEPERATE
-  // Randomly choose between "sight," "smell," "touch," and "feel"
+ 
   let ambienceIntro = 'It is a [' + mainSelect + ' ' + currentPhase + ']. '  
 
- 
   let rawStory = ``
   
   //ADD AMBIENCE
@@ -76,12 +71,19 @@ const Storyteller = {
 
   let playerIntro = 'You are at [' + locationName.textContent + ']. '  
 
+  const presentNPCs = this.getNPCs(locationName.textContent);
+
+for (const npcWithStory of presentNPCs) {
+const npcStory = npcWithStory.story;
+rawStory += `${npcStory}`;
+}
+
   // Replace monster placeholders in the GM text
   const gmTextWithMonsters = await this.replaceMonsterPlaceholders(gm);
 
   //ADD LOCATION BITS
   rawStory += `
-  <span class="section player"> ${playerIntro} \n\n ${player} \n\n\  <hr>\n </span>
+  <span class="section player"> <hr> \n ${playerIntro} \n\n ${player} \n\n\  <hr>\n </span>
   <span class="section gm">${gmTextWithMonsters}\n \n <hr> \n</span>
   <span class="section misc">${misc}\n\n\</span>              
   `;     
@@ -124,10 +126,64 @@ const Storyteller = {
         
       }
 
-      NPCs.updateNPCTable();
+      NPCs.loadNPC();
 
     };
   }, 
+
+  generateNPCStory(npc, locationName) {
+    let story = ``;
+    
+    if (npc.class && npc.class !== "N/A") {
+      story += `{LEVEL ${npc.level} ${npc.class.toUpperCase()}} \n`;
+    }
+
+    story +=
+    `${npc.name} the ${npc.occupation.toLowerCase()} is here.`;
+  
+    if(npc.primaryLocation === locationName){
+      story += `You see them ${npc.primaryActivity.toLowerCase()}. \n\n`;
+    }
+  
+    if(npc.secondaryLocation === locationName){
+      story += `You see them ${npc.secondaryActivity.toLowerCase()}. \n\n`;
+    }
+  
+    if(npc.tertiaryLocation === locationName){
+      story += `You see them ${npc.tertiaryActivity.toLowerCase()}. \n\n`;
+    }
+  
+    if (npc.npcPhysicalAppearance) {
+      story += `${npc.npcPhysicalAppearance} \n\n`;
+    }
+  
+    if (npc.npcEmotionalAppearance) {
+      story += `${npc.npcEmotionalAppearance} \n\n`;
+    }
+  
+    if (npc.npcSocialAppearance) {
+      story += `${npc.npcSocialAppearance} \n\n`;
+    }
+      
+    return story;
+  },
+  
+
+   
+   getNPCs(locationName) {
+    const presentNPCs = [];
+    
+    for (const npc of NPCs.npcArray) {
+      if (npc.primaryLocation === locationName ||
+          npc.secondaryLocation === locationName ||
+          npc.tertiaryLocation === locationName) {
+        const npcStory = this.generateNPCStory(npc, locationName);
+        presentNPCs.push({ name: npc.name, story: npcStory });
+      }
+    }
+    
+    return presentNPCs;
+  },
 
   
   async replaceMonsterPlaceholders(text) {

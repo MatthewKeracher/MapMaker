@@ -22,7 +22,7 @@ const Monsters = {
         const monstersData = await Monsters.loadMonstersArray();
         const monsters = monstersData.monsters; // Access monsters from the monstersData object
         const editGMText = document.getElementById('editGMText');
-        const optionsList = document.getElementById('optionsList');
+        const optionsList = document.getElementById('MonsteroptionsList');
 
         //console.log(JSON.stringify(monsters).length + ' Monsters')
       

@@ -15,7 +15,7 @@
 
 .npcFormContainer{
     width: 30vw;
-    height: 75vh;
+    height: 85vh;
 };
 
 #npcForm label{
@@ -128,73 +128,47 @@ background-color: black;
     opacity: 1; /* Firefox */
   }
 
-#npcForm Button {
-    bottom: 10vh;
-    right: 15vw;
-    width: 14vw;    
-    font-size: 2vh;
-    padding: 1vh 1vw;
-    margin: 0;
-    border: 0.1vh solid black;
-    transition: background-color 0.3s;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-}
-
-.npcToolbar{
-    position: fixed;
-    bottom: 10vh;
-    right: 1vw;
-    width: 28vw;
-    height: 6vh;
-    display: flex; 
-    flex-direction: row; 
-    }
-
-#npcForm Button:hover {
-    background-color: hotpink;
-}
-
-#npcNamesTable {
-    width: 30vw; /* Make the table take up the entire available width */
-    table-layout: flex; /* Lock the table layout to fix the cell widths */
-}
-
-#npcNamesTable td {
-    width: 30vw; /* Divide the row into two equal-width cells */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    white-space: nowrap; /* Prevent text from wrapping to the next line */
-    overflow: hidden; /* Hide any overflowing content */
-    text-overflow: ellipsis; /* Display ellipsis (...) for long text */
-}
-
-#npcNamesTable td {
-    padding: 0vw;
-    height: 4vh;
-    width: 30vw; 
-    font-size: 2vh;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    text-align: center;
+  #NPCoptionsList {
+    color: gray;
+    background-color: transparent;
+    opacity: 1;
+    height: 100vh;
+    border: transparent;
+    padding: 5px;
+    position: fixed; /* Use fixed position for screen coordinates */
+    top: 0;
+    left: 55vw;
+    z-index: 10; /* Adjust z-index as needed */
+    overflow-y: auto;
+    display: none;
+    scrollbar-color: black;
   }
 
-.primary-row {
+  #NPCoptionsList div:hover {
+    background-color: lime; /* Change the background color on hover */
+    color: black;
+    cursor: pointer; /* Show pointer cursor on hover */
+  }  
+
+  #NPCoptionsList::-webkit-scrollbar {
+    width: 5px; /* Set the width of the scrollbar */
+    }
+  
+
+.primary {
     color: lime;
 }
 
-.secondary-row {    
+.secondary {    
     color: hotpink;
 }
 
-.tertiary-row {   
+.tertiary {   
     color: yellow;
 }
 
-.not-here-row {    
-    color: bisque;
-} 
-   
-  #npcNamesTable td:nth-child(1):hover {
-    background-color: lime;
-    color: black;
-}
+
+
+
+
   

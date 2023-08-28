@@ -1,5 +1,5 @@
 // Import the necessary module
-import Array from "./array.js";
+import Edit from "./edit.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -58,148 +58,92 @@ const NPCs = {
         document.getElementById('npcForm').reset();
     },
     
+    fixDisplay: function(){
 
-    
+    // Get references to the elements
+    const imageContainer = document.querySelector('.image-container');
+    const radiantDisplay = document.getElementById('radiantDisplay'); 
 
-loadNPC: function() {
-const npcForm = document.getElementById('npcForm');
-
-// Hide the npcForm
-npcForm.style.display = "none";
-
-const editorContainer = document.querySelector('.EditorContainer');      
-
-// Create a new npcNamesTable div
-const npcNamesTable = document.createElement('div');
-npcNamesTable.id = 'npcNamesTable'; // Set an ID for the div element
-
-// Create a table element inside the npcNamesTable div
-const table = document.createElement('table');
-
-// Clear the existing table rows
-while (table.firstChild) {
-table.removeChild(table.firstChild);
-}
-
-// Create table rows and cells for each NPC name and location
-for (const npc of NPCs.npcArray) {
-    
-const row = document.createElement('tr');
-
-    // Create and populate the cell for the NPC name
-    const nameCell = document.createElement('td');
-    nameCell.textContent = npc.name;
-
-        // Create and populate the cell for the location information
-        const locationName = document.querySelector('.locationLabel').textContent;
-        const currentLocation = document.createElement('td');
-        if (npc.primaryLocation === locationName) {
-            row.className = 'primary-row';
-            currentLocation.textContent = 'Primary';
-        } else if (npc.secondaryLocation === locationName) {
-            row.className = 'secondary-row';
-            currentLocation.textContent = 'Secondary';
-        } else if (npc.tertiaryLocation === locationName) {
-            row.className = 'tertiary-row';
-            currentLocation.textContent = 'Tertiary';
-        } else {
-            row.className = 'not-here-row';
-            currentLocation.textContent = 'Not here';
-        }
-
-        // Add both cells to the row
-        row.appendChild(nameCell);
-        row.appendChild(currentLocation);
-
-        // Determine where to insert the row based on the location type
-        if (row.className === 'primary-row') {
-        console.log(1);
-        // Find the first row with class 'primary-row' and insert before it
-        const primaryRow = table.querySelector('.primary-row');
-        if (primaryRow) {
-        table.insertBefore(row, primaryRow);
-        } else {
-        table.insertBefore(row, table.firstChild); // If no 'primary-row' rows, just append to the end
-        }
-        } else if (row.className === 'secondary-row') {
-        console.log(2);
-        // Find the first row with class 'secondary-row' and insert before it
-        const secondaryRow = table.querySelector('.secondary-row');
-        if (secondaryRow) {
-        table.insertBefore(row, secondaryRow);
-        } else {
-        table.appendChild(row); // If no 'secondary-row' rows, just append to the end
-        }
-        } else if (row.className === 'tertiary-row') {
-        console.log(3);
-        table.appendChild(row); // Append to the end for tertiary
-        } else {
-        console.log(4);
-        table.appendChild(row); // Append to the end for unknown
-        }
-
-}
-
-// Add the table element to the npcNamesTable div
-npcNamesTable.appendChild(table);
-
-// Add the npcNamesTable div to the editorContainer
-editorContainer.appendChild(npcNamesTable);
-
-table.addEventListener('click', function(event) {
-    const clickedRow = event.target.closest('tr');
-    console.log('table click');
-
-    // Check if the clicked element is a row
-    if (clickedRow) {
-        // Get the row index of the clicked row
-        const rowIndex = clickedRow.rowIndex;
-        console.log('Row index:', rowIndex);
-
-        // Make sure the rowIndex is within the valid range
-        if (rowIndex >= 0 && rowIndex < NPCs.npcArray.length) {
-            const selectedNPC = NPCs.npcArray[rowIndex];   
-
-        document.getElementById('npcName').value = selectedNPC.name;
-        document.getElementById('npcOccupation').value = selectedNPC.occupation;
-        document.getElementById('npcLevel').value = selectedNPC.level;
-        document.getElementById('npcClass').value = selectedNPC.class;
-        document.getElementById('primaryLocation').value = selectedNPC.primaryLocation;
-        document.getElementById('primaryActivity').value = selectedNPC.primaryActivity;
-        document.getElementById('secondaryLocation').value = selectedNPC.secondaryLocation;
-        document.getElementById('secondaryActivity').value = selectedNPC.secondaryActivity;
-        document.getElementById('tertiaryLocation').value = selectedNPC.tertiaryLocation;
-        document.getElementById('tertiaryActivity').value = selectedNPC.tertiaryActivity;
-        document.getElementById('npcPhysicalAppearance').value = selectedNPC.npcPhysicalAppearance;
-        document.getElementById('npcEmotionalAppearance').value = selectedNPC.npcEmotionalAppearance;
-        document.getElementById('npcSocialAppearance').value = selectedNPC.npcSocialAppearance;
-
-
-// Display the npcForm
-document.getElementById('npcForm').style.display = 'flex';
-
-
-npcNamesTable.parentNode.removeChild(npcNamesTable);
-
-
-} else {
-console.log('Invalid row index:', rowIndex);
-}
-}
-});
-
-},
-
-updateNPCTable: function() {
-    const npcNamesTable = document.getElementById('npcNamesTable');
-    const npcForm = document.getElementById('npcForm');
-    console.log('attempting')
-    if (npcNamesTable) {
-        npcNamesTable.parentNode.removeChild(npcNamesTable);
-        //npcForm.style.display = "flex";
-        this.loadNPC();
+    if (Edit.editPage === 3) {
+    imageContainer.style.width = "55vw"; 
+    radiantDisplay.style.width = "55vw"; 
+    }else{imageContainer.style.width = "70vw"; 
+    radiantDisplay.style.width = "70vw"; 
     }
-},
+    },
+
+    
+
+    loadNPC: function() {
+        const npcForm = document.getElementById('npcForm');    
+        const NPCoptionsList = document.getElementById('NPCoptionsList'); // Reuse the optionsList div
+        const locationName = document.querySelector('.locationLabel');
+               
+        // Clear the existing content
+        NPCoptionsList.innerHTML = '';
+      
+        const primaryNPCs = [];
+        const secondaryNPCs = [];
+        const tertiaryNPCs = [];
+        const otherNPCs = [];
+      
+        for (const npc of NPCs.npcArray) {
+          const npcNameDiv = document.createElement('div');
+          npcNameDiv.textContent = npc.name;            
+      
+          // Colour code based on whether this is their Primary, Secondary, or Tertiary Location
+          if (npc.primaryLocation === locationName.textContent) {
+            npcNameDiv.classList.add('primary');
+            primaryNPCs.push(npcNameDiv);
+          } else if (npc.secondaryLocation === locationName.textContent) {
+            npcNameDiv.classList.add('secondary');
+            secondaryNPCs.push(npcNameDiv);
+          } else if (npc.tertiaryLocation === locationName.textContent) {
+            npcNameDiv.classList.add('tertiary');
+            tertiaryNPCs.push(npcNameDiv);
+          } else {
+            npcNameDiv.classList.add('npc-name'); // Add a class for styling
+            otherNPCs.push(npcNameDiv);
+          }
+      
+          // Add click event listener to each NPC name
+          npcNameDiv.addEventListener('click', () => {
+            // Populate the npcForm with the selected NPC's data
+            document.getElementById('npcName').value = npc.name;
+            // Populate other fields here
+            
+            npcForm.style.display = 'flex'; // Display the npcForm
+          });
+        }
+      
+        // Concatenate arrays in desired order
+        const sortedNPCs = [...primaryNPCs, ...secondaryNPCs, ...tertiaryNPCs, ...otherNPCs];
+      
+        // Append sorted divs to the NPCoptionsList
+        sortedNPCs.forEach(npcDiv => {
+          NPCoptionsList.appendChild(npcDiv);
+        });
+      
+        NPCoptionsList.style.display = 'block'; // Display the NPC names container
+  
+        this.fixDisplay();
+  
+
+      }
+      
+      
+      
+
+// updateNPCTable: function() {
+//     const npcNamesTable = document.getElementById('npcNamesTable');
+//     const npcForm = document.getElementById('npcForm');
+    
+//     if (npcNamesTable) {
+//         npcNamesTable.parentNode.removeChild(npcNamesTable);
+//         //npcForm.style.display = "flex";
+//         this.loadNPC();
+//     }
+// },
 
 
 

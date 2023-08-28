@@ -1,6 +1,6 @@
 import Array from "./array.js";
 import Storyteller from "./storyteller.js";
-import Monsters from "./monsters.js";
+import NPCs from "./npcs.js";
 
 const Edit = {
 
@@ -146,6 +146,8 @@ const AmbienceContainer = document.querySelector('.AmbienceContainer')
 
 const npcForm = document.querySelector('.npcForm')
 
+NPCs.fixDisplay();
+
 
 
 switch (newPage) {
@@ -189,7 +191,7 @@ switch (newPage) {
 
       //Show
       npcForm.style.display = "flex"
-
+      
 
       //Hide
       editLocationName.style.display  = "none";
@@ -201,6 +203,9 @@ switch (newPage) {
       misc.style.display = "none";
       tableForm.style.display = "none";
       AmbienceContainer.style.display = "none";
+
+      NPCs.loadNPC();
+
       break;
       
     case 4:
