@@ -203,7 +203,7 @@ const Storyteller = {
       if (npc.primaryLocation === locationName || npc.secondaryLocation === locationName || npc.tertiaryLocation === locationName) {
           const chance = Math.random() * 100;
   
-          if (npc.primaryLocation === locationName && chance <= 80) {
+          if (npc.primaryLocation === locationName && chance <= 100) {
               const npcStory = this.generateNPCStory(npc, locationName);
               presentNPCs.push({ name: npc.name, story: npcStory });
           } else if (npc.secondaryLocation === locationName && chance <= 50) {
@@ -212,7 +212,7 @@ const Storyteller = {
           } else if (npc.tertiaryLocation === locationName && chance <= 25) {
               const npcStory = this.generateNPCStory(npc, locationName);
               presentNPCs.push({ name: npc.name, story: npcStory });
-          } else if (chance <= 5) {
+          } else if (chance <= 10) {
               const npcStory = this.generateNPCStory(npc, locationName);
               presentNPCs.push({ name: npc.name, story: npcStory });
           }
@@ -221,7 +221,7 @@ const Storyteller = {
   
   
   
-  
+    console.log(presentNPCs)
     
     return presentNPCs;
   },

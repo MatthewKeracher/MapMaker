@@ -8,23 +8,41 @@ const Edit = {
     moveMode: false,
     editPage: 1,
 
+    filterEmptyEntries(npcArray) {
+      return npcArray.filter(npc => {
+          // Check if any of the key values is not an empty string
+          for (const key in npc) {
+              if (npc.hasOwnProperty(key) && npc[key] !== "") {
+                  return true;
+              }
+          }
+          return false;
+      });
+  },
+  
+
 
     deleteLocation() {
       switch (this.editPage) {
-          case 3:
-              const npcName = document.getElementById('npcName').value;
-              const npcIndex = NPCs.npcArray.findIndex(npc => npc.name === npcName);
-              const npcForm = document.getElementById('npcForm');
-
-              if (npcIndex !== -1) {
-                const confirmation = window.confirm("Are you sure you want to delete this NPC?");
-                if (confirmation) {
+        case 3:
+          const npcName = document.getElementById('npcName').value;
+          const npcIndex = NPCs.npcArray.findIndex(npc => npc.name === npcName);
+          const npcForm = document.getElementById('npcForm');
+      
+          if (npcIndex !== -1) {
+              const confirmation = window.confirm("Are you sure you want to delete this NPC?");
+              if (confirmation) {
                   NPCs.npcArray.splice(npcIndex, 1); // Remove NPC from npcArray
-                  NPCs.loadNPC(); // Refresh the NPC form with updated npcArray                  
+      
+                  // Filter and update npcArray to remove empty entries
+                  //NPCs.npcArray = this.filterEmptyEntries(NPCs.npcArray);
+      
+                  NPCs.loadNPC(); // Refresh the NPC form with updated npcArray
                   npcForm.reset(); // Call the reset() method to clear the form fields
-              }}
-              break;
-          default:
+              }
+          }
+          break;
+      
               const locationLabel = document.querySelector('.locationLabel');
               const divId = locationLabel.textContent;
 

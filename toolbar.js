@@ -64,6 +64,7 @@ generateTableButton.addEventListener('click', this.handleeditgenerateTableButton
 
 handleMapButtonClick() {  
 Map.fetchAndProcessImage()
+document.getElementById('Banner').style.display = "none";
 };
 
 handleDataButtonClick() {

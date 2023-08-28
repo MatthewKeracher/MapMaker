@@ -6,6 +6,23 @@ margin: 0; /* Remove default margin */
 
 }
 
+/* Style for the centered container */
+.center-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* Style for the centered image */
+.center-screen img {
+    width: 90vw; /* Reset width to auto to allow resizing */
+    
+    display: block; /* Remove any default spacing */
+    margin: 0 auto; /* Horizontally center the image */
+}
+
 
 
 
