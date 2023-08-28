@@ -138,7 +138,8 @@ background-color: black;
     position: fixed; /* Use fixed position for screen coordinates */
     top: 0;
     left: 55vw;
-    z-index: 10; /* Adjust z-index as needed */
+    width: 15vw;
+    z-index: 1;
     overflow-y: auto;
     display: none;
     scrollbar-color: black;
