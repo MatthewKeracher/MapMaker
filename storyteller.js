@@ -82,7 +82,7 @@ const Storyteller = {
   <span class="section player"> <hr> \n ${playerIntro} \n\n ${player} \n\n\  <hr> </span>`
       
 
-  const presentNPCs = this.getNPCs(locationName.textContent,currentPhase);
+  const presentNPCs = this.getNPCs(locationName.textContent,Ambience.phase);
 
   if (presentNPCs.length === 0) {
     rawStory += "There is nobody around.";
@@ -140,19 +140,19 @@ const Storyteller = {
     };
   }, 
 
-  generateNPCStory(npc, locationName, locationType) {
+  generateNPCStory(npc, locationName, currentPhase, phaseName) {
     let story = ``;
     
     // Apply different colors based on location type
-    const nameColor = locationType === 'Morning' ? 'Morning' :
-                      locationType === 'Afternoon' ? 'Afternoon' :
-                      locationType === 'Night' ? 'Night' : 'wild';
+    const nameColor = currentPhase === 0 ? 'Morning' :
+                      currentPhase === 1 ? 'Afternoon' :
+                      currentPhase === 2 ? 'Night' : 'wild';
 
     // Add the span around the NPC's name
     story += `<span class="${nameColor}">${npc.name}`;
 
     if (npc.class && npc.class !== "N/A") {
-        story += ` {LEVEL ${npc.level} ${npc.class}} `;
+        story += ` {Level ${npc.level} ${npc.class}} `;
     }
 
     if (npc.name && npc.name !== "undefined") {
@@ -173,15 +173,15 @@ const Storyteller = {
         story += `   ${npc.socialAppearance} \n\n`;
     }
 
-    if (npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
+    if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
         story += `   They are currently ${npc.MorningActivity} \n\n`;
     }
 
-    if (npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
+    if (phaseName === 'Afternoon'  && npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
         story += `   They are currently ${npc.AfternoonActivity} \n\n`;
     }
 
-    if (npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
+    if (phaseName === 'Night'  && npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
         story += `   They are currently ${npc.NightActivity} \n\n`;
     }
 
@@ -195,11 +195,16 @@ const Storyteller = {
    
 getNPCs(locationName, currentPhase) {
   const presentNPCs = [];
+
+  // Apply different colors based on location type
+  const phaseName = currentPhase === 0 ? 'Morning' :
+                    currentPhase === 1 ? 'Afternoon' :
+                    currentPhase === 2 ? 'Night' : 'wild';
   
   for (const npc of NPCs.npcArray) {
-    if (npc[`${currentPhase}Location`] === locationName) {
+    if (npc[`${phaseName}Location`] === locationName) {
       console.log('Present')
-      const npcStory = this.generateNPCStory(npc, locationName, currentPhase);
+      const npcStory = this.generateNPCStory(npc, locationName, currentPhase, phaseName);
       presentNPCs.push({ name: npc.name, story: npcStory });
     }
   }

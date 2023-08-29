@@ -115,20 +115,26 @@ const NPCs = {
           npcNameDiv.textContent = npc.name;            
       
           // Colour code based on whether this is their Morning, Afternoon, or Night Location
-          if (npc.MorningLocation === locationName.textContent) {
-            npcNameDiv.classList.add('Morning');
-            MorningNPCs.push(npcNameDiv);
-          } else if (npc.AfternoonLocation === locationName.textContent) {
-            npcNameDiv.classList.add('Afternoon');
-            AfternoonNPCs.push(npcNameDiv);
-          } else if (npc.NightLocation === locationName.textContent) {
-            npcNameDiv.classList.add('Night');
-            NightNPCs.push(npcNameDiv);
-          } else {
-            npcNameDiv.classList.add('npc-name'); // Add a class for styling
-            otherNPCs.push(npcNameDiv);
-          }
-      
+          
+          if (npc.MorningLocation === locationName.textContent &&
+            npc.AfternoonLocation === locationName.textContent &&
+            npc.NightLocation === locationName.textContent) {
+          npcNameDiv.classList.add('Always');
+          NightNPCs.push(npcNameDiv);
+       } else if (npc.MorningLocation === locationName.textContent) {
+          npcNameDiv.classList.add('Morning');
+          MorningNPCs.push(npcNameDiv);
+        } else if (npc.AfternoonLocation === locationName.textContent) {
+          npcNameDiv.classList.add('Afternoon');
+          AfternoonNPCs.push(npcNameDiv);
+        } else if (npc.NightLocation === locationName.textContent) {
+          npcNameDiv.classList.add('Night');
+          NightNPCs.push(npcNameDiv);
+        } else {
+          npcNameDiv.classList.add('npc-name'); // Add a class for styling
+          otherNPCs.push(npcNameDiv);
+        }
+
           // Add click event listener to each NPC name
           npcNameDiv.addEventListener('click', () => {
             
