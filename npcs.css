@@ -68,7 +68,7 @@
 
     .halfField {
         height: 4vh;
-        width: 14vw;
+        width: 13vw;
         margin: 1vh;
         font-size: 2vh;
         color: bisque;
@@ -162,19 +162,19 @@ background-color: black;
     }
   
 
-.primary {
+.Morning {
     color: lime;
 }
 
-.secondary {    
+.Afternoon {    
     color: orange;
 }
 
-.tertiary {   
+.Night {   
     color: yellow;
 }
 
-.tertiary {   
+.Night {   
     color: hotpink;
 }
 

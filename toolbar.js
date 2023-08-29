@@ -42,8 +42,11 @@ editEditButton.addEventListener('click', this.handleEditButtonClick);
 const editSaveButton = document.getElementById('editSaveButton');
 editSaveButton.addEventListener('click', this.handleeditSaveButtonButtonClick);
 
-const editMoveButton = document.getElementById('editMoveButton');
-editMoveButton.addEventListener('click', this.handleeditMoveButtonButtonClick); 
+// const editMoveButton = document.getElementById('editMoveButton');
+// editMoveButton.addEventListener('click', this.handleeditMoveButtonButtonClick); 
+
+const editClearButton = document.getElementById('editClearButton');
+editClearButton.addEventListener('click', this.handleeditClearButtonClick); 
 
 const editDeleteButton = document.getElementById('editDeleteButton');
 editDeleteButton.addEventListener('click', this.handleeditDeleteButtonButtonClick);
@@ -56,15 +59,26 @@ nextButton.addEventListener('click', this.handleNextButtonClick);
 const prevButton = document.getElementById('prevButton');
 prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
-//table maker
+//Export .csv
 
-const generateTableButton = document.getElementById('generateTable');
-generateTableButton.addEventListener('click', this.handleeditgenerateTableButtonClick);
+const exportData = document.getElementById('exportData');
+exportData.addEventListener('click', this.handleexportDataClick);
+
+
+const importData = document.getElementById('importData');
+importData.addEventListener('click', this.handleimportDataClick);
+
+const csvFileInput = document.getElementById('csvFileInput'); // Add this line
+csvFileInput.addEventListener('change', Array.handleCSVFileInputChange); // Use "Array" here
+
 }
+
+
 
 handleMapButtonClick() {  
 Map.fetchAndProcessImage()
 document.getElementById('Banner').style.display = "none";
+
 };
 
 handleDataButtonClick() {
@@ -86,10 +100,10 @@ if(!Add.addMode){
 Add.addMode = true;
 addButton.classList.add('click-button');
 
-    // Add the event listeners
-    mapElement.addEventListener('mousedown', Add.handleMouseDown);
-    mapElement.addEventListener('mousemove', Add.handleMouseMove);
-    mapElement.addEventListener('mouseup', Add.handleMouseUp);
+// Add the event listeners
+mapElement.addEventListener('mousedown', Add.handleMouseDown);
+mapElement.addEventListener('mousemove', Add.handleMouseMove);
+mapElement.addEventListener('mouseup', Add.handleMouseUp);
 
 // Disable pointer events on the locations and mainToolbar while dragging
 const mainToolbar = document.querySelector('.mainToolbar');        
@@ -98,7 +112,7 @@ mainToolbar.style.pointerEvents = 'none';
 
 const selectionList = document.querySelectorAll('.selection');
 selectionList.forEach((selection) => {
-    selection.style.pointerEvents = 'none';
+selection.style.pointerEvents = 'none';
 });
 
 
@@ -108,10 +122,10 @@ selectionList.forEach((selection) => {
 Add.addMode = false;
 addButton.classList.remove('click-button');
 
-    // Remove the event listeners
-    mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-    mapElement.removeEventListener('mousemove', Add.handleMouseMove);
-    mapElement.removeEventListener('mouseup', Add.handleMouseUp);
+// Remove the event listeners
+mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+mapElement.removeEventListener('mousemove', Add.handleMouseMove);
+mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 
 // Enable pointer events on the locations and mainToolbar after dragging
 const mainToolbar = document.querySelector('.mainToolbar');        
@@ -187,30 +201,64 @@ div.removeEventListener('mouseleave', Edit.handleMouseHover);
 
 handleSaveButtonClick(){
 
-    Array.exportArray();
-    
+Array.exportArray();
+
 };  
 
 handleeditSaveButtonButtonClick(){
 
 Edit.saveLocation();
 NPCs.saveNPC();
-Array.generateLocationOptions();
 NPCs.loadNPC();
 
 
 };
 
+handleeditClearButtonClick(){
+
+const Page = Edit.editPage
+
+editClearButton.classList.add('click-button');
+setTimeout(() => {
+editClearButton.classList.remove('click-button');
+}, 1000); // 1000 milliseconds = 1 second
+
+switch (Page) {
+case 1:
+document.getElementById('editPlayerText').value = "";
+break;
+
+case 2:
+document.getElementById('editGMText').value = "";
+break;
+
+case 3:
+NPCs.clearForm();
+break;
+
+case 4:
+Edit.generateTable();
+break;
+
+case 5:
+
+break;
+
+default:
+// Handle any other cases
+break;
+}}
+
 handleeditMoveButtonButtonClick(){
 
 if (!Edit.moveMode) {
-    Edit.moveMode = true;
-    editMoveButton.classList.add('click-button');
-    
+Edit.moveMode = true;
+editMoveButton.classList.add('click-button');
+
 } else {
 if (Edit.editMode) {
-    Edit.moveMode = false;
-    editMoveButton.classList.remove('click-button');
+Edit.moveMode = false;
+editMoveButton.classList.remove('click-button');
 
 }}};
 
@@ -222,82 +270,33 @@ Edit.deleteLocation();
 
 handleNextButtonClick(){
 
-    if (Edit.editPage < 5) {
-        Edit.editPage = Edit.editPage + 1;
-        Edit.pageChange(Edit.editPage);
-    }
+if (Edit.editPage < 5) {
+Edit.editPage = Edit.editPage + 1;
+Edit.pageChange(Edit.editPage);
+}
 
 };
 
 handleeditPrevButtonButtonClick(){
 
-    if (Edit.editPage > 1) {
-        Edit.editPage = Edit.editPage - 1;
-        Edit.pageChange(Edit.editPage)
-        console.log(Edit.editPage)
-    }
+if (Edit.editPage > 1) {
+Edit.editPage = Edit.editPage - 1;
+Edit.pageChange(Edit.editPage)
+console.log(Edit.editPage)
+}
 
 };
 
-handleeditgenerateTableButtonClick(){
+handleexportDataClick(){
+// Call the export function when needed, e.g., when clicking a button
+Array.exportNPCArrayToCSV();
+}
 
-//document.addEventListener("DOMContentLoaded", function () {
-    //const generateTableButton = document.getElementById("generateTable");
-  
-    //generateTableButton.addEventListener("click", function () {
-      const tableContainer = document.getElementById("tableContainer");
-      const numRows = parseInt(document.getElementById("numRows").value);
-      const numCols = parseInt(document.getElementById("numCols").value);
-  
-      const table = document.createElement("table");
-      table.classList.add("spreadsheet");
-  
-      // Create a row for column labels
-      const labelRow = document.createElement("tr");
-      for (let j = 1; j <= numCols; j++) { // Start at 1 to skip the first column
-        const cell = document.createElement("td");
-        const input = document.createElement("input");
-        input.type = "text";
-        
-        
-        // Add an event listener for column header editing
-        input.addEventListener("blur", function () {
-          cell.value = input.value;
-        });
-        
-        cell.appendChild(input);
-        labelRow.appendChild(cell);
-      }
-      table.appendChild(labelRow);
-  
-      // Create data rows
-      for (let i = 1; i <= numRows; i++) { // Start at 1 to skip the first row
-      const row = document.createElement("tr");
-      for (let j = 1; j <= numCols; j++) {
-      const cell = document.createElement("td");
-      const input = document.createElement("input");
-      input.type = "text";
-
-      // Add an event listener for cell editing
-      input.addEventListener("blur", function () {
-      cell.textContent = input.value;
-      });
-
-      // Set the ID based on x and y coordinates
-      input.id = `cell-${i}-${j}`;
-
-      cell.appendChild(input);
-      row.appendChild(cell);
-      }
-      table.appendChild(row);
-      }
-  
-      tableContainer.innerHTML = ""; // Clear previous content
-      tableContainer.appendChild(table);
-      Hotkeys.spreadsheetHotkeys();
-   // });
-  //});
-};
+handleimportDataClick(){
+// Trigger the hidden file input element
+const CSVfileInput = document.getElementById('csvFileInput');
+CSVfileInput.click();
+}
 
 
 

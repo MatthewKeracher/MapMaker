@@ -162,14 +162,14 @@ if (matchingEntry) {
 // Update the new location name in npcArray!
 
 for (const npc of NPCs.npcArray) {
-  if (npc.primaryLocation === divId) {
-    npc.primaryLocation = editLocationName;
+  if (npc.MorningLocation === divId) {
+    npc.MorningLocation = editLocationName;
   }
-  if (npc.secondaryLocation === divId) {
-    npc.secondaryLocation = editLocationName;
+  if (npc.AfternoonLocation === divId) {
+    npc.AfternoonLocation = editLocationName;
   }
-  if (npc.tertiaryLocation === divId) {
-    npc.tertiaryLocation = editLocationName;
+  if (npc.NightLocation === divId) {
+    npc.NightLocation = editLocationName;
   }
 }
 
@@ -303,6 +303,66 @@ switch (newPage) {
   }
 
 },
+
+generateTable(){
+
+  //document.addEventListener("DOMContentLoaded", function () {
+      //const generateTableButton = document.getElementById("generateTable");
+    
+      //generateTableButton.addEventListener("click", function () {
+        const tableContainer = document.getElementById("tableContainer");
+        const numRows = parseInt(document.getElementById("numRows").value);
+        const numCols = parseInt(document.getElementById("numCols").value);
+    
+        const table = document.createElement("table");
+        table.classList.add("spreadsheet");
+    
+        // Create a row for column labels
+        const labelRow = document.createElement("tr");
+        for (let j = 1; j <= numCols; j++) { // Start at 1 to skip the first column
+          const cell = document.createElement("td");
+          const input = document.createElement("input");
+          input.type = "text";
+          
+          
+          // Add an event listener for column header editing
+          input.addEventListener("blur", function () {
+            cell.value = input.value;
+          });
+          
+          cell.appendChild(input);
+          labelRow.appendChild(cell);
+        }
+        table.appendChild(labelRow);
+    
+        // Create data rows
+        for (let i = 1; i <= numRows; i++) { // Start at 1 to skip the first row
+        const row = document.createElement("tr");
+        for (let j = 1; j <= numCols; j++) {
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+  
+        // Add an event listener for cell editing
+        input.addEventListener("blur", function () {
+        cell.textContent = input.value;
+        });
+  
+        // Set the ID based on x and y coordinates
+        input.id = `cell-${i}-${j}`;
+  
+        cell.appendChild(input);
+        row.appendChild(cell);
+        }
+        table.appendChild(row);
+        }
+    
+        tableContainer.innerHTML = ""; // Clear previous content
+        tableContainer.appendChild(table);
+        //Hotkeys.spreadsheetHotkeys();
+     // });
+    //});
+  }
 
 
 

@@ -1,3 +1,5 @@
+import Edit from "./edit.js";
+
 const Ambience = {
 
     phase: 0,
@@ -119,6 +121,7 @@ const Ambience = {
 
     async clock(){
 
+        if(!Edit.editMode){
         if(this.hour < 3){
             this.hour = this.hour + 1;                
         }else{
@@ -136,7 +139,7 @@ const Ambience = {
 
 this.radiateDisplay();
 
-},
+}},
 
 radiateDisplay(){
 

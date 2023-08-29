@@ -157,6 +157,7 @@ height: 75vh;
 font-size: 2vh; 
 overflow-y: scroll;
 scrollbar-color: black;
+
 }
 
 .bottomTable::-webkit-scrollbar {

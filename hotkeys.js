@@ -47,8 +47,8 @@ case 'e':
 case 's':
     editSaveButton.click();
     break;
-case 'm':
-    editMoveButton.click();
+case 'c':
+    editClearButton.click();
     break;
 case 'd':
     editDeleteButton.click();
@@ -59,12 +59,6 @@ break;
 case 'p':
     prevButton.click();
 break;
-case 'g':
-    generateTable.click();
-break;
-
-
-
 
 }}}
 

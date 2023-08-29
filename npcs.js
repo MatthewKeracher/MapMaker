@@ -1,5 +1,6 @@
 // Import the necessary module
 import Edit from "./edit.js";
+import Array from "./array.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -11,12 +12,12 @@ const NPCs = {
         const npcOccupation = document.getElementById('npcOccupation').value;
         const npcLevel = document.getElementById('npcLevel').value;
         const npcClass = document.getElementById('npcClass').value;
-        const primaryLocation = document.getElementById('primaryLocation').value;
-        const primaryActivity = document.getElementById('primaryActivity').value;
-        const secondaryLocation = document.getElementById('secondaryLocation').value;
-        const secondaryActivity = document.getElementById('secondaryActivity').value;
-        const tertiaryLocation = document.getElementById('tertiaryLocation').value;
-        const tertiaryActivity = document.getElementById('tertiaryActivity').value;
+        const MorningLocation = document.getElementById('MorningLocation').value;
+        const MorningActivity = document.getElementById('MorningActivity').value;
+        const AfternoonLocation = document.getElementById('AfternoonLocation').value;
+        const AfternoonActivity = document.getElementById('AfternoonActivity').value;
+        const NightLocation = document.getElementById('NightLocation').value;
+        const NightActivity = document.getElementById('NightActivity').value;
         const npcPhysicalAppearance = document.getElementById('npcPhysicalAppearance').value;
         const npcEmotionalAppearance = document.getElementById('npcEmotionalAppearance').value;
         const npcSocialAppearance = document.getElementById('npcSocialAppearance').value;
@@ -30,12 +31,12 @@ const NPCs = {
             occupation: npcOccupation,
             level: npcLevel,
             class: npcClass,
-            primaryLocation: primaryLocation,
-            primaryActivity: primaryActivity,
-            secondaryLocation: secondaryLocation,
-            secondaryActivity: secondaryActivity,
-            tertiaryLocation: tertiaryLocation,
-            tertiaryActivity: tertiaryActivity,
+            MorningLocation: MorningLocation,
+            MorningActivity: MorningActivity,
+            AfternoonLocation: AfternoonLocation,
+            AfternoonActivity: AfternoonActivity,
+            NightLocation: NightLocation,
+            NightActivity: NightActivity,
             physicalAppearance: npcPhysicalAppearance,
             emotionalAppearance: npcEmotionalAppearance,
             socialAppearance: npcSocialAppearance
@@ -64,18 +65,21 @@ const NPCs = {
     const imageContainer = document.querySelector('.image-container');
     const radiantDisplay = document.getElementById('radiantDisplay'); 
 
+    try{
     if (Edit.editPage === 3) {
     imageContainer.style.width = "55vw"; 
     radiantDisplay.style.width = "55vw"; 
     }else{imageContainer.style.width = "70vw"; 
     radiantDisplay.style.width = "70vw"; 
-    }
+    }}catch{}
     },
 
     clearForm: function(){
       const npcForm = document.getElementById('npcForm');
       const inputFields = npcForm.querySelectorAll('input, textarea, select'); // Select input, textarea, and select fields within npcForm
   
+      //console.log("clearing npcForm")
+
       // Loop through the form elements and clear their values
       inputFields.forEach(formElement => {
           if (formElement.tagName === 'SELECT') {
@@ -85,6 +89,9 @@ const NPCs = {
               formElement.value = ''; // Clear the value of input and textarea elements
           }
       });
+
+     Array.generateLocationOptions();
+
   },
   
 
@@ -98,25 +105,25 @@ const NPCs = {
         // Clear the existing content
         NPCoptionsList.innerHTML = '';
       
-        const primaryNPCs = [];
-        const secondaryNPCs = [];
-        const tertiaryNPCs = [];
+        const MorningNPCs = [];
+        const AfternoonNPCs = [];
+        const NightNPCs = [];
         const otherNPCs = [];
       
         for (const npc of NPCs.npcArray) {
           const npcNameDiv = document.createElement('div');
           npcNameDiv.textContent = npc.name;            
       
-          // Colour code based on whether this is their Primary, Secondary, or Tertiary Location
-          if (npc.primaryLocation === locationName.textContent) {
-            npcNameDiv.classList.add('primary');
-            primaryNPCs.push(npcNameDiv);
-          } else if (npc.secondaryLocation === locationName.textContent) {
-            npcNameDiv.classList.add('secondary');
-            secondaryNPCs.push(npcNameDiv);
-          } else if (npc.tertiaryLocation === locationName.textContent) {
-            npcNameDiv.classList.add('tertiary');
-            tertiaryNPCs.push(npcNameDiv);
+          // Colour code based on whether this is their Morning, Afternoon, or Night Location
+          if (npc.MorningLocation === locationName.textContent) {
+            npcNameDiv.classList.add('Morning');
+            MorningNPCs.push(npcNameDiv);
+          } else if (npc.AfternoonLocation === locationName.textContent) {
+            npcNameDiv.classList.add('Afternoon');
+            AfternoonNPCs.push(npcNameDiv);
+          } else if (npc.NightLocation === locationName.textContent) {
+            npcNameDiv.classList.add('Night');
+            NightNPCs.push(npcNameDiv);
           } else {
             npcNameDiv.classList.add('npc-name'); // Add a class for styling
             otherNPCs.push(npcNameDiv);
@@ -129,12 +136,12 @@ const NPCs = {
             document.getElementById('npcOccupation').value = npc.occupation;
             document.getElementById('npcLevel').value = npc.level;
             document.getElementById('npcClass').value = npc.class;
-            document.getElementById('primaryLocation').value = npc.primaryLocation;
-            document.getElementById('primaryActivity').value = npc.primaryActivity;
-            document.getElementById('secondaryLocation').value = npc.secondaryLocation;
-            document.getElementById('secondaryActivity').value = npc.secondaryActivity;
-            document.getElementById('tertiaryLocation').value = npc.tertiaryLocation;
-            document.getElementById('tertiaryActivity').value = npc.tertiaryActivity;
+            document.getElementById('MorningLocation').value = npc.MorningLocation;
+            document.getElementById('MorningActivity').value = npc.MorningActivity;
+            document.getElementById('AfternoonLocation').value = npc.AfternoonLocation;
+            document.getElementById('AfternoonActivity').value = npc.AfternoonActivity;
+            document.getElementById('NightLocation').value = npc.NightLocation;
+            document.getElementById('NightActivity').value = npc.NightActivity;
             document.getElementById('npcPhysicalAppearance').value = npc.physicalAppearance;
             document.getElementById('npcEmotionalAppearance').value = npc.emotionalAppearance;
             document.getElementById('npcSocialAppearance').value = npc.socialAppearance;
@@ -145,7 +152,7 @@ const NPCs = {
         }
       
         // Concatenate arrays in desired order
-        const sortedNPCs = [...primaryNPCs, ...secondaryNPCs, ...tertiaryNPCs, ...otherNPCs];
+        const sortedNPCs = [...MorningNPCs, ...AfternoonNPCs, ...NightNPCs, ...otherNPCs];
       
         // Append sorted divs to the NPCoptionsList
         sortedNPCs.forEach(npcDiv => {

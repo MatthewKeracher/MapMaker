@@ -2,6 +2,7 @@ import Ambience from "./ambience.js";
 import Edit from "./edit.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
+//import Papa from 'papaparse';
 
 const Array = {
 locationArray: [],
@@ -72,6 +73,10 @@ locationArray: [],
                 } else {
                 console.log('Filename not provided, file not saved.');
                 }
+
+
+
+
                 }, 
 
                 handleFileSave(event, blob, blobUrl) {
@@ -96,36 +101,6 @@ locationArray: [],
                 event.target.remove();
                 },
 
-                downloadImage(filename) {
-                const mapElement = document.getElementById('mapElement'); // Get the map element
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                // Set the canvas dimensions to match the image dimensions
-                canvas.width = mapElement.width;
-                canvas.height = mapElement.height;
-
-                // Draw the image onto the canvas
-                ctx.drawImage(mapElement, 0, 0);
-
-                // Convert the canvas content to a data URL (imageDataUrl)
-                const imageDataUrl = canvas.toDataURL();
-
-                // Create a download link for the image
-                const imageLink = document.createElement('a');
-                imageLink.href = imageDataUrl;
-                imageLink.download = filename || 'image.png'; // Specify the desired image filename
-                imageLink.textContent = 'Download Image';
-
-                // Append the image download link to the body
-                document.body.appendChild(imageLink);
-
-                // Programmatically trigger a click event on the image link to start the download
-                imageLink.click();
-
-                // Remove the image download link after the download is initiated
-                imageLink.remove();
-                },
 
 //For Loading...
 
@@ -143,7 +118,7 @@ locationArray: [],
 
                 try {
                 //Handle Location Information
-                console.log(data.locations)
+                //console.log(data.locations)
                 this.displayLoadedLocationsOnMap(data.locations);
                 } catch (error) {
                 console.error('Error loading file:', error);
@@ -152,7 +127,7 @@ locationArray: [],
                 try {
                     if (data.npcArray) {
                         NPCs.npcArray = data.npcArray;
-                        console.log(NPCs.npcArray);
+                        //console.log(NPCs.npcArray);
                     } else {
                         console.log('NPC array data is not available.');
                     }
@@ -222,10 +197,13 @@ locationArray: [],
                 //Add Events to Divs
                 this.addLocationEvents()
 
-                // Generate options for primary and secondary locations dropdowns
-                this.generateLocationOptions();
+               
 
                 });
+
+                 // Generate options for Morning and Afternoon locations dropdowns
+                 this.generateLocationOptions();
+
                 },
 
                 addSaveLocation(locationData) {
@@ -248,7 +226,7 @@ locationArray: [],
                 newLoc.appendChild(labelElement);
 
                 //console.log("Created: " + JSON.stringify(newLoc, null, 2));
-                generateTable.click();
+                Edit.generateTable();
 
                 return newLoc;
                 },   
@@ -294,67 +272,108 @@ locationArray: [],
                 });
                 },
 
-                generateLocationOptions() {
-                    const primaryLocationDropdown = document.getElementById('primaryLocation');
-                    const secondaryLocationDropdown = document.getElementById('secondaryLocation');
-                    const tertiaryLocationDropdown = document.getElementById('tertiaryLocation');
-                    
-                    // Get the current location name
-                    const currentLocationName = document.querySelector('.locationLabel').textContent;
-                
-                    // Get the current values of secondary and tertiary locations
-                    const currentSecondaryLocation = secondaryLocationDropdown.value;
-                    const currentTertiaryLocation = tertiaryLocationDropdown.value;
-                
-                    // Clear existing options
-                    primaryLocationDropdown.innerHTML = '';
-                    secondaryLocationDropdown.innerHTML = '<option value="">None</option>';
-                    tertiaryLocationDropdown.innerHTML = '<option value="">None</option>';
-                
-                    // Flag to keep track of whether a primary location is selected
-                    let isPrimarySelected = false;
-                
-                    // Generate options based on .selection div IDs
-                    this.locationArray.forEach((location) => {
-                        const option = document.createElement('option');
-                        option.value = location.divId;
-                        option.textContent = location.divId;
-                
-                        // Check if the old primary location is available
-                        if (location.divId === currentLocationName && !isPrimarySelected) {
-                            option.setAttribute('selected', 'selected');
-                            isPrimarySelected = true;
-                        }
-                
-                        primaryLocationDropdown.appendChild(option);
-                    });
-                
-                    // Keep or randomly select secondary and tertiary locations
-                    this.locationArray.forEach((location) => {
-                        const secondaryOption = document.createElement('option');
-                        secondaryOption.value = location.divId;
-                        secondaryOption.textContent = location.divId;
-                
-                        const tertiaryOption = document.createElement('option');
-                        tertiaryOption.value = location.divId;
-                        tertiaryOption.textContent = location.divId;
-                
-                        if (location.divId === currentSecondaryLocation) {
-                            secondaryOption.setAttribute('selected', 'selected');
-                        }
-                
-                        if (location.divId === currentTertiaryLocation) {
-                            tertiaryOption.setAttribute('selected', 'selected');
-                        }
-                
-                        secondaryLocationDropdown.appendChild(secondaryOption);
-                        tertiaryLocationDropdown.appendChild(tertiaryOption);
-                    });
-                }
-                
-                
+generateLocationOptions() {
+// The Dropdowns
+const Morning = document.getElementById('MorningLocation');
+const Afternoon = document.getElementById('AfternoonLocation');
+const Night = document.getElementById('NightLocation');
 
-};
+// Get the current location name
+const currentMapSelection = document.querySelector('.locationLabel').textContent;
+
+// Get the current values of Morning, Afternoon and Night locations in the npcForm
+const currentMorningLocation = Morning.value;
+const currentAfternoonLocation = Afternoon.value;
+const currentNightLocation = Night.value;
+
+// Clear existing options
+Morning.innerHTML = '<option value="">None</option>';
+Afternoon.innerHTML = '<option value="">None</option>';
+Night.innerHTML = '<option value="">None</option>';
+
+// Generate options based on .selection div IDs for all dropdowns
+this.locationArray.forEach((location) => {
+    //console.log(location.divId)
+    const MorningOption = document.createElement('option');
+    MorningOption.value = location.divId;
+    MorningOption.textContent = location.divId;
+    Morning.appendChild(MorningOption);
+
+    const AfternoonOption = document.createElement('option');
+    AfternoonOption.value = location.divId;
+    AfternoonOption.textContent = location.divId;
+    Afternoon.appendChild(AfternoonOption);
+
+    const NightOption = document.createElement('option');
+    NightOption.value = location.divId;
+    NightOption.textContent = location.divId;
+    Night.appendChild(NightOption);
+});
+},
+
+ downloadCSV(filename, data) {
+    const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(data);
+    const link = document.createElement("a");
+    link.setAttribute("href", csvContent);
+    link.setAttribute("download", filename);
+    link.click();
+},
+
+ exportNPCArrayToCSV() {
+    const csvRows = [];
+    const header = Object.keys(NPCs.npcArray[0]).join(",");
+    csvRows.push(header);
+
+    for (const npc of NPCs.npcArray) {
+        const values = Object.values(npc).map(value => {
+            if (typeof value === "string") {
+                return `"${value}"`;
+            } else {
+                return value;
+            }
+        });
+        csvRows.push(values.join(","));
+    }
+
+    const csvContent = csvRows.join("\n");
+    const filename = "npcArray.csv";
+
+    this.downloadCSV(filename, csvContent);
+},
+
+handleCSVFileInputChange: function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        console.log("Importing CSV:", file.name);
+        Array.importCSV(file);
+    }
+}.bind(this),
+
+importCSV(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const content = e.target.result;
+        const parsedData = Papa.parse(content, { header: true }).data;
+        const importedNPCArray = parsedData.map(row => {
+            const npc = {};
+            for (const key in row) {
+                npc[key] = row[key];
+            }
+            return npc;
+        });
+
+        // Replace npcArray with importedNPCArray
+        NPCs.npcArray.length = 0;
+        NPCs.npcArray.push(...importedNPCArray);
+
+        console.log("Imported NPC data:", NPCs.npcArray);
+    };
+
+    reader.readAsText(file);
+}
+
+}
 
 export default Array;
 

@@ -36,7 +36,7 @@
 
 <button class= "button" id="editEditButton"    >[E]dit   </button>
 <button class= "button" id="editSaveButton"    >[S]ave   </button>
-<button class= "button" id="editMoveButton"    >[M]ove   </button>
+<button class= "button" id="editClearButton"   >[C]lear   </button>
 <button class= "button" id="editDeleteButton"  >[D]elete </button>
 
 </div> 
@@ -85,31 +85,30 @@ placeholder="What do other people know them as?">
 <input class="smallField" type="number" id="npcLevel" name="npcLevel">
 
 <label for="npcClass">Class:</label>
-<select class="halfSelect" id="npcClass">                    
+<input class="halfField" type="textarea" id="npcClass" name="npcClass" required>
+
+<label for="MorningLocation">Morning Location:</label>
+<select class="smallSelect" id="MorningLocation" required>                    
 </select>
 
-<label for="primaryLocation">Primary Location:</label>
-<select class="smallSelect" id="primaryLocation" required>                    
-</select>
-
-<label for="primaryActivity">Activity:</label>
-<input class="smallField" type="textarea" id="primaryActivity" name="primaryActivity"
+<label for="MorningActivity">They are currently...</label>
+<input class="smallField" type="textarea" id="MorningActivity" name="MorningActivity"
 placeholder="What do the normally do here? They are...">
 
-<label for="secondaryLocation">Secondary Location:</label>
-<select class="smallSelect" id="secondaryLocation">                    
+<label for="AfternoonLocation">Afternoon Location:</label>
+<select class="smallSelect" id="AfternoonLocation">                    
 </select>
 
-<label for="secondaryActivity">Activity:</label>
-<input class="smallField" type="textarea" id="secondaryActivity" name="secondaryActivity"
+<label for="AfternoonActivity">They are currently...</label>
+<input class="smallField" type="textarea" id="AfternoonActivity" name="AfternoonActivity"
 placeholder="What do the normally do here? They are...">
 
-<label for="tertiaryLocation">Tertiary Location:</label>
-<select class="smallSelect" id="tertiaryLocation">                    
+<label for="NightLocation">Night Location:</label>
+<select class="smallSelect" id="NightLocation">                    
 </select>
 
-<label for="tertiaryActivity">Activity:</label>
-<input class="smallField" type="textarea" id="tertiaryActivity" name="tertiaryActivity"
+<label for="NightActivity">They are currently...</label>
+<input class="smallField" type="textarea" id="NightActivity" name="NightActivity"
 placeholder="What do the normally do here? They are...">
 
 <label for="npcPhysicalAppearance">Physical Character:</label>
@@ -133,7 +132,7 @@ placeholder="How does this NPC act socially? Are they outgoing or reserved; do p
 
 <div class="topTable">       
 
-<button type="button" id="generateTable">[G]enerate Table</button>
+
 
 <label for="numRows">Rows:</label>
 <input type="number" id="numRows" value=30 name="numRows" min="1" required><br><br>
@@ -185,6 +184,17 @@ are stored in a .json file. Select rediance for ambient lighting.
 <option value="">Select Main</option>
 </select>
 
+<br>
+
+<label id = "ExportHead"> Export .csv :</label>
+<p>Export the npcArray as a .csv file for easier editing.
+</p>
+
+<div class = "exportToolbar" id="exportToolbar"> 
+<button type="button" class = "button" id="importData">Import</button>
+<input type="file" id="csvFileInput" style="display: none">
+<button type="button" class = "button" id="exportData">Export</button>
+</div>
 </div>
 
 <div class = "bottomToolbar" id="bottomToolbar"> 
@@ -201,6 +211,8 @@ are stored in a .json file. Select rediance for ambient lighting.
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
 <script type="module" src="map.js"></script> 
 <script type="module" src="toolbar.js"></script> 
 <script type="module" src="hotkeys.js"></script> 
@@ -211,6 +223,8 @@ are stored in a .json file. Select rediance for ambient lighting.
 <script type="module" src="monsters.js"></script> 
 <script type="module" src="npcs.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
 
 
 </body>

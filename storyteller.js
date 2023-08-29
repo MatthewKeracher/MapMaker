@@ -2,6 +2,7 @@ import Array from "./array.js";
 import Ambience from "./ambience.js";
 import Monsters from "./monsters.js";
 import NPCs from "./npcs.js";
+import Edit from "./edit.js";
 
 const Storyteller = {
     
@@ -11,7 +12,7 @@ const Storyteller = {
 
   const locationName     = document.querySelector('.locationLabel');
   const editLocationName = document.querySelector('.editLocationName');
-  const primaryLocation = document.getElementById('primaryLocation')
+  const MorningLocation = document.getElementById('MorningLocation')
 
   const Storyteller      = document.getElementById('Storyteller');
 
@@ -24,7 +25,7 @@ const Storyteller = {
   editLocationName.value   = divId;
   
   //CHANGE CONTENT IN NPCFORM
-  primaryLocation.value = divId;
+  //MorningLocation.value = divId;
 
   //USE TITLE TO FIND REST OF DATA
   const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
@@ -48,6 +49,7 @@ const Storyteller = {
   //Morning [0], Afternoon [1], Night [2]
   const allPhases = document.getElementById("secondAmbienceDropdown"); 
   const currentPhase = allPhases[Ambience.phase].value;
+  console.log('The time is ' + currentPhase)
 
   //Within Random Selection, filter through.
   const senses = ["sight", "smell", "touch", "feel"];
@@ -80,7 +82,7 @@ const Storyteller = {
   <span class="section player"> <hr> \n ${playerIntro} \n\n ${player} \n\n\  <hr> </span>`
       
 
-  const presentNPCs = this.getNPCs(locationName.textContent);
+  const presentNPCs = this.getNPCs(locationName.textContent,currentPhase);
 
   if (presentNPCs.length === 0) {
     rawStory += "There is nobody around.";
@@ -114,6 +116,7 @@ const Storyteller = {
       editGMText.value = gm;
       editMiscText.value = misc;
 
+      Edit.generateTable();
       
 
       try {
@@ -129,8 +132,7 @@ const Storyteller = {
           }
         });
       } catch {
-        generateTable.click();
-        
+              
       }
 
       NPCs.loadNPC();
@@ -138,28 +140,23 @@ const Storyteller = {
     };
   }, 
 
-  generateNPCStory(npc, locationName) {
+  generateNPCStory(npc, locationName, locationType) {
     let story = ``;
-
-    // Check location types and set colors
-    const locationType = npc.primaryLocation === locationName ? 'primary' :
-        npc.secondaryLocation === locationName ? 'secondary' :
-        npc.tertiaryLocation === locationName ? 'tertiary' : 'wild';
-
+    
     // Apply different colors based on location type
-    const nameColor = locationType === 'primary' ? 'primary' :
-                      locationType === 'secondary' ? 'secondary' :
-                      locationType === 'tertiary' ? 'tertiary' : 'wild';
+    const nameColor = locationType === 'Morning' ? 'Morning' :
+                      locationType === 'Afternoon' ? 'Afternoon' :
+                      locationType === 'Night' ? 'Night' : 'wild';
 
     // Add the span around the NPC's name
     story += `<span class="${nameColor}">${npc.name}`;
 
     if (npc.class && npc.class !== "N/A") {
-        story += `{LEVEL ${npc.level} ${npc.class.toUpperCase()}} `;
+        story += ` {LEVEL ${npc.level} ${npc.class}} `;
     }
 
     if (npc.name && npc.name !== "undefined") {
-        story += `, the ${npc.occupation.toLowerCase()}, is here. `;
+        story += `, known as ${npc.occupation}, is here. `;
     }
 
     story += `</span>`
@@ -176,16 +173,16 @@ const Storyteller = {
         story += `   ${npc.socialAppearance} \n\n`;
     }
 
-    if (npc.primaryLocation === locationName && npc.primaryActivity && npc.primaryActivity !== "undefined") {
-        story += `   They are currently ${npc.primaryActivity.toLowerCase()}. \n\n`;
+    if (npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
+        story += `   They are currently ${npc.MorningActivity} \n\n`;
     }
 
-    if (npc.secondaryLocation === locationName && npc.secondaryActivity && npc.secondaryActivity !== "undefined") {
-        story += `   They are currently ${npc.secondaryActivity.toLowerCase()}. \n\n`;
+    if (npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
+        story += `   They are currently ${npc.AfternoonActivity} \n\n`;
     }
 
-    if (npc.tertiaryLocation === locationName && npc.tertiaryActivity && npc.tertiaryActivity !== "undefined") {
-        story += `   They are currently ${npc.tertiaryActivity.toLowerCase()}. \n\n`;
+    if (npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
+        story += `   They are currently ${npc.NightActivity} \n\n`;
     }
 
     
@@ -196,35 +193,20 @@ const Storyteller = {
 
 
    
-   getNPCs(locationName) {
-    const presentNPCs = [];
-    
-    for (const npc of NPCs.npcArray) {
-      if (npc.primaryLocation === locationName || npc.secondaryLocation === locationName || npc.tertiaryLocation === locationName) {
-          const chance = Math.random() * 100;
+getNPCs(locationName, currentPhase) {
+  const presentNPCs = [];
   
-          if (npc.primaryLocation === locationName && chance <= 100) {
-              const npcStory = this.generateNPCStory(npc, locationName);
-              presentNPCs.push({ name: npc.name, story: npcStory });
-          } else if (npc.secondaryLocation === locationName && chance <= 50) {
-              const npcStory = this.generateNPCStory(npc, locationName);
-              presentNPCs.push({ name: npc.name, story: npcStory });
-          } else if (npc.tertiaryLocation === locationName && chance <= 25) {
-              const npcStory = this.generateNPCStory(npc, locationName);
-              presentNPCs.push({ name: npc.name, story: npcStory });
-          } else if (chance <= 10) {
-              const npcStory = this.generateNPCStory(npc, locationName);
-              presentNPCs.push({ name: npc.name, story: npcStory });
-          }
-      }
+  for (const npc of NPCs.npcArray) {
+    if (npc[`${currentPhase}Location`] === locationName) {
+      console.log('Present')
+      const npcStory = this.generateNPCStory(npc, locationName, currentPhase);
+      presentNPCs.push({ name: npc.name, story: npcStory });
+    }
   }
-  
-  
-  
-    console.log(presentNPCs)
-    
-    return presentNPCs;
-  },
+
+  return presentNPCs;
+},
+
 
   
   async replaceMonsterPlaceholders(text) {
@@ -232,13 +214,13 @@ const Storyteller = {
     const monsters = await Monsters.loadMonstersArray();
   
     return text.replace(monsterPlaceholderRegex, (match, monsterName) => {
-      console.log(`Searching for monster: ${monsterName}`);
+      //console.log(`Searching for monster: ${monsterName}`);
       
       const monster = monsters.monsters[monsterName]; // Access monsters object first
 
       if (monster) {
 
-        console.log(`Found monster: ${monsterName}`);
+        //console.log(`Found monster: ${monsterName}`);
 
         //Format Presentation of Monster Stats
   
