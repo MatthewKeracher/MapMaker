@@ -1,12 +1,11 @@
 #npcForm {
-    display: none;
-    flex-direction: column;
-    align-items: flex-start;
+    display: none;    
     border-radius: 0;
     background-color: transparent;
     text-align: left;
     vertical-align: top;
     overflow: auto;
+    color: cyan;
 }
 
 #npcForm::-webkit-scrollbar {
@@ -42,6 +41,15 @@
     margin: 0;
 }
 
+
+#npcForm number:focus {
+    vertical-align: middle;
+    outline: cyan;
+    border-color: hotpink;
+    border-radius: 0;
+}
+
+
     .largeField{
         height: 15vh;
         width: 28vw;
@@ -57,6 +65,19 @@
     .smallField {
         height: 4vh;
         width: 28vw;
+        margin: 1vh;
+        font-size: 2vh;
+        color: bisque;
+        font-family: monospace, 'Trebuchet MS', sans-serif;
+        border: 0.2vh solid cyan;
+        padding: 0.8vh;
+        background-color: black;
+    }
+
+    .statBlock {
+        height: 62vh;
+        width: 10vw;
+        right: 0;
         margin: 1vh;
         font-size: 2vh;
         color: bisque;
@@ -115,7 +136,6 @@ background-color: black;
 }
 
 #npcForm select:focus,
-#npcForm number:focus,
 #npcForm textarea:focus {
     vertical-align: middle;
     outline: none;

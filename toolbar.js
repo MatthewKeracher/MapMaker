@@ -13,6 +13,7 @@ import Monsters from "./monsters.js";
 class Toolbar{
 
 init() {
+       
 
 Ambience.initializeAmbienceDropdowns();
 Monsters.addPredictiveMonsters();
@@ -189,6 +190,7 @@ LocationName.style.display = 'flex';
 mainToolbar.style.display = 'flex';
 editToolbar.style.display = 'none';
 bottomToolbar.style.display = 'none';
+
 
 // Remove the event listeners from each .selection element
 divs.forEach((div) => {

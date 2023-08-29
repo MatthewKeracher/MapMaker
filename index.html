@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="storyteller.css">
 <link rel="stylesheet" href="edit.css">
 <link rel="stylesheet" href="npcs.css">
+
 <link rel="icon" type="image/x-icon" href="data:," />
 <title>Excel_DM</title>
 </head>
@@ -30,6 +31,10 @@
 <button class= "button" id="editButton"  >[E]dit</button>
 <button class= "button" id="saveButton" >[S]ave</button>
 
+</div>
+
+<div class = "extraInfo" id="extraInfo">
+    <div class="extraContent" id="extraContent"></div>
 </div>
 
 <div class = "editToolbar" id="editToolbar"> 
@@ -74,7 +79,9 @@
 
 <div class="npcFormContainer">
 
-<label for="npcName">NPC Name:</label>
+<p>Use this form to create an non-player character (NPC)</p>
+
+<label for="npcName">Full or Unique Name:</label>
 <input class="smallField" type="textarea" id="npcName" name="npcName" required>
 
 <label for="npcOccupation">Known as...</label>
@@ -86,6 +93,8 @@ placeholder="What do other people know them as?">
 
 <label for="npcClass">Class:</label>
 <input class="halfField" type="textarea" id="npcClass" name="npcClass" required>
+
+<p>Assign the NPC to a routine, so that they can be found in locations at certain times.</p>
 
 <label for="MorningLocation">Morning Location:</label>
 <select class="smallSelect" id="MorningLocation" required>                    
@@ -111,9 +120,35 @@ placeholder="What do the normally do here? They are...">
 <input class="smallField" type="textarea" id="NightActivity" name="NightActivity"
 placeholder="What do the normally do here? They are...">
 
+<br>
+
+<p>If necessary, enter the NPC's stats here:</p>
+
+<div class="statBlock">
+
+<label for="STR">STR:</label><br>
+<input class="stat" type="number" id="STR" name="STR"><br>
+
+<label for="DEX">DEX:</label><br>
+<input class="stat" type="number" id="DEX" name="DEX"><br>
+
+<label for="INT">INT:</label><br>
+<input class="stat" type="number" id="INT" name="INT"><br>
+
+<label for="WIS">WIS:</label><br>
+<input class="stat" type="number" id="WIS" name="WIS"><br>
+
+<label for="CON">CON:</label><br>
+<input class="stat" type="number" id="CON" name="CON"><br>
+
+<label for="CHA">CHA:</label><br>
+<input class="stat" type="number" id="CHA" name="CHA"><br><br>
+
+</div>
+
 <label for="npcPhysicalAppearance">Physical Character:</label>
 <textarea class="largeField" type="textarea" id="npcPhysicalAppearance" name="npcPhysicalAppearance" 
-placeholder="Describe the physical appearance of this character. What do they look like, and what can the players tell about the NPC's habits and history from this?"></textarea>        
+placeholder="What does this NPC look like; what details should the player-characters be presented with?"></textarea>        
 
 <label for="npcEmotionalAppearance">Emotional Character:</label>
 <textarea class="largeField" type="textarea" id="npcEmotionalAppearance" name="npcEmotionalAppearance" 

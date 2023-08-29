@@ -136,6 +136,7 @@ const Storyteller = {
       }
 
       NPCs.loadNPC();
+      this.showExtraContent()
 
     };
   }, 
@@ -143,13 +144,14 @@ const Storyteller = {
   generateNPCStory(npc, locationName, currentPhase, phaseName) {
     let story = ``;
     
-    // Apply different colors based on location type
+    // Apply different colors based on expandable
     const nameColor = currentPhase === 0 ? 'Morning' :
                       currentPhase === 1 ? 'Afternoon' :
                       currentPhase === 2 ? 'Night' : 'wild';
 
-    // Add the span around the NPC's name
-    story += `<span class="${nameColor}">${npc.name}`;
+    // Add the span around the NPC's name that includes it as an .expandable but also their unique name.
+    story += `<span class="${npc.name} expandable">${npc.name}`
+   
 
     if (npc.class && npc.class !== "N/A") {
         story += ` {Level ${npc.level} ${npc.class}} `;
@@ -159,7 +161,9 @@ const Storyteller = {
         story += `, known as ${npc.occupation}, is here. `;
     }
 
-    story += `</span>`
+    story += `</span>`;
+
+    
 
     if (npc.physicalAppearance && npc.physicalAppearance !== "undefined") {
         story += `   ${npc.physicalAppearance} \n\n`;
@@ -317,6 +321,29 @@ rowsHtml += '</tr>';
 
 return rowsHtml;
 } catch{}
+},
+
+showExtraContent() {
+  const expandableElements = document.querySelectorAll('.expandable');
+  const extraInfo = document.querySelector('.extraInfo');
+
+  expandableElements.forEach(expandableElement => {
+    expandableElement.addEventListener('mouseenter', (event) => {
+      console.log('Enter');
+      extraInfo.classList.add('showExtraInfo');
+      
+      // Extract the NPC name from the element's text content
+      const npcName = event.target.textContent;
+      console.log('NPC name:', npcName);
+
+      // Now you can use the npcName for further actions
+    });
+
+    extraInfo.addEventListener('mouseleave', () => {
+      console.log('Leave');
+      extraInfo.classList.remove('showExtraInfo');
+    });
+  });
 }
 
 };

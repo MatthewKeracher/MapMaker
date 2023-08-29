@@ -36,10 +36,9 @@
 .EditorContainer label {
     position: relative;
     left: 0.5vw;
-    font-weight: bold;
     margin-top: 0.5vh;
     margin-bottom: 0.5vh;        
-    color: white;   
+    color: whitesmoke;   
 }
 
 #MonsteroptionsList {
