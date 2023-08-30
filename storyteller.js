@@ -5,84 +5,69 @@ import NPCs from "./npcs.js";
 import Edit from "./edit.js";
 
 const Storyteller = {
+  
+//Storyteller
+locationLabel: document.querySelector('.locationLabel'),
+Storyteller: document.getElementById('Storyteller'),
 
-async changeContent(location) {
-//TAKE LOCATION NAME
-const divId = location.id;
+//Editbar
+editLocationLabel: document.querySelector('.editLocationName'),
+editPlayerText: document.getElementById('editPlayerText'),
+editGMText: document.getElementById('editGMText'),
+editMiscText: document.getElementById('editMiscText'),
 
-const locationName     = document.querySelector('.locationLabel');
-const editLocationName = document.querySelector('.editLocationName');
-const MorningLocation = document.getElementById('MorningLocation')
+//Ambience 
+mainAmbience: document.getElementById("mainAmbienceDropdown"),
+allPhases: document.getElementById("secondAmbienceDropdown"),
 
-const Storyteller      = document.getElementById('Storyteller');
 
-const editPlayerText   = document.getElementById('editPlayerText');
-const editGMText       = document.getElementById('editGMText');
-const editMiscText     = document.getElementById('editMiscText');
+async changeContent(locationDiv) {
 
-//CHANGE CONTENT - SIDEBAR TITLES
-locationName.textContent = divId;
-editLocationName.value   = divId;
+let rawStory = ``
 
-//CHANGE CONTENT IN NPCFORM
-//MorningLocation.value = divId;
-
-//USE TITLE TO FIND REST OF DATA
-const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
-
-if (matchingEntry) {
-
-//CUT RETURNED DATA INTO CHUNKS  
-const player = matchingEntry.player;
-const gm = matchingEntry.gm;
-const misc = matchingEntry.misc;
-const spreadsheet = matchingEntry.spreadsheetData;
-
-//GET AMBIENCE MAIN FROM DROPDOWN
-const mainSelect = document.getElementById("mainAmbienceDropdown").value;
-
-//GET AMBIENCE SECOND FROM CLOCK
-
-//Let Time Pass
 Ambience.clock();
-
-//Morning [0], Afternoon [1], Night [2]
-const allPhases = document.getElementById("secondAmbienceDropdown"); 
-const currentPhase = allPhases[Ambience.phase].value;
-console.log('The time is ' + currentPhase)
+const Spring = this.mainAmbience.value;
+const Morning= this.allPhases[Ambience.phase].value;
 
 //Within Random Selection, filter through.
 const senses = ["sight", "smell", "touch", "feel"];
 const chosenSense = senses[Ambience.hour];
+const ambienceEntry = await Ambience.loadAmbienceEntry(Spring, Morning);
 
-const ambienceEntry = await Ambience.loadAmbienceEntry(mainSelect, currentPhase);
-
-//Retain returned entry until next phase.
+//Retain returned entry until next phase. Do not delete!
 Ambience.current = ambienceEntry;  
 
-let ambienceIntro = 'It is a [' + mainSelect + ' ' + currentPhase + ']. '  
+let ambienceText = 'It is a [' + Spring  + ' ' + Morning + ']. ' 
 
-let rawStory = ``
-
-//ADD AMBIENCE
 rawStory += `<span class="ambience">
-${ambienceIntro}\n
+${ambienceText}\n
 ${ambienceEntry.description}\n
 ${ambienceEntry[chosenSense]}\n
 </span>`;
 
-let playerIntro = 'You are at [' + locationName.textContent + ']. '  
+//take location name from object.
+const locationName = locationDiv.id;
 
+//change content in the sidebar and editbar
+this.locationLabel.textContent = locationName;
+this.editLocationLabel.value   = locationName;
 
-// Replace monster placeholders in the GM text
-const gmTextWithMonsters = await this.replaceMonsterPlaceholders(gm);
+//Use divId to find locationObject of the same name
+const locationObject = Array.locationArray.find(entry => entry.divId === locationName);
 
-//ADD LOCATION BITS
-rawStory += `
-<span class="section player"> <hr> \n ${playerIntro} \n\n ${player} \n\n\  <hr> </span>`
+if (locationObject) {
+//name the returned locationObject data 
+const playerText = locationObject.player;
+const masterText = locationObject.gm;
+const masterTextwithMonsters = await this.replaceMonsterPlaceholders(masterText);
 
+const spreadsheet = locationObject.spreadsheetData;
+const location = this.locationLabel.textContent;
+const presentNPCs = this.getNPCs(location, Ambience.phase);
 
-const presentNPCs = this.getNPCs(locationName.textContent,Ambience.phase);
+let playerIntro = 'You are at [' + location + ']. '
+
+rawStory += `<span class="section player"> <hr> \n ${playerIntro} \n\n ${playerText} \n\n\  <hr> </span>`
 
 if (presentNPCs.length === 0) {
 rawStory += "There is nobody around.";
@@ -93,11 +78,9 @@ rawStory += npcStory;
 }
 }
 
-rawStory += 
-`<span class="section gm"> <hr> ${gmTextWithMonsters} \n\n</span>
-<span class="section misc">${misc} \n\n\</span>`; 
+rawStory += `<span class="section gm"> <hr> ${masterTextwithMonsters} \n\n</span>`; 
 
-//FORMAT STORYTELLER
+//Send rawStory to applyStyling
 let formattedStory = this.applyStyling(rawStory);
 
 //ADD TABLE SO DOESN'T GET FORMATTED
@@ -108,14 +91,14 @@ ${this.generateSpreadsheetRows(spreadsheet)}
 </tbody>
 </table>`
 
-//CHANGE CONTENT IN STORYTELLER ELEMENT
-Storyteller.innerHTML = formattedStory;
+//Apply formattedStory to Storyteller
+this.Storyteller.innerHTML = formattedStory;
 
-//CHANGE CONTENT IN EDITOR ELEMENT
-editPlayerText.value = player;
-editGMText.value = gm;
-editMiscText.value = misc;
+//Update Editor Content
+this.editPlayerText.value = playerText;
+this.editGMText.value = masterText;
 
+//Clear Table
 Edit.generateTable();
 
 
