@@ -1,103 +1,96 @@
 #npcForm {
-    display: none;    
-    border-radius: 0;
-    background-color: transparent;
-    text-align: left;
-    vertical-align: top;
-    overflow: auto;
-    color: cyan;
+display: none;    
+border-radius: 0;
+background-color: transparent;
+text-align: left;
+overflow: auto;
+overflow-x: hidden  ;
+color: cyan;
 }
 
 #npcForm::-webkit-scrollbar {
-    width: 5px; /* Set the width of the scrollbar */
+width: 0.1px; /* Set the width of the scrollbar */
 }
 
 .npcFormContainer{
-    width: 30vw;
-    height: 85vh;
+width: 30vw;
+height: 85vh;
 };
 
+.largeField{
+/* Do not Delete, needed for textarea. */
+}
+
+#npcForm textarea{
+height: 15vh;
+width: 28vw;
+margin: 1vh;
+font-size: 2vh;
+color: bisque;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid cyan;
+padding: 0.8vh;
+background-color: black;
+}
+
 #npcForm label{
-    vertical-align: middle;
-    color: bisque;}
+left: 0.5vw;
+vertical-align: middle;
+}
+
+.halfField {
+height: 4vh;
+width: 13vw;
+margin: 1vh;
+font-size: 2vh;
+color: bisque;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid cyan;
+padding: 0.8vh;
+background-color: black;
+}
+
+.smallField {
+height: 4vh;
+width: 28vw;
+margin: 1vh;
+font-size: 2vh;
+color: bisque;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid cyan;
+padding: 0.8vh;
+background-color: black;
+}
+
+/* Individual stat fields */
+.stat {
+flex: 1; /* Equal width for both columns */
+margin: 0 1vh; /* Add space between columns */
+}
 
 #npcForm input[type="number"] {
-    height: 4vh;
-    width: 3vw;
-    margin: 1vh;
-    font-size: 3vh;
-    color: hotpink;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    border: 0.2vh solid cyan;
-    padding: 0.8vh;
-    background-color: transparent;
-    text-align: center;
-    vertical-align: top;
+height: 4vh;
+width: 3vw;
+margin: 1vh;
+font-size: 3vh;
+color: hotpink;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid cyan;
+padding: 0.8vh;
+background-color: transparent;
+text-align: center;
+vertical-align: middle;
+
 }
+
+#npcForm input[type="number"]:focus {
+border: 0.2vh solid hotpink;}
 
 #npcForm input[type="number"]::-webkit-inner-spin-button,
 #npcForm input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+-webkit-appearance: none;
+margin: 0;
 }
-
-
-#npcForm number:focus {
-    vertical-align: middle;
-    outline: cyan;
-    border-color: hotpink;
-    border-radius: 0;
-}
-
-
-    .largeField{
-        height: 15vh;
-        width: 28vw;
-        margin: 1vh;
-        font-size: 2vh;
-        color: bisque;
-        font-family: monospace, 'Trebuchet MS', sans-serif;
-        border: 0.2vh solid cyan;
-        padding: 0.8vh;
-        background-color: black;
-
-    }
-    .smallField {
-        height: 4vh;
-        width: 28vw;
-        margin: 1vh;
-        font-size: 2vh;
-        color: bisque;
-        font-family: monospace, 'Trebuchet MS', sans-serif;
-        border: 0.2vh solid cyan;
-        padding: 0.8vh;
-        background-color: black;
-    }
-
-    .statBlock {
-        height: 62vh;
-        width: 10vw;
-        right: 0;
-        margin: 1vh;
-        font-size: 2vh;
-        color: bisque;
-        font-family: monospace, 'Trebuchet MS', sans-serif;
-        border: 0.2vh solid cyan;
-        padding: 0.8vh;
-        background-color: black;
-    }
-
-    .halfField {
-        height: 4vh;
-        width: 13vw;
-        margin: 1vh;
-        font-size: 2vh;
-        color: bisque;
-        font-family: monospace, 'Trebuchet MS', sans-serif;
-        border: 0.2vh solid cyan;
-        padding: 0.8vh;
-        background-color: black;
-    }
 
 .halfSelect{
 height: 6vh;
@@ -125,81 +118,82 @@ background-color: black;
 
 .halfField:focus,
 .smallField:focus,
-.largeField:focus{
-    border-color: hotpink;
-    outline: none;
-    background-color: transparent;
-    color: bisque;
-    border-radius: 0;
-    text-align: left;
-    vertical-align: middle;
+.largeField:focus,
+.stat:focus{
+border-color: hotpink;
+outline: 0.2vh solid hotpink;
+background-color: transparent;
+color: bisque;
+border-radius: 0;
+text-align: left;
+vertical-align: middle;
 }
 
 #npcForm select:focus,
 #npcForm textarea:focus {
-    vertical-align: middle;
-    outline: none;
-    border-color: hotpink;
-    border-radius: 0;
+vertical-align: middle;
+outline: 0.2vh solid hotpink;
+border-color: hotpink;
+border-radius: 0;
 }
 
- ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: hotpink;
-    opacity: 1; /* Firefox */
-  }
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+color: hotpink;
+opacity: 1; /* Firefox */
+}
 
-  #NPCoptionsList {
-    color: gray;
-    background-color: transparent;
-    opacity: 1;
-    height: 100vh;
-    border: transparent;
-    padding: 5px;
-    position: fixed; /* Use fixed position for screen coordinates */
-    top: 0;
-    left: 55vw;
-    width: 15vw;
-    z-index: 1;
-    overflow-y: auto;
-    display: none;
-    scrollbar-color: black;
-  }
+#NPCoptionsList {
+color: gray;
+background-color: transparent;
+opacity: 1;
+height: 100vh;
+border: transparent;
+padding: 5px;
+position: fixed; /* Use fixed position for screen coordinates */
+top: 0;
+left: 55vw;
+width: 15vw;
+z-index: 1;
+overflow-y: auto;
+display: none;
+scrollbar-color: black;
+}
 
-  #NPCoptionsList div:hover {
-    background-color: lime; /* Change the background color on hover */
-    color: black;
-    cursor: pointer; /* Show pointer cursor on hover */
-  }  
+#NPCoptionsList div:hover {
+background-color: lime; /* Change the background color on hover */
+color: black;
+cursor: pointer; /* Show pointer cursor on hover */
+}  
 
-  #NPCoptionsList div:select {
-    background-color: lime; /* Change the background color on hover */
-    color: black;
-    cursor: pointer; /* Show pointer cursor on hover */
-  } 
+#NPCoptionsList div:select {
+background-color: lime; /* Change the background color on hover */
+color: black;
+cursor: pointer; /* Show pointer cursor on hover */
+} 
 
-  #NPCoptionsList::-webkit-scrollbar {
-    width: 5px; /* Set the width of the scrollbar */
-    }
-  
+#NPCoptionsList::-webkit-scrollbar {
+width: 5px; /* Set the width of the scrollbar */
+}
+
 
 .Morning {
-    color: gold;
+color: gold;
 }
 
 .Afternoon {    
-    color: lime;
+color: lime;
 }
 
 .Night {   
-    color: blueviolet;
+color: blueviolet;
 }
 
 .Always {   
-    color: whitesmoke;
+color: whitesmoke;
 }
 
 
 
 
 
-  
+

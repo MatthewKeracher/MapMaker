@@ -79,20 +79,14 @@
 
 <div class="npcFormContainer">
 
-<p>Use this form to create an non-player character (NPC)</p>
+<p>Use this form to create a non-player character (NPC)</p>
 
 <label for="npcName">Full or Unique Name:</label>
 <input class="smallField" type="textarea" id="npcName" name="npcName" required>
 
-<label for="npcOccupation">Known as...</label>
+<label for="npcOccupation">3 Word Description</label>
 <input class="smallField" type="textarea" id="npcOccupation" name="npcOccupation"
 placeholder="What do other people know them as?">
-
-<label for="npcLevel">Level:</label>
-<input class="smallField" type="number" id="npcLevel" name="npcLevel">
-
-<label for="npcClass">Class:</label>
-<input class="halfField" type="textarea" id="npcClass" name="npcClass" required>
 
 <p>Assign the NPC to a routine, so that they can be found in locations at certain times.</p>
 
@@ -124,27 +118,33 @@ placeholder="What do the normally do here? They are...">
 
 <p>If necessary, enter the NPC's stats here:</p>
 
-<div class="statBlock">
+<label for="npcLevel">Level:</label>
+<input class="stat" type="number" id="npcLevel" name="npcLevel">
 
-<label for="STR">STR:</label><br>
+<label for="npcClass">Class:</label>
+<input class="halfField" type="textarea" id="npcClass" name="npcClass" required>
+
+<label for="STR">Strength:</label>
 <input class="stat" type="number" id="STR" name="STR"><br>
 
-<label for="DEX">DEX:</label><br>
+<label for="DEX">Dexterity:</label>
 <input class="stat" type="number" id="DEX" name="DEX"><br>
 
-<label for="INT">INT:</label><br>
+<label for="INT">Intelligence:</label>
 <input class="stat" type="number" id="INT" name="INT"><br>
 
-<label for="WIS">WIS:</label><br>
+<label for="WIS">Wisdom:</label>
 <input class="stat" type="number" id="WIS" name="WIS"><br>
 
-<label for="CON">CON:</label><br>
+<label for="CON">Constitution:</label>
 <input class="stat" type="number" id="CON" name="CON"><br>
 
-<label for="CHA">CHA:</label><br>
-<input class="stat" type="number" id="CHA" name="CHA"><br><br>
+<label for="CHA">Charisma:</label>
+<input class="stat" type="number" id="CHA" name="CHA">
 
-</div>
+
+
+<p>Additional Information about the NPC:</p>
 
 <label for="npcPhysicalAppearance">Physical Character:</label>
 <textarea class="largeField" type="textarea" id="npcPhysicalAppearance" name="npcPhysicalAppearance" 
@@ -222,8 +222,15 @@ are stored in a .json file. Select rediance for ambient lighting.
 <br>
 
 <label id = "ExportHead"> Export .csv :</label>
-<p>Export the npcArray as a .csv file for easier editing.
+<p>Select an array to export as a .csv file for easier editing.
 </p>
+
+<label for="exportDropdown">Select Array:</label>
+<select id="exportDropdown">
+<option value="">Select Array!</option>
+<option value="NPCs">NPCs</option>
+<option value="Locations">Locations</option>
+</select>
 
 <div class = "exportToolbar" id="exportToolbar"> 
 <button type="button" class = "button" id="importData">Import</button>

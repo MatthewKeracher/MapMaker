@@ -10,14 +10,27 @@ saveNPC: function() {
 // Get the values from the form fields
 const npcName = document.getElementById('npcName').value;
 const npcOccupation = document.getElementById('npcOccupation').value;
-const npcLevel = document.getElementById('npcLevel').value;
-const npcClass = document.getElementById('npcClass').value;
+
+
 const MorningLocation = document.getElementById('MorningLocation').value;
 const MorningActivity = document.getElementById('MorningActivity').value;
+
 const AfternoonLocation = document.getElementById('AfternoonLocation').value;
 const AfternoonActivity = document.getElementById('AfternoonActivity').value;
+
 const NightLocation = document.getElementById('NightLocation').value;
 const NightActivity = document.getElementById('NightActivity').value;
+
+const npcLevel = document.getElementById('npcLevel').value;
+const npcClass = document.getElementById('npcClass').value;
+
+const STR = document.getElementById('STR').value;
+const DEX = document.getElementById('DEX').value;
+const INT = document.getElementById('INT').value;
+const WIS = document.getElementById('WIS').value;
+const CON = document.getElementById('CON').value;
+const CHA = document.getElementById('CHA').value;
+
 const npcPhysicalAppearance = document.getElementById('npcPhysicalAppearance').value;
 const npcEmotionalAppearance = document.getElementById('npcEmotionalAppearance').value;
 const npcSocialAppearance = document.getElementById('npcSocialAppearance').value;
@@ -27,19 +40,33 @@ const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === npcName);
 
 // Create an NPC object with the retrieved values
 const npc = {
+
 name: npcName,
 occupation: npcOccupation,
-level: npcLevel,
-class: npcClass,
+
 MorningLocation: MorningLocation,
 MorningActivity: MorningActivity,
+
 AfternoonLocation: AfternoonLocation,
 AfternoonActivity: AfternoonActivity,
+
 NightLocation: NightLocation,
 NightActivity: NightActivity,
+
+
+level: npcLevel,
+class: npcClass,
+str: STR,
+dex: DEX,
+int: INT,
+wis: WIS,
+con: CON,
+cha: CHA,
+
 physicalAppearance: npcPhysicalAppearance,
 emotionalAppearance: npcEmotionalAppearance,
 socialAppearance: npcSocialAppearance
+
 };
 
 if (existingNPCIndex !== -1) {
@@ -138,14 +165,26 @@ npcNameDiv.addEventListener('click', () => {
 
 document.getElementById('npcName').value = npc.name;
 document.getElementById('npcOccupation').value = npc.occupation;
-document.getElementById('npcLevel').value = npc.level;
-document.getElementById('npcClass').value = npc.class;
+
 document.getElementById('MorningLocation').value = npc.MorningLocation;
 document.getElementById('MorningActivity').value = npc.MorningActivity;
+
 document.getElementById('AfternoonLocation').value = npc.AfternoonLocation;
 document.getElementById('AfternoonActivity').value = npc.AfternoonActivity;
+
 document.getElementById('NightLocation').value = npc.NightLocation;
 document.getElementById('NightActivity').value = npc.NightActivity;
+
+document.getElementById('npcLevel').value = npc.level;
+document.getElementById('npcClass').value = npc.class;
+
+document.getElementById('STR').value = npc.str;  
+document.getElementById('DEX').value = npc.dex; 
+document.getElementById('INT').value = npc.int; 
+document.getElementById('WIS').value = npc.wis; 
+document.getElementById('CON').value = npc.con; 
+document.getElementById('CHA').value = npc.cha; 
+
 document.getElementById('npcPhysicalAppearance').value = npc.physicalAppearance;
 document.getElementById('npcEmotionalAppearance').value = npc.emotionalAppearance;
 document.getElementById('npcSocialAppearance').value = npc.socialAppearance;

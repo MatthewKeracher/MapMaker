@@ -319,27 +319,48 @@ this.locationArray.forEach((location) => {
     link.click();
 },
 
- exportNPCArrayToCSV() {
-    const csvRows = [];
-    const header = Object.keys(NPCs.npcArray[0]).join(",");
-    csvRows.push(header);
+exportNPCArrayToCSV() {
 
-    for (const npc of NPCs.npcArray) {
-        const values = Object.values(npc).map(value => {
-            if (typeof value === "string") {
-                return `"${value}"`;
-            } else {
-                return value;
-            }
-        });
-        csvRows.push(values.join(","));
-    }
+const exportDropdown = document.getElementById("exportDropdown"); 
+const selectedValue = exportDropdown.value;
+const csvRows = [];
+let header = '';
+let selectedArray = '';
 
-    const csvContent = csvRows.join("\n");
-    const filename = "npcArray.csv";
+if (selectedValue === "NPCs") {
+     header = Object.keys(NPCs.npcArray[0]).join(",");
+} else if (selectedValue === "Locations") { 
+     header = Object.keys(this.locationArray[0]).join(","); 
+} else{
 
-    this.downloadCSV(filename, csvContent);
-},
+}
+
+csvRows.push(header);
+
+console.log(selectedValue);
+    
+if (selectedValue === "NPCs") {
+        selectedArray = NPCs.npcArray;
+    } else if (selectedValue === "Locations") {
+        selectedArray = this.locationArray; 
+    } 
+
+for (const npc of selectedArray) {
+    const values = Object.values(npc).map(value => {
+        if (typeof value === "string") {
+            return `"${value}"`;
+        } else {
+            return value;
+        }
+    });
+    csvRows.push(values.join(","));
+}
+
+const csvContent = csvRows.join("\n");
+const filename = selectedValue + ".csv";
+
+this.downloadCSV(filename, csvContent);
+ },
 
 handleCSVFileInputChange: function(e) {
     const file = e.target.files[0];
@@ -352,22 +373,32 @@ handleCSVFileInputChange: function(e) {
 importCSV(file) {
     const reader = new FileReader();
 
-    reader.onload = function (e) {
+    reader.onload = (e) => {
         const content = e.target.result;
         const parsedData = Papa.parse(content, { header: true }).data;
-        const importedNPCArray = parsedData.map(row => {
-            const npc = {};
-            for (const key in row) {
-                npc[key] = row[key];
-            }
-            return npc;
-        });
+        let importedArray = parsedData;
 
-        // Replace npcArray with importedNPCArray
-        NPCs.npcArray.length = 0;
-        NPCs.npcArray.push(...importedNPCArray);
+        const importDropdown = document.getElementById("importDropdown"); // Replace with your actual dropdown element
+        const selectedValue = importDropdown.value;
 
-        console.log("Imported NPC data:", NPCs.npcArray);
+        if (selectedValue === "NPCs") {
+            importedArray = parsedData;
+        } else if (selectedValue === "Locations") {
+            importedArray = parsedData; // Update this with your actual import logic for locationArray
+        }
+
+        // Replace npcArray or locationArray with importedArray
+        // Assuming NPCs.npcArray and locationArray are global variables
+        if (selectedValue === "NPCs") {
+            NPCs.npcArray.length = 0;
+            NPCs.npcArray.push(...importedArray);
+            console.log("Imported NPC data:", NPCs.npcArray);
+        } else if (selectedValue === "Locations") {
+            // Update this with your actual import logic for locationArray
+            this.locationArray.length = 0;
+            this.locationArray.push(...importedArray);
+            console.log("Imported location data:", locationArray);
+        }
     };
 
     reader.readAsText(file);

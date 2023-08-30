@@ -20,7 +20,7 @@ flex-direction: row;
 
 .exportToolbar {
     position: fixed;
-    bottom: 20vh; 
+    bottom: 10vh; 
     right: 14vw; 
     z-index: 5;
     width: 15vw;
