@@ -1,72 +1,43 @@
 // Import the necessary module
 import Edit from "./edit.js";
 import Array from "./array.js";
+import Ref from "./ref.js";
 
 // Define the NPCs module
 const NPCs = {
 npcArray: [],
 
 saveNPC: function() {
-// Get the values from the form fields
-const npcName = document.getElementById('npcName').value;
-const npcOccupation = document.getElementById('npcOccupation').value;
-
-
-const MorningLocation = document.getElementById('MorningLocation').value;
-const MorningActivity = document.getElementById('MorningActivity').value;
-
-const AfternoonLocation = document.getElementById('AfternoonLocation').value;
-const AfternoonActivity = document.getElementById('AfternoonActivity').value;
-
-const NightLocation = document.getElementById('NightLocation').value;
-const NightActivity = document.getElementById('NightActivity').value;
-
-const npcLevel = document.getElementById('npcLevel').value;
-const npcClass = document.getElementById('npcClass').value;
-
-const STR = document.getElementById('STR').value;
-const DEX = document.getElementById('DEX').value;
-const INT = document.getElementById('INT').value;
-const WIS = document.getElementById('WIS').value;
-const CON = document.getElementById('CON').value;
-const CHA = document.getElementById('CHA').value;
-
-const npcPhysicalAppearance = document.getElementById('npcPhysicalAppearance').value;
-const npcEmotionalAppearance = document.getElementById('npcEmotionalAppearance').value;
-const npcSocialAppearance = document.getElementById('npcSocialAppearance').value;
 
 // Check if an NPC with the same name already exists
 const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === npcName);
 
-// Create an NPC object with the retrieved values
 const npc = {
+        name: Ref.npcName,
+        occupation: Ref.npcOccupation,
 
-name: npcName,
-occupation: npcOccupation,
+        MorningLocation: Ref.MorningLocation,
+        MorningActivity: Ref.MorningActivity,
 
-MorningLocation: MorningLocation,
-MorningActivity: MorningActivity,
+        AfternoonLocation: Ref.AfternoonLocation,
+        AfternoonActivity: Ref.AfternoonActivity,
 
-AfternoonLocation: AfternoonLocation,
-AfternoonActivity: AfternoonActivity,
-
-NightLocation: NightLocation,
-NightActivity: NightActivity,
+        NightLocation: Ref.NightLocation,
+        NightActivity: Ref.NightActivity,
 
 
-level: npcLevel,
-class: npcClass,
-str: STR,
-dex: DEX,
-int: INT,
-wis: WIS,
-con: CON,
-cha: CHA,
+        level: Ref.npcLevel,
+        class: Ref.npcClass,
+        str: Ref.STR,
+        dex: Ref.DEX,
+        int: Ref.INT,
+        wis: Ref.WIS,
+        con: Ref.CON,
+        cha: Ref.CHA,
 
-physicalAppearance: npcPhysicalAppearance,
-emotionalAppearance: npcEmotionalAppearance,
-socialAppearance: npcSocialAppearance
-
+        physicalAppearance: Ref.npcPhysicalAppearance,
+        emotionalAppearance: Ref.npcEmotionalAppearance,
+        socialAppearance: Ref.npcSocialAppearance
 };
 
 if (existingNPCIndex !== -1) {
@@ -79,18 +50,12 @@ this.npcArray.push(npc);
 console.log('New NPC added:', npc);
 }
 
-// Do something with the created/updated NPC object (e.g., add to an array)
-console.log(this.npcArray);
-
-// Clear the form
-//document.getElementById('npcForm').reset();
 },
 
 fixDisplay: function(){
 
-// Get references to the elements
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay'); 
+    const imageContainer = document.querySelector('.image-container');
+    const radiantDisplay = document.getElementById('radiantDisplay');
 
 try{
 if (Edit.editPage === 3) {
@@ -125,7 +90,7 @@ Array.generateLocationOptions();
 loadNPC: function() {
 const npcForm = document.getElementById('npcForm');    
 const NPCoptionsList = document.getElementById('NPCoptionsList'); // Reuse the optionsList div
-const locationName = document.querySelector('.locationLabel');
+
 
 // Clear the existing content
 NPCoptionsList.innerHTML = '';
@@ -141,18 +106,18 @@ npcNameDiv.textContent = npc.name;
 
 // Colour code based on whether this is their Morning, Afternoon, or Night Location
 
-if (npc.MorningLocation === locationName.textContent &&
-npc.AfternoonLocation === locationName.textContent &&
-npc.NightLocation === locationName.textContent) {
+if (npc.MorningLocation === Ref.locationLabel.textContent &&
+npc.AfternoonLocation === Ref.locationLabel.textContent &&
+npc.NightLocation === Ref.locationLabel.textContent) {
 npcNameDiv.classList.add('Always');
 NightNPCs.push(npcNameDiv);
-} else if (npc.MorningLocation === locationName.textContent) {
+} else if (npc.MorningLocation === Ref.locationLabel.textContent) {
 npcNameDiv.classList.add('Morning');
 MorningNPCs.push(npcNameDiv);
-} else if (npc.AfternoonLocation === locationName.textContent) {
+} else if (npc.AfternoonLocation === Ref.locationLabel.textContent) {
 npcNameDiv.classList.add('Afternoon');
 AfternoonNPCs.push(npcNameDiv);
-} else if (npc.NightLocation === locationName.textContent) {
+} else if (npc.NightLocation === Ref.locationLabel.textContent) {
 npcNameDiv.classList.add('Night');
 NightNPCs.push(npcNameDiv);
 } else {

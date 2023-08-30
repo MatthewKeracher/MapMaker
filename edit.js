@@ -1,3 +1,4 @@
+import Ref from "./ref.js";
 import Array from "./array.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
@@ -42,27 +43,30 @@ const Edit = {
               }
           }
           break;
+                   
+          default:
+            // For any other case
+            const divId = Ref.locationLabel.textContent;
+
+            const matchingEntryIndex = Array.locationArray.findIndex(entry => entry.divId === divId);
+
+            if (matchingEntryIndex !== -1) {
+                const confirmation = window.confirm("Are you sure you want to delete this entry?");
+                if (confirmation) {
+                    // Remove the entry from locationArray
+                    Array.locationArray.splice(matchingEntryIndex, 1);
+
+                    // Remove the corresponding <div> element from the DOM
+                    const divToRemove = document.getElementById(divId);
+                    if (divToRemove) {
+                        divToRemove.remove();
+                    }
+                }
+            }
+            break;
+    }
+
       
-              const locationLabel = document.querySelector('.locationLabel');
-              const divId = locationLabel.textContent;
-
-              const matchingEntryIndex = Array.locationArray.findIndex(entry => entry.divId === divId);
-
-              if (matchingEntryIndex !== -1) {
-                  const confirmation = window.confirm("Are you sure you want to delete this location?");
-                  if (confirmation) {
-                      // Remove the entry from locationArray
-                      Array.locationArray.splice(matchingEntryIndex, 1);
-
-                      // Remove the corresponding <div> element from the DOM
-                      const divToRemove = document.getElementById(divId);
-                      if (divToRemove) {
-                          divToRemove.remove();
-                      }
-                  }
-              }
-              break;
-      }
   },
 
 // Move a Location -- Unfinished
@@ -75,8 +79,7 @@ moveLocation(source,target) {
 
     if (Edit.editMode) { 
 
-    const locationLabel = document.querySelector('.locationLabel');
-    const sourceDivId = locationLabel.textContent;
+    const sourceDivId = Ref.locationLabel.textContent;
 
     console.log('Moving ' + targetDivId + ' to ' + sourceDivId)
 
@@ -104,8 +107,7 @@ moveLocation(source,target) {
 
 // Save a Location
 saveLocation() {
-const locationLabel = document.querySelector('.locationLabel');
-const divId = locationLabel.textContent; // Get the divId for the location you're saving
+const divId = Ref.locationLabel.textContent; // Get the divId for the location you're saving
 
 // Get the spreadsheet data
 const spreadsheetData = [];
@@ -128,7 +130,6 @@ spreadsheetCells.forEach(input => {
 
 
 //Places that have info we want to save...
-const editLocationName = document.querySelector('.editLocationName').value;
 const editPlayerText = document.getElementById('editPlayerText').value; // Get the value of the input field
 const editGMText = document.getElementById('editGMText').value;
 const editMiscText = document.getElementById('editMiscText').value;
@@ -141,20 +142,20 @@ if (matchingEntry) {
     matchingEntry.player = editPlayerText;
     matchingEntry.gm = editGMText;
     matchingEntry.misc = editMiscText;
-    matchingEntry.divId = editLocationName;
+    matchingEntry.divId = Ref.editLocationName.value;
 
             //Update the spreadsheet data
             matchingEntry.spreadsheetData = spreadsheetData;
 
     //Update the Existing Divs
     const locationDiv = document.getElementById(divId);
-    locationDiv.setAttribute('id',editLocationName);
-    locationDiv.querySelector('.div-id-label').textContent = editLocationName;
+    locationDiv.setAttribute('id',Ref.editLocationName.value);
+    locationDiv.querySelector('.div-id-label').textContent = Ref.editLocationName.value;
 
     console.log("Updated Entry: " + JSON.stringify(matchingEntry, null, 2));
 
     //Refresh
-    const savedLocation = document.getElementById(editLocationName);
+    const savedLocation = document.getElementById(Ref.editLocationName.value);
     Storyteller.changeContent(savedLocation);
 
 }
@@ -163,13 +164,13 @@ if (matchingEntry) {
 
 for (const npc of NPCs.npcArray) {
   if (npc.MorningLocation === divId) {
-    npc.MorningLocation = editLocationName;
+    npc.MorningLocation = Ref.editLocationName.value;
   }
   if (npc.AfternoonLocation === divId) {
-    npc.AfternoonLocation = editLocationName;
+    npc.AfternoonLocation = Ref.editLocationName.value;
   }
   if (npc.NightLocation === divId) {
-    npc.NightLocation = editLocationName;
+    npc.NightLocation = Ref.editLocationName.value;
   }
 }
 
@@ -180,22 +181,7 @@ for (const npc of NPCs.npcArray) {
 //Remove or Add editContainer contents depending on editPage no.
 pageChange(newPage){
 
-const editLocationName = document.querySelector('.editLocationName');
 
-const player = document.getElementById('editPlayerText')
-const playerLabel = document.getElementById('playerLabel')
-
-const gm = document.getElementById('editGMText')
-const gmLabel = document.getElementById('gmLabel')
-
-const misc = document.getElementById('editMiscText')
-const miscLabel = document.getElementById('miscLabel')
-
-const tableForm = document.getElementById('tableForm')
-
-const AmbienceContainer = document.querySelector('.AmbienceContainer')
-
-const npcForm = document.querySelector('.npcForm')
 
 NPCs.fixDisplay();
 
@@ -205,55 +191,55 @@ switch (newPage) {
     case 1:
 
       //Show
-      editLocationName.style.display  = "flex";
-      playerLabel.style.display = "flex";
-      player.style.display = "flex";
+      Ref.editLocationName.style.display  = "flex";
+      Ref.playerLabel.style.display = "flex";
+      Ref.editPlayerText.style.display = "flex";
 
       //Hide
-      npcForm.style.display = "none"
-      gmLabel.style.display = "none";
-      gm.style.display = "none";
-      miscLabel.style.display = "none";
-      misc.style.display = "none";
-      tableForm.style.display = "none";
-      AmbienceContainer.style.display = "none";
+      Ref.npcForm.style.display = "none"
+      Ref.gmLabel.style.display = "none";
+      Ref.editGMText.style.display = "none";
+      Ref.miscLabel.style.display = "none";
+      Ref.editMiscText.style.display = "none";
+      Ref.tableForm.style.display = "none";
+      Ref.AmbienceContainer.style.display = "none";
       break;
       
     case 2:
 
       //Show
-      editLocationName.style.display  = "flex";
-      gmLabel.style.display = "flex";
-      gm.style.display = "flex";
+      Ref.editLocationName.style.display  = "flex";
+      Ref.gmLabel.style.display = "flex";
+      Ref.editGMText.style.display = "flex";
 
 
       //Hide
  
-      npcForm.style.display = "none"
-      playerLabel.style.display = "none";
-      player.style.display = "none";
-      miscLabel.style.display = "none";
-      misc.style.display = "none";
-      tableForm.style.display = "none";
-      AmbienceContainer.style.display = "none";
+      Ref.npcForm.style.display = "none"
+      Ref.playerLabel.style.display = "none";
+      Ref.editPlayerText.style.display = "none";
+      Ref.miscLabel.style.display = "none";
+      Ref.editMiscText.style.display = "none";
+      Ref.tableForm.style.display = "none";
+      Ref.AmbienceContainer.style.display = "none";
       break;
 
       case 3:
 
       //Show
-      npcForm.style.display = "flex"
+      Ref.npcForm.style.display = "flex"
       
 
       //Hide
-      editLocationName.style.display  = "none";
-      gmLabel.style.display = "none";
-      gm.style.display = "none";
-      playerLabel.style.display = "none";
-      player.style.display = "none";
-      miscLabel.style.display = "none";
-      misc.style.display = "none";
-      tableForm.style.display = "none";
-      AmbienceContainer.style.display = "none";
+      Ref.editLocationName.style.display  = "none";
+      Ref.gmLabel.style.display = "none";
+      Ref.editGMText.style.display = "none";
+      Ref.playerLabel.style.display = "none";
+      Ref.editPlayerText.style.display = "none";
+      Ref.miscLabel.style.display = "none";
+      Ref.editMiscText.style.display = "none";
+      Ref.tableForm.style.display = "none";
+      Ref.AmbienceContainer.style.display = "none";
 
       NPCs.loadNPC();
 
@@ -262,38 +248,38 @@ switch (newPage) {
     case 4:
 
       //Show
-      tableForm.style.display = "flex";
+      Ref.tableForm.style.display = "flex";
       
 
       //Hide
-      npcForm.style.display = "none"
-      editLocationName.style.display  = "none";
-      playerLabel.style.display = "none";
-      player.style.display = "none";
-      gmLabel.style.display = "none";
-      gm.style.display = "none";
-      miscLabel.style.display = "none";
-      misc.style.display = "none";
-      AmbienceContainer.style.display = "none";
+      Ref.npcForm.style.display = "none"
+      Ref.editLocationName.style.display  = "none";
+      Ref.playerLabel.style.display = "none";
+      Ref.editPlayerText.style.display = "none";
+      Ref.gmLabel.style.display = "none";
+      Ref.editGMText.style.display = "none";
+      Ref.miscLabel.style.display = "none";
+      Ref.editMiscText.style.display = "none";
+      Ref.AmbienceContainer.style.display = "none";
 
       break;
 
       case 5:
 
       //Show
-      AmbienceContainer.style.display = "flex";
+      Ref.AmbienceContainer.style.display = "flex";
       
 
       //Hide
-      npcForm.style.display = "none"
-      tableForm.style.display = "none";
-      editLocationName.style.display  = "none";
-      playerLabel.style.display = "none";
-      player.style.display = "none";
-      gmLabel.style.display = "none";
-      gm.style.display = "none";
-      miscLabel.style.display = "none";
-      misc.style.display = "none";
+      Ref.npcForm.style.display = "none"
+      Ref.tableForm.style.display = "none";
+      Ref.Ref.editLocationName.style.display  = "none";
+      Ref.playerLabel.style.display = "none";
+      Ref.editPlayerText.style.display = "none";
+      Ref.gmLabel.style.display = "none";
+      Ref.editGMText.style.display = "none";
+      Ref.miscLabel.style.display = "none";
+      Ref.editMiscText.style.display = "none";
 
       break;
       

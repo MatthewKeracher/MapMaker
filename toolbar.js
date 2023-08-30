@@ -1,122 +1,69 @@
 //Toolbar.js
-
+import Ref from "./ref.js";
 import Map   from "./map.js";
 import Add   from "./add.js";
 import Array from "./array.js";
 import Edit from "./edit.js";
 import Ambience from "./ambience.js";
-import Hotkeys from "./hotkeys.js";
 import NPCs from "./npcs.js";
-import Storyteller from "./storyteller.js";
 import Monsters from "./monsters.js";
 
 class Toolbar{
 
-init() {
-       
+init() {       
 
 Ambience.initializeAmbienceDropdowns();
 Monsters.addPredictiveMonsters();
 
-const mapButton = document.getElementById('mapButton');
-mapButton.addEventListener('click', this.handleMapButtonClick);
+//mainToolbar
+Ref.mapButton.addEventListener('click', this.handleMapButtonClick);
+Ref.dataButton.addEventListener('click', this.handleDataButtonClick);
+Ref.addButton.addEventListener('click', this.handleAddButtonClick); 
+Ref.editButton.addEventListener('click', this.handleEditButtonClick);
+Ref.saveButton.addEventListener('click', this.handleSaveButtonClick);  
+Ref.fileInput.addEventListener('change', Array.handleFileInputChange); 
 
-const dataButton = document.getElementById('dataButton');
-dataButton.addEventListener('click', this.handleDataButtonClick);
-
-const addButton = document.getElementById('addButton');
-addButton.addEventListener('click', this.handleAddButtonClick); 
-
-const editButton = document.getElementById('editButton');
-editButton.addEventListener('click', this.handleEditButtonClick);
-
-const saveButton = document.getElementById('saveButton');
-saveButton.addEventListener('click', this.handleSaveButtonClick);  
-
-const fileInput = document.getElementById('fileInput'); // Add this line
-fileInput.addEventListener('change', Array.handleFileInputChange); // Use "Array" here
-
-//toolbarEdit
-const editEditButton = document.getElementById('editEditButton');
-editEditButton.addEventListener('click', this.handleEditButtonClick);
-
-const editSaveButton = document.getElementById('editSaveButton');
-editSaveButton.addEventListener('click', this.handleeditSaveButtonButtonClick);
-
-// const editMoveButton = document.getElementById('editMoveButton');
-// editMoveButton.addEventListener('click', this.handleeditMoveButtonButtonClick); 
-
-const editClearButton = document.getElementById('editClearButton');
-editClearButton.addEventListener('click', this.handleeditClearButtonClick); 
-
-const editDeleteButton = document.getElementById('editDeleteButton');
-editDeleteButton.addEventListener('click', this.handleeditDeleteButtonButtonClick);
+//editToolbar
+Ref.editEditButton.addEventListener('click', this.handleEditButtonClick);
+Ref.editSaveButton.addEventListener('click', this.handleeditSaveButtonButtonClick);
+Ref.editClearButton.addEventListener('click', this.handleeditClearButtonClick); 
+Ref.editDeleteButton.addEventListener('click', this.handleeditDeleteButtonClick);
 
 //bottomToolbar
+Ref.nextButton.addEventListener('click', this.handleNextButtonClick);
+Ref.prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
 
-const nextButton = document.getElementById('nextButton');
-nextButton.addEventListener('click', this.handleNextButtonClick);
-
-const prevButton = document.getElementById('prevButton');
-prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
-
-//Export .csv
-
-const exportData = document.getElementById('exportData');
-exportData.addEventListener('click', this.handleexportDataClick);
-
-
-const importData = document.getElementById('importData');
-importData.addEventListener('click', this.handleimportDataClick);
-
-const csvFileInput = document.getElementById('csvFileInput'); // Add this line
-csvFileInput.addEventListener('change', Array.handleCSVFileInputChange); // Use "Array" here
+//Data Import & Export
+Ref.exportData.addEventListener('click', this.handleexportDataClick);
+Ref.importData.addEventListener('click', this.handleimportDataClick);
+Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange); 
 
 }
-
-
 
 handleMapButtonClick() {  
 Map.fetchAndProcessImage()
 document.getElementById('Banner').style.display = "none";
-
 };
 
 handleDataButtonClick() {
-
-// Trigger the hidden file input element
 const fileInput = document.getElementById('fileInput');
 fileInput.click();
-
-
 };
 
 handleAddButtonClick() {
 
-//console.log(Add.addMode)
-const mapElement = document.getElementById('mapElement');
-
 if(!Add.addMode){
-
 Add.addMode = true;
 addButton.classList.add('click-button');
 
 // Add the event listeners
-mapElement.addEventListener('mousedown', Add.handleMouseDown);
-mapElement.addEventListener('mousemove', Add.handleMouseMove);
-mapElement.addEventListener('mouseup', Add.handleMouseUp);
-
-// Disable pointer events on the locations and mainToolbar while dragging
-const mainToolbar = document.querySelector('.mainToolbar');        
-mainToolbar.style.pointerEvents = 'none';
-
-
-const selectionList = document.querySelectorAll('.selection');
-selectionList.forEach((selection) => {
+Ref.mapElement.addEventListener('mousedown', Add.handleMouseDown);
+Ref.mapElement.addEventListener('mousemove', Add.handleMouseMove);
+Ref.mapElement.addEventListener('mouseup', Add.handleMouseUp);   
+Ref.mainToolbar.style.pointerEvents = 'none';
+Ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
 });
-
-
 
 }else{if(Add.addMode){
 
@@ -124,34 +71,17 @@ Add.addMode = false;
 addButton.classList.remove('click-button');
 
 // Remove the event listeners
-mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-mapElement.removeEventListener('mousemove', Add.handleMouseMove);
-mapElement.removeEventListener('mouseup', Add.handleMouseUp);
-
-// Enable pointer events on the locations and mainToolbar after dragging
-const mainToolbar = document.querySelector('.mainToolbar');        
-mainToolbar.style.pointerEvents = 'auto';
-
-const selectionList = document.querySelectorAll('.selection');
-selectionList.forEach((selection) => {
+Ref.mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+Ref.mapElement.removeEventListener('mousemove', Add.handleMouseMove);
+Ref.mapElement.removeEventListener('mouseup', Add.handleMouseUp);
+Ref.mainToolbar.style.pointerEvents = 'auto';
+Ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'auto';
-
 });
 }}
-
 };
 
 handleEditButtonClick() {
-
-const divs = document.querySelectorAll('.selection'); // Select all elements with the .selection class
-const LocationName = document.getElementById('locationLabel');
-const Storyteller = document.querySelector('.Storyteller');
-const editToolbar = document.getElementById('editToolbar');
-const mainToolbar = document.getElementById('mainToolbar');
-const bottomToolbar = document.getElementById('bottomToolbar');
-
-const EditorContainer = document.querySelector('.EditorContainer');
-const editLocationName = document.querySelector('.editLocationName');
 
 Edit.editPage = 1;
 
@@ -161,17 +91,18 @@ editEditButton.classList.add('click-button');
 
 //Hide Storyteller, pageChange()
 Edit.pageChange(Edit.editPage)
-EditorContainer.style.display = 'flex';
-editLocationName.style.display = 'flex';
-Storyteller.style.display = 'none';
-LocationName.style.display = 'none';
+Ref.EditorContainer.style.display = 'flex';
+Ref.editLocationName.style.display = 'flex';
+Ref.Storyteller.style.display = 'none';
+Ref.locationLabel.style.display = 'none';
+
 //Switch Toolbars
-mainToolbar.style.display = 'none';
-editToolbar.style.display = 'flex';
-bottomToolbar.style.display = 'flex';
+Ref.mainToolbar.style.display = 'none';
+Ref.editToolbar.style.display = 'flex';
+Ref.bottomToolbar.style.display = 'flex';
 
 // Add the event listeners to each .selection element
-divs.forEach((div) => {
+Ref.locationDivs.forEach((div) => {
 div.addEventListener('mouseenter', Edit.handleMouseHover);
 div.addEventListener('mouseleave', Edit.handleMouseHover);
 });
@@ -182,38 +113,31 @@ editEditButton.classList.remove('click-button');
 
 //Show Storyteller, pageChange()
 Edit.pageChange(1);
-EditorContainer.style.display = 'none';
-editLocationName.style.display = 'none';
-Storyteller.style.display = 'flex';
-LocationName.style.display = 'flex';
-//Switch Toolbars
-mainToolbar.style.display = 'flex';
-editToolbar.style.display = 'none';
-bottomToolbar.style.display = 'none';
+Ref.EditorContainer.style.display = 'none';
+Ref.editLocationName.style.display = 'none';
+Ref.Storyteller.style.display = 'flex';
+Ref.locationLabel.style.display = 'flex';
 
+//Switch Toolbars
+Ref.mainToolbar.style.display = 'flex';
+Ref.editToolbar.style.display = 'none';
+Ref.bottomToolbar.style.display = 'none';
 
 // Remove the event listeners from each .selection element
-divs.forEach((div) => {
+Ref.locationDivs.forEach((div) => {
 div.removeEventListener('mouseenter', Edit.handleMouseHover);
 div.removeEventListener('mouseleave', Edit.handleMouseHover);
 });
-}
-}
-};
+}}};
 
 handleSaveButtonClick(){
-
 Array.exportArray();
-
 };  
 
 handleeditSaveButtonButtonClick(){
-
 Edit.saveLocation();
 NPCs.saveNPC();
 NPCs.loadNPC();
-
-
 };
 
 handleeditClearButtonClick(){
@@ -247,7 +171,7 @@ case 5:
 break;
 
 default:
-// Handle any other cases
+
 break;
 }}
 
@@ -264,43 +188,31 @@ editMoveButton.classList.remove('click-button');
 
 }}};
 
-handleeditDeleteButtonButtonClick(){
-
+handleeditDeleteButtonClick(){
 Edit.deleteLocation();
-
 };
 
 handleNextButtonClick(){
-
 if (Edit.editPage < 5) {
 Edit.editPage = Edit.editPage + 1;
 Edit.pageChange(Edit.editPage);
-}
-
-};
+}};
 
 handleeditPrevButtonButtonClick(){
 
 if (Edit.editPage > 1) {
 Edit.editPage = Edit.editPage - 1;
 Edit.pageChange(Edit.editPage)
-console.log(Edit.editPage)
-}
-
-};
+}};
 
 handleexportDataClick(){
-// Call the export function when needed, e.g., when clicking a button
 Array.exportNPCArrayToCSV();
 }
 
 handleimportDataClick(){
-// Trigger the hidden file input element
 const CSVfileInput = document.getElementById('csvFileInput');
 CSVfileInput.click();
 }
-
-
 
 };
 

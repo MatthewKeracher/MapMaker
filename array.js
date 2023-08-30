@@ -278,14 +278,6 @@ const Morning = document.getElementById('MorningLocation');
 const Afternoon = document.getElementById('AfternoonLocation');
 const Night = document.getElementById('NightLocation');
 
-// Get the current location name
-const currentMapSelection = document.querySelector('.locationLabel').textContent;
-
-// Get the current values of Morning, Afternoon and Night locations in the npcForm
-const currentMorningLocation = Morning.value;
-const currentAfternoonLocation = Afternoon.value;
-const currentNightLocation = Night.value;
-
 // Clear existing options
 Morning.innerHTML = '<option value="">None</option>';
 Afternoon.innerHTML = '<option value="">None</option>';

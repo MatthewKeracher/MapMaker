@@ -3,31 +3,17 @@ import Ambience from "./ambience.js";
 import Monsters from "./monsters.js";
 import NPCs from "./npcs.js";
 import Edit from "./edit.js";
+import Ref from "./ref.js";
 
 const Storyteller = {
-  
-//Storyteller
-locationLabel: document.querySelector('.locationLabel'),
-Storyteller: document.getElementById('Storyteller'),
-
-//Editbar
-editLocationLabel: document.querySelector('.editLocationName'),
-editPlayerText: document.getElementById('editPlayerText'),
-editGMText: document.getElementById('editGMText'),
-editMiscText: document.getElementById('editMiscText'),
-
-//Ambience 
-mainAmbience: document.getElementById("mainAmbienceDropdown"),
-allPhases: document.getElementById("secondAmbienceDropdown"),
-
 
 async changeContent(locationDiv) {
 
 let rawStory = ``
 
 Ambience.clock();
-const Spring = this.mainAmbience.value;
-const Morning= this.allPhases[Ambience.phase].value;
+const Spring = Ref.mainAmbience.value;
+const Morning= Ref.allPhases[Ambience.phase].value;
 
 //Within Random Selection, filter through.
 const senses = ["sight", "smell", "touch", "feel"];
@@ -49,8 +35,8 @@ ${ambienceEntry[chosenSense]}\n
 const locationName = locationDiv.id;
 
 //change content in the sidebar and editbar
-this.locationLabel.textContent = locationName;
-this.editLocationLabel.value   = locationName;
+Ref.locationLabel.textContent = locationName;
+Ref.editLocationName.value   = locationName;
 
 //Use divId to find locationObject of the same name
 const locationObject = Array.locationArray.find(entry => entry.divId === locationName);
@@ -62,7 +48,7 @@ const masterText = locationObject.gm;
 const masterTextwithMonsters = await this.replaceMonsterPlaceholders(masterText);
 
 const spreadsheet = locationObject.spreadsheetData;
-const location = this.locationLabel.textContent;
+const location = Ref.locationLabel.textContent;
 const presentNPCs = this.getNPCs(location, Ambience.phase);
 
 let playerIntro = 'You are at [' + location + ']. '
@@ -92,11 +78,11 @@ ${this.generateSpreadsheetRows(spreadsheet)}
 </table>`
 
 //Apply formattedStory to Storyteller
-this.Storyteller.innerHTML = formattedStory;
+Ref.Storyteller.innerHTML = formattedStory;
 
 //Update Editor Content
-this.editPlayerText.value = playerText;
-this.editGMText.value = masterText;
+Ref.editPlayerText.value = playerText;
+Ref.editGMText.value = masterText;
 
 //Clear Table
 Edit.generateTable();
@@ -134,11 +120,9 @@ currentPhase === 2 ? 'Night' : 'wild';
 
 for (const npc of NPCs.npcArray) {
 if (npc[`${phaseName}Location`] === locationName) {
-console.log('Present')
 const npcStory = this.generateNPCStory(npc, locationName, phaseName);
 presentNPCs.push({ name: npc.name, story: npcStory });
-}
-}
+}}
 
 return presentNPCs;
 },
