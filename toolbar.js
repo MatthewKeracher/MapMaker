@@ -51,15 +51,15 @@ fileInput.click();
 };
 
 handleAddButtonClick() {
-
+const mapElement = document.getElementById('mapElement');
 if(!Add.addMode){
 Add.addMode = true;
 addButton.classList.add('click-button');
 
 // Add the event listeners
-Ref.mapElement.addEventListener('mousedown', Add.handleMouseDown);
-Ref.mapElement.addEventListener('mousemove', Add.handleMouseMove);
-Ref.mapElement.addEventListener('mouseup', Add.handleMouseUp);   
+mapElement.addEventListener('mousedown', Add.handleMouseDown);
+mapElement.addEventListener('mousemove', Add.handleMouseMove);
+mapElement.addEventListener('mouseup', Add.handleMouseUp);   
 Ref.mainToolbar.style.pointerEvents = 'none';
 Ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
@@ -71,9 +71,9 @@ Add.addMode = false;
 addButton.classList.remove('click-button');
 
 // Remove the event listeners
-Ref.mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-Ref.mapElement.removeEventListener('mousemove', Add.handleMouseMove);
-Ref.mapElement.removeEventListener('mouseup', Add.handleMouseUp);
+mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+mapElement.removeEventListener('mousemove', Add.handleMouseMove);
+mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 Ref.mainToolbar.style.pointerEvents = 'auto';
 Ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'auto';

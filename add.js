@@ -41,9 +41,6 @@ handleMouseMove(e) {
 const mapElement = document.getElementById('mapElement');
 const rect = mapElement.getBoundingClientRect();
 
-// const imageContainer = document.querySelector('.image-container');
-// const rect = imageContainer.getBoundingClientRect();
-
 e.preventDefault();
 
 if (this.isDragging) {
@@ -64,8 +61,7 @@ if (this.isDragging) {
     this.previewDiv.style.top = top + 'px';
     this.previewDiv.style.width = width + 'px';
     this.previewDiv.style.height = height + 'px';
-
-       
+      
 }
 
 },
@@ -107,9 +103,6 @@ imageContainer.insertBefore(location,firstChild);
 
 //Add Events to Divs
 Array.addLocationEvents();
-
-
-//console.log(left + ',' + top + ' ; ' + width + ',' + height);
 
 // Create an object with the location information
 const locationInfo = Array.addNewLocation(location);
