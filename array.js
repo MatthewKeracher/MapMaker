@@ -19,8 +19,6 @@ locationArray: [],
                 const height = parseFloat(location.style.height);
                 const divId = location.id;
                 const player = "";
-                const gm = "";
-                const misc = "";
 
                 return {
                 left,
@@ -29,8 +27,6 @@ locationArray: [],
                 height,
                 divId,
                 player,
-                gm,
-                misc,
                 };
                 },
 
@@ -232,7 +228,7 @@ locationArray: [],
                 },   
 
                 addLocationToArray(locationData) {
-                const { left, top, width, height, divId, player, gm, misc, spreadsheetData } = locationData;
+                const { left, top, width, height, divId, player, spreadsheetData } = locationData;
 
                 // Create a new location object with the specified properties
                 const newLocation = {
@@ -242,8 +238,6 @@ locationArray: [],
                 height,
                 divId,
                 player,
-                gm,
-                misc,
                 spreadsheetData,
                 };
 
@@ -263,7 +257,7 @@ locationArray: [],
                 location.addEventListener('click', () => {
                 Storyteller.changeContent(location);
                 Edit.moveLocation(location);
-                NPCs.clearForm();
+                NPCs.clearNPCForm();
 
                 });
 

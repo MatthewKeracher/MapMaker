@@ -7,9 +7,11 @@ import Ref from "./ref.js";
 
 const Storyteller = {
 
+comboArray: [],
+
 async changeContent(locationDiv) {
 
-let rawStory = ``
+let Story = ``
 
 Ambience.clock();
 const Spring = Ref.mainAmbience.value;
@@ -23,66 +25,61 @@ const ambienceEntry = await Ambience.loadAmbienceEntry(Spring, Morning);
 //Retain returned entry until next phase. Do not delete!
 Ambience.current = ambienceEntry;  
 
-let ambienceText = 'It is a [' + Spring  + ' ' + Morning + ']. ' 
-
-rawStory += `<span class="ambience">
-${ambienceText}\n
-${ambienceEntry.description}\n
-${ambienceEntry[chosenSense]}\n
-</span>`;
-
 //take location name from object.
 const locationName = locationDiv.id;
+//use divId to find locationObject of the same name
+const locationObject = Array.locationArray.find(entry => entry.divId === locationName);
 
-//change content in the sidebar and editbar
 Ref.locationLabel.textContent = locationName;
 Ref.editLocationName.value   = locationName;
 
-//Use divId to find locationObject of the same name
-const locationObject = Array.locationArray.find(entry => entry.divId === locationName);
-
 if (locationObject) {
 //name the returned locationObject data 
-const playerText = locationObject.player;
-const masterText = locationObject.gm;
-const masterTextwithMonsters = await this.replaceMonsterPlaceholders(masterText);
+const locationText = locationObject.player;
+
+this.comboArray = [];
+const squareCurly = this.getMisc(locationText, this.comboArray);
+
+const formattedLocation = await Monsters.getMonsters(squareCurly);
+//console.log(presentMonsters)
 
 const spreadsheet = locationObject.spreadsheetData;
 const location = Ref.locationLabel.textContent;
-const presentNPCs = this.getNPCs(location, Ambience.phase);
+const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
-let playerIntro = 'You are at [' + location + ']. '
+let introText = 'It is a ' + Spring  + ' ' + Morning + '. You are at ' + location + '. ';
 
-rawStory += `<span class="section player"> <hr> \n ${playerIntro} \n\n ${playerText} \n\n\  <hr> </span>`
+
+Story += `
+${introText}\n
+${ambienceEntry.description}\n
+${ambienceEntry[chosenSense]}\n
+${formattedLocation}
+`;
+
 
 if (presentNPCs.length === 0) {
-rawStory += "There is nobody around.";
+Story += "There is nobody around.";
 } else {
 for (const npcWithStory of presentNPCs) {
 const npcStory = npcWithStory.story;
-rawStory += npcStory;
+Story += npcStory;
 }
 }
 
-rawStory += `<span class="section gm"> <hr> ${masterTextwithMonsters} \n\n</span>`; 
-
-//Send rawStory to applyStyling
-let formattedStory = this.applyStyling(rawStory);
 
 //ADD TABLE SO DOESN'T GET FORMATTED
-formattedStory +=`
-<table class="storyTable"> 
+//rawStory +=`
+{/* <table class="storyTable"> 
 <tbody>
 ${this.generateSpreadsheetRows(spreadsheet)}
-</tbody>
-</table>`
+</tbody></table>` */}
 
 //Apply formattedStory to Storyteller
-Ref.Storyteller.innerHTML = formattedStory;
+Ref.Storyteller.innerHTML = Story;
 
 //Update Editor Content
-Ref.editPlayerText.value = playerText;
-Ref.editGMText.value = masterText;
+Ref.textLocation.value = locationText;
 
 //Clear Table
 Edit.generateTable();
@@ -110,205 +107,81 @@ this.showExtraContent()
 };
 }, 
 
-getNPCs(locationName, currentPhase) {
-const presentNPCs = [];
+addMiscInfo(contentId, comboArray) {
+const extraContent = document.getElementById('extraContent');  
+const combo = comboArray.find(item => item.square === contentId);
+  
+  if (combo) {
+    const miscInfo = [ 
+      
+    `<h2><span class="misc">${combo.square.toUpperCase()}</span></h2>\n
+    ${combo.curly}`]
 
-// Apply different colors based on location type
-const phaseName = currentPhase === 0 ? 'Morning' :
-currentPhase === 1 ? 'Afternoon' :
-currentPhase === 2 ? 'Night' : 'wild';
-
-for (const npc of NPCs.npcArray) {
-if (npc[`${phaseName}Location`] === locationName) {
-const npcStory = this.generateNPCStory(npc, locationName, phaseName);
-presentNPCs.push({ name: npc.name, story: npcStory });
-}}
-
-return presentNPCs;
+    extraContent.innerHTML = miscInfo;
+  } else {
+    console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
+  }
 },
 
 
-generateNPCStory(npc, locationName,phaseName) {
-let story = `<br>`;
+getMisc(locationText, comboArray) {
+  const squareBrackets = /\[([^\]]+)\]\{([^}]+)\}/g;
 
-// Add the span around the NPC's name that includes it as an .expandable but also their unique name.
-story += `<span class="expandable" divId="${npc.name.replace(/\s+/g, '-')}">${npc.occupation} is here. \n (${npc.name})</span>`;
-story += `</span><br>`;
+  const matches = [...locationText.matchAll(squareBrackets)];
+  let updatedText = locationText;
 
-if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
-story += `   They are currently ${npc.MorningActivity} \n`;
-}
+  for (const match of matches) {
+    const square = match[1];
+    const curly = match[2];
 
-if (phaseName === 'Afternoon'  && npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
-story += `   They are currently ${npc.AfternoonActivity} \n`;
-}
+    const replacement = `
+    <span class="expandable misc" data-content-type="misc" divId="${square}">
+    ${square.toUpperCase()}</span>`;
 
-if (phaseName === 'Night'  && npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
-story += `   They are currently ${npc.NightActivity} \n`;
-}
+    updatedText = updatedText.replace(match[0], replacement);
 
+    // Store the square curly combo in the provided array
+    comboArray.push({ square, curly });
+  }
 
-
-return story;
+  return updatedText;
 },
 
 
 showExtraContent() {
-const expandableElements = document.querySelectorAll('.expandable');
-const extraInfo = document.querySelector('.extraInfo');
+  const expandableElements = document.querySelectorAll('.expandable');
+  const extraInfo = document.querySelector('.extraInfo');
 
-expandableElements.forEach(expandableElement => {
-expandableElement.addEventListener('mouseenter', (event) => {
-console.log('Enter');
-extraInfo.classList.add('showExtraInfo');
+  expandableElements.forEach(expandableElement => {
+      expandableElement.addEventListener('mouseenter', (event) => {
+          extraInfo.classList.add('showExtraInfo');
 
-// Extract the NPC name from the element's divId
-const npcName = event.target.getAttribute('divId');
-console.log('NPC name:', npcName);
-this.addCharacterSheet(npcName);
+          const contentType = event.target.getAttribute('data-content-type');
+          const contentId = event.target.getAttribute('divId');
 
-// Now you can use the npcName for further actions
-});
-
-extraInfo.addEventListener('mouseleave', () => {
-console.log('Leave');
-extraInfo.classList.remove('showExtraInfo');
-});
-});
-},
-
-
-addCharacterSheet(npcName) {
-const extraContent = document.getElementById('extraContent');
-
-// Search for the NPC in the npcArray
-
-const findNPC = npcName.replace(/-/g, ' ');
-
-const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
-
-if (foundNPC) {
-  console.log(foundNPC);
-// Format the NPC information into npcContent
-let npcContent = `<h2><span class="orange">${foundNPC.name}</span></h2>`;
-
-if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
-  npcContent += `<span class="orange">${foundNPC.occupation}.</span>`;
-  }
-
-if (foundNPC.class && foundNPC.class !== "N/A") {
-npcContent += `<br><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span>`;
-}
-
-if (foundNPC.str) {
-  npcContent += `<br>
-  <span class="hotpink"> STR: </span> ${foundNPC.str}
-  <span class="hotpink"> DEX: </span> ${foundNPC.dex}
-  <span class="hotpink"> INT: </span> ${foundNPC.int}
-  <span class="hotpink"> WIS: </span> ${foundNPC.wis}
-  <span class="hotpink"> CON: </span> ${foundNPC.con}
-  <span class="hotpink"> CHA: </span> ${foundNPC.cha}
-  `
-}
-
-
-
-    if (foundNPC.physicalAppearance && foundNPC.physicalAppearance !== "undefined") {
-    npcContent += `<br><br>${foundNPC.physicalAppearance}`;
-    }
-
-    if (foundNPC.emotionalAppearance && foundNPC.emotionalAppearance !== "undefined") {
-    npcContent += `<br><br>${foundNPC.emotionalAppearance}`;
-    }
-
-    if (foundNPC.socialAppearance && foundNPC.socialAppearance !== "undefined") {
-    npcContent += `<br><br>${foundNPC.socialAppearance}`;
-    }
-
-          if (foundNPC.MorningLocation) {
-          npcContent += `<br><br>   In the morning they can be found at  <span class="lime">[${foundNPC.MorningLocation}]</span>, ${foundNPC.MorningActivity}`;
+          switch (contentType) {
+              case 'npc':
+                  NPCs.addNPCInfo(contentId); // Handle NPCs
+                  break;
+              case 'monster':
+                  Monsters.addMonsterInfo(contentId); // Handle monsters
+                  break;
+                  case 'misc':
+                    this.addMiscInfo(contentId, this.comboArray);
+                    break;
+              default:
+                  console.log('Unknown content type');
           }
+      });
 
-          if (foundNPC.AfternoonLocation) {
-          npcContent += `<br><br>   In the afternoon they can be found at <span class="orange">[${foundNPC.AfternoonLocation}]</span>, ${foundNPC.AfternoonActivity}`;
-          }
-
-          if (foundNPC.NightLocation) {
-          npcContent += `<br><br>   In the evening they can be found at <span class="hotpink">[${foundNPC.NightLocation}]</span>, ${foundNPC.NightActivity}`;
-          }
-
-// Set the formatted content in the extraContent element
-extraContent.innerHTML = npcContent;
-} else {
-// NPC not found
-extraContent.innerHTML = `NPC not found`;
-}
-},
-
-async replaceMonsterPlaceholders(text) {
-const monsterPlaceholderRegex = /\{([^}]+)\}/g;
-const monsters = await Monsters.loadMonstersArray();
-
-return text.replace(monsterPlaceholderRegex, (match, monsterName) => {
-//console.log(`Searching for monster: ${monsterName}`);
-
-const monster = monsters.monsters[monsterName]; // Access monsters object first
-
-if (monster) {
-
-//console.log(`Found monster: ${monsterName}`);
-
-//Format Presentation of Monster Stats
-
-const attributes = [
-`${monsterName.toUpperCase()}`,
-`${monster.Type};\n\n`,
-
-`{# App}: ${monster.Appearing};\n`,
-`{Morale}: ${monster.Morale};\n`,
-`{Movement}: ${monster.Mvmt};\n`,
-`{Armour Class}: ${monster.AC};\n`,
-`{Hit Dice}: ${monster.HD};\n`,
-`{Hit Dice Range}: ${monster.HDSort};\n`,
-`{No. Attacks}: ${monster.Attacks};\n`,
-`{Damage}: ${monster.Damage};\n`,          
-`{Special}: ${monster.Special || "None"};\n`,
-`{Save As}: ${monster["Save As "]};\n`,
-`{Treasure}: ${monster.Treasure || "None"};\n`,
-`{Experience Points}: ${monster.XP};\n\n `,
-`{Description}: \n\n ${monster.Description.replace(/\./g, '.\n\n')}`,
-
-// Add other fields here
-];
-
-const formattedAttributes = attributes
-.filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
-.join(" ");
-
-//console.log(`Attributes for ${monsterName}: ${formattedAttributes}`);
-
-return formattedAttributes;
-} else {
-console.log(`Monster not found: ${monsterName}`);
-return match; // Keep the original placeholder if monster not found
-}
-});
+      extraInfo.addEventListener('mouseleave', () => {
+          extraInfo.classList.remove('showExtraInfo');
+      });
+  });
 },
 
 
-applyStyling(content) {
 
-const allCapsPattern = /\b([A-Z]{2,})\b/g;
-const insideRoundedBracketsPattern = /\(([^)]+)\)/g;
-const insideSquareBracketsPattern = /\[([^\]]+)\]/g;
-const insideCurlyBrackets = /\{([^}]+)\}/g;
-
-return content
-.replace(allCapsPattern, '<span class="all-caps">$1</span>')
-.replace(insideRoundedBracketsPattern, '<span class="inside-rounded-brackets">($1)</span>')
-.replace(insideSquareBracketsPattern, '<span class="inside-square-brackets">[$1]</span>')
-.replace(insideCurlyBrackets, '<span class="inside-curly-brackets">{$1}</span>');
-},
 
 
 generateSpreadsheetRows(spreadsheet) {

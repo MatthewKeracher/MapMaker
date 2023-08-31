@@ -151,11 +151,11 @@ editClearButton.classList.remove('click-button');
 
 switch (Page) {
 case 1:
-document.getElementById('editPlayerText').value = "";
+document.getElementById('textLocation').value = "";
 break;
 
 case 2:
-document.getElementById('editGMText').value = "";
+
 break;
 
 case 3:

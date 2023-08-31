@@ -26,7 +26,7 @@ this.startX = e.clientX - rect.left;
 this.startY = e.clientY - rect.top;
 
 // console.log('isDragging: ' + this.isDragging);
-console.log('start: ' + this.endX + ',' + this.endY);
+//console.log('start: ' + this.endX + ',' + this.endY);
 
 // Create a temporary preview div
 this.previewDiv = document.createElement('div');
@@ -109,7 +109,7 @@ const locationInfo = Array.addNewLocation(location);
 
 // Add the locationInfo to the locationArray
 Array.locationArray.push(locationInfo);
-console.log("Adding new entry: " + JSON.stringify(Array.locationArray, null, 2));
+//console.log("Adding new entry: " + JSON.stringify(Array.locationArray, null, 2));
 
 this.isDragging = false;
 this.previewDiv.remove();

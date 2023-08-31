@@ -46,44 +46,7 @@ width: 5px; /* Set the width of the scrollbar */
 .Storyteller .section {
 flex: 1;
 }
-.ambience{
-color: skyblue;
-}
 
-.player{
-color: rgb(233, 205, 171);
-font-style: italic;
-}
-
-.gm{
-color: bisque;    
-}
-
-.misc{
-color: lime;
-}    
-
-.all-caps{
-color: cyan;
-}
-
-.inside-rounded-brackets{
-color: gold;
-}
-
-.inside-square-brackets {
-color: orange; 
-}
-
-.inside-curly-brackets{
-color:hotpink;
-font-weight: bold;
-}
-
-.inside-quotation-marks {
-color: orange; /* Change this to the desired color */
-/* Add other styling properties as needed */
-}
 
 .storyTable input {
 height: 3vh;

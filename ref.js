@@ -15,43 +15,41 @@ Storyteller: document.getElementById('Storyteller'),
 EditorContainer: document.querySelector('.EditorContainer'),
 editLocationName: document.querySelector('.editLocationName'),
 
-playerLabel: document.getElementById('playerLabel'),
-editPlayerText: document.getElementById('editPlayerText'),
+textLocationLabel: document.getElementById('textLocationLabel'),
+textLocation: document.getElementById('textLocation'),
 
-gmLabel: document.getElementById('gmLabel'),
-editGMText: document.getElementById('editGMText'),
-
-miscLabel: document.getElementById('miscLabel'),
-editMiscText: document.getElementById('editMiscText'),
+optionsListMonster: document.getElementById('MonsteroptionsList'),
+expandableElements: document.querySelectorAll('.expandable'),
+extraInfo: document.querySelector('.extraInfo'),
 
 //npcForm
 npcForm: document.querySelector('.npcForm'),
 
-    npcName: document.getElementById('npcName').value,
-    npcOccupation: document.getElementById('npcOccupation').value,
+    npcName: document.getElementById('npcName'),
+    npcOccupation: document.getElementById('npcOccupation'),
 
-    MorningLocation: document.getElementById('MorningLocation').value,
-    MorningActivity: document.getElementById('MorningActivity').value,
+    MorningLocation: document.getElementById('MorningLocation'),
+    MorningActivity: document.getElementById('MorningActivity'),
 
-    AfternoonLocation: document.getElementById('AfternoonLocation').value,
-    AfternoonActivity: document.getElementById('AfternoonActivity').value,
+    AfternoonLocation: document.getElementById('AfternoonLocation'),
+    AfternoonActivity: document.getElementById('AfternoonActivity'),
 
-    NightLocation: document.getElementById('NightLocation').value,
-    NightActivity: document.getElementById('NightActivity').value,
+    NightLocation: document.getElementById('NightLocation'),
+    NightActivity: document.getElementById('NightActivity'),
 
-    npcLevel: document.getElementById('npcLevel').value,
-    npcClass: document.getElementById('npcClass').value,
+    npcLevel: document.getElementById('npcLevel'),
+    npcClass: document.getElementById('npcClass'),
 
-    STR: document.getElementById('STR').value,
-    DEX: document.getElementById('DEX').value,
-    INT: document.getElementById('INT').value,
-    WIS: document.getElementById('WIS').value,
-    CON: document.getElementById('CON').value,
-    CHA: document.getElementById('CHA').value,
+    STR: document.getElementById('STR'),
+    DEX: document.getElementById('DEX'),
+    INT: document.getElementById('INT'),
+    WIS: document.getElementById('WIS'),
+    CON: document.getElementById('CON'),
+    CHA: document.getElementById('CHA'),
 
-    npcPhysicalAppearance: document.getElementById('npcPhysicalAppearance').value,
-    npcEmotionalAppearance: document.getElementById('npcEmotionalAppearance').value,
-    npcSocialAppearance: document.getElementById('npcSocialAppearance').value,
+    npcPhysicalAppearance: document.getElementById('npcPhysicalAppearance'),
+    npcEmotionalAppearance: document.getElementById('npcEmotionalAppearance'),
+    npcSocialAppearance: document.getElementById('npcSocialAppearance'),
 
 //Table
 tableForm: document.getElementById('tableForm'),
