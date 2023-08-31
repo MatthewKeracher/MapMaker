@@ -194,8 +194,9 @@ generateNPCStory(npc, locationName,phaseName) {
 let story = `<br>`;
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
-${npc.occupation} is here. (${npc.name})
-</span>`
+${npc.occupation} is here. </span>
+\n <span class="hotpink"> (${npc.name})</span>
+`
 
 if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
 story += `   They are currently ${npc.MorningActivity} \n`;
@@ -257,21 +258,21 @@ npcContent += `<br><br>${foundNPC.socialAppearance}`;
 }
 
 if (foundNPC.MorningLocation) {
-npcContent += `<br><br>
+npcContent += `<br>
 In the morning they can be found at
 <span class="lime">[${foundNPC.MorningLocation}]</span>,
 ${foundNPC.MorningActivity}`;
 }
 
 if (foundNPC.AfternoonLocation) {
-npcContent += `<br><br>
+npcContent += `<br>
 In the afternoon they can be found at <span class="orange">
 [${foundNPC.AfternoonLocation}]</span>,
 ${foundNPC.AfternoonActivity}`;
 }
 
 if (foundNPC.NightLocation) {
-npcContent += `<br><br>
+npcContent += `<br>
 In the evening they can be found at <span class="hotpink">
 [${foundNPC.NightLocation}]</span>,
  ${foundNPC.NightActivity}`;
