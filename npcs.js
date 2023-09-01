@@ -276,7 +276,7 @@ npcContent += `<br><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.t
 }
 
 if (foundNPC.str) {
-npcContent += `<br><br>
+npcContent += `<br>
 <span class="hotpink"> STR: </span> ${foundNPC.str} <br>
 <span class="hotpink"> DEX: </span> ${foundNPC.dex} <br>
 <span class="hotpink"> INT: </span> ${foundNPC.int} <br>
@@ -292,7 +292,7 @@ npcContent += `<br><br><span class="withbreak">${foundNPC.Backstory}</span>`;
 
 
 if (foundNPC.MorningLocation) {
-npcContent += `<br>
+npcContent += `<br><br>
 In the morning they can be found at
 <span class="lime">[${foundNPC.MorningLocation}]</span>,
 ${foundNPC.MorningActivity}`;
