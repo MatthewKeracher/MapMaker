@@ -103,7 +103,7 @@ input.value = cellData.content;
 
 }
 
-NPCs.loadNPC();
+NPCs.loadNPC(NPCs.npcArray)
 this.showExtraContent()
 
 };

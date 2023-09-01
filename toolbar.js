@@ -14,6 +14,7 @@ init() {
 
 Ambience.initializeAmbienceDropdowns();
 Monsters.addPredictiveMonsters();
+NPCs.addNPCSearch();
 
 //mainToolbar
 Ref.mapButton.addEventListener('click', this.handleMapButtonClick);
@@ -137,7 +138,7 @@ Array.exportArray();
 handleeditSaveButtonButtonClick(){
 Edit.saveLocation();
 NPCs.saveNPC();
-NPCs.loadNPC();
+NPCs.loadNPC(NPCs.npcArray)
 };
 
 handleeditClearButtonClick(){

@@ -6,11 +6,82 @@ import Ref from "./ref.js";
 // Define the NPCs module
 const NPCs = {
 npcArray: [],
+npcSearchArray:[],
 AlwaysNPCs : [],
 MorningNPCs : [],
 AfternoonNPCs : [],
 NightNPCs : [],
 otherNPCs : [],
+
+addNPCSearch: function(){
+
+    Ref.npcName.addEventListener('input', (event) => {
+        let searchText = event.target.value.toLowerCase();
+    
+        // Check if the searchText contains '{'
+        if (searchText.includes('{')) {
+            // Remove '{' from the searchText
+            searchText = searchText.replace('{', '');
+    
+            // Call the searchNPC function
+            this.searchNPC(searchText);
+        }
+    });
+    
+},
+
+searchNPC: function(searchText){
+
+ this.npcSearchArray = [];
+
+ this.npcSearchArray = this.npcArray.filter((npc) => {
+     const npcName = npc.name.toLowerCase();
+     const npcOccupation = npc.occupation.toLowerCase();
+     
+     // Check if either the name or occupation contains the search text
+     return npcName.includes(searchText.toLowerCase()) || npcOccupation.includes(searchText.toLowerCase());
+ });
+
+ this.loadNPC(this.npcSearchArray);
+
+},
+
+
+loadNPC: function(NPCArray) {
+   
+const NPCoptionsList = document.getElementById('NPCoptionsList'); // Do not delete!!
+
+// Clear the existing content
+NPCoptionsList.innerHTML = '';
+
+this.AlwaysNPCs = [];
+this.MorningNPCs = [];
+this.AfternoonNPCs = [];
+this.NightNPCs = [];
+this.otherNPCs = [];
+
+for (const npc of NPCArray) {
+const npcNameDiv = document.createElement('div');
+npcNameDiv.textContent = npc.name + ' [' + npc.occupation + ']';            
+
+this.sortNPCs(npc, npcNameDiv);
+this.fillNPCForm(npc, npcNameDiv);
+
+}
+
+// Concatenate arrays in desired order
+const sortedNPCs = [...this.AlwaysNPCs, ...this.MorningNPCs, ...this.AfternoonNPCs, ...this.NightNPCs, ...this.otherNPCs];
+
+// Append sorted divs to the NPCoptionsList
+sortedNPCs.forEach(npcDiv => {
+NPCoptionsList.appendChild(npcDiv);
+});
+
+NPCoptionsList.style.display = 'block'; // Display the NPC names container
+
+this.fixDisplay();
+
+},
 
 sortNPCs: function(npc, npcNameDiv){
 
@@ -53,69 +124,32 @@ fillNPCForm: function(npc, npcNameDiv){
 // Add click event listener to each NPC name
 npcNameDiv.addEventListener('click', () => {
 
-    Ref.npcName.value = npc.name;
-    Ref.npcOccupation.value = npc.occupation;
-    
-    Ref.MorningLocation.value = npc.MorningLocation;
-    Ref.MorningActivity.value = npc.MorningActivity;
-    
-    Ref.AfternoonLocation.value = npc.AfternoonLocation;
-    Ref.AfternoonActivity.value = npc.AfternoonActivity;
-    
-    Ref.NightLocation.value = npc.NightLocation;
-    Ref.NightActivity.value = npc.NightActivity;
-    
-    Ref.npcLevel.value = npc.level;
-    Ref.npcClass.value = npc.class;
-    
-    Ref.STR.value = npc.str;  
-    Ref.DEX.value = npc.dex; 
-    Ref.INT.value = npc.int; 
-    Ref.WIS.value = npc.wis; 
-    Ref.CON.value = npc.con; 
-    Ref.CHA.value = npc.cha; 
-    
-    Ref.Backstory.value = npc.Backstory;
-    
-    Ref.npcForm.style.display = 'flex'; // Display the npcForm
-    });
+Ref.npcName.value = npc.name;
+Ref.npcOccupation.value = npc.occupation;
 
-},
+Ref.MorningLocation.value = npc.MorningLocation;
+Ref.MorningActivity.value = npc.MorningActivity;
 
+Ref.AfternoonLocation.value = npc.AfternoonLocation;
+Ref.AfternoonActivity.value = npc.AfternoonActivity;
 
-loadNPC: function() {
-   
-const NPCoptionsList = document.getElementById('NPCoptionsList'); // Do not delete!!
+Ref.NightLocation.value = npc.NightLocation;
+Ref.NightActivity.value = npc.NightActivity;
 
-// Clear the existing content
-NPCoptionsList.innerHTML = '';
+Ref.npcLevel.value = npc.level;
+Ref.npcClass.value = npc.class;
 
-this.AlwaysNPCs = [];
-this.MorningNPCs = [];
-this.AfternoonNPCs = [];
-this.NightNPCs = [];
-this.otherNPCs = [];
+Ref.STR.value = npc.str;  
+Ref.DEX.value = npc.dex; 
+Ref.INT.value = npc.int; 
+Ref.WIS.value = npc.wis; 
+Ref.CON.value = npc.con; 
+Ref.CHA.value = npc.cha; 
 
-for (const npc of NPCs.npcArray) {
-const npcNameDiv = document.createElement('div');
-npcNameDiv.textContent = npc.name;            
+Ref.Backstory.value = npc.Backstory;
 
-this.sortNPCs(npc, npcNameDiv);
-this.fillNPCForm(npc, npcNameDiv);
-
-}
-
-// Concatenate arrays in desired order
-const sortedNPCs = [...this.AlwaysNPCs, ...this.MorningNPCs, ...this.AfternoonNPCs, ...this.NightNPCs, ...this.otherNPCs];
-
-// Append sorted divs to the NPCoptionsList
-sortedNPCs.forEach(npcDiv => {
-NPCoptionsList.appendChild(npcDiv);
+Ref.npcForm.style.display = 'flex'; // Display the npcForm
 });
-
-NPCoptionsList.style.display = 'block'; // Display the NPC names container
-
-this.fixDisplay();
 
 },
 

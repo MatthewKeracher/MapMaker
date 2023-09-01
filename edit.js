@@ -38,7 +38,7 @@ const Edit = {
                   // Filter and update npcArray to remove empty entries
                   //NPCs.npcArray = this.filterEmptyEntries(NPCs.npcArray);
       
-                  NPCs.loadNPC(); // Refresh the NPC form with updated npcArray
+                  NPCs.loadNPC(NPCs.npcArray); // Refresh the NPC form with updated npcArray
                   npcForm.reset(); // Call the reset() method to clear the form fields
               }
           }
@@ -202,7 +202,7 @@ Ref.textLocation.style.display = "none";
 Ref.tableForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 
-NPCs.loadNPC();
+NPCs.loadNPC(NPCs.npcArray);
 
 break;
 
