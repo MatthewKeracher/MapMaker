@@ -65,7 +65,7 @@ Story += "There is nobody around.";
 } else {
 for (const npcWithStory of presentNPCs) {
 const npcStory = npcWithStory.story;
-Story += `<span class="withbreak">${npcStory}</span><br>`;
+Story += `<span class="withbreak">${npcStory}</span>`;
 }
 }
 
@@ -173,8 +173,7 @@ showExtraContent() {
           break;
         default:
           console.log('Unknown content type');
-      }      
-    
+      }          
 
       extraInfo.classList.add('showExtraInfo');
 

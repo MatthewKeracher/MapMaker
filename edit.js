@@ -25,7 +25,7 @@ const Edit = {
 
     deleteLocation() {
       switch (this.editPage) {
-        case 3:
+        case 2:
           const npcName = document.getElementById('npcName').value;
           const npcIndex = NPCs.npcArray.findIndex(npc => npc.name === npcName);
           const npcForm = document.getElementById('npcForm');
@@ -174,7 +174,7 @@ for (const npc of NPCs.npcArray) {
 pageChange(newPage){
 
 NPCs.fixDisplay();
-console.log(newPage)
+
 
 switch (newPage) {
 case 1:

@@ -6,6 +6,118 @@ import Ref from "./ref.js";
 // Define the NPCs module
 const NPCs = {
 npcArray: [],
+AlwaysNPCs : [],
+MorningNPCs : [],
+AfternoonNPCs : [],
+NightNPCs : [],
+otherNPCs : [],
+
+sortNPCs: function(npc, npcNameDiv){
+
+// Colour code based on whether this is their Morning, Afternoon, or Night Location
+
+if (npc.MorningLocation   === Ref.locationLabel.textContent &&
+npc.AfternoonLocation === Ref.locationLabel.textContent &&
+npc.NightLocation     === Ref.locationLabel.textContent) {
+
+npcNameDiv.classList.add('Always');
+
+this.AlwaysNPCs.push(npcNameDiv);
+
+} else if (npc.MorningLocation === Ref.locationLabel.textContent) {
+
+npcNameDiv.classList.add('Morning');
+this.MorningNPCs.push(npcNameDiv);
+
+} else if (npc.AfternoonLocation === Ref.locationLabel.textContent) {
+
+npcNameDiv.classList.add('Afternoon');
+this.AfternoonNPCs.push(npcNameDiv);
+
+} else if (npc.NightLocation === Ref.locationLabel.textContent) {
+
+npcNameDiv.classList.add('Night');
+this.NightNPCs.push(npcNameDiv);
+
+} else {
+
+npcNameDiv.classList.add('npc-name'); // Add a class for styling
+this.otherNPCs.push(npcNameDiv);
+
+}
+
+},
+
+fillNPCForm: function(npc, npcNameDiv){
+
+// Add click event listener to each NPC name
+npcNameDiv.addEventListener('click', () => {
+
+    Ref.npcName.value = npc.name;
+    Ref.npcOccupation.value = npc.occupation;
+    
+    Ref.MorningLocation.value = npc.MorningLocation;
+    Ref.MorningActivity.value = npc.MorningActivity;
+    
+    Ref.AfternoonLocation.value = npc.AfternoonLocation;
+    Ref.AfternoonActivity.value = npc.AfternoonActivity;
+    
+    Ref.NightLocation.value = npc.NightLocation;
+    Ref.NightActivity.value = npc.NightActivity;
+    
+    Ref.npcLevel.value = npc.level;
+    Ref.npcClass.value = npc.class;
+    
+    Ref.STR.value = npc.str;  
+    Ref.DEX.value = npc.dex; 
+    Ref.INT.value = npc.int; 
+    Ref.WIS.value = npc.wis; 
+    Ref.CON.value = npc.con; 
+    Ref.CHA.value = npc.cha; 
+    
+    Ref.Backstory.value = npc.Backstory;
+    
+    Ref.npcForm.style.display = 'flex'; // Display the npcForm
+    });
+
+},
+
+
+loadNPC: function() {
+   
+const NPCoptionsList = document.getElementById('NPCoptionsList'); // Do not delete!!
+
+// Clear the existing content
+NPCoptionsList.innerHTML = '';
+
+this.AlwaysNPCs = [];
+this.MorningNPCs = [];
+this.AfternoonNPCs = [];
+this.NightNPCs = [];
+this.otherNPCs = [];
+
+for (const npc of NPCs.npcArray) {
+const npcNameDiv = document.createElement('div');
+npcNameDiv.textContent = npc.name;            
+
+this.sortNPCs(npc, npcNameDiv);
+this.fillNPCForm(npc, npcNameDiv);
+
+}
+
+// Concatenate arrays in desired order
+const sortedNPCs = [...this.AlwaysNPCs, ...this.MorningNPCs, ...this.AfternoonNPCs, ...this.NightNPCs, ...this.otherNPCs];
+
+// Append sorted divs to the NPCoptionsList
+sortedNPCs.forEach(npcDiv => {
+NPCoptionsList.appendChild(npcDiv);
+});
+
+NPCoptionsList.style.display = 'block'; // Display the NPC names container
+
+this.fixDisplay();
+
+},
 
 saveNPC: function() {
 
@@ -34,8 +146,7 @@ wis: Ref.WIS.value,
 con: Ref.CON.value,
 cha: Ref.CHA.value,
 
-Backstory: Ref.npcBackStory.value,
-
+Backstory: Ref.Backstory.value,
 };
 
 if (existingNPCIndex !== -1) {
@@ -50,23 +161,9 @@ this.npcArray.push(npc);
 
 },
 
-fixDisplay: function(){
-
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-
-try{
-if (Edit.editPage === 2) {
-imageContainer.style.width = "45vw"; 
-radiantDisplay.style.width = "45vw"; 
-}else{imageContainer.style.width = "70vw"; 
-radiantDisplay.style.width = "70vw"; 
-}}catch{}
-},
-
 clearNPCForm: function(){
-const npcForm = document.getElementById('npcForm');
-const inputFields = npcForm.querySelectorAll('input, textarea, select'); // Select input, textarea, and select fields within npcForm
+
+const inputFields = Ref.npcForm.querySelectorAll('input, textarea, select'); // Select input, textarea, and select fields within npcForm
 
 //console.log("clearing npcForm")
 
@@ -81,90 +178,6 @@ formElement.value = ''; // Clear the value of input and textarea elements
 });
 
 Array.generateLocationOptions();
-
-},
-
-loadNPC: function() {
-const npcForm = document.getElementById('npcForm');    
-const NPCoptionsList = document.getElementById('NPCoptionsList'); // Reuse the optionsList div
-
-
-// Clear the existing content
-NPCoptionsList.innerHTML = '';
-
-const MorningNPCs = [];
-const AfternoonNPCs = [];
-const NightNPCs = [];
-const otherNPCs = [];
-
-for (const npc of NPCs.npcArray) {
-const npcNameDiv = document.createElement('div');
-npcNameDiv.textContent = npc.name +  ' [' + npc.occupation + ']';            
-
-// Colour code based on whether this is their Morning, Afternoon, or Night Location
-
-if (npc.MorningLocation === Ref.locationLabel.textContent &&
-npc.AfternoonLocation === Ref.locationLabel.textContent &&
-npc.NightLocation === Ref.locationLabel.textContent) {
-npcNameDiv.classList.add('Always');
-NightNPCs.push(npcNameDiv);
-} else if (npc.MorningLocation === Ref.locationLabel.textContent) {
-npcNameDiv.classList.add('Morning');
-MorningNPCs.push(npcNameDiv);
-} else if (npc.AfternoonLocation === Ref.locationLabel.textContent) {
-npcNameDiv.classList.add('Afternoon');
-AfternoonNPCs.push(npcNameDiv);
-} else if (npc.NightLocation === Ref.locationLabel.textContent) {
-npcNameDiv.classList.add('Night');
-NightNPCs.push(npcNameDiv);
-} else {
-npcNameDiv.classList.add('npc-name'); // Add a class for styling
-otherNPCs.push(npcNameDiv);
-}
-
-// Add click event listener to each NPC name
-npcNameDiv.addEventListener('click', () => {
-
-document.getElementById('npcName').value = npc.name;
-document.getElementById('npcOccupation').value = npc.occupation;
-
-document.getElementById('MorningLocation').value = npc.MorningLocation;
-document.getElementById('MorningActivity').value = npc.MorningActivity;
-
-document.getElementById('AfternoonLocation').value = npc.AfternoonLocation;
-document.getElementById('AfternoonActivity').value = npc.AfternoonActivity;
-
-document.getElementById('NightLocation').value = npc.NightLocation;
-document.getElementById('NightActivity').value = npc.NightActivity;
-
-document.getElementById('npcLevel').value = npc.level;
-document.getElementById('npcClass').value = npc.class;
-
-document.getElementById('STR').value = npc.str;  
-document.getElementById('DEX').value = npc.dex; 
-document.getElementById('INT').value = npc.int; 
-document.getElementById('WIS').value = npc.wis; 
-document.getElementById('CON').value = npc.con; 
-document.getElementById('CHA').value = npc.cha; 
-
-document.getElementById('npcBackStory').value = npc.Backstory;
-
-npcForm.style.display = 'flex'; // Display the npcForm
-});
-}
-
-// Concatenate arrays in desired order
-const sortedNPCs = [...MorningNPCs, ...AfternoonNPCs, ...NightNPCs, ...otherNPCs];
-
-// Append sorted divs to the NPCoptionsList
-sortedNPCs.forEach(npcDiv => {
-NPCoptionsList.appendChild(npcDiv);
-});
-
-NPCoptionsList.style.display = 'block'; // Display the NPC names container
-
-this.fixDisplay();
-
 
 },
 
@@ -190,20 +203,19 @@ generateNPCStory(npc, locationName,phaseName) {
 let story = `<br>`;
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
-${npc.occupation} is here. </span>
-<span class="hotpink"> (${npc.name})</span><br>
-`
+${npc.occupation} is here. (${npc.name})
+</span>`
 
 if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
-story += `   They are currently ${npc.MorningActivity} <br>`;
+story += `   They are currently ${npc.MorningActivity} \n`;
 }
 
 if (phaseName === 'Afternoon'  && npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
-story += `   They are currently ${npc.AfternoonActivity} <br>`;
+story += `   They are currently ${npc.AfternoonActivity} \n`;
 }
 
 if (phaseName === 'Night'  && npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
-story += `   They are currently ${npc.NightActivity} <br>`;
+story += `   They are currently ${npc.NightActivity} \n`;
 }
 
 //console.log(story)
@@ -232,38 +244,46 @@ npcContent += `<br><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.t
 
 if (foundNPC.str) {
 npcContent += `<br>
-<br><span class="hotpink"> STR: </span> ${foundNPC.str}
-<br><span class="hotpink"> DEX: </span> ${foundNPC.dex}
-<br><span class="hotpink"> INT: </span> ${foundNPC.int}
-<br><span class="hotpink"> WIS: </span> ${foundNPC.wis}
-<br><span class="hotpink"> CON: </span> ${foundNPC.con}
-<br><span class="hotpink"> CHA: </span> ${foundNPC.cha}
+<span class="hotpink"> STR: </span> ${foundNPC.str}
+<span class="hotpink"> DEX: </span> ${foundNPC.dex}
+<span class="hotpink"> INT: </span> ${foundNPC.int}
+<span class="hotpink"> WIS: </span> ${foundNPC.wis}
+<span class="hotpink"> CON: </span> ${foundNPC.con}
+<span class="hotpink"> CHA: </span> ${foundNPC.cha}
 `
 }
 
-if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-npcContent += `<br><br><span class="withbreak"> ${foundNPC.Backstory}</span>`;
+if (foundNPC.physicalAppearance && foundNPC.physicalAppearance !== "undefined") {
+npcContent += `<br><br>${foundNPC.physicalAppearance}`;
+}
+
+if (foundNPC.emotionalAppearance && foundNPC.emotionalAppearance !== "undefined") {
+npcContent += `<br><br>${foundNPC.emotionalAppearance}`;
+}
+
+if (foundNPC.socialAppearance && foundNPC.socialAppearance !== "undefined") {
+npcContent += `<br><br>${foundNPC.socialAppearance}`;
 }
 
 if (foundNPC.MorningLocation) {
 npcContent += `<br><br>
 In the morning they can be found at
-<span class="lime"> [${foundNPC.MorningLocation}]</span>,
+<span class="lime">[${foundNPC.MorningLocation}]</span>,
 ${foundNPC.MorningActivity}`;
 }
 
 if (foundNPC.AfternoonLocation) {
 npcContent += `<br><br>
-In the afternoon they can be found at 
-<span class="orange"> [${foundNPC.AfternoonLocation}]</span>,
+In the afternoon they can be found at <span class="orange">
+[${foundNPC.AfternoonLocation}]</span>,
 ${foundNPC.AfternoonActivity}`;
 }
 
 if (foundNPC.NightLocation) {
 npcContent += `<br><br>
-In the evening they can be found at 
-<span class="hotpink"> [${foundNPC.NightLocation}]</span>,
- ${foundNPC.NightActivity}`;
+In the evening they can be found at <span class="hotpink">
+[${foundNPC.NightLocation}]</span>,
+${foundNPC.NightActivity}`;
 }
 
 // Set the formatted content in the extraContent element
@@ -272,6 +292,20 @@ extraContent.innerHTML = npcContent;
 // NPC not found
 extraContent.innerHTML = `NPC not found`;
 }
+},
+
+fixDisplay: function(){
+
+const imageContainer = document.querySelector('.image-container');
+const radiantDisplay = document.getElementById('radiantDisplay');
+
+try{
+if (Edit.editPage === 2) {
+imageContainer.style.width = "45vw"; 
+radiantDisplay.style.width = "45vw"; 
+}else{imageContainer.style.width = "70vw"; 
+radiantDisplay.style.width = "70vw"; 
+}}catch{}
 },
 
 };

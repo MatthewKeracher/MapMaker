@@ -184,11 +184,6 @@ color: black;
 cursor: pointer; /* Show pointer cursor on hover */
 }  
 
-#NPCoptionsList div:select {
-background-color: lime; /* Change the background color on hover */
-color: black;
-cursor: pointer; /* Show pointer cursor on hover */
-} 
 
 #NPCoptionsList::-webkit-scrollbar {
 width: 5px; /* Set the width of the scrollbar */
@@ -209,6 +204,10 @@ color: blueviolet;
 
 .Always {   
 color: whitesmoke;
+}
+
+.npc-name{
+    color:gray
 }
 
 

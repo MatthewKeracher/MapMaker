@@ -24,6 +24,7 @@ extraInfo: document.querySelector('.extraInfo'),
 
 //npcForm
 npcForm: document.querySelector('.npcForm'),
+NPCoptionslist: document.getElementById('NPCoptionslist'),
 
     npcName: document.getElementById('npcName'),
     npcOccupation: document.getElementById('npcOccupation'),
@@ -47,7 +48,7 @@ npcForm: document.querySelector('.npcForm'),
     CON: document.getElementById('CON'),
     CHA: document.getElementById('CHA'),
 
-    npcBackStory: document.getElementById('npcBackStory'),
+    Backstory: document.getElementById('npcBackStory'),
    
 //Table
 tableForm: document.getElementById('tableForm'),
