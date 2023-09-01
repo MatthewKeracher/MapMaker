@@ -31,7 +31,6 @@ scrollbar-color: black;
 vertical-align: top; 
 flex-direction: column;
 resize: none;
-white-space: pre-line; 
 text-align: left;
 }  
 
@@ -42,6 +41,10 @@ text-align: left;
 .showExtraInfo {
     display: block;
   }
+
+.withbreak{
+  white-space: pre-line; 
+}
 
 .npc{
     color: cyan;
@@ -56,7 +59,7 @@ text-align: left;
 }
 
 .hotpink{
-  color:hotpink
+  color:hotpink;
 }
 
 .lime{

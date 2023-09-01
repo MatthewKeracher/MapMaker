@@ -51,10 +51,10 @@ let introText = 'It is a ' + Spring  + ' ' + Morning + '. You are at ' + locatio
 
 
 Story += `
-${introText}\n
-${ambienceEntry.description}\n
-${ambienceEntry[chosenSense]}\n
-${formattedLocation}
+${introText}<br><br>
+${ambienceEntry.description}<br><br>
+${ambienceEntry[chosenSense]}<br><br>
+<span class="withbreak">${formattedLocation}</span>
 `;
 
 
@@ -63,7 +63,7 @@ Story += "There is nobody around.";
 } else {
 for (const npcWithStory of presentNPCs) {
 const npcStory = npcWithStory.story;
-Story += npcStory;
+Story += `<span class="withbreak">${npcStory}</span><br>`;
 }
 }
 
@@ -114,7 +114,7 @@ const combo = comboArray.find(item => item.square === contentId);
   if (combo) {
     const miscInfo = [ 
       
-    `<h2><span class="misc">${combo.square.toUpperCase()}</span></h2>\n
+    `<h2><span class="misc">${combo.square.toUpperCase()}</span></h2><br>
     ${combo.curly}`]
 
     extraContent.innerHTML = miscInfo;

@@ -195,19 +195,19 @@ let story = `<br>`;
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
 ${npc.occupation} is here. </span>
-\n <span class="hotpink"> (${npc.name})</span>
+<span class="hotpink"> (${npc.name})</span><br>
 `
 
 if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
-story += `   They are currently ${npc.MorningActivity} \n`;
+story += `   They are currently ${npc.MorningActivity} <br>`;
 }
 
 if (phaseName === 'Afternoon'  && npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
-story += `   They are currently ${npc.AfternoonActivity} \n`;
+story += `   They are currently ${npc.AfternoonActivity} <br>`;
 }
 
 if (phaseName === 'Night'  && npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
-story += `   They are currently ${npc.NightActivity} \n`;
+story += `   They are currently ${npc.NightActivity} <br>`;
 }
 
 //console.log(story)
@@ -236,45 +236,45 @@ npcContent += `<br><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.t
 
 if (foundNPC.str) {
 npcContent += `<br>
-<span class="hotpink"> STR: </span> ${foundNPC.str}
-<span class="hotpink"> DEX: </span> ${foundNPC.dex}
-<span class="hotpink"> INT: </span> ${foundNPC.int}
-<span class="hotpink"> WIS: </span> ${foundNPC.wis}
-<span class="hotpink"> CON: </span> ${foundNPC.con}
-<span class="hotpink"> CHA: </span> ${foundNPC.cha}
+<br><span class="hotpink"> STR: </span> ${foundNPC.str}
+<br><span class="hotpink"> DEX: </span> ${foundNPC.dex}
+<br><span class="hotpink"> INT: </span> ${foundNPC.int}
+<br><span class="hotpink"> WIS: </span> ${foundNPC.wis}
+<br><span class="hotpink"> CON: </span> ${foundNPC.con}
+<br><span class="hotpink"> CHA: </span> ${foundNPC.cha}
 `
 }
 
 if (foundNPC.physicalAppearance && foundNPC.physicalAppearance !== "undefined") {
-npcContent += `<br><br>${foundNPC.physicalAppearance}`;
+npcContent += `<br><br><span class="withbreak"> ${foundNPC.physicalAppearance}</span>`;
 }
 
 if (foundNPC.emotionalAppearance && foundNPC.emotionalAppearance !== "undefined") {
-npcContent += `<br><br>${foundNPC.emotionalAppearance}`;
+npcContent += `<br><br><span class="withbreak">${foundNPC.emotionalAppearance}</span>`;
 }
 
 if (foundNPC.socialAppearance && foundNPC.socialAppearance !== "undefined") {
-npcContent += `<br><br>${foundNPC.socialAppearance}`;
+npcContent += `<br><br><span class="withbreak">${foundNPC.socialAppearance}</span>`;
 }
 
 if (foundNPC.MorningLocation) {
-npcContent += `<br>
+npcContent += `<br><br>
 In the morning they can be found at
-<span class="lime">[${foundNPC.MorningLocation}]</span>,
+<span class="lime"> [${foundNPC.MorningLocation}]</span>,
 ${foundNPC.MorningActivity}`;
 }
 
 if (foundNPC.AfternoonLocation) {
-npcContent += `<br>
-In the afternoon they can be found at <span class="orange">
-[${foundNPC.AfternoonLocation}]</span>,
+npcContent += `<br><br>
+In the afternoon they can be found at 
+<span class="orange"> [${foundNPC.AfternoonLocation}]</span>,
 ${foundNPC.AfternoonActivity}`;
 }
 
 if (foundNPC.NightLocation) {
-npcContent += `<br>
-In the evening they can be found at <span class="hotpink">
-[${foundNPC.NightLocation}]</span>,
+npcContent += `<br><br>
+In the evening they can be found at 
+<span class="hotpink"> [${foundNPC.NightLocation}]</span>,
  ${foundNPC.NightActivity}`;
 }
 

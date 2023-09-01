@@ -23,11 +23,9 @@ top: 20vh;
 right: 0.35vw; 
 width: 28.5vw;   
 height: 78vh;  
-
 color: white;
 font-size: 1.9vh; 
 background-color: transparent; 
-
 text-align: left;
 overflow: auto;
 scrollbar-color: black;
@@ -35,7 +33,6 @@ vertical-align: top;
 display: flex;
 flex-direction: column;
 resize: none;
-white-space: pre-line; 
 text-align: left;
 }
 

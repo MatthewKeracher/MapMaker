@@ -86,22 +86,22 @@ const Monsters = {
       
       const monsterStats = [
        
-      `<h2><span class="hotpink">${contentId.toUpperCase()}</span></h2>\n`,
-      `${monster.Type}\n\n`,
+      `<h2><span class="hotpink">${contentId.toUpperCase()}</span></h2><br>`,
+      `${monster.Type}<br><br>`,
       
-      `<span class="hotpink"># App:</span> ${monster.Appearing};\n`,
-      `<span class="hotpink">Morale:</span> ${monster.Morale};\n`,
-      `<span class="hotpink">Movement:</span> ${monster.Mvmt};\n`,
-      `<span class="hotpink">Armour Class:</span> ${monster.AC};\n`,
-      `<span class="hotpink">Hit Dice:</span> ${monster.HD};\n`,
-      `<span class="hotpink">Hit Dice Range:</span> ${monster.HDSort};\n`,
-      `<span class="hotpink">No. Attacks:</span> ${monster.Attacks};\n`,
-      `<span class="hotpink">Damage:</span> ${monster.Damage};\n`,          
-      `<span class="hotpink">Special:</span> ${monster.Special || "None"};\n`,
-      `<span class="hotpink">Save As:</span> ${monster["Save As "]};\n`,
-      `<span class="hotpink">Treasure:</span> ${monster.Treasure || "None"};\n`,
-      `<span class="hotpink">Experience Points:</span> ${monster.XP};\n\n `,
-      `<span class="hotpink">Description:</span> \n\n ${monster.Description.replace(/\./g, '.\n\n')}`,
+      `<span class="hotpink"># App:</span> ${monster.Appearing};<br>`,
+      `<span class="hotpink">Morale:</span> ${monster.Morale};<br>`,
+      `<span class="hotpink">Movement:</span> ${monster.Mvmt};<br>`,
+      `<span class="hotpink">Armour Class:</span> ${monster.AC};<br>`,
+      `<span class="hotpink">Hit Dice:</span> ${monster.HD};<br>`,
+      `<span class="hotpink">Hit Dice Range:</span> ${monster.HDSort};<br>`,
+      `<span class="hotpink">No. Attacks:</span> ${monster.Attacks};<br>`,
+      `<span class="hotpink">Damage:</span> ${monster.Damage};<br>`,          
+      `<span class="hotpink">Special:</span> ${monster.Special || "None"};<br>`,
+      `<span class="hotpink">Save As:</span> ${monster["Save As "]};<br>`,
+      `<span class="hotpink">Treasure:</span> ${monster.Treasure || "None"};<br>`,
+      `<span class="hotpink">Experience Points:</span> ${monster.XP};<br><br> `,
+      `<span class="hotpink">Description:</span> <br><br> ${monster.Description.replace(/\./g, '.<br><br>')}`,
       
       ];
       
