@@ -119,7 +119,7 @@ const MiscItem = miscArray.find(item => item.square === contentId);
     const miscInfo = [ 
       
     `<br><span class="misc">${MiscItem.square.toUpperCase()}</span><br><br>
-    ${withMonsters}`]
+    <span class="withbreak">${withMonsters}</span>`]
 
     extraContent.innerHTML = miscInfo;
   } else {
@@ -180,7 +180,7 @@ showExtraContent() {
       
     });
 
-    expandableElement.addEventListener('mouseleave', () => {
+    extraInfo.addEventListener('mouseleave', () => {
       extraInfo.classList.remove('showExtraInfo');
     });
   });

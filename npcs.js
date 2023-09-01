@@ -237,8 +237,7 @@ generateNPCStory(npc, locationName,phaseName) {
 let story = `<br>`;
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
-${npc.occupation} is here. (${npc.name})
-</span>`
+${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </span>`
 
 if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
 story += `   They are currently ${npc.MorningActivity} \n`;
@@ -277,30 +276,23 @@ npcContent += `<br><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.t
 }
 
 if (foundNPC.str) {
-npcContent += `<br>
-<span class="hotpink"> STR: </span> ${foundNPC.str}
-<span class="hotpink"> DEX: </span> ${foundNPC.dex}
-<span class="hotpink"> INT: </span> ${foundNPC.int}
-<span class="hotpink"> WIS: </span> ${foundNPC.wis}
-<span class="hotpink"> CON: </span> ${foundNPC.con}
-<span class="hotpink"> CHA: </span> ${foundNPC.cha}
+npcContent += `<br><br>
+<span class="hotpink"> STR: </span> ${foundNPC.str} <br>
+<span class="hotpink"> DEX: </span> ${foundNPC.dex} <br>
+<span class="hotpink"> INT: </span> ${foundNPC.int} <br>
+<span class="hotpink"> WIS: </span> ${foundNPC.wis} <br>
+<span class="hotpink"> CON: </span> ${foundNPC.con} <br>
+<span class="hotpink"> CHA: </span> ${foundNPC.cha} <br>
 `
 }
 
-if (foundNPC.physicalAppearance && foundNPC.physicalAppearance !== "undefined") {
-npcContent += `<br><br>${foundNPC.physicalAppearance}`;
+if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
+npcContent += `<br><br><span class="withbreak">${foundNPC.Backstory}</span>`;
 }
 
-if (foundNPC.emotionalAppearance && foundNPC.emotionalAppearance !== "undefined") {
-npcContent += `<br><br>${foundNPC.emotionalAppearance}`;
-}
-
-if (foundNPC.socialAppearance && foundNPC.socialAppearance !== "undefined") {
-npcContent += `<br><br>${foundNPC.socialAppearance}`;
-}
 
 if (foundNPC.MorningLocation) {
-npcContent += `<br><br>
+npcContent += `<br>
 In the morning they can be found at
 <span class="lime">[${foundNPC.MorningLocation}]</span>,
 ${foundNPC.MorningActivity}`;
