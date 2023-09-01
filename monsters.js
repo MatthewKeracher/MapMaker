@@ -28,7 +28,7 @@ const Monsters = {
           const text = event.target.value;
           const cursorPosition = event.target.selectionStart;
       
-          const openBraceIndex = text.lastIndexOf('{', cursorPosition);
+          const openBraceIndex = text.lastIndexOf('*', cursorPosition);
           if (openBraceIndex !== -1) {
             const searchText = text.substring(openBraceIndex + 1, cursorPosition);
       
@@ -58,20 +58,36 @@ const Monsters = {
       },
 
       async getMonsters(locationText) {
-        const curlyBrackets = /\{([^}]+)\}/g;
+        const asteriskBrackets = /\*([^*]+)\*/g;
         const monsters = await Monsters.loadMonstersArray();
-      
-        return locationText.replace(curlyBrackets, (match, monsterName) => {
+    
+        return locationText.replace(asteriskBrackets, (match, monsterName) => {
             const monster = monsters.monsters[monsterName];
-      
+    
             if (monster) {
                 return `<span class="expandable monster" data-content-type="monster" divId="${monsterName}">${monsterName.toUpperCase()}</span>`;
             } else {
                 console.log(`Monster not found: ${monsterName}`);
-                return match; 
+                return match;
             }
         });
-      },
+    },
+
+    async extraMonsters(contentId) {
+      const asteriskBrackets = /\*([^*]+)\*/g;
+      const monsters = await Monsters.loadMonstersArray();
+  
+      return contentId.replace(asteriskBrackets, (match, monsterName) => {
+          const monster = monsters.monsters[monsterName];
+          
+          if (monster) {
+              return this.addMonsterInfo(monsterName);
+          } else {
+              console.log(`Monster not found: ${monsterName}`);
+              return match;
+          }
+      });
+  },
            
       
       async addMonsterInfo(contentId) {

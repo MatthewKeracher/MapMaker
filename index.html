@@ -74,8 +74,6 @@
 
 <div class="npcFormContainer">
 
-<p>Use this form to create a non-player character (NPC)</p>
-
 <label for="npcName">Full or Unique Name:</label>
 <input class="smallField" type="textarea" id="npcName" name="npcName" required>
 
@@ -83,13 +81,18 @@
 <input class="smallField" type="textarea" id="npcOccupation" name="npcOccupation"
 placeholder="What do other people know them as?">
 
-<p>Assign the NPC to a routine, so that they can be found in locations at certain times.</p>
+<br>
+
+<label for="npcBackStory">Backstory:</label>
+<textarea class="largeField" type="textarea" id="npcBackStory" name="npcBackStory" 
+placeholder="Put any other information about this NPC here."></textarea>
+
+<br>
 
 <label for="MorningLocation">Morning Location:</label>
 <select class="smallSelect" id="MorningLocation" required>                    
 </select>
 
-<label for="MorningActivity">They are currently...</label>
 <input class="smallField" type="textarea" id="MorningActivity" name="MorningActivity"
 placeholder="What do the normally do here? They are...">
 
@@ -97,7 +100,6 @@ placeholder="What do the normally do here? They are...">
 <select class="smallSelect" id="AfternoonLocation">                    
 </select>
 
-<label for="AfternoonActivity">They are currently...</label>
 <input class="smallField" type="textarea" id="AfternoonActivity" name="AfternoonActivity"
 placeholder="What do the normally do here? They are...">
 
@@ -105,64 +107,49 @@ placeholder="What do the normally do here? They are...">
 <select class="smallSelect" id="NightLocation">                    
 </select>
 
-<label for="NightActivity">They are currently...</label>
 <input class="smallField" type="textarea" id="NightActivity" name="NightActivity"
 placeholder="What do the normally do here? They are...">
 
 <br>
-
-<p>If necessary, enter the NPC's stats here:</p>
+<br>
 
 <label for="npcLevel">Level:</label>
 <input class="stat" type="number" id="npcLevel" name="npcLevel">
 
 <label for="npcClass">Class:</label>
-<input class="halfField" type="textarea" id="npcClass" name="npcClass" required>
+<input class="halfField" type="textarea" id="npcClass" name="npcClass">
 
-<label for="STR">Strength:</label>
-<input class="stat" type="number" id="STR" name="STR"><br>
+<br>
 
-<label for="DEX">Dexterity:</label>
-<input class="stat" type="number" id="DEX" name="DEX"><br>
-
-<label for="INT">Intelligence:</label>
-<input class="stat" type="number" id="INT" name="INT"><br>
-
-<label for="WIS">Wisdom:</label>
-<input class="stat" type="number" id="WIS" name="WIS"><br>
-
-<label for="CON">Constitution:</label>
-<input class="stat" type="number" id="CON" name="CON"><br>
-
-<label for="CHA">Charisma:</label>
-<input class="stat" type="number" id="CHA" name="CHA">
-
-
-
-<p>Additional Information about the NPC:</p>
-
-<label for="npcPhysicalAppearance">Physical Character:</label>
-<textarea class="largeField" type="textarea" id="npcPhysicalAppearance" name="npcPhysicalAppearance" 
-placeholder="What does this NPC look like; what details should the player-characters be presented with?"></textarea>        
-
-<label for="npcEmotionalAppearance">Emotional Character:</label>
-<textarea class="largeField" type="textarea" id="npcEmotionalAppearance" name="npcEmotionalAppearance" 
-placeholder="Describe the internal emotional state of this NPC. What is their usual disposition?"></textarea>        
-
-<label for="npcSocialAppearance">Social Character:</label>
-<textarea class="largeField" type="textarea" id="npcSocialAppearance" name="npcSocialAppearance" 
-placeholder="How does this NPC act socially? Are they outgoing or reserved; do people know them in just one role, or many?"></textarea>        
-
-
+<div class="stats-container">
+    <div class="leftStats">
+        <label for="STR">Strength:</label>
+        <input class="stat" type="number" id="STR" name="STR">
+        
+        <label for="DEX">Dexterity:</label>
+        <input class="stat" type="number" id="DEX" name="DEX">
+        
+        <label for="INT">Intelligence:</label>
+        <input class="stat" type="number" id="INT" name="INT">
+    </div>
+    <div class="rightStats">
+        <label for="WIS">Wisdom:</label>
+        <input class="stat" type="number" id="WIS" name="WIS">
+        
+        <label for="CON">Constitution:</label>
+        <input class="stat" type="number" id="CON" name="CON">
+        
+        <label for="CHA">Charisma:</label>
+        <input class="stat" type="number" id="CHA" name="CHA">
+    </div>
 </div>
-  
+</div>
+
 </form>
 
 <form id="tableForm">
 
 <div class="topTable">       
-
-
 
 <label for="numRows">Rows:</label>
 <input type="number" id="numRows" value=30 name="numRows" min="1" required><br><br>

@@ -47,10 +47,8 @@ npcForm: document.querySelector('.npcForm'),
     CON: document.getElementById('CON'),
     CHA: document.getElementById('CHA'),
 
-    npcPhysicalAppearance: document.getElementById('npcPhysicalAppearance'),
-    npcEmotionalAppearance: document.getElementById('npcEmotionalAppearance'),
-    npcSocialAppearance: document.getElementById('npcSocialAppearance'),
-
+    npcBackStory: document.getElementById('npcBackStory'),
+   
 //Table
 tableForm: document.getElementById('tableForm'),
 

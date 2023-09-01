@@ -173,11 +173,8 @@ for (const npc of NPCs.npcArray) {
 //Remove or Add editContainer contents depending on editPage no.
 pageChange(newPage){
 
-
-
 NPCs.fixDisplay();
-
-
+console.log(newPage)
 
 switch (newPage) {
 case 1:
@@ -189,7 +186,6 @@ Ref.textLocation.style.display = "flex";
 
 //Hide
 Ref.npcForm.style.display = "none"
-
 Ref.tableForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 break;
@@ -201,10 +197,8 @@ Ref.npcForm.style.display = "flex"
 
 //Hide
 Ref.editLocationName.style.display  = "none";
-
 Ref.textLocationLabel.style.display = "none";
 Ref.textLocation.style.display = "none";
-
 Ref.tableForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 
@@ -231,7 +225,6 @@ case 4:
 //Show
 Ref.AmbienceContainer.style.display = "flex";
 
-
 //Hide
 Ref.npcForm.style.display = "none"
 Ref.tableForm.style.display = "none";
@@ -239,12 +232,7 @@ Ref.editLocationName.style.display  = "none";
 Ref.textLocationLabel.style.display = "none";
 Ref.textLocation.style.display = "none";
 
-
-
-
 break;
-
-
 
 default:
 // Handle any other cases

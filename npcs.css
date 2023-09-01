@@ -22,7 +22,7 @@ height: 85vh;
 }
 
 #npcForm textarea{
-height: 15vh;
+height: 50vh;
 width: 28vw;
 margin: 1vh;
 font-size: 2vh;
@@ -62,10 +62,29 @@ padding: 0.8vh;
 background-color: black;
 }
 
-/* Individual stat fields */
-.stat {
-flex: 1; /* Equal width for both columns */
-margin: 0 1vh; /* Add space between columns */
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    width: 20vw; /* Adjust the total width as needed */
+    margin: 0 auto;
+}
+
+.leftStats, .rightStats {
+    width: 45%;
+}
+
+.label-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem; /* Adjust the spacing between labels and inputs */
+}
+
+.label-container label {
+    width: 40%; /* Adjust the label width as needed */
+    text-align: right;
+    margin-right: 1rem; /* Add some spacing between label and input */
 }
 
 #npcForm input[type="number"] {
@@ -151,8 +170,8 @@ border: transparent;
 padding: 5px;
 position: fixed; /* Use fixed position for screen coordinates */
 top: 0;
-left: 55vw;
-width: 15vw;
+left: 45vw;
+width: 25vw;
 z-index: 1;
 overflow-y: auto;
 display: none;

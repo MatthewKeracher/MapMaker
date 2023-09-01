@@ -7,7 +7,8 @@ import Ref from "./ref.js";
 
 const Storyteller = {
 
-comboArray: [],
+miscArray: [],
+monsterArray:[],
 
 async changeContent(locationDiv) {
 
@@ -37,8 +38,9 @@ if (locationObject) {
 //name the returned locationObject data 
 const locationText = locationObject.player;
 
-this.comboArray = [];
-const squareCurly = this.getMisc(locationText, this.comboArray);
+this.miscArray = [];
+this.monsterArray = [];
+const squareCurly = this.getMisc(locationText, this.miscArray);
 
 const formattedLocation = await Monsters.getMonsters(squareCurly);
 //console.log(presentMonsters)
@@ -107,15 +109,17 @@ this.showExtraContent()
 };
 }, 
 
-addMiscInfo(contentId, comboArray) {
+async addMiscInfo(contentId, miscArray) {
 const extraContent = document.getElementById('extraContent');  
-const combo = comboArray.find(item => item.square === contentId);
+const MiscItem = miscArray.find(item => item.square === contentId);
+
   
-  if (combo) {
+  if (MiscItem) {
+    const withMonsters = await Monsters.extraMonsters(MiscItem.curly);
     const miscInfo = [ 
       
-    `<h2><span class="misc">${combo.square.toUpperCase()}</span></h2><br>
-    ${combo.curly}`]
+    `<br><span class="misc">${MiscItem.square.toUpperCase()}</span><br><br>
+    ${withMonsters}`]
 
     extraContent.innerHTML = miscInfo;
   } else {
@@ -134,9 +138,7 @@ getMisc(locationText, comboArray) {
     const square = match[1];
     const curly = match[2];
 
-    const replacement = `
-    <span class="expandable misc" data-content-type="misc" divId="${square}">
-    ${square.toUpperCase()}</span>`;
+    const replacement = `<span class="expandable misc" data-content-type="misc" divId="${square}">${square.toUpperCase()}</span>`;
 
     updatedText = updatedText.replace(match[0], replacement);
 
@@ -153,35 +155,37 @@ showExtraContent() {
   const extraInfo = document.querySelector('.extraInfo');
 
   expandableElements.forEach(expandableElement => {
-      expandableElement.addEventListener('mouseenter', (event) => {
-          extraInfo.classList.add('showExtraInfo');
+    expandableElement.addEventListener('mouseenter', (event) => {
+      
+      const contentType = event.target.getAttribute('data-content-type');
+      const contentId = event.target.getAttribute('divId');
+     
 
-          const contentType = event.target.getAttribute('data-content-type');
-          const contentId = event.target.getAttribute('divId');
+      switch (contentType) {
+        case 'npc':
+          NPCs.addNPCInfo(contentId); // Handle NPCs
+          break;
+        case 'monster':
+          Monsters.addMonsterInfo(contentId); // Handle monsters
+          break;
+        case 'misc':
+          this.addMiscInfo(contentId, this.miscArray);
+          break;
+        default:
+          console.log('Unknown content type');
+      }      
+    
 
-          switch (contentType) {
-              case 'npc':
-                  NPCs.addNPCInfo(contentId); // Handle NPCs
-                  break;
-              case 'monster':
-                  Monsters.addMonsterInfo(contentId); // Handle monsters
-                  break;
-                  case 'misc':
-                    this.addMiscInfo(contentId, this.comboArray);
-                    break;
-              default:
-                  console.log('Unknown content type');
-          }
-      });
+      extraInfo.classList.add('showExtraInfo');
 
-      extraInfo.addEventListener('mouseleave', () => {
-          extraInfo.classList.remove('showExtraInfo');
-      });
+      
+    });
+
+    expandableElement.addEventListener('mouseleave', () => {
+      extraInfo.classList.remove('showExtraInfo');
+    });
   });
 },
-
-
-
 
 
 generateSpreadsheetRows(spreadsheet) {

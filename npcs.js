@@ -34,9 +34,8 @@ wis: Ref.WIS.value,
 con: Ref.CON.value,
 cha: Ref.CHA.value,
 
-physicalAppearance: Ref.npcPhysicalAppearance.value,
-emotionalAppearance: Ref.npcEmotionalAppearance.value,
-socialAppearance: Ref.npcSocialAppearance.value
+Backstory: Ref.npcBackStory.value,
+
 };
 
 if (existingNPCIndex !== -1) {
@@ -58,8 +57,8 @@ const radiantDisplay = document.getElementById('radiantDisplay');
 
 try{
 if (Edit.editPage === 2) {
-imageContainer.style.width = "55vw"; 
-radiantDisplay.style.width = "55vw"; 
+imageContainer.style.width = "45vw"; 
+radiantDisplay.style.width = "45vw"; 
 }else{imageContainer.style.width = "70vw"; 
 radiantDisplay.style.width = "70vw"; 
 }}catch{}
@@ -100,7 +99,7 @@ const otherNPCs = [];
 
 for (const npc of NPCs.npcArray) {
 const npcNameDiv = document.createElement('div');
-npcNameDiv.textContent = npc.name;            
+npcNameDiv.textContent = npc.name +  ' [' + npc.occupation + ']';            
 
 // Colour code based on whether this is their Morning, Afternoon, or Night Location
 
@@ -148,10 +147,7 @@ document.getElementById('WIS').value = npc.wis;
 document.getElementById('CON').value = npc.con; 
 document.getElementById('CHA').value = npc.cha; 
 
-document.getElementById('npcPhysicalAppearance').value = npc.physicalAppearance;
-document.getElementById('npcEmotionalAppearance').value = npc.emotionalAppearance;
-document.getElementById('npcSocialAppearance').value = npc.socialAppearance;
-
+document.getElementById('npcBackStory').value = npc.Backstory;
 
 npcForm.style.display = 'flex'; // Display the npcForm
 });
@@ -245,16 +241,8 @@ npcContent += `<br>
 `
 }
 
-if (foundNPC.physicalAppearance && foundNPC.physicalAppearance !== "undefined") {
-npcContent += `<br><br><span class="withbreak"> ${foundNPC.physicalAppearance}</span>`;
-}
-
-if (foundNPC.emotionalAppearance && foundNPC.emotionalAppearance !== "undefined") {
-npcContent += `<br><br><span class="withbreak">${foundNPC.emotionalAppearance}</span>`;
-}
-
-if (foundNPC.socialAppearance && foundNPC.socialAppearance !== "undefined") {
-npcContent += `<br><br><span class="withbreak">${foundNPC.socialAppearance}</span>`;
+if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
+npcContent += `<br><br><span class="withbreak"> ${foundNPC.Backstory}</span>`;
 }
 
 if (foundNPC.MorningLocation) {

@@ -121,7 +121,7 @@ Ref.locationLabel.style.display = 'flex';
 //Switch Toolbars
 Ref.mainToolbar.style.display = 'flex';
 Ref.editToolbar.style.display = 'none';
-Ref.bottomToolbar.style.display = 'none';
+Ref.bottomToolbar.style.display = 'flex';
 
 // Remove the event listeners from each .selection element
 Ref.locationDivs.forEach((div) => {
