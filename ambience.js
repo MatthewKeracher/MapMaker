@@ -1,10 +1,13 @@
 import Edit from "./edit.js";
+import Ref from "./ref.js";
 
 const Ambience = {
 
     phase: 0,
     hour: 0,
     current: '',
+    genDesc: "",
+    senseDesc:"",
 
     async loadAmbienceArray() {
 
@@ -20,25 +23,27 @@ const Ambience = {
 
     },
 
-        simConDrop(){
+async getAmbience(){
 
-        //Simulate Click on Second Dropdown
-        const contextDropdown = document.getElementById("contextDropdown");
-        const event = new Event("change", { bubbles: true, cancelable: true });
+  Ambience.clock();
+  const Spring = Ref.mainAmbienceDropdown.value;
+  const Morning= Ref.secondAmbienceDropdown[Ambience.phase].value;
+  
+  //Within Random Selection, filter through.
+  const senses = ["sight", "smell", "touch", "feel"];
+  const chosenSense = senses[Ambience.hour];
+  const ambienceEntry = await this.loadAmbienceEntry(Spring, Morning);
+  
+  //Retain returned entry until next phase. Do not delete!
+  this.current = ambienceEntry; 
 
-        contextDropdown.dispatchEvent(event);
+  this.genDesc = "";
+  this.senseDesc = "";
 
-        },
+  this.genDesc = ambienceEntry.description
+  this.senseDesc = ambienceEntry[chosenSense]
 
-        simMainDrop(){
-
-        //Simulate Click on Second Dropdown
-        const mainDropdown = document.getElementById("mainAmbienceDropdown");
-        const event = new Event("change", { bubbles: true, cancelable: true });
-
-        mainDropdown.dispatchEvent(event);
-
-        },
+},     
 
     async initializeAmbienceDropdowns() {
         const ambienceArray = await this.loadAmbienceArray();
@@ -105,8 +110,7 @@ const Ambience = {
           option.textContent = value;
           dropdown.appendChild(option);
         });
-      }
-      ,
+      },
 
     populateDropdown(dropdown, options) {
         dropdown.innerHTML = ''; // Clear existing options
@@ -119,155 +123,25 @@ const Ambience = {
         });
     },
 
-    async clock(){
+    simConDrop(){
 
-        if(!Edit.editMode){
-        if(this.hour < 3){
-            this.hour = this.hour + 1;                
-        }else{
-        if(this.hour === 3){
-            console.log('New Phase')   
-            this.hour = 0;
-        if(this.phase === 2){
-            console.log('New Day')
-            this.phase = 0;    
-            }else{
-            this.phase = this.phase + 1;
-            }
-        }
-    }
+        //Simulate Click on Second Dropdown
+        const contextDropdown = document.getElementById("contextDropdown");
+        const event = new Event("change", { bubbles: true, cancelable: true });
 
-this.radiateDisplay();
+        contextDropdown.dispatchEvent(event);
 
-}},
+        },
 
-radiateDisplay(){
+        simMainDrop(){
 
-const overlay = document.getElementById('radiantDisplay');
-const radianceDropdown = document.getElementById('radianceDropdown').value;
+        //Simulate Click on Second Dropdown
+        const mainDropdown = document.getElementById("mainAmbienceDropdown");
+        const event = new Event("change", { bubbles: true, cancelable: true });
 
-if(radianceDropdown === 'exterior'){
-    switch (this.phase) {
-    case 0: // Morning
-    switch (this.hour) {
-        case 0: 
-        
-        overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-        overlay.style.opacity = "0.2";
+        mainDropdown.dispatchEvent(event);
 
-        break;
-
-        case 1: 
-        
-        overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-        overlay.style.opacity = "0.1";
-
-        break;
-
-        case 2: 
-        
-        overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-        overlay.style.opacity = "0.2";
-
-    
-        break;
-
-        case 3: 
-
-        overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-        overlay.style.opacity = "0.3";
-
-        break;
-
-            default:
-            break;
-        }
-    break;
-
-    case 1: // Afternoon
-        switch (this.hour) {
-            case 0: 
-        
-            overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-            overlay.style.opacity = "0.2";
-        
-            break;
-        
-            case 1: 
-            
-            overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.1";
-        
-            break;
-        
-            case 2: 
-            
-            overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.2";
-        
-        
-            break;
-        
-            case 3: 
-        
-            overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.3";
-        
-            break;
-
-        default:
-        break;
-        }
-    break;
-
-    case 2: // Night
-        switch (this.hour) {
-            case 0: 
-        
-            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.4";
-        
-            break;
-        
-            case 1: 
-            
-            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.5";
-        
-            break;
-        
-            case 2: 
-        
-            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.6";
-        
-        
-            break;
-        
-            case 3: 
-        
-            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-            overlay.style.opacity = "0.7";
-        
-            break;
-
-        default:
-        break;
-        }
-    break;
-
-    default:
-    break;
-    }
-}else{
-
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.5";
-
-}
-
-
-},
+        },
 
 
 async loadAmbienceEntry(main, second) {
@@ -302,6 +176,156 @@ return randomEntry;
 }}
 
 
+},
+
+async clock(){
+
+    if(!Edit.editMode){
+    if(this.hour < 3){
+        this.hour = this.hour + 1;                
+    }else{
+    if(this.hour === 3){
+        console.log('New Phase')   
+        this.hour = 0;
+    if(this.phase === 2){
+        console.log('New Day')
+        this.phase = 0;    
+        }else{
+        this.phase = this.phase + 1;
+        }
+    }
+}
+
+this.radiateDisplay();
+
+}},
+
+radiateDisplay(){
+
+    const overlay = document.getElementById('radiantDisplay');
+    const radianceDropdown = document.getElementById('radianceDropdown').value;
+    
+    if(radianceDropdown === 'exterior'){
+        switch (this.phase) {
+        case 0: // Morning
+        switch (this.hour) {
+            case 0: 
+            
+            overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+            overlay.style.opacity = "0.2";
+    
+            break;
+    
+            case 1: 
+            
+            overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+            overlay.style.opacity = "0.1";
+    
+            break;
+    
+            case 2: 
+            
+            overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+            overlay.style.opacity = "0.2";
+    
+        
+            break;
+    
+            case 3: 
+    
+            overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+            overlay.style.opacity = "0.3";
+    
+            break;
+    
+                default:
+                break;
+            }
+        break;
+    
+        case 1: // Afternoon
+            switch (this.hour) {
+                case 0: 
+            
+                overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+                overlay.style.opacity = "0.2";
+            
+                break;
+            
+                case 1: 
+                
+                overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.1";
+            
+                break;
+            
+                case 2: 
+                
+                overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.2";
+            
+            
+                break;
+            
+                case 3: 
+            
+                overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.3";
+            
+                break;
+    
+            default:
+            break;
+            }
+        break;
+    
+        case 2: // Night
+            switch (this.hour) {
+                case 0: 
+            
+                overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.4";
+            
+                break;
+            
+                case 1: 
+                
+                overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.5";
+            
+                break;
+            
+                case 2: 
+            
+                overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.6";
+            
+            
+                break;
+            
+                case 3: 
+            
+                overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+                overlay.style.opacity = "0.7";
+            
+                break;
+    
+            default:
+            break;
+            }
+        break;
+    
+        default:
+        break;
+        }
+    }else{
+    
+        overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+        overlay.style.opacity = "0.5";
+    
+    }
+    
+    
 },
 
 

@@ -54,8 +54,11 @@ tableForm: document.getElementById('tableForm'),
 
 //Ambience 
 AmbienceContainer: document.querySelector('.AmbienceContainer'),
-mainAmbience: document.getElementById("mainAmbienceDropdown"),
-allPhases: document.getElementById("secondAmbienceDropdown"),
+mainAmbienceDropdown: document.getElementById("mainAmbienceDropdown"),
+secondAmbienceDropdown: document.getElementById("secondAmbienceDropdown"),
+contextDropdown: document.getElementById("contextDropdown"),
+radianceDropdown: document.getElementById("radianceDropdown"),
+
 
 //Toolbars
 editToolbar: document.getElementById('editToolbar'),
