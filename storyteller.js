@@ -10,7 +10,28 @@ const Storyteller = {
 miscArray: [],
 monsterArray:[],
 
-getAmbience(){
+genDesc: "",
+senseDesc:"",
+
+async getAmbience(){
+
+  Ambience.clock();
+  const Spring = Ref.mainAmbience.value;
+  const Morning= Ref.allPhases[Ambience.phase].value;
+  
+  //Within Random Selection, filter through.
+  const senses = ["sight", "smell", "touch", "feel"];
+  const chosenSense = senses[Ambience.hour];
+  const ambienceEntry = await Ambience.loadAmbienceEntry(Spring, Morning);
+  
+  //Retain returned entry until next phase. Do not delete!
+  Ambience.current = ambienceEntry; 
+
+  this.genDesc = "";
+  this.senseDesc = "";
+
+  this.genDesc = ambienceEntry.description
+  this.senseDesc = ambienceEntry[chosenSense]
 
 
 },
@@ -19,17 +40,7 @@ async changeContent(locationDiv) {
 
 let Story = ``
 
-Ambience.clock();
-const Spring = Ref.mainAmbience.value;
-const Morning= Ref.allPhases[Ambience.phase].value;
-
-//Within Random Selection, filter through.
-const senses = ["sight", "smell", "touch", "feel"];
-const chosenSense = senses[Ambience.hour];
-const ambienceEntry = await Ambience.loadAmbienceEntry(Spring, Morning);
-
-//Retain returned entry until next phase. Do not delete!
-Ambience.current = ambienceEntry;  
+this.getAmbience(); 
 
 //take location name from object.
 const locationName = locationDiv.id;
@@ -55,8 +66,8 @@ const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
 Story += `
-${ambienceEntry.description}<br><br>
-${ambienceEntry[chosenSense]}<br><br>
+${this.genDesc}<br><br>
+${this.senseDesc}<br><br>
 <span class="withbreak">${formattedLocation}</span>
 `;
 
