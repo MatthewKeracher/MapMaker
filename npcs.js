@@ -46,7 +46,6 @@ searchNPC: function(searchText){
 
 },
 
-
 loadNPC: function(NPCArray) {
    
 const NPCoptionsList = document.getElementById('NPCoptionsList'); // Do not delete!!
@@ -123,6 +122,8 @@ fillNPCForm: function(npc, npcNameDiv){
 
 // Add click event listener to each NPC name
 npcNameDiv.addEventListener('click', () => {
+
+console.log(npc)
 
 Ref.npcName.value = npc.name;
 Ref.npcOccupation.value = npc.occupation;

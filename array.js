@@ -364,7 +364,7 @@ importCSV(file) {
         const parsedData = Papa.parse(content, { header: true }).data;
         let importedArray = parsedData;
 
-        const importDropdown = document.getElementById("importDropdown"); // Replace with your actual dropdown element
+        const importDropdown = document.getElementById("exportDropdown"); // Replace with your actual dropdown element
         const selectedValue = importDropdown.value;
 
         if (selectedValue === "NPCs") {
