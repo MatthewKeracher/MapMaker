@@ -10,6 +10,11 @@ const Storyteller = {
 miscArray: [],
 monsterArray:[],
 
+getAmbience(){
+
+
+},
+
 async changeContent(locationDiv) {
 
 let Story = ``
@@ -49,11 +54,7 @@ const spreadsheet = locationObject.spreadsheetData;
 const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
-let introText = 'It is a ' + Spring  + ' ' + Morning + '. You are at ' + location + '. ';
-
-
 Story += `
-${introText}<br><br>
 ${ambienceEntry.description}<br><br>
 ${ambienceEntry[chosenSense]}<br><br>
 <span class="withbreak">${formattedLocation}</span>
@@ -61,7 +62,7 @@ ${ambienceEntry[chosenSense]}<br><br>
 
 
 if (presentNPCs.length === 0) {
-Story += "There is nobody around.";
+Story += `<br> There is nobody around.`;
 } else {
 for (const npcWithStory of presentNPCs) {
 const npcStory = npcWithStory.story;

@@ -181,7 +181,6 @@ case 1:
 
 //Show
 Ref.editLocationName.style.display  = "flex";
-Ref.textLocationLabel.style.display = "flex";
 Ref.textLocation.style.display = "flex";
 
 //Hide
@@ -197,7 +196,6 @@ Ref.npcForm.style.display = "flex"
 
 //Hide
 Ref.editLocationName.style.display  = "none";
-Ref.textLocationLabel.style.display = "none";
 Ref.textLocation.style.display = "none";
 Ref.tableForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
@@ -215,7 +213,6 @@ Ref.tableForm.style.display = "flex";
 //Hide
 Ref.npcForm.style.display = "none"
 Ref.editLocationName.style.display  = "none";
-Ref.textLocationLabel.style.display = "none";
 Ref.textLocation.style.display = "none";
 
 Ref.AmbienceContainer.style.display = "none";
@@ -229,7 +226,6 @@ Ref.AmbienceContainer.style.display = "flex";
 Ref.npcForm.style.display = "none"
 Ref.tableForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
-Ref.textLocationLabel.style.display = "none";
 Ref.textLocation.style.display = "none";
 
 break;

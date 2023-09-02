@@ -22,6 +22,7 @@
     color: hotpink;
     padding: 1vh;
     display: none;
+    overflow: hidden;
     flex-direction: row;
 }
 
@@ -70,14 +71,14 @@
   
 
 .editBox {            
-    height: 65vh;
+    height: 85vh;
+    border: 0.4vh solid transparent; 
     margin: 1vh; 
-    font-size: 2vh;
-    border: 0.4vh solid hotpink; 
+    font-size: 1.9vh;
     text-align: left;
     vertical-align: top;    
     background-color: transparent; 
-    color: orange;
+    color: bisque;
     padding: 1vh;
 
 }

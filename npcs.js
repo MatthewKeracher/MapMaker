@@ -241,15 +241,15 @@ story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name
 ${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </span>`
 
 if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
-story += `   They are currently ${npc.MorningActivity} \n`;
+story += `   is currently ${npc.MorningActivity} \n`;
 }
 
 if (phaseName === 'Afternoon'  && npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
-story += `   They are currently ${npc.AfternoonActivity} \n`;
+story += `   is currently ${npc.AfternoonActivity} \n`;
 }
 
 if (phaseName === 'Night'  && npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
-story += `   They are currently ${npc.NightActivity} \n`;
+story += `   is currently ${npc.NightActivity} \n`;
 }
 
 //console.log(story)

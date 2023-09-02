@@ -15,7 +15,6 @@ Storyteller: document.getElementById('Storyteller'),
 EditorContainer: document.querySelector('.EditorContainer'),
 editLocationName: document.querySelector('.editLocationName'),
 
-textLocationLabel: document.getElementById('textLocationLabel'),
 textLocation: document.getElementById('textLocation'),
 
 optionsListMonster: document.getElementById('MonsteroptionsList'),
