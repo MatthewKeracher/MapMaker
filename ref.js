@@ -52,13 +52,16 @@ NPCoptionslist: document.getElementById('NPCoptionslist'),
 //Table
 tableForm: document.getElementById('tableForm'),
 
-//Ambience 
+//Ambience
 AmbienceContainer: document.querySelector('.AmbienceContainer'),
-mainAmbienceDropdown: document.getElementById("mainAmbienceDropdown"),
-secondAmbienceDropdown: document.getElementById("secondAmbienceDropdown"),
-contextDropdown: document.getElementById("contextDropdown"),
+//Interior or Exterior 
 radianceDropdown: document.getElementById("radianceDropdown"),
-
+//Hommlet or Dungeon
+contextDropdown: document.getElementById("contextDropdown"),
+//Spring, Summer, Autumn, Winter
+mainAmbienceDropdown: document.getElementById("mainAmbienceDropdown"),
+//Morning, Afternoon, Night
+secondAmbienceDropdown: document.getElementById("secondAmbienceDropdown"),
 
 //Toolbars
 editToolbar: document.getElementById('editToolbar'),
