@@ -323,17 +323,18 @@ extraContent.innerHTML = `NPC not found`;
 
 fixDisplay: function(){
 
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-
-try{
-if (Edit.editPage === 2) {
-imageContainer.style.width = "45vw"; 
-radiantDisplay.style.width = "45vw"; 
-}else{imageContainer.style.width = "70vw"; 
-radiantDisplay.style.width = "70vw"; 
-}}catch{}
-},
+    const imageContainer = document.querySelector('.image-container');
+    const radiantDisplay = document.getElementById('radiantDisplay');
+    
+        if (Edit.editPage === 2) {
+            imageContainer.style.width = "45vw";
+            radiantDisplay.style.width = "45vw";
+        } else {
+            imageContainer.style.width = "70vw";
+            radiantDisplay.style.width = "70vw";
+        }
+    
+}
 
 };
 

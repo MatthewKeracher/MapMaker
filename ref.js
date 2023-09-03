@@ -1,3 +1,5 @@
+import Edit from "./edit.js";
+
 const Ref = {
 
 //Map
@@ -86,6 +88,7 @@ bottomToolbar: document.getElementById('bottomToolbar'),
 exportData: document.getElementById('exportData'),
 importData: document.getElementById('importData'),
 csvFileInput: document.getElementById('csvFileInput'),
+
 
 };
 

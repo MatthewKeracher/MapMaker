@@ -31,13 +31,18 @@ const Monsters = {
           const openBraceIndex = text.lastIndexOf('*', cursorPosition);
           if (openBraceIndex !== -1) {
             const searchText = text.substring(openBraceIndex + 1, cursorPosition);
-      
+            
             const filteredMonsters = Object.keys(monsters).filter(monsterName =>
               monsterName.toLowerCase().includes(searchText.toLowerCase())
             );
-      
+
+            //Show ExtraContent      
             Ref.optionsListMonster.style.display = 'block';
             Ref.optionsListMonster.innerHTML = ''; // Clear existing content
+            const imageContainer = document.querySelector('.image-container');
+            const radiantDisplay = document.getElementById('radiantDisplay');
+            imageContainer.style.width = "45vw";
+            radiantDisplay.style.width = "45vw";
       
             filteredMonsters.forEach(monsterName => {
               const option = document.createElement('div');
@@ -53,6 +58,8 @@ const Monsters = {
           } else {
             Ref.optionsListMonster.style.display = 'none';
             Ref.optionsListMonster.innerHTML = '';
+            imageContainer.style.width = "70vw";
+            radiantDisplay.style.width = "70vw";
           }
         });
       },

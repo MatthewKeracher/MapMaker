@@ -1,6 +1,9 @@
 import Edit from "./edit.js";
 import Ref from "./ref.js";
 
+
+
+
 const Ambience = {
 
 phase: 0,
@@ -8,20 +11,6 @@ hour: 0,
 current: '',
 genDesc: "",
 senseDesc:"",
-
-async loadAmbienceArray() {
-
-try {
-const response = await fetch('ambience.json'); // Adjust the path if needed
-const data = await response.json();
-return data.ambience;
-
-} catch (error) {
-console.error('Error loading ambience array:', error);
-return [];
-}
-
-},
 
 async getAmbience(){
 
@@ -43,7 +32,21 @@ this.senseDesc = "";
 this.genDesc = ambienceEntry.description
 this.senseDesc = ambienceEntry[chosenSense]
 
-},     
+}, 
+
+async loadAmbienceArray() {
+
+try {
+const response = await fetch('ambience.json'); // Adjust the path if needed
+const data = await response.json();
+return data.ambience;
+
+} catch (error) {
+console.error('Error loading ambience array:', error);
+return [];
+}
+
+},    
 
 async initializeAmbienceDropdowns() {
 

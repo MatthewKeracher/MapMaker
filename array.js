@@ -52,8 +52,8 @@ locationArray: [],
 
                 // Create the main object to be exported
                 const exportData = {
-                locations: this.locationArray,
                 generalInformation: generalInfo,
+                locations: this.locationArray,                
                 npcArray: NPCs.npcArray  // Add the npcArray here
                 };
 
