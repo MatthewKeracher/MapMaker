@@ -26,6 +26,22 @@ extraInfo: document.querySelector('.extraInfo'),
 //monsterForm
 monsterForm: document.querySelector('.monsterForm'),
 
+monsterName: document.getElementById('monsterName'),
+monsterType: document.getElementById('monsterType'),
+monsterAppearing: document.getElementById('monsterAppearing'),
+monsterMorale: document.getElementById('monsterMorale'),
+monsterMovement: document.getElementById('monsterMovement'),
+monsterAC: document.getElementById('monsterAC'),
+monsterHD: document.getElementById('monsterHD'),
+monsterHDRange: document.getElementById('monsterHDRange'),
+monsterAttacks: document.getElementById('monsterAttacks'),
+monsterDamage: document.getElementById('monsterDamage'),
+monsterSpecial: document.getElementById('monsterSpecial'),
+monsterSaveAs: document.getElementById('monsterSaveAs'),
+monsterTreasure: document.getElementById('monsterTreasure'),
+monsterXP: document.getElementById('monsterXP'),
+monsterDescription: document.getElementById('monsterDescription'),
+
 //npcForm
 npcForm: document.querySelector('.npcForm'),
 

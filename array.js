@@ -2,6 +2,7 @@ import Ambience from "./ambience.js";
 import Edit from "./edit.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
+import Monsters from "./monsters.js";
 //import Papa from 'papaparse';
 
 const Array = {
@@ -54,7 +55,8 @@ locationArray: [],
                 const exportData = {
                 generalInformation: generalInfo,
                 locations: this.locationArray,                
-                npcArray: NPCs.npcArray  // Add the npcArray here
+                npcArray: NPCs.npcArray,
+                monstersArray: Monsters.monstersArray
                 };
 
                 const json = JSON.stringify(exportData, null, 2);

@@ -2,6 +2,7 @@ import Ref from "./ref.js";
 import Array from "./array.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
+import Monsters from "./monsters.js";
 
 const Edit = {
 
@@ -186,6 +187,7 @@ case 3:
 
 //Show
 Ref.monsterForm.style.display = "flex";
+//Monsters.loadMonsterList();
 
 //Hide
 Ref.npcForm.style.display = "none"

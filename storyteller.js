@@ -65,13 +65,13 @@ this.showExtraContent()
 };
 }, 
 
-async addMiscInfo(contentId, miscArray) {
+addMiscInfo(contentId, miscArray) {
 const extraContent = document.getElementById('extraContent');  
 const MiscItem = miscArray.find(item => item.square === contentId);
 
   
   if (MiscItem) {
-    const withMonsters = await Monsters.extraMonsters(MiscItem.curly);
+    const withMonsters = Monsters.extraMonsters(MiscItem.curly);
     const miscInfo = [ 
       
     `<br><span class="misc">${MiscItem.square.toUpperCase()}</span><br><br>

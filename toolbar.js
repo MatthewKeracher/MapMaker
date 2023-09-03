@@ -14,6 +14,7 @@ init() {
 
 Ambience.initializeAmbienceDropdowns();
 Monsters.addPredictiveMonsters();
+Monsters.loadMonstersArray();
 NPCs.addNPCSearch();
 
 //mainToolbar

@@ -13,41 +13,8 @@ AfternoonNPCs : [],
 NightNPCs : [],
 otherNPCs : [],
 
-addNPCSearch: function(){
-
-    Ref.npcName.addEventListener('input', (event) => {
-        let searchText = event.target.value.toLowerCase();
-    
-        // Check if the searchText contains '{'
-        if (searchText.includes('{')) {
-            // Remove '{' from the searchText
-            searchText = searchText.replace('{', '');
-    
-            // Call the searchNPC function
-            this.searchNPC(searchText);
-        }
-    });
-    
-},
-
-searchNPC: function(searchText){
-
- this.npcSearchArray = [];
-
- this.npcSearchArray = this.npcArray.filter((npc) => {
-     const npcName = npc.name.toLowerCase();
-     const npcOccupation = npc.occupation.toLowerCase();
-     
-     // Check if either the name or occupation contains the search text
-     return npcName.includes(searchText.toLowerCase()) || npcOccupation.includes(searchText.toLowerCase());
- });
-
- this.loadNPC(this.npcSearchArray);
-
-},
-
 loadNPC: function(NPCArray) {
-   
+
 const itemList = document.getElementById('itemList'); // Do not delete!!
 
 // Clear the existing content
@@ -155,6 +122,8 @@ Ref.npcForm.style.display = 'flex'; // Display the npcForm
 },
 
 saveNPC: function() {
+
+//if not empty
 
 // Check if an NPC with the same name already exists
 const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName.value);
@@ -321,25 +290,58 @@ extraContent.innerHTML = `NPC not found`;
 }
 },
 
+addNPCSearch: function(){
+
+Ref.npcName.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
+
+// Check if the searchText contains '{'
+if (searchText.includes('{')) {
+// Remove '{' from the searchText
+searchText = searchText.replace('{', '');
+
+// Call the searchNPC function
+this.searchNPC(searchText);
+}
+});
+
+},
+
+searchNPC: function(searchText){
+
+this.npcSearchArray = [];
+
+this.npcSearchArray = this.npcArray.filter((npc) => {
+const npcName = npc.name.toLowerCase();
+const npcOccupation = npc.occupation.toLowerCase();
+
+// Check if either the name or occupation contains the search text
+return npcName.includes(searchText.toLowerCase()) || npcOccupation.includes(searchText.toLowerCase());
+});
+
+this.loadNPC(this.npcSearchArray);
+
+},
+
 fixDisplay: function(){
 
-    const imageContainer = document.querySelector('.image-container');
-    const radiantDisplay = document.getElementById('radiantDisplay');
-    
+const imageContainer = document.querySelector('.image-container');
+const radiantDisplay = document.getElementById('radiantDisplay');
+
 try{
 
-        if (Edit.editPage === 2) {
-            imageContainer.style.width = "45vw";
-            radiantDisplay.style.width = "45vw";
-            Ref.itemList.style.display = "block";
-        } else {
-            imageContainer.style.width = "70vw";
-            radiantDisplay.style.width = "70vw";
-            Ref.itemList.style.display = "none";
-        }
+if (Edit.editPage === 2 | Edit.editPage === 3) {
+imageContainer.style.width = "45vw";
+radiantDisplay.style.width = "45vw";
+Ref.itemList.style.display = "block";
+} else {
+imageContainer.style.width = "70vw";
+radiantDisplay.style.width = "70vw";
+Ref.itemList.style.display = "none";
+}
 
-    }catch{}
-    
+}catch{}
+
 }
 
 };
