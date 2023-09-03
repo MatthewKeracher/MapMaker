@@ -25,7 +25,7 @@
 
 <button class= "button" id="mapButton"  >[M]ap</button>
 <!-- Add this hidden input element -->
-    <input type="file" id="fileInput" style="display: none">
+<input type="file" id="fileInput" style="display: none">
 <button class= "button" id="dataButton" >[D]ata</button>
 <button class= "button" id="addButton"  >[A]dd</button>
 <button class= "button" id="editButton"  >[E]dit</button>
@@ -34,7 +34,7 @@
 </div>
 
 <div class = "extraInfo" id="extraInfo">
-    <div class="extraContent" id="extraContent"></div>
+<div class="extraContent" id="extraContent"></div>
 </div>
 
 <div class = "editToolbar" id="editToolbar"> 
@@ -48,9 +48,9 @@
 
 <main>
 
-    <div class="center-screen">
-        <img id="Banner" src="BannerLogo.gif" alt="Your GIF">
-    </div>
+<div class="center-screen">
+<img id="Banner" src="BannerLogo.gif" alt="Your GIF">
+</div>
 
 <div class="sidebar">
 
@@ -60,19 +60,14 @@
 
 <div class="EditorContainer">                         
 
-    <textarea class="editLocationName" id="editLocationName"></textarea>             
+<textarea class="editLocationName" id="editLocationName"></textarea>             
 
-<textarea class="editBox" id="textLocation" 
-placeholder=
-"[You see a chest]{inside there is 1gp}
+<textarea class="editBox" id="textLocation"></textarea>  
 
-There is a *goblin* nearby."></textarea>  
-
-<div id="MonsteroptionsList"></div>
+<div id="itemList"></div>
 
 <form id="npcForm" class="npcForm">
 
-<div id="NPCoptionsList"></div>
 
 <div class="npcFormContainer">
 
@@ -124,50 +119,31 @@ placeholder="What do the normally do here? They are...">
 <br>
 
 <div class="stats-container">
-    <div class="leftStats">
-        <label for="STR">Strength:</label>
-        <input class="stat" type="number" id="STR" name="STR">
-        
-        <label for="DEX">Dexterity:</label>
-        <input class="stat" type="number" id="DEX" name="DEX">
-        
-        <label for="INT">Intelligence:</label>
-        <input class="stat" type="number" id="INT" name="INT">
-    </div>
-    <div class="rightStats">
-        <label for="WIS">Wisdom:</label>
-        <input class="stat" type="number" id="WIS" name="WIS">
-        
-        <label for="CON">Constitution:</label>
-        <input class="stat" type="number" id="CON" name="CON">
-        
-        <label for="CHA">Charisma:</label>
-        <input class="stat" type="number" id="CHA" name="CHA">
-    </div>
+<div class="leftStats">
+<label for="STR">Strength:</label>
+<input class="stat" type="number" id="STR" name="STR">
+
+<label for="DEX">Dexterity:</label>
+<input class="stat" type="number" id="DEX" name="DEX">
+
+<label for="INT">Intelligence:</label>
+<input class="stat" type="number" id="INT" name="INT">
+</div>
+<div class="rightStats">
+<label for="WIS">Wisdom:</label>
+<input class="stat" type="number" id="WIS" name="WIS">
+
+<label for="CON">Constitution:</label>
+<input class="stat" type="number" id="CON" name="CON">
+
+<label for="CHA">Charisma:</label>
+<input class="stat" type="number" id="CHA" name="CHA">
 </div>
 </div>
-
-</form>
-
-<form id="tableForm">
-
-<div class="topTable">       
-
-<label for="numRows">Rows:</label>
-<input type="number" id="numRows" value=30 name="numRows" min="1" required><br><br>
-
-<label for="numCols">Columns:</label>
-<input type="number" id="numCols" value=5 name="numCols" min="1" required><br><br>
-
-</div>
-
-<div class="bottomTable">  
-
-<div id="tableContainer"></div>
-
 </div>
 
 </form>
+
 
 <div class="AmbienceContainer"> 
 

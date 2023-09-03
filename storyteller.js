@@ -24,7 +24,7 @@ Ref.editLocationName.value   = locationName;
 
 if (locationObject) {
 //name the returned locationObject data 
-const locationText = locationObject.player;
+const locationText = locationObject.description;
 
 this.miscArray = [];
 this.monsterArray = [];
@@ -33,7 +33,6 @@ const squareCurly = this.getMisc(locationText, this.miscArray);
 const formattedLocation = await Monsters.getMonsters(squareCurly);
 //console.log(presentMonsters)
 
-const spreadsheet = locationObject.spreadsheetData;
 const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
@@ -52,12 +51,6 @@ Story += `<span class="withbreak">${npcStory}</span>`;
 }
 }
 
-//ADD TABLE SO DOESN'T GET FORMATTED
-//rawStory +=`
-{/* <table class="storyTable"> 
-<tbody>
-${this.generateSpreadsheetRows(spreadsheet)}
-</tbody></table>` */}
 
 //Apply formattedStory to Storyteller
 Ref.Storyteller.innerHTML = Story;
@@ -65,25 +58,6 @@ Ref.Storyteller.innerHTML = Story;
 //Update Editor Content
 Ref.textLocation.value = locationText;
 
-//Clear Table
-Edit.generateTable();
-
-
-try {
-// Populate the spreadsheet cells with the saved content
-const spreadsheetCells = document.querySelectorAll('.spreadsheet td input');
-spreadsheetCells.forEach(input => {
-const cell = input.parentNode;
-const row = cell.parentNode.rowIndex //- 1;
-const col = cell.cellIndex //- 1;
-const cellData = spreadsheet.find(data => data.row === row && data.col === col);
-if (cellData) {
-input.value = cellData.content;
-}
-});
-} catch {
-
-}
 
 NPCs.loadNPC(NPCs.npcArray)
 this.showExtraContent()
@@ -166,45 +140,6 @@ showExtraContent() {
       extraInfo.classList.remove('showExtraInfo');
     });
   });
-},
-
-
-generateSpreadsheetRows(spreadsheet) {
-// Determine the maximum row and column indices
-let maxRow = -1;
-let maxCol = -1;
-
-try{
-
-spreadsheet.forEach(cellData => {
-if (cellData.row > maxRow) {
-maxRow = cellData.row;
-}
-if (cellData.col > maxCol) {
-maxCol = cellData.col;
-}
-});
-
-// Increment by 1 to get the actual number of rows and columns
-const numRows = maxRow + 1;
-const numCols = maxCol + 1;
-
-let rowsHtml = '';
-
-for (let i = 0; i < numRows; i++) {
-rowsHtml += '<tr>';
-
-for (let j = 0; j < numCols; j++) {
-const cellData = spreadsheet.find(data => data.row === i && data.col === j);
-const cellContent = cellData ? cellData.content : '';
-rowsHtml += `<td><input value="${cellContent}"></td>`;
-}
-
-rowsHtml += '</tr>';
-}
-
-return rowsHtml;
-} catch{}
 },
 
 

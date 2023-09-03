@@ -37,8 +37,8 @@ const Monsters = {
             );
 
             //Show ExtraContent      
-            Ref.optionsListMonster.style.display = 'block';
-            Ref.optionsListMonster.innerHTML = ''; // Clear existing content
+            Ref.itemList.style.display = 'block';
+            Ref.itemList.innerHTML = ''; // Clear existing content
             const imageContainer = document.querySelector('.image-container');
             const radiantDisplay = document.getElementById('radiantDisplay');
             imageContainer.style.width = "45vw";
@@ -51,13 +51,13 @@ const Monsters = {
                 const replacement = `*${monsterName}*`;
                 const newText = text.substring(0, openBraceIndex) + replacement + text.substring(cursorPosition);
                 event.target.value = newText;
-                Ref.optionsListMonster.style.display = 'none'; // Hide Ref.optionsList
+                Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
               });
-              Ref.optionsListMonster.appendChild(option);
+              Ref.itemList.appendChild(option);
             });
           } else {
-            Ref.optionsListMonster.style.display = 'none';
-            Ref.optionsListMonster.innerHTML = '';
+            Ref.itemList.style.display = 'none';
+            Ref.itemList.innerHTML = '';
             imageContainer.style.width = "70vw";
             radiantDisplay.style.width = "70vw";
           }

@@ -18,7 +18,7 @@ locationArray: [],
                 const width = parseFloat(location.style.width);
                 const height = parseFloat(location.style.height);
                 const divId = location.id;
-                const player = "";
+                const description = "";
 
                 return {
                 left,
@@ -26,7 +26,7 @@ locationArray: [],
                 width,
                 height,
                 divId,
-                player,
+                description,
                 };
                 },
 
@@ -69,9 +69,6 @@ locationArray: [],
                 } else {
                 console.log('Filename not provided, file not saved.');
                 }
-
-
-
 
                 }, 
 
@@ -221,14 +218,11 @@ locationArray: [],
                 labelElement.textContent = divId;
                 newLoc.appendChild(labelElement);
 
-                //console.log("Created: " + JSON.stringify(newLoc, null, 2));
-                Edit.generateTable();
-
                 return newLoc;
                 },   
 
                 addLocationToArray(locationData) {
-                const { left, top, width, height, divId, player, spreadsheetData } = locationData;
+                const { left, top, width, height, divId, description } = locationData;
 
                 // Create a new location object with the specified properties
                 const newLocation = {
@@ -237,8 +231,7 @@ locationArray: [],
                 width,
                 height,
                 divId,
-                player,
-                spreadsheetData,
+                description,
                 };
 
                 this.locationArray.push(newLocation);

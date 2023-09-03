@@ -161,7 +161,7 @@ color: hotpink;
 opacity: 1; /* Firefox */
 }
 
-#NPCoptionsList {
+#itemList {
 color: gray;
 background-color: transparent;
 opacity: 1;
@@ -178,14 +178,14 @@ display: none;
 scrollbar-color: black;
 }
 
-#NPCoptionsList div:hover {
+#itemList div:hover {
 background-color: lime; /* Change the background color on hover */
 color: black;
 cursor: pointer; /* Show pointer cursor on hover */
 }  
 
 
-#NPCoptionsList::-webkit-scrollbar {
+#itemList::-webkit-scrollbar {
 width: 5px; /* Set the width of the scrollbar */
 }
 

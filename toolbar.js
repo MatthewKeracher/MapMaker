@@ -164,7 +164,7 @@ NPCs.clearForm();
 break;
 
 case 4:
-Edit.generateTable();
+
 break;
 
 case 5:

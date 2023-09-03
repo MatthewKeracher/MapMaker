@@ -19,13 +19,13 @@ editLocationName: document.querySelector('.editLocationName'),
 
 textLocation: document.getElementById('textLocation'),
 
-optionsListMonster: document.getElementById('MonsteroptionsList'),
+itemList: document.getElementById('itemList'),
 expandableElements: document.querySelectorAll('.expandable'),
 extraInfo: document.querySelector('.extraInfo'),
 
 //npcForm
 npcForm: document.querySelector('.npcForm'),
-NPCoptionslist: document.getElementById('NPCoptionslist'),
+
 
     npcName: document.getElementById('npcName'),
     npcOccupation: document.getElementById('npcOccupation'),

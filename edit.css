@@ -42,38 +42,11 @@
     color: whitesmoke;   
 }
 
-#MonsteroptionsList {
-    color: gray;
-    background-color: transparent;
-    opacity: 1;
-    height: 100vh;
-    border: transparent;
-    padding: 5px;
-    position: fixed; /* Use fixed position for screen coordinates */
-    top: 0;
-    left: 45vw;
-    width: 25vw;
-    z-index: 1;
-    overflow-y: auto;
-    display: none;
-    scrollbar-color: black;
-  }
 
-  #MonsteroptionsList div:hover {
-    background-color: lime; /* Change the background color on hover */
-    color: black;
-    cursor: pointer; /* Show pointer cursor on hover */
-  }  
-
-  #MonsteroptionsList::-webkit-scrollbar {
-    width: 5px; /* Set the width of the scrollbar */
-    }
-
-  
 
 .editBox {            
     height: 85vh;
-    border: 0.4vh solid transparent; 
+    border: 0.4vh solid lime; 
     margin: 1vh; 
     font-size: 1.9vh;
     text-align: left;
@@ -90,126 +63,6 @@
         color: lime; /* Change the text color */
         border-radius: 0px; /* Adjust the border radius for rounded corners */
     }
-
-
-
-
-
-/* Target the entire form */
-#tableForm {
-display: flex;
-flex-direction: column; /* Arrange elements in a column */
-align-items: flex-start; /* Align elements to the start of the column */
-gap: 0px; /* Add spacing between elements */
-}
-
-.topTable {
-display: flex;
-flex-direction: row; /* Arrange elements in a column */
-align-items: flex-start; /* Align elements to the start of the column */
-gap: 5px; /* Add spacing between elements */
-margin: 2vh 0vw;
-}
-
-
-/* Target the labels within the form */
-#tableForm label {
-left: 0vw;
-color: hotpink;
-}
-
-/* Target the input elements within the form */
-.topTable input {
-height: 6vh;
-width: 6vh;
-font-size: 5vh;
-text-align: center;
-background-color: black;
-border-color: hotpink;
-color: cyan;
-}
-
-.topTable input[type="number"]::-webkit-inner-spin-button,
-.topTable input[type="number"]::-webkit-outer-spin-button {
--webkit-appearance: none;
-margin: 0;
-}
-
-/* Target the button within the form */
-#tableForm button {
-width: 13vw; /* Make each button fill the width of the toolbar */
-height: 6vh; 
-font-size: 2vh; 
-padding: 1vh 1vw; 
-margin: 0vh 0vw; /* Add margin to control spacing */
-border: 0.1vh solid black; 
-transition: background-color 0.3s; 
-font-family: monospace, 'Trebuchet MS', sans-serif;
-}
-
-#tableForm button:hover {
-background-color: hotpink; 
-}
-
-.bottomTable{
-border-collapse: collapse;
-width: 30vw;
-height: 75vh;
-font-size: 2vh; 
-overflow-y: scroll;
-scrollbar-color: black;
-
-}
-
-.bottomTable::-webkit-scrollbar {
-width: 5px; /* Set the width of the scrollbar */
-}
-
-/* Target the input elements within the form */
-.bottomTable input {
-height: 3vh;
-width: 6vh;
-font-size: 2vh;
-text-align: center;
-background-color: transparent;
-color: whitesmoke;    
-font-family: monospace, 'Trebuchet MS', sans-serif;
-}
-
-    .spreadsheet td {
-    border: 0.1px solid whitesmoke;
-    color:whitesmoke;
-    width: 28vw;
-    font-weight: bold;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    }
-
-    .spreadsheet tr:nth-child(even) {
-    background-color: black;
-    }
-
-    .spreadsheet tr:hover {
-    background-color: lime;
-    color: whitesmoke;
-    }
-
-    /* Add styling to input fields for editing */
-    .spreadsheet td input {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
-    box-sizing: border-box;
-    }
-
-    /* Add styling for the editing state */
-    .spreadsheet td.editing {
-    background-color: lime;
-    }
-
 
     .AmbienceContainer{
         position: fixed;

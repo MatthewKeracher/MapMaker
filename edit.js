@@ -91,11 +91,11 @@ moveLocation(source,target) {
         const targetEntry = Array.locationArray[targetEntryIndex];
 
         // Copy information from sourceEntry to targetEntry
-        targetEntry.player = sourceEntry.player;
+        targetEntry.description = sourceEntry.description;
 
 
         // Optionally, you can clear the source entry information
-        sourceEntry.player = '';
+        sourceEntry.description = '';
 
     }
 
@@ -107,37 +107,14 @@ moveLocation(source,target) {
 saveLocation() {
 const divId = Ref.locationLabel.textContent; // Get the divId for the location you're saving
 
-// Get the spreadsheet data
-const spreadsheetData = [];
-const spreadsheetCells = document.querySelectorAll('.spreadsheet td input');
-spreadsheetCells.forEach(input => {
-  const cell = input.parentNode;
-  const row = cell.parentNode.rowIndex //- 1; // Adjust for skipping the column headers
-  const col = cell.cellIndex //- 1; // Adjust for skipping the row numbers
-  const content = input.value.trim(); // Trim whitespace
-  //console.log(content)
-  if (content !== "") { // Skip empty cells
-    const cellData = {
-      row: row,
-      col: col,
-      content: content
-    };
-    spreadsheetData.push(cellData);
-  }
-});
-
-
 //Find correct place to save...
 const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
 
 
 if (matchingEntry) {
     // Update the corresponding entry in locationArray
-    matchingEntry.player = Ref.textLocation.value;
+    matchingEntry.description = Ref.textLocation.value;
     matchingEntry.divId = Ref.editLocationName.value;
-
-            //Update the spreadsheet data
-            matchingEntry.spreadsheetData = spreadsheetData;
 
     //Update the Existing Divs
     const locationDiv = document.getElementById(divId);
@@ -174,6 +151,7 @@ for (const npc of NPCs.npcArray) {
 pageChange(newPage){
 
 NPCs.fixDisplay();
+Ref.itemList.innerHTML = ``;
 
 
 switch (newPage) {
@@ -185,7 +163,6 @@ Ref.textLocation.style.display = "flex";
 
 //Hide
 Ref.npcForm.style.display = "none"
-Ref.tableForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 break;
 
@@ -197,7 +174,6 @@ Ref.npcForm.style.display = "flex"
 //Hide
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.tableForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 
 NPCs.loadNPC(NPCs.npcArray);
@@ -207,14 +183,12 @@ break;
 case 3:
 
 //Show
-Ref.tableForm.style.display = "flex";
 
 
 //Hide
 Ref.npcForm.style.display = "none"
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
-
 Ref.AmbienceContainer.style.display = "none";
 break;
 
@@ -224,7 +198,6 @@ Ref.AmbienceContainer.style.display = "flex";
 
 //Hide
 Ref.npcForm.style.display = "none"
-Ref.tableForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 
@@ -237,65 +210,7 @@ break;
 
 },
 
-generateTable(){
 
-  //document.addEventListener("DOMContentLoaded", function () {
-      //const generateTableButton = document.getElementById("generateTable");
-    
-      //generateTableButton.addEventListener("click", function () {
-        const tableContainer = document.getElementById("tableContainer");
-        const numRows = parseInt(document.getElementById("numRows").value);
-        const numCols = parseInt(document.getElementById("numCols").value);
-    
-        const table = document.createElement("table");
-        table.classList.add("spreadsheet");
-    
-        // Create a row for column labels
-        const labelRow = document.createElement("tr");
-        for (let j = 1; j <= numCols; j++) { // Start at 1 to skip the first column
-          const cell = document.createElement("td");
-          const input = document.createElement("input");
-          input.type = "text";
-          
-          
-          // Add an event listener for column header editing
-          input.addEventListener("blur", function () {
-            cell.value = input.value;
-          });
-          
-          cell.appendChild(input);
-          labelRow.appendChild(cell);
-        }
-        table.appendChild(labelRow);
-    
-        // Create data rows
-        for (let i = 1; i <= numRows; i++) { // Start at 1 to skip the first row
-        const row = document.createElement("tr");
-        for (let j = 1; j <= numCols; j++) {
-        const cell = document.createElement("td");
-        const input = document.createElement("input");
-        input.type = "text";
-  
-        // Add an event listener for cell editing
-        input.addEventListener("blur", function () {
-        cell.textContent = input.value;
-        });
-  
-        // Set the ID based on x and y coordinates
-        input.id = `cell-${i}-${j}`;
-  
-        cell.appendChild(input);
-        row.appendChild(cell);
-        }
-        table.appendChild(row);
-        }
-    
-        tableContainer.innerHTML = ""; // Clear previous content
-        tableContainer.appendChild(table);
-        //Hotkeys.spreadsheetHotkeys();
-     // });
-    //});
-  }
 
 
 

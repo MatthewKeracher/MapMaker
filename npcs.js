@@ -48,10 +48,10 @@ searchNPC: function(searchText){
 
 loadNPC: function(NPCArray) {
    
-const NPCoptionsList = document.getElementById('NPCoptionsList'); // Do not delete!!
+const itemList = document.getElementById('itemList'); // Do not delete!!
 
 // Clear the existing content
-NPCoptionsList.innerHTML = '';
+itemList.innerHTML = '';
 
 this.AlwaysNPCs = [];
 this.MorningNPCs = [];
@@ -71,12 +71,12 @@ this.fillNPCForm(npc, npcNameDiv);
 // Concatenate arrays in desired order
 const sortedNPCs = [...this.AlwaysNPCs, ...this.MorningNPCs, ...this.AfternoonNPCs, ...this.NightNPCs, ...this.otherNPCs];
 
-// Append sorted divs to the NPCoptionsList
+// Append sorted divs to the itemList
 sortedNPCs.forEach(npcDiv => {
-NPCoptionsList.appendChild(npcDiv);
+itemList.appendChild(npcDiv);
 });
 
-NPCoptionsList.style.display = 'block'; // Display the NPC names container
+itemList.style.display = 'block'; // Display the NPC names container
 
 this.fixDisplay();
 
