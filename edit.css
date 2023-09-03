@@ -12,14 +12,14 @@ flex-direction: column;
 .editLocationName{
 height: 4vh;
 width: 27.5vw;
-margin: 0vh; 
+margin: 1vh; 
 font-size: 3vh;
 font-weight: bold;
 border: 0.4vh solid black; 
 text-align: left;
 vertical-align: middle;    
 background-color: transparent; 
-color: hotpink;
+color: gray;
 padding: 1vh;
 display: none;
 overflow: hidden;
@@ -44,13 +44,14 @@ color: whitesmoke;
 
 .editBox {            
 height: 85vh;
-border: 0.4vh solid lime; 
+width: 27.5vw;
+border: 0.4vh solid gray; 
 margin: 1vh; 
 font-size: 1.9vh;
 text-align: left;
 vertical-align: top;    
 background-color: transparent; 
-color: bisque;
+color: gray;
 padding: 1vh;
 
 }

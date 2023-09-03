@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="storyteller.css">
 <link rel="stylesheet" href="edit.css">
 <link rel="stylesheet" href="npcs.css">
+<link rel="stylesheet" href="monsters.css">
 
 <link rel="icon" type="image/x-icon" href="data:," />
 <title>Excel_DM</title>
@@ -66,9 +67,59 @@
 
 <div id="itemList"></div>
 
+<form id="monsterForm" class="monsterForm">
+<div class="monsterFormContainer">
+
+<label for="monsterName">Name:</label>
+<input class="smallField" type="textarea" id="monsterName" name="monsterName" placeholder="{... to Search" required>
+
+<label for="monsterType">Type:</label>
+<input class="smallField" type="textarea" id="monsterType" name="monsterType">
+
+<label for="monsterAppearing"># Appearing:</label>
+<input class="smallField" type="textarea" id="monsterAppearing" name="monsterAppearing">
+
+<label for="monsterMorale">Morale:</label>
+<input class="smallField" type="textarea" id="monsterMorale" name="monsterMorale">
+
+<label for="monsterMovement">Movement:</label>
+<input class="smallField" type="textarea" id="monsterMovement" name="monsterMovement">
+
+<label for="monesterAC">Armour Class:</label>
+<input class="smallField" type="textarea" id="monesterAC" name="monesterAC">
+
+<label for="monsterHD">Hit Dice:</label>
+<input class="smallField" type="textarea" id="monsterHD" name="monsterHD">
+
+<label for="monsterHDRange">Hit Dice Range:</label>
+<input class="smallField" type="textarea" id="monsterHDRange" name="monsterHDRange">
+
+<label for="monsterAttacks">Attacks:</label>
+<input class="smallField" type="textarea" id="monsterAttacks" name="monsterAttacks">
+
+<label for="monsterDamage">Damage:</label>
+<input class="smallField" type="textarea" id="monsterDamage" name="monsterDamage">
+
+<label for="monsterSpecial">Special:</label>
+<input class="smallField" type="textarea" id="monsterSpecial" name="monsterSpecial">
+
+<label for="monsterSaveAs">Save As:</label>
+<input class="smallField" type="textarea" id="monsterSaveAs" name="monsterSaveAs">
+
+<label for="monsterTreasure">Treasure:</label>
+<input class="smallField" type="textarea" id="monsterTreasure" name="monsterTreasure">
+
+<label for="monsterXP">Experience Points:</label>
+<input class="smallField" type="textarea" id="monsterXP" name="monsterXP">
+
+<label for="monsterDescription">Description:</label>
+<input class="smallField" type="textarea" id="monsterDescription" name="monsterDescription">
+
+</div>
+</form>
+
+
 <form id="npcForm" class="npcForm">
-
-
 <div class="npcFormContainer">
 
 <label for="npcName">Full or Unique Name:</label>

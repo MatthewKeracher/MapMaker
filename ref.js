@@ -23,6 +23,9 @@ itemList: document.getElementById('itemList'),
 expandableElements: document.querySelectorAll('.expandable'),
 extraInfo: document.querySelector('.extraInfo'),
 
+//monsterForm
+monsterForm: document.querySelector('.monsterForm'),
+
 //npcForm
 npcForm: document.querySelector('.npcForm'),
 

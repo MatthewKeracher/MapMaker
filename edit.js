@@ -162,7 +162,8 @@ Ref.editLocationName.style.display  = "flex";
 Ref.textLocation.style.display = "flex";
 
 //Hide
-Ref.npcForm.style.display = "none"
+Ref.npcForm.style.display = "none";
+Ref.monsterForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 break;
 
@@ -172,6 +173,7 @@ Ref.npcForm.style.display = "flex"
 
 
 //Hide
+Ref.monsterForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
@@ -183,7 +185,7 @@ break;
 case 3:
 
 //Show
-
+Ref.monsterForm.style.display = "flex";
 
 //Hide
 Ref.npcForm.style.display = "none"
@@ -197,6 +199,7 @@ case 4:
 Ref.AmbienceContainer.style.display = "flex";
 
 //Hide
+Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none"
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";

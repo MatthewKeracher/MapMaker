@@ -326,13 +326,19 @@ fixDisplay: function(){
     const imageContainer = document.querySelector('.image-container');
     const radiantDisplay = document.getElementById('radiantDisplay');
     
+try{
+
         if (Edit.editPage === 2) {
             imageContainer.style.width = "45vw";
             radiantDisplay.style.width = "45vw";
+            Ref.itemList.style.display = "block";
         } else {
             imageContainer.style.width = "70vw";
             radiantDisplay.style.width = "70vw";
+            Ref.itemList.style.display = "none";
         }
+
+    }catch{}
     
 }
 

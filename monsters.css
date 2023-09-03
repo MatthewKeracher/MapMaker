@@ -1,0 +1,16 @@
+#monsterForm {
+display: none;    
+border-radius: 0;
+background-color: transparent;
+overflow: auto;
+overflow-x: hidden ;
+}
+
+#monsterForm::-webkit-scrollbar {
+width: 0.1px; /* Set the width of the scrollbar */
+}
+
+.monsterFormContainer{
+width: 30vw;
+height: 85vh;
+};
