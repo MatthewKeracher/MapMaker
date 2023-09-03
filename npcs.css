@@ -2,7 +2,6 @@
 display: none;    
 border-radius: 0;
 background-color: transparent;
-text-align: left;
 overflow: auto;
 overflow-x: hidden  ;
 color: cyan;
@@ -28,7 +27,7 @@ margin: 1vh;
 font-size: 2vh;
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid cyan;
+border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
@@ -39,13 +38,13 @@ vertical-align: middle;
 }
 
 .halfField {
-height: 4vh;
+height: 4.5vh;
 width: 13vw;
 margin: 1vh;
 font-size: 2vh;
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid cyan;
+border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
@@ -57,35 +56,30 @@ margin: 1vh;
 font-size: 2vh;
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid cyan;
+border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
 
-
-.stats-container {
-    display: flex;
-    justify-content: space-between;
-    width: 20vw; /* Adjust the total width as needed */
-    margin: 0 auto;
+.stats-all{
+display: flex;
+flex-direction: row;
 }
 
-.leftStats, .rightStats {
-    width: 45%;
+
+.stats-left {
+text-align: right;
+width: 15.5vw;
+
 }
 
-.label-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem; /* Adjust the spacing between labels and inputs */
+.stats-right {
+text-align: right;
+width: 14vw;
 }
 
-.label-container label {
-    width: 40%; /* Adjust the label width as needed */
-    text-align: right;
-    margin-right: 1rem; /* Add some spacing between label and input */
-}
+
+
 
 #npcForm input[type="number"] {
 height: 4vh;
@@ -94,7 +88,7 @@ margin: 1vh;
 font-size: 3vh;
 color: hotpink;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid cyan;
+border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: transparent;
 text-align: center;
@@ -118,7 +112,7 @@ margin: 1vh;
 font-size: 2vh;
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid cyan;
+border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
@@ -130,7 +124,7 @@ margin: 1vh;
 font-size: 2vh;
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid cyan;
+border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
@@ -157,7 +151,7 @@ border-radius: 0;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-color: hotpink;
+color: gray;
 opacity: 1; /* Firefox */
 }
 
@@ -184,13 +178,9 @@ color: black;
 cursor: pointer; /* Show pointer cursor on hover */
 }  
 
-
 #itemList::-webkit-scrollbar {
 width: 5px; /* Set the width of the scrollbar */
 }
-
-
-
 
 .Morning {
 color: gold;
@@ -209,7 +199,7 @@ color: whitesmoke;
 }
 
 .npc-name{
-    color:gray
+color:gray
 }
 
 

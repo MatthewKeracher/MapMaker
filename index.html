@@ -80,6 +80,15 @@ placeholder="What do other people know them as?">
 
 <br>
 
+<label for="npcLevel">Level:</label>
+<input class="stat" type="number" id="npcLevel" name="npcLevel">
+
+<label for="npcClass">Class:</label>
+<input class="halfField" type="textarea" id="npcClass" name="npcClass">
+
+<br><br>
+
+
 <label for="npcBackStory">Backstory:</label>
 <textarea class="largeField" type="textarea" id="npcBackStory" name="npcBackStory" 
 placeholder="Put any other information about this NPC here."></textarea>
@@ -107,39 +116,37 @@ placeholder="What do the normally do here? They are...">
 <input class="smallField" type="textarea" id="NightActivity" name="NightActivity"
 placeholder="What do the normally do here? They are...">
 
-<br>
-<br>
-
-<label for="npcLevel">Level:</label>
-<input class="stat" type="number" id="npcLevel" name="npcLevel">
-
-<label for="npcClass">Class:</label>
-<input class="halfField" type="textarea" id="npcClass" name="npcClass">
 
 <br>
 
-<div class="stats-container">
-<div class="leftStats">
-<label for="STR">Strength:</label>
-<input class="stat" type="number" id="STR" name="STR">
+<div class = "stats-all">
 
-<label for="DEX">Dexterity:</label>
-<input class="stat" type="number" id="DEX" name="DEX">
+    <div class="stats-left"> 
 
-<label for="INT">Intelligence:</label>
-<input class="stat" type="number" id="INT" name="INT">
-</div>
-<div class="rightStats">
-<label for="WIS">Wisdom:</label>
-<input class="stat" type="number" id="WIS" name="WIS">
+    <label for="STR">Strength:</label>
+    <input class="stat" type="number" id="STR" name="STR">
+    
+    <label for="DEX">Dexterity:</label>
+    <input class="stat" type="number" id="DEX" name="DEX">
+    
+    <label for="INT">Intelligence:</label>
+    <input class="stat" type="number" id="INT" name="INT">    
 
-<label for="CON">Constitution:</label>
-<input class="stat" type="number" id="CON" name="CON">
+    </div>
 
-<label for="CHA">Charisma:</label>
-<input class="stat" type="number" id="CHA" name="CHA">
-</div>
-</div>
+    <div class="stats-right"> 
+    
+    <label for="WIS">Wisdom:</label>
+    <input class="stat" type="number" id="WIS" name="WIS">
+    
+    <label for="CON">Constitution:</label>
+    <input class="stat" type="number" id="CON" name="CON">
+    
+    <label for="CHA">Charisma:</label>
+    <input class="stat" type="number" id="CHA" name="CHA">
+    
+        </div>
+    </div>
 </div>
 
 </form>

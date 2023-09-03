@@ -1,95 +1,92 @@
 .EditorContainer {
-    position: fixed;
-    top: 7vh;    
-    right: 0vw; 
-    width: 30vw;   
-    height: 85vh;     
-    font-size: 2vh;
-    display: none;
-    flex-direction: column;
+position: fixed;
+top: 7vh;    
+right: 0vw; 
+width: 30vw;   
+height: 85vh;     
+font-size: 2vh;
+display: none;
+flex-direction: column;
 }    
 
 .editLocationName{
-    height: 4vh;
-    width: 27.5vw;
-    margin: 0vh; 
-    font-size: 3vh;
-    font-weight: bold;
-    border: 0.4vh solid black; 
-    text-align: left;
-    vertical-align: middle;    
-    background-color: transparent; 
-    color: hotpink;
-    padding: 1vh;
-    display: none;
-    overflow: hidden;
-    flex-direction: row;
+height: 4vh;
+width: 27.5vw;
+margin: 0vh; 
+font-size: 3vh;
+font-weight: bold;
+border: 0.4vh solid black; 
+text-align: left;
+vertical-align: middle;    
+background-color: transparent; 
+color: hotpink;
+padding: 1vh;
+display: none;
+overflow: hidden;
+flex-direction: row;
 }
 
-    .editLocationName:focus {
-        border-color: lime; /* Change the border color */
-        outline: none; /* Remove the default outline */
-        background-color: black; /* Change the background color */
-        color: lime; /* Change the text color */
-        border-radius: 0px; /* Adjust the border radius for rounded corners */
-    }
+.editLocationName:focus {
+border-color: lime; /* Change the border color */
+outline: none; /* Remove the default outline */
+background-color: black; /* Change the background color */
+color: lime; /* Change the text color */
+border-radius: 0px; /* Adjust the border radius for rounded corners */
+}
 
 .EditorContainer label {
-    position: relative;
-    left: 0.5vw;
-    margin-top: 0.5vh;
-    margin-bottom: 0.5vh;        
-    color: whitesmoke;   
+position: relative;
+left: 0.5vw;
+margin-top: 0.5vh;
+margin-bottom: 0.5vh;        
+color: whitesmoke;   
 }
-
-
 
 .editBox {            
-    height: 85vh;
-    border: 0.4vh solid lime; 
-    margin: 1vh; 
-    font-size: 1.9vh;
-    text-align: left;
-    vertical-align: top;    
-    background-color: transparent; 
-    color: bisque;
-    padding: 1vh;
+height: 85vh;
+border: 0.4vh solid lime; 
+margin: 1vh; 
+font-size: 1.9vh;
+text-align: left;
+vertical-align: top;    
+background-color: transparent; 
+color: bisque;
+padding: 1vh;
 
 }
-    .editBox:focus {
-        border-color: lime; /* Change the border color */
-        outline: none; /* Remove the default outline */
-        background-color: transparent; /* Change the background color */
-        color: lime; /* Change the text color */
-        border-radius: 0px; /* Adjust the border radius for rounded corners */
-    }
+.editBox:focus {
+border-color: lime; /* Change the border color */
+outline: none; /* Remove the default outline */
+background-color: transparent; /* Change the background color */
+color: lime; /* Change the text color */
+border-radius: 0px; /* Adjust the border radius for rounded corners */
+}
 
-    .AmbienceContainer{
-        position: fixed;
-        color: whitesmoke;
-        top: 7vh;   
-        width: 30vw; 
-        right: 0vw;                
-        height: 160vh;     
-        font-size: 2vh;
-        display: none;
-        flex-direction: column;
-    }
+.AmbienceContainer{
+position: fixed;
+color: whitesmoke;
+top: 7vh;   
+width: 30vw; 
+right: 0vw;                
+height: 160vh;     
+font-size: 2vh;
+display: none;
+flex-direction: column;
+}
 
-    .AmbienceContainer label{
-        color: hotpink;
-        font-size: 2.5vh;
-        left: 0;
-    }
+.AmbienceContainer label{
+color: hotpink;
+font-size: 2.5vh;
+left: 0;
+}
 
-    .AmbienceContainer select {
-        padding: 8px;
-        font-size: 2vh;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: peachpuff;
-        width: 15vw;
-        font-family: monospace, 'Trebuchet MS', sans-serif;
-    }
+.AmbienceContainer select {
+padding: 8px;
+font-size: 2vh;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: peachpuff;
+width: 15vw;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+}
 
-   
