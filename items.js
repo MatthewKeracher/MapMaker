@@ -12,7 +12,7 @@ try {
 const response = await fetch('items.json'); // Adjust the path if needed
 const data = await response.json();
 this.itemsArray = data;
-console.log(this.itemsArray)
+
 return data //.monsters;
 } catch (error) {
 console.error('Error loading items array:', error);
@@ -22,19 +22,19 @@ return [];
 },   
 
 // Add to Storyteller
-addPredictiveMonsters() {
+addPredictiveObjects() {
 
 Ref.textLocation.addEventListener('input', (event) => {
 const text = event.target.value;
 const cursorPosition = event.target.selectionStart;
 
-const openBraceIndex = text.lastIndexOf('*', cursorPosition);
+const openBraceIndex = text.lastIndexOf('#', cursorPosition);
 if (openBraceIndex !== -1) {
 const searchText = text.substring(openBraceIndex + 1, cursorPosition);
 
-const filteredMonsters = Object.keys(this.monstersArray).filter(monsterName =>
-monsterName.toLowerCase().includes(searchText.toLowerCase())
-);
+const filteredItems = this.itemsArray.filter(item =>
+    item.Name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
 //Show ExtraContent      
 Ref.itemList.style.display = 'block';
@@ -46,11 +46,11 @@ const radiantDisplay = document.getElementById('radiantDisplay');
 imageContainer.style.width = "45vw";
 radiantDisplay.style.width = "45vw";
 
-filteredMonsters.forEach(monsterName => {
+filteredItems.forEach(item => {
 const option = document.createElement('div');
-option.textContent = monsterName;
+option.textContent = item.Name;
 option.addEventListener('click', () => {
-const replacement = `*${monsterName}*`;
+const replacement = `#${item.Name}#`;
 const newText = text.substring(0, openBraceIndex) + replacement + text.substring(cursorPosition);
 event.target.value = newText;
 Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
@@ -71,71 +71,68 @@ radiantDisplay.style.width = "70vw";
 
 },
 
-getMonsters(locationText) {
-const asteriskBrackets = /\*([^*]+)\*/g;
+getItems(locationText) {
+    const hashBrackets = /#([^#]+)#/g;
 
-return locationText.replace(asteriskBrackets, (match, monsterName) => {
-console.log(monsterName)
-if (this.monstersArray[monsterName]) {
-return `<span class="expandable monster" data-content-type="monster" divId="${monsterName}">${monsterName.toUpperCase()}</span>`;
+    return locationText.replace(hashBrackets, (match, itemName) => {
+        const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === itemName.toLowerCase());
+        if (item) {
+            return `<span class="expandable item" data-content-type="item" divId="${item.Name}">${item.Name.toUpperCase()}</span>`;
+        } else {
+            console.log(`Item not found: ${itemName}`);
+            return match;
+        }
+    });
+},
+ 
+
+extraItem(contentId) {
+const hashBrackets = /#([^#]+)#/g;
+
+return contentId.replace(hashBrackets, (match, itemName) => {
+const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === itemName.toLowerCase());
+if (item) {
+console.log(item.Name);
+return this.addIteminfo(item.Name);
 } else {
-console.log(`Monster not found: ${monsterName}`);
+console.log(`Item not found: ${itemName}`);
 return match;
 }
 });
 },
 
-extraMonsters(contentId) {
-const asteriskBrackets = /\*([^*]+)\*/g;
-
-return contentId.replace(asteriskBrackets, (match, monsterName) => {
-if (this.monstersArray[monsterName]) {
-return this.addMonsterInfo(monsterName);
-} else {
-console.log(`Monster not found: ${monsterName}`);
-return match;
-}
-});
-},
-
-addMonsterInfo(contentId) {
+addIteminfo(contentId) {
 
 const extraContent = document.getElementById('extraContent');
 
-//Search for Monster in the Array   
-const monster = this.monstersArray[contentId]; 
+//Search for Item in the Array   
+const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === contentId.toLowerCase());
 
-if (monster) {
+if (item) {
 
-const monsterStats = [
+const itemStats = [
 
-`<h2><span class="hotpink">${contentId.toUpperCase()}</span></h2><br>`,
-`${monster.Type}<br><br>`,
+`<h2><span class="lime">${contentId.toUpperCase()}</span></h2><br>`,
+`${item.Type}<br><br>`,
 
-`<span class="hotpink"># App:</span> ${monster.Appearing};<br>`,
-`<span class="hotpink">Morale:</span> ${monster.Morale};<br>`,
-`<span class="hotpink">Movement:</span> ${monster.Mvmt};<br>`,
-`<span class="hotpink">Armour Class:</span> ${monster.AC};<br>`,
-`<span class="hotpink">Hit Dice:</span> ${monster.HD};<br>`,
-`<span class="hotpink">Hit Dice Range:</span> ${monster.HDSort};<br>`,
-`<span class="hotpink">No. Attacks:</span> ${monster.Attacks};<br>`,
-`<span class="hotpink">Damage:</span> ${monster.Damage};<br>`,          
-`<span class="hotpink">Special:</span> ${monster.Special || "None"};<br>`,
-`<span class="hotpink">Save As:</span> ${monster["Save As "]};<br>`,
-`<span class="hotpink">Treasure:</span> ${monster.Treasure || "None"};<br>`,
-`<span class="hotpink">Experience Points:</span> ${monster.XP};<br><br> `,
-`<span class="hotpink">Description:</span> <br><br> ${monster.Description.replace(/\./g, '.<br><br>')}`,
+`<span class="lime">Size:</span> ${item.Size || "None"};<br>`,
+`<span class="lime">Weight:</span> ${item.Weight || "None"};<br>`,
+`<span class="lime">Cost:</span> ${item.Cost || "None"};<br>`,
+`<span class="lime">Damage:</span> ${item.Damage || "None"};<br>`,
+`<span class="lime">Range:</span> ${item.Range || "None"};<br>`,
+`<span class="lime">Armour Class:</span> ${item.AC || "None"};<br><br>`,
+`<span class="lime">Description:</span> <br><br> ${item.Description.replace(/\./g, '.<br><br>')}`,
 
 ];
 
-const formattedMonster = monsterStats
+const formattedItem = itemStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
 // Set the formatted content in the extraContent element
-extraContent.innerHTML = formattedMonster;
+extraContent.innerHTML = formattedItem;
 
-return formattedMonster;
+return formattedItem;
 
 } else {
 console.log(`Monster not found: ${contentId}`);

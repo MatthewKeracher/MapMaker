@@ -2,6 +2,7 @@ import Array from "./array.js";
 import Ambience from "./ambience.js";
 import Monsters from "./monsters.js";
 import NPCs from "./npcs.js";
+import Items from "./items.js";
 import Edit from "./edit.js";
 import Ref from "./ref.js";
 
@@ -30,7 +31,8 @@ this.miscArray = [];
 this.monsterArray = [];
 const squareCurly = this.getMisc(locationText, this.miscArray);
 
-const formattedLocation = await Monsters.getMonsters(squareCurly);
+const formattedMonsters = await Monsters.getMonsters(squareCurly);
+const formattedLocation = await Items.getItems(formattedMonsters);
 //console.log(presentMonsters)
 
 const location = Ref.locationLabel.textContent;
@@ -72,10 +74,11 @@ const MiscItem = miscArray.find(item => item.square === contentId);
   
   if (MiscItem) {
     const withMonsters = Monsters.extraMonsters(MiscItem.curly);
+    const withItems = Items.extraItem(withMonsters);
     const miscInfo = [ 
       
     `<br><span class="misc">${MiscItem.square.toUpperCase()}</span><br><br>
-    <span class="withbreak">${withMonsters}</span>`]
+    <span class="withbreak">${withItems}</span>`]
 
     extraContent.innerHTML = miscInfo;
   } else {
@@ -123,6 +126,9 @@ showExtraContent() {
           break;
         case 'monster':
           Monsters.addMonsterInfo(contentId); // Handle monsters
+          break;
+          case 'item':
+          Items.addIteminfo(contentId); // Handle items
           break;
         case 'misc':
           this.addMiscInfo(contentId, this.miscArray);

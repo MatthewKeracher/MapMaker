@@ -14,12 +14,13 @@ class Toolbar{
 init() {       
 
 Ambience.initializeAmbienceDropdowns();
-Monsters.addPredictiveMonsters();
+
 Monsters.loadMonstersArray();
 Monsters.addMonsterSearch();
 NPCs.addNPCSearch();
 Items.loadItemsArray();
 Items.addItemSearch();
+Monsters.addPredictiveContent();
 
 
 //mainToolbar

@@ -1,5 +1,6 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
+import Items from "./items.js";
 
 const Monsters = {
 
@@ -19,55 +20,66 @@ return [];
 
 },   
 
-// Add to Storyteller
-addPredictiveMonsters() {
-
-Ref.textLocation.addEventListener('input', (event) => {
-const text = event.target.value;
-const cursorPosition = event.target.selectionStart;
-
-const openBraceIndex = text.lastIndexOf('*', cursorPosition);
-if (openBraceIndex !== -1) {
-const searchText = text.substring(openBraceIndex + 1, cursorPosition);
-
-const filteredMonsters = Object.keys(this.monstersArray).filter(monsterName =>
-monsterName.toLowerCase().includes(searchText.toLowerCase())
-);
-
-//Show ExtraContent      
-Ref.itemList.style.display = 'block';
-Ref.itemList.innerHTML = ''; // Clear existing content
-
-//fixDisplay()
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-imageContainer.style.width = "45vw";
-radiantDisplay.style.width = "45vw";
-
-filteredMonsters.forEach(monsterName => {
-const option = document.createElement('div');
-option.textContent = monsterName;
-option.addEventListener('click', () => {
-const replacement = `*${monsterName}*`;
-const newText = text.substring(0, openBraceIndex) + replacement + text.substring(cursorPosition);
-event.target.value = newText;
-Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
-});
-Ref.itemList.appendChild(option);
-});
-} else {
-
-Ref.itemList.style.display = 'none';
-Ref.itemList.innerHTML = '';
-
-//fixDisplay()
-imageContainer.style.width = "70vw";
-radiantDisplay.style.width = "70vw";
-
-}
-});
-
-},
+addPredictiveContent() {
+    Ref.textLocation.addEventListener('input', (event) => {
+      const text = event.target.value;
+      const cursorPosition = event.target.selectionStart;
+  
+      const openBraceIndex = text.lastIndexOf('#', cursorPosition);
+      const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+  
+      if (openBraceIndex !== -1 || openAsteriskIndex !== -1) {
+        let searchText;
+        let filteredItems;
+  
+        if (openBraceIndex > openAsteriskIndex) {
+          searchText = text.substring(openBraceIndex + 1, cursorPosition);
+          filteredItems = Items.itemsArray.filter(item =>
+            item.Name.toLowerCase().includes(searchText.toLowerCase())
+          );
+        } else {
+          searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
+          filteredItems = Object.keys(this.monstersArray).filter(monsterName =>
+            monsterName.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
+  
+        // Show ExtraContent
+        Ref.itemList.style.display = 'block';
+        Ref.itemList.innerHTML = ''; // Clear existing content
+  
+        // fixDisplay()
+        const imageContainer = document.querySelector('.image-container');
+        const radiantDisplay = document.getElementById('radiantDisplay');
+        imageContainer.style.width = "45vw";
+        radiantDisplay.style.width = "45vw";
+  
+        filteredItems.forEach(item => {
+          const option = document.createElement('div');
+          option.textContent = item.Name || item; // Use "Name" property if available
+          option.addEventListener('click', () => {
+            const replacement = openBraceIndex !== -1
+              ? `#${item.Name}#`
+              : `*${item}*`;
+            const newText = text.substring(0, openBraceIndex !== -1 ? openBraceIndex : openAsteriskIndex) + replacement + text.substring(cursorPosition);
+            event.target.value = newText;
+            Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+          });
+          Ref.itemList.appendChild(option);
+        });
+      } else {
+        Ref.itemList.style.display = 'none';
+        Ref.itemList.innerHTML = '';
+  
+        // fixDisplay()
+        const imageContainer = document.querySelector('.image-container');
+        const radiantDisplay = document.getElementById('radiantDisplay');
+        imageContainer.style.width = "70vw";
+        radiantDisplay.style.width = "70vw";
+      }
+    });
+  },
+  
 
 getMonsters(locationText) {
 const asteriskBrackets = /\*([^*]+)\*/g;
