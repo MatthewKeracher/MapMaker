@@ -24,7 +24,17 @@ expandableElements: document.querySelectorAll('.expandable'),
 extraInfo: document.querySelector('.extraInfo'),
 
 //objectForm
-objectForm: document.querySelector('.objectForm'),
+itemForm: document.querySelector('.itemForm'),
+
+itemName: document.getElementById('itemName'),
+itemType: document.getElementById('itemType'),
+itemSize: document.getElementById('itemSize'),
+itemWeight: document.getElementById('itemWeight'),
+itemCost: document.getElementById('itemCost'),
+itemDamage: document.getElementById('itemDamage'),
+itemRange: document.getElementById('itemRange'),
+itemAC: document.getElementById('itemAC'),
+itemDescription: document.getElementById('itemDescription'),
 
 //monsterForm
 monsterForm: document.querySelector('.monsterForm'),

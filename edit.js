@@ -3,6 +3,7 @@ import Array from "./array.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
+import Items from "./items.js";
 
 const Edit = {
 
@@ -61,6 +62,25 @@ monsterForm.reset(); // Call the reset() method to clear the form fields
 }
 break;
 
+case 4:
+const itemName = document.getElementById('itemName').value;
+const itemIndex = Items.itemsArray.findIndex(item => item.Name === itemName);
+const itemForm = document.getElementById('itemForm');
+
+if (itemIndex !== -1) {
+const confirmation = window.confirm("Are you sure you want to delete this item?");
+if (confirmation) {
+Items.itemsArray.splice(itemIndex, 1); // Remove NPC from npcArray
+
+// Filter and update npcArray to remove empty entries
+//NPCs.npcArray = this.filterEmptyEntries(NPCs.npcArray);
+
+Items.loadItemsList(Items.itemsArray); // Refresh the NPC form with updated npcArray
+itemForm.reset(); // Call the reset() method to clear the form fields
+}
+}
+break;
+
 
 default:
 // For any other case
@@ -83,8 +103,6 @@ divToRemove.remove();
 }
 break;
 }
-
-
 },
 
 // Move a Location -- Unfinished
@@ -183,7 +201,7 @@ Ref.textLocation.style.display = "flex";
 //Hide
 Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";
-Ref.objectForm.style.display = "none";
+Ref.itemForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 break;
 
@@ -194,7 +212,7 @@ Ref.npcForm.style.display = "flex"
 
 //Hide
 Ref.monsterForm.style.display = "none";
-Ref.objectForm.style.display = "none";
+Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
@@ -211,7 +229,7 @@ Ref.monsterForm.style.display = "flex";
 
 //Hide
 Ref.npcForm.style.display = "none"
-Ref.objectForm.style.display = "none";
+Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
@@ -222,7 +240,7 @@ break;
 
 case 4:
 //Show
-Ref.objectForm.style.display = "flex";
+Ref.itemForm.style.display = "flex";
 
 //Hide
 Ref.monsterForm.style.display = "none";
@@ -230,6 +248,8 @@ Ref.npcForm.style.display = "none"
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
+
+Items.loadItemsList(Items.itemsArray);
 
 break;
 
@@ -240,7 +260,7 @@ Ref.AmbienceContainer.style.display = "flex";
 //Hide
 Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none";
-Ref.objectForm.style.display = "none";
+Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 

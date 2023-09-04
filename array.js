@@ -3,6 +3,8 @@ import Edit from "./edit.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
+import Ref from "./ref.js";
+import Items from "./items.js";
 //import Papa from 'papaparse';
 
 const Array = {
@@ -56,7 +58,8 @@ locationArray: [],
                 generalInformation: generalInfo,
                 locations: this.locationArray,                
                 npcArray: NPCs.npcArray,
-                monstersArray: Monsters.monstersArray
+                monstersArray: Monsters.monstersArray,
+                itemsArray: Items.itemsArray
                 };
 
                 const json = JSON.stringify(exportData, null, 2);
@@ -139,6 +142,17 @@ locationArray: [],
                     }
                 } catch (error) {
                     console.error('Error loading Monster information:', error);
+                }
+
+                try {
+                    if (data.itemsArray) {
+                        Items.itemsArray = data.itemsArray;
+                        //console.log( Monsters.monstersArray);
+                    } else {
+                        console.log('Items array data is not available.');
+                    }
+                } catch (error) {
+                    console.error('Error loading Item information:', error);
                 }
         
 
@@ -263,7 +277,7 @@ locationArray: [],
                 location.addEventListener('click', () => {
                 Storyteller.changeContent(location);
                 Edit.moveLocation(location);
-                NPCs.clearNPCForm();
+                NPCs.clearForm(Ref.npcForm);
 
                 });
 

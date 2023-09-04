@@ -1,19 +1,21 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 
-const Monsters = {
+const Items = {
 
-monstersArray: [],
+itemsArray: [],
+itemsSearchArray: [],
 
-async loadMonstersArray() {
+async loadItemsArray() {
 
 try {
-const response = await fetch('monsters.json'); // Adjust the path if needed
+const response = await fetch('items.json'); // Adjust the path if needed
 const data = await response.json();
-this.monstersArray = data;
+this.itemsArray = data;
+console.log(this.itemsArray)
 return data //.monsters;
 } catch (error) {
-console.error('Error loading monster array:', error);
+console.error('Error loading items array:', error);
 return [];
 }
 
@@ -142,23 +144,23 @@ console.log(`Monster not found: ${contentId}`);
 
 },
 
-// Edit Monsters
-loadMonsterList: function(data) {
+// Edit Items
+loadItemsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
 
 // Clear the existing content
 itemList.innerHTML = '';
 
 // Get an array of monster names and sort them alphabetically
-const monsterNames = Object.keys(data).sort();
+const itemsNames = Object.keys(data).sort();
 
 // Iterate through the sorted monster names
-for (const monsterName of monsterNames) {
-const monster = data[monsterName];
-const monsterNameDiv = document.createElement('div');
-monsterNameDiv.textContent = `${monster.Name} [${monster.Type}]`;
-itemList.appendChild(monsterNameDiv);
-this.fillMonsterForm(monster, monsterNameDiv);
+for (const itemName of itemsNames) {
+const item = data[itemName];
+const itemNameDiv = document.createElement('div');
+itemNameDiv.textContent = `${item.Name} [${item.Type}]`;
+itemList.appendChild(itemNameDiv);
+this.fillItemsForm(item, itemNameDiv);
 }
 
 itemList.style.display = 'block'; // Display the NPC names container
@@ -166,74 +168,58 @@ itemList.style.display = 'block'; // Display the NPC names container
 NPCs.fixDisplay();
 }, 
 
-fillMonsterForm: function(monster, monsterNameDiv){
+fillItemsForm: function(item, itemNameDiv){
 
 // Add click event listener to each NPC name
-monsterNameDiv.addEventListener('click', () => {
+itemNameDiv.addEventListener('click', () => {
 
-Ref.monsterName.value = monster.Name;
-Ref.monsterType.value = monster.Type;
+Ref.itemName.value = item.Name;
+Ref.itemType.value = item.Type;
+Ref.itemSize.value = item.Size;
+Ref.itemWeight.value = item.Weight;
+Ref.itemCost.value = item.Cost;
+Ref.itemDamage.value = item.Damage;
+Ref.itemRange.value = item.Range;
+Ref.itemAC.value = item.AC;
+Ref.itemDescription.value = item.Description;
 
-Ref.monsterAppearing.value = monster.NoApp;
-Ref.monsterMorale.value = monster.Morale;
-
-Ref.monsterMovement.value = monster.Movement;
-Ref.monsterAC.value = monster.AC;
-
-Ref.monsterHD.value = monster.HD;
-Ref.monsterHDRange.value = monster.HDSort;
-
-Ref.monsterAttacks.value = monster.Attacks;
-Ref.monsterDamage.value = monster.Damage;
-Ref.monsterSpecial.value = monster.Special;  
-Ref.monsterSaveAs.value = monster.SaveAs; 
-Ref.monsterTreasure.value = monster.Treasure; 
-Ref.monsterXP.value = monster.XP; 
-
-Ref.monsterDescription.value = monster.Description; 
-
-Ref.monsterForm.style.display = 'flex'; // Display the monsterForm
+Ref.itemForm.style.display = 'flex'; // Display the itemForm
 });
 
 },
 
-saveMonster: function() {
-// Get the monster name from the form
-const monsterName = Ref.monsterName.value;
+saveItem: function() {
 
-const monster = {
-Name: monsterName,
-Type: Ref.monsterType.value,
-NoApp: Ref.monsterAppearing.value,
-Morale: Ref.monsterMorale.value,
-Movement: Ref.monsterMovement.value,
-AC: Ref.monsterAC.value,
-HD: Ref.monsterHD.value,
-HDSort: Ref.monsterHDRange.value,
-Attacks: Ref.monsterAttacks.value,
-Damage: Ref.monsterDamage.value,
-Special: Ref.monsterSpecial.value,
-SaveAs: Ref.monsterSaveAs.value,
-Treasure: Ref.monsterTreasure.value,
-XP: Ref.monsterXP.value,
-Description: Ref.monsterDescription.value
-};
+    const existingItemIndex = this.itemsArray.findIndex(item => item.name === Ref.itemName.value);
+    console.log(Ref.itemName.value)
 
-// Check if the monster already exists by name
-if (this.monstersArray.hasOwnProperty(monsterName)) {
-// Update the existing monster entry
-this.monstersArray[monsterName] = monster;
-console.log('Monster updated:', monster);
-} else {
-// Add the created monster to the monstersArray
-this.monstersArray[monsterName] = monster;
-console.log('New Monster added:', monster);
-}
-},
+    const item = {
 
-addMonsterSearch: function(){
+        Name: Ref.itemName.value,
+        Type: Ref.itemType.value,
+        Size: Ref.itemSize.value,
+        Weight: Ref.itemWeight.value,
+        Cost: Ref.itemCost.value,
+        Damage: Ref.itemDamage.value,
+        Range: Ref.itemRange.value,
+        AC: Ref.itemAC.value,
+        Description: Ref.itemDescription.value
 
-Ref.monsterName.addEventListener('input', (event) => {
+    };
+    
+    if (existingItemIndex !== -1) {
+    // Update the existing NPC entry
+    this.itemsArray[existingItemIndex] = item;
+    console.log('Item updated:', item);
+    } else {
+    this.itemsArray.push(item);
+    }
+    
+    },
+
+addItemSearch: function(){
+
+Ref.itemName.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 
 // Check if the searchText contains '{'
@@ -242,32 +228,30 @@ if (searchText.includes('{')) {
 searchText = searchText.replace('{', '');
 
 // Call the searchMonster function
-this.searchMonster(searchText);
+this.searchItem(searchText);
 }
 });
 
 },
 
-searchMonster: function(searchText) {
-this.monsterSearchObject = {};
+searchItem: function(searchText){
 
-for (const monsterName in this.monstersArray) {
-if (Object.hasOwnProperty.call(this.monstersArray, monsterName)) {
-const monster = this.monstersArray[monsterName];
-const monsterNameLower = monster.Name.toLowerCase();
-const monsterTypeLower = monster.Type.toLowerCase();
-
-if (monsterNameLower.includes(searchText.toLowerCase()) || monsterTypeLower.includes(searchText.toLowerCase())) {
-this.monsterSearchObject[monsterName] = monster;
-}
-}
-}
-
-this.loadMonsterList(this.monsterSearchObject);
-},
+    this.itemSearchArray = [];
+    
+    this.itemSearchArray = this.itemsArray.filter((item) => {
+    const itemName = item.Name.toLowerCase();
+    const itemType = item.Type.toLowerCase();
+    
+    // Check if either the name or occupation contains the search text
+    return itemName.includes(searchText.toLowerCase()) || itemType.includes(searchText.toLowerCase());
+    });
+    
+    this.loadItemsList(this.itemSearchArray);
+    
+    },
 
 
 };
 
-export default Monsters;
+export default Items;
 

@@ -1,0 +1,24 @@
+[
+    {
+        "Name": "Name goes here",
+        "Type": "Type goes here",
+        "Size": "Size goes here",
+        "Weight": "Weight goes here",
+        "Cost": "Cost goes here",
+        "Damage": "Damage goes here",
+        "Range": "Range goes here",
+        "AC": "Armour Class goes here",
+        "Description": "Description goes here"
+    },
+    {
+        "Name": "Name goes here",
+        "Type": "Type goes here",
+        "Size": "Size goes here",
+        "Weight": "Weight goes here",
+        "Cost": "Cost goes here",
+        "Damage": "Damage goes here",
+        "Range": "Range goes here",
+        "AC": "Armour Class goes here",
+        "Description": "Description goes here"
+    }
+]

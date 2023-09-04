@@ -7,6 +7,7 @@ import Edit from "./edit.js";
 import Ambience from "./ambience.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
+import Items  from "./items.js";
 
 class Toolbar{
 
@@ -17,6 +18,9 @@ Monsters.addPredictiveMonsters();
 Monsters.loadMonstersArray();
 Monsters.addMonsterSearch();
 NPCs.addNPCSearch();
+Items.loadItemsArray();
+Items.addItemSearch();
+
 
 //mainToolbar
 Ref.mapButton.addEventListener('click', this.handleMapButtonClick);
@@ -162,7 +166,8 @@ Monsters.loadMonsterList(Monsters.monstersArray);
 break;
 
 case 4:
-
+Items.saveItem();
+Items.loadItemsList(Items.itemsArray);
 break;
 
 case 5:
@@ -192,11 +197,11 @@ document.getElementById('textLocation').value = "";
 break;
 
 case 2:
-NPCs.clearNPCForm();
+NPCs.clearForm(Ref.npcForm);
 break;
 
 case 3:
-Monsters.clearMonsterForm();
+NPCs.clearForm(Ref.monsterForm);
 break;
 
 case 4:

@@ -165,19 +165,15 @@ this.npcArray.push(npc);
 
 },
 
-clearNPCForm: function(){
+clearForm: function(form){
 
-const inputFields = Ref.npcForm.querySelectorAll('input, textarea, select'); // Select input, textarea, and select fields within npcForm
-
-//console.log("clearing npcForm")
-
-// Loop through the form elements and clear their values
+const inputFields = form.querySelectorAll('input, textarea, select'); 
 inputFields.forEach(formElement => {
 if (formElement.tagName === 'SELECT') {
 // For select elements, set the selected index to -1 to clear the selection
 formElement.selectedIndex = -1;
 } else {
-formElement.value = ''; // Clear the value of input and textarea elements
+formElement.value = ''; 
 }
 });
 
@@ -330,7 +326,7 @@ const radiantDisplay = document.getElementById('radiantDisplay');
 
 try{
 
-if (Edit.editPage === 2 | Edit.editPage === 3) {
+if (Edit.editPage === 2 | Edit.editPage === 3 | Edit.editPage === 4) {
 imageContainer.style.width = "45vw";
 radiantDisplay.style.width = "45vw";
 Ref.itemList.style.display = "block";
