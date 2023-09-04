@@ -4,7 +4,6 @@ border-radius: 0;
 background-color: transparent;
 overflow: auto;
 overflow-x: hidden  ;
-color: cyan;
 }
 
 #npcForm::-webkit-scrollbar {
@@ -16,33 +15,43 @@ width: 30vw;
 height: 85vh;
 };
 
-.largeField{
-/* Do not Delete, needed for textarea. */
-}
-
-#npcForm textarea{
-height: 50vh;
-width: 28vw;
-margin: 1vh;
-font-size: 2vh;
-color: bisque;
-font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid gray;
-padding: 0.8vh;
-background-color: black;
-}
-
 #npcForm label{
 left: 0.5vw;
 vertical-align: middle;
 }
 
+.largeField{
+height: 50vh;
+width: 28vw;
+margin: 1vh;
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid gray;
+padding: 0.8vh;
+background-color: black;
+align-content: left;
+}
+
+.medField{
+height: 25vh;
+width: 28vw;
+margin: 1vh;
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid gray;
+padding: 0.8vh;
+background-color: black;
+align-content: left;
+}
+
 .halfField {
-height: 4.5vh;
+height: 4vh;
 width: 13vw;
 margin: 1vh;
 font-size: 2vh;
-color: bisque;
+color: gray;
 font-family: monospace, 'Trebuchet MS', sans-serif;
 border: 0.2vh solid gray;
 padding: 0.8vh;
@@ -50,36 +59,45 @@ background-color: black;
 }
 
 .smallField {
-height: 4vh;
-width: 28vw;
+height: 4.5vh;
+width: 13vw;
 margin: 1vh;
 font-size: 2vh;
-color: bisque;
+color: gray;
 font-family: monospace, 'Trebuchet MS', sans-serif;
 border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
 
-.stats-all{
+.lineField {
+height: 4vh;
+width: 28vw;
+margin: 1vh;
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid gray;
+padding: 0.8vh;
+background-color: black;
+}
+
+.NPC-stats-all{
 display: flex;
 flex-direction: row;
 }
 
 
-.stats-left {
+.NPC-stats-left {
 text-align: right;
 width: 15.5vw;
 
 }
 
-.stats-right {
+.NPC-stats-right {
 text-align: right;
 width: 14vw;
 }
-
-
-
 
 #npcForm input[type="number"] {
 height: 4vh;
@@ -110,7 +128,7 @@ height: 6vh;
 width: 14.3vw;
 margin: 1vh;
 font-size: 2vh;
-color: bisque;
+color: gray;
 font-family: monospace, 'Trebuchet MS', sans-serif;
 border: 0.2vh solid gray;
 padding: 0.8vh;
@@ -122,7 +140,7 @@ height: 6vh;
 width: 29vw;
 margin: 1vh;
 font-size: 2vh;
-color: bisque;
+color: gray;
 font-family: monospace, 'Trebuchet MS', sans-serif;
 border: 0.2vh solid gray;
 padding: 0.8vh;
@@ -131,12 +149,14 @@ background-color: black;
 
 .halfField:focus,
 .smallField:focus,
+.medField:focus,
 .largeField:focus,
+.lineField:focus,
 .stat:focus{
 border-color: hotpink;
 outline: 0.2vh solid hotpink;
 background-color: transparent;
-color: bisque;
+color: hotpink;
 border-radius: 0;
 text-align: left;
 vertical-align: middle;
@@ -157,7 +177,7 @@ opacity: 1; /* Firefox */
 
 #itemList {
 color: gray;
-background-color: transparent;
+background-color: black;
 opacity: 1;
 height: 100vh;
 border: transparent;

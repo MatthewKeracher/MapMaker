@@ -67,53 +67,116 @@
 
 <div id="itemList"></div>
 
+<form id="objectForm" class="objectForm">
+    <div class="objectFormContainer">
+    
+    <label for="objectName">Name:</label>
+    <input class="lineField" type="textarea" id="objectName" name="objectName" placeholder="{... to Search" required>
+    
+    <label for="objectType">Type:</label>
+    <input class="lineField" type="textarea" id="objectType" name="objectType">
+     
+    <br>
+    
+    <div class = "Monster-stats-all">
+    
+    <div class="Monster-stats-left"> 
+    
+    <label for="objectSize">Size:</label>
+    <input class="halfField" type="textarea" id="objectSize" name="objectSize">
+    
+    <label for="objectWeight">Weight:</label>
+    <input class="halfField" type="textarea" id="objectWeight" name="objectWeight">
+    
+    <label for="objectCost">Cost:</label>
+    <input class="halfField" type="textarea" id="objectCost" name="objectCost">
+    
+    </div>
+    
+    <div class="Monster-stats-right"> 
+    
+    <label for="objectDamage">Damage:</label>
+    <input class="halfField" type="textarea" id="objectDamage" name="objectDamage">
+    
+    <label for="objectRange">Range:</label>
+    <input class="halfField" type="textarea" id="objectRange" name="objectRange">
+    
+    <label for="objectAC">Armour Class:</label>
+    <input class="halfField" type="textarea" id="objectAC" name="objectAC">
+    
+    
+    
+    </div>
+    </div>
+    
+    <label for="objectDescription">Description:</label>
+    <textarea class="medField" type="textarea" id="objectDescription" name="objectDescription"></textarea>
+    
+    </div>
+    </form>
+
 <form id="monsterForm" class="monsterForm">
 <div class="monsterFormContainer">
 
 <label for="monsterName">Name:</label>
-<input class="smallField" type="textarea" id="monsterName" name="monsterName" placeholder="{... to Search" required>
+<input class="lineField" type="textarea" id="monsterName" name="monsterName" placeholder="{... to Search" required>
 
 <label for="monsterType">Type:</label>
-<input class="smallField" type="textarea" id="monsterType" name="monsterType">
+<input class="lineField" type="textarea" id="monsterType" name="monsterType">
 
 <label for="monsterAppearing"># Appearing:</label>
-<input class="smallField" type="textarea" id="monsterAppearing" name="monsterAppearing">
-
-<label for="monsterMorale">Morale:</label>
-<input class="smallField" type="textarea" id="monsterMorale" name="monsterMorale">
-
-<label for="monsterMovement">Movement:</label>
-<input class="smallField" type="textarea" id="monsterMovement" name="monsterMovement">
-
-<label for="monsterAC">Armour Class:</label>
-<input class="smallField" type="textarea" id="monsterAC" name="monsterAC">
-
-<label for="monsterHD">Hit Dice:</label>
-<input class="smallField" type="textarea" id="monsterHD" name="monsterHD">
-
-<label for="monsterHDRange">Hit Dice Range:</label>
-<input class="smallField" type="textarea" id="monsterHDRange" name="monsterHDRange">
-
-<label for="monsterAttacks">Attacks:</label>
-<input class="smallField" type="textarea" id="monsterAttacks" name="monsterAttacks">
-
-<label for="monsterDamage">Damage:</label>
-<input class="smallField" type="textarea" id="monsterDamage" name="monsterDamage">
-
-<label for="monsterSpecial">Special:</label>
-<input class="smallField" type="textarea" id="monsterSpecial" name="monsterSpecial">
-
-<label for="monsterSaveAs">Save As:</label>
-<input class="smallField" type="textarea" id="monsterSaveAs" name="monsterSaveAs">
-
-<label for="monsterTreasure">Treasure:</label>
-<input class="smallField" type="textarea" id="monsterTreasure" name="monsterTreasure">
-
-<label for="monsterXP">Experience Points:</label>
-<input class="smallField" type="textarea" id="monsterXP" name="monsterXP">
+<input class="lineField" type="textarea" id="monsterAppearing" name="monsterAppearing">
 
 <label for="monsterDescription">Description:</label>
-<input class="smallField" type="textarea" id="monsterDescription" name="monsterDescription">
+<textarea class="largeField" type="textarea" id="monsterDescription" name="monsterDescription"></textarea>
+
+<br>
+
+<div class = "Monster-stats-all">
+
+<div class="Monster-stats-left"> 
+
+<label for="monsterAttacks">Attacks:</label>
+<input class="halfField" type="textarea" id="monsterAttacks" name="monsterAttacks">
+
+<label for="monsterDamage">Damage:</label>
+<input class="halfField" type="textarea" id="monsterDamage" name="monsterDamage">
+
+<label for="monsterHD">Hit Dice:</label>
+<input class="halfField" type="textarea" id="monsterHD" name="monsterHD">
+
+<label for="monsterHDRange">Hit Range:</label>
+<input class="halfField" type="textarea" id="monsterHDRange" name="monsterHDRange">
+
+<label for="monsterSaveAs">Save As:</label>
+<input class="halfField" type="textarea" id="monsterSaveAs" name="monsterSaveAs">
+
+</div>
+
+<div class="Monster-stats-right"> 
+
+<label for="monsterMorale">Morale:</label>
+<input class="halfField" type="textarea" id="monsterMorale" name="monsterMorale">
+
+<label for="monsterMovement">Movement:</label>
+<input class="halfField" type="textarea" id="monsterMovement" name="monsterMovement">
+
+<label for="monsterAC">Armour Class:</label>
+<input class="halfField" type="textarea" id="monsterAC" name="monsterAC">
+
+<label for="monsterXP">Exp Points:</label>
+<input class="halfField" type="textarea" id="monsterXP" name="monsterXP">
+
+<label for="monsterTreasure">Treasure:</label>
+<input class="halfField" type="textarea" id="monsterTreasure" name="monsterTreasure">
+
+
+
+</div>
+</div>
+
+<label for="monsterSpecial">Special:</label>
+<textarea class="medField" type="textarea" id="monsterSpecial" name="monsterSpecial"></textarea>
 
 </div>
 </form>
@@ -123,10 +186,10 @@
 <div class="npcFormContainer">
 
 <label for="npcName">Full or Unique Name:</label>
-<input class="smallField" type="textarea" id="npcName" name="npcName" placeholder="{... to Search" required>
+<input class="lineField" type="textarea" id="npcName" name="npcName" placeholder="{... to Search" required>
 
 <label for="npcOccupation">3 Word Description</label>
-<input class="smallField" type="textarea" id="npcOccupation" name="npcOccupation"
+<input class="lineField" type="textarea" id="npcOccupation" name="npcOccupation"
 placeholder="What do other people know them as?">
 
 <br>
@@ -150,54 +213,54 @@ placeholder="Put any other information about this NPC here."></textarea>
 <select class="smallSelect" id="MorningLocation" required>                    
 </select>
 
-<input class="smallField" type="textarea" id="MorningActivity" name="MorningActivity"
+<input class="lineField" type="textarea" id="MorningActivity" name="MorningActivity"
 placeholder="What do the normally do here? They are...">
 
 <label for="AfternoonLocation">Afternoon Location:</label>
 <select class="smallSelect" id="AfternoonLocation">                    
 </select>
 
-<input class="smallField" type="textarea" id="AfternoonActivity" name="AfternoonActivity"
+<input class="lineField" type="textarea" id="AfternoonActivity" name="AfternoonActivity"
 placeholder="What do the normally do here? They are...">
 
 <label for="NightLocation">Night Location:</label>
 <select class="smallSelect" id="NightLocation">                    
 </select>
 
-<input class="smallField" type="textarea" id="NightActivity" name="NightActivity"
+<input class="lineField" type="textarea" id="NightActivity" name="NightActivity"
 placeholder="What do the normally do here? They are...">
 
 
 <br>
 
-<div class = "stats-all">
+<div class = "NPC-stats-all">
 
-    <div class="stats-left"> 
+<div class="NPC-stats-left"> 
 
-    <label for="STR">Strength:</label>
-    <input class="stat" type="number" id="STR" name="STR">
-    
-    <label for="DEX">Dexterity:</label>
-    <input class="stat" type="number" id="DEX" name="DEX">
-    
-    <label for="INT">Intelligence:</label>
-    <input class="stat" type="number" id="INT" name="INT">    
+<label for="STR">Strength:</label>
+<input class="stat" type="number" id="STR" name="STR">
 
-    </div>
+<label for="DEX">Dexterity:</label>
+<input class="stat" type="number" id="DEX" name="DEX">
 
-    <div class="stats-right"> 
-    
-    <label for="WIS">Wisdom:</label>
-    <input class="stat" type="number" id="WIS" name="WIS">
-    
-    <label for="CON">Constitution:</label>
-    <input class="stat" type="number" id="CON" name="CON">
-    
-    <label for="CHA">Charisma:</label>
-    <input class="stat" type="number" id="CHA" name="CHA">
-    
-        </div>
-    </div>
+<label for="INT">Intelligence:</label>
+<input class="stat" type="number" id="INT" name="INT">    
+
+</div>
+
+<div class="NPC-stats-right"> 
+
+<label for="WIS">Wisdom:</label>
+<input class="stat" type="number" id="WIS" name="WIS">
+
+<label for="CON">Constitution:</label>
+<input class="stat" type="number" id="CON" name="CON">
+
+<label for="CHA">Charisma:</label>
+<input class="stat" type="number" id="CHA" name="CHA">
+
+</div>
+</div>
 </div>
 
 </form>

@@ -15,6 +15,7 @@ init() {
 Ambience.initializeAmbienceDropdowns();
 Monsters.addPredictiveMonsters();
 Monsters.loadMonstersArray();
+Monsters.addMonsterSearch();
 NPCs.addNPCSearch();
 
 //mainToolbar
@@ -137,9 +138,43 @@ Array.exportArray();
 };  
 
 handleeditSaveButtonButtonClick(){
+
+const Page = Edit.editPage
+
+editSaveButton.classList.add('click-button');
+setTimeout(() => {
+editSaveButton.classList.remove('click-button');
+}, 1000); // 1000 milliseconds = 1 second
+
+switch (Page) {
+case 1:
 Edit.saveLocation();
+break;
+
+case 2:
 NPCs.saveNPC();
 NPCs.loadNPC(NPCs.npcArray)
+break;
+
+case 3:
+Monsters.saveMonster();
+Monsters.loadMonsterList(Monsters.monstersArray);
+break;
+
+case 4:
+
+break;
+
+case 5:
+
+break;
+
+default:
+
+break;
+
+}
+
 };
 
 handleeditClearButtonClick(){
@@ -157,11 +192,11 @@ document.getElementById('textLocation').value = "";
 break;
 
 case 2:
-
+NPCs.clearNPCForm();
 break;
 
 case 3:
-NPCs.clearForm();
+Monsters.clearMonsterForm();
 break;
 
 case 4:

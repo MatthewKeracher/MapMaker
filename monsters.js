@@ -1,4 +1,5 @@
 import Ref from "./ref.js";
+import NPCs from "./npcs.js";
 
 const Monsters = {
 
@@ -141,58 +142,145 @@ console.log(`Monster not found: ${contentId}`);
 },
 
 // Edit Monsters
-
-loadMonsterList: function() {
-
+loadMonsterList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
 
 // Clear the existing content
 itemList.innerHTML = '';
 
-for (const monster of this.monstersArray) {
+// Get an array of monster names and sort them alphabetically
+const monsterNames = Object.keys(data).sort();
+
+// Iterate through the sorted monster names
+for (const monsterName of monsterNames) {
+const monster = data[monsterName];
 const monsterNameDiv = document.createElement('div');
-monsterNameDiv.textContent = monster.name + ' [' + monster.Type + ']';            
-
+monsterNameDiv.textContent = `${monster.Name} [${monster.Type}]`;
+itemList.appendChild(monsterNameDiv);
 this.fillMonsterForm(monster, monsterNameDiv);
-
 }
 
 itemList.style.display = 'block'; // Display the NPC names container
 
-this.fixDisplay();
-
-},
+NPCs.fixDisplay();
+}, 
 
 fillMonsterForm: function(monster, monsterNameDiv){
 
 // Add click event listener to each NPC name
 monsterNameDiv.addEventListener('click', () => {
 
-console.log(monster)
+Ref.monsterName.value = monster.Name;
+Ref.monsterType.value = monster.Type;
 
-Ref.monsterName.value = monster.monsterName;
-Ref.monsterType.value = monster.monsterType;
+Ref.monsterAppearing.value = monster.NoApp;
+Ref.monsterMorale.value = monster.Morale;
 
-Ref.monsterAppearing.value = monster.monsterAppearing;
-Ref.monsterMorale.value = monster.monsterMorale;
+Ref.monsterMovement.value = monster.Movement;
+Ref.monsterAC.value = monster.AC;
 
-Ref.monsterMovement.value = monster.monsterMovement;
-Ref.monsterAC.value = monster.monsterAC;
+Ref.monsterHD.value = monster.HD;
+Ref.monsterHDRange.value = monster.HDSort;
 
-Ref.monsterHD.value = monster.monsterHD;
-Ref.monsterHDRange.value = monster.monsterHDRange;
+Ref.monsterAttacks.value = monster.Attacks;
+Ref.monsterDamage.value = monster.Damage;
+Ref.monsterSpecial.value = monster.Special;  
+Ref.monsterSaveAs.value = monster.SaveAs; 
+Ref.monsterTreasure.value = monster.Treasure; 
+Ref.monsterXP.value = monster.XP; 
 
-Ref.monsterAttacks.value = monster.monsterAttacks;
-Ref.monsterDamage.value = monster.monsterDamage;
-Ref.monsterSpecial.value = monster.monsterSpecial;  
-Ref.monsterSaveAs.value = monster.monsterSaveAs; 
-Ref.monsterTreasure.value = monster.monsterTreasure; 
-Ref.monsterXP.value = monster.monsterXP; 
+Ref.monsterDescription.value = monster.Description; 
 
-Ref.monsterDescription.value = monster.monsterDescription; 
-
-Ref.npcForm.style.display = 'flex'; // Display the npcForm
+Ref.monsterForm.style.display = 'flex'; // Display the monsterForm
 });
+
+},
+
+saveMonster: function() {
+// Get the monster name from the form
+const monsterName = Ref.monsterName.value;
+
+const monster = {
+Name: monsterName,
+Type: Ref.monsterType.value,
+NoApp: Ref.monsterAppearing.value,
+Morale: Ref.monsterMorale.value,
+Movement: Ref.monsterMovement.value,
+AC: Ref.monsterAC.value,
+HD: Ref.monsterHD.value,
+HDSort: Ref.monsterHDRange.value,
+Attacks: Ref.monsterAttacks.value,
+Damage: Ref.monsterDamage.value,
+Special: Ref.monsterSpecial.value,
+SaveAs: Ref.monsterSaveAs.value,
+Treasure: Ref.monsterTreasure.value,
+XP: Ref.monsterXP.value,
+Description: Ref.monsterDescription.value
+};
+
+// Check if the monster already exists by name
+if (this.monstersArray.hasOwnProperty(monsterName)) {
+// Update the existing monster entry
+this.monstersArray[monsterName] = monster;
+console.log('Monster updated:', monster);
+} else {
+// Add the created monster to the monstersArray
+this.monstersArray[monsterName] = monster;
+console.log('New Monster added:', monster);
+}
+},
+
+addMonsterSearch: function(){
+
+Ref.monsterName.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
+
+// Check if the searchText contains '{'
+if (searchText.includes('{')) {
+// Remove '{' from the searchText
+searchText = searchText.replace('{', '');
+
+// Call the searchMonster function
+this.searchMonster(searchText);
+}
+});
+
+},
+
+searchMonster: function(searchText) {
+this.monsterSearchObject = {};
+
+for (const monsterName in this.monstersArray) {
+if (Object.hasOwnProperty.call(this.monstersArray, monsterName)) {
+const monster = this.monstersArray[monsterName];
+const monsterNameLower = monster.Name.toLowerCase();
+const monsterTypeLower = monster.Type.toLowerCase();
+
+if (monsterNameLower.includes(searchText.toLowerCase()) || monsterTypeLower.includes(searchText.toLowerCase())) {
+this.monsterSearchObject[monsterName] = monster;
+}
+}
+}
+
+this.loadMonsterList(this.monsterSearchObject);
+},
+
+clearMonsterForm: function(){
+
+const inputFields = Ref.monsterForm.querySelectorAll('input, textarea, select'); // Select input, textarea, and select fields within npcForm
+
+//console.log("clearing npcForm")
+
+// Loop through the form elements and clear their values
+inputFields.forEach(formElement => {
+if (formElement.tagName === 'SELECT') {
+// For select elements, set the selected index to -1 to clear the selection
+formElement.selectedIndex = -1;
+} else {
+formElement.value = ''; // Clear the value of input and textarea elements
+}
+});
+
 
 },
 

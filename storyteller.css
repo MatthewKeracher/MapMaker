@@ -45,57 +45,6 @@ flex: 1;
 }
 
 
-.storyTable input {
-height: 3vh;
-width: 100%;
-border: 0.1px solid whitesmoke;
-background-color: transparent;
-color:whitesmoke;
-font-size: 1.5vh;             
-padding: 0;
-margin: 0;
-opacity: 1;
-font-family: monospace, 'Trebuchet MS', sans-serif;
-text-align: left;
-}
-                    
-.storyTable tr:nth-child(even) {
-background-color: black;
-}
-
-.storyTable tr:hover {
-background-color: lime;
-opacity: 1;
-}
-
-/* Apply the 'resizable' class to the table */
-.resizable {
-table-layout: fixed; /* Set table layout to fixed for resizable columns */
-width: 100%; /* Ensure the table takes up the available space */
-}
-
-/* Style for the column resizer handle */
-.resizable th {
-position: relative;
-}
-
-.resizable th::after {
-content: '';
-position: absolute;
-top: 0;
-right: -5px; /* Adjust this value for the handle's position */
-width: 10px; /* Adjust the handle's width */
-height: 100%;
-cursor: col-resize;
-background: transparent;
-}
-
-/* Apply the resizable class to the input elements in the first row (header) */
-.resizable th input {
-width: 100%; /* Allow input elements to adjust based on header's width */
-}
-
-
 .Storyteller:focus {
 outline: none; /* Remove the default outline */
 border-radius: 0px; /* Adjust the border radius for rounded corners */

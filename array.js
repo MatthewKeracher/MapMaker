@@ -129,6 +129,17 @@ locationArray: [],
                 } catch (error) {
                     console.error('Error loading NPC information:', error);
                 }
+
+                try {
+                    if (data.monstersArray) {
+                        Monsters.monstersArray = data.monstersArray;
+                        //console.log( Monsters.monstersArray);
+                    } else {
+                        console.log('Monster array data is not available.');
+                    }
+                } catch (error) {
+                    console.error('Error loading Monster information:', error);
+                }
         
 
                 try{
