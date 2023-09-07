@@ -27,10 +27,10 @@ flex-direction: row;
 }
 
 .editLocationName:focus {
-border-color: lime; /* Change the border color */
+border-color: cyan; /* Change the border color */
 outline: none; /* Remove the default outline */
 background-color: black; /* Change the background color */
-color: lime; /* Change the text color */
+color: cyan; /* Change the text color */
 border-radius: 0px; /* Adjust the border radius for rounded corners */
 }
 
@@ -53,13 +53,13 @@ vertical-align: top;
 background-color: black; 
 color: gray;
 padding: 1vh;
-
 }
+
 .editBox:focus {
-border-color: lime; /* Change the border color */
+border-color: cyan; /* Change the border color */
 outline: none; /* Remove the default outline */
 background-color: transparent; /* Change the background color */
-color: lime; /* Change the text color */
+color: cyan; /* Change the text color */
 border-radius: 0px; /* Adjust the border radius for rounded corners */
 }
 
@@ -67,21 +67,39 @@ border-radius: 0px; /* Adjust the border radius for rounded corners */
 position: fixed;
 color: whitesmoke;
 top: 7vh;   
+padding: 0px;
 width: 30vw; 
 right: 0vw;                
 height: 160vh;     
-font-size: 2vh;
+font-size: 1.9vh;
 display: none;
 flex-direction: column;
 }
 
-.AmbienceContainer label{
-color: hotpink;
-font-size: 2.5vh;
-left: 0;
+.AmbienceContainer select {
+padding: 0px;
+font-size: 2vh;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: peachpuff;
+width: 15vw;
+font-family: monospace, 'Trebuchet MS', sans-serif;
 }
 
-.AmbienceContainer select {
+.SettingsContainer{
+position: fixed;
+color: whitesmoke;
+top: 7vh;   
+width: 30vw; 
+right: 0vw;                
+height: 160vh;     
+font-size: 1.9vh;
+display: none;
+flex-direction: column;
+}
+
+
+.SettingsContainer select {
 padding: 8px;
 font-size: 2vh;
 border: 1px solid #ccc;

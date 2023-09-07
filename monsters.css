@@ -1,3 +1,20 @@
+#ambienceForm { 
+border-radius: 0;
+background-color: transparent;
+overflow: auto;
+overflow-x: hidden ;
+}
+
+#ambienceForm::-webkit-scrollbar {
+width: 0.1px; /* Set the width of the scrollbar */
+}
+
+.AmbienceContainer{
+width: 30vw;
+height: 85vh;
+};
+
+
 #monsterForm {
 display: none;    
 border-radius: 0;

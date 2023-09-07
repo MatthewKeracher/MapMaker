@@ -12,6 +12,23 @@ locationArray: [],
 
 //If there are problems with the load dialog freezing, try deleting unneccesary .json files in downloads folder.
 
+//for removing keys from .json objects
+
+extractValues(inputObject) {
+    const valuesArray = [];
+  
+    for (const key in inputObject) {
+      if (Object.hasOwnProperty.call(inputObject, key)) {
+        const value = inputObject[key];
+        valuesArray.push(value);
+      }
+    }
+  
+    return valuesArray;
+  },
+
+
+
 //For Saving...
 
                 addNewLocation(location) {

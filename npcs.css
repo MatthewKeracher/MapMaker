@@ -59,15 +59,16 @@ background-color: black;
 }
 
 .smallField {
-height: 4.5vh;
-width: 13vw;
-margin: 1vh;
-font-size: 2vh;
-color: gray;
-font-family: monospace, 'Trebuchet MS', sans-serif;
-border: 0.2vh solid gray;
-padding: 0.8vh;
-background-color: black;
+    height: 12vh;
+    width: 28vw;
+    margin: 1vh;
+    font-size: 2vh;
+    color: gray;
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    border: 0.2vh solid gray;
+    padding: 0.8vh;
+    background-color: black;
+    align-content: left;
 }
 
 .lineField {
@@ -193,8 +194,8 @@ scrollbar-color: black;
 }
 
 #itemList div:hover {
-background-color: lime; /* Change the background color on hover */
-color: black;
+background-color: gray; /* Change the background color on hover */
+color: whitesmoke;
 cursor: pointer; /* Show pointer cursor on hover */
 }  
 

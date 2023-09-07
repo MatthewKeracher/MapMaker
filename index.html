@@ -261,63 +261,139 @@ placeholder="What do the normally do here? They are...">
 
 </div>
 </div>
+
+
+
 </div>
 
 </form>
 
 
+
 <div class="AmbienceContainer"> 
 
-<label id = "AmbienceHead"> Set Ambience:</label>
-<p>Set the dynamic and continuous description style to theme each entry. These
-are stored in a .json file. Select rediance for ambient lighting.
-</p>
+    <form id="ambienceForm" class="ambienceForm">
+    <div class="ambienceFormContainer">
 
-<label for="radianceDropdown">Interior or Exterior:</label>
-<select id="radianceDropdown">
-<option value="exterior">Exterior</option>
-<option value="interior">Interior</option>        
-</select>
+    <br>
 
-<br>
+    <div class = "Monster-stats-all">
 
-<label for="contextDropdown">Select Context:</label>
-<select id="contextDropdown">
-<option value=""></option>
-</select>
+    <div class="Monster-stats-left"> 
+            
+        <label for="radianceDropdown">Interior or Exterior:</label><br>
 
-<br>
+        <label for="contextDropdown">Select Context:</label><br>
 
-<label for="mainAmbienceDropdown">Select Main:</label>
-<select id="mainAmbienceDropdown">
-<option value=""></option>
-</select>
+        <label for="mainAmbienceDropdown">Select Main:</label><br>
 
-<br>
+        <label for="secondAmbienceDropdown">Select Second:</label><br>
+        
+       
 
-<label for="secondAmbienceDropdown">Select Second:</label>
-<select id="secondAmbienceDropdown">
-<option value="">Select Main</option>
-</select>
+    </div>
+            
+    <div class="Monster-stats-right"> 
 
-<br>
+        <select id="radianceDropdown">
+        <option value="exterior">Exterior</option>
+        <option value="interior">Interior</option>        
+        </select><br>
 
-<label id = "ExportHead"> Export .csv :</label>
-<p>Select an array to export as a .csv file for easier editing.
-</p>
+        <select id="contextDropdown">
+        <option value=""></option>
+        </select><br>
 
-<label for="exportDropdown">Select Array:</label>
-<select id="exportDropdown">
-<option value="">Select Array!</option>
-<option value="NPCs">NPCs</option>
-<option value="Locations">Locations</option>
-</select>
+        <select id="mainAmbienceDropdown">
+        <option value=""></option>
+        </select><br>   
 
-<div class = "exportToolbar" id="exportToolbar"> 
-<button type="button" class = "button" id="importData">Import</button>
-<input type="file" id="csvFileInput" style="display: none">
-<button type="button" class = "button" id="exportData">Export</button>
+        <select id="secondAmbienceDropdown">
+        <option value="">Select Main</option>
+        </select><br>
+            
+    </div>
+
+    </div>
+
+    <br><hr>
+
+    <label for="Context">Context:</label>
+    <input class="lineField" type="textarea" id="Context" name="Context" required>
+
+    <div class = "Monster-stats-all">
+
+        <div class="Monster-stats-left"> 
+        
+        <label for="Primary">Primary:</label>
+        <input class="halfField" type="textarea" id="Primary" name="Primary">   
+        
+        </div>
+        
+        <div class="Monster-stats-right"> 
+        
+        <label for="Secondary">Secondary:</label>
+        <input class="halfField" type="textarea" id="Secondary" name="Secondary">
+        
+        </div>
+
+    </div>
+
+        <label for="ambienceDescription">Description:</label>
+        <textarea class="medField" type="textarea" id="ambienceDescription" name="ambienceDescription"></textarea>
+
+        <label for="sight">Sight:</label>
+        <textarea class="smallField" type="textarea" id="sight" name="sight"></textarea>
+
+        <label for="smell">Smell:</label>
+        <textarea class="smallField" type="textarea" id="smell" name="smell"></textarea>
+
+        <label for="sounds">Sounds:</label>
+        <textarea class="smallField" type="textarea" id="sounds" name="sounds"></textarea>
+
+        <label for="feel">Feel:</label>
+        <textarea class="smallField" type="textarea" id="feel" name="feel"></textarea>
+
+        <label for="taste">Taste:</label>
+        <textarea class="smallField" type="textarea" id="taste" name="taste"></textarea>
+
+    </div>
+    </form>
+
 </div>
+
+<div class="SettingsContainer"> 
+
+    <label id = "AmbienceHead"> Set Ambience:</label>
+    <p>Set the dynamic and continuous description style to theme each entry. These
+    are stored in a .json file. Select rediance for ambient lighting.
+    </p>
+    
+    
+    
+    <br>
+    
+    
+    
+    <br>
+    
+    <label id = "ExportHead"> Export .csv :</label>
+    <p>Select an array to export as a .csv file for easier editing.
+    </p>
+    
+    <label for="exportDropdown">Select Array:</label>
+    <select id="exportDropdown">
+    <option value="">Select Array!</option>
+    <option value="NPCs">NPCs</option>
+    <option value="Locations">Locations</option>
+    </select>
+    
+    <div class = "exportToolbar" id="exportToolbar"> 
+    <button type="button" class = "button" id="importData">Import</button>
+    <input type="file" id="csvFileInput" style="display: none">
+    <button type="button" class = "button" id="exportData">Export</button>
+    </div>
+
 </div>
 
 <div class = "bottomToolbar" id="bottomToolbar"> 

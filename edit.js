@@ -4,6 +4,7 @@ import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items from "./items.js";
+import Ambience from "./ambience.js";
 
 const Edit = {
 
@@ -203,6 +204,8 @@ Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
+
 break;
 
 case 2:
@@ -216,6 +219,7 @@ Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
 
 NPCs.loadNPC(NPCs.npcArray);
 
@@ -233,6 +237,7 @@ Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
 
 Monsters.loadMonsterList(Monsters.monstersArray);
 
@@ -248,6 +253,7 @@ Ref.npcForm.style.display = "none"
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
 
 Items.loadItemsList(Items.itemsArray);
 
@@ -256,6 +262,22 @@ break;
 case 5:
 //Show
 Ref.AmbienceContainer.style.display = "flex";
+
+//Hide
+Ref.monsterForm.style.display = "none";
+Ref.npcForm.style.display = "none";
+Ref.itemForm.style.display = "none";
+Ref.editLocationName.style.display  = "none";
+Ref.textLocation.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
+
+Ambience.loadAmbienceList(Ambience.ambienceArray);
+
+break;
+
+case 6:
+//Show
+Ref.SettingsContainer.style.display = "flex";
 
 //Hide
 Ref.monsterForm.style.display = "none";

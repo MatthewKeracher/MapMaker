@@ -1,17 +1,23 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Items from "./items.js";
+import Array from "./array.js";
 
 const Monsters = {
 
 monstersArray: [],
 
+//Load the Array
 async loadMonstersArray() {
 
 try {
 const response = await fetch('monsters.json'); // Adjust the path if needed
 const data = await response.json();
 this.monstersArray = data;
+
+const noKeys = Array.extractValues(data);
+this.monstersArray = noKeys;
+
 return data //.monsters;
 } catch (error) {
 console.error('Error loading monster array:', error);
@@ -19,6 +25,8 @@ return [];
 }
 
 },   
+
+// Add to Storyteller
 
 addPredictiveContent() {
     Ref.textLocation.addEventListener('input', (event) => {
@@ -81,28 +89,45 @@ addPredictiveContent() {
   },
   
 
-getMonsters(locationText) {
-const asteriskBrackets = /\*([^*]+)\*/g;
+// getMonsters(locationText) {
+// const asteriskBrackets = /\*([^*]+)\*/g;
 
-return locationText.replace(asteriskBrackets, (match, monsterName) => {
-console.log(monsterName)
-if (this.monstersArray[monsterName]) {
-return `<span class="expandable monster" data-content-type="monster" divId="${monsterName}">${monsterName.toUpperCase()}</span>`;
-} else {
-console.log(`Monster not found: ${monsterName}`);
-return match;
-}
-});
-},
+// return locationText.replace(asteriskBrackets, (match, monsterName) => {
+// console.log(monsterName)
+// if (this.monstersArray[monsterName]) {
+// return `<span class="expandable monster" data-content-type="monster" divId="${monsterName}">${monsterName.toUpperCase()}</span>`;
+// } else {
+// console.log(`Monster not found: ${monsterName}`);
+// return match;
+// }
+// });
+// },
+
+
+getMonsters(locationText) {
+  const asteriskBrackets = /\*([^*]+)\*/g;
+  
+  return locationText.replace(asteriskBrackets, (match, targetText) => {
+    const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
+    if (monster) {
+  return `<span class="expandable monster" data-content-type="monster" divId="${targetText}">${targetText.toUpperCase()}</span>`;
+  } else {
+  console.log(`Monster not found: ${targetText}`);
+  return match;
+  }
+  });
+  },
+
 
 extraMonsters(contentId) {
 const asteriskBrackets = /\*([^*]+)\*/g;
 
-return contentId.replace(asteriskBrackets, (match, monsterName) => {
-if (this.monstersArray[monsterName]) {
-return this.addMonsterInfo(monsterName);
+return contentId.replace(asteriskBrackets, (match, targetText) => {
+const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
+if (monster) {
+return this.addMonsterInfo(targetText);
 } else {
-console.log(`Monster not found: ${monsterName}`);
+console.log(`Monster not found: ${targetText}`);
 return match;
 }
 });
@@ -113,7 +138,7 @@ addMonsterInfo(contentId) {
 const extraContent = document.getElementById('extraContent');
 
 //Search for Monster in the Array   
-const monster = this.monstersArray[contentId]; 
+const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === contentId.toLowerCase());
 
 if (monster) {
 
@@ -168,7 +193,7 @@ const monsterNames = Object.keys(data).sort();
 for (const monsterName of monsterNames) {
 const monster = data[monsterName];
 const monsterNameDiv = document.createElement('div');
-monsterNameDiv.textContent = `${monster.Name} [${monster.Type}]`;
+monsterNameDiv.innerHTML = `[${monster.Type}] <span class="hotpink">${monster.Name}</span>`;
 itemList.appendChild(monsterNameDiv);
 this.fillMonsterForm(monster, monsterNameDiv);
 }

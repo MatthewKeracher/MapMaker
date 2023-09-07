@@ -9,6 +9,11 @@ radiantDisplay: document.getElementById('radiantDisplay'),
 mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
 
+
+//SettingContainer
+SettingsContainer: document.querySelector('.SettingsContainer'),
+
+
 //Storyteller
 locationLabel: document.getElementById('locationLabel'),
 Storyteller: document.getElementById('Storyteller'),
@@ -96,6 +101,8 @@ contextDropdown: document.getElementById("contextDropdown"),
 mainAmbienceDropdown: document.getElementById("mainAmbienceDropdown"),
 //Morning, Afternoon, Night
 secondAmbienceDropdown: document.getElementById("secondAmbienceDropdown"),
+
+
 
 //Toolbars
 editToolbar: document.getElementById('editToolbar'),

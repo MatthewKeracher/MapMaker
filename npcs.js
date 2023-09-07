@@ -326,7 +326,7 @@ const radiantDisplay = document.getElementById('radiantDisplay');
 
 try{
 
-if (Edit.editPage === 2 | Edit.editPage === 3 | Edit.editPage === 4) {
+if (Edit.editPage === 2 | Edit.editPage === 3 | Edit.editPage === 4 | Edit.editPage === 5) {
 imageContainer.style.width = "45vw";
 radiantDisplay.style.width = "45vw";
 Ref.itemList.style.display = "block";

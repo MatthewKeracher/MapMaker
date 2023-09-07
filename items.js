@@ -1,17 +1,22 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
+import Array from "./array.js";
 
 const Items = {
 
 itemsArray: [],
 itemsSearchArray: [],
 
+//Load the Array
 async loadItemsArray() {
 
 try {
 const response = await fetch('items.json'); // Adjust the path if needed
 const data = await response.json();
 this.itemsArray = data;
+
+const noKeys = Array.extractValues(data);
+this.itemsArray = noKeys;
 
 return data //.monsters;
 } catch (error) {
@@ -21,65 +26,20 @@ return [];
 
 },   
 
-// Add to Storyteller
-addPredictiveObjects() {
+//Add to Storyteller
 
-Ref.textLocation.addEventListener('input', (event) => {
-const text = event.target.value;
-const cursorPosition = event.target.selectionStart;
+//addPredictive Items is now with addPredictive Monsters
 
-const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-if (openBraceIndex !== -1) {
-const searchText = text.substring(openBraceIndex + 1, cursorPosition);
-
-const filteredItems = this.itemsArray.filter(item =>
-    item.Name.toLowerCase().includes(searchText.toLowerCase())
-  );
-
-//Show ExtraContent      
-Ref.itemList.style.display = 'block';
-Ref.itemList.innerHTML = ''; // Clear existing content
-
-//fixDisplay()
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-imageContainer.style.width = "45vw";
-radiantDisplay.style.width = "45vw";
-
-filteredItems.forEach(item => {
-const option = document.createElement('div');
-option.textContent = item.Name;
-option.addEventListener('click', () => {
-const replacement = `#${item.Name}#`;
-const newText = text.substring(0, openBraceIndex) + replacement + text.substring(cursorPosition);
-event.target.value = newText;
-Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
-});
-Ref.itemList.appendChild(option);
-});
-} else {
-
-Ref.itemList.style.display = 'none';
-Ref.itemList.innerHTML = '';
-
-//fixDisplay()
-imageContainer.style.width = "70vw";
-radiantDisplay.style.width = "70vw";
-
-}
-});
-
-},
 
 getItems(locationText) {
     const hashBrackets = /#([^#]+)#/g;
 
-    return locationText.replace(hashBrackets, (match, itemName) => {
-        const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === itemName.toLowerCase());
+    return locationText.replace(hashBrackets, (match, targetText) => {
+        const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
         if (item) {
             return `<span class="expandable item" data-content-type="item" divId="${item.Name}">${item.Name.toUpperCase()}</span>`;
         } else {
-            console.log(`Item not found: ${itemName}`);
+            console.log(`Item not found: ${targetText}`);
             return match;
         }
     });
@@ -89,13 +49,13 @@ getItems(locationText) {
 extraItem(contentId) {
 const hashBrackets = /#([^#]+)#/g;
 
-return contentId.replace(hashBrackets, (match, itemName) => {
-const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === itemName.toLowerCase());
+return contentId.replace(hashBrackets, (match, targetText) => {
+const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
 if (item) {
 console.log(item.Name);
 return this.addIteminfo(item.Name);
 } else {
-console.log(`Item not found: ${itemName}`);
+console.log(`Item not found: ${targetText}`);
 return match;
 }
 });
@@ -121,7 +81,7 @@ const itemStats = [
 `<span class="lime">Damage:</span> ${item.Damage || "None"};<br>`,
 `<span class="lime">Range:</span> ${item.Range || "None"};<br>`,
 `<span class="lime">Armour Class:</span> ${item.AC || "None"};<br><br>`,
-`<span class="lime">Description:</span> <br><br> ${item.Description.replace(/\./g, '.<br><br>')}`,
+`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}`,
 
 ];
 
@@ -148,14 +108,14 @@ const itemList = document.getElementById('itemList'); // Do not delete!!
 // Clear the existing content
 itemList.innerHTML = '';
 
-// Get an array of monster names and sort them alphabetically
+// Get an array of item names and sort them alphabetically
 const itemsNames = Object.keys(data).sort();
 
 // Iterate through the sorted monster names
 for (const itemName of itemsNames) {
 const item = data[itemName];
 const itemNameDiv = document.createElement('div');
-itemNameDiv.textContent = `${item.Name} [${item.Type}]`;
+itemNameDiv.innerHTML = `[${item.Type}] <span class="cyan">${item.Name}</span>`;
 itemList.appendChild(itemNameDiv);
 this.fillItemsForm(item, itemNameDiv);
 }

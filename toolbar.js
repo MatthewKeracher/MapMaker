@@ -206,7 +206,7 @@ NPCs.clearForm(Ref.monsterForm);
 break;
 
 case 4:
-
+NPCs.clearForm(Ref.itemForm);
 break;
 
 case 5:

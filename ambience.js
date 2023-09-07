@@ -1,6 +1,6 @@
 import Edit from "./edit.js";
 import Ref from "./ref.js";
-
+import NPCs from "./npcs.js";
 
 
 
@@ -11,6 +11,7 @@ hour: 0,
 current: '',
 genDesc: "",
 senseDesc:"",
+ambienceArray: [],
 
 async getAmbience(){
 
@@ -39,6 +40,7 @@ async loadAmbienceArray() {
 try {
 const response = await fetch('ambience.json'); // Adjust the path if needed
 const data = await response.json();
+this.ambienceArray = data;
 return data.ambience;
 
 } catch (error) {
@@ -313,6 +315,32 @@ overlay.style.opacity = "0.5";
 
 
 },
+
+
+loadAmbienceList: function(data) {
+
+const itemList = document.getElementById('itemList'); // Do not delete!!
+
+// Clear the existing content
+itemList.innerHTML = '';
+
+// Get an array of item names and sort them alphabetically
+const ambienceNames = Object.keys(data).sort();
+
+// Iterate through the sorted monster names
+for (const ambienceName of ambienceNames) {
+const ambience = data[ambienceName];
+const ambienceNameDiv = document.createElement('div');
+ambienceNameDiv.innerHTML = `[${ambience.main}] <span class="cyan">${ambience.title}</span>`;
+itemList.appendChild(ambienceNameDiv);
+//this.fillItemsForm(ambience, ambienceNameDiv);
+}
+
+itemList.style.display = 'block'; // Display the NPC names container
+
+NPCs.fixDisplay();
+}, 
+
 
 };
 
