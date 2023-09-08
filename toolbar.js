@@ -15,13 +15,17 @@ init() {
 
 Ambience.initializeAmbienceDropdowns();
 
-Monsters.loadMonstersArray();
+//Monsters.loadMonstersArray();
+//Items.loadItemsArray();
+
+Edit.addPredictiveContent();
+
 Monsters.addMonsterSearch();
 Ambience.addAmbienceSearch();
 NPCs.addNPCSearch();
-Items.loadItemsArray();
+
 Items.addItemSearch();
-Monsters.addPredictiveContent();
+
 
 
 //mainToolbar

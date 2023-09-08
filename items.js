@@ -72,7 +72,7 @@ if (item) {
 
 const itemStats = [
 
-`<h2><span class="lime">${contentId.toUpperCase()}</span></h2><br>`,
+`<h3><span class="lime">${contentId.toUpperCase()}</span></h3><br>`,
 `${item.Type}<br><br>`,
 
 `<span class="lime">Size:</span> ${item.Size || "None"};<br>`,
@@ -81,7 +81,7 @@ const itemStats = [
 `<span class="lime">Damage:</span> ${item.Damage || "None"};<br>`,
 `<span class="lime">Range:</span> ${item.Range || "None"};<br>`,
 `<span class="lime">Armour Class:</span> ${item.AC || "None"};<br><br>`,
-`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}`,
+`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}<hr>`,
 
 ];
 
@@ -101,29 +101,28 @@ console.log(`Monster not found: ${contentId}`);
 
 },
 
-// Edit Items
 loadItemsList: function(data) {
-const itemList = document.getElementById('itemList'); // Do not delete!!
-
-// Clear the existing content
-itemList.innerHTML = '';
-
-// Get an array of item names and sort them alphabetically
-const itemsNames = Object.keys(data).sort();
-
-// Iterate through the sorted monster names
-for (const itemName of itemsNames) {
-const item = data[itemName];
-const itemNameDiv = document.createElement('div');
-itemNameDiv.innerHTML = `[${item.Type}] <span class="cyan">${item.Name}</span>`;
-itemList.appendChild(itemNameDiv);
-this.fillItemsForm(item, itemNameDiv);
-}
-
-itemList.style.display = 'block'; // Display the NPC names container
-
-NPCs.fixDisplay();
-}, 
+    const itemList = document.getElementById('itemList'); // Do not delete!!
+  
+    // Clear the existing content
+    itemList.innerHTML = '';
+  
+    // Sort the items by item type alphabetically
+    const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+  
+    // Iterate through the sorted items
+    for (const item of sortedItems) {
+      const itemNameDiv = document.createElement('div');
+      itemNameDiv.innerHTML = `[${item.Type}] <span class="cyan">${item.Name}</span>`;
+      itemList.appendChild(itemNameDiv);
+      this.fillItemsForm(item, itemNameDiv);
+    }
+  
+    itemList.style.display = 'block'; // Display the container
+  
+    NPCs.fixDisplay();
+  },
+  
 
 fillItemsForm: function(item, itemNameDiv){
 
