@@ -33,6 +33,7 @@ resize: none;
 text-align: left;
 }  
 
+
 .extraInfo::-webkit-scrollbar {
   width: 0.1px; /* Set the width of the scrollbar */
   }

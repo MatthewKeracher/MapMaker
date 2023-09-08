@@ -178,6 +178,7 @@ opacity: 1; /* Firefox */
 
 #itemList {
 color: gray;
+font-size: 1.5vh;
 background-color: black;
 opacity: 1;
 height: 100vh;

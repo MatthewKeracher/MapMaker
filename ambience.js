@@ -41,7 +41,8 @@ try {
 const response = await fetch('ambience.json'); // Adjust the path if needed
 const data = await response.json();
 this.ambienceArray = data;
-return data.ambience;
+
+return data;
 
 } catch (error) {
 console.error('Error loading ambience array:', error);
@@ -316,33 +317,27 @@ overlay.style.opacity = "0.5";
 
 },
 
-
 loadAmbienceList: function(data) {
+    const itemList = document.getElementById('itemList'); // Do not delete!!
 
-const itemList = document.getElementById('itemList'); // Do not delete!!
+    // Clear the existing content
+    itemList.innerHTML = '';
 
-// Clear the existing content
-itemList.innerHTML = '';
+    // Iterate through the sorted ambience objects
+    for (const ambience of data) {
+        const ambienceNameDiv = document.createElement('div');
+        ambienceNameDiv.innerHTML = `[${ambience.context} ${ambience.main} ${ambience.second}] <span class="cyan">${ambience.title}</span>`;
+        itemList.appendChild(ambienceNameDiv);
+        // this.fillItemsForm(ambience, ambienceNameDiv);
+    }
 
-// Get an array of item names and sort them alphabetically
-const ambienceNames = Object.keys(data).sort();
+    itemList.style.display = 'block'; // Display the container
 
-// Iterate through the sorted monster names
-for (const ambienceName of ambienceNames) {
-const ambience = data[ambienceName];
-const ambienceNameDiv = document.createElement('div');
-ambienceNameDiv.innerHTML = `[${ambience.main}] <span class="cyan">${ambience.title}</span>`;
-itemList.appendChild(ambienceNameDiv);
-//this.fillItemsForm(ambience, ambienceNameDiv);
+    NPCs.fixDisplay();
+},
+
+
 }
-
-itemList.style.display = 'block'; // Display the NPC names container
-
-NPCs.fixDisplay();
-}, 
-
-
-};
 
 export default Ambience;
 
