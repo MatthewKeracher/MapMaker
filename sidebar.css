@@ -7,9 +7,9 @@ width: 30vw;;
 z-index:4;
 background-color: transparent;
 overflow: auto; 
-  
+
 } 
-    
+
 .extraInfo {
 position: fixed;  
 right: 30vw; 
@@ -35,56 +35,83 @@ text-align: left;
 
 
 .extraInfo::-webkit-scrollbar {
-  width: 0.1px; /* Set the width of the scrollbar */
-  }
+width: 0.1px; /* Set the width of the scrollbar */
+}
 
-  .spacer {
-    height: 20vh; /* Set the height you desire */
+#itemList {
+color: gray;
+font-size: 1.5vh;
+background-color: black;
+opacity: 1;
+height: 100vh;
+border: transparent;
+padding: 5px;
+position: fixed; /* Use fixed position for screen coordinates */
+top: 0;
+left: 45vw;
+width: 25vw;
+z-index: 1;
+overflow-y: auto;
+display: none;
+scrollbar-color: black;
+}
+
+#itemList div:hover {
+background-color: gray; /* Change the background color on hover */
+color: whitesmoke;
+cursor: pointer; /* Show pointer cursor on hover */
+}  
+
+#itemList::-webkit-scrollbar {
+width: 5px; /* Set the width of the scrollbar */
+}
+
+.spacer {
+height: 20vh; /* Set the height you desire */
 }
 
 .showExtraInfo {
-    display: block;
-  }
+display: block;
+}
 
 .withbreak{
-  white-space: pre-line; 
+white-space: pre-line; 
 }
 
 .npc{
-    color: cyan;
+color: cyan;
 }
 
 .monster{
-  color: hotpink;
+color: hotpink;
 }
 
 .item{
-  color: yellowgreen;
+color: yellowgreen;
 }
 
 .misc{
-  color:gold
+color:gold
 }
 
 .hotpink{
-  color:hotpink;
+color:hotpink;
 }
 
 .lime{
-  color:yellowgreen;
+color:yellowgreen;
 }
 
 .orange{
-  color:orange
+color:orange
 }
 
 .cyan{
-  color:cyan
+color:cyan
 }
 
 
 
 
 
-        
-       
+

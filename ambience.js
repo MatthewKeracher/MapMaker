@@ -328,13 +328,91 @@ loadAmbienceList: function(data) {
         const ambienceNameDiv = document.createElement('div');
         ambienceNameDiv.innerHTML = `[${ambience.context} ${ambience.main} ${ambience.second}] <span class="cyan">${ambience.title}</span>`;
         itemList.appendChild(ambienceNameDiv);
-        // this.fillItemsForm(ambience, ambienceNameDiv);
+        this.fillAmbienceForm(ambience, ambienceNameDiv);
     }
 
     itemList.style.display = 'block'; // Display the container
 
     NPCs.fixDisplay();
 },
+
+fillAmbienceForm: function(ambience, ambienceNameDiv) {
+    // Add click event listener to each ambience name
+    ambienceNameDiv.addEventListener('click', () => {
+        Ref.ambienceContext.value = ambience.context;
+        Ref.ambienceMain.value = ambience.main;
+        Ref.ambienceSecond.value = ambience.second;
+        Ref.ambienceTitle.value = ambience.title;
+        Ref.ambienceDescription.value = ambience.description;
+        Ref.ambienceSight.value = ambience.sight;
+        Ref.ambienceSmell.value = ambience.smell;
+        //Ref.ambienceTouch.value = ambience.touch;
+        Ref.ambienceFeel.value = ambience.feel;
+        //Ref.ambienceTaste.value = ambience.taste;
+
+        Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
+    });
+},
+
+saveAmbience: function() {
+    const existingAmbienceIndex = this.ambienceArray.findIndex(ambience => 
+        ambience.title === Ref.ambienceTitle.value         
+    );
+
+    const ambience = {
+        context: Ref.ambienceContext.value,
+        main: Ref.ambienceMain.value,
+        second: Ref.ambienceSecond.value,
+        title: Ref.ambienceTitle.value,
+        description: Ref.ambienceDescription.value,
+        sight: Ref.ambienceSight.value,
+        smell: Ref.ambienceSmell.value,
+        //touch: Ref.ambienceTouch.value,
+        feel: Ref.ambienceFeel.value
+    };
+
+    if (existingAmbienceIndex !== -1) {
+        // Update the existing ambience entry
+        this.ambienceArray[existingAmbienceIndex] = ambience;
+        console.log('Ambience updated:', ambience);
+    } else {
+        this.ambienceArray.push(ambience);
+    }
+},
+
+addAmbienceSearch: function() {
+    Ref.ambienceTitle.addEventListener('input', (event) => {
+        let searchText = event.target.value.toLowerCase();
+
+        // Check if the searchText contains '{'
+        if (searchText.includes('{')) {
+            // Remove '{' from the searchText
+            searchText = searchText.replace('{', '');
+
+            // Call the searchAmbience function
+            this.searchAmbience(searchText);
+        }
+    });
+},
+
+searchAmbience: function(searchText) {
+    this.ambienceSearchArray = [];
+
+    this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
+        const context = ambience.context.toLowerCase();
+        const main = ambience.main.toLowerCase();
+        const second = ambience.second.toLowerCase();
+        const title = ambience.title.toLowerCase();
+
+        // Check if any of the properties contain the search text
+        return context.includes(searchText) || main.includes(searchText) ||
+            second.includes(searchText) || title.includes(searchText);
+    });
+
+    this.loadAmbienceList(this.ambienceSearchArray);
+}
+
+
 
 
 }

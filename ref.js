@@ -28,6 +28,20 @@ itemList: document.getElementById('itemList'),
 expandableElements: document.querySelectorAll('.expandable'),
 extraInfo: document.querySelector('.extraInfo'),
 
+//ambienceForm:
+
+ambienceForm: document.querySelector('.ambienceForm'),
+ambienceTitle: document.getElementById('ambienceTitle'),
+ambienceContext: document.getElementById('ambienceContext'),
+ambienceMain: document.getElementById('ambienceMain'),
+ambienceSecond: document.getElementById('ambienceSecond'),
+ambienceDescription: document.getElementById('ambienceDescription'),
+ambienceSight: document.getElementById('ambienceSight'),
+ambienceSmell: document.getElementById('ambienceSmell'),
+ambienceSounds: document.getElementById('ambienceTouch'),
+ambienceFeel: document.getElementById('ambienceFeel'),
+ambienceTaste: document.getElementById('ambienceTaste'),
+
 //objectForm
 itemForm: document.querySelector('.itemForm'),
 

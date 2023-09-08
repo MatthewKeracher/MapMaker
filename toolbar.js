@@ -17,6 +17,7 @@ Ambience.initializeAmbienceDropdowns();
 
 Monsters.loadMonstersArray();
 Monsters.addMonsterSearch();
+Ambience.addAmbienceSearch();
 NPCs.addNPCSearch();
 Items.loadItemsArray();
 Items.addItemSearch();
@@ -172,7 +173,8 @@ Items.loadItemsList(Items.itemsArray);
 break;
 
 case 5:
-
+Ambience.saveAmbience();
+Ambience.loadAmbienceList(Ambience.ambienceArray);
 break;
 
 default:
@@ -210,7 +212,7 @@ NPCs.clearForm(Ref.itemForm);
 break;
 
 case 5:
-
+NPCs.clearForm(Ref.ambienceForm);
 break;
 
 default:

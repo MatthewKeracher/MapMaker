@@ -82,6 +82,25 @@ itemForm.reset(); // Call the reset() method to clear the form fields
 }
 break;
 
+case 5:
+  const ambienceTitle = document.getElementById('ambienceTitle').value;
+  const ambienceIndex = Ambience.ambienceArray.findIndex(ambience => ambience.title === ambienceTitle);
+  const ambienceForm = document.getElementById('ambienceForm');
+
+  if (ambienceIndex !== -1) {
+    const confirmation = window.confirm("Are you sure you want to delete this ambience?");
+    if (confirmation) {
+      Ambience.ambienceArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
+
+      // Update the ambience list with the updated ambienceArray
+      Ambience.loadAmbienceList(Ambience.ambienceArray);
+
+      // Reset the ambience form fields
+      ambienceForm.reset();
+    }
+  }
+  break;
+
 
 default:
 // For any other case

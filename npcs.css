@@ -176,33 +176,7 @@ color: gray;
 opacity: 1; /* Firefox */
 }
 
-#itemList {
-color: gray;
-font-size: 1.5vh;
-background-color: black;
-opacity: 1;
-height: 100vh;
-border: transparent;
-padding: 5px;
-position: fixed; /* Use fixed position for screen coordinates */
-top: 0;
-left: 45vw;
-width: 25vw;
-z-index: 1;
-overflow-y: auto;
-display: none;
-scrollbar-color: black;
-}
 
-#itemList div:hover {
-background-color: gray; /* Change the background color on hover */
-color: whitesmoke;
-cursor: pointer; /* Show pointer cursor on hover */
-}  
-
-#itemList::-webkit-scrollbar {
-width: 5px; /* Set the width of the scrollbar */
-}
 
 .Morning {
 color: gold;
