@@ -26,25 +26,6 @@ return [];
 
 },   
 
-// Add to Storyteller
-
-
-  
-
-// getMonsters(locationText) {
-// const asteriskBrackets = /\*([^*]+)\*/g;
-
-// return locationText.replace(asteriskBrackets, (match, monsterName) => {
-// console.log(monsterName)
-// if (this.monstersArray[monsterName]) {
-// return `<span class="expandable monster" data-content-type="monster" divId="${monsterName}">${monsterName.toUpperCase()}</span>`;
-// } else {
-// console.log(`Monster not found: ${monsterName}`);
-// return match;
-// }
-// });
-// },
-
 
 getMonsters(locationText) {
   const asteriskBrackets = /\*([^*]+)\*/g;

@@ -11,78 +11,72 @@ const Edit = {
 editMode : false,
 moveMode: false,
 editPage: 1,
+divIds : ['textLocation', 'npcBackStory'],
 
-filterEmptyEntries(npcArray) {
-return npcArray.filter(npc => {
-// Check if any of the key values is not an empty string
-for (const key in npc) {
-if (npc.hasOwnProperty(key) && npc[key] !== "") {
-return true;
-}
-}
-return false;
-});
-},
+init: function () {
+this.divIds.forEach((divId) => {
+  const divElement = document.getElementById(divId);
+  if (divElement) {
+    divElement.addEventListener('input', (event) => {
+      const text = event.target.value;
+      const cursorPosition = event.target.selectionStart;
+      const openBraceIndex = text.lastIndexOf('#', cursorPosition);
+      const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
 
-addPredictiveContent() {
-  Ref.textLocation.addEventListener('input', (event) => {
-    const text = event.target.value;
-    const cursorPosition = event.target.selectionStart;
+      if (openBraceIndex !== -1 || openAsteriskIndex !== -1) {
+        let searchText;
+        let filteredItems;
 
-    const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-    const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+        if (openBraceIndex > openAsteriskIndex) {
+          searchText = text.substring(openBraceIndex + 1, cursorPosition);
+          filteredItems = Items.itemsArray.filter(item =>
+            item.Name.toLowerCase().includes(searchText.toLowerCase())
+          );
+        } else {
+          searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
+          filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
+            monsterName.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
 
-    if (openBraceIndex !== -1 || openAsteriskIndex !== -1) {
-      let searchText;
-      let filteredItems;
+        console.log(searchText)
 
-      if (openBraceIndex > openAsteriskIndex) {
-        searchText = text.substring(openBraceIndex + 1, cursorPosition);
-        filteredItems = Items.itemsArray.filter(item =>
-          item.Name.toLowerCase().includes(searchText.toLowerCase())
-        );
-      } else {
-        searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-        filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
-          monsterName.toLowerCase().includes(searchText.toLowerCase())
-        );
-      }
+        // Show ExtraContent
+        Ref.itemList.style.display = 'block';
+        Ref.itemList.innerHTML = ''; // Clear existing content
 
-      // Show ExtraContent
-      Ref.itemList.style.display = 'block';
-      Ref.itemList.innerHTML = ''; // Clear existing content
+        // fixDisplay()
+        const imageContainer = document.querySelector('.image-container');
+        const radiantDisplay = document.getElementById('radiantDisplay');
+        imageContainer.style.width = "45vw";
+        radiantDisplay.style.width = "45vw";
 
-      // fixDisplay()
-      const imageContainer = document.querySelector('.image-container');
-      const radiantDisplay = document.getElementById('radiantDisplay');
-      imageContainer.style.width = "45vw";
-      radiantDisplay.style.width = "45vw";
-
-      filteredItems.forEach(item => {
-        const option = document.createElement('div');
-        option.textContent = item.Name || item; // Use "Name" property if available
-        option.addEventListener('click', () => {
-          const replacement = openBraceIndex !== -1
-            ? `#${item.Name}#`
-            : `*${item}*`;
-          const newText = text.substring(0, openBraceIndex !== -1 ? openBraceIndex : openAsteriskIndex) + replacement + text.substring(cursorPosition);
-          event.target.value = newText;
-          Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+        filteredItems.forEach(item => {
+          const option = document.createElement('div');
+          option.textContent = item.Name || item; // Use "Name" property if available
+          option.addEventListener('click', () => {
+            const replacement = openBraceIndex !== -1
+              ? `#${item.Name}#`
+              : `*${item}*`;
+            const newText = text.substring(0, openBraceIndex !== -1 ? openBraceIndex : openAsteriskIndex) + replacement + text.substring(cursorPosition);
+            event.target.value = newText;
+            Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+          });
+          Ref.itemList.appendChild(option);
         });
-        Ref.itemList.appendChild(option);
-      });
-    } else {
-      Ref.itemList.style.display = 'none';
-      Ref.itemList.innerHTML = '';
+      } else {
+        Ref.itemList.style.display = 'none';
+        Ref.itemList.innerHTML = '';
 
-      // fixDisplay()
-      const imageContainer = document.querySelector('.image-container');
-      const radiantDisplay = document.getElementById('radiantDisplay');
-      imageContainer.style.width = "70vw";
-      radiantDisplay.style.width = "70vw";
-    }
-  });
-},
+        // fixDisplay()
+        const imageContainer = document.querySelector('.image-container');
+        const radiantDisplay = document.getElementById('radiantDisplay');
+        imageContainer.style.width = "70vw";
+        radiantDisplay.style.width = "70vw";
+      }
+    });
+  }
+})},
 
 
 deleteLocation() {

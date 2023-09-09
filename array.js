@@ -334,98 +334,100 @@ this.locationArray.forEach((location) => {
 });
 },
 
- downloadCSV(filename, data) {
-    const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(data);
-    const link = document.createElement("a");
-    link.setAttribute("href", csvContent);
-    link.setAttribute("download", filename);
-    link.click();
-},
+                //Export and Import .csv of Arrays
 
-exportNPCArrayToCSV() {
+                downloadCSV(filename, data) {
+                    const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(data);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", csvContent);
+                    link.setAttribute("download", filename);
+                    link.click();
+                },
 
-const exportDropdown = document.getElementById("exportDropdown"); 
-const selectedValue = exportDropdown.value;
-const csvRows = [];
-let header = '';
-let selectedArray = '';
+                exportNPCArrayToCSV() {
 
-if (selectedValue === "NPCs") {
-     header = Object.keys(NPCs.npcArray[0]).join(",");
-} else if (selectedValue === "Locations") { 
-     header = Object.keys(this.locationArray[0]).join(","); 
-} else{
+                const exportDropdown = document.getElementById("exportDropdown"); 
+                const selectedValue = exportDropdown.value;
+                const csvRows = [];
+                let header = '';
+                let selectedArray = '';
 
-}
+                if (selectedValue === "NPCs") {
+                    header = Object.keys(NPCs.npcArray[0]).join(",");
+                } else if (selectedValue === "Locations") { 
+                    header = Object.keys(this.locationArray[0]).join(","); 
+                } else{
 
-csvRows.push(header);
+                }
 
-console.log(selectedValue);
-    
-if (selectedValue === "NPCs") {
-        selectedArray = NPCs.npcArray;
-    } else if (selectedValue === "Locations") {
-        selectedArray = this.locationArray; 
-    } 
+                csvRows.push(header);
 
-for (const npc of selectedArray) {
-    const values = Object.values(npc).map(value => {
-        if (typeof value === "string") {
-            return `"${value}"`;
-        } else {
-            return value;
-        }
-    });
-    csvRows.push(values.join(","));
-}
+                console.log(selectedValue);
+                    
+                if (selectedValue === "NPCs") {
+                        selectedArray = NPCs.npcArray;
+                    } else if (selectedValue === "Locations") {
+                        selectedArray = this.locationArray; 
+                    } 
 
-const csvContent = csvRows.join("\n");
-const filename = selectedValue + ".csv";
+                for (const npc of selectedArray) {
+                    const values = Object.values(npc).map(value => {
+                        if (typeof value === "string") {
+                            return `"${value}"`;
+                        } else {
+                            return value;
+                        }
+                    });
+                    csvRows.push(values.join(","));
+                }
 
-this.downloadCSV(filename, csvContent);
- },
+                const csvContent = csvRows.join("\n");
+                const filename = selectedValue + ".csv";
 
-handleCSVFileInputChange: function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        console.log("Importing CSV:", file.name);
-        Array.importCSV(file);
-    }
-}.bind(this),
+                this.downloadCSV(filename, csvContent);
+                },
 
-importCSV(file) {
-    const reader = new FileReader();
+                handleCSVFileInputChange: function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        console.log("Importing CSV:", file.name);
+                        Array.importCSV(file);
+                    }
+                }.bind(this),
 
-    reader.onload = (e) => {
-        const content = e.target.result;
-        const parsedData = Papa.parse(content, { header: true }).data;
-        let importedArray = parsedData;
+                importCSV(file) {
+                    const reader = new FileReader();
 
-        const importDropdown = document.getElementById("exportDropdown"); // Replace with your actual dropdown element
-        const selectedValue = importDropdown.value;
+                    reader.onload = (e) => {
+                        const content = e.target.result;
+                        const parsedData = Papa.parse(content, { header: true }).data;
+                        let importedArray = parsedData;
 
-        if (selectedValue === "NPCs") {
-            importedArray = parsedData;
-        } else if (selectedValue === "Locations") {
-            importedArray = parsedData; // Update this with your actual import logic for locationArray
-        }
+                        const importDropdown = document.getElementById("exportDropdown"); // Replace with your actual dropdown element
+                        const selectedValue = importDropdown.value;
 
-        // Replace npcArray or locationArray with importedArray
-        // Assuming NPCs.npcArray and locationArray are global variables
-        if (selectedValue === "NPCs") {
-            NPCs.npcArray.length = 0;
-            NPCs.npcArray.push(...importedArray);
-            console.log("Imported NPC data:", NPCs.npcArray);
-        } else if (selectedValue === "Locations") {
-            // Update this with your actual import logic for locationArray
-            this.locationArray.length = 0;
-            this.locationArray.push(...importedArray);
-            console.log("Imported location data:", locationArray);
-        }
-    };
+                        if (selectedValue === "NPCs") {
+                            importedArray = parsedData;
+                        } else if (selectedValue === "Locations") {
+                            importedArray = parsedData; // Update this with your actual import logic for locationArray
+                        }
 
-    reader.readAsText(file);
-}
+                        // Replace npcArray or locationArray with importedArray
+                        // Assuming NPCs.npcArray and locationArray are global variables
+                        if (selectedValue === "NPCs") {
+                            NPCs.npcArray.length = 0;
+                            NPCs.npcArray.push(...importedArray);
+                            console.log("Imported NPC data:", NPCs.npcArray);
+                        } else if (selectedValue === "Locations") {
+                            // Update this with your actual import logic for locationArray
+                            this.locationArray.length = 0;
+                            this.locationArray.push(...importedArray);
+                            console.log("Imported location data:", locationArray);
+                        }
+                    };
+
+                    reader.readAsText(file);
+                }
 
 }
 

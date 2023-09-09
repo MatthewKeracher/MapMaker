@@ -2,6 +2,7 @@
 import Edit from "./edit.js";
 import Array from "./array.js";
 import Ref from "./ref.js";
+import Items from "./items.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -238,7 +239,7 @@ npcContent += `${foundNPC.occupation}.<br><br>`;
 }
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
-npcContent += `<br><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span>`;
+npcContent += `<span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span><br>`;
 }
 
 if (foundNPC.str) {
@@ -252,8 +253,9 @@ npcContent += `<br>
 `
 }
 
+//need to run through getMonsters and getItems
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-npcContent += `<br><br><span class="withbreak">${foundNPC.Backstory}</span>`;
+npcContent += `<br><br><span class="withbreak">${Items.getItems(foundNPC.Backstory)}</span>`;
 }
 
 

@@ -38,7 +38,8 @@ text-align: left;
 width: 0.1px; /* Set the width of the scrollbar */
 }
 
-#itemList {
+#itemList,
+#itemList2 {
 color: gray;
 font-size: 1.5vh;
 background-color: black;
@@ -56,13 +57,15 @@ display: none;
 scrollbar-color: black;
 }
 
-#itemList div:hover {
+#itemList div:hover,
+#itemList2 div:hover {
 background-color: gray; /* Change the background color on hover */
 color: whitesmoke;
 cursor: pointer; /* Show pointer cursor on hover */
 }  
 
-#itemList::-webkit-scrollbar {
+#itemList::-webkit-scrollbar,
+#itemList2::-webkit-scrollbar {
 width: 5px; /* Set the width of the scrollbar */
 }
 
