@@ -110,16 +110,74 @@ getMisc(locationText, comboArray) {
 
 
 showExtraContent() {
-  const expandableElements = document.querySelectorAll('.expandable');
-  const extraInfo = document.querySelector('.extraInfo');
+  const expandableStoryteller = Ref.Storyteller.querySelectorAll('.expandable');
+  const target = 'ExtraContent'
+  
+            // console.log('List all divs found for expandableStoryteller:');
+            // expandableStoryteller.forEach((div, index) => {
+            //   console.log(`Div ${index + 1}:`);
+            //   console.log('Element:', div);
+            //   console.log('Text Content:', div.textContent);
+            //   console.log('Data Attributes:', div.dataset);
+            // });            
 
-  expandableElements.forEach(expandableElement => {
+ expandableStoryteller.forEach(expandableElement => {
     expandableElement.addEventListener('mouseenter', (event) => {
       
       const contentType = event.target.getAttribute('data-content-type');
       const contentId = event.target.getAttribute('divId');
      
+      switch (contentType) {
+        case 'npc':
+          NPCs.addNPCInfo(contentId,); // Handle NPCs
+          break;
+        case 'monster':
+          Monsters.addMonsterInfo(contentId, target); // Handle monsters
+          break;
+          case 'item':
+          Items.addIteminfo(contentId, target); // Handle items
+          break;
+        case 'misc':
+          this.addMiscInfo(contentId, this.miscArray);
+          break;
+        default:
+          console.log('Unknown content type');
+      }          
 
+    Ref.extraInfo.classList.add('showExtraInfo');
+    this.showExtraExtraContent(); 
+      
+    });
+
+    Ref.extraInfoContainer.addEventListener('mouseleave', () => {
+    Ref.extraInfo.classList.remove('showExtraInfo');
+    Ref.extraInfo2.classList.remove('showExtraInfo');
+         
+    });
+  });
+},
+
+showExtraExtraContent() {
+ 
+  const expandableExtra = Ref.extraInfo.querySelectorAll('.expandable');
+  const extraInfo2 = document.querySelector('.extraInfo2');
+
+  // console.log('List all divs found for expandableExtra:');
+  //           expandableExtra.forEach((div, index) => {
+  //             console.log(`Div ${index + 1}:`);
+  //             console.log('Element:', div);
+  //             console.log('Text Content:', div.textContent);
+  //             console.log('Data Attributes:', div.dataset);
+  //           });
+
+  expandableExtra.forEach(expandableElement => {
+    
+    expandableElement.addEventListener('mouseenter', (event) => {
+      
+      console.log('selected')
+      const contentType = event.target.getAttribute('data-content-type');
+      const contentId = event.target.getAttribute('divId');
+     
       switch (contentType) {
         case 'npc':
           NPCs.addNPCInfo(contentId); // Handle NPCs
@@ -135,17 +193,14 @@ showExtraContent() {
           break;
         default:
           console.log('Unknown content type');
-      }          
+      }        
 
-      extraInfo.classList.add('showExtraInfo');
-
+      extraInfo2.classList.add('showExtraInfo');
       
-    });
+    });   
 
-    extraInfo.addEventListener('mouseleave', () => {
-      extraInfo.classList.remove('showExtraInfo');
-    });
   });
+
 },
 
 

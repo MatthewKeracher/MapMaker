@@ -70,6 +70,8 @@ extractValues(inputObject) {
                 secondAmbience
                 };
 
+                console.log(Items.itemsArray);
+
                 // Create the main object to be exported
                 const exportData = {
                 generalInformation: generalInfo,

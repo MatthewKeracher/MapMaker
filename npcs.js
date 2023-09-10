@@ -3,6 +3,7 @@ import Edit from "./edit.js";
 import Array from "./array.js";
 import Ref from "./ref.js";
 import Items from "./items.js";
+import Monsters from "./monsters.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -232,7 +233,7 @@ const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
 if (foundNPC) {
 //console.log(foundNPC);
 // Format the NPC information into npcContent
-let npcContent = `<h3><span class="cyan">${foundNPC.name}</span></h3>`;
+let npcContent = `<hr><h3><span class="cyan">${foundNPC.name}</span></h3>`;
 
 if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
 npcContent += `${foundNPC.occupation}.<br><br>`;
@@ -255,7 +256,7 @@ npcContent += `<br>
 
 //need to run through getMonsters and getItems
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-npcContent += `<br><br><span class="withbreak">${Items.getItems(foundNPC.Backstory)}</span>`;
+npcContent += `<br><br><span class="withbreak">${Monsters.getMonsters(Items.getItems(foundNPC.Backstory))}</span>`;
 }
 
 

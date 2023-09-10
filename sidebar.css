@@ -38,6 +38,34 @@ text-align: left;
 width: 0.1px; /* Set the width of the scrollbar */
 }
 
+.extraInfo2 {
+    position: fixed;  
+    right: 51vw; 
+    width: 20vw;
+    height: 97vh;
+    top:0;
+    z-index:5;
+    background-color: black;
+    opacity: 1;  
+    display: none; 
+    color: bisque;
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    font-size: 1.9vh; 
+    padding: 1vh; 
+    text-align: left;
+    overflow: auto;
+    scrollbar-color: black;
+    vertical-align: top; 
+    flex-direction: column;
+    resize: none;
+    text-align: left;
+    }  
+    
+    
+    .extraInfo2::-webkit-scrollbar {
+    width: 0.1px; /* Set the width of the scrollbar */
+    }
+
 #itemList,
 #itemList2 {
 color: gray;

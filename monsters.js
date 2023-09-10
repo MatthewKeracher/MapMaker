@@ -56,9 +56,15 @@ return match;
 });
 },
 
-addMonsterInfo(contentId) {
+addMonsterInfo(contentId, target) {
 
-const extraContent = document.getElementById('extraContent');
+  let targetLocation = '';
+
+  if(target === 'ExtraContent'){
+  targetLocation = Ref.extraContent
+  } else {
+  targetLocation = Ref.extraContent2
+  }
 
 //Search for Monster in the Array   
 const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === contentId.toLowerCase());
@@ -67,7 +73,7 @@ if (monster) {
 
 const monsterStats = [
 
-`<h2><span class="hotpink">${contentId.toUpperCase()}</span></h2><br>`,
+`<hr><h3><span class="hotpink">${contentId.toUpperCase()}</span></h3>`,
 `${monster.Type}<br><br>`,
 
 `<span class="hotpink"># App:</span> ${monster.Appearing};<br>`,
@@ -91,7 +97,7 @@ const formattedMonster = monsterStats
 .join(" ");
 
 // Set the formatted content in the extraContent element
-extraContent.innerHTML = formattedMonster;
+targetLocation.innerHTML = formattedMonster;
 
 return formattedMonster;
 

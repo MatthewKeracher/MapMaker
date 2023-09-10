@@ -26,7 +26,11 @@ textLocation: document.getElementById('textLocation'),
 
 itemList: document.getElementById('itemList'),
 expandableElements: document.querySelectorAll('.expandable'),
+extraInfoContainer: document.getElementById('extraInfoContainer'),
 extraInfo: document.querySelector('.extraInfo'),
+extraInfo2: document.querySelector('.extraInfo2'),
+extraContent: document.querySelector('.extraContent'),
+extraContent2: document.querySelector('.extraContent2'),
 
 //ambienceForm:
 

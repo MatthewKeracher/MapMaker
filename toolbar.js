@@ -16,8 +16,8 @@ init() {
 Ambience.initializeAmbienceDropdowns();
 //Ambience.getAmbience();
 
-//Monsters.loadMonstersArray();
-//Items.loadItemsArray();
+Monsters.loadMonstersArray();
+Items.loadItemsArray();
 
 //Edit.addPredictiveContent();
 Edit.init();

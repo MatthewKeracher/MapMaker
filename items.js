@@ -61,9 +61,15 @@ return match;
 });
 },
 
-addIteminfo(contentId) {
+addIteminfo(contentId, target) {
 
-const extraContent = document.getElementById('extraContent');
+let targetLocation = '';
+
+if(target === 'ExtraContent'){
+targetLocation = Ref.extraContent
+} else {
+targetLocation = Ref.extraContent2
+}
 
 //Search for Item in the Array   
 const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === contentId.toLowerCase());
@@ -72,8 +78,8 @@ if (item) {
 
 const itemStats = [
 
-`<h3><span class="lime">${contentId.toUpperCase()}</span></h3><br>`,
-`${item.Type}<br><br>`,
+`<hr><h3><span class="lime">${contentId.toUpperCase()}</span></h3>`,
+`${item.Type}.<br><br>`,
 
 `<span class="lime">Size:</span> ${item.Size || "None"};<br>`,
 `<span class="lime">Weight:</span> ${item.Weight || "None"};<br>`,
@@ -81,7 +87,7 @@ const itemStats = [
 `<span class="lime">Damage:</span> ${item.Damage || "None"};<br>`,
 `<span class="lime">Range:</span> ${item.Range || "None"};<br>`,
 `<span class="lime">Armour Class:</span> ${item.AC || "None"};<br><br>`,
-`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}<hr>`,
+`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}`,
 
 ];
 
@@ -90,7 +96,7 @@ const formattedItem = itemStats
 .join(" ");
 
 // Set the formatted content in the extraContent element
-extraContent.innerHTML = formattedItem;
+targetLocation.innerHTML = formattedItem;
 
 return formattedItem;
 
