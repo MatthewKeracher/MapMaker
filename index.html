@@ -76,52 +76,65 @@
 <div id="itemList"></div>
 
 <form id="itemForm" class="itemForm">
-    <div class="itemFormContainer">
-    
-    <label for="itemName">Name:</label>
-    <input class="lineField" type="textarea" id="itemName" name="itemName" placeholder="{... to Search" required>
-    
-    <label for="itemType">Type:</label>
-    <input class="lineField" type="textarea" id="itemType" name="itemType">
-     
-    <br>
-    
-    <div class = "Monster-stats-all">
-    
-    <div class="Monster-stats-left"> 
-    
-    <label for="itemSize">Size:</label>
-    <input class="halfField" type="textarea" id="itemSize" name="itemSize">
-    
-    <label for="itemWeight">Weight:</label>
-    <input class="halfField" type="textarea" id="itemWeight" name="itemWeight">
-    
-    <label for="itemCost">Cost:</label>
-    <input class="halfField" type="textarea" id="itemCost" name="itemCost">
-    
-    </div>
-    
-    <div class="Monster-stats-right"> 
-    
-    <label for="itemDamage">Damage:</label>
-    <input class="halfField" type="textarea" id="itemDamage" name="itemDamage">
-    
-    <label for="itemRange">Range:</label>
-    <input class="halfField" type="textarea" id="itemRange" name="itemRange">
-    
-    <label for="itemAC">Armour Class:</label>
-    <input class="halfField" type="textarea" id="itemAC" name="itemAC">
-    
-    
-    
-    </div>
-    </div>
-    
-    <label for="itemDescription">Description:</label>
-    <textarea class="medField" type="textarea" id="itemDescription" name="itemDescription"></textarea>
-    
-    </div>
-    </form>
+<div class="itemFormContainer">
+
+<label for="itemName">Name:</label>
+<input class="lineField" type="textarea" id="itemName" name="itemName" placeholder="{... to Search" required>
+
+<label for="itemType">Type:</label>
+<input class="lineField" type="textarea" id="itemType" name="itemType">
+
+<br>
+
+<div class = "Monster-stats-all">
+
+<div class="Monster-stats-left"> 
+
+<label for="itemSize">Size:</label>
+<input class="halfField" type="textarea" id="itemSize" name="itemSize">
+
+<label for="itemWeight">Weight:</label>
+<input class="halfField" type="textarea" id="itemWeight" name="itemWeight">
+
+<label for="itemCost">Cost:</label>
+<input class="halfField" type="textarea" id="itemCost" name="itemCost">
+
+</div>
+
+<div class="Monster-stats-right"> 
+
+<label for="itemDamage">Damage:</label>
+<input class="halfField" type="textarea" id="itemDamage" name="itemDamage">
+
+<label for="itemRange">Range:</label>
+<input class="halfField" type="textarea" id="itemRange" name="itemRange">
+
+<label for="itemAC">Armour Class:</label>
+<input class="halfField" type="textarea" id="itemAC" name="itemAC">
+
+
+
+</div>
+</div>
+
+<label for="itemDescription">Description:</label>
+<textarea class="medField" type="textarea" id="itemDescription" name="itemDescription"></textarea>
+
+</div>
+</form>
+
+<form id="spellsForm" class="spellsForm">
+<div class="spellsFormContainer">
+
+<label for="spellName">Name:</label>
+<input class="lineField" type="textarea" id="spellName" name="spellName" placeholder="{... to Search" required>
+<br>
+
+<label for="spellDescription">Description:</label>
+<textarea class="medField" type="textarea" id="spellDescription" name="spellDescription"></textarea>
+
+</div>
+</form>
 
 <form id="monsterForm" class="monsterForm">
 <div class="monsterFormContainer">
@@ -280,130 +293,130 @@ placeholder="What do the normally do here? They are...">
 
 <div class="AmbienceContainer"> 
 
-    <form id="ambienceForm" class="ambienceForm">
-    <div class="ambienceFormContainer">
+<form id="ambienceForm" class="ambienceForm">
+<div class="ambienceFormContainer">
 
-    <br>
+<br>
 
-    <div class = "Monster-stats-all">
+<div class = "Monster-stats-all">
 
-    <div class="Monster-stats-left"> 
-            
-        <label for="radianceDropdown">Interior or Exterior:</label><br>
+<div class="Monster-stats-left"> 
 
-        <label for="contextDropdown">Select Context:</label><br>
+<label for="radianceDropdown">Interior or Exterior:</label><br>
 
-        <label for="mainAmbienceDropdown">Select Main:</label><br>
+<label for="contextDropdown">Select Context:</label><br>
 
-        <label for="secondAmbienceDropdown">Select Second:</label><br>
-        
-       
+<label for="mainAmbienceDropdown">Select Main:</label><br>
 
-    </div>
-            
-    <div class="Monster-stats-right"> 
+<label for="secondAmbienceDropdown">Select Second:</label><br>
 
-        <select id="radianceDropdown">
-        <option value="exterior">Exterior</option>
-        <option value="interior">Interior</option>        
-        </select><br>
 
-        <select id="contextDropdown">
-        <option value=""></option>
-        </select><br>
 
-        <select id="mainAmbienceDropdown">
-        <option value=""></option>
-        </select><br>   
+</div>
 
-        <select id="secondAmbienceDropdown">
-        <option value="">Select Main</option>
-        </select><br>
-            
-    </div>
+<div class="Monster-stats-right"> 
 
-    </div>
+<select id="radianceDropdown">
+<option value="exterior">Exterior</option>
+<option value="interior">Interior</option>        
+</select><br>
 
-    <br><hr>
+<select id="contextDropdown">
+<option value=""></option>
+</select><br>
 
-    <label for="ambienceTitle">Title:</label>
-    <input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="{... to Search" required>
+<select id="mainAmbienceDropdown">
+<option value=""></option>
+</select><br>   
 
-    <label for="ambienceContext">Context:</label>
-    <input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
+<select id="secondAmbienceDropdown">
+<option value="">Select Main</option>
+</select><br>
 
-    <div class = "Monster-stats-all">
+</div>
 
-        <div class="Monster-stats-left"> 
-        
-        <label for="ambienceMain">Primary:</label>
-        <input class="halfField" type="textarea" id="ambienceMain" name="ambienceMain">   
-        
-        </div>
-        
-        <div class="Monster-stats-right"> 
-        
-        <label for="ambienceSecond">Secondary:</label>
-        <input class="halfField" type="textarea" id="ambienceSecond" name="ambienceSecond">
-        
-        </div>
+</div>
 
-    </div>
+<br><hr>
 
-        <label for="ambienceDescription">Description:</label>
-        <textarea class="medField" type="textarea" id="ambienceDescription" name="ambienceDescription"></textarea>
+<label for="ambienceTitle">Title:</label>
+<input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="{... to Search" required>
 
-        <label for="ambienceSight">Sight:</label>
-        <textarea class="smallField" type="textarea" id="ambienceSight" name="ambienceSight"></textarea>
+<label for="ambienceContext">Context:</label>
+<input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
 
-        <label for="ambienceSmell">Smell:</label>
-        <textarea class="smallField" type="textarea" id="ambienceSmell" name="ambienceSmell"></textarea>
+<div class = "Monster-stats-all">
 
-        <label for="ambienceSounds">Sounds:</label>
-        <textarea class="smallField" type="textarea" id="ambienceSounds" name="ambienceSounds"></textarea>
+<div class="Monster-stats-left"> 
 
-        <label for="ambienceFeel">Feel:</label>
-        <textarea class="smallField" type="textarea" id="ambienceFeel" name="ambienceFeel"></textarea>
+<label for="ambienceMain">Primary:</label>
+<input class="halfField" type="textarea" id="ambienceMain" name="ambienceMain">   
 
-        <label for="ambienceTaste">Taste:</label>
-        <textarea class="smallField" type="textarea" id="ambienceTaste" name="ambienceTaste"></textarea>
+</div>
 
-    </div>
-    </form>
+<div class="Monster-stats-right"> 
+
+<label for="ambienceSecond">Secondary:</label>
+<input class="halfField" type="textarea" id="ambienceSecond" name="ambienceSecond">
+
+</div>
+
+</div>
+
+<label for="ambienceDescription">Description:</label>
+<textarea class="medField" type="textarea" id="ambienceDescription" name="ambienceDescription"></textarea>
+
+<label for="ambienceSight">Sight:</label>
+<textarea class="smallField" type="textarea" id="ambienceSight" name="ambienceSight"></textarea>
+
+<label for="ambienceSmell">Smell:</label>
+<textarea class="smallField" type="textarea" id="ambienceSmell" name="ambienceSmell"></textarea>
+
+<label for="ambienceSounds">Sounds:</label>
+<textarea class="smallField" type="textarea" id="ambienceSounds" name="ambienceSounds"></textarea>
+
+<label for="ambienceFeel">Feel:</label>
+<textarea class="smallField" type="textarea" id="ambienceFeel" name="ambienceFeel"></textarea>
+
+<label for="ambienceTaste">Taste:</label>
+<textarea class="smallField" type="textarea" id="ambienceTaste" name="ambienceTaste"></textarea>
+
+</div>
+</form>
 
 </div>
 
 <div class="SettingsContainer"> 
 
-    <label id = "AmbienceHead"> Set Ambience:</label>
-    <p>Set the dynamic and continuous description style to theme each entry. These
-    are stored in a .json file. Select rediance for ambient lighting.
-    </p>
-    
-    
-    
-    <br>
-    
-    
-    
-    <br>
-    
-    <label id = "ExportHead"> Export .csv :</label>
-    <p>Select an array to export as a .csv file for easier editing.
-    </p>
-    
-    <label for="exportDropdown">Select Array:</label>
-    <select id="exportDropdown">
-    <option value="">Select Array!</option>
-    <option value="NPCs">NPCs</option>
-    <option value="Locations">Locations</option>
-    </select>
-    
-    <div class = "exportToolbar" id="exportToolbar"> 
-    <button type="button" class = "button" id="importData">Import</button>
-    <input type="file" id="csvFileInput" style="display: none">
-    <button type="button" class = "button" id="exportData">Export</button>
-    </div>
+<label id = "AmbienceHead"> Set Ambience:</label>
+<p>Set the dynamic and continuous description style to theme each entry. These
+are stored in a .json file. Select rediance for ambient lighting.
+</p>
+
+
+
+<br>
+
+
+
+<br>
+
+<label id = "ExportHead"> Export .csv :</label>
+<p>Select an array to export as a .csv file for easier editing.
+</p>
+
+<label for="exportDropdown">Select Array:</label>
+<select id="exportDropdown">
+<option value="">Select Array!</option>
+<option value="NPCs">NPCs</option>
+<option value="Locations">Locations</option>
+</select>
+
+<div class = "exportToolbar" id="exportToolbar"> 
+<button type="button" class = "button" id="importData">Import</button>
+<input type="file" id="csvFileInput" style="display: none">
+<button type="button" class = "button" id="exportData">Export</button>
+</div>
 
 </div>
 
@@ -424,6 +437,7 @@ placeholder="What do the normally do here? They are...">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script type="module" src="map.js"></script> 
+<script type="module" src="spells.js"></script> 
 <script type="module" src="toolbar.js"></script> 
 <script type="module" src="hotkeys.js"></script> 
 <script type="module" src="add.js"></script>

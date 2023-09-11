@@ -8,6 +8,7 @@ import Ambience from "./ambience.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items  from "./items.js";
+import Spells  from "./spells.js";
 
 class Toolbar{
 
@@ -18,6 +19,7 @@ Ambience.initializeAmbienceDropdowns();
 
 Monsters.loadMonstersArray();
 Items.loadItemsArray();
+Spells.loadSpellsArray()
 
 //Edit.addPredictiveContent();
 Edit.init();
@@ -183,6 +185,11 @@ Ambience.saveAmbience();
 Ambience.loadAmbienceList(Ambience.ambienceArray);
 break;
 
+case 6:
+// Spells.saveAmbience();
+// Ambience.loadAmbienceList(Ambience.ambienceArray);
+break;
+
 default:
 
 break;
@@ -244,7 +251,7 @@ Edit.deleteLocation();
 };
 
 handleNextButtonClick(){
-if (Edit.editPage < 5) {
+if (Edit.editPage < 7) {
 Edit.editPage = Edit.editPage + 1;
 Edit.pageChange(Edit.editPage);
 }};

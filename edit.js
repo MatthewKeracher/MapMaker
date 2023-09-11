@@ -5,6 +5,7 @@ import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items from "./items.js";
 import Ambience from "./ambience.js";
+import Spells from "./spells.js";
 
 const Edit = {
 
@@ -279,6 +280,7 @@ Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
 
 break;
 
@@ -294,6 +296,7 @@ Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
 
 NPCs.loadNPC(NPCs.npcArray);
 
@@ -312,6 +315,7 @@ Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
 
 Monsters.loadMonsterList(Monsters.monstersArray);
 
@@ -328,6 +332,7 @@ Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.AmbienceContainer.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
 
 Items.loadItemsList(Items.itemsArray);
 
@@ -344,12 +349,30 @@ Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
 
 Ambience.loadAmbienceList(Ambience.ambienceArray);
 
 break;
 
 case 6:
+//Show
+Ref.spellsForm.style.display = "flex";
+
+//Hide
+Ref.monsterForm.style.display = "none";
+Ref.npcForm.style.display = "none";
+Ref.itemForm.style.display = "none";
+Ref.editLocationName.style.display  = "none";
+Ref.textLocation.style.display = "none";
+Ref.AmbienceContainer.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
+
+Spells.loadSpellsList(Spells.spellsArray);
+
+break;
+
+case 7:
 //Show
 Ref.SettingsContainer.style.display = "flex";
 
@@ -359,6 +382,8 @@ Ref.npcForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
+Ref.spellsForm.style.display = "none";
+Ref.AmbienceContainer.style.display = "none";
 
 break;
 

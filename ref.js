@@ -32,6 +32,10 @@ extraInfo2: document.querySelector('.extraInfo2'),
 extraContent: document.querySelector('.extraContent'),
 extraContent2: document.querySelector('.extraContent2'),
 
+
+//spellsForm
+spellsForm: document.querySelector('.spellsForm'),
+
 //ambienceForm:
 
 ambienceForm: document.querySelector('.ambienceForm'),
