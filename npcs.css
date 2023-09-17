@@ -3,7 +3,7 @@ display: none;
 border-radius: 0;
 background-color: transparent;
 overflow: auto;
-overflow-x: hidden  ;
+overflow-x: hidden;
 }
 
 #npcForm::-webkit-scrollbar {

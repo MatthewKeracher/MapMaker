@@ -181,13 +181,13 @@ Items.loadItemsList(Items.itemsArray);
 break;
 
 case 5:
-Ambience.saveAmbience();
-Ambience.loadAmbienceList(Ambience.ambienceArray);
+Spells.saveSpell();
+Spells.loadSpellsList(Spells.spellsArray);
 break;
 
 case 6:
-// Spells.saveAmbience();
-// Ambience.loadAmbienceList(Ambience.ambienceArray);
+Ambience.saveAmbience();
+Ambience.loadAmbienceList(Ambience.ambienceArray);
 break;
 
 default:
@@ -225,6 +225,10 @@ NPCs.clearForm(Ref.itemForm);
 break;
 
 case 5:
+NPCs.clearForm(Ref.spellsForm);
+break;
+
+case 6:
 NPCs.clearForm(Ref.ambienceForm);
 break;
 

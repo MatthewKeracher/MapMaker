@@ -16,67 +16,67 @@ divIds : ['textLocation', 'npcBackStory'],
 
 init: function () {
 this.divIds.forEach((divId) => {
-  const divElement = document.getElementById(divId);
-  if (divElement) {
-    divElement.addEventListener('input', (event) => {
-      const text = event.target.value;
-      const cursorPosition = event.target.selectionStart;
-      const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-      const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+const divElement = document.getElementById(divId);
+if (divElement) {
+divElement.addEventListener('input', (event) => {
+const text = event.target.value;
+const cursorPosition = event.target.selectionStart;
+const openBraceIndex = text.lastIndexOf('#', cursorPosition);
+const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
 
-      if (openBraceIndex !== -1 || openAsteriskIndex !== -1) {
-        let searchText;
-        let filteredItems;
+if (openBraceIndex !== -1 || openAsteriskIndex !== -1) {
+let searchText;
+let filteredItems;
 
-        if (openBraceIndex > openAsteriskIndex) {
-          searchText = text.substring(openBraceIndex + 1, cursorPosition);
-          filteredItems = Items.itemsArray.filter(item =>
-            item.Name.toLowerCase().includes(searchText.toLowerCase())
-          );
-        } else {
-          searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-          filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
-            monsterName.toLowerCase().includes(searchText.toLowerCase())
-          );
-        }
+if (openBraceIndex > openAsteriskIndex) {
+  searchText = text.substring(openBraceIndex + 1, cursorPosition);
+  filteredItems = Items.itemsArray.filter(item =>
+    item.Name.toLowerCase().includes(searchText.toLowerCase())
+  );
+} else {
+  searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
+  filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
+    monsterName.toLowerCase().includes(searchText.toLowerCase())
+  );
+}
 
-        console.log(searchText)
+console.log(searchText)
 
-        // Show ExtraContent
-        Ref.itemList.style.display = 'block';
-        Ref.itemList.innerHTML = ''; // Clear existing content
+// Show ExtraContent
+Ref.itemList.style.display = 'block';
+Ref.itemList.innerHTML = ''; // Clear existing content
 
-        // fixDisplay()
-        const imageContainer = document.querySelector('.image-container');
-        const radiantDisplay = document.getElementById('radiantDisplay');
-        imageContainer.style.width = "45vw";
-        radiantDisplay.style.width = "45vw";
+// fixDisplay()
+const imageContainer = document.querySelector('.image-container');
+const radiantDisplay = document.getElementById('radiantDisplay');
+imageContainer.style.width = "45vw";
+radiantDisplay.style.width = "45vw";
 
-        filteredItems.forEach(item => {
-          const option = document.createElement('div');
-          option.textContent = item.Name || item; // Use "Name" property if available
-          option.addEventListener('click', () => {
-            const replacement = openBraceIndex !== -1
-              ? `#${item.Name}#`
-              : `*${item}*`;
-            const newText = text.substring(0, openBraceIndex !== -1 ? openBraceIndex : openAsteriskIndex) + replacement + text.substring(cursorPosition);
-            event.target.value = newText;
-            Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
-          });
-          Ref.itemList.appendChild(option);
-        });
-      } else {
-        Ref.itemList.style.display = 'none';
-        Ref.itemList.innerHTML = '';
+filteredItems.forEach(item => {
+  const option = document.createElement('div');
+  option.textContent = item.Name || item; // Use "Name" property if available
+  option.addEventListener('click', () => {
+    const replacement = openBraceIndex !== -1
+      ? `#${item.Name}#`
+      : `*${item}*`;
+    const newText = text.substring(0, openBraceIndex !== -1 ? openBraceIndex : openAsteriskIndex) + replacement + text.substring(cursorPosition);
+    event.target.value = newText;
+    Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+  });
+  Ref.itemList.appendChild(option);
+});
+} else {
+Ref.itemList.style.display = 'none';
+Ref.itemList.innerHTML = '';
 
-        // fixDisplay()
-        const imageContainer = document.querySelector('.image-container');
-        const radiantDisplay = document.getElementById('radiantDisplay');
-        imageContainer.style.width = "70vw";
-        radiantDisplay.style.width = "70vw";
-      }
-    });
-  }
+// fixDisplay()
+const imageContainer = document.querySelector('.image-container');
+const radiantDisplay = document.getElementById('radiantDisplay');
+imageContainer.style.width = "70vw";
+radiantDisplay.style.width = "70vw";
+}
+});
+}
 })},
 
 
@@ -137,23 +137,42 @@ itemForm.reset(); // Call the reset() method to clear the form fields
 break;
 
 case 5:
-  const ambienceTitle = document.getElementById('ambienceTitle').value;
-  const ambienceIndex = Ambience.ambienceArray.findIndex(ambience => ambience.title === ambienceTitle);
-  const ambienceForm = document.getElementById('ambienceForm');
+const spellName = document.getElementById('spellName').value;
+const spellIndex = Spells.spellsArray.findIndex(spell => spell.Name === spellName);
+const spellsForm = document.getElementById('spellsForm');
 
-  if (ambienceIndex !== -1) {
-    const confirmation = window.confirm("Are you sure you want to delete this ambience?");
-    if (confirmation) {
-      Ambience.ambienceArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
+if (spellIndex !== -1) {
+const confirmation = window.confirm("Are you sure you want to delete this spell?");
+if (confirmation) {
+Spells.spellsArray.splice(spellIndex, 1); // Remove ambience from ambienceArray
 
-      // Update the ambience list with the updated ambienceArray
-      Ambience.loadAmbienceList(Ambience.ambienceArray);
+// Update the ambience list with the updated ambienceArray
+Spells.loadSpellsList(Spells.spellsArray);
 
-      // Reset the ambience form fields
-      ambienceForm.reset();
-    }
-  }
-  break;
+// Reset the ambience form fields
+spellsForm.reset();
+}
+}
+break;
+
+case 6:
+const ambienceTitle = document.getElementById('ambienceTitle').value;
+const ambienceIndex = Ambience.ambienceArray.findIndex(ambience => ambience.title === ambienceTitle);
+const ambienceForm = document.getElementById('ambienceForm');
+
+if (ambienceIndex !== -1) {
+const confirmation = window.confirm("Are you sure you want to delete this ambience?");
+if (confirmation) {
+Ambience.ambienceArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
+
+// Update the ambience list with the updated ambienceArray
+Ambience.loadAmbienceList(Ambience.ambienceArray);
+
+// Reset the ambience form fields
+ambienceForm.reset();
+}
+}
+break;
 
 
 default:
@@ -339,23 +358,7 @@ Items.loadItemsList(Items.itemsArray);
 break;
 
 case 5:
-//Show
-Ref.AmbienceContainer.style.display = "flex";
 
-//Hide
-Ref.monsterForm.style.display = "none";
-Ref.npcForm.style.display = "none";
-Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
-Ref.textLocation.style.display = "none";
-Ref.SettingsContainer.style.display = "none";
-Ref.spellsForm.style.display = "none";
-
-Ambience.loadAmbienceList(Ambience.ambienceArray);
-
-break;
-
-case 6:
 //Show
 Ref.spellsForm.style.display = "flex";
 
@@ -369,6 +372,23 @@ Ref.AmbienceContainer.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 
 Spells.loadSpellsList(Spells.spellsArray);
+
+break;
+
+case 6:
+//Show
+Ref.AmbienceContainer.style.display = "flex";
+
+//Hide
+Ref.monsterForm.style.display = "none";
+Ref.npcForm.style.display = "none";
+Ref.itemForm.style.display = "none";
+Ref.editLocationName.style.display  = "none";
+Ref.textLocation.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
+
+Ambience.loadAmbienceList(Ambience.ambienceArray);
 
 break;
 

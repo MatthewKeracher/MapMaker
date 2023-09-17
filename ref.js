@@ -36,6 +36,16 @@ extraContent2: document.querySelector('.extraContent2'),
 //spellsForm
 spellsForm: document.querySelector('.spellsForm'),
 
+spellName: document.getElementById('spellName'),
+spellClass: document.getElementById('spellClass'),
+spellLevel: document.getElementById('spellLevel'),
+spellDescription: document.getElementById('spellDescription'),
+spellReverse: document.getElementById('spellReverse'),
+spellNote: document.getElementById('spellNote'),
+spellRange: document.getElementById('spellRange'),
+spellDuration: document.getElementById('spellDuration'),
+
+
 //ambienceForm:
 
 ambienceForm: document.querySelector('.ambienceForm'),

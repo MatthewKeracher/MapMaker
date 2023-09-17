@@ -122,7 +122,7 @@ loadSpellsList: function(data) {
       const spellNameDiv = document.createElement('div');
       spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}] <span class="yellow">${spell.Name}</span>`;
       itemList.appendChild(spellNameDiv);
-      //this.fillItemsForm(item, spellNameDiv);
+      this.fillSpellsForm(spell, spellNameDiv);
     }
   
     itemList.style.display = 'block'; // Display the container
@@ -131,47 +131,46 @@ loadSpellsList: function(data) {
   },
   
 
-fillItemsForm: function(item, itemNameDiv){
+  fillSpellsForm: function(spell, spellNameDiv){
 
 // Add click event listener to each NPC name
-itemNameDiv.addEventListener('click', () => {
+spellNameDiv.addEventListener('click', () => {
 
-Ref.itemName.value = item.Name;
-Ref.itemType.value = item.Type;
-Ref.itemSize.value = item.Size;
-Ref.itemWeight.value = item.Weight;
-Ref.itemCost.value = item.Cost;
-Ref.itemDamage.value = item.Damage;
-Ref.itemRange.value = item.Range;
-Ref.itemAC.value = item.AC;
-Ref.itemDescription.value = item.Description;
+Ref.spellName.value = spell.Name;
+Ref.spellClass.value = spell.Class;
+Ref.spellLevel.value = spell.Level;
+Ref.spellDescription.value = spell.Description;
+Ref.spellReverse.value = spell.Reverse;
+Ref.spellNote.value = spell.Note;
+Ref.spellRange.value = spell.Range;
+Ref.spellDuration.value = spell.Duration;
 
-Ref.itemForm.style.display = 'flex'; // Display the itemForm
+
+Ref.spellsForm.style.display = 'flex'; // Display the itemForm
 });
 
 },
 
-saveItem: function() {
+saveSpell: function() {
 
-    const existingItemIndex = this.spellsArray.findIndex(item => item.name === Ref.itemName.value);
-    console.log(Ref.itemName.value)
+    const existingItemIndex = this.spellsArray.findIndex(spell => spell.Name === Ref.spellName.value);
+    console.log(Ref.spellName.value)
 
     const item = {
 
-        Name: Ref.itemName.value,
-        Type: Ref.itemType.value,
-        Size: Ref.itemSize.value,
-        Weight: Ref.itemWeight.value,
-        Cost: Ref.itemCost.value,
-        Damage: Ref.itemDamage.value,
-        Range: Ref.itemRange.value,
-        AC: Ref.itemAC.value,
-        Description: Ref.itemDescription.value
+        Name: Ref.spellName.value,
+        Class: Ref.spellClass.value,
+        Level: Ref.spellLevel.value,
+        Description: Ref.spellDescription.value,
+        Reverse: Ref.spellReverse.value,
+        Note: Ref.spellNote.value,
+        Range: Ref.spellRange.value,
+        Duration: Ref.spellDuration.value       
 
     };
     
     if (existingItemIndex !== -1) {
-    // Update the existing NPC entry
+    // Update the existing Spell entry
     this.spellsArray[existingItemIndex] = item;
     console.log('Item updated:', item);
     } else {

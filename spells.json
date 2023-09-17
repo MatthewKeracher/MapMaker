@@ -6,8 +6,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Let's caster see evil in Creatures, magic items, & (possibly) extraplanar beings as a glow. No one else sees this glow.",
-    "Reverse (Note 1):": "*DETECT GOOD: same effect.",
-    "Note 2:": null
+    "Reverse": "*DETECT GOOD: same effect.",
+    "Note": null
   },
   "Detect Magic": {
     "Name": "Detect Magic",
@@ -16,8 +16,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Let's Caster see a pale glowing light surrounding enchanted or enspelled creatures. Invisible magic is detected as a glowing fog. Caster may attack with -2 penalty. Non-magical invisiblity is not detected. Only Caster can see.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Light*": {
     "Name": "Light*",
@@ -26,8 +26,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Creates light = to torchlight with 30' radius and 20' dim light around target location/object. Can move if on object. Does not work in Magical Darkness. Can blind if cast in visual organs. Target can save vs Death Ray. Can cancel DARKNESS if caster level is ≥ than spell.",
-    "Reverse (Note 1):": "*DARKNESS: Same but with dark",
-    "Note 2:": null
+    "Reverse": "*DARKNESS: Same but with dark",
+    "Note": null
   },
   "Protection from Evil*": {
     "Name": "Protection from Evil*",
@@ -36,8 +36,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Wards against attacks from evil beings, mind control & summoned creates in a 1' radius. 1st: Target gains +2 to AC & saves. 2nd: wards from possession & mind control. 3rd: prevents contact of summoned creatures (fails if Target attacks or pushes barrier against creature).",
-    "Reverse (Note 1):": "*PROTECTION FROM GOOD: same but from good instead.",
-    "Note 2:": null
+    "Reverse": "*PROTECTION FROM GOOD: same but from good instead.",
+    "Note": null
   },
   "Cure Light Wounds*": {
     "Name": "Cure Light Wounds*",
@@ -46,8 +46,8 @@
     "Class": "Cleric",
     "Level": "1",
     "Description": "Heals Target for 1d6+1. Damages Undead for 1d6+1.",
-    "Reverse (Note 1):": "*CAUSE L. WOUNDS: Reversed",
-    "Note 2:": "CAUSE requires an attack roll."
+    "Reverse": "*CAUSE L. WOUNDS: Reversed",
+    "Note": "CAUSE requires an attack roll."
   },
   "Purify Food and Water": {
     "Name": "Purify Food and Water",
@@ -56,8 +56,8 @@
     "Class": "Cleric",
     "Level": "1",
     "Description": "Purifies spoiled, rotten, poisoned, & otherwise contaminated food & water. Does not prevent spoilage after casting. Spoils Unholy food, water & drinks. Does not affect creatures or magic potions.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Remove Fear*": {
     "Name": "Remove Fear*",
@@ -66,8 +66,8 @@
     "Class": "Cleric",
     "Level": "1",
     "Description": "Calms Target. If under magical fear, gives new save vs Spells to resist fear at +1/caster level.",
-    "Reverse (Note 1):": "*CAUSE FEAR: Scares 1 Target within 120'. Flees for 2 turns if save vs Spell fails.",
-    "Note 2:": null
+    "Reverse": "*CAUSE FEAR: Scares 1 Target within 120'. Flees for 2 turns if save vs Spell fails.",
+    "Note": null
   },
   "Resist Cold": {
     "Name": "Resist Cold",
@@ -76,8 +76,8 @@
     "Class": "Cleric",
     "Level": "1",
     "Description": "Grants Target temporary immunity to cold. Target is unaffected by Minor Cold (winter), has a +3 to save throws & 1/2 damage from Significant Cold (ie. Dragon Breath).",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Charm Person": {
     "Name": "Charm Person",
@@ -86,8 +86,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Only ≤4 HD Humanoid. Save vs Spells negates. If attacked/threatened, +5 to save. Saves if ordered (GM decides). Must speak language or have good body language. Will protect Caster. Save again by INT score:",
-    "Reverse (Note 1):": "≤8 daily, 9-12 weekly, 13≥ month",
-    "Note 2:": "demi/humans affected, regardless"
+    "Reverse": "≤8 daily, 9-12 weekly, 13≥ month",
+    "Note": "demi/humans affected, regardless"
   },
   "Floating Disc": {
     "Name": "Floating Disc",
@@ -96,8 +96,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Creates circular plane force. Its 3' diameter & 1\" deep. Holds 500lbs (62 gallons of water, in container). Stays level with ground & at a height equal to caster's waist. Remains 10' from caster. Can be pushed but dispells if pushed away from caster beyond 10'.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Hold Portal": {
     "Name": "Hold Portal",
@@ -106,8 +106,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Magically holds shut a door, gate, window or shutter of wood, metal, stone. Secures portal like a shut and locked door. KNOCK and DISPEL MAGIC negates.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Magic Missile": {
     "Name": "Magic Missile",
@@ -116,8 +116,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Causes a magical missle to dart from caster's finger towards target (must be partially seen) dealing 1d6+1 dam. Never misses. Can't single out specific parts. Inanimated objects not affected. Additional missle/caster level (Max 5). Multiple missle can attack single or group.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Must disignate Targets."
+    "Reverse": null,
+    "Note": "Must disignate Targets."
   },
   "Magic Mouth": {
     "Name": "Magic Mouth",
@@ -126,8 +126,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Imbues object (includes trees/rocks) with a mouth that appears sudden and gives message. 3 words/caster level & in any language the caster knows at any volume for 10 min when triggered. Caster can set visual/audio triggers (as complex as desired) but they can be fooled. Trigger range is 10'/caster level.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Read Languages": {
     "Name": "Read Languages",
@@ -136,8 +136,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Gives ability to rad any written language. Cast 1 of 3 modes. 1st: Read any # of works in variety of languages for 1 turn/caster level. 2nd: Read any book/tome  for 3 hours/caster level. 3rd: Read any 1 single scroll or 1 sheet document. Doesn't work on magic text or grant understanding.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Requires a creature who can read Language must exist on the plane."
+    "Reverse": null,
+    "Note": "Requires a creature who can read Language must exist on the plane."
   },
   "Read Magic": {
     "Name": "Read Magic",
@@ -146,8 +146,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Enables caster to read megical text. ALL Magic-USERs begin adepted in this spell. It can be cast without a spellbook. If cast on a cursed text, it will trigger the curse.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Shield": {
     "Name": "Shield",
@@ -156,8 +156,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Creates an invisible, shield-like mobile force in front of caster. Negates MAGIC MISSILES from all directions. +3 vs Melee & +6 vs Missles to AC, except from attacks from behind caster.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Sleep": {
     "Name": "Sleep",
@@ -166,8 +166,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Puts several creatures ≤3 HD asleep. Those of ≥4 HD are unaffected, as are undead, constructs, and unconscious. Slapping & attacking wakes up.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Ventriloquism": {
     "Name": "Ventriloquism",
@@ -176,8 +176,8 @@
     "Class": "Magic User",
     "Level": "1",
     "Description": "Caster can cause his/her voice to sound from someplace else within range.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Hold Person": {
     "Name": "Hold Person",
@@ -186,8 +186,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Paralyzes demi/human or humanoid. Creatures >ogre and undead not affected. Save vs Spell to negate. Shingle target has -2 save. 1d4 of creatures can be affected. Flyers fall & swimmers may drown.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Charm Animal": {
     "Name": "Charm Animal",
@@ -196,8 +196,8 @@
     "Class": "Cleric",
     "Level": "2",
     "Description": "Makes animals favor caster. Normal & Giant-sized can't save. Must decide which are affected 1st. Fantastics make \"Spells\" save (If GM allows). Does not give communication. When spell ends, it becomes normal.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Useful with \"Speak with Animals\""
+    "Reverse": null,
+    "Note": "Useful with \"Speak with Animals\""
   },
   "Find Traps": {
     "Name": "Find Traps",
@@ -206,8 +206,8 @@
     "Class": "Cleric",
     "Level": "2",
     "Description": "Permits Caster to detect traps (magical & mechanical). Traps within 30' of Caster will give off a faint glow. Does not detect natural traps. Does not give knowledge of disarmament or type/nature.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Resist Fire": {
     "Name": "Resist Fire",
@@ -216,8 +216,8 @@
     "Class": "Cleric",
     "Level": "2",
     "Description": "Grants Target temporary immunity to heat & fire. Target is unaffected by Minor heat & fire (normal flames), has a +3 to save throws & 1/2 damage from Significant fire (ie. FIREBALL).",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Silence 15' Radius": {
     "Name": "Silence 15' Radius",
@@ -226,8 +226,8 @@
     "Class": "Cleric",
     "Level": "2",
     "Description": "Creates absolute silence within a 15' radius around target. Can be cast on spot (stationary), or be cast on moble object of creature (Mobile). Creatures (& thier equipment if targeted) can save vs Spells to negate. No spells can be cast within.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Speak with Animals": {
     "Name": "Speak with Animals",
@@ -236,8 +236,8 @@
     "Class": "Cleric",
     "Level": "2",
     "Description": "Grants caster understanding & commincation with 1 animal (normal & giant-sized, not magical/monstrous). May change animal once per round. Intelligent animals likely to be terse/evasive. May not alter reaction/attitude of animal.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Spiritual Hammer": {
     "Name": "Spiritual Hammer",
@@ -246,8 +246,8 @@
     "Class": "Cleric",
     "Level": "2",
     "Description": "Creates a Warhammer of pure forse to exist & attacks once per round. Deals 1d6+1/caster's 3 levels (Max +5) per strike. It uses caster's attack bonus. It can strike enemies who are only attackable by magic. Hammer disappears if caster loses sight of or ceases to direct it. its Immune to physical attacks.",
-    "Reverse (Note 1):": "Dispeled by DISPEL MAGIC, DISINTEGRATE or ROD OF CANCELLATION.",
-    "Note 2:": null
+    "Reverse": "Dispeled by DISPEL MAGIC, DISINTEGRATE or ROD OF CANCELLATION.",
+    "Note": null
   },
   "Continual Light*": {
     "Name": "Continual Light*",
@@ -256,8 +256,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Creates a sphere of light. 30' radius of daylight & less intense to 60'.Can be cast on objects, creatures, & air. If cast on visual organs, target must save vs death ray or suffer -4 on attack rolls.",
-    "Reverse (Note 1):": "*CONTINUAL DARKNESS: Same",
-    "Note 2:": "Dark dispels all light"
+    "Reverse": "*CONTINUAL DARKNESS: Same",
+    "Note": "Dark dispels all light"
   },
   "Locate Object": {
     "Name": "Locate Object",
@@ -266,8 +266,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Senses direction of a well-known or clearly visualized object. If searched in general terms nearest item is located (if more than one exists in range). Unique items MUST be seen first hand not by divination (ie. CLAIRVOYANCE or CRYSTAL BALL). This sheet of lead/gold blocks. Creatures can't be located by spell.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Detect Invisible": {
     "Name": "Detect Invisible",
@@ -276,8 +276,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Let's Caster see invisible characters, creatures or objects within the given range, seeing them as translucent shapes. [like Pepper's Ghost]",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Invisibility": {
     "Name": "Invisibility",
@@ -286,8 +286,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Target becomes invisible (including to Darkvision). Target is invisible to eveyone. can still be heard anything on Target is unseen except if droped or extending >10'. Last 24 hours. Ends if target attacks or cast spells but not if defending.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Knock": {
     "Name": "Knock",
@@ -296,8 +296,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Opens stuck, barred, locked HELD & WIZARD LOCKED doors. Includes secret doors, trick opening boxes/chests. Lossens welds, shackles, chains. Suspends (not remove) WIZARD LOCKS for 1 turn. Can't raise portcullis or similar mechanism. Each spell undos a single means preventing access.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Levitate": {
     "Name": "Levitate",
@@ -306,8 +306,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Leviates Target up/down 20'/round as desired by caster. Must be wiling to accept spell or be unettended (if single object). Can't move sideways unless pushing on a surface (1/2 speed if so). If attacking has penality -1 for 1st attack and increasing to -5. 1 round stablizing resets to -1.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Mirror Image": {
     "Name": "Mirror Image",
@@ -316,8 +316,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Causes 1d4+1/caster's 3 levels (max 8) of illusory copies of caster. They move constantly through each other and the caster, mimicing him or her. Attacks will always hit a copy first. AOE spells affect all copies as it does the caster. Direct spells at the copy destroy it without save.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Phantasmal Force": {
     "Name": "Phantasmal Force",
@@ -326,8 +326,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Creates VISUAL illusion of object, creature(s) or effects as conceived by caster in area (Max 20'x20'x20'). If 1+ creatures created, they have 11 AC. Damage is not real but simulates normal Dam. Anyone \"killed\" by the illusions, wake up after 2d8 rounds. Animating beyond limit will allow Save vs Spells.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Those who save see through spell."
+    "Reverse": null,
+    "Note": "Those who save see through spell."
   },
   "Web": {
     "Name": "Web",
@@ -336,8 +336,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Creates 8,000 cubic feet of webs. Like spider web but bigger and tougher. Traps anyone in or entering the webs, save vs Death Ray. Success: 1/2 move rate, can't attack or cast spells. Fail, Unable to do aything. Creatures with STR ≥13 new get save each round. webs can burn 10' cube/round. 2d4 dam if in.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Wizard Lock": {
     "Name": "Wizard Lock",
@@ -346,8 +346,8 @@
     "Class": "Magic User",
     "Level": "2",
     "Description": "Magically seals a door, chest, or portal. The caster can pass through freely, as well as any Magic User who is ≥3 levels higher than the one who casts the spell. Anyone ele has to break in or cast DISPEL MAGIC or KNOCK.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Remove Curse*": {
     "Name": "Remove Curse*",
@@ -356,8 +356,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Removes curse from creature or object. Doesn't get rid of weapon, shield & armor curses but allows them to be taken off & get rid of it. Some curses are unremovable or can only be removed by higher caster levels.",
-    "Reverse (Note 1):": "*BESTOW CURSE:pick -4 Ability; -4 saves; 50% no action.",
-    "Note 2:": null
+    "Reverse": "*BESTOW CURSE:pick -4 Ability; -4 saves; 50% no action.",
+    "Note": null
   },
   "Cure Blindness": {
     "Name": "Cure Blindness",
@@ -366,8 +366,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Cures Blindness caused by injury or magic. Does not cure blindness caused by a curse.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Cure Disease*": {
     "Name": "Cure Disease*",
@@ -376,8 +376,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Cures all diseases and kills all parasites that the target is suffering from. Certain special diseases may not be cured by this spell or may be cured only by a caster of a certain level or higher. Can still be reinfected.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Growth of Animals": {
     "Name": "Growth of Animals",
@@ -386,8 +386,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Cause animals to grow 2x its size & 8x its weight. It does 2x Dam. & +2 AC. 2x max carrying load. May save vs Spells to resist. Equipment removed from animal remove to norm size. Does not give influence or command.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Speak with Dead": {
     "Name": "Speak with Dead",
@@ -396,8 +396,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Grants a corpse ability to speak to caster. Caster can ask 1 question/2 caster levels It can only speak what it knew in life. Answers are often brief, cryptic, & repetitive. If spell was used on corpse within the last week, new spell fails. A damaged corpse must have a mouth & may give only partial answers.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Does not affect Undead."
+    "Reverse": null,
+    "Note": "Does not affect Undead."
   },
   "Striking": {
     "Name": "Striking",
@@ -406,8 +406,8 @@
     "Class": "Cleric",
     "Level": "3",
     "Description": "Bestows 1 weapon an extra 1d6 damage on a successful attack. It provides no attack bonus. It does allow the weapon to attack monsters who can only be attacked by magic, but the 1d6 damage counts in this instance.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Dispel Magic": {
     "Name": "Dispel Magic",
@@ -416,8 +416,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Ends spells (including potion effects) on a creature or object or 20'cubic area. Spells ≤caster's level canceled. If spells were cast by higher level caster, 5% failure rate per level higher than Caster's level.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Can't dispel curses"
+    "Reverse": null,
+    "Note": "Can't dispel curses"
   },
   "Protection from Evil 10' Radius*": {
     "Name": "Protection from Evil 10' Radius*",
@@ -426,8 +426,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Wards against attacks from evil beings, mind control & summoned creates in a 10' radius. All within/entering recieve protection. 1st: Target gains +2 to AC & saves. 2nd: wards from possession & mind control. 3rd: prevents contact of summoned creatures (fails if Target attacks or pushes barrier against creature).",
-    "Reverse (Note 1):": "*PROTECTION FROM GOOD 10' RADIUS: same but from good instead.",
-    "Note 2:": null
+    "Reverse": "*PROTECTION FROM GOOD 10' RADIUS: same but from good instead.",
+    "Note": null
   },
   "Clairvoyance": {
     "Name": "Clairvoyance",
@@ -436,8 +436,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Caster looks through creature's eyes. Must specify direction & ~distance. Max 60'. Spell fails if no creature is there. May choose another afte 1 turn. May choose another if lost contact or out of range. It remains unaware",
-    "Reverse (Note 1):": "No Save Allowed",
-    "Note 2:": null
+    "Reverse": "No Save Allowed",
+    "Note": null
   },
   "Darkvision": {
     "Name": "Darkvision",
@@ -446,8 +446,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "The target receives Darkvision with a range of 60' for the duration of the spell.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Fireball": {
     "Name": "Fireball",
@@ -456,8 +456,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Deals 1d6/ Caster level with a 20' sphere. Save vs Spells for 1/2 dam. Must determine distance height. If shot through narrow space, must roll missle attack (no range adjustments). Early impact = early detonation. Damages objects in area. Melts low melting-point metals. Can breakthrough barriers.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Fly": {
     "Name": "Fly",
@@ -466,8 +466,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Target can fly at normal move rate (adjust for encumbrance). Ascends at 1/2 speed. Descends at 2x speed. Can still cast or attack. Can't charge/run or carry >max weight. If the spell expires/dispels, Target flots down 120'/1d10 rounds.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Haste*": {
     "Name": "Haste*",
@@ -476,8 +476,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "2x speed of move & action rate of 1 target/caster level.Spell casting and magical item use not 2x. Does not stack.",
-    "Reverse (Note 1):": "*SLOW: same but at 1/2 speed. Target can Save vs Spells to avoid.",
-    "Note 2:": "dispel each other."
+    "Reverse": "*SLOW: same but at 1/2 speed. Target can Save vs Spells to avoid.",
+    "Note": "dispel each other."
   },
   "Invisibility 10' Radius": {
     "Name": "Invisibility 10' Radius",
@@ -486,8 +486,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "All Targets within 10' of recipient becomes invisible (including to Darkvision). Everyone can see each other within range. Can still be heard anything on Targets are unseen except if droped or extending >10'of range. Last 24 hours. Ends for targets (only) attacks or cast spells but not if defending.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Ends for all if Caster casts or attacks"
+    "Reverse": null,
+    "Note": "Ends for all if Caster casts or attacks"
   },
   "Lightning Bolt": {
     "Name": "Lightning Bolt",
@@ -496,8 +496,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Deals 1d6 damage/caster level within range. Save vs Spells for 1/2 dam. Begins at casters finger and extends to given range (minimum 60'). Passes through area at 5' wide. Sets combustables on fire, Melts low melting ponit metals. Can bust through barriers or be reflected randomly. Affected targets do not take extra dam.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Protection from Normal Missiles": {
     "Name": "Protection from Normal Missiles",
@@ -506,8 +506,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Protects Caster from non-magical missles (arrows, bullets, bolts, thrown weapons). Does not protect from Magical arrows, hurled boulder & etc. Non-magical missles from magical weapons are considered magical.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Water Breathing": {
     "Name": "Water Breathing",
@@ -516,8 +516,8 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Allows Targets to breathe water freely. Divide the duration evenly among all the Targets the caster touches. Targets can still breathe air.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Animate Dead": {
     "Name": "Animate Dead",
@@ -526,8 +526,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Turns dead into undead skeletons & zombies. Stays until destroyed. Skeletons HD = dead creatures HD. Zombies HD = dead creatures HD+1. Requires mostly intact remains. Caster controls Spell level x2 of undead.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "LIMIT: 4x Character level"
+    "Reverse": null,
+    "Note": "LIMIT: 4x Character level"
   },
   "Create Water": {
     "Name": "Create Water",
@@ -536,8 +536,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Creates one gallon of water per caster level. Requires vessels to hold water. 1 gallon = 8lbs; 1 cubic foot = 8 gallons.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Cure Serious Wounds*": {
     "Name": "Cure Serious Wounds*",
@@ -546,8 +546,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Heals Target for 1d6+1/caster level. Damages Undead 1d6+1/caster level.",
-    "Reverse (Note 1):": "*CAUSE L. WOUNDS: Reversed",
-    "Note 2:": "CAUSE requires an attack roll."
+    "Reverse": "*CAUSE L. WOUNDS: Reversed",
+    "Note": "CAUSE requires an attack roll."
   },
   "Neutralize Poison*": {
     "Name": "Neutralize Poison*",
@@ -556,8 +556,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Cures poison. If cast upon creature slain in last 10 rounds, it revives with 1 HD. If cast on trap, permanently renders poison ineffective.",
-    "Reverse (Note 1):": "*POISON: reverse. Roll attack. Save vs Spell allowed. Touch last 1 round",
-    "Note 2:": null
+    "Reverse": "*POISON: reverse. Roll attack. Save vs Spell allowed. Touch last 1 round",
+    "Note": null
   },
   "Speak with Plants": {
     "Name": "Speak with Plants",
@@ -566,8 +566,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Grants caster understanding & commincation with Plants & Plant Creatures. Plants are unable to give details about anything outside of its immediate vicinity but will speak freely. Intelligent plant likely to be terse/evasive. May not alter reaction/attitude of plants.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Sticks to Snakes": {
     "Name": "Sticks to Snakes",
@@ -576,8 +576,8 @@
     "Class": "Cleric",
     "Level": "4",
     "Description": "Transforms sticks intointo 1d4 HD worth of snakes (not giant)/4 caster levels. Snakes obey caster. If slain, dispeled or spell expires, they return to sticks. Magical sticks (ie. enchanted staves) are unaffected by spell.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "See SNAKE in Monster Section for Stats and types"
+    "Reverse": null,
+    "Note": "See SNAKE in Monster Section for Stats and types"
   },
   "Wall of Fire": {
     "Name": "Wall of Fire",
@@ -586,8 +586,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Creates a fire wall. Deals 2d4 of damage to creatures within 10' & 1d4 dam to any within 20' of the side Caster chooses. Any passing through will take takes 2d6 +1/caster level. Undead take 2x dam. Wall can be straight or cicular and up to 20' high. If invoked on creatures, each saves vs spells for 2d4 dam",
-    "Reverse (Note 1):": "Caster can keep wall indeffintely by focusing or let stand 1 round/level",
-    "Note 2:": null
+    "Reverse": "Caster can keep wall indeffintely by focusing or let stand 1 round/level",
+    "Note": null
   },
   "Charm Monster": {
     "Name": "Charm Monster",
@@ -596,8 +596,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "3d6 of ≤3 HD or 1 of ≥3 HD. Save vs Spells negates. If attacked/threatened, +5 to save. Saves if ordered (GM decides). Must speak language or have good body language. Will protect Caster. Save again by INT score:",
-    "Reverse (Note 1):": "≤8 daily, 9-12 weekly, 13≥ month",
-    "Note 2:": "Undead unaffected."
+    "Reverse": "≤8 daily, 9-12 weekly, 13≥ month",
+    "Note": "Undead unaffected."
   },
   "Confusion": {
     "Name": "Confusion",
@@ -606,8 +606,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Confuses 3d6 creatures in 30' radius. It \"Save vs Spells\" to resist. On its intiative roll 1d20: 1-2 Attacks, 3-4 Normal, 5-10 Babbles, 11-14 Flees, 15-20 attacks other creature. If unable to perform it babbles.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "No advantage. Attacks if attacked"
+    "Reverse": null,
+    "Note": "No advantage. Attacks if attacked"
   },
   "Dimension Door": {
     "Name": "Dimension Door",
@@ -616,8 +616,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Tranfers him/herself or a single target within range to any spot 200' +20/caster level. They arrive at exactly the desired spot. Another creature or characte can be transported if first is able to hold.",
-    "Reverse (Note 1):": "Unwilling can save vs Spell",
-    "Note 2:": "Fails if spot is in solid wall"
+    "Reverse": "Unwilling can save vs Spell",
+    "Note": "Fails if spot is in solid wall"
   },
   "Growth of Plants*": {
     "Name": "Growth of Plants*",
@@ -626,8 +626,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Overgrows up to 1,000' sq./5 caster levels of normal vegitation. Reduces >giant-size to 5' round move rate. Giant-size is rduced to 1/2 move rate. Does not affect animated plants. DISPEL MAGIC and SHRINK PLANT ends spell.",
-    "Reverse (Note 1):": "*SHRINK PLANT: Reverse spell",
-    "Note 2:": null
+    "Reverse": "*SHRINK PLANT: Reverse spell",
+    "Note": null
   },
   "Hallucinatory Terrain": {
     "Name": "Hallucinatory Terrain",
@@ -636,8 +636,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Changes appearance of outdoor terrain 10 cubic yards/level. Does not change/hide structures, equipment, & creature. Requires full turn to cast. Save vs Spells to see through the illusion, if actively attempted.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Ice Storm": {
     "Name": "Ice Storm",
@@ -646,8 +646,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Rains down Magical hailstones for 1 round. Deals 5d6 damage to everyone in a 20' radius target spot. Save vs Spells for 1/2 Dam. Fills 40' vertical column. Higher creatues are unaffected. -20% penalty to \"Listen\" roll. All move at 1/2 speed. Cold resistance gives 1/2 dam. (1/4 dam. is save successful).",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Massmorph": {
     "Name": "Massmorph",
@@ -656,8 +656,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Causes 1d4+1/caster level of ≤Man-sized creatues to blend into natural terrain. Desired Targets must be with 120' radius of caster & must be willing. If a Target move/attack spell dispels for him/her. Caster can end spell early. DISPEL MAGIC ends spell.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Polymorph Other": {
     "Name": "Polymorph Other",
@@ -666,8 +666,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Changes 1 Target into another form of living being. The form can't have >HD than caster, be gasuos or incorporeal. Target acquires ALL traits, abilities, powers & stats of new form (keep old HD). If form's INT is < Target old self s/he may not remener past Life. Shapeshifting Form can revert to old self in 1 round.",
-    "Reverse (Note 1):": "Reverts only if dispelled/slain.",
-    "Note 2:": "Unwilling can save vs Spells"
+    "Reverse": "Reverts only if dispelled/slain.",
+    "Note": "Unwilling can save vs Spells"
   },
   "Polymorph Self": {
     "Name": "Polymorph Self",
@@ -676,8 +676,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Changes caster into another form of a living creature. Can't assume incorporeal or gaseous form. If slain, return to old form. Keep original mental ability. Gain new form's physical ability. Do not gain special, supernatural, or spell abilities.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Wizard Eye": {
     "Name": "Wizard Eye",
@@ -686,8 +686,8 @@
     "Class": "Magic User",
     "Level": "4",
     "Description": "Creates invisible Magic \"eye\". It has Darkvision and lets caster see 240' away. It can move 40'/round but will not move 240' away from caster. It can't pass through solid objects but can fit through 1\" round holes.  Caster must focus to use eye.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Commune": {
     "Name": "Commune",
@@ -696,8 +696,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Let's caster talk to a deity or extraplanar servant. It answers 1 yes/no question per caster level. (DM decide if it answers clearly or not or if it's omniscient).",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Create Food": {
     "Name": "Create Food",
@@ -706,8 +706,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Creates bland, highly nourishing food. 3 men or one horse per caster level can be fed for a day. Food is inedible after 24 hours, it can be kept fresh for another 24 hours by casting purify food and water on it",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Dispel Evil": {
     "Name": "Dispel Evil",
@@ -716,8 +716,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "1st: +4 bonus to AC. 2nd: With attack roll, banish extraplanar being to home plane. Being can save vs Spells. (Spell ends either way) 3rd: dispels spells cast by extraplanar beings.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Can't dispel curses"
+    "Reverse": null,
+    "Note": "Can't dispel curses"
   },
   "Insect Plague": {
     "Name": "Insect Plague",
@@ -726,8 +726,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Summons 1 swarm of Locusts/caster level (Max of 6 at level 18). All swarms must be adjacent and are stationary. Attacks anyone in shared or entering.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "See INSECT SWARM for stats in Monster Section"
+    "Reverse": null,
+    "Note": "See INSECT SWARM for stats in Monster Section"
   },
   "Quest*": {
     "Name": "Quest*",
@@ -736,8 +736,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Forces the Target to carry out a service or refrain from an activity as desird by the Caster. Can't result in self-killing or in ceratin death. Save vs Spells to resist at 1st casting. Target must complete task. Open-ended tasks end in 1 day/Caster level. Disobeying for 24 hours, results 3d6 dam. a day.",
-    "Reverse (Note 1):": "DISPEL MAGIC does not affect.",
-    "Note 2:": "REMOVE CURSE from caster of 2+ levels of Caster's, WISH, or reverse quest ends"
+    "Reverse": "DISPEL MAGIC does not affect.",
+    "Note": "REMOVE CURSE from caster of 2+ levels of Caster's, WISH, or reverse quest ends"
   },
   "Raise Dead*": {
     "Name": "Raise Dead*",
@@ -746,8 +746,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Demi/Human or humanoid who has been dead for 1 day/caster level is given life. Must be willing to return. Target permantly loses a level (min xp for last level). If level 1, loses 1 CON. If CON ≤1 can't be raised. Effects can't be repaired but can still gain xp, levels, & HD in normal fashion. Cures poison/disease.",
-    "Reverse (Note 1):": "*SLAY LIVING: Instant kill. Roll Attack. Save vs Spells. 2d6 dam if saved.",
-    "Note 2:": "Does not affect Undead, Old age death, & elementals/constructs."
+    "Reverse": "*SLAY LIVING: Instant kill. Roll Attack. Save vs Spells. 2d6 dam if saved.",
+    "Note": "Does not affect Undead, Old age death, & elementals/constructs."
   },
   "True Seeing": {
     "Name": "True Seeing",
@@ -756,8 +756,8 @@
     "Class": "Cleric",
     "Level": "5",
     "Description": "Let's Target see all things as they really are. See through normal & magical darkeness & diguises, detect secret doors, exact locations of creatures & objects, sees past illusions &  true forms of POLYMORPHED, altered, & transmuted things, beings. Target can see truly for 120'. Doesn't give x-ray vision. Fog (& like) blocks.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Can't be magically enhanced"
+    "Reverse": null,
+    "Note": "Can't be magically enhanced"
   },
   "Cloudkill": {
     "Name": "Cloudkill",
@@ -766,8 +766,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Creates a 20'x20'x20' poison gas cloud. Moves 10'/round if caster concentrates. Kills anything with ≤3 of HD/level. ≥4 HD/level must \"save vs Poison\" or die.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Remains until Expired"
+    "Reverse": null,
+    "Note": "Remains until Expired"
   },
   "Conjure Elemental": {
     "Name": "Conjure Elemental",
@@ -776,8 +776,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Summons Elemantal from its Plane. 1 of each element can be summoned a day. It serves until caster loses concetration or dispeled by caster. If lost, will rampage & only \"Dispel Magic/Evil\" will banish.",
-    "Reverse (Note 1):": "Concentration Lost if:",
-    "Note 2:": "Combat, spells, >1/2 movement"
+    "Reverse": "Concentration Lost if:",
+    "Note": "Combat, spells, >1/2 movement"
   },
   "Feeblemind": {
     "Name": "Feeblemind",
@@ -786,8 +786,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "If Target fails save vs Spells, its INT and CHA drop to 1. It's unable to cat spells, understand language,  or communicate. It remembers friends and eill protect them. It remains in such state until a \"HEAL\" spell is used. A MU has a -4 penalty to its save.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Hold Monster": {
     "Name": "Hold Monster",
@@ -796,8 +796,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Paralyzes any living creature. Creatures >ogre and undead not affected. Save vs Spell to negate. Shingle target has -2 save. 1d4 of creatures can be affected. Flyers fall & swimmers may drown.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Magic Jar": {
     "Name": "Magic Jar",
@@ -806,8 +806,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Places Caster's soul into a gem/large crystal within range (no need to be seen), allowing possession of nearby creature. PROTECTION FROM EVIL blocks. Save vs Spells to resist. If success, keep Caster's INT, WIS, WIS & Host's STR, CON, DEX. Can't reposses body until expired. DISPEL MAGIC/EVIL ends spell.",
-    "Reverse (Note 1):": "Caster soul dies if boy isn't in range when gem is broken",
-    "Note 2:": "Host spirit dies if not near body."
+    "Reverse": "Caster soul dies if boy isn't in range when gem is broken",
+    "Note": "Host spirit dies if not near body."
   },
   "Passwall": {
     "Name": "Passwall",
@@ -816,8 +816,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Creates passage through wood, plaste & stone walls but not metal. Passage is 10'+10'/3 caster levels. If passage is short than wall it stops abruptly. More than 1 can be used to extend. If spell ends (duration, choice, DISPEL MAGIC) it ejects all out of the nearest exit.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Telekinesis": {
     "Name": "Telekinesis",
@@ -826,8 +826,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Permits caster to move objects or creature by concentration alone. Can move Max of 50lbs/caster level to max of 20'/round. Creature can Save vs Death Ray to negate effect. Must concentrate to use: no running,casting, or attacking. Can reuse power next round if focus lost but Target gets new save if so.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Teleport": {
     "Name": "Teleport",
@@ -836,8 +836,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Instantly transports Caster to designated destination. Which can be 100 miles/caster level away. Caster can bring objects/creatures (Max 300lbs +100lbs/level above 10th). Must be in physical contact to be brought along. Creatures can save vs Spells to resist. Magical areas make teleportation more difficult.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "See \"Teleport chances\" below for details"
+    "Reverse": null,
+    "Note": "See \"Teleport chances\" below for details"
   },
   "Wall of Stone": {
     "Name": "Wall of Stone",
@@ -846,8 +846,8 @@
     "Class": "Magic User",
     "Level": "5",
     "Description": "Creates 1\" thick stone wall up to 10'x10'/caster level. Can't be conjured on top of creatures objects (but can trap if they are mobile, save vs Death Ray allowed). Can be shaped to be bridge/ramp, if spaning 20' must be arched (=1/2 area). DISINTEGRATE destroys as does chipping.",
-    "Reverse (Note 1):": "Wall can be shaped at a 2:1 ratio",
-    "Note 2:": null
+    "Reverse": "Wall can be shaped at a 2:1 ratio",
+    "Note": null
   },
   "Animate Objects": {
     "Name": "Animate Objects",
@@ -856,8 +856,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Gives objects life\". cannot be used on carried or magical items. Objects have 10' move rate & must have some contact with the ground.Damage is decided by GM.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "LIMIT: 1 object & +25lb per level"
+    "Reverse": null,
+    "Note": "LIMIT: 1 object & +25lb per level"
   },
   "Blade Barrier": {
     "Name": "Blade Barrier",
@@ -866,8 +866,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Wall of whirling blades. 20' long/level or radius of 5'/2 levels. Both are 20' high. Creatures in it must pass \"Death Ray\" save or suffer 1d6 (Max 15d6) damage. 1/2 damage if saved. If summoned on, save = no damage.",
-    "Reverse (Note 1):": "*BANE = -1 penalty instead",
-    "Note 2:": "It gives cover, +4 bonus to AC"
+    "Reverse": "*BANE = -1 penalty instead",
+    "Note": "It gives cover, +4 bonus to AC"
   },
   "Find the Path": {
     "Name": "Find the Path",
@@ -876,8 +876,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Target can find shortest, most direct route to a specific physical location. Caster must have knowledge of location. Including described locations. Name is enough. Must be on same plane as caster. Reveals secret doors and solutions.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Heal*": {
     "Name": "Heal*",
@@ -886,8 +886,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Heals target of all injury & affliction but -levels & permanent lost ability scores.  Heals all but 1d4 of HD.",
-    "Reverse (Note 1):": "*HARM: reverse; dam. all but 1d4 HD. Must make attack roll.",
-    "Note 2:": "Both reverse for Undead. Does not affect golems."
+    "Reverse": "*HARM: reverse; dam. all but 1d4 HD. Must make attack roll.",
+    "Note": "Both reverse for Undead. Does not affect golems."
   },
   "Regenerate": {
     "Name": "Regenerate",
@@ -896,8 +896,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Regrows Targets severed body members, broken bones & ruined organs. Takes 1 round for severed members & 1 turn for all others. Also heals 3d8 . Has no affect on nonliving creatures, Undead & constructs.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Restoration": {
     "Name": "Restoration",
@@ -906,8 +906,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Removes 1 negative level from Target. At 16th level, removes 2 negative levels. Alternately, restores 1d4 of  Ability points (Temporarily lost) or 1 point (permanently lost).",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Doesn't remove negative levels given by death."
+    "Reverse": null,
+    "Note": "Doesn't remove negative levels given by death."
   },
   "Speak with Monsters": {
     "Name": "Speak with Monsters",
@@ -916,8 +916,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Grants caster understanding & commincation with 1 Monster (not undead, mindless monsters, or plants). May change monster once per round. Intelligent monsters likely to be terse/evasive. May not alter reaction/attitude of monster. Speakers of monsters language understand caster.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Word of Recall": {
     "Name": "Word of Recall",
@@ -926,8 +926,8 @@
     "Class": "Cleric",
     "Level": "6",
     "Description": "Teleports caster back to his or her sanctuary. Must disignate while preparing & it has to be a very familiar place. Can travel anywhere on the same plane but can't travel between. Caster can bring anyone or anything (max of 300lbs +100/level after 10th). Must be in contact.  save vs Spells to resist.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Anti-Magic Shell": {
     "Name": "Anti-Magic Shell",
@@ -936,8 +936,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Within a 10' radius around the caster, all magic is negated for the full duration of the spell.  Magical attacks will not affect the caster, magic items and spells within the radius are suppressed.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Spells can't be cast until expired."
+    "Reverse": null,
+    "Note": "Spells can't be cast until expired."
   },
   "Death Spell": {
     "Name": "Death Spell",
@@ -946,8 +946,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Kills 3d12 HD or levels of creatures in a 30' radius. Excess levels are ineffective. It must save vs Death Ray. ≥8 HD or Levels are immune. Does not affect Undead, golems, or anything not truly alive.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Disintegrate": {
     "Name": "Disintegrate",
@@ -956,8 +956,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "A thin, green ray shoots from caster's finger. A single creature or object (10'x10'x10' cubic material) is turned into fine dust. Targets equipment is unaffected. Target saves vs Spells. If saved spell is wasted.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Flesh to Stone*": {
     "Name": "Flesh to Stone*",
@@ -966,8 +966,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Turns Target & its gear to stone. Save vs Petrification to resist. Damage to statue stays with target (if returned to original state). Only affects flesh beings.",
-    "Reverse (Note 1):": "STONE TO FLESH: reverses this spell.",
-    "Note 2:": null
+    "Reverse": "STONE TO FLESH: reverses this spell.",
+    "Note": null
   },
   "Geas*": {
     "Name": "Geas*",
@@ -976,8 +976,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Target obeys Caster's command. Save vs Spells to resist (at casting). Does not expire except if task is open ended (last a day/caster level). If target disobeys it recieves -2  to all ability scores (max -8), can't reduce >3. Penalty removed after 24 of obidence. Can't kill self. REMOVE CURSE, WISH & REMOVE GEAS dispels.",
-    "Reverse (Note 1):": "Not affected by DISPEL MAGIC",
-    "Note 2:": null
+    "Reverse": "Not affected by DISPEL MAGIC",
+    "Note": null
   },
   "Invisible Stalker": {
     "Name": "Invisible Stalker",
@@ -986,8 +986,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Summons INVISIBLE STALKER to do caster's bidding. persist until DISPEL MAGIC is cast on ctreature, it is slain, or task is forfiled.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "See INVISIBLE STALKER for stats in \"Monster Section\""
+    "Reverse": null,
+    "Note": "See INVISIBLE STALKER for stats in \"Monster Section\""
   },
   "Lower Water": {
     "Name": "Lower Water",
@@ -996,8 +996,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Causes water (or similar liquid) to reduce 2'/caster level to min of 1\". Lowers within square deression with sides of 10'/caster level. In large water bodies, creates whirlpool that traps nearby ships'. If cast on Water Elementals, reduces speed move and attack rate to 1/2. Save vs Spell to negate.",
-    "Reverse (Note 1):": null,
-    "Note 2:": "Doesn't effect any other creature"
+    "Reverse": null,
+    "Note": "Doesn't effect any other creature"
   },
   "Projected Image": {
     "Name": "Projected Image",
@@ -1006,8 +1006,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Creates qausi-real image of caster. It looks, sounds, smells like caster and mimics actions, speech included. Spells seem to come from image but range is from caster. Desn't give sensory feedback. Lost of line of sight, including by spells, ends.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   },
   "Reincarnate": {
     "Name": "Reincarnate",
@@ -1016,8 +1016,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Brings back a dead Humanoid (includes PC) into a new body.  soul must be willing to return. Roll d%: 1-2= bugbear, 3-17= dwarf, 18-28= elf, 29= gnoll, 30-39= gnome, 40-44= goblin, 45-63= halfling, 64-88= human, 89-92= kobold, 93= lizard man, 94-98= orc, 99= troglodyte. 100=GM choice. Memories remain intact.",
-    "Reverse (Note 1):": "Lose level; -2 CON (if 1st) reroll STR, DEX, CON. -1 HD roll",
-    "Note 2:": "does't affect undead or constructs."
+    "Reverse": "Lose level; -2 CON (if 1st) reroll STR, DEX, CON. -1 HD roll",
+    "Note": "does't affect undead or constructs."
   },
   "Wall of Iron": {
     "Name": "Wall of Iron",
@@ -1026,8 +1026,8 @@
     "Class": "Magic User",
     "Level": "6",
     "Description": "Creates 1\" thick iron wall up to 10'x10'/caster level. Can't be conjured on creatures or objects or in air. Must be on flat plane. Can be shaped to fit space. If unattached, 50% to fall unless pushed by creature with 13 STR (≥4 HD). If it falls, creatures save vs Death Ray +Dex bonus. 10d6 dam if fail. ≥Ogre-size immune",
-    "Reverse (Note 1):": "Wall can be shaped at a 2:1 ratio",
-    "Note 2:": null
+    "Reverse": "Wall can be shaped at a 2:1 ratio",
+    "Note": null
   },
   "ESP": {
     "Name": "ESP",
@@ -1036,7 +1036,7 @@
     "Class": "Magic User",
     "Level": "3",
     "Description": "Let's Caster \"Hear\" surface thoughts. Must Designate direction & focus for a turn. May change direction each Turn. May stop & resume if not expired. Target may not be aware. Undead and Mindless immune. 2\" Rock & Heavy Metal Blocks spell.",
-    "Reverse (Note 1):": null,
-    "Note 2:": null
+    "Reverse": null,
+    "Note": null
   }
 }
