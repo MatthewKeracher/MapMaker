@@ -3,6 +3,7 @@ import Ambience from "./ambience.js";
 import Monsters from "./monsters.js";
 import NPCs from "./npcs.js";
 import Items from "./items.js";
+import Spells from "./spells.js";
 import Edit from "./edit.js";
 import Ref from "./ref.js";
 
@@ -32,7 +33,8 @@ this.monsterArray = [];
 const squareCurly = this.getMisc(locationText, this.miscArray);
 
 const formattedMonsters = await Monsters.getMonsters(squareCurly);
-const formattedLocation = await Items.getItems(formattedMonsters);
+const formattedSpells = await Spells.getSpells(formattedMonsters);
+const formattedLocation = await Items.getItems(formattedSpells);
 //console.log(presentMonsters)
 
 const location = Ref.locationLabel.textContent;
@@ -70,15 +72,15 @@ this.showExtraContent()
 addMiscInfo(contentId, miscArray) {
 const extraContent = document.getElementById('extraContent');  
 const MiscItem = miscArray.find(item => item.square === contentId);
-
   
   if (MiscItem) {
     const withMonsters = Monsters.extraMonsters(MiscItem.curly);
     const withItems = Items.extraItem(withMonsters);
+    const withSpells = Spells.extraSpell(withItems);
     const miscInfo = [ 
       
     `<br><span class="misc">${MiscItem.square.toUpperCase()}</span><br><br>
-    <span class="withbreak">${withItems}</span>`]
+    <span class="withbreak">${withSpells}</span>`]
 
     extraContent.innerHTML = miscInfo;
   } else {
@@ -137,6 +139,9 @@ showExtraContent() {
           case 'item':
           Items.addIteminfo(contentId, target); // Handle items
           break;
+          case 'spell':
+          Spells.addSpellInfo(contentId, target); // Handle spells
+          break;
         case 'misc':
           this.addMiscInfo(contentId, this.miscArray);
           break;
@@ -187,6 +192,9 @@ showExtraExtraContent() {
           break;
           case 'item':
           Items.addIteminfo(contentId); // Handle items
+          break;
+          case 'spell':
+          Spells.addSpellInfo(contentId); // Handle spells
           break;
         case 'misc':
           this.addMiscInfo(contentId, this.miscArray);

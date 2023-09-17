@@ -15,69 +15,90 @@ editPage: 1,
 divIds : ['textLocation', 'npcBackStory'],
 
 init: function () {
-this.divIds.forEach((divId) => {
-const divElement = document.getElementById(divId);
-if (divElement) {
-divElement.addEventListener('input', (event) => {
-const text = event.target.value;
-const cursorPosition = event.target.selectionStart;
-const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+  this.divIds.forEach((divId) => {
+    const divElement = document.getElementById(divId);
+    if (divElement) {
+      divElement.addEventListener('input', (event) => {
+        const text = event.target.value;
+        const cursorPosition = event.target.selectionStart;
+        const openBraceIndex = text.lastIndexOf('#', cursorPosition);
+        const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+        const openTildeIndex = text.lastIndexOf('~', cursorPosition); // Add this line for ~
 
-if (openBraceIndex !== -1 || openAsteriskIndex !== -1) {
-let searchText;
-let filteredItems;
+        if (openBraceIndex !== -1 || openAsteriskIndex !== -1 || openTildeIndex !== -1) { // Add openTildeIndex here
+          let searchText;
+          let filteredItems;
 
-if (openBraceIndex > openAsteriskIndex) {
-  searchText = text.substring(openBraceIndex + 1, cursorPosition);
-  filteredItems = Items.itemsArray.filter(item =>
-    item.Name.toLowerCase().includes(searchText.toLowerCase())
-  );
-} else {
-  searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-  filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
-    monsterName.toLowerCase().includes(searchText.toLowerCase())
-  );
-}
+          if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
+            searchText = text.substring(openBraceIndex + 1, cursorPosition);
+            filteredItems = Items.itemsArray.filter(item =>
+              item.Name.toLowerCase().includes(searchText.toLowerCase())
+            );
+          } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
+            searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
+            filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
+              monsterName.toLowerCase().includes(searchText.toLowerCase())
+            );
+          } else {
+            searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
+            filteredItems = Spells.spellsArray.filter(spell =>
+              spell.Name.toLowerCase().includes(searchText.toLowerCase())
+              );
+          }
 
-console.log(searchText)
+          console.log(searchText);
 
-// Show ExtraContent
-Ref.itemList.style.display = 'block';
-Ref.itemList.innerHTML = ''; // Clear existing content
+          // Show ExtraContent
+          Ref.itemList.style.display = 'block';
+          Ref.itemList.innerHTML = ''; // Clear existing content
 
-// fixDisplay()
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-imageContainer.style.width = "45vw";
-radiantDisplay.style.width = "45vw";
+          // fixDisplay()
+          const imageContainer = document.querySelector('.image-container');
+          const radiantDisplay = document.getElementById('radiantDisplay');
+          imageContainer.style.width = "45vw";
+          radiantDisplay.style.width = "45vw";
 
-filteredItems.forEach(item => {
-  const option = document.createElement('div');
-  option.textContent = item.Name || item; // Use "Name" property if available
-  option.addEventListener('click', () => {
-    const replacement = openBraceIndex !== -1
-      ? `#${item.Name}#`
-      : `*${item}*`;
-    const newText = text.substring(0, openBraceIndex !== -1 ? openBraceIndex : openAsteriskIndex) + replacement + text.substring(cursorPosition);
-    event.target.value = newText;
-    Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+          filteredItems.forEach(item => {
+            const option = document.createElement('div');
+            option.textContent = item.Name || item; // Use "Name" property if available
+            option.addEventListener('click', () => {
+              const replacement = openBraceIndex !== -1
+                ? `#${item.Name}#`
+                : openAsteriskIndex !== -1
+                ? `*${item}*`
+                : openTildeIndex !== -1 // Add this line
+                ? `~${item.Name}~` // Add this line
+                : ''; // Add this line for ~
+                
+                const newText = text.substring(
+                  0,
+                  openBraceIndex !== -1
+                    ? openBraceIndex
+                    : openAsteriskIndex !== -1
+                    ? openAsteriskIndex
+                    : openTildeIndex // Add this line for ~
+                ) + replacement + text.substring(cursorPosition);
+                event.target.value = newText;
+                
+              Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+            });
+            Ref.itemList.appendChild(option);
+          });
+        } else {
+          Ref.itemList.style.display = 'none';
+          Ref.itemList.innerHTML = '';
+
+          // fixDisplay()
+          const imageContainer = document.querySelector('.image-container');
+          const radiantDisplay = document.getElementById('radiantDisplay');
+          imageContainer.style.width = "70vw";
+          radiantDisplay.style.width = "70vw";
+        }
+      });
+    }
   });
-  Ref.itemList.appendChild(option);
-});
-} else {
-Ref.itemList.style.display = 'none';
-Ref.itemList.innerHTML = '';
+},
 
-// fixDisplay()
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-imageContainer.style.width = "70vw";
-radiantDisplay.style.width = "70vw";
-}
-});
-}
-})},
 
 
 deleteLocation() {
@@ -276,8 +297,6 @@ npc.NightLocation = Ref.editLocationName.value;
 
 }, 
 
-
-
 //Remove or Add editContainer contents depending on editPage no.
 pageChange(newPage){
 
@@ -413,10 +432,6 @@ break;
 }
 
 },
-
-
-
-
 
 };
 

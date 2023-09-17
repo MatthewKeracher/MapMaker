@@ -32,37 +32,37 @@ return [];
 //addPredictive Items is now with addPredictive Monsters
 
 
-getItems(locationText) {
-    const hashBrackets = /#([^#]+)#/g;
+getSpells(locationText) {
+const tildeBrackets = /~([^~]+)~/g;
 
-    return locationText.replace(hashBrackets, (match, targetText) => {
-        const item = Object.values(this.spellsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
-        if (item) {
-            return `<span class="expandable item" data-content-type="item" divId="${item.Name}">${item.Name.toUpperCase()}</span>`;
-        } else {
-            console.log(`Item not found: ${targetText}`);
-            return match;
-        }
-    });
-},
- 
-
-extraItem(contentId) {
-const hashBrackets = /#([^#]+)#/g;
-
-return contentId.replace(hashBrackets, (match, targetText) => {
-const item = Object.values(this.spellsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
-if (item) {
-console.log(item.Name);
-return this.addIteminfo(item.Name);
+return locationText.replace(tildeBrackets, (match, targetText) => {
+const spell = Object.values(this.spellsArray).find(spell => spell.Name.toLowerCase() === targetText.toLowerCase());
+if (spell) {
+return `<span class="expandable spell" data-content-type="spell" divId="${spell.Name}">${spell.Name.toUpperCase()}</span>`;
 } else {
-console.log(`Item not found: ${targetText}`);
+console.log(`Spell not found: ${targetText}`);
 return match;
 }
 });
 },
 
-addIteminfo(contentId, target) {
+
+extraSpell(contentId) {
+const tildeBrackets = /~([^~]+)~/g;
+
+return contentId.replace(tildeBrackets, (match, targetText) => {
+const spell = Object.values(this.spellsArray).find(spell => spell.Name.toLowerCase() === targetText.toLowerCase());
+if (spell) {
+console.log(spell.Name);
+return this.addSpellInfo(spell.Name);
+} else {
+console.log(`Spell not found: ${targetText}`);
+return match;
+}
+});
+},
+
+addSpellInfo(contentId, target) {
 
 let targetLocation = '';
 
@@ -72,27 +72,25 @@ targetLocation = Ref.extraContent
 targetLocation = Ref.extraContent2
 }
 
-//Search for Item in the Array   
-const item = Object.values(this.spellsArray).find(item => item.Name.toLowerCase() === contentId.toLowerCase());
+//Search for Spell in the Array   
+const spell = Object.values(this.spellsArray).find(spell => spell.Name.toLowerCase() === contentId.toLowerCase());
 
-if (item) {
+if (spell) {
 
-const itemStats = [
+const spellStats = [
 
-`<hr><h3><span class="lime">${contentId.toUpperCase()}</span></h3>`,
-`${item.Type}.<br><br>`,
+`<hr><h3><span class="spell">${contentId.toUpperCase()}</span></h3>`,
+`${spell.Class} ${spell.Level}.<br><br>`,
 
-`<span class="lime">Size:</span> ${item.Size || "None"};<br>`,
-`<span class="lime">Weight:</span> ${item.Weight || "None"};<br>`,
-`<span class="lime">Cost:</span> ${item.Cost || "None"};<br>`,
-`<span class="lime">Damage:</span> ${item.Damage || "None"};<br>`,
-`<span class="lime">Range:</span> ${item.Range || "None"};<br>`,
-`<span class="lime">Armour Class:</span> ${item.AC || "None"};<br><br>`,
-`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}`,
+`<span class="spell">Range:</span>  ${spell.Range || "None"} <br>`,
+`<span class="spell">Duration:</span>  ${spell.Duration || "None"} <br><br> `,
+`<span class="spell">Description:</span> <br><br> ${spell.Description || "None"};<br><br> `,
+`<span class="spell">Reverse:</span> ${spell.Reverse || "None"};<br><br> `,
+`<span class="spell">Note:</span> ${spell.Note || "None"};<br><br>`,
 
 ];
 
-const formattedItem = itemStats
+const formattedItem = spellStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
@@ -109,29 +107,29 @@ console.log(`Monster not found: ${contentId}`);
 },
 
 loadSpellsList: function(data) {
-    const itemList = document.getElementById('itemList'); // Do not delete!!
-  
-    // Clear the existing content
-    itemList.innerHTML = '';
-  
-    // Sort the items by item type alphabetically
-    //const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
-  
-    // Iterate through the sorted spells
-    for (const spell of data) {
-      const spellNameDiv = document.createElement('div');
-      spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}] <span class="yellow">${spell.Name}</span>`;
-      itemList.appendChild(spellNameDiv);
-      this.fillSpellsForm(spell, spellNameDiv);
-    }
-  
-    itemList.style.display = 'block'; // Display the container
-  
-    NPCs.fixDisplay();
-  },
-  
+const itemList = document.getElementById('itemList'); // Do not delete!!
 
-  fillSpellsForm: function(spell, spellNameDiv){
+// Clear the existing content
+itemList.innerHTML = '';
+
+// Sort the items by item type alphabetically
+//const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+
+// Iterate through the sorted spells
+for (const spell of data) {
+const spellNameDiv = document.createElement('div');
+spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}] <span class="yellow">${spell.Name}</span>`;
+itemList.appendChild(spellNameDiv);
+this.fillSpellsForm(spell, spellNameDiv);
+}
+
+itemList.style.display = 'block'; // Display the container
+
+NPCs.fixDisplay();
+},
+
+
+fillSpellsForm: function(spell, spellNameDiv){
 
 // Add click event listener to each NPC name
 spellNameDiv.addEventListener('click', () => {
@@ -153,35 +151,35 @@ Ref.spellsForm.style.display = 'flex'; // Display the itemForm
 
 saveSpell: function() {
 
-    const existingItemIndex = this.spellsArray.findIndex(spell => spell.Name === Ref.spellName.value);
-    console.log(Ref.spellName.value)
+const existingItemIndex = this.spellsArray.findIndex(spell => spell.Name === Ref.spellName.value);
+console.log(Ref.spellName.value)
 
-    const item = {
+const item = {
 
-        Name: Ref.spellName.value,
-        Class: Ref.spellClass.value,
-        Level: Ref.spellLevel.value,
-        Description: Ref.spellDescription.value,
-        Reverse: Ref.spellReverse.value,
-        Note: Ref.spellNote.value,
-        Range: Ref.spellRange.value,
-        Duration: Ref.spellDuration.value       
+Name: Ref.spellName.value,
+Class: Ref.spellClass.value,
+Level: Ref.spellLevel.value,
+Description: Ref.spellDescription.value,
+Reverse: Ref.spellReverse.value,
+Note: Ref.spellNote.value,
+Range: Ref.spellRange.value,
+Duration: Ref.spellDuration.value       
 
-    };
-    
-    if (existingItemIndex !== -1) {
-    // Update the existing Spell entry
-    this.spellsArray[existingItemIndex] = item;
-    console.log('Item updated:', item);
-    } else {
-    this.spellsArray.push(item);
-    }
-    
-    },
+};
 
-addItemSearch: function(){
+if (existingItemIndex !== -1) {
+// Update the existing Spell entry
+this.spellsArray[existingItemIndex] = item;
+console.log('Item updated:', item);
+} else {
+this.spellsArray.push(item);
+}
 
-Ref.itemName.addEventListener('input', (event) => {
+},
+
+addSpellSearch: function(){
+
+Ref.spellName.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 
 // Check if the searchText contains '{'
@@ -190,27 +188,28 @@ if (searchText.includes('{')) {
 searchText = searchText.replace('{', '');
 
 // Call the searchMonster function
-this.searchItem(searchText);
+this.searchSpell(searchText);
 }
 });
 
 },
 
-searchItem: function(searchText){
+searchSpell: function(searchText){
 
-    this.itemSearchArray = [];
-    
-    this.itemSearchArray = this.spellsArray.filter((item) => {
-    const itemName = item.Name.toLowerCase();
-    const itemType = item.Type.toLowerCase();
-    
-    // Check if either the name or occupation contains the search text
-    return itemName.includes(searchText.toLowerCase()) || itemType.includes(searchText.toLowerCase());
-    });
-    
-    this.loadItemsList(this.itemSearchArray);
-    
-    },
+this.spellsSearchArray = [];
+
+this.spellsSearchArray = this.spellsArray.filter((spell) => {
+const spellName = spell.Name.toLowerCase();
+const spellClass = spell.Class.toLowerCase();
+const spellLevel = spell.Level.toLowerCase();
+
+// Check if either the name or occupation contains the search text
+return spellName.includes(searchText.toLowerCase()) || spellClass.includes(searchText.toLowerCase());
+});
+
+this.loadSpellsList(this.spellsSearchArray);
+
+},
 
 
 };

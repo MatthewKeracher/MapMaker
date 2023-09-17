@@ -27,7 +27,7 @@ Edit.init();
 Monsters.addMonsterSearch();
 Ambience.addAmbienceSearch();
 NPCs.addNPCSearch();
-
+Spells.addSpellSearch();
 Items.addItemSearch();
 
 

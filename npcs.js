@@ -4,6 +4,7 @@ import Array from "./array.js";
 import Ref from "./ref.js";
 import Items from "./items.js";
 import Monsters from "./monsters.js";
+import Spells from "./spells.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -256,7 +257,7 @@ npcContent += `<br>
 
 //need to run through getMonsters and getItems
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-npcContent += `<br><br><span class="withbreak">${Monsters.getMonsters(Items.getItems(foundNPC.Backstory))}</span>`;
+npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.Backstory)))}</span>`;
 }
 
 
