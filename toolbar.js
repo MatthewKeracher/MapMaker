@@ -255,7 +255,7 @@ Edit.deleteLocation();
 };
 
 handleNextButtonClick(){
-if (Edit.editPage < 7) {
+if (Edit.editPage < 6) {
 Edit.editPage = Edit.editPage + 1;
 Edit.pageChange(Edit.editPage);
 }};
