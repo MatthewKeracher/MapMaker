@@ -187,7 +187,7 @@ if (confirmation) {
 Ambience.ambienceArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
 
 // Update the ambience list with the updated ambienceArray
-Ambience.loadAmbienceList(Ambience.ambienceArray);
+Ambience.loadEventsList(Ambience.ambienceArray);
 
 // Reset the ambience form fields
 ambienceForm.reset();
@@ -317,7 +317,7 @@ Ref.textLocation.style.display = "flex";
 Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
-Ref.AmbienceContainer.style.display = "none";
+Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -334,7 +334,7 @@ Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.AmbienceContainer.style.display = "none";
+Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -354,7 +354,7 @@ Ref.npcForm.style.display = "none"
 Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.AmbienceContainer.style.display = "none";
+Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -372,7 +372,7 @@ Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none"
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.AmbienceContainer.style.display = "none";
+Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -392,7 +392,7 @@ Ref.npcForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.AmbienceContainer.style.display = "none";
+Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 
 Spells.loadSpellsList(Spells.spellsArray);
@@ -401,7 +401,7 @@ break;
 
 case 6:
 //Show
-Ref.AmbienceContainer.style.display = "flex";
+Ref.ambienceForm.style.display = "flex";
 
 
 //Hide
@@ -414,7 +414,7 @@ Ref.textLocation.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
-Ambience.loadAmbienceList(Ambience.ambienceArray);
+Ambience.loadEventsList(Ambience.ambienceArray);
 
 break;
 
@@ -430,7 +430,7 @@ Ref.itemForm.style.display = "none";
 Ref.editLocationName.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.spellsForm.style.display = "none";
-Ref.AmbienceContainer.style.display = "none";
+Ref.ambienceForm.style.display = "none";
 
 break;
 

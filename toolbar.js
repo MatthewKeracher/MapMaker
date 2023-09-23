@@ -16,7 +16,7 @@ init() {
 //Base Load Arrays
 Monsters.loadMonstersArray();
 Items.loadItemsArray();
-Spells.loadSpellsArray()
+Spells.loadSpellsArray();
 Ambience.loadAmbienceArray();
 
 //Edit.addPredictiveContent();
@@ -192,8 +192,8 @@ break;
 
 case 6:
 Ambience.saveAmbience();
-Ambience.loadAmbienceList(Ambience.ambienceArray);
-Ambience.getAmbience();
+Ambience.loadEventsList(Ambience.ambienceArray);
+Ambience.getEvent();
 break;
 
 default:

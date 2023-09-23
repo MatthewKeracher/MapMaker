@@ -12,12 +12,30 @@ eventDesc: "",
 
 ambienceArray: [],
 
+async loadAmbienceArray() {
+
+    try {
+    const response = await fetch('ambience.json'); // Adjust the path if needed
+    const data = await response.json();
+    this.ambienceArray = data;
+    //console.log(this.ambienceArray)
+        
+    return data;
+    
+    } catch (error) {
+    console.error('Error loading ambience array:', error);
+    return [];
+    }
+    
+    },
+
 EventLoad(){
 
 Ref.eventManager.addEventListener('change', () => {
 Ref.extraInfo.classList.add('showExtraInfo');
 this.getEvent();
 this.addEventInfo();
+this.radiateDisplay();
 })
 
 Ref.extraInfoContainer.addEventListener('mouseleave', () => {
@@ -36,10 +54,10 @@ if (event) {
 
 const eventInfo = [
 
-`<span class="cyan">Context:</span>  ${event.context || "None"} <br><br>`,
-`<span class="cyan">Season:</span>  ${event.main || "None"} <br><br> `,
-`<span class="cyan">Time:</span> ${event.second || "None"};<br><br> `,
-`<span class="cyan">Title:</span> ${event.title || "None"};<br><br> `,
+`<span class="cyan">Context:</span>  ${event.context || "None"}; <br><br>`,
+`<span class="cyan">Season:</span>   ${event.main    || "None"}; <br><br> `,
+`<span class="cyan">Time:</span>     ${event.second  || "None"}; <br><br> `,
+`<span class="cyan">Title:</span>    ${event.title   || "None"}; <br><br> `,
 `<span class="cyan">Description:</span> ${event.description || "None"};<br><br>`,
 
 ];
@@ -69,12 +87,12 @@ itemList.innerHTML = '';
 // Sort the items by item type alphabetically
 //const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
 
-// Iterate through the sorted spells
+// Iterate through the sorted events
 for (const event of data) {
 const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `${event.Name}</span>`;
+eventNameDiv.innerHTML = `${event.title}</span>`;
 itemList.appendChild(eventNameDiv);
-//this.fillSpellsForm(event, eventNameDiv);
+this.fillAmbienceForm(event, eventNameDiv);
 }
 
 itemList.style.display = 'block'; // Display the container
@@ -156,23 +174,7 @@ this.hour = this.hour
 
 }},
 
-async loadAmbienceArray() {
-
-try {
-const response = await fetch('ambience.json'); // Adjust the path if needed
-const data = await response.json();
-this.ambienceArray = data;
-//console.log(this.ambienceArray)
-this.initializeAmbienceDropdowns();
-
-return data;
-
-} catch (error) {
-console.error('Error loading ambience array:', error);
-return [];
-}
-
-},    
+    
 
 defaultAmbience(){
 
@@ -200,41 +202,6 @@ this.EventLoad()
 
 
 
-addAmbienceEventListeners(){
-
-Ref.radianceDropdown.addEventListener("change", () => {
-console.log('radiate');
-this.radiateDisplay();
-});
-
-Ref.contextDropdown.addEventListener("change", () => {
-const selectedContext = Ref.contextDropdown.value;
-const filteredByContext = this.ambienceArray.filter(item => item.context === selectedContext);
-
-if (filteredByContext.length > 0) {
-const uniqueMain = [...new Set(filteredByContext.map(item => item.main))];
-this.populateDropdown(Ref.mainAmbienceDropdown, uniqueMain);
-
-this.simMainDrop();
-
-} else {
-Ref.mainAmbienceDropdown.innerHTML = '<option value="">No Data</option>';
-Ref.secondAmbienceDropdown.innerHTML = '<option value="">No Data</option>';
-}
-});
-
-Ref.mainAmbienceDropdown.addEventListener("change", () => {
-const selectedMain = Ref.mainAmbienceDropdown.value;
-const filteredByMain = this.ambienceArray.filter(item => item.main === selectedMain);
-const uniqueFilteredSecond = [...new Set(filteredByMain.map(item => item.second))];
-this.populateDropdown(Ref.secondAmbienceDropdown, uniqueFilteredSecond);
-});
-
-Ref.secondAmbienceDropdown.addEventListener("change", () => {
-// Handle second dropdown change
-});
-},
-
 populateDropdown(dropdown, options, replace) {
 
 if(replace === 1){    
@@ -256,7 +223,7 @@ async initializeAmbienceDropdowns() {
 
 
 this.defaultAmbience();
-this.addAmbienceEventListeners();
+
 
 },
 
@@ -280,156 +247,9 @@ Ref.mainAmbienceDropdown.dispatchEvent(event);
 
 
 
-//Backlights screen depending on ToD or context. 
-
-radiateDisplay(){
-
-const overlay = document.getElementById('radiantDisplay');
-const radianceDropdown = document.getElementById('radianceDropdown').value;
-
-if(radianceDropdown === 'exterior'){
-switch (this.phase) {
-case 0: // Morning
-switch (this.hour) {
-case 0: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-break;
-
-case 1: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.1";
-
-break;
-
-case 2: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-
-break;
-
-case 3: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.3";
-
-break;
-
-default:
-break;
-}
-break;
-
-case 1: // Afternoon
-switch (this.hour) {
-case 0: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-break;
-
-case 1: 
-
-overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-overlay.style.opacity = "0.1";
-
-break;
-
-case 2: 
-
-overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-
-break;
-
-case 3: 
-
-overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-overlay.style.opacity = "0.3";
-
-break;
-
-default:
-break;
-}
-break;
-
-case 2: // Night
-switch (this.hour) {
-case 0: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.4";
-
-break;
-
-case 1: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.5";
-
-break;
-
-case 2: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.6";
-
-
-break;
-
-case 3: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.7";
-
-break;
-
-default:
-break;
-}
-break;
-
-default:
-break;
-}
-}else{
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.5";
-
-}
-
-
-},
 
 //Standard Edit, Save, load
 
-loadAmbienceList: function(data) {
-const itemList = document.getElementById('itemList'); // Do not delete!!
-
-// Clear the existing content
-itemList.innerHTML = '';
-
-// Iterate through the sorted ambience objects
-for (const ambience of data) {
-const ambienceNameDiv = document.createElement('div');
-ambienceNameDiv.innerHTML = `[${ambience.context} ${ambience.main} ${ambience.second}] <span class="cyan">${ambience.title}</span>`;
-itemList.appendChild(ambienceNameDiv);
-this.fillAmbienceForm(ambience, ambienceNameDiv);
-}
-
-itemList.style.display = 'block'; // Display the container
-
-NPCs.fixDisplay();
-},
 
 fillAmbienceForm: function(ambience, ambienceNameDiv) {
 // Add click event listener to each ambience name
@@ -508,10 +328,136 @@ return context.includes(searchText) || main.includes(searchText) ||
 second.includes(searchText) || title.includes(searchText);
 });
 
-this.loadAmbienceList(this.ambienceSearchArray);
+this.loadEventsList(this.ambienceArray);
+},
+
+radiateDisplay(){
+
+    const overlay = document.getElementById('radiantDisplay');
+    const radianceDropdown = document.getElementById('radianceDropdown').value;
+    
+    if(radianceDropdown === 'exterior'){
+    switch (this.phase) {
+    case 0: // Morning
+    switch (this.hour) {
+    case 0: 
+    
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.2";
+    
+    break;
+    
+    case 1: 
+    
+    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+    overlay.style.opacity = "0.1";
+    
+    break;
+    
+    case 2: 
+    
+    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+    overlay.style.opacity = "0.2";
+    
+    
+    break;
+    
+    case 3: 
+    
+    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+    overlay.style.opacity = "0.3";
+    
+    break;
+    
+    default:
+    break;
+    }
+    break;
+    
+    case 1: // Afternoon
+    switch (this.hour) {
+    case 0: 
+    
+    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+    overlay.style.opacity = "0.2";
+    
+    break;
+    
+    case 1: 
+    
+    overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.1";
+    
+    break;
+    
+    case 2: 
+    
+    overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.2";
+    
+    
+    break;
+    
+    case 3: 
+    
+    overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.3";
+    
+    break;
+    
+    default:
+    break;
+    }
+    break;
+    
+    case 2: // Night
+    switch (this.hour) {
+    case 0: 
+    
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.4";
+    
+    break;
+    
+    case 1: 
+    
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.5";
+    
+    break;
+    
+    case 2: 
+    
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.6";
+    
+    
+    break;
+    
+    case 3: 
+    
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.7";
+    
+    break;
+    
+    default:
+    break;
+    }
+    break;
+    
+    default:
+    break;
+    }
+    }else{
+    
+    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+    overlay.style.opacity = "0.5";
+    
+    }
+    
+    
 }
-
-
 
 
 }
