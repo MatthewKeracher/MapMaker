@@ -17,9 +17,9 @@ this.spellsArray = data;
 
 const noKeys = Array.extractValues(data);
 this.spellsArray = noKeys;
-console.log(this.spellsArray);
+//console.log(this.spellsArray);
 
-return data //.monsters;
+return data //.spells;
 } catch (error) {
 console.error('Error loading spells array:', error);
 return [];

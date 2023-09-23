@@ -13,13 +13,11 @@ import Spells  from "./spells.js";
 class Toolbar{
 
 init() {       
-
-Ambience.initializeAmbienceDropdowns();
-//Ambience.getAmbience();
-
+//Base Load Arrays
 Monsters.loadMonstersArray();
 Items.loadItemsArray();
 Spells.loadSpellsArray()
+Ambience.loadAmbienceArray();
 
 //Edit.addPredictiveContent();
 Edit.init();
@@ -31,6 +29,8 @@ Spells.addSpellSearch();
 Items.addItemSearch();
 
 
+
+//Ambience.getAmbience();
 
 //mainToolbar
 Ref.mapButton.addEventListener('click', this.handleMapButtonClick);
@@ -188,6 +188,7 @@ break;
 case 6:
 Ambience.saveAmbience();
 Ambience.loadAmbienceList(Ambience.ambienceArray);
+Ambience.getAmbience();
 break;
 
 default:

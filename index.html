@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="edit.css">
 <link rel="stylesheet" href="npcs.css">
 <link rel="stylesheet" href="monsters.css">
+<link rel="stylesheet" href="events.css">
 
 <link rel="icon" type="image/x-icon" href="data:," />
 <title>Excel_DM</title>
@@ -62,6 +63,18 @@
 </div>
 
 <div class="sidebar">
+
+<div class="eventManagerContainer">
+
+<select class="eventManagerSelect" id="eventManagerSelect">
+<option value="all">All</option> </select>
+
+<button class= "button" id="enableEventButton">  Enable   </button>
+<button class= "button" id="disableEventButton"> Disable  </button>
+
+</div>
+
+<br>
 
 <label class="locationLabel" id = "locationLabel"></label>
 
@@ -352,7 +365,12 @@ placeholder="What do the normally do here? They are...">
 
 <label for="mainAmbienceDropdown">Select Main:</label><br>
 
-<label for="secondAmbienceDropdown">Select Second:</label><br>
+<label for="secondAmbienceDropdown">Select Second:</label><br><br>
+
+<label>
+    <input type="checkbox" id="timePassingCheckbox" checked>
+    Time Passing?
+  </label>
 
 
 
@@ -362,7 +380,8 @@ placeholder="What do the normally do here? They are...">
 
 <select id="radianceDropdown">
 <option value="exterior">Exterior</option>
-<option value="interior">Interior</option>        
+<option value="interior">Interior</option>  
+   
 </select><br>
 
 <select id="contextDropdown">

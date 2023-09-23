@@ -1,6 +1,6 @@
 .locationLabel{
 position: relative;
-top: 0vh;
+top: 4vh;
 right: 0vw;
 left: 0.5vw;
 
@@ -16,6 +16,8 @@ height: 10vh;
 width: 25vw;
 padding: 1vh;    
 }
+
+
 
 .Storyteller{
 position: fixed;

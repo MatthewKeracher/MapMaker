@@ -62,6 +62,7 @@ const interiorOrExterior = document.getElementById('radianceDropdown').value;
 const context = document.getElementById('contextDropdown').value;
 const mainAmbience = document.getElementById('mainAmbienceDropdown').value;
 const secondAmbience = document.getElementById('secondAmbienceDropdown').value || null;
+//const timePassing = Ref.timePassingCheckbox.
 
 // Create the general information object
 const generalInfo = {

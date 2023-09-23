@@ -1,8 +1,7 @@
 import Edit from "./edit.js";
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
-
-
+import Storyteller from "./storyteller.js";
 
 const Ambience = {
 
@@ -16,8 +15,8 @@ ambienceArray: [],
 async getAmbience(){
 
 Ambience.clock();
-const Spring = Ref.mainAmbienceDropdown.value;
-const Morning= Ref.secondAmbienceDropdown[Ambience.phase].value;
+const Spring  = Ref.mainAmbienceDropdown.value;
+const Morning = Ref.secondAmbienceDropdown[Ambience.phase].value;
 
 //Within Random Selection, filter through.
 const senses = ["sight", "smell", "touch", "feel"];
@@ -35,12 +34,43 @@ this.senseDesc = ambienceEntry[chosenSense]
 
 }, 
 
+async clock(){
+
+if(!Edit.editMode){
+
+if(Ref.timePassingCheckbox.checked) {
+
+if(this.hour < 3){
+this.hour = this.hour + 1;                
+}else{
+if(this.hour === 3){
+console.log('New Phase')   
+this.hour = 0;
+if(this.phase === 2){
+console.log('New Day')
+this.phase = 0;    
+}else{
+this.phase = this.phase + 1;
+}
+}
+}
+
+this.radiateDisplay();
+
+}} else{
+
+this.hour = this.hour
+
+}},
+
 async loadAmbienceArray() {
 
 try {
 const response = await fetch('ambience.json'); // Adjust the path if needed
 const data = await response.json();
 this.ambienceArray = data;
+console.log(this.ambienceArray)
+this.initializeAmbienceDropdowns();
 
 return data;
 
@@ -51,25 +81,103 @@ return [];
 
 },    
 
-async initializeAmbienceDropdowns() {
-
-const ambienceArray = await this.loadAmbienceArray();
-const uniqueContext = [...new Set(ambienceArray.map(item => item.context))];
-this.populateDropdown(document.getElementById("contextDropdown"), uniqueContext);
+defaultAmbience(){
 
 // Set default context, main, and second values
+const uniqueContext = [...new Set(this.ambienceArray.map(item => item.context))];
+this.populateDropdown(document.getElementById("contextDropdown"), uniqueContext, 1);
+
 const defaultContext = uniqueContext[0];
-const filteredByDefaultContext = ambienceArray.filter(item => item.context === defaultContext);
+const filteredByDefaultContext = this.ambienceArray.filter(item => item.context === defaultContext);
 const defaultMain = filteredByDefaultContext.length > 0 ? filteredByDefaultContext[0].main : "";
-const filteredByDefaultMain = ambienceArray.filter(item => item.main === defaultMain);
+const filteredByDefaultMain = this.ambienceArray.filter(item => item.main === defaultMain);
 const defaultSecond = filteredByDefaultMain.length > 0 ? filteredByDefaultMain[0].second : "";
 
 // Set default values for dropdowns
 Ref.contextDropdown.value = defaultContext;
-this.populateDropdown(Ref.mainAmbienceDropdown, [...new Set(filteredByDefaultContext.map(item => item.main))]);
+this.populateDropdown(Ref.mainAmbienceDropdown, [...new Set(filteredByDefaultContext.map(item => item.main))],1);
 Ref.mainAmbienceDropdown.value = defaultMain;
-this.populateDropdown(Ref.secondAmbienceDropdown, [...new Set(filteredByDefaultMain.map(item => item.second))]);
+this.populateDropdown(Ref.secondAmbienceDropdown, [...new Set(filteredByDefaultMain.map(item => item.second))],1);
 Ref.secondAmbienceDropdown.value = defaultSecond;
+
+this.populateDropdown(Ref.eventmanager, [...new Set(filteredByDefaultContext.map(item => item.title))], 0)
+
+this.EventLoad()
+},
+
+
+
+EventLoad(){
+
+Ref.eventmanager.addEventListener('change', () => {
+Ref.extraInfo.classList.add('showExtraInfo');
+
+this.addEventInfo();
+})
+
+Ref.extraInfoContainer.addEventListener('mouseleave', () => {
+Ref.extraInfo.classList.remove('showExtraInfo');})
+
+},
+
+addEventInfo(){
+
+    const contentId = Ref.eventmanager.value
+       
+    //Search for Event in the Array   
+    const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
+    
+    if (event) {
+    
+    const eventInfo = [
+      
+    `<span class="cyan">Context:</span>  ${event.context || "None"} <br><br>`,
+    `<span class="cyan">Season:</span>  ${event.main || "None"} <br><br> `,
+    `<span class="cyan">Time:</span> ${event.second || "None"};<br><br> `,
+    `<span class="cyan">Title:</span> ${event.title || "None"};<br><br> `,
+    `<span class="cyan">Description:</span> ${event.description || "None"};<br><br>`,
+    
+    ];
+    
+    const formattedItem = eventInfo
+    .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
+    .join(" ");
+    
+    // Set the formatted content in the extraContent element
+    Ref.extraContent.innerHTML = formattedItem;
+    
+    return formattedItem;
+    
+    } else {
+    console.log(`Event not found: ${contentId}`);
+    
+    }
+    
+    },
+
+loadEventsList: function(data) {
+    const itemList = document.getElementById('itemList'); // Do not delete!!
+    
+    // Clear the existing content
+    itemList.innerHTML = '';
+    
+    // Sort the items by item type alphabetically
+    //const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+    
+    // Iterate through the sorted spells
+    for (const event of data) {
+    const eventNameDiv = document.createElement('div');
+    eventNameDiv.innerHTML = `${event.Name}</span>`;
+    itemList.appendChild(eventNameDiv);
+    //this.fillSpellsForm(event, eventNameDiv);
+    }
+    
+    itemList.style.display = 'block'; // Display the container
+    
+    NPCs.fixDisplay();
+    },
+
+addAmbienceEventListeners(){
 
 Ref.radianceDropdown.addEventListener("change", () => {
 console.log('radiate');
@@ -78,7 +186,7 @@ this.radiateDisplay();
 
 Ref.contextDropdown.addEventListener("change", () => {
 const selectedContext = Ref.contextDropdown.value;
-const filteredByContext = ambienceArray.filter(item => item.context === selectedContext);
+const filteredByContext = this.ambienceArray.filter(item => item.context === selectedContext);
 
 if (filteredByContext.length > 0) {
 const uniqueMain = [...new Set(filteredByContext.map(item => item.main))];
@@ -94,7 +202,7 @@ Ref.secondAmbienceDropdown.innerHTML = '<option value="">No Data</option>';
 
 Ref.mainAmbienceDropdown.addEventListener("change", () => {
 const selectedMain = Ref.mainAmbienceDropdown.value;
-const filteredByMain = ambienceArray.filter(item => item.main === selectedMain);
+const filteredByMain = this.ambienceArray.filter(item => item.main === selectedMain);
 const uniqueFilteredSecond = [...new Set(filteredByMain.map(item => item.second))];
 this.populateDropdown(Ref.secondAmbienceDropdown, uniqueFilteredSecond);
 });
@@ -104,8 +212,11 @@ Ref.secondAmbienceDropdown.addEventListener("change", () => {
 });
 },
 
-populateDropdown(dropdown, options) {
+populateDropdown(dropdown, options, replace) {
+
+if(replace === 1){    
 dropdown.innerHTML = ''; // Clear existing options
+}
 
 options.forEach(option => {
 const optionElement = document.createElement("option");
@@ -113,6 +224,17 @@ optionElement.value = option;
 optionElement.text = option;
 dropdown.appendChild(optionElement);
 });
+},
+
+async initializeAmbienceDropdowns() {
+
+console.log(this.ambienceArray)
+
+
+
+this.defaultAmbience();
+this.addAmbienceEventListeners();
+
 },
 
 simConDrop(){
@@ -167,27 +289,7 @@ return randomEntry;
 
 },
 
-async clock(){
-
-if(!Edit.editMode){
-if(this.hour < 3){
-this.hour = this.hour + 1;                
-}else{
-if(this.hour === 3){
-console.log('New Phase')   
-this.hour = 0;
-if(this.phase === 2){
-console.log('New Day')
-this.phase = 0;    
-}else{
-this.phase = this.phase + 1;
-}
-}
-}
-
-this.radiateDisplay();
-
-}},
+//Backlights screen depending on ToD or context. 
 
 radiateDisplay(){
 
@@ -317,99 +419,105 @@ overlay.style.opacity = "0.5";
 
 },
 
+//Standard Edit, Save, load
+
 loadAmbienceList: function(data) {
-    const itemList = document.getElementById('itemList'); // Do not delete!!
+const itemList = document.getElementById('itemList'); // Do not delete!!
 
-    // Clear the existing content
-    itemList.innerHTML = '';
+// Clear the existing content
+itemList.innerHTML = '';
 
-    // Iterate through the sorted ambience objects
-    for (const ambience of data) {
-        const ambienceNameDiv = document.createElement('div');
-        ambienceNameDiv.innerHTML = `[${ambience.context} ${ambience.main} ${ambience.second}] <span class="cyan">${ambience.title}</span>`;
-        itemList.appendChild(ambienceNameDiv);
-        this.fillAmbienceForm(ambience, ambienceNameDiv);
-    }
+// Iterate through the sorted ambience objects
+for (const ambience of data) {
+const ambienceNameDiv = document.createElement('div');
+ambienceNameDiv.innerHTML = `[${ambience.context} ${ambience.main} ${ambience.second}] <span class="cyan">${ambience.title}</span>`;
+itemList.appendChild(ambienceNameDiv);
+this.fillAmbienceForm(ambience, ambienceNameDiv);
+}
 
-    itemList.style.display = 'block'; // Display the container
+itemList.style.display = 'block'; // Display the container
 
-    NPCs.fixDisplay();
+NPCs.fixDisplay();
 },
 
 fillAmbienceForm: function(ambience, ambienceNameDiv) {
-    // Add click event listener to each ambience name
-    ambienceNameDiv.addEventListener('click', () => {
-        Ref.ambienceContext.value = ambience.context;
-        Ref.ambienceMain.value = ambience.main;
-        Ref.ambienceSecond.value = ambience.second;
-        Ref.ambienceTitle.value = ambience.title;
-        Ref.ambienceDescription.value = ambience.description;
-        Ref.ambienceSight.value = ambience.sight;
-        Ref.ambienceSmell.value = ambience.smell;
-        //Ref.ambienceTouch.value = ambience.touch;
-        Ref.ambienceFeel.value = ambience.feel;
-        //Ref.ambienceTaste.value = ambience.taste;
+// Add click event listener to each ambience name
+ambienceNameDiv.addEventListener('click', () => {
+Ref.ambienceContext.value = ambience.context;
+Ref.ambienceMain.value = ambience.main;
+Ref.ambienceSecond.value = ambience.second;
+Ref.ambienceTitle.value = ambience.title;
+Ref.ambienceDescription.value = ambience.description;
+Ref.ambienceSight.value = ambience.sight;
+Ref.ambienceSmell.value = ambience.smell;
+//Ref.ambienceTouch.value = ambience.touch;
+Ref.ambienceFeel.value = ambience.feel;
+//Ref.ambienceTaste.value = ambience.taste;
 
-        Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
-    });
+Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
+});
 },
 
 saveAmbience: function() {
-    const existingAmbienceIndex = this.ambienceArray.findIndex(ambience => 
-        ambience.title === Ref.ambienceTitle.value         
-    );
+const existingAmbienceIndex = this.ambienceArray.findIndex(ambience => 
+ambience.title === Ref.ambienceTitle.value         
+);
 
-    const ambience = {
-        context: Ref.ambienceContext.value,
-        main: Ref.ambienceMain.value,
-        second: Ref.ambienceSecond.value,
-        title: Ref.ambienceTitle.value,
-        description: Ref.ambienceDescription.value,
-        sight: Ref.ambienceSight.value,
-        smell: Ref.ambienceSmell.value,
-        //touch: Ref.ambienceTouch.value,
-        feel: Ref.ambienceFeel.value
-    };
+const ambience = {
+context: Ref.ambienceContext.value,
+main: Ref.ambienceMain.value,
+second: Ref.ambienceSecond.value,
+title: Ref.ambienceTitle.value,
+description: Ref.ambienceDescription.value,
+sight: Ref.ambienceSight.value,
+smell: Ref.ambienceSmell.value,
+//touch: Ref.ambienceTouch.value,
+feel: Ref.ambienceFeel.value
+};
 
-    if (existingAmbienceIndex !== -1) {
-        // Update the existing ambience entry
-        this.ambienceArray[existingAmbienceIndex] = ambience;
-        console.log('Ambience updated:', ambience);
-    } else {
-        this.ambienceArray.push(ambience);
-    }
+if (existingAmbienceIndex !== -1) {
+// Update the existing ambience entry
+this.ambienceArray[existingAmbienceIndex] = ambience;
+console.log('Ambience updated:', ambience);
+} else {
+this.ambienceArray.push(ambience);
+
+}
+
+this.initializeAmbienceDropdowns()
+
 },
 
 addAmbienceSearch: function() {
-    Ref.ambienceTitle.addEventListener('input', (event) => {
-        let searchText = event.target.value.toLowerCase();
+Ref.ambienceTitle.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
 
-        // Check if the searchText contains '{'
-        if (searchText.includes('{')) {
-            // Remove '{' from the searchText
-            searchText = searchText.replace('{', '');
+// Check if the searchText contains '{'
+if (searchText.includes('{')) {
+// Remove '{' from the searchText
+searchText = searchText.replace('{', '');
 
-            // Call the searchAmbience function
-            this.searchAmbience(searchText);
-        }
-    });
+// Call the searchAmbience function
+this.searchAmbience(searchText);
+}
+});
 },
 
 searchAmbience: function(searchText) {
-    this.ambienceSearchArray = [];
+this.ambienceSearchArray = [];
 
-    this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
-        const context = ambience.context.toLowerCase();
-        const main = ambience.main.toLowerCase();
-        const second = ambience.second.toLowerCase();
-        const title = ambience.title.toLowerCase();
+this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
+const context = ambience.context.toLowerCase();
+const main = ambience.main.toLowerCase();
+const second = ambience.second.toLowerCase();
+const title = ambience.title.toLowerCase();
 
-        // Check if any of the properties contain the search text
-        return context.includes(searchText) || main.includes(searchText) ||
-            second.includes(searchText) || title.includes(searchText);
-    });
+// Check if any of the properties contain the search text
+return context.includes(searchText) || main.includes(searchText) ||
+second.includes(searchText) || title.includes(searchText);
+});
 
-    this.loadAmbienceList(this.ambienceSearchArray);
+this.loadAmbienceList(this.ambienceSearchArray);
 }
 
 

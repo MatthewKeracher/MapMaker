@@ -1,0 +1,35 @@
+.eventManagerContainer {
+position: fixed;
+top: 7vh;    
+right: 1vw; 
+width: 27vw;   
+height: 20vh;     
+font-size: 2vh;
+display: fixed;
+flex-direction: row;
+}
+
+.eventManagerContainer button {
+    width: 5vw;
+    height: 3vh; 
+    font-size: 2vh; 
+    padding: 0vh 0vw; 
+    margin: 0.5vh 0; /* Add margin to control spacing */
+    border: 0.1vh solid black; 
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    transition: background-color 0.3s; 
+    }
+
+.eventManagerSelect {
+padding: 0px;
+font-size: 2vh;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: peachpuff;
+width: 15vw;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+}
+
+
+        
+  

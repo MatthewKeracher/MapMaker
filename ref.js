@@ -13,6 +13,8 @@ locationDivs: document.querySelectorAll('.selection'),
 //SettingContainer
 SettingsContainer: document.querySelector('.SettingsContainer'),
 
+//eventManager
+eventmanager: document.getElementById('eventManagerSelect'),
 
 //Storyteller
 locationLabel: document.getElementById('locationLabel'),
@@ -47,6 +49,8 @@ spellDuration: document.getElementById('spellDuration'),
 
 
 //ambienceForm:
+
+timePassingCheckbox : document.getElementById('timePassingCheckbox'),
 
 ambienceForm: document.querySelector('.ambienceForm'),
 ambienceTitle: document.getElementById('ambienceTitle'),
