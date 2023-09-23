@@ -16,8 +16,6 @@ async changeContent(locationDiv) {
 
 let Story = ``
 
-Ambience.getAmbience(); 
-
 const locationName = locationDiv.id;
 const locationObject = Array.locationArray.find(entry => entry.divId === locationName);
 
@@ -41,8 +39,7 @@ const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
 Story += `
-${Ambience.genDesc}<br><br>
-${Ambience.senseDesc}<br><br>
+${Ambience.eventDesc}<br><br>
 <span class="withbreak">${formattedLocation}</span>
 `;
 

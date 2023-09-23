@@ -8,31 +8,124 @@ const Ambience = {
 phase: 0,
 hour: 0,
 current: '',
-genDesc: "",
-senseDesc:"",
+eventDesc: "",
+
 ambienceArray: [],
 
-async getAmbience(){
+EventLoad(){
 
-Ambience.clock();
-const Spring  = Ref.mainAmbienceDropdown.value;
-const Morning = Ref.secondAmbienceDropdown[Ambience.phase].value;
+Ref.eventManager.addEventListener('change', () => {
+Ref.extraInfo.classList.add('showExtraInfo');
+this.getEvent();
+this.addEventInfo();
+})
 
-//Within Random Selection, filter through.
-const senses = ["sight", "smell", "touch", "feel"];
-const chosenSense = senses[Ambience.hour];
-const ambienceEntry = await this.loadAmbienceEntry(Spring, Morning);
+Ref.extraInfoContainer.addEventListener('mouseleave', () => {
+Ref.extraInfo.classList.remove('showExtraInfo');})
 
-//Retain returned entry until next phase. Do not delete!
-this.current = ambienceEntry; 
+},
 
-this.genDesc = "";
-this.senseDesc = "";
+addEventInfo(){
 
-this.genDesc = ambienceEntry.description
-this.senseDesc = ambienceEntry[chosenSense]
+const contentId = Ref.eventManager.value
+
+//Search for Event in the Array   
+const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
+
+if (event) {
+
+const eventInfo = [
+
+`<span class="cyan">Context:</span>  ${event.context || "None"} <br><br>`,
+`<span class="cyan">Season:</span>  ${event.main || "None"} <br><br> `,
+`<span class="cyan">Time:</span> ${event.second || "None"};<br><br> `,
+`<span class="cyan">Title:</span> ${event.title || "None"};<br><br> `,
+`<span class="cyan">Description:</span> ${event.description || "None"};<br><br>`,
+
+];
+
+const formattedItem = eventInfo
+.filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
+.join(" ");
+
+// Set the formatted content in the extraContent element
+Ref.extraContent.innerHTML = formattedItem;
+
+return formattedItem;
+
+} else {
+console.log(`Event not found: ${contentId}`);
+
+}
+
+},
+
+loadEventsList: function(data) {
+const itemList = document.getElementById('itemList'); // Do not delete!!
+
+// Clear the existing content
+itemList.innerHTML = '';
+
+// Sort the items by item type alphabetically
+//const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+
+// Iterate through the sorted spells
+for (const event of data) {
+const eventNameDiv = document.createElement('div');
+eventNameDiv.innerHTML = `${event.Name}</span>`;
+itemList.appendChild(eventNameDiv);
+//this.fillSpellsForm(event, eventNameDiv);
+}
+
+itemList.style.display = 'block'; // Display the container
+
+NPCs.fixDisplay();
+},
+
+async getEvent(){
+
+// Filter ambienceArray based on selected values
+console.log(Ref.eventManager.value)
+
+const filterArray = this.ambienceArray.filter(entry => entry.title === Ref.eventManager.value);
+console.log(filterArray)
+this.eventDesc = filterArray[0].description;
 
 }, 
+
+async loadAmbienceEntry(main, second) {
+
+const ambienceArray = await this.loadAmbienceArray();
+
+// Filter ambienceArray based on selected values
+const filterArray = ambienceArray.filter(entry =>
+entry.main === main && entry.second === second
+);
+
+//console.log('current: ' + this.current);
+
+if(this.current === ''){
+const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
+return randomEntry;     
+};
+
+//console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
+
+if(this.hour > 0){
+
+return this.current;       
+
+}else{
+
+if(this.hour === 0){
+
+const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
+//console.log('New Description: ' + randomEntry.title);
+return randomEntry;
+}}
+
+
+},
 
 async clock(){
 
@@ -69,7 +162,7 @@ try {
 const response = await fetch('ambience.json'); // Adjust the path if needed
 const data = await response.json();
 this.ambienceArray = data;
-console.log(this.ambienceArray)
+//console.log(this.ambienceArray)
 this.initializeAmbienceDropdowns();
 
 return data;
@@ -100,82 +193,12 @@ Ref.mainAmbienceDropdown.value = defaultMain;
 this.populateDropdown(Ref.secondAmbienceDropdown, [...new Set(filteredByDefaultMain.map(item => item.second))],1);
 Ref.secondAmbienceDropdown.value = defaultSecond;
 
-this.populateDropdown(Ref.eventmanager, [...new Set(filteredByDefaultContext.map(item => item.title))], 0)
+this.populateDropdown(Ref.eventManager, [...new Set(filteredByDefaultContext.map(item => item.title))], 0)
 
 this.EventLoad()
 },
 
 
-
-EventLoad(){
-
-Ref.eventmanager.addEventListener('change', () => {
-Ref.extraInfo.classList.add('showExtraInfo');
-
-this.addEventInfo();
-})
-
-Ref.extraInfoContainer.addEventListener('mouseleave', () => {
-Ref.extraInfo.classList.remove('showExtraInfo');})
-
-},
-
-addEventInfo(){
-
-    const contentId = Ref.eventmanager.value
-       
-    //Search for Event in the Array   
-    const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
-    
-    if (event) {
-    
-    const eventInfo = [
-      
-    `<span class="cyan">Context:</span>  ${event.context || "None"} <br><br>`,
-    `<span class="cyan">Season:</span>  ${event.main || "None"} <br><br> `,
-    `<span class="cyan">Time:</span> ${event.second || "None"};<br><br> `,
-    `<span class="cyan">Title:</span> ${event.title || "None"};<br><br> `,
-    `<span class="cyan">Description:</span> ${event.description || "None"};<br><br>`,
-    
-    ];
-    
-    const formattedItem = eventInfo
-    .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
-    .join(" ");
-    
-    // Set the formatted content in the extraContent element
-    Ref.extraContent.innerHTML = formattedItem;
-    
-    return formattedItem;
-    
-    } else {
-    console.log(`Event not found: ${contentId}`);
-    
-    }
-    
-    },
-
-loadEventsList: function(data) {
-    const itemList = document.getElementById('itemList'); // Do not delete!!
-    
-    // Clear the existing content
-    itemList.innerHTML = '';
-    
-    // Sort the items by item type alphabetically
-    //const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
-    
-    // Iterate through the sorted spells
-    for (const event of data) {
-    const eventNameDiv = document.createElement('div');
-    eventNameDiv.innerHTML = `${event.Name}</span>`;
-    itemList.appendChild(eventNameDiv);
-    //this.fillSpellsForm(event, eventNameDiv);
-    }
-    
-    itemList.style.display = 'block'; // Display the container
-    
-    NPCs.fixDisplay();
-    },
 
 addAmbienceEventListeners(){
 
@@ -228,7 +251,7 @@ dropdown.appendChild(optionElement);
 
 async initializeAmbienceDropdowns() {
 
-console.log(this.ambienceArray)
+//console.log(this.ambienceArray)
 
 
 
@@ -255,39 +278,7 @@ Ref.mainAmbienceDropdown.dispatchEvent(event);
 
 },
 
-async loadAmbienceEntry(main, second) {
 
-const ambienceArray = await this.loadAmbienceArray();
-
-// Filter ambienceArray based on selected values
-const filterArray = ambienceArray.filter(entry =>
-entry.main === main && entry.second === second
-);
-
-//console.log('current: ' + this.current);
-
-if(this.current === ''){
-const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
-return randomEntry;     
-};
-
-//console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
-
-if(this.hour > 0){
-
-return this.current;       
-
-}else{
-
-if(this.hour === 0){
-
-const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
-//console.log('New Description: ' + randomEntry.title);
-return randomEntry;
-}}
-
-
-},
 
 //Backlights screen depending on ToD or context. 
 

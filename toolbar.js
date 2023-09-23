@@ -110,6 +110,8 @@ editEditButton.classList.add('click-button');
 Edit.pageChange(Edit.editPage)
 Ref.EditorContainer.style.display = 'flex';
 Ref.editLocationName.style.display = 'flex';
+
+Ref.eventManagerContainer.style.display = 'none';
 Ref.Storyteller.style.display = 'none';
 Ref.locationLabel.style.display = 'none';
 
@@ -124,6 +126,7 @@ div.addEventListener('mouseenter', Edit.handleMouseHover);
 div.addEventListener('mouseleave', Edit.handleMouseHover);
 });
 } else {
+
 if (Edit.editMode) {
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
@@ -132,6 +135,8 @@ editEditButton.classList.remove('click-button');
 Edit.pageChange(1);
 Ref.EditorContainer.style.display = 'none';
 Ref.editLocationName.style.display = 'none';
+
+Ref.eventManagerContainer.style.display = '';
 Ref.Storyteller.style.display = 'flex';
 Ref.locationLabel.style.display = 'flex';
 

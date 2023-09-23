@@ -14,7 +14,8 @@ locationDivs: document.querySelectorAll('.selection'),
 SettingsContainer: document.querySelector('.SettingsContainer'),
 
 //eventManager
-eventmanager: document.getElementById('eventManagerSelect'),
+eventManagerContainer: document.querySelector('.eventManagerContainer'),
+eventManager: document.getElementById('eventManagerSelect'),
 
 //Storyteller
 locationLabel: document.getElementById('locationLabel'),
