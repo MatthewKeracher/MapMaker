@@ -14,28 +14,33 @@ ambienceArray: [],
 
 async loadAmbienceArray() {
 
-    try {
-    const response = await fetch('ambience.json'); // Adjust the path if needed
-    const data = await response.json();
-    this.ambienceArray = data;
-    //console.log(this.ambienceArray)
-        
-    return data;
-    
-    } catch (error) {
-    console.error('Error loading ambience array:', error);
-    return [];
-    }
-    
-    },
+try {
+const response = await fetch('ambience.json'); // Adjust the path if needed
+const data = await response.json();
+this.ambienceArray = data;
+//console.log(this.ambienceArray)
+this.fillEventManager();
+return data;
 
-EventLoad(){
+} catch (error) {
+console.error('Error loading ambience array:', error);
+return [];
+}
+},
 
-Ref.eventManager.addEventListener('change', () => {
+loadEventListeners(){
+
+Ref.eventManagerDropdown.addEventListener('mouseenter', () => {
+this.showcurrentEvents();
+console.log('hovering...')
+});
+
+Ref.eventManagerDropdown.addEventListener('change', () => {
 Ref.extraInfo.classList.add('showExtraInfo');
 this.getEvent();
 this.addEventInfo();
-this.radiateDisplay();
+console.log('hovering...')
+//this.radiateDisplay();
 })
 
 Ref.extraInfoContainer.addEventListener('mouseleave', () => {
@@ -43,9 +48,64 @@ Ref.extraInfo.classList.remove('showExtraInfo');})
 
 },
 
+showcurrentEvents(){
+
+const itemList = document.getElementById('itemList'); // Do not delete!!
+console.log('showing currentEvents')
+
+// Clear the existing content
+itemList.innerHTML = '';
+
+// Iterate through the sorted events
+for (const event of this.ambienceArray) {
+const eventNameDiv = document.createElement('div');
+console.log(event.title)
+eventNameDiv.innerHTML = `[${event.context}]<span class="cyan">${event.title}</span>`;
+itemList.appendChild(eventNameDiv);
+}
+
+itemList.style.display = 'block'; // Display the container
+
+NPCs.fixDisplay();
+
+},
+
+fillEventManager() {
+// Create an object to keep track of unique items
+const uniqueItems = {};
+
+// Reference to the dropdown element
+const eventManagerDropdown = Ref.eventManagerDropdown;
+
+// Clear existing options
+eventManagerDropdown.innerHTML = '';
+
+// Iterate through the ambienceArray and add unique titles to the dropdown
+this.ambienceArray.forEach(ambience => {
+const title = ambience.title;
+
+// Check if the title is unique
+if (!uniqueItems[title]) {
+// Create a new option element
+const option = document.createElement('option');
+option.value = title;
+option.text = title;
+
+// Add the option to the dropdown
+eventManagerDropdown.appendChild(option);
+
+// Mark the title as seen
+uniqueItems[title] = true;
+}
+});
+
+// Call EventLoad() if needed
+this.loadEventListeners();
+},
+
 addEventInfo(){
 
-const contentId = Ref.eventManager.value
+const contentId = Ref.eventManagerDropdown.value
 
 //Search for Event in the Array   
 const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
@@ -80,17 +140,15 @@ console.log(`Event not found: ${contentId}`);
 
 loadEventsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
+//console.log(data)
 
 // Clear the existing content
 itemList.innerHTML = '';
 
-// Sort the items by item type alphabetically
-//const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
-
 // Iterate through the sorted events
 for (const event of data) {
 const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `${event.title}</span>`;
+eventNameDiv.innerHTML = `[${event.context}]<span class="cyan">${event.title}</span>`;
 itemList.appendChild(eventNameDiv);
 this.fillAmbienceForm(event, eventNameDiv);
 }
@@ -103,168 +161,21 @@ NPCs.fixDisplay();
 async getEvent(){
 
 // Filter ambienceArray based on selected values
-console.log(Ref.eventManager.value)
+console.log(Ref.eventManagerDropdown.value)
 
-const filterArray = this.ambienceArray.filter(entry => entry.title === Ref.eventManager.value);
+const filterArray = this.ambienceArray.filter(entry => entry.title === Ref.eventManagerDropdown.value);
 console.log(filterArray)
 this.eventDesc = filterArray[0].description;
 
 }, 
 
-async loadAmbienceEntry(main, second) {
-
-const ambienceArray = await this.loadAmbienceArray();
-
-// Filter ambienceArray based on selected values
-const filterArray = ambienceArray.filter(entry =>
-entry.main === main && entry.second === second
-);
-
-//console.log('current: ' + this.current);
-
-if(this.current === ''){
-const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
-return randomEntry;     
-};
-
-//console.log('Time in Ambience -- Hour: ' + this.hour + '; Phase: ' + this.phase);
-
-if(this.hour > 0){
-
-return this.current;       
-
-}else{
-
-if(this.hour === 0){
-
-const randomEntry = filterArray[Math.floor(Math.random() * filterArray.length)];
-//console.log('New Description: ' + randomEntry.title);
-return randomEntry;
-}}
-
-
-},
-
-async clock(){
-
-if(!Edit.editMode){
-
-if(Ref.timePassingCheckbox.checked) {
-
-if(this.hour < 3){
-this.hour = this.hour + 1;                
-}else{
-if(this.hour === 3){
-console.log('New Phase')   
-this.hour = 0;
-if(this.phase === 2){
-console.log('New Day')
-this.phase = 0;    
-}else{
-this.phase = this.phase + 1;
-}
-}
-}
-
-this.radiateDisplay();
-
-}} else{
-
-this.hour = this.hour
-
-}},
-
-    
-
-defaultAmbience(){
-
-// Set default context, main, and second values
-const uniqueContext = [...new Set(this.ambienceArray.map(item => item.context))];
-this.populateDropdown(document.getElementById("contextDropdown"), uniqueContext, 1);
-
-const defaultContext = uniqueContext[0];
-const filteredByDefaultContext = this.ambienceArray.filter(item => item.context === defaultContext);
-const defaultMain = filteredByDefaultContext.length > 0 ? filteredByDefaultContext[0].main : "";
-const filteredByDefaultMain = this.ambienceArray.filter(item => item.main === defaultMain);
-const defaultSecond = filteredByDefaultMain.length > 0 ? filteredByDefaultMain[0].second : "";
-
-// Set default values for dropdowns
-Ref.contextDropdown.value = defaultContext;
-this.populateDropdown(Ref.mainAmbienceDropdown, [...new Set(filteredByDefaultContext.map(item => item.main))],1);
-Ref.mainAmbienceDropdown.value = defaultMain;
-this.populateDropdown(Ref.secondAmbienceDropdown, [...new Set(filteredByDefaultMain.map(item => item.second))],1);
-Ref.secondAmbienceDropdown.value = defaultSecond;
-
-this.populateDropdown(Ref.eventManager, [...new Set(filteredByDefaultContext.map(item => item.title))], 0)
-
-this.EventLoad()
-},
-
-
-
-populateDropdown(dropdown, options, replace) {
-
-if(replace === 1){    
-dropdown.innerHTML = ''; // Clear existing options
-}
-
-options.forEach(option => {
-const optionElement = document.createElement("option");
-optionElement.value = option;
-optionElement.text = option;
-dropdown.appendChild(optionElement);
-});
-},
-
-async initializeAmbienceDropdowns() {
-
-//console.log(this.ambienceArray)
-
-
-
-this.defaultAmbience();
-
-
-},
-
-simConDrop(){
-
-//Simulate Click on Second Dropdown
-const event = new Event("change", { bubbles: true, cancelable: true });
-
-Ref.contextDropdown.dispatchEvent(event);
-
-},
-
-simMainDrop(){
-
-//Simulate Click on Second Dropdown
-const event = new Event("change", { bubbles: true, cancelable: true });
-
-Ref.mainAmbienceDropdown.dispatchEvent(event);
-
-},
-
-
-
-
 //Standard Edit, Save, load
-
-
 fillAmbienceForm: function(ambience, ambienceNameDiv) {
 // Add click event listener to each ambience name
 ambienceNameDiv.addEventListener('click', () => {
 Ref.ambienceContext.value = ambience.context;
-Ref.ambienceMain.value = ambience.main;
-Ref.ambienceSecond.value = ambience.second;
 Ref.ambienceTitle.value = ambience.title;
 Ref.ambienceDescription.value = ambience.description;
-Ref.ambienceSight.value = ambience.sight;
-Ref.ambienceSmell.value = ambience.smell;
-//Ref.ambienceTouch.value = ambience.touch;
-Ref.ambienceFeel.value = ambience.feel;
-//Ref.ambienceTaste.value = ambience.taste;
-
 Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
 });
 },
@@ -295,7 +206,8 @@ this.ambienceArray.push(ambience);
 
 }
 
-this.initializeAmbienceDropdowns()
+
+this.fillEventManager();
 
 },
 
@@ -316,147 +228,159 @@ this.searchAmbience(searchText);
 
 searchAmbience: function(searchText) {
 this.ambienceSearchArray = [];
+console.log('called')
 
 this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
 const context = ambience.context.toLowerCase();
-const main = ambience.main.toLowerCase();
-const second = ambience.second.toLowerCase();
 const title = ambience.title.toLowerCase();
 
 // Check if any of the properties contain the search text
-return context.includes(searchText) || main.includes(searchText) ||
-second.includes(searchText) || title.includes(searchText);
+return context.includes(searchText) || title.includes(searchText);
 });
 
-this.loadEventsList(this.ambienceArray);
+this.loadEventsList(this.ambienceSearchArray);
 },
+
+populateDropdown(dropdown, options, replace) {
+
+    if(replace === 1){    
+    dropdown.innerHTML = ''; // Clear existing options
+    }
+    
+    options.forEach(option => {
+    const optionElement = document.createElement("option");
+    optionElement.value = option;
+    optionElement.text = option;
+    dropdown.appendChild(optionElement);
+    });
+    },
 
 radiateDisplay(){
 
-    const overlay = document.getElementById('radiantDisplay');
-    const radianceDropdown = document.getElementById('radianceDropdown').value;
-    
-    if(radianceDropdown === 'exterior'){
-    switch (this.phase) {
-    case 0: // Morning
-    switch (this.hour) {
-    case 0: 
-    
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.2";
-    
-    break;
-    
-    case 1: 
-    
-    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-    overlay.style.opacity = "0.1";
-    
-    break;
-    
-    case 2: 
-    
-    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-    overlay.style.opacity = "0.2";
-    
-    
-    break;
-    
-    case 3: 
-    
-    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-    overlay.style.opacity = "0.3";
-    
-    break;
-    
-    default:
-    break;
-    }
-    break;
-    
-    case 1: // Afternoon
-    switch (this.hour) {
-    case 0: 
-    
-    overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-    overlay.style.opacity = "0.2";
-    
-    break;
-    
-    case 1: 
-    
-    overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.1";
-    
-    break;
-    
-    case 2: 
-    
-    overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.2";
-    
-    
-    break;
-    
-    case 3: 
-    
-    overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.3";
-    
-    break;
-    
-    default:
-    break;
-    }
-    break;
-    
-    case 2: // Night
-    switch (this.hour) {
-    case 0: 
-    
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.4";
-    
-    break;
-    
-    case 1: 
-    
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.5";
-    
-    break;
-    
-    case 2: 
-    
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.6";
-    
-    
-    break;
-    
-    case 3: 
-    
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.7";
-    
-    break;
-    
-    default:
-    break;
-    }
-    break;
-    
-    default:
-    break;
-    }
-    }else{
-    
-    overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-    overlay.style.opacity = "0.5";
-    
-    }
-    
-    
+const overlay = document.getElementById('radiantDisplay');
+const radianceDropdown = document.getElementById('radianceDropdown').value;
+
+if(radianceDropdown === 'exterior'){
+switch (this.phase) {
+case 0: // Morning
+switch (this.hour) {
+case 0: 
+
+overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+overlay.style.opacity = "0.2";
+
+break;
+
+case 1: 
+
+overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+overlay.style.opacity = "0.1";
+
+break;
+
+case 2: 
+
+overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+overlay.style.opacity = "0.2";
+
+
+break;
+
+case 3: 
+
+overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+overlay.style.opacity = "0.3";
+
+break;
+
+default:
+break;
+}
+break;
+
+case 1: // Afternoon
+switch (this.hour) {
+case 0: 
+
+overlay.style.backgroundColor = "gold"; /* Set your desired background color */
+overlay.style.opacity = "0.2";
+
+break;
+
+case 1: 
+
+overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+overlay.style.opacity = "0.1";
+
+break;
+
+case 2: 
+
+overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+overlay.style.opacity = "0.2";
+
+
+break;
+
+case 3: 
+
+overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
+overlay.style.opacity = "0.3";
+
+break;
+
+default:
+break;
+}
+break;
+
+case 2: // Night
+switch (this.hour) {
+case 0: 
+
+overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+overlay.style.opacity = "0.4";
+
+break;
+
+case 1: 
+
+overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+overlay.style.opacity = "0.5";
+
+break;
+
+case 2: 
+
+overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+overlay.style.opacity = "0.6";
+
+
+break;
+
+case 3: 
+
+overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+overlay.style.opacity = "0.7";
+
+break;
+
+default:
+break;
+}
+break;
+
+default:
+break;
+}
+}else{
+
+overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
+overlay.style.opacity = "0.5";
+
+}
+
+
 }
 
 

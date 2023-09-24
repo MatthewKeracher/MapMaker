@@ -119,7 +119,7 @@ loadItemsList: function(data) {
     // Iterate through the sorted items
     for (const item of sortedItems) {
       const itemNameDiv = document.createElement('div');
-      itemNameDiv.innerHTML = `[${item.Type}] <span class="cyan">${item.Name}</span>`;
+      itemNameDiv.innerHTML = `[${item.Type}]<span class="lime">${item.Name}</span>`;
       itemList.appendChild(itemNameDiv);
       this.fillItemsForm(item, itemNameDiv);
     }

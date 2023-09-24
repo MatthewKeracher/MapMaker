@@ -15,7 +15,9 @@ SettingsContainer: document.querySelector('.SettingsContainer'),
 
 //eventManager
 eventManagerContainer: document.querySelector('.eventManagerContainer'),
-eventManager: document.getElementById('eventManagerSelect'),
+eventManagerDropdown: document.getElementById('eventManagerSelect'),
+enableEventButton: document.getElementById('enableEventButton'),
+disableEventButton: document.getElementById('disableEventButton'),
 
 //Storyteller
 locationLabel: document.getElementById('locationLabel'),

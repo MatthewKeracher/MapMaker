@@ -28,8 +28,6 @@ NPCs.addNPCSearch();
 Spells.addSpellSearch();
 Items.addItemSearch();
 
-
-
 //Ambience.getAmbience();
 
 //mainToolbar
@@ -39,6 +37,10 @@ Ref.addButton.addEventListener('click', this.handleAddButtonClick);
 Ref.editButton.addEventListener('click', this.handleEditButtonClick);
 Ref.saveButton.addEventListener('click', this.handleSaveButtonClick);  
 Ref.fileInput.addEventListener('change', Array.handleFileInputChange); 
+
+//eventManager
+Ref.enableEventButton.addEventListener('click', this.handleeventEnableClick);
+Ref.disableEventButton.addEventListener('click', this.handleeventDisableClick);
 
 //editToolbar
 Ref.editEditButton.addEventListener('click', this.handleEditButtonClick);
@@ -56,6 +58,16 @@ Ref.importData.addEventListener('click', this.handleimportDataClick);
 Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange); 
 
 }
+
+handleeventEnableClick(){
+console.log('click');
+
+};
+
+handleeventDisableClick(){
+console.log('click');
+
+};
 
 handleMapButtonClick() {  
 Map.fetchAndProcessImage()

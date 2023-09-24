@@ -79,7 +79,7 @@ position: fixed; /* Use fixed position for screen coordinates */
 top: 0;
 left: 45vw;
 width: 25vw;
-z-index: 1;
+z-index: 10;
 overflow-y: auto;
 display: none;
 scrollbar-color: black;

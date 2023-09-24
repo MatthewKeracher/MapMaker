@@ -118,7 +118,7 @@ itemList.innerHTML = '';
 // Iterate through the sorted spells
 for (const spell of data) {
 const spellNameDiv = document.createElement('div');
-spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}] <span class="yellow">${spell.Name}</span>`;
+spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}]<span class="yellow">${spell.Name}</span>`;
 itemList.appendChild(spellNameDiv);
 this.fillSpellsForm(spell, spellNameDiv);
 }

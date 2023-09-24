@@ -122,7 +122,7 @@ const monsterNames = Object.keys(data).sort();
 for (const monsterName of monsterNames) {
 const monster = data[monsterName];
 const monsterNameDiv = document.createElement('div');
-monsterNameDiv.innerHTML = `[${monster.Type}] <span class="hotpink">${monster.Name}</span>`;
+monsterNameDiv.innerHTML = `[${monster.Type}]<span class="hotpink">${monster.Name}</span>`;
 itemList.appendChild(monsterNameDiv);
 this.fillMonsterForm(monster, monsterNameDiv);
 }
