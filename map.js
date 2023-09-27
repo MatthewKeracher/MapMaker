@@ -76,7 +76,7 @@ radiantDisplay() {
       imageContainer.appendChild(overlay);
     }
 
-    Ambience.radiateDisplay();
+    //Ambience.radiateDisplay();
     
   },
   

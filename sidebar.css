@@ -33,6 +33,12 @@ resize: none;
 text-align: left;
 }  
 
+#extraContent div:hover {
+background-color: gray; /* Change the background color on hover */
+color: whitesmoke;
+cursor: pointer; /* Show pointer cursor on hover */
+} 
+
 
 .extraInfo::-webkit-scrollbar {
 width: 0.1px; /* Set the width of the scrollbar */
@@ -40,7 +46,7 @@ width: 0.1px; /* Set the width of the scrollbar */
 
 .extraInfo2 {
     position: fixed;  
-    right: 51vw; 
+    right: 50.5vw; 
     width: 20vw;
     height: 97vh;
     top:0;
@@ -149,6 +155,9 @@ color:cyan
 color:rgb(246, 235, 10)
 }
 
+.gray{
+    color:gray
+}
 
 
 

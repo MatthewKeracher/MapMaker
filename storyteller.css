@@ -1,10 +1,10 @@
 .locationLabel{
 position: relative;
-top: 4vh;
+top: 10vh;
 right: 0vw;
 left: 0.5vw;
 
-color: bisque;   
+color: hotpink;   
 font-size: 3vh;
 font-weight: bold;
 
@@ -12,14 +12,14 @@ margin-top: 0.5vh;
 margin-bottom: 0.5vh; 
 background-color: transparent;        
 
-height: 10vh;
+height: 6vh;
 width: 25vw;
 padding: 1vh;    
 }
 
 .Storyteller{
 position: fixed;
-top: 20vh;    
+top: 25vh;    
 right: 0.35vw; 
 width: 28.5vw;   
 height: 78vh;  

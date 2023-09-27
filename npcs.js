@@ -234,7 +234,7 @@ const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
 if (foundNPC) {
 //console.log(foundNPC);
 // Format the NPC information into npcContent
-let npcContent = `<hr><h3><span class="cyan">${foundNPC.name}</span></h3>`;
+let npcContent = `<h3><span class="cyan">${foundNPC.name}</span></h3>`;
 
 if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
 npcContent += `${foundNPC.occupation}.<br><br>`;

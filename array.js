@@ -58,18 +58,18 @@ saveAs(blob, filename);
 
 exportArray: function () {
 // Extract general information from the dropdowns
-const interiorOrExterior = document.getElementById('radianceDropdown').value;
-const context = document.getElementById('contextDropdown').value;
-const mainAmbience = document.getElementById('mainAmbienceDropdown').value;
-const secondAmbience = document.getElementById('secondAmbienceDropdown').value || null;
+//const interiorOrExterior = document.getElementById('radianceDropdown').value;
+//const context = document.getElementById('contextDropdown').value;
+//const mainAmbience = document.getElementById('mainAmbienceDropdown').value;
+//const secondAmbience = document.getElementById('secondAmbienceDropdown').value || null;
 //const timePassing = Ref.timePassingCheckbox.
 
 // Create the general information object
 const generalInfo = {
-interiorOrExterior,
-context,
-mainAmbience,
-secondAmbience
+//interiorOrExterior,
+//context,
+//mainAmbience,
+//secondAmbience
 };
 
 console.log(Items.itemsArray);
@@ -81,7 +81,8 @@ locations: this.locationArray,
 npcArray: NPCs.npcArray,
 monstersArray: Monsters.monstersArray,
 itemsArray: Items.itemsArray,
-spellsArray: Spells.spellsArray
+spellsArray: Spells.spellsArray,
+eventsArray: Ambience.ambienceArray
 };
 
 const json = JSON.stringify(exportData, null, 2);
@@ -188,14 +189,25 @@ console.log('Spells array data is not available.');
 console.error('Error loading Item information:', error);
 }
 
+try {
+if (data.eventsArray) {
+Ambience.ambienceArray = data.eventsArray;
+//console.log( Monsters.monstersArray);
+} else {
+console.log('Events/Ambience array data is not available.');
+}
+} catch (error) {
+console.error('Error loading Item information:', error);
+}
+
 
 try{
 //Handle General Information
 this.handleGeneralInformation(data.generalInformation);
 //Ambience.initializeAmbienceDropdowns();
-Ambience.simConDrop();
-Ambience.simMainDrop();
-Ambience.radiateDisplay();
+//Ambience.simConDrop();
+//Ambience.simMainDrop();
+//Ambience.radiateDisplay();
 } catch (error) {
 console.error('Error loading general information:', error);
 }
@@ -207,10 +219,10 @@ const { interiorOrExterior, context, mainAmbience, secondAmbience } = generalInf
 
 //console.log(generalInfo);
 // Set the values of the dropdowns
-document.getElementById('radianceDropdown').value = interiorOrExterior;
-document.getElementById('contextDropdown').value = context;
-document.getElementById('mainAmbienceDropdown').value = mainAmbience;
-document.getElementById('secondAmbienceDropdown').value = secondAmbience;
+// document.getElementById('radianceDropdown').value = interiorOrExterior;
+// document.getElementById('contextDropdown').value = context;
+// document.getElementById('mainAmbienceDropdown').value = mainAmbience;
+// document.getElementById('secondAmbienceDropdown').value = secondAmbience;
 },
 
 

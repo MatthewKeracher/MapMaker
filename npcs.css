@@ -59,17 +59,30 @@ background-color: black;
 }
 
 .smallField {
-    height: 12vh;
-    width: 28vw;
-    margin: 1vh;
-    font-size: 2vh;
-    color: gray;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    border: 0.2vh solid gray;
-    padding: 0.8vh;
-    background-color: black;
-    align-content: left;
+height: 12vh;
+width: 28vw;
+margin: 1vh;
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid gray;
+padding: 0.8vh;
+background-color: black;
+align-content: left;
 }
+
+.EventField {
+height: 4vh;
+width: 28vw;
+margin: 0vh;
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid gray;
+padding: 0.8vh;
+background-color: black;
+}
+    
 
 .lineField {
 height: 4vh;
@@ -112,7 +125,6 @@ padding: 0.8vh;
 background-color: transparent;
 text-align: center;
 vertical-align: middle;
-
 }
 
 #npcForm input[type="number"]:focus {
@@ -153,6 +165,7 @@ background-color: black;
 .medField:focus,
 .largeField:focus,
 .lineField:focus,
+.EventField.focus,
 .stat:focus{
 border-color: hotpink;
 outline: 0.2vh solid hotpink;

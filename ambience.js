@@ -29,43 +29,44 @@ return [];
 },
 
 loadEventListeners(){
-
-Ref.eventManagerDropdown.addEventListener('mouseenter', () => {
+Ref.eventManagerInput.addEventListener('mouseenter', () => {
+Ref.extraInfo.classList.add('showExtraInfo');
 this.showcurrentEvents();
-console.log('hovering...')
 });
 
-Ref.eventManagerDropdown.addEventListener('change', () => {
+Ref.eventManagerInput.addEventListener('change', () => {
 Ref.extraInfo.classList.add('showExtraInfo');
 this.getEvent();
 this.addEventInfo();
-console.log('hovering...')
 //this.radiateDisplay();
 })
 
-Ref.extraInfoContainer.addEventListener('mouseleave', () => {
-Ref.extraInfo.classList.remove('showExtraInfo');})
-
 },
+
 
 showcurrentEvents(){
 
-const itemList = document.getElementById('itemList'); // Do not delete!!
-console.log('showing currentEvents')
+Ref.extraContent.innerHTML = '';
+Ref.extraContent.style.display = 'block'; // Display the container
 
-// Clear the existing content
-itemList.innerHTML = '';
+// Partition the ambienceArray into active and inactive events
+const activeEvents = this.ambienceArray.filter(event => event.active === 1);
+const inactiveEvents = this.ambienceArray.filter(event => event.active !== 1);
 
-// Iterate through the sorted events
-for (const event of this.ambienceArray) {
-const eventNameDiv = document.createElement('div');
-console.log(event.title)
-eventNameDiv.innerHTML = `[${event.context}]<span class="cyan">${event.title}</span>`;
-itemList.appendChild(eventNameDiv);
-}
+// Concatenate the active and inactive events arrays, placing active events first
+const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
 
-itemList.style.display = 'block'; // Display the container
+// Iterate through the sorted events and display them
+for (const event of sortedAmbienceArray) {
+  const eventNameDiv = document.createElement('div');
+  eventNameDiv.innerHTML = `<span class="gray">[${event.context}]</span><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.title}</span>`;
+  Ref.extraContent.appendChild(eventNameDiv);
 
+  eventNameDiv.addEventListener('click', () => {
+  Ref.eventManagerInput.value = event.title;
+  this.addEventInfo();})
+  }
+ 
 NPCs.fixDisplay();
 
 },
@@ -75,7 +76,7 @@ fillEventManager() {
 const uniqueItems = {};
 
 // Reference to the dropdown element
-const eventManagerDropdown = Ref.eventManagerDropdown;
+const eventManagerDropdown = Ref.eventManagerInput;
 
 // Clear existing options
 eventManagerDropdown.innerHTML = '';
@@ -105,20 +106,17 @@ this.loadEventListeners();
 
 addEventInfo(){
 
-const contentId = Ref.eventManagerDropdown.value
-
+const contentId = Ref.eventManagerInput.value
+Ref.extraInfo2.classList.add('showExtraInfo');
 //Search for Event in the Array   
 const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
 
 if (event) {
 
 const eventInfo = [
-
-`<span class="cyan">Context:</span>  ${event.context || "None"}; <br><br>`,
-`<span class="cyan">Season:</span>   ${event.main    || "None"}; <br><br> `,
-`<span class="cyan">Time:</span>     ${event.second  || "None"}; <br><br> `,
-`<span class="cyan">Title:</span>    ${event.title   || "None"}; <br><br> `,
-`<span class="cyan">Description:</span> ${event.description || "None"};<br><br>`,
+`<span class="misc">Title:</span>    ${event.title   || "None"} <br><hr> `,
+`<span class="misc">Context:</span>  ${event.context || "None"} <br><hr>`,
+`<span class="misc">Description:</span> ${event.description || "None"}<br><br>`,
 
 ];
 
@@ -127,7 +125,7 @@ const formattedItem = eventInfo
 .join(" ");
 
 // Set the formatted content in the extraContent element
-Ref.extraContent.innerHTML = formattedItem;
+Ref.extraContent2.innerHTML = formattedItem;
 
 return formattedItem;
 
@@ -145,10 +143,17 @@ const itemList = document.getElementById('itemList'); // Do not delete!!
 // Clear the existing content
 itemList.innerHTML = '';
 
+// Partition the ambienceArray into active and inactive events
+const activeEvents = data.filter(event => event.active === 1);
+const inactiveEvents = data.filter(event => event.active !== 1);
+
+// Concatenate the active and inactive events arrays, placing active events first
+const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
+
 // Iterate through the sorted events
-for (const event of data) {
+for (const event of sortedAmbienceArray) {
 const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `[${event.context}]<span class="cyan">${event.title}</span>`;
+eventNameDiv.innerHTML = `[${event.context}]<span class="${event.active === 1 ? 'lime' : 'other-class'}">${event.title}</span>`;
 itemList.appendChild(eventNameDiv);
 this.fillAmbienceForm(event, eventNameDiv);
 }
@@ -158,16 +163,30 @@ itemList.style.display = 'block'; // Display the container
 NPCs.fixDisplay();
 },
 
-async getEvent(){
-
-// Filter ambienceArray based on selected values
-console.log(Ref.eventManagerDropdown.value)
-
-const filterArray = this.ambienceArray.filter(entry => entry.title === Ref.eventManagerDropdown.value);
-console.log(filterArray)
-this.eventDesc = filterArray[0].description;
-
-}, 
+async getEvent() {
+    // Filter ambienceArray based on selected values
+    console.log(Ref.eventManagerInput.value);
+  
+    const activeEvents = [];
+  
+    for (const entry of this.ambienceArray) {
+      if (entry.active === 1) {
+        activeEvents.push(entry);
+      }
+    }
+  
+    console.log(activeEvents);
+  
+    // Concatenate descriptions from active events into eventDesc
+    this.eventDesc = activeEvents.map(entry => entry.description).join('\n\n');
+  
+    console.log(this.eventDesc);
+  
+    // Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
+    // You can use it as needed.
+  },
+  
+   
 
 //Standard Edit, Save, load
 fillAmbienceForm: function(ambience, ambienceNameDiv) {
@@ -187,14 +206,14 @@ ambience.title === Ref.ambienceTitle.value
 
 const ambience = {
 context: Ref.ambienceContext.value,
-main: Ref.ambienceMain.value,
-second: Ref.ambienceSecond.value,
+//main: Ref.ambienceMain.value,
+//second: Ref.ambienceSecond.value,
 title: Ref.ambienceTitle.value,
 description: Ref.ambienceDescription.value,
-sight: Ref.ambienceSight.value,
-smell: Ref.ambienceSmell.value,
+//sight: Ref.ambienceSight.value,
+//smell: Ref.ambienceSmell.value,
 //touch: Ref.ambienceTouch.value,
-feel: Ref.ambienceFeel.value
+//feel: Ref.ambienceFeel.value
 };
 
 if (existingAmbienceIndex !== -1) {

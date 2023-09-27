@@ -15,7 +15,7 @@ SettingsContainer: document.querySelector('.SettingsContainer'),
 
 //eventManager
 eventManagerContainer: document.querySelector('.eventManagerContainer'),
-eventManagerDropdown: document.getElementById('eventManagerSelect'),
+eventManagerInput: document.getElementById('eventManagerInput'),
 enableEventButton: document.getElementById('enableEventButton'),
 disableEventButton: document.getElementById('disableEventButton'),
 

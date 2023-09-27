@@ -1,13 +1,14 @@
 .eventManagerContainer {
 position: fixed;
-z-index: 10;
 top: 7vh;    
-right: 1vw; 
-width: 27vw;   
-height: 5vh;     
+right: 0vw; 
+width: 30vw;   
+height: 15vh;     
 font-size: 2vh;
-display: fixed;
-flex-direction: row;
+}
+
+label{
+color: whitesmoke;
 }
 
 .eventManagerContainer button {
@@ -15,21 +16,13 @@ width: 5vw;
 height: 3vh; 
 font-size: 2vh; 
 padding: 0vh 0vw; 
-margin: 0.5vh 0; /* Add margin to control spacing */
+margin: 0.1vh 0; /* Add margin to control spacing */
 border: 0.1vh solid black; 
 font-family: monospace, 'Trebuchet MS', sans-serif;
 transition: background-color 0.3s; 
 }
 
-.eventManagerSelect {
-padding: 0px;
-font-size: 2vh;
-border: 1px solid #ccc;
-border-radius: 4px;
-background-color: peachpuff;
-width: 15vw;
-font-family: monospace, 'Trebuchet MS', sans-serif;
-}
+
 
 
         

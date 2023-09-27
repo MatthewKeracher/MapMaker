@@ -38,6 +38,8 @@ const formattedLocation = await Items.getItems(formattedSpells);
 const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
+Ambience.getEvent();
+
 Story += `
 ${Ambience.eventDesc}<br><br>
 <span class="withbreak">${formattedLocation}</span>
@@ -152,7 +154,7 @@ showExtraContent() {
     });
 
     Ref.extraInfoContainer.addEventListener('mouseleave', () => {
-    Ref.extraInfo.classList.remove('showExtraInfo');
+    //Ref.extraInfo.classList.remove('showExtraInfo');
     Ref.extraInfo2.classList.remove('showExtraInfo');
          
     });

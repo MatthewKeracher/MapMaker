@@ -59,13 +59,38 @@ Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange);
 
 }
 
-handleeventEnableClick(){
-console.log('click');
-
-};
+handleeventEnableClick() {
+    const selectedEvent = Ref.eventManagerInput.value; // Get the selected event from the dropdown
+  
+    // Search for the selected event in the ambienceArray
+    const foundEvent = Ambience.ambienceArray.find(event => event.title === selectedEvent);
+  
+    if (foundEvent) {
+      foundEvent.active = 1; // Set the 'active' property to 1
+      console.log('Event Enabled')
+      Ambience.showcurrentEvents();
+     
+      //Ref.extraInfo.classList.remove('showExtraInfo');
+      Ref.extraInfo2.classList.remove('showExtraInfo');
+   }
+ 
+  }
+  
 
 handleeventDisableClick(){
-console.log('click');
+    const selectedEvent = Ref.eventManagerInput.value; // Get the selected event from the dropdown
+  
+    // Search for the selected event in the ambienceArray
+    const foundEvent = Ambience.ambienceArray.find(event => event.title === selectedEvent);
+  
+    if (foundEvent) {
+      foundEvent.active = 0; // Set the 'active' property to 0
+      console.log('Event Disabled')
+      Ambience.showcurrentEvents();
+
+      //Ref.extraInfo.classList.remove('showExtraInfo');
+      Ref.extraInfo2.classList.remove('showExtraInfo');
+    }
 
 };
 

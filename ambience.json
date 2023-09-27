@@ -1,5 +1,6 @@
 [
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -11,6 +12,7 @@
 "feel": "The sense of renewal in the air brings a lightness to your step and a hopeful spirit."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -22,6 +24,7 @@
 "feel": "The stillness of the misty morning envelops you, evoking a sense of calm and a touch of magic in the everyday."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -33,6 +36,7 @@
 "feel": "The tranquility of the rain-soaked morning brings a sense of renewal and a connection to nature's cycles."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -44,6 +48,7 @@
 "feel": "The stillness of the morning envelops you, and you can't help but feel a sense of peace as you start your day."
 },      
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Afternoon",
@@ -55,6 +60,7 @@
 "feel": "The unhurried pace of the afternoon allows you to take in the beauty of the moment. It's a time for relaxation and reflection."
 },    
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Night",
@@ -66,6 +72,7 @@
 "feel": "The quietude of the night wraps around you, and you can't help but be captivated by the enigmatic beauty of the overcast night sky."
 },        
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Afternoon",
@@ -77,6 +84,7 @@
 "feel": "The dynamic interplay of rain and sun creates a lively atmosphere, reflecting the resilience of nature."
 },            
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Afternoon",
@@ -88,6 +96,7 @@
 "feel": "The energy of life in full bloom surrounds you, making you feel connected to the renewal of the season."
 },            
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Afternoon",
@@ -99,6 +108,7 @@
 "feel": "The energy of spring fills the air, making you want to be outdoors and embrace the liveliness."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Night",
@@ -110,6 +120,7 @@
 "feel": "The soothing sound of rain and the quietness of the night inspire a peaceful state of mind, making it easy to drift into relaxation."
 },      
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Night",
@@ -121,6 +132,7 @@
 "feel": "The tranquility of the night brings a sense of introspection, allowing you to appreciate the subtleties of spring's arrival."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Night",
@@ -132,6 +144,7 @@
 "feel": "The quietude of the night wraps around you, allowing you to reflect on the beauty of the day and anticipate tomorrow."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Morning",
@@ -143,6 +156,7 @@
 "feel": "The sense of energy in the air is palpable, and the imminent storm sparks a mix of excitement and reverence."
 },      
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Morning",
@@ -154,6 +168,7 @@
 "feel": "The promise of a new day fills you with energy, and the tranquility of the morning sets a peaceful tone."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Afternoon",
@@ -165,6 +180,7 @@
 "feel": "The storm's power and intensity evoke both awe and humility, reminding you of nature's grandeur."
 },      
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Afternoon",
@@ -176,6 +192,7 @@
 "feel": "The heat envelopes you, making you appreciate the need for shade and a cool drink as you soak in the summer vibes."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Night",
@@ -187,6 +204,7 @@
 "feel": "The power and drama of the storm awaken your senses, reminding you of the forces at play in the natural world."
 },     
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Night",
@@ -198,6 +216,7 @@
 "feel": "The beauty of the night sky evokes wonder, and the warmth in the air makes the night inviting for late conversations and stargazing."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Autumn",
 "second": "Morning",
@@ -209,6 +228,7 @@
 "feel": "The freshness in the air fills you with a sense of vitality, and the rustling leaves create a soothing ambiance."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Autumn",
 "second": "Morning",
@@ -220,6 +240,7 @@
 "feel": "The gusts of wind make you feel alive and connected to the wild energy of the changing season."
 },      
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Autumn",
 "second": "Afternoon",
@@ -231,6 +252,7 @@
 "feel": "The comfortable temperature and the sight of nature's transformation make you feel content and reflective."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Autumn",
 "second": "Afternoon",
@@ -242,6 +264,7 @@
 "feel": "The energy of the gale is infectious, making you want to embrace the outdoors and join in the swirling motion."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Autumn",
 "second": "Night",
@@ -253,6 +276,7 @@
 "feel": "The haunting melody of the wind and the rustling leaves create a sense of mystery and introspection in the quiet night."
 },         
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Autumn",
 "second": "Night",
@@ -264,6 +288,7 @@
 "feel": "The quiet and stillness of the night envelops you, bringing a sense of tranquility and the anticipation of the coming winter."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Morning",
@@ -275,6 +300,7 @@
 "feel": "The power of the blizzard is humbling, reminding you of the forces of nature and the beauty in its rawness."
 },      
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Morning",
@@ -286,6 +312,7 @@
 "feel": "The chill in the air invigorates you, and the winter wonderland makes you appreciate the beauty of the season."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Afternoon",
@@ -297,6 +324,7 @@
 "feel": "The quiet stillness of the snow-covered world brings a sense of peace, making you want to savor the moment."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Afternoon",
@@ -308,6 +336,7 @@
 "feel": "The isolation and quiet of the blizzard make you appreciate the shelter and warmth indoors, creating a cocoon of comfort."
 },   
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Night",
@@ -319,6 +348,7 @@
 "feel": "The serenity of the snowy night creates a sense of tranquility and reflection, inviting you to embrace the peacefulness of the moment."
 },         
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Night",
@@ -330,6 +360,7 @@
 "feel": "The sense of comfort from being indoors contrasts with the cold outside, creating a cozy and reflective ambiance."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -341,6 +372,7 @@
 "feel": "A shiver dances down your spine as an unsettling renewal infiltrates the air, evoking a wary spirit."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -352,6 +384,7 @@
 "feel": "The air is still, an eerie calmness that beckons you to explore the supernatural in the ordinary."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -363,6 +396,7 @@
 "feel": "A sense of tranquility carries a hint of sorrow, the world's renewal accompanied by the knowledge of decay."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Spring",
 "second": "Morning",
@@ -374,6 +408,7 @@
 "feel": "The stillness that lingers is a weight upon your heart, a melancholic tranquility that bids you reflect on life's ephemeral nature."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Afternoon",
@@ -385,6 +420,7 @@
 "feel": "A bead of sweat trickles down your brow, each drop a testament to the sun's unyielding dominion, and the world's longing for shade."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Afternoon",
@@ -396,6 +432,7 @@
 "feel": "Time itself seems to slow, the haze a gentle hand guiding you into a reverie where worries fade, and only the moment remains."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Afternoon",
@@ -407,6 +444,7 @@
 "feel": "Joyful chatter and the pulsating heartbeat of life resonate, a reminder of the sun's gift of vitality and the interconnectedness of all living things."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Summer",
 "second": "Afternoon",
@@ -418,6 +456,7 @@
 "feel": "Serenity settles deep within you, a moment of quiet contemplation in which the sun's radiance feels like a gentle caress upon the soul."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Night",
@@ -429,6 +468,7 @@
 "feel": "The peacefulness of the night envelops you, allowing you to experience the magic of winter's stillness."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Night",
@@ -440,6 +480,7 @@
 "feel": "As you navigate the winter's embrace, a sense of awe and enchantment settles in, reminding you of the hidden wonders that lie just beyond sight."
 },
 {
+"active": 0,
 "context": "Hommlet",
 "main": "Winter",
 "second": "Night",
@@ -451,6 +492,7 @@
 "feel": "The night holds a sense of wonder and curiosity, as if the veil between the mundane and the magical has been lifted, revealing the hidden truths of the season."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -462,6 +504,7 @@
   "feel": "As you venture deeper, a sense of unease accompanies you. The silence seems pregnant with anticipation, and the echoes of your footsteps resonate with the tension that permeates the air."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -473,6 +516,7 @@
   "feel": "With every step deeper into the dungeon, suspicion hangs heavy. The silence amplifies the sound of your own breathing, and a sense of watchfulness surrounds you, an unspoken challenge to proceed."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -484,6 +528,7 @@
   "feel": "Every step you take further into the dungeon is accompanied by a growing sense of unease. The atmosphere is charged with tension, and even the silence whispers of a presence that remains concealed."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -495,6 +540,7 @@
   "feel": "As you venture deeper into the dungeon, a wave of intrigue envelops you. The silence resonates with the possibility of revelations, and every corridor seems to echo with the excitement of what lies just out of reach."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -506,6 +552,7 @@
   "feel": "As you move forward, an ever-growing sense of dread accompanies you. The atmosphere is thick with anticipation, and even the silence seems to whisper unsettling secrets."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -517,6 +564,7 @@
   "feel": "With each step, a sense of impending danger grows stronger. The atmosphere is charged with anticipation, and even the silence seems to echo with the creaking of unseen threats."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Rising Tension",
@@ -528,6 +576,7 @@
   "feel": "With each step, an insidious sense of threat grows. The atmosphere is heavy with uncertainty, and even the silence seems to pulse with the heartbeat of an unseen danger."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Anticlimax",
@@ -539,6 +588,7 @@
   "feel": "As you tread further, a pervasive sense of anticlimax accompanies you. The air holds the residue of unfulfilled potential, and even the silence seems to sigh in resignation."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Anticlimax",
@@ -550,6 +600,7 @@
   "feel": "As you proceed, a prevailing sense of anticlimax envelops you. The air feels flat, and even the silence seems to echo the absence of the excitement you had hoped to encounter."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Anticlimax",
@@ -561,6 +612,7 @@
   "feel": "As you proceed further, a prevailing sense of anticlimax accompanies you. The atmosphere is tinged with disappointment, and even the silence seems to echo the lackluster nature of the journey."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Anticlimax",
@@ -572,6 +624,7 @@
   "feel": "As you proceed, a prevailing sense of anticlimax accompanies you. The atmosphere holds a subdued disappointment, and even the silence seems to resonate with the diminished nature of the journey."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Anticlimax",
@@ -583,6 +636,7 @@
   "feel": "As you proceed, a sense of quiet anticlimax accompanies you. The atmosphere is tinged with disappointment, and even the silence seems to echo the unfulfilled nature of the journey's conclusion."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Falling Action",
@@ -594,6 +648,7 @@
   "feel": "As you move forward, a prevailing sense of calm accompanies you. The atmosphere is tranquil, and even the silence seems to resonate with the relaxation of a task near completion."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Falling Action",
@@ -605,6 +660,7 @@
   "feel": "As you tread forward, a prevailing sense of gentleness envelops you. The atmosphere is serene, and even the silence seems to echo the peacefulness of a journey's winding conclusion."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Falling Action",
@@ -616,6 +672,7 @@
   "feel": "As you proceed, a prevailing sense of serenity accompanies you. The atmosphere is tranquil, and even the silence seems to echo the relaxation that comes after the storm's intensity."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Falling Action",
@@ -627,6 +684,7 @@
   "feel": "As you tread forward, a prevailing sense of gentle release accompanies you. The atmosphere is tranquil, and even the silence seems to echo the quiet transition that comes after the climax's intensity."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Climax",
@@ -638,6 +696,7 @@
   "feel": "As you venture further into the heart of the dungeon, a surge of intensity accompanies each heartbeat. The air crackles with energy, and the very ground seems to throb with the anticipation of what's to come."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Climax",
@@ -649,6 +708,7 @@
   "feel": "As you progress deeper, a palpable sense of confrontation envelops you. The air is thick with the clash of wills, and even the silence seems to resonate with the reverberations of conflict and determination."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Climax",
@@ -660,6 +720,7 @@
   "feel": "With each step, the dungeon seems to resonate with the aura of culmination. The very atmosphere vibrates with a sense of purpose, and the echoes of your footsteps seem to harmonize with the profound significance of this pinnacle."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Climax",
@@ -671,6 +732,7 @@
   "feel": "With every step, the dungeon resounds with a sense of crescendo. The air hums with a harmonious tension, as if all events lead to this point, and even the silence seems to harmonize in the symphony of the unfolding climax."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Climax",
@@ -682,6 +744,7 @@
   "feel": "As you move through the dungeon's passages, a sense of monumental confrontation envelops you. The air crackles with intensity, and even the silence seems to echo with the reverberations of the imminent clash of forces."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Denouement",
@@ -693,6 +756,7 @@
   "feel": "As you near the end of your journey, a sense of reflection envelops you. The atmosphere is tinged with nostalgia, and the very air seems to hum with the resonance of stories waiting to be remembered."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Denouement",
@@ -704,6 +768,7 @@
   "feel": "With each step, the sense of resolution grows stronger. The atmosphere is steady and unwavering, and even the silence seems to echo with the affirmation that choices made will lead to the intended outcomes."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Denouement",
@@ -715,6 +780,7 @@
   "feel": "As you proceed through the final corridors, a soothing serenity envelops you. The atmosphere is gentle and restful, and even the silence seems to echo with the tranquility of moments savored and earned."
 },
 {
+"active": 0,
   "context": "Dungeon",
   "main": "Dungeon",
   "second": "Denouement",
