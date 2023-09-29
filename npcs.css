@@ -82,6 +82,16 @@ border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
 }
+
+.EventField{
+border-color: hotpink;
+outline: 0.2vh solid hotpink;
+background-color: transparent;
+color: hotpink;
+border-radius: 0;
+text-align: left;
+vertical-align: middle;
+}
     
 
 .lineField {
@@ -165,7 +175,6 @@ background-color: black;
 .medField:focus,
 .largeField:focus,
 .lineField:focus,
-.EventField.focus,
 .stat:focus{
 border-color: hotpink;
 outline: 0.2vh solid hotpink;

@@ -60,39 +60,41 @@ Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange);
 }
 
 handleeventEnableClick() {
-    const selectedEvent = Ref.eventManagerInput.value; // Get the selected event from the dropdown
-  
-    // Search for the selected event in the ambienceArray
-    const foundEvent = Ambience.ambienceArray.find(event => event.title === selectedEvent);
-  
-    if (foundEvent) {
-      foundEvent.active = 1; // Set the 'active' property to 1
-      console.log('Event Enabled')
-      Ambience.showcurrentEvents();
-     
-      //Ref.extraInfo.classList.remove('showExtraInfo');
-      Ref.extraInfo2.classList.remove('showExtraInfo');
-   }
- 
-  }
+  // Iterate through the ambienceSearchArray and enable all events
+  Ambience.ambienceSearchArray.forEach(event => {
+    event.active = 1;
+
+    // Update the corresponding event in Ambience.ambienceArray
+    const indexInAmbienceArray = Ambience.ambienceArray.findIndex(e => e.title === event.title);
+    if (indexInAmbienceArray !== -1) {
+      Ambience.ambienceArray[indexInAmbienceArray].active = 1;
+    }
+  });
+
+  console.log('All Events Enabled');
+  Ambience.showcurrentEvents(Ambience.ambienceSearchArray);
+
+}
+
+
   
 
 handleeventDisableClick(){
-    const selectedEvent = Ref.eventManagerInput.value; // Get the selected event from the dropdown
-  
-    // Search for the selected event in the ambienceArray
-    const foundEvent = Ambience.ambienceArray.find(event => event.title === selectedEvent);
-  
-    if (foundEvent) {
-      foundEvent.active = 0; // Set the 'active' property to 0
-      console.log('Event Disabled')
-      Ambience.showcurrentEvents();
+     // Iterate through the ambienceSearchArray and enable all events
+  Ambience.ambienceSearchArray.forEach(event => {
+    event.active = 0;
 
-      //Ref.extraInfo.classList.remove('showExtraInfo');
-      Ref.extraInfo2.classList.remove('showExtraInfo');
+    // Update the corresponding event in Ambience.ambienceArray
+    const indexInAmbienceArray = Ambience.ambienceArray.findIndex(e => e.title === event.title);
+    if (indexInAmbienceArray !== -1) {
+      Ambience.ambienceArray[indexInAmbienceArray].active = 0;
     }
+  });
 
-};
+  console.log('All Events Enabled');
+  Ambience.showcurrentEvents(Ambience.ambienceSearchArray);
+
+}
 
 handleMapButtonClick() {  
 Map.fetchAndProcessImage()

@@ -12,7 +12,7 @@ overflow: auto;
 
 .extraInfo {
 position: fixed;  
-right: 30vw; 
+right: 30.1vw; 
 width: 20vw;
 height: 97vh;
 top:0;
@@ -34,43 +34,42 @@ text-align: left;
 }  
 
 #extraContent div:hover {
-background-color: gray; /* Change the background color on hover */
+background-color: limegreen; /* Change the background color on hover */
 color: whitesmoke;
 cursor: pointer; /* Show pointer cursor on hover */
 } 
-
 
 .extraInfo::-webkit-scrollbar {
 width: 0.1px; /* Set the width of the scrollbar */
 }
 
 .extraInfo2 {
-    position: fixed;  
-    right: 50.5vw; 
-    width: 20vw;
-    height: 97vh;
-    top:0;
-    z-index:5;
-    background-color: black;
-    opacity: 1;  
-    display: none; 
-    color: bisque;
-    font-family: monospace, 'Trebuchet MS', sans-serif;
-    font-size: 1.9vh; 
-    padding: 1vh; 
-    text-align: left;
-    overflow: auto;
-    scrollbar-color: black;
-    vertical-align: top; 
-    flex-direction: column;
-    resize: none;
-    text-align: left;
-    }  
-    
-    
-    .extraInfo2::-webkit-scrollbar {
-    width: 0.1px; /* Set the width of the scrollbar */
-    }
+position: fixed;  
+right: 51.0vw; 
+width: 20vw;
+height: 97vh;
+top:0;
+z-index:5;
+background-color: black;
+opacity: 1;  
+display: none; 
+color: bisque;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+font-size: 1.9vh; 
+padding: 1vh; 
+text-align: left;
+overflow: auto;
+scrollbar-color: black;
+vertical-align: top; 
+flex-direction: column;
+resize: none;
+text-align: left;
+}  
+
+
+.extraInfo2::-webkit-scrollbar {
+width: 0.1px; /* Set the width of the scrollbar */
+}
 
 #itemList,
 #itemList2 {

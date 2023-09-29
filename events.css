@@ -11,6 +11,12 @@ label{
 color: whitesmoke;
 }
 
+.eventToolbarContainer{
+
+padding: 0.2vh
+
+}
+
 .eventManagerContainer button {
 width: 5vw;
 height: 3vh; 

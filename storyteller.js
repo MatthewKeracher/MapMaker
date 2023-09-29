@@ -24,7 +24,8 @@ Ref.editLocationName.value   = locationName;
 
 if (locationObject) {
 //name the returned locationObject data 
-const locationText = locationObject.description;
+Ambience.getEvent();
+const locationText = Ambience.eventDesc + locationObject.description;
 
 this.miscArray = [];
 this.monsterArray = [];
@@ -38,10 +39,9 @@ const formattedLocation = await Items.getItems(formattedSpells);
 const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
 
-Ambience.getEvent();
+
 
 Story += `
-${Ambience.eventDesc}<br><br>
 <span class="withbreak">${formattedLocation}</span>
 `;
 

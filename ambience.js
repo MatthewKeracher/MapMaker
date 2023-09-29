@@ -11,6 +11,7 @@ current: '',
 eventDesc: "",
 
 ambienceArray: [],
+ambienceSearchArray: [],
 
 async loadAmbienceArray() {
 
@@ -29,29 +30,43 @@ return [];
 },
 
 loadEventListeners(){
-Ref.eventManagerInput.addEventListener('mouseenter', () => {
-Ref.extraInfo.classList.add('showExtraInfo');
-this.showcurrentEvents();
-});
+// Ref.eventManagerInput.addEventListener('mouseenter', () => {
+// Ref.extraInfo.classList.add('showExtraInfo');
+// this.ambienceSearchArray = this.ambienceArray;
+// this.showcurrentEvents(this.ambienceSearchArray);
+// });
 
-Ref.eventManagerInput.addEventListener('change', () => {
+// Ref.eventManagerInput.addEventListener('change', () => {
+// Ref.extraInfo.classList.add('showExtraInfo');
+// this.getEvent();
+// this.addEventInfo();
+// //this.radiateDisplay();
+// })
+
+Ref.eventManagerInput.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
 Ref.extraInfo.classList.add('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+// Call the searchAmbience function
+this.searchEvents(searchText);
+
 this.getEvent();
 this.addEventInfo();
-//this.radiateDisplay();
-})
+
+}
+)
 
 },
 
 
-showcurrentEvents(){
+showcurrentEvents(data){
 
 Ref.extraContent.innerHTML = '';
 Ref.extraContent.style.display = 'block'; // Display the container
 
-// Partition the ambienceArray into active and inactive events
-const activeEvents = this.ambienceArray.filter(event => event.active === 1);
-const inactiveEvents = this.ambienceArray.filter(event => event.active !== 1);
+// Partition the data into active and inactive events
+const activeEvents = data.filter(event => event.active === 1);
+const inactiveEvents = data.filter(event => event.active !== 1);
 
 // Concatenate the active and inactive events arrays, placing active events first
 const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
@@ -63,9 +78,13 @@ for (const event of sortedAmbienceArray) {
   Ref.extraContent.appendChild(eventNameDiv);
 
   eventNameDiv.addEventListener('click', () => {
-  Ref.eventManagerInput.value = event.title;
-  this.addEventInfo();})
-  }
+    Ref.eventManagerInput.value = event.title;
+    this.ambienceSearchArray = [event]; // Assign an array with a single element
+    this.addEventInfo();
+    Ref.extraInfo2.classList.add('showExtraInfo');
+  });
+
+}
  
 NPCs.fixDisplay();
 
@@ -104,10 +123,27 @@ uniqueItems[title] = true;
 this.loadEventListeners();
 },
 
+searchEvents: function(searchText) {
+  this.ambienceSearchArray = [];
+  console.log(searchText)
+  
+  
+  this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
+  const context = ambience.context.toLowerCase();
+  const title = ambience.title.toLowerCase();
+  
+  // Check if any of the properties contain the search text
+  return context.includes(searchText) || title.includes(searchText);
+  });
+  console.log(this.ambienceSearchArray)
+  this.showcurrentEvents(this.ambienceSearchArray);
+  },
+
+
 addEventInfo(){
 
 const contentId = Ref.eventManagerInput.value
-Ref.extraInfo2.classList.add('showExtraInfo');
+
 //Search for Event in the Array   
 const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
 
@@ -178,7 +214,7 @@ async getEvent() {
     console.log(activeEvents);
   
     // Concatenate descriptions from active events into eventDesc
-    this.eventDesc = activeEvents.map(entry => entry.description).join('\n\n');
+    this.eventDesc = activeEvents.map(entry => entry.description).join('<br><br>');
   
     console.log(this.eventDesc);
   
