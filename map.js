@@ -1,5 +1,5 @@
-import Ambience from "./ambience.js";
-import Array from "./array.js";
+import Events from "./events.js";
+import Ref from "./ref.js";
 
 const Map = {
 
@@ -52,6 +52,7 @@ inputElement.addEventListener("change", async (event) => {
         //console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
 
         this.radiantDisplay();
+        Ref.stateLabel.textContent = '';
         
 
 });

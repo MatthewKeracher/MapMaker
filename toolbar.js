@@ -4,7 +4,7 @@ import Map   from "./map.js";
 import Add   from "./add.js";
 import Array from "./array.js";
 import Edit from "./edit.js";
-import Ambience from "./ambience.js";
+import Events from "./events.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items  from "./items.js";
@@ -17,13 +17,13 @@ init() {
 Monsters.loadMonstersArray();
 Items.loadItemsArray();
 Spells.loadSpellsArray();
-Ambience.loadAmbienceArray();
+Events.loadEventsArray();
 
 //Edit.addPredictiveContent();
 Edit.init();
 
 Monsters.addMonsterSearch();
-Ambience.addAmbienceSearch();
+Events.addAmbienceSearch();
 NPCs.addNPCSearch();
 Spells.addSpellSearch();
 Items.addItemSearch();
@@ -41,6 +41,7 @@ Ref.fileInput.addEventListener('change', Array.handleFileInputChange);
 //eventManager
 Ref.enableEventButton.addEventListener('click', this.handleeventEnableClick);
 Ref.disableEventButton.addEventListener('click', this.handleeventDisableClick);
+ 
 
 //editToolbar
 Ref.editEditButton.addEventListener('click', this.handleEditButtonClick);
@@ -61,38 +62,47 @@ Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange);
 
 handleeventEnableClick() {
   // Iterate through the ambienceSearchArray and enable all events
-  Ambience.ambienceSearchArray.forEach(event => {
+  Events.eventsSearchArray.forEach(event => {
     event.active = 1;
 
     // Update the corresponding event in Ambience.ambienceArray
-    const indexInAmbienceArray = Ambience.ambienceArray.findIndex(e => e.title === event.title);
+    const indexInAmbienceArray = Events.eventsArray.findIndex(e => e.event === event.event);
     if (indexInAmbienceArray !== -1) {
-      Ambience.ambienceArray[indexInAmbienceArray].active = 1;
+      Events.eventsArray[indexInAmbienceArray].active = 1;
     }
   });
 
   console.log('All Events Enabled');
-  Ambience.showcurrentEvents(Ambience.ambienceSearchArray);
-
+  Ref.extraInfo2.classList.remove('showExtraInfo');
+  Events.showcurrentEvents(Events.eventsSearchArray);
+  
 }
 
+handleEscButtonClick(){
 
+  Ref.extraInfo.classList.remove('showExtraInfo');
+  Ref.extraInfo2.classList.remove('showExtraInfo');
+  Ref.itemList.style.display = "none";
+  document.activeElement.blur();
+
+};
   
 
 handleeventDisableClick(){
      // Iterate through the ambienceSearchArray and enable all events
-  Ambience.ambienceSearchArray.forEach(event => {
+  Events.eventsSearchArray.forEach(event => {
     event.active = 0;
 
     // Update the corresponding event in Ambience.ambienceArray
-    const indexInAmbienceArray = Ambience.ambienceArray.findIndex(e => e.title === event.title);
+    const indexInAmbienceArray = Events.eventsArray.findIndex(e => e.event === event.event);
     if (indexInAmbienceArray !== -1) {
-      Ambience.ambienceArray[indexInAmbienceArray].active = 0;
+      Events.eventsArray[indexInAmbienceArray].active = 0;
     }
   });
 
   console.log('All Events Enabled');
-  Ambience.showcurrentEvents(Ambience.ambienceSearchArray);
+  Ref.extraInfo2.classList.remove('showExtraInfo');
+  Events.showcurrentEvents(Events.eventsSearchArray);
 
 }
 
@@ -141,7 +151,10 @@ handleEditButtonClick() {
 
 Edit.editPage = 1;
 
+
+
 if (!Edit.editMode) {
+
 Edit.editMode = true;
 editEditButton.classList.add('click-button');
 
@@ -167,6 +180,7 @@ div.addEventListener('mouseleave', Edit.handleMouseHover);
 } else {
 
 if (Edit.editMode) {
+Ref.stateLabel.textContent = "";
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
 
@@ -210,30 +224,32 @@ Edit.saveLocation();
 break;
 
 case 2:
+Events.saveAmbience();
+Events.loadEventsList(Events.eventsArray);
+//Events.getEvent();
+break;
+
+case 3:
 NPCs.saveNPC();
 NPCs.loadNPC(NPCs.npcArray)
 break;
 
-case 3:
+case 4:
 Monsters.saveMonster();
 Monsters.loadMonsterList(Monsters.monstersArray);
 break;
 
-case 4:
+case 5:
 Items.saveItem();
 Items.loadItemsList(Items.itemsArray);
 break;
 
-case 5:
+case 6:
 Spells.saveSpell();
 Spells.loadSpellsList(Spells.spellsArray);
 break;
 
-case 6:
-Ambience.saveAmbience();
-Ambience.loadEventsList(Ambience.ambienceArray);
-Ambience.getEvent();
-break;
+
 
 default:
 
@@ -258,23 +274,27 @@ document.getElementById('textLocation').value = "";
 break;
 
 case 2:
-NPCs.clearForm(Ref.npcForm);
+NPCs.clearForm(Ref.ambienceForm);
+
 break;
 
 case 3:
-NPCs.clearForm(Ref.monsterForm);
+NPCs.clearForm(Ref.npcForm);
+
 break;
 
 case 4:
-NPCs.clearForm(Ref.itemForm);
+NPCs.clearForm(Ref.monsterForm);
+
 break;
 
 case 5:
-NPCs.clearForm(Ref.spellsForm);
+NPCs.clearForm(Ref.itemForm);
+
 break;
 
 case 6:
-NPCs.clearForm(Ref.ambienceForm);
+NPCs.clearForm(Ref.spellsForm);
 break;
 
 default:

@@ -1,6 +1,7 @@
 
 import Edit from "./edit.js";
 import Map from "./map.js";
+import toolbar from "./toolbar.js";
 
 class Hotkeys{
 
@@ -10,6 +11,10 @@ document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
 const Sidebar = document.querySelector('.sidebar');
 const editMode = Edit.editMode
+
+if (key === 'escape') {
+toolbar.handleEscButtonClick();
+}
 
 if (!Sidebar.contains(document.activeElement)) {
 
@@ -36,6 +41,7 @@ case ',':
  case '.':
     Map.decreaseOpacity();
  break;
+
 
 // Add more cases for additional hotkeys here
 }

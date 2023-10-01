@@ -76,6 +76,8 @@
 
 <br>
 
+<label class="stateLabel" id = "stateLabel">Load Map and Data</label>
+
 <label class="locationLabel" id = "locationLabel"></label>
 
 <div class="Storyteller" id="Storyteller"></div>   
@@ -84,7 +86,12 @@
 
 <textarea class="editLocationName" id="editLocationName"></textarea>             
 
-<textarea class="editBox" id="textLocation"></textarea>  
+<textarea class="editBox" id="textLocation" placeholder=
+"Enter information about the location here.
+
+#... for Monsters
+*... for Items
+~... for Spells"></textarea>  
 
 <div id="itemList"></div>
 
@@ -283,7 +290,12 @@ placeholder="What do other people know them as?">
 
 <label for="npcBackStory">Backstory:</label>
 <textarea class="largeField" type="textarea" id="npcBackStory" name="npcBackStory" 
-placeholder="Put any other information about this NPC here."></textarea>
+placeholder="Put any other information about this NPC here.
+
+#... for Monsters
+*... for Items
+~... for Spells">
+</textarea>
 
 <br>
 
@@ -346,14 +358,25 @@ placeholder="What do the normally do here? They are...">
 <form id="ambienceForm" class="ambienceForm">
 <div class="monsterFormContainer">
 
-<label for="ambienceTitle">Event Title:</label>
+<label for="ambienceTitle">Event:</label>
 <input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="{... to Search" required>
 
-<label for="ambienceContext">Event Group (Optional):</label>
+<label for="ambienceContext">Group:</label>
 <input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
 
+<label for="eventLocation">Location(s):</label>
+<input class="lineField" type="textarea" id="eventLocation" name="eventLocation" placeholder="All, One, or by Group" required>
+
+<label for="eventNPC">NPC(s):</label>
+<input class="lineField" type="textarea" id="eventNPC" name="eventNPC" placeholder="All, One, or by Group" required>
+
 <label for="ambienceDescription">Description:</label>
-<textarea class="largeField" type="textarea" id="ambienceDescription" name="ambienceDescription"></textarea>
+<textarea class="largeField" type="textarea" id="ambienceDescription" name="ambienceDescription" 
+placeholder=
+"#... for Monsters
+*... for Items
+~... for Spells">
+</textarea>
 
 </div>
 </form>
@@ -400,7 +423,7 @@ placeholder="What do the normally do here? They are...">
 <script type="module" src="add.js"></script>
 <script type="module" src="array.js"></script>
 <script type="module" src="edit.js"></script>
-<script type="module" src="ambience.js"></script> 
+<script type="module" src="events.js"></script> 
 <script type="module" src="monsters.js"></script> 
 <script type="module" src="npcs.js"></script> 
 <script type="module" src="ref.js"></script>

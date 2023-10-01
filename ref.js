@@ -8,7 +8,7 @@ imageContainer: document.querySelector('.image-container'),
 radiantDisplay: document.getElementById('radiantDisplay'),
 mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
-
+stateLabel: document.getElementById('stateLabel'),
 
 //SettingContainer
 SettingsContainer: document.querySelector('.SettingsContainer'),
@@ -56,8 +56,10 @@ spellDuration: document.getElementById('spellDuration'),
 timePassingCheckbox : document.getElementById('timePassingCheckbox'),
 
 ambienceForm: document.querySelector('.ambienceForm'),
-ambienceTitle: document.getElementById('ambienceTitle'),
-ambienceContext: document.getElementById('ambienceContext'),
+eventEvent: document.getElementById('ambienceTitle'),
+eventGroup: document.getElementById('ambienceContext'),
+eventLocation: document.getElementById('eventLocation'),
+eventNPC: document.getElementById('eventNPC'),
 ambienceMain: document.getElementById('ambienceMain'),
 ambienceSecond: document.getElementById('ambienceSecond'),
 ambienceDescription: document.getElementById('ambienceDescription'),
@@ -129,19 +131,6 @@ npcForm: document.querySelector('.npcForm'),
    
 //Table
 tableForm: document.getElementById('tableForm'),
-
-//Ambience
-AmbienceContainer: document.querySelector('.AmbienceContainer'),
-//Interior or Exterior 
-radianceDropdown: document.getElementById("radianceDropdown"),
-//Hommlet or Dungeon
-contextDropdown: document.getElementById("contextDropdown"),
-//Spring, Summer, Autumn, Winter
-mainAmbienceDropdown: document.getElementById("mainAmbienceDropdown"),
-//Morning, Afternoon, Night
-secondAmbienceDropdown: document.getElementById("secondAmbienceDropdown"),
-
-
 
 //Toolbars
 editToolbar: document.getElementById('editToolbar'),

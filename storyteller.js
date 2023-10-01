@@ -1,5 +1,5 @@
 import Array from "./array.js";
-import Ambience from "./ambience.js";
+import Events from "./events.js";
 import Monsters from "./monsters.js";
 import NPCs from "./npcs.js";
 import Items from "./items.js";
@@ -24,8 +24,8 @@ Ref.editLocationName.value   = locationName;
 
 if (locationObject) {
 //name the returned locationObject data 
-Ambience.getEvent();
-const locationText = Ambience.eventDesc + locationObject.description;
+Events.getEvent(locationName);
+const locationText = Events.eventDesc + '<br><br>' + locationObject.description;
 
 this.miscArray = [];
 this.monsterArray = [];
@@ -37,7 +37,7 @@ const formattedLocation = await Items.getItems(formattedSpells);
 //console.log(presentMonsters)
 
 const location = Ref.locationLabel.textContent;
-const presentNPCs = NPCs.getNPCs(location, Ambience.phase);
+const presentNPCs = NPCs.getNPCs(location, Events.phase);
 
 
 
@@ -59,7 +59,7 @@ Story += `<span class="withbreak">${npcStory}</span>`;
 Ref.Storyteller.innerHTML = Story;
 
 //Update Editor Content
-Ref.textLocation.value = locationText;
+Ref.textLocation.value = locationObject.description;
 
 
 NPCs.loadNPC(NPCs.npcArray)

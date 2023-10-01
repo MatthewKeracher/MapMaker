@@ -4,7 +4,7 @@ import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items from "./items.js";
-import Ambience from "./ambience.js";
+import Events from "./events.js";
 import Spells from "./spells.js";
 
 const Edit = {
@@ -12,7 +12,7 @@ const Edit = {
 editMode : false,
 moveMode: false,
 editPage: 1,
-divIds : ['textLocation', 'npcBackStory'],
+divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 
 init: function () {
   this.divIds.forEach((divId) => {
@@ -103,7 +103,27 @@ init: function () {
 
 deleteLocation() {
 switch (this.editPage) {
+  
 case 2:
+  const ambienceTitle = document.getElementById('ambienceTitle').value;
+  const ambienceIndex = Events.eventsArray.findIndex(ambience => ambience.event === ambienceTitle);
+  const ambienceForm = document.getElementById('ambienceForm');
+  
+  if (ambienceIndex !== -1) {
+  const confirmation = window.confirm("Are you sure you want to delete this Event?");
+  if (confirmation) {
+  Events.eventsArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
+  
+  // Update the ambience list with the updated ambienceArray
+  Events.loadEventsList(Events.eventsArray);
+  
+  // Reset the ambience form fields
+  ambienceForm.reset();
+  }
+  }
+  break;
+
+case 3:
 const npcName = document.getElementById('npcName').value;
 const npcIndex = NPCs.npcArray.findIndex(npc => npc.name === npcName);
 const npcForm = document.getElementById('npcForm');
@@ -117,12 +137,13 @@ NPCs.npcArray.splice(npcIndex, 1); // Remove NPC from npcArray
 //NPCs.npcArray = this.filterEmptyEntries(NPCs.npcArray);
 
 NPCs.loadNPC(NPCs.npcArray); // Refresh the NPC form with updated npcArray
+
 npcForm.reset(); // Call the reset() method to clear the form fields
 }
 }
 break;
 
-case 3:
+case 4:
 const monsterName = document.getElementById('monsterName').value;
 const monsterToDelete = Monsters.monstersArray[monsterName];
 const monsterForm = document.getElementById('monsterForm');
@@ -138,13 +159,13 @@ monsterForm.reset(); // Call the reset() method to clear the form fields
 }
 break;
 
-case 4:
+case 5:
 const itemName = document.getElementById('itemName').value;
 const itemIndex = Items.itemsArray.findIndex(item => item.Name === itemName);
 const itemForm = document.getElementById('itemForm');
 
 if (itemIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete this item?");
+const confirmation = window.confirm("Are you sure you want to delete this Item?");
 if (confirmation) {
 Items.itemsArray.splice(itemIndex, 1); // Remove NPC from npcArray
 
@@ -157,7 +178,7 @@ itemForm.reset(); // Call the reset() method to clear the form fields
 }
 break;
 
-case 5:
+case 6:
 const spellName = document.getElementById('spellName').value;
 const spellIndex = Spells.spellsArray.findIndex(spell => spell.Name === spellName);
 const spellsForm = document.getElementById('spellsForm');
@@ -176,24 +197,6 @@ spellsForm.reset();
 }
 break;
 
-case 6:
-const ambienceTitle = document.getElementById('ambienceTitle').value;
-const ambienceIndex = Ambience.ambienceArray.findIndex(ambience => ambience.title === ambienceTitle);
-const ambienceForm = document.getElementById('ambienceForm');
-
-if (ambienceIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete this ambience?");
-if (confirmation) {
-Ambience.ambienceArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
-
-// Update the ambience list with the updated ambienceArray
-Ambience.loadEventsList(Ambience.ambienceArray);
-
-// Reset the ambience form fields
-ambienceForm.reset();
-}
-}
-break;
 
 
 default:
@@ -309,6 +312,7 @@ switch (newPage) {
 case 1:
 
 //Show
+Ref.stateLabel.textContent = "editing Location (" + newPage + ")";
 Ref.editLocationName.style.display  = "flex";
 Ref.textLocation.style.display = "flex";
 
@@ -325,6 +329,27 @@ break;
 
 case 2:
 //Show
+Ref.stateLabel.textContent = "editing Events (" + newPage + ")";
+Ref.ambienceForm.style.display = "flex";
+
+
+//Hide
+
+Ref.monsterForm.style.display = "none";
+Ref.npcForm.style.display = "none";
+Ref.itemForm.style.display = "none";
+Ref.editLocationName.style.display  = "none";
+Ref.textLocation.style.display = "none";
+Ref.SettingsContainer.style.display = "none";
+Ref.spellsForm.style.display = "none";
+
+Events.loadEventsList(Events.eventsArray);
+
+break;
+
+case 3:
+//Show
+Ref.stateLabel.textContent = "editing NPCs (" + newPage + ")";
 Ref.npcForm.style.display = "flex"
 
 
@@ -342,9 +367,10 @@ NPCs.loadNPC(NPCs.npcArray);
 
 break;
 
-case 3:
+case 4:
 
 //Show
+Ref.stateLabel.textContent = "editing Monsters (" + newPage + ")";
 Ref.monsterForm.style.display = "flex";
 
 
@@ -362,8 +388,9 @@ Monsters.loadMonsterList(Monsters.monstersArray);
 
 break;
 
-case 4:
+case 5:
 //Show
+Ref.stateLabel.textContent = "editing Items (" + newPage + ")";
 Ref.itemForm.style.display = "flex";
 
 //Hide
@@ -380,9 +407,10 @@ Items.loadItemsList(Items.itemsArray);
 
 break;
 
-case 5:
+case 6:
 
 //Show
+Ref.stateLabel.textContent = "editing Spells (" + newPage + ")";
 Ref.spellsForm.style.display = "flex";
 
 //Hide
@@ -399,27 +427,9 @@ Spells.loadSpellsList(Spells.spellsArray);
 
 break;
 
-case 6:
-//Show
-Ref.ambienceForm.style.display = "flex";
-
-
-//Hide
-
-Ref.monsterForm.style.display = "none";
-Ref.npcForm.style.display = "none";
-Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
-Ref.textLocation.style.display = "none";
-Ref.SettingsContainer.style.display = "none";
-Ref.spellsForm.style.display = "none";
-
-Ambience.loadEventsList(Ambience.ambienceArray);
-
-break;
-
 case 7:
 //Show
+Ref.stateLabel.textContent = "Settings (" + newPage + ")";
 Ref.SettingsContainer.style.display = "flex";
 
 //Hide

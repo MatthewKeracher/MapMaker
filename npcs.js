@@ -29,6 +29,7 @@ this.AfternoonNPCs = [];
 this.NightNPCs = [];
 this.otherNPCs = [];
 
+
 for (const npc of NPCArray) {
 const npcNameDiv = document.createElement('div');
 npcNameDiv.textContent = npc.name + ' [' + npc.occupation + ']';            
@@ -93,6 +94,10 @@ fillNPCForm: function(npc, npcNameDiv){
 // Add click event listener to each NPC name
 npcNameDiv.addEventListener('click', () => {
 
+if(Edit.editPage === 3){
+
+Ref.npcForm.style.display = 'flex'; // Display the npcForm
+
 console.log(npc)
 
 Ref.npcName.value = npc.name;
@@ -118,8 +123,13 @@ Ref.CON.value = npc.con;
 Ref.CHA.value = npc.cha; 
 
 Ref.Backstory.value = npc.Backstory;
+}else{
 
-Ref.npcForm.style.display = 'flex'; // Display the npcForm
+Ref.eventNPC.value = npc.name
+
+
+}
+
 });
 
 },

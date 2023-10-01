@@ -2,23 +2,24 @@ import Edit from "./edit.js";
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Storyteller from "./storyteller.js";
+import Array from "./array.js";
 
-const Ambience = {
+const Events = {
 
 phase: 0,
 hour: 0,
 current: '',
 eventDesc: "",
 
-ambienceArray: [],
-ambienceSearchArray: [],
+eventsArray: [],
+eventsSearchArray: [],
 
-async loadAmbienceArray() {
+async loadEventsArray() {
 
 try {
 const response = await fetch('ambience.json'); // Adjust the path if needed
 const data = await response.json();
-this.ambienceArray = data;
+this.eventsArray = data;
 //console.log(this.ambienceArray)
 this.fillEventManager();
 return data;
@@ -30,18 +31,8 @@ return [];
 },
 
 loadEventListeners(){
-// Ref.eventManagerInput.addEventListener('mouseenter', () => {
-// Ref.extraInfo.classList.add('showExtraInfo');
-// this.ambienceSearchArray = this.ambienceArray;
-// this.showcurrentEvents(this.ambienceSearchArray);
-// });
 
-// Ref.eventManagerInput.addEventListener('change', () => {
-// Ref.extraInfo.classList.add('showExtraInfo');
-// this.getEvent();
-// this.addEventInfo();
-// //this.radiateDisplay();
-// })
+// -- EVENT MANAGER LISTENERS
 
 Ref.eventManagerInput.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
@@ -49,46 +40,41 @@ Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
 // Call the searchAmbience function
 this.searchEvents(searchText);
+this.showcurrentEvents(this.eventsSearchArray);
 
-this.getEvent();
+//this.getEvent();
 this.addEventInfo();
 
-}
-)
+})
 
-},
+// -- EVENTFORM LISTENERS
+
+Ref.eventEvent.addEventListener('click', () => {
+this.loadEventsList(this.eventsArray)
+})
+
+Ref.eventLocation.addEventListener('click', () => {
+this.loadLocationsList(Array.locationArray);
+})
+
+Ref.eventLocation.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
+this.searchLocations(searchText);
+console.log(this.eventsSearchArray);
+this.loadLocationsList(this.eventsSearchArray);
+
+})
+
+Ref.eventNPC.addEventListener('click', () => {
+NPCs.loadNPC(NPCs.npcArray)
+})
+
+Ref.eventNPC.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
+NPCs.searchNPC(searchText);
+})},
 
 
-showcurrentEvents(data){
-
-Ref.extraContent.innerHTML = '';
-Ref.extraContent.style.display = 'block'; // Display the container
-
-// Partition the data into active and inactive events
-const activeEvents = data.filter(event => event.active === 1);
-const inactiveEvents = data.filter(event => event.active !== 1);
-
-// Concatenate the active and inactive events arrays, placing active events first
-const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
-
-// Iterate through the sorted events and display them
-for (const event of sortedAmbienceArray) {
-  const eventNameDiv = document.createElement('div');
-  eventNameDiv.innerHTML = `<span class="gray">[${event.context}]</span><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.title}</span>`;
-  Ref.extraContent.appendChild(eventNameDiv);
-
-  eventNameDiv.addEventListener('click', () => {
-    Ref.eventManagerInput.value = event.title;
-    this.ambienceSearchArray = [event]; // Assign an array with a single element
-    this.addEventInfo();
-    Ref.extraInfo2.classList.add('showExtraInfo');
-  });
-
-}
- 
-NPCs.fixDisplay();
-
-},
 
 fillEventManager() {
 // Create an object to keep track of unique items
@@ -101,8 +87,8 @@ const eventManagerDropdown = Ref.eventManagerInput;
 eventManagerDropdown.innerHTML = '';
 
 // Iterate through the ambienceArray and add unique titles to the dropdown
-this.ambienceArray.forEach(ambience => {
-const title = ambience.title;
+this.eventsArray.forEach(ambience => {
+const title = ambience.event;
 
 // Check if the title is unique
 if (!uniqueItems[title]) {
@@ -124,34 +110,64 @@ this.loadEventListeners();
 },
 
 searchEvents: function(searchText) {
-  this.ambienceSearchArray = [];
-  console.log(searchText)
-  
-  
-  this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
-  const context = ambience.context.toLowerCase();
-  const title = ambience.title.toLowerCase();
-  
-  // Check if any of the properties contain the search text
-  return context.includes(searchText) || title.includes(searchText);
-  });
-  console.log(this.ambienceSearchArray)
-  this.showcurrentEvents(this.ambienceSearchArray);
-  },
+this.eventsSearchArray = [];
+console.log(searchText)
 
+this.eventsSearchArray = this.eventsArray.filter((ambience) => {
+const group = ambience.group.toLowerCase();
+const event = ambience.event.toLowerCase();
+
+// Check if any of the properties contain the search text
+return group.includes(searchText) || event.includes(searchText);
+}); 
+
+},
+
+// -- USING EVENT MANAGER
+
+showcurrentEvents(data){
+
+Ref.extraContent.innerHTML = '';
+Ref.extraContent.style.display = 'block'; // Display the container
+
+// Partition the data into active and inactive events
+const activeEvents = data.filter(event => event.active === 1);
+const inactiveEvents = data.filter(event => event.active !== 1);
+
+// Concatenate the active and inactive events arrays, placing active events first
+const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
+
+// Iterate through the sorted events and display them
+for (const event of sortedAmbienceArray) {
+const eventNameDiv = document.createElement('div');
+eventNameDiv.innerHTML = `<span class="gray">[${event.group}]</span><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>`;
+Ref.extraContent.appendChild(eventNameDiv);
+
+eventNameDiv.addEventListener('click', () => {
+Ref.eventManagerInput.value = event.event;
+this.eventsSearchArray = [event]; // Assign an array with a single element
+this.addEventInfo();
+Ref.extraInfo2.classList.add('showExtraInfo');
+});
+
+}
+
+NPCs.fixDisplay();
+
+},
 
 addEventInfo(){
 
 const contentId = Ref.eventManagerInput.value
 
 //Search for Event in the Array   
-const event = Object.values(this.ambienceArray).find(event => event.title.toLowerCase() === contentId.toLowerCase());
+const event = Object.values(this.eventsArray).find(event => event.event.toLowerCase() === contentId.toLowerCase());
 
 if (event) {
 
 const eventInfo = [
-`<span class="misc">Title:</span>    ${event.title   || "None"} <br><hr> `,
-`<span class="misc">Context:</span>  ${event.context || "None"} <br><hr>`,
+`<span class="misc">Event:</span>    ${event.event   || "None"} <br><hr> `,
+`<span class="misc">Group:</span>  ${event.group || "None"} <br><hr>`,
 `<span class="misc">Description:</span> ${event.description || "None"}<br><br>`,
 
 ];
@@ -172,6 +188,20 @@ console.log(`Event not found: ${contentId}`);
 
 },
 
+searchLocations: function(searchText) {
+this.eventsSearchArray = [];
+console.log(searchText);
+
+
+this.eventsSearchArray = Array.locationArray.filter((location) => {
+//const group = location.group.toLowerCase();
+const name = location.divId.toLowerCase();
+// Check if any of the properties contain the search text
+return name.includes(searchText) //|| group.includes(searchText); 
+}); 
+
+},
+
 loadEventsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
 //console.log(data)
@@ -183,13 +213,14 @@ itemList.innerHTML = '';
 const activeEvents = data.filter(event => event.active === 1);
 const inactiveEvents = data.filter(event => event.active !== 1);
 
+
 // Concatenate the active and inactive events arrays, placing active events first
 const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
 
 // Iterate through the sorted events
 for (const event of sortedAmbienceArray) {
 const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `[${event.context}]<span class="${event.active === 1 ? 'lime' : 'other-class'}">${event.title}</span>`;
+eventNameDiv.innerHTML = `[${event.group}]<span class="${event.active === 1 ? 'lime' : 'other-class'}">${event.event}</span>`;
 itemList.appendChild(eventNameDiv);
 this.fillAmbienceForm(event, eventNameDiv);
 }
@@ -199,65 +230,95 @@ itemList.style.display = 'block'; // Display the container
 NPCs.fixDisplay();
 },
 
-async getEvent() {
-    // Filter ambienceArray based on selected values
-    console.log(Ref.eventManagerInput.value);
-  
-    const activeEvents = [];
-  
-    for (const entry of this.ambienceArray) {
-      if (entry.active === 1) {
-        activeEvents.push(entry);
-      }
-    }
-  
-    console.log(activeEvents);
-  
-    // Concatenate descriptions from active events into eventDesc
-    this.eventDesc = activeEvents.map(entry => entry.description).join('<br><br>');
-  
-    console.log(this.eventDesc);
-  
-    // Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
-    // You can use it as needed.
-  },
-  
-   
+loadLocationsList: function(data) {
+const itemList = document.getElementById('itemList'); // Do not delete!!
+//console.log(data)
 
-//Standard Edit, Save, load
+// Clear the existing content
+itemList.innerHTML = '';
+
+const AllDiv = document.createElement('div');
+AllDiv.innerHTML = "<span class= cyan>All</span>";
+itemList.appendChild(AllDiv);
+
+// Iterate through the sorted events
+for (const location of data) {
+const locationNameDiv = document.createElement('div');
+locationNameDiv.innerHTML = `[Group Goes Here] ${location.divId}</span>`;
+itemList.appendChild(locationNameDiv);
+
+locationNameDiv.addEventListener('click', () => {
+Ref.eventLocation.value = location.divId
+});
+}
+},
+
+async getEvent(currentLocation) {
+  // Filter ambienceArray based on selected values
+  console.log(Ref.eventManagerInput.value);
+
+  const activeEvents = [];
+
+  for (const entry of this.eventsArray) {
+    if (entry.active === 1 && entry.location === "All" | entry.active === 1 && entry.location === currentLocation ) {
+      activeEvents.push(entry);
+    }
+  }
+
+  console.log(activeEvents);
+
+  // Concatenate descriptions from active events into eventDesc
+  this.eventDesc = activeEvents.map(entry => {
+    let description = `${entry.description}`;
+    return description;
+  }).join('<br><br>');
+
+  console.log(this.eventDesc);
+
+  // Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
+  // You can use it as needed.
+},
+
+
+
+
+// -- MAKING AND EDITING EVENTS
+
 fillAmbienceForm: function(ambience, ambienceNameDiv) {
 // Add click event listener to each ambience name
 ambienceNameDiv.addEventListener('click', () => {
-Ref.ambienceContext.value = ambience.context;
-Ref.ambienceTitle.value = ambience.title;
+Ref.eventGroup.value = ambience.group;
+Ref.eventEvent.value = ambience.event;
+Ref.eventNPC.value = ambience.npc;
+Ref.eventLocation.value = ambience.location;
 Ref.ambienceDescription.value = ambience.description;
 Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
 });
 },
 
 saveAmbience: function() {
-const existingAmbienceIndex = this.ambienceArray.findIndex(ambience => 
-ambience.title === Ref.ambienceTitle.value         
+const existingAmbienceIndex = this.eventsArray.findIndex(ambience => 
+ambience.event === Ref.eventEvent.value         
 );
 
 const ambience = {
-context: Ref.ambienceContext.value,
+group: Ref.eventGroup.value,
 //main: Ref.ambienceMain.value,
 //second: Ref.ambienceSecond.value,
-title: Ref.ambienceTitle.value,
+event: Ref.eventEvent.value,
 description: Ref.ambienceDescription.value,
-//sight: Ref.ambienceSight.value,
-//smell: Ref.ambienceSmell.value,
+location: Ref.eventLocation.value,
+npc: Ref.eventNPC.value,
 //touch: Ref.ambienceTouch.value,
 //feel: Ref.ambienceFeel.value
 };
 
 if (existingAmbienceIndex !== -1) {
 // Update the existing ambience entry
-this.ambienceArray[existingAmbienceIndex] = ambience;
+this.eventsArray[existingAmbienceIndex] = ambience;
 console.log('Ambience updated:', ambience);
 } else {
-this.ambienceArray.push(ambience);
+this.eventsArray.push(ambience);
 
 }
 
@@ -267,7 +328,7 @@ this.fillEventManager();
 },
 
 addAmbienceSearch: function() {
-Ref.ambienceTitle.addEventListener('input', (event) => {
+Ref.eventEvent.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 
 // Check if the searchText contains '{'
@@ -282,33 +343,33 @@ this.searchAmbience(searchText);
 },
 
 searchAmbience: function(searchText) {
-this.ambienceSearchArray = [];
+this.eventsSearchArray = [];
 console.log('called')
 
-this.ambienceSearchArray = this.ambienceArray.filter((ambience) => {
-const context = ambience.context.toLowerCase();
-const title = ambience.title.toLowerCase();
+this.eventsSearchArray = this.eventsArray.filter((ambience) => {
+const group = ambience.group.toLowerCase();
+const event = ambience.event.toLowerCase();
 
 // Check if any of the properties contain the search text
-return context.includes(searchText) || title.includes(searchText);
+return group.includes(searchText) || event.includes(searchText);
 });
 
-this.loadEventsList(this.ambienceSearchArray);
+this.loadEventsList(this.eventsSearchArray);
 },
 
 populateDropdown(dropdown, options, replace) {
 
-    if(replace === 1){    
-    dropdown.innerHTML = ''; // Clear existing options
-    }
-    
-    options.forEach(option => {
-    const optionElement = document.createElement("option");
-    optionElement.value = option;
-    optionElement.text = option;
-    dropdown.appendChild(optionElement);
-    });
-    },
+if(replace === 1){    
+dropdown.innerHTML = ''; // Clear existing options
+}
+
+options.forEach(option => {
+const optionElement = document.createElement("option");
+optionElement.value = option;
+optionElement.text = option;
+dropdown.appendChild(optionElement);
+});
+},
 
 radiateDisplay(){
 
@@ -441,5 +502,5 @@ overlay.style.opacity = "0.5";
 
 }
 
-export default Ambience;
+export default Events;
 

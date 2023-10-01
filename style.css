@@ -23,6 +23,30 @@ margin: 0; /* Remove default margin */
     margin: 0 auto; /* Horizontally center the image */
 }
 
+.stateLabel{
+    position: fixed;
+    z-index: 10;
+    top: 0vh;
+    right: 0vw;
+    left: 0.5vw;
+    
+    color: whitesmoke;   
+    font-size: 3vh;
+    text-align: center;
+    
+    font-weight: bold;
+    
+    margin-top: 0.5vh;
+    margin-bottom: 0.5vh; 
+    background-color: black;        
+    
+    height: auto;
+    width: 15vw;
+    padding: 0vh; 
+}
+
+
+
 
 
 

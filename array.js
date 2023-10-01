@@ -1,4 +1,4 @@
-import Ambience from "./ambience.js";
+import Events from "./events.js";
 import Edit from "./edit.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
@@ -82,7 +82,7 @@ npcArray: NPCs.npcArray,
 monstersArray: Monsters.monstersArray,
 itemsArray: Items.itemsArray,
 spellsArray: Spells.spellsArray,
-eventsArray: Ambience.ambienceArray
+eventsArray: Events.eventsArray
 };
 
 const json = JSON.stringify(exportData, null, 2);
@@ -191,8 +191,8 @@ console.error('Error loading Item information:', error);
 
 try {
 if (data.eventsArray) {
-Ambience.ambienceArray = data.eventsArray;
-//console.log( Monsters.monstersArray);
+Events.eventsArray = data.eventsArray;
+console.log(Events.eventsArray);
 } else {
 console.log('Events/Ambience array data is not available.');
 }
