@@ -24,8 +24,10 @@ locationLabel: document.getElementById('locationLabel'),
 Storyteller: document.getElementById('Storyteller'),
 
 //EditContainer
+locationGroup: document.querySelector('.locationGroup'),
 EditorContainer: document.querySelector('.EditorContainer'),
-editLocationName: document.querySelector('.editLocationName'),
+editLocationName: document.getElementById('editLocationName'),
+editLocationTags: document.getElementById('editLocationTags'),
 
 textLocation: document.getElementById('textLocation'),
 
@@ -106,7 +108,7 @@ npcForm: document.querySelector('.npcForm'),
 
 
     npcName: document.getElementById('npcName'),
-    npcOccupation: document.getElementById('npcOccupation'),
+    npcTags: document.getElementById('npcOccupation'),
 
     MorningLocation: document.getElementById('MorningLocation'),
     MorningActivity: document.getElementById('MorningActivity'),

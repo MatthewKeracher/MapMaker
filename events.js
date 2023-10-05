@@ -11,8 +11,9 @@ hour: 0,
 current: '',
 eventDesc: "",
 
+tagsArray: [],
 eventsArray: [],
-eventsSearchArray: [],
+searchArray: [],
 
 async loadEventsArray() {
 
@@ -40,11 +41,58 @@ Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
 // Call the searchAmbience function
 this.searchEvents(searchText);
-this.showcurrentEvents(this.eventsSearchArray);
+this.showcurrentEvents(this.searchArray);
 
 //this.getEvent();
 this.addEventInfo();
 
+})
+
+Ref.eventManagerInput.addEventListener('click', () => {
+Ref.extraInfo.classList.add('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+this.showcurrentEvents(this.eventsArray);
+})
+
+// NPC TAGS LISTENERS
+
+Ref.npcTags.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
+Ref.extraInfo.classList.add('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.itemList.style.display = 'none';
+// Call the searchAmbience function
+console.log(searchText)
+this.searchTags(searchText); 
+this.showTags(this.searchArray);
+
+})
+
+Ref.npcTags.addEventListener('click', () => {
+Ref.extraInfo.classList.add('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+this.fillTagsArray();
+this.showTags(this.tagsArray);
+})
+
+// LOCATION TAGS LISTENERS
+
+Ref.editLocationTags.addEventListener('input', (event) => {
+let searchText = event.target.value.toLowerCase();
+Ref.extraInfo.classList.add('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+// Call the searchAmbience function
+console.log(searchText)
+this.searchTags(searchText); 
+this.showTags(this.searchArray);
+
+})
+
+Ref.editLocationTags.addEventListener('click', () => {
+Ref.extraInfo.classList.add('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+this.fillTagsArray();
+this.showTags(this.tagsArray);
 })
 
 // -- EVENTFORM LISTENERS
@@ -60,8 +108,8 @@ this.loadLocationsList(Array.locationArray);
 Ref.eventLocation.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 this.searchLocations(searchText);
-console.log(this.eventsSearchArray);
-this.loadLocationsList(this.eventsSearchArray);
+console.log(this.searchArray);
+this.loadLocationsList(this.searchArray);
 
 })
 
@@ -73,8 +121,6 @@ Ref.eventNPC.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 NPCs.searchNPC(searchText);
 })},
-
-
 
 fillEventManager() {
 // Create an object to keep track of unique items
@@ -122,6 +168,105 @@ return group.includes(searchText) || event.includes(searchText);
 }); 
 
 },
+
+// -- LOCATION search
+
+searchLocations: function(searchText) {
+this.eventsSearchArray = [];
+console.log(searchText);
+
+
+this.eventsSearchArray = Array.locationArray.filter((location) => {
+//const group = location.group.toLowerCase();
+const name = location.divId.toLowerCase();
+// Check if any of the properties contain the search text
+return name.includes(searchText) //|| group.includes(searchText); 
+}); 
+
+},
+
+// -- TAGS Functions
+
+searchTags(searchText) {
+this.searchArray = [];
+
+this.searchArray = this.tagsArray.filter((tag) => {
+const tags = tag.toLowerCase();
+
+// Check if the search text is included in the tag list
+return tags.includes(searchText.toLowerCase());
+});
+},
+
+// Function to extract tags from all Arrays
+fillTagsArray() {
+this.tagsArray = [];
+
+for (const NPC of NPCs.npcArray) {
+let tags = NPC.occupation || [];
+
+try{
+tags = tags.split(',').map(keyword => keyword.trim());
+this.tagsArray.push(...tags);
+}catch{}
+
+} // ----
+
+for (const location of Array.locationArray) {
+let tags = location.tags || [];
+
+try{
+tags = tags.split(',').map(keyword => keyword.trim());
+
+this.tagsArray.push(...tags);
+}catch{}
+
+} // ----
+
+},
+
+// Function to append tags to NPCs and Locations
+addTag(tag) {
+
+let target = Ref.editLocationTags; //DEFAULT
+
+if (Edit.editPage === 3){target = Ref.npcTags};
+
+const currentText = target.value;
+
+if (currentText === '') {
+// If the textarea is empty, just add the text
+target.value = tag;
+} else {
+// If not empty, add a comma and the text to the end
+target.value = `${currentText}, ${tag}`;
+}
+},
+
+// Function to populate the div elements list with tags
+showTags(data) {
+Ref.extraContent.innerHTML = '';
+Ref.extraContent.style.display = 'block'; // Display the container
+
+
+// Iterate through the tags and display them
+for (const tag of data) {
+const tagDiv = document.createElement('div');
+tagDiv.innerHTML = `<span class="gray">${tag}</span>`;
+Ref.extraContent.appendChild(tagDiv);
+
+tagDiv.addEventListener('click', () => {
+  this.addTag(tag)
+});
+}
+},
+
+// -- LOCATION TAGS FUNCTIONS
+
+
+
+
+
 
 // -- USING EVENT MANAGER
 
@@ -188,19 +333,7 @@ console.log(`Event not found: ${contentId}`);
 
 },
 
-searchLocations: function(searchText) {
-this.eventsSearchArray = [];
-console.log(searchText);
 
-
-this.eventsSearchArray = Array.locationArray.filter((location) => {
-//const group = location.group.toLowerCase();
-const name = location.divId.toLowerCase();
-// Check if any of the properties contain the search text
-return name.includes(searchText) //|| group.includes(searchText); 
-}); 
-
-},
 
 loadEventsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
@@ -254,29 +387,29 @@ Ref.eventLocation.value = location.divId
 },
 
 async getEvent(currentLocation) {
-  // Filter ambienceArray based on selected values
-  console.log(Ref.eventManagerInput.value);
+// Filter ambienceArray based on selected values
+console.log(Ref.eventManagerInput.value);
 
-  const activeEvents = [];
+const activeEvents = [];
 
-  for (const entry of this.eventsArray) {
-    if (entry.active === 1 && entry.location === "All" | entry.active === 1 && entry.location === currentLocation ) {
-      activeEvents.push(entry);
-    }
-  }
+for (const entry of this.eventsArray) {
+if (entry.active === 1 && entry.location === "All" | entry.active === 1 && entry.location === currentLocation ) {
+activeEvents.push(entry);
+}
+}
 
-  console.log(activeEvents);
+console.log(activeEvents);
 
-  // Concatenate descriptions from active events into eventDesc
-  this.eventDesc = activeEvents.map(entry => {
-    let description = `${entry.description}`;
-    return description;
-  }).join('<br><br>');
+// Concatenate descriptions from active events into eventDesc
+this.eventDesc = activeEvents.map(entry => {
+let description = `${entry.description}`;
+return description;
+}).join('<br><br>');
 
-  console.log(this.eventDesc);
+console.log(this.eventDesc);
 
-  // Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
-  // You can use it as needed.
+// Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
+// You can use it as needed.
 },
 
 
@@ -354,7 +487,7 @@ const event = ambience.event.toLowerCase();
 return group.includes(searchText) || event.includes(searchText);
 });
 
-this.loadEventsList(this.eventsSearchArray);
+this.loadEventsList(this.searchArray);
 },
 
 populateDropdown(dropdown, options, replace) {

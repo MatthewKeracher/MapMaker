@@ -104,6 +104,7 @@ font-family: monospace, 'Trebuchet MS', sans-serif;
 border: 0.2vh solid gray;
 padding: 0.8vh;
 background-color: black;
+vertical-align: middle;
 }
 
 .NPC-stats-all{

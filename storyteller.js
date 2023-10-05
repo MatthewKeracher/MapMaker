@@ -54,13 +54,13 @@ Story += `<span class="withbreak">${npcStory}</span>`;
 }
 }
 
-
 //Apply formattedStory to Storyteller
 Ref.Storyteller.innerHTML = Story;
 
 //Update Editor Content
 Ref.textLocation.value = locationObject.description;
-
+console.log(locationObject.tags)
+Ref.editLocationTags.value = locationObject.tags;
 
 NPCs.loadNPC(NPCs.npcArray)
 this.showExtraContent()

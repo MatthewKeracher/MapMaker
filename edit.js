@@ -263,11 +263,12 @@ const divId = Ref.locationLabel.textContent; // Get the divId for the location y
 //Find correct place to save...
 const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
 
-
 if (matchingEntry) {
 // Update the corresponding entry in locationArray
+console.log(matchingEntry)
 matchingEntry.description = Ref.textLocation.value;
 matchingEntry.divId = Ref.editLocationName.value;
+matchingEntry.tags = Ref.editLocationTags.value;
 
 //Update the Existing Divs
 const locationDiv = document.getElementById(divId);
@@ -313,7 +314,7 @@ case 1:
 
 //Show
 Ref.stateLabel.textContent = "editing Location (" + newPage + ")";
-Ref.editLocationName.style.display  = "flex";
+Ref.locationGroup.style.display  = "flex";
 Ref.textLocation.style.display = "flex";
 
 //Hide
@@ -338,7 +339,7 @@ Ref.ambienceForm.style.display = "flex";
 Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none";
 Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
+Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
@@ -357,7 +358,7 @@ Ref.npcForm.style.display = "flex"
 
 Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
+Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
@@ -378,7 +379,7 @@ Ref.monsterForm.style.display = "flex";
 
 Ref.npcForm.style.display = "none"
 Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
+Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
@@ -397,7 +398,7 @@ Ref.itemForm.style.display = "flex";
 
 Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none"
-Ref.editLocationName.style.display  = "none";
+Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
@@ -418,7 +419,7 @@ Ref.spellsForm.style.display = "flex";
 Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none";
 Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
+Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.ambienceForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
@@ -437,7 +438,7 @@ Ref.SettingsContainer.style.display = "flex";
 Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none";
 Ref.itemForm.style.display = "none";
-Ref.editLocationName.style.display  = "none";
+Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.spellsForm.style.display = "none";
 Ref.ambienceForm.style.display = "none";

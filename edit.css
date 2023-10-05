@@ -7,61 +7,7 @@ height: 85vh;
 font-size: 2vh;
 display: none;
 flex-direction: column;
-}    
-
-.editLocationName{
-height: 4vh;
-width: 27.5vw;
-margin: 1vh; 
-font-size: 3vh;
-font-weight: bold; 
-text-align: left;
-vertical-align: middle;    
-background-color: black; 
-border: 0.2vh solid gray; 
-color: gray;
-padding: 1vh;
-display: none;
-overflow: hidden;
-flex-direction: row;
-}
-
-.editLocationName:focus {
-border-color: cyan; /* Change the border color */
-outline: none; /* Remove the default outline */
-background-color: black; /* Change the background color */
-color: cyan; /* Change the text color */
-border-radius: 0px; /* Adjust the border radius for rounded corners */
-}
-
-.EditorContainer label {
-position: relative;
-left: 0.5vw;
-margin-top: 0.5vh;
-margin-bottom: 0.5vh;        
-color: whitesmoke;   
-}
-
-.editBox {            
-height: 85vh;
-width: 27.5vw;
-border: 0.2vh solid gray; 
-margin: 1vh; 
-font-size: 1.9vh;
-text-align: left;
-vertical-align: top;    
-background-color: black; 
-color: gray;
-padding: 1vh;
-}
-
-.editBox:focus {
-border-color: cyan; /* Change the border color */
-outline: none; /* Remove the default outline */
-background-color: transparent; /* Change the background color */
-color: cyan; /* Change the text color */
-border-radius: 0px; /* Adjust the border radius for rounded corners */
-}
+}  
 
 .AmbienceContainer{
 position: fixed;
@@ -85,8 +31,6 @@ background-color: peachpuff;
 width: 15vw;
 font-family: monospace, 'Trebuchet MS', sans-serif;
 }
-
-
 
 .SettingsContainer{
 position: fixed;

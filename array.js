@@ -40,6 +40,7 @@ const width = parseFloat(location.style.width);
 const height = parseFloat(location.style.height);
 const divId = location.id;
 const description = "";
+const tags = ""
 
 return {
 left,
@@ -47,6 +48,7 @@ top,
 width,
 height,
 divId,
+tags,
 description,
 };
 },
@@ -294,7 +296,7 @@ return newLoc;
 },   
 
 addLocationToArray(locationData) {
-const { left, top, width, height, divId, description } = locationData;
+const { left, top, width, height, divId, tags, description } = locationData;
 
 // Create a new location object with the specified properties
 const newLocation = {
@@ -303,6 +305,7 @@ top,
 width,
 height,
 divId,
+tags,
 description,
 };
 

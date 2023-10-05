@@ -62,7 +62,7 @@ Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange);
 
 handleeventEnableClick() {
   // Iterate through the ambienceSearchArray and enable all events
-  Events.eventsSearchArray.forEach(event => {
+  Events.searchArray.forEach(event => {
     event.active = 1;
 
     // Update the corresponding event in Ambience.ambienceArray
@@ -74,7 +74,7 @@ handleeventEnableClick() {
 
   console.log('All Events Enabled');
   Ref.extraInfo2.classList.remove('showExtraInfo');
-  Events.showcurrentEvents(Events.eventsSearchArray);
+  Events.showcurrentEvents(Events.searchArray);
   
 }
 
@@ -84,13 +84,14 @@ handleEscButtonClick(){
   Ref.extraInfo2.classList.remove('showExtraInfo');
   Ref.itemList.style.display = "none";
   document.activeElement.blur();
+  NPCs.fixDisplay();
 
 };
   
 
 handleeventDisableClick(){
      // Iterate through the ambienceSearchArray and enable all events
-  Events.eventsSearchArray.forEach(event => {
+  Events.searchArray.forEach(event => {
     event.active = 0;
 
     // Update the corresponding event in Ambience.ambienceArray
@@ -102,7 +103,7 @@ handleeventDisableClick(){
 
   console.log('All Events Enabled');
   Ref.extraInfo2.classList.remove('showExtraInfo');
-  Events.showcurrentEvents(Events.eventsSearchArray);
+  Events.showcurrentEvents(Events.searchArray);
 
 }
 
@@ -152,7 +153,6 @@ handleEditButtonClick() {
 Edit.editPage = 1;
 
 
-
 if (!Edit.editMode) {
 
 Edit.editMode = true;
@@ -161,7 +161,7 @@ editEditButton.classList.add('click-button');
 //Hide Storyteller, pageChange()
 Edit.pageChange(Edit.editPage)
 Ref.EditorContainer.style.display = 'flex';
-Ref.editLocationName.style.display = 'flex';
+Ref.locationGroup.style.display = 'flex';
 
 Ref.eventManagerContainer.style.display = 'none';
 Ref.Storyteller.style.display = 'none';
@@ -187,7 +187,7 @@ editEditButton.classList.remove('click-button');
 //Show Storyteller, pageChange()
 Edit.pageChange(1);
 Ref.EditorContainer.style.display = 'none';
-Ref.editLocationName.style.display = 'none';
+Ref.locationGroup.style.display = 'none';
 
 Ref.eventManagerContainer.style.display = '';
 Ref.Storyteller.style.display = 'flex';

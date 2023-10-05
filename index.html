@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="storyteller.css">
 <link rel="stylesheet" href="edit.css">
 <link rel="stylesheet" href="npcs.css">
+<link rel="stylesheet" href="locations.css">
 <link rel="stylesheet" href="monsters.css">
 <link rel="stylesheet" href="events.css">
 
@@ -82,10 +83,17 @@
 
 <div class="Storyteller" id="Storyteller"></div>   
 
-<div class="EditorContainer">                         
+<div class="EditorContainer">    
 
-<textarea class="editLocationName" id="editLocationName"></textarea>             
+<div class = "locationGroup">    
 
+<label for="editLocationName">Location</label>
+<input class="lineField" id="editLocationName" placeholder="Unique Location Name">
+
+<label for="editLocationTags">Tags</label>
+<input class="lineField" id="editLocationTags" placeholder="Location Group Tags">
+
+<label for="textLocation">Description</label>
 <textarea class="editBox" id="textLocation" placeholder=
 "Enter information about the location here.
 
@@ -93,15 +101,17 @@
 *... for Items
 ~... for Spells"></textarea>  
 
+</div>  
+
 <div id="itemList"></div>
 
 <form id="itemForm" class="itemForm">
 <div class="itemFormContainer">
 
-<label for="itemName">Name:</label>
+<label for="itemName">Name</label>
 <input class="lineField" type="textarea" id="itemName" name="itemName" placeholder="{... to Search" required>
 
-<label for="itemType">Type:</label>
+<label for="itemType">Type</label>
 <input class="lineField" type="textarea" id="itemType" name="itemType">
 
 <br>
@@ -110,26 +120,26 @@
 
 <div class="Monster-stats-left"> 
 
-<label for="itemSize">Size:</label>
+<label for="itemSize">Size</label>
 <input class="halfField" type="textarea" id="itemSize" name="itemSize">
 
-<label for="itemWeight">Weight:</label>
+<label for="itemWeight">Weight</label>
 <input class="halfField" type="textarea" id="itemWeight" name="itemWeight">
 
-<label for="itemCost">Cost:</label>
+<label for="itemCost">Cost</label>
 <input class="halfField" type="textarea" id="itemCost" name="itemCost">
 
 </div>
 
 <div class="Monster-stats-right"> 
 
-<label for="itemDamage">Damage:</label>
+<label for="itemDamage">Damage</label>
 <input class="halfField" type="textarea" id="itemDamage" name="itemDamage">
 
-<label for="itemRange">Range:</label>
+<label for="itemRange">Range</label>
 <input class="halfField" type="textarea" id="itemRange" name="itemRange">
 
-<label for="itemAC">Armour Class:</label>
+<label for="itemAC">Armour Class</label>
 <input class="halfField" type="textarea" id="itemAC" name="itemAC">
 
 
@@ -137,7 +147,7 @@
 </div>
 </div>
 
-<label for="itemDescription">Description:</label>
+<label for="itemDescription">Description</label>
 <textarea class="medField" type="textarea" id="itemDescription" name="itemDescription"></textarea>
 
 </div>
@@ -146,7 +156,7 @@
 <form id="spellsForm" class="spellsForm">
 <div class="spellsFormContainer">
 
-<label for="spellName">Name:</label>
+<label for="spellName">Name</label>
 <input class="lineField" type="textarea" id="spellName" name="spellName" placeholder="{... to Search" required>
 <br>
 
@@ -154,7 +164,7 @@
 
     <div class="Monster-stats-left"> 
 
-    <label for="spellClass">Class:</label>
+    <label for="spellClass">Class</label>
     <input class="halfField" type="textarea" id="spellClass" name="spellClass">
       
     
@@ -162,7 +172,7 @@
     
     <div class="Monster-stats-right"> 
     
-    <label for="spellLevel">Level:</label>
+    <label for="spellLevel">Level</label>
     <input class="halfField" type="textarea" id="spellLevel" name="spellLevel">
     
     </div>
@@ -172,27 +182,27 @@
 
         <div class="Monster-stats-left"> 
       
-        <label for="spellRange">Range:</label>
+        <label for="spellRange">Range</label>
         <input class="halfField" type="textarea" id="spellRange" name="spellRange">
         
         </div>
         
         <div class="Monster-stats-right"> 
         
-        <label for="spellDuration">Duration:</label>
+        <label for="spellDuration">Duration</label>
         <input class="halfField" type="textarea" id="spellDuration" name="spellDuration">
            
         
         </div>
         </div>
 
-<label for="spellDescription">Description:</label>
+<label for="spellDescription">Description</label>
 <textarea class="medField" type="textarea" id="spellDescription" name="spellDescription"></textarea>
 
-<label for="spellReverse">Reverse:</label>
+<label for="spellReverse">Reverse</label>
 <textarea class="medField" type="textarea" id="spellReverse" name="spellReverse"></textarea>
 
-<label for="spellNote">Note:</label>
+<label for="spellNote">Note</label>
 <textarea class="medField" type="textarea" id="spellNote" name="spellNote"></textarea>
 
 
@@ -203,16 +213,16 @@
 <form id="monsterForm" class="monsterForm">
 <div class="monsterFormContainer">
 
-<label for="monsterName">Name:</label>
+<label for="monsterName">Name</label>
 <input class="lineField" type="textarea" id="monsterName" name="monsterName" placeholder="{... to Search" required>
 
-<label for="monsterType">Type:</label>
+<label for="monsterType">Type</label>
 <input class="lineField" type="textarea" id="monsterType" name="monsterType">
 
-<label for="monsterAppearing"># Appearing:</label>
+<label for="monsterAppearing"># Appearing</label>
 <input class="lineField" type="textarea" id="monsterAppearing" name="monsterAppearing">
 
-<label for="monsterDescription">Description:</label>
+<label for="monsterDescription">Description</label>
 <textarea class="largeField" type="textarea" id="monsterDescription" name="monsterDescription"></textarea>
 
 <br>
@@ -221,74 +231,71 @@
 
 <div class="Monster-stats-left"> 
 
-<label for="monsterAttacks">Attacks:</label>
+<label for="monsterAttacks">Attacks</label>
 <input class="halfField" type="textarea" id="monsterAttacks" name="monsterAttacks">
 
-<label for="monsterDamage">Damage:</label>
+<label for="monsterDamage">Damage</label>
 <input class="halfField" type="textarea" id="monsterDamage" name="monsterDamage">
 
-<label for="monsterHD">Hit Dice:</label>
+<label for="monsterHD">Hit Dice</label>
 <input class="halfField" type="textarea" id="monsterHD" name="monsterHD">
 
-<label for="monsterHDRange">Hit Range:</label>
+<label for="monsterHDRange">Hit Range</label>
 <input class="halfField" type="textarea" id="monsterHDRange" name="monsterHDRange">
 
-<label for="monsterSaveAs">Save As:</label>
+<label for="monsterSaveAs">Save As</label>
 <input class="halfField" type="textarea" id="monsterSaveAs" name="monsterSaveAs">
 
 </div>
 
 <div class="Monster-stats-right"> 
 
-<label for="monsterMorale">Morale:</label>
+<label for="monsterMorale">Morale</label>
 <input class="halfField" type="textarea" id="monsterMorale" name="monsterMorale">
 
-<label for="monsterMovement">Movement:</label>
+<label for="monsterMovement">Movement</label>
 <input class="halfField" type="textarea" id="monsterMovement" name="monsterMovement">
 
-<label for="monsterAC">Armour Class:</label>
+<label for="monsterAC">Armour Class</label>
 <input class="halfField" type="textarea" id="monsterAC" name="monsterAC">
 
-<label for="monsterXP">Exp Points:</label>
+<label for="monsterXP">Exp Points</label>
 <input class="halfField" type="textarea" id="monsterXP" name="monsterXP">
 
-<label for="monsterTreasure">Treasure:</label>
+<label for="monsterTreasure">Treasure</label>
 <input class="halfField" type="textarea" id="monsterTreasure" name="monsterTreasure">
 
-
-
 </div>
 </div>
 
-<label for="monsterSpecial">Special:</label>
+<label for="monsterSpecial">Special</label>
 <textarea class="medField" type="textarea" id="monsterSpecial" name="monsterSpecial"></textarea>
 
 </div>
 </form>
 
-
 <form id="npcForm" class="npcForm">
 <div class="npcFormContainer">
 
-<label for="npcName">Full or Unique Name:</label>
+<label for="npcName">Full or Unique Name</label>
 <input class="lineField" type="textarea" id="npcName" name="npcName" placeholder="{... to Search" required>
 
-<label for="npcOccupation">3 Word Description</label>
+<label for="npcOccupation">Tags</label>
 <input class="lineField" type="textarea" id="npcOccupation" name="npcOccupation"
-placeholder="What do other people know them as?">
+placeholder="Villager, Potter, Man at Arms">
 
 <br>
 
-<label for="npcLevel">Level:</label>
+<label for="npcLevel">Level</label>
 <input class="stat" type="number" id="npcLevel" name="npcLevel">
 
-<label for="npcClass">Class:</label>
+<label for="npcClass">Class</label>
 <input class="halfField" type="textarea" id="npcClass" name="npcClass">
 
 <br><br>
 
 
-<label for="npcBackStory">Backstory:</label>
+<label for="npcBackStory">Backstory</label>
 <textarea class="largeField" type="textarea" id="npcBackStory" name="npcBackStory" 
 placeholder="Put any other information about this NPC here.
 
@@ -327,26 +334,26 @@ placeholder="What do the normally do here? They are...">
 
 <div class="NPC-stats-left"> 
 
-<label for="STR">Strength:</label>
+<label for="STR">Strength</label>
 <input class="stat" type="number" id="STR" name="STR">
 
-<label for="DEX">Dexterity:</label>
+<label for="DEX">Dexterity</label>
 <input class="stat" type="number" id="DEX" name="DEX">
 
-<label for="INT">Intelligence:</label>
+<label for="INT">Intelligence</label>
 <input class="stat" type="number" id="INT" name="INT">    
 
 </div>
 
 <div class="NPC-stats-right"> 
 
-<label for="WIS">Wisdom:</label>
+<label for="WIS">Wisdom</label>
 <input class="stat" type="number" id="WIS" name="WIS">
 
-<label for="CON">Constitution:</label>
+<label for="CON">Constitution</label>
 <input class="stat" type="number" id="CON" name="CON">
 
-<label for="CHA">Charisma:</label>
+<label for="CHA">Charisma</label>
 <input class="stat" type="number" id="CHA" name="CHA">
 
 </div>
@@ -358,19 +365,19 @@ placeholder="What do the normally do here? They are...">
 <form id="ambienceForm" class="ambienceForm">
 <div class="monsterFormContainer">
 
-<label for="ambienceTitle">Event:</label>
+<label for="ambienceTitle">Event</label>
 <input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="{... to Search" required>
 
-<label for="ambienceContext">Group:</label>
+<label for="ambienceContext">Tags</label>
 <input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
 
-<label for="eventLocation">Location(s):</label>
-<input class="lineField" type="textarea" id="eventLocation" name="eventLocation" placeholder="All, One, or by Group" required>
+<label for="eventLocation">Location(s)</label>
+<input class="lineField" type="textarea" id="eventLocation" name="eventLocation" placeholder="All, One, or by Location Tag" required>
 
-<label for="eventNPC">NPC(s):</label>
-<input class="lineField" type="textarea" id="eventNPC" name="eventNPC" placeholder="All, One, or by Group" required>
+<label for="eventNPC">NPC(s)</label>
+<input class="lineField" type="textarea" id="eventNPC" name="eventNPC" placeholder="All, One, or by NPC Tag" required>
 
-<label for="ambienceDescription">Description:</label>
+<label for="ambienceDescription">Description</label>
 <textarea class="largeField" type="textarea" id="ambienceDescription" name="ambienceDescription" 
 placeholder=
 "#... for Monsters

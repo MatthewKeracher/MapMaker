@@ -101,7 +101,7 @@ Ref.npcForm.style.display = 'flex'; // Display the npcForm
 console.log(npc)
 
 Ref.npcName.value = npc.name;
-Ref.npcOccupation.value = npc.occupation;
+Ref.npcTags.value = npc.occupation;
 
 Ref.MorningLocation.value = npc.MorningLocation;
 Ref.MorningActivity.value = npc.MorningActivity;
@@ -143,7 +143,7 @@ const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName
 console.log(Ref.npcName.value)
 const npc = {
 name: Ref.npcName.value,
-occupation: Ref.npcOccupation.value,
+occupation: Ref.npcTags.value,
 
 MorningLocation: Ref.MorningLocation.value,
 MorningActivity: Ref.MorningActivity.value,

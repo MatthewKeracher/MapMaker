@@ -47,7 +47,8 @@
                     }      
                         .div-id-label{
                         position: absolute;
-                        color: slategrey;
+                        color: black;
+                        font-weight: bolder;
                         left: 50%;
                         top: 50%;
                         transform: translate(-50%, -50%);
