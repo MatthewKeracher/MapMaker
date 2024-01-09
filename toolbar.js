@@ -156,6 +156,7 @@ Edit.editPage = 1;
 if (!Edit.editMode) {
 
 Edit.editMode = true;
+Ref.stateLabel.style.display = 'flex';
 editEditButton.classList.add('click-button');
 
 //Hide Storyteller, pageChange()
@@ -180,7 +181,7 @@ div.addEventListener('mouseleave', Edit.handleMouseHover);
 } else {
 
 if (Edit.editMode) {
-Ref.stateLabel.textContent = "";
+Ref.stateLabel.style.display = 'none';
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
 
