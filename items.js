@@ -76,20 +76,19 @@ const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase()
 
 if (item) {
 
-const itemStats = [
-
-`<hr><h3><span class="lime">${contentId.toUpperCase()}</span></h3>`,
-`${item.Type}.<br><br>`,
-
-`<span class="lime">Size:</span> ${item.Size || "None"};<br>`,
-`<span class="lime">Weight:</span> ${item.Weight || "None"};<br>`,
-`<span class="lime">Cost:</span> ${item.Cost || "None"};<br>`,
-`<span class="lime">Damage:</span> ${item.Damage || "None"};<br>`,
-`<span class="lime">Range:</span> ${item.Range || "None"};<br>`,
-`<span class="lime">Armour Class:</span> ${item.AC || "None"};<br><br>`,
-`<span class="lime">Description:</span> <br><br> ${item.Description || "None"}`,
-
-];
+    const itemStats = [
+        `<hr><h3><span class="lime">${contentId.toUpperCase()}</span></h3>`,
+        `${item.Type}.<br><br>`,
+      
+        `${item.Size ? `<span class="lime">Size:</span> ${item.Size};<br>` : ''}`,
+        `${item.Weight ? `<span class="lime">Weight:</span> ${item.Weight};<br>` : ''}`,
+        `${item.Cost ? `<span class="lime">Cost:</span> ${item.Cost};<br>` : ''}`,
+        `${item.Damage ? `<span class="lime">Damage:</span> ${item.Damage};<br>` : ''}`,
+        `${item.Range ? `<span class="lime">Range:</span> ${item.Range};<br>` : ''}`,
+        `${item.AC ? `<span class="lime">Armour Class:</span> ${item.AC};<br><br>` : ''}`,
+        `${item.Description ? `<span class="lime">Description:</span> <br><br> ${item.Description}` : ''}`,
+      ];
+      
 
 const formattedItem = itemStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')

@@ -71,6 +71,7 @@ this.showTags(this.searchArray);
 Ref.npcTags.addEventListener('click', () => {
 Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.itemList.style.display = 'none';
 this.fillTagsArray();
 this.showTags(this.tagsArray);
 })

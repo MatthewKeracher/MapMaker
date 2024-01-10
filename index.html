@@ -94,7 +94,7 @@
 <input class="lineField" id="editLocationTags" placeholder="Location Group Tags">
 
 <label for="textLocation">Description</label>
-<textarea class="editBox" id="textLocation" placeholder=
+<textarea class="largeField" id="textLocation" placeholder=
 "Enter information about the location here.
 
 #... for Monsters
@@ -306,26 +306,35 @@ placeholder="Put any other information about this NPC here.
 
 <br>
 
-<label for="MorningLocation">Morning Location:</label>
-<select class="smallSelect" id="MorningLocation" required>                    
-</select>
+<div id="locationContainer">
+    <!-- Primary Location for NPC -->
+    <label for="primaryLocation">Primary Location:</label>
+    <select class="smallSelect" id="primaryLocation" required></select>
+  
+    <!-- Container for dynamically added elements -->
+    <div id="dynamicEventsContainer"></div>
+  
+    <!-- Button to add events -->
+    <button onclick="addEvent()">Add More</button>
+  </div>
+  
+  <script>
+  function addEvent() {
+    const dynamicContainer = document.getElementById('dynamicEventsContainer');
+  
+    const label = document.createElement('label');
+    label.textContent = 'Additional Location:';
+  
+    const select = document.createElement('select');
+    select.className = 'smallSelect';
+    select.id = 'additionalLocation';
+  
+    dynamicContainer.appendChild(label);
+    dynamicContainer.appendChild(select);
 
-<input class="lineField" type="textarea" id="MorningActivity" name="MorningActivity"
-placeholder="What do the normally do here? They are...">
-
-<label for="AfternoonLocation">Afternoon Location:</label>
-<select class="smallSelect" id="AfternoonLocation">                    
-</select>
-
-<input class="lineField" type="textarea" id="AfternoonActivity" name="AfternoonActivity"
-placeholder="What do the normally do here? They are...">
-
-<label for="NightLocation">Night Location:</label>
-<select class="smallSelect" id="NightLocation">                    
-</select>
-
-<input class="lineField" type="textarea" id="NightActivity" name="NightActivity"
-placeholder="What do the normally do here? They are...">
+  }
+  </script>
+  
 
 
 <br>

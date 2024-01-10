@@ -110,7 +110,7 @@ npcForm: document.querySelector('.npcForm'),
     npcName: document.getElementById('npcName'),
     npcTags: document.getElementById('npcOccupation'),
 
-    MorningLocation: document.getElementById('MorningLocation'),
+    MorningLocation: document.getElementById('primaryLocation'),
     MorningActivity: document.getElementById('MorningActivity'),
 
     AfternoonLocation: document.getElementById('AfternoonLocation'),

@@ -336,14 +336,14 @@ location.dataset.hasListener = true;
 
 generateLocationOptions() {
 // The Dropdowns
-const Morning = document.getElementById('MorningLocation');
-const Afternoon = document.getElementById('AfternoonLocation');
-const Night = document.getElementById('NightLocation');
+const Morning = document.getElementById('primaryLocation');
+// const Afternoon = document.getElementById('AfternoonLocation');
+// const Night = document.getElementById('NightLocation');
 
 // Clear existing options
 Morning.innerHTML = '<option value="">None</option>';
-Afternoon.innerHTML = '<option value="">None</option>';
-Night.innerHTML = '<option value="">None</option>';
+// Afternoon.innerHTML = '<option value="">None</option>';
+// Night.innerHTML = '<option value="">None</option>';
 
 // Generate options based on .selection div IDs for all dropdowns
 this.locationArray.forEach((location) => {
@@ -353,15 +353,15 @@ MorningOption.value = location.divId;
 MorningOption.textContent = location.divId;
 Morning.appendChild(MorningOption);
 
-const AfternoonOption = document.createElement('option');
-AfternoonOption.value = location.divId;
-AfternoonOption.textContent = location.divId;
-Afternoon.appendChild(AfternoonOption);
+// const AfternoonOption = document.createElement('option');
+// AfternoonOption.value = location.divId;
+// AfternoonOption.textContent = location.divId;
+// Afternoon.appendChild(AfternoonOption);
 
-const NightOption = document.createElement('option');
-NightOption.value = location.divId;
-NightOption.textContent = location.divId;
-Night.appendChild(NightOption);
+// const NightOption = document.createElement('option');
+// NightOption.value = location.divId;
+// NightOption.textContent = location.divId;
+// Night.appendChild(NightOption);
 });
 },
 

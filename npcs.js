@@ -33,7 +33,7 @@ this.otherNPCs = [];
 
 for (const npc of NPCArray) {
 const npcNameDiv = document.createElement('div');
-npcNameDiv.textContent = npc.name + ' [' + npc.occupation + ']';            
+npcNameDiv.textContent = ' [' + npc.occupation + ']  ' + npc.name ;            
 
 this.sortNPCs(npc, npcNameDiv);
 this.fillNPCForm(npc, npcNameDiv);
@@ -105,13 +105,6 @@ Ref.npcName.value = npc.name;
 Ref.npcTags.value = npc.occupation;
 
 Ref.MorningLocation.value = npc.MorningLocation;
-Ref.MorningActivity.value = npc.MorningActivity;
-
-Ref.AfternoonLocation.value = npc.AfternoonLocation;
-Ref.AfternoonActivity.value = npc.AfternoonActivity;
-
-Ref.NightLocation.value = npc.NightLocation;
-Ref.NightActivity.value = npc.NightActivity;
 
 Ref.npcLevel.value = npc.level;
 Ref.npcClass.value = npc.class;
@@ -147,13 +140,7 @@ name: Ref.npcName.value,
 occupation: Ref.npcTags.value,
 
 MorningLocation: Ref.MorningLocation.value,
-MorningActivity: Ref.MorningActivity.value,
 
-AfternoonLocation: Ref.AfternoonLocation.value,
-AfternoonActivity: Ref.AfternoonActivity.value,
-
-NightLocation: Ref.NightLocation.value,
-NightActivity: Ref.NightActivity.value,
 
 level: Ref.npcLevel.value,
 class: Ref.npcClass.value,
@@ -195,8 +182,6 @@ Array.generateLocationOptions();
 
 },
 
-// Jan -- Next step is to fill the presentNPCs array with active Events rather than Morn, Noon, Night activities. 
-// Jan -- Search the active NPCs array for either individual names, whole location or group events, or All events.
 
 getNPCs(locationName, currentPhase) {
 const presentNPCs = [];
@@ -225,7 +210,7 @@ ${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </
 //Search active events to see if any apply based on the location, or the individual. 
 
 const presentNPCEvents = Events.eventsArray.filter(event => 
-    (event.npc === npc.name || event.npc === 'All') &&
+    (event.npc === npc.name || event.npc === 'All' || event.npc === npc.occupation) &&
     (event.location === locationName || event.location === 'All')
   );
   
@@ -244,6 +229,18 @@ story += `${event.description} \n`;
 //console.log(story)
 return story;
 },
+
+getRandomItem(itemsArray) {
+    if (itemsArray.length > 0) {
+      const randomIndex = Math.floor(Math.random() * itemsArray.length);
+      return itemsArray[randomIndex];
+    } else {
+      console.log("No items found.");
+      return null;
+    }
+  },
+
+
 
 addNPCInfo(npcName) {
 const extraContent = document.getElementById('extraContent');
@@ -278,30 +275,78 @@ npcContent += `<br>
 
 //need to run through getMonsters and getItems
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.Backstory)))}</span>`;
+    npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.Backstory)))}</span>`;
+    }
+
+//RANDOM SPELLS FOR NPCS ------>
+
+const randomSpellsLoop = 3; // Change this to the desired number of times
+
+let randomSpells = `<br> ${foundNPC.name} can cast: <br><br>`;
+
+for (let i = 0; i < randomSpellsLoop; i++) {
+  const randomSpell = this.getRandomItem(Spells.spellsArray);
+  if (randomSpell) {
+    randomSpells += `~${randomSpell.Name}~ <br>`;
+  }
 }
 
+npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(randomSpells)))}</span>`;
 
-if (foundNPC.MorningLocation) {
-npcContent += `<br><br>
-In the morning they can be found at
-<span class="lime">[${foundNPC.MorningLocation}]</span>,
-${foundNPC.MorningActivity}`;
+//RANDOM ITEMS FOR NPCS ----->
+
+const randomItemsLoop = 5; // Change this to the desired number of times
+
+let loot = `<br> ${foundNPC.name} has nearby: <br><br>`;
+
+for (let i = 0; i < randomItemsLoop; i++) {
+  const randomItem = this.getRandomItem(Items.itemsArray);
+  if (randomItem) {
+    loot += `#${randomItem.Name}# <br>`;
+  }
 }
 
-if (foundNPC.AfternoonLocation) {
-npcContent += `<br><br>
-In the afternoon they can be found at <span class="orange">
-[${foundNPC.AfternoonLocation}]</span>,
-${foundNPC.AfternoonActivity}`;
-}
+npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(loot)))}</span>`;
 
-if (foundNPC.NightLocation) {
-npcContent += `<br><br>
-In the evening they can be found at <span class="hotpink">
-[${foundNPC.NightLocation}]</span>,
-${foundNPC.NightActivity}`;
-}
+//RANDOM GARB OUTFITTER FOR NPCS ---->
+
+let garb = `<br> ${foundNPC.name} is wearing: <br><br>`
+
+const typesToSearch = [
+    'Head Garb', 
+    'Body Garb', 
+    'Hand Garb', 
+    'Garb' , 
+    'Leg Garb',
+    'Over Garb',
+    'Under Garb',
+    'Whole Garb',
+    'Winter Foot Garb',
+    'Winter Hand Garb' ];
+    
+    for (const type of typesToSearch) {
+      const filteredItems = Items.itemsArray.filter(item => item.Type === type);
+    
+      if (filteredItems.length > 0) {
+        const randomIndex = Math.floor(Math.random() * filteredItems.length);
+        const selectedItem = filteredItems[randomIndex];
+        console.log(`${type}:`, selectedItem.Name);
+        garb += `#${selectedItem.Name}# <br>`;
+      } else {
+        console.log(`No matching items found for ${type}.`);
+      }
+    }
+      
+      
+npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(garb)))}</span>`;
+
+
+// if (foundNPC.MorningLocation) {
+// npcContent += `<br><br>
+// They can always be found at 
+// <span class="lime">[${foundNPC.MorningLocation}]</span>`;
+// }
+
 
 // Set the formatted content in the extraContent element
 extraContent.innerHTML = npcContent;
@@ -310,6 +355,8 @@ extraContent.innerHTML = npcContent;
 extraContent.innerHTML = `NPC not found`;
 }
 },
+
+
 
 addNPCSearch: function(){
 
