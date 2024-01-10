@@ -74,7 +74,7 @@ width: 0.1px; /* Set the width of the scrollbar */
 #itemList,
 #itemList2 {
 color: gray;
-font-size: 1.5vh;
+font-size: 2.0vh;
 background-color: black;
 opacity: 1;
 height: 100vh;
@@ -82,8 +82,8 @@ border: transparent;
 padding: 5px;
 position: fixed; /* Use fixed position for screen coordinates */
 top: 0;
-left: 45vw;
-width: 25vw;
+left: 40vw;
+width: 30vw;
 z-index: 10;
 overflow-y: auto;
 display: none;

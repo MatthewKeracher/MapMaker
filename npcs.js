@@ -5,6 +5,7 @@ import Ref from "./ref.js";
 import Items from "./items.js";
 import Monsters from "./monsters.js";
 import Spells from "./spells.js";
+import Events from "./events.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -194,6 +195,9 @@ Array.generateLocationOptions();
 
 },
 
+// Jan -- Next step is to fill the presentNPCs array with active Events rather than Morn, Noon, Night activities. 
+// Jan -- Search the active NPCs array for either individual names, whole location or group events, or All events.
+
 getNPCs(locationName, currentPhase) {
 const presentNPCs = [];
 
@@ -212,22 +216,29 @@ presentNPCs.push({ name: npc.name, story: npcStory });
 return presentNPCs;
 },
 
-generateNPCStory(npc, locationName,phaseName) {
+generateNPCStory(npc, locationName) {
 let story = `<br>`;
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
 ${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </span>`
 
-if (phaseName === 'Morning' && npc.MorningLocation === locationName && npc.MorningActivity && npc.MorningActivity !== "undefined") {
-story += `   is currently ${npc.MorningActivity} \n`;
-}
+//Search active events to see if any apply based on the location, or the individual. 
 
-if (phaseName === 'Afternoon'  && npc.AfternoonLocation === locationName && npc.AfternoonActivity && npc.AfternoonActivity !== "undefined") {
-story += `   is currently ${npc.AfternoonActivity} \n`;
-}
+const presentNPCEvents = Events.eventsArray.filter(event => 
+    (event.npc === npc.name || event.npc === 'All') &&
+    (event.location === locationName || event.location === 'All')
+  );
+  
 
-if (phaseName === 'Night'  && npc.NightLocation === locationName && npc.NightActivity && npc.NightActivity !== "undefined") {
-story += `   is currently ${npc.NightActivity} \n`;
+//console.log(locationEvents)
+//console.log(presentNPCEvents)
+
+// for (const event of locationEvents) {
+// story += `<span class = "misc"> ${event.description} </span> \n`;
+// }
+
+for (const event of presentNPCEvents) {
+story += `${event.description} \n`;
 }
 
 //console.log(story)
