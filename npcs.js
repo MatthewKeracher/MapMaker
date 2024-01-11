@@ -210,8 +210,7 @@ ${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </
 //Search active events to see if any apply based on the location, or the individual. 
 
 const presentNPCEvents = Events.eventsArray.filter(event => 
-    (event.npc === npc.name || event.npc === 'All' || event.npc === npc.occupation) &&
-    (event.location === locationName || event.location === 'All')
+    (event.npc === npc.name || event.npc === 'All' || event.npc === npc.occupation) && (event.active === 1)
   );
   
 
@@ -228,6 +227,16 @@ story += `${event.description} \n`;
 
 //console.log(story)
 return story;
+},
+
+getNPCSpells(cleric, level){
+
+const filteredSpells = Spells.spellsArray.filter(spell => spell.Level <= level && spell.Class === cleric);
+
+console.log(filteredSpells);
+
+return filteredSpells
+
 },
 
 getRandomItem(itemsArray) {
@@ -274,24 +283,40 @@ npcContent += `<br>
 }
 
 //need to run through getMonsters and getItems
+//want to put in Backstory as hover for extraextra
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
     npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.Backstory)))}</span>`;
     }
 
 //RANDOM SPELLS FOR NPCS ------>
 
-const randomSpellsLoop = 3; // Change this to the desired number of times
+//Need to filter by CLASS and LEVEL
 
-let randomSpells = `<br> ${foundNPC.name} can cast: <br><br>`;
+console.log(foundNPC.class + ' ' + foundNPC.level)
 
-for (let i = 0; i < randomSpellsLoop; i++) {
-  const randomSpell = this.getRandomItem(Spells.spellsArray);
-  if (randomSpell) {
-    randomSpells += `~${randomSpell.Name}~ <br>`;
-  }
+const knownSpells = this.getNPCSpells(foundNPC.class, foundNPC.level)
+
+let magic = ``;
+let level = 0
+
+for (let i = 0; i < knownSpells.length; i++) {
+  const spell = knownSpells[i]
+  const newLevel = knownSpells[i].Level
+
+if (newLevel > level) {
+
+  magic += `<br> LEVEL ${newLevel} SPELLS <br> ~${spell.Name}~ <br>`;
+  level = newLevel;
+
+} else {
+
+  magic += `~${spell.Name}~ <br>`;
+
 }
 
-npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(randomSpells)))}</span>`;
+}
+
+npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(magic)))}</span>`;
 
 //RANDOM ITEMS FOR NPCS ----->
 
@@ -330,7 +355,7 @@ const typesToSearch = [
       if (filteredItems.length > 0) {
         const randomIndex = Math.floor(Math.random() * filteredItems.length);
         const selectedItem = filteredItems[randomIndex];
-        console.log(`${type}:`, selectedItem.Name);
+        //console.log(`${type}:`, selectedItem.Name);
         garb += `#${selectedItem.Name}# <br>`;
       } else {
         console.log(`No matching items found for ${type}.`);

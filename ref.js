@@ -18,6 +18,8 @@ eventManagerContainer: document.querySelector('.eventManagerContainer'),
 eventManagerInput: document.getElementById('eventManagerInput'),
 enableEventButton: document.getElementById('enableEventButton'),
 disableEventButton: document.getElementById('disableEventButton'),
+enableGroupEventButton: document.getElementById('enableGroupEventButton'),
+disableGroupEventButton: document.getElementById('disableGroupEventButton'),
 
 //Storyteller
 locationLabel: document.getElementById('locationLabel'),

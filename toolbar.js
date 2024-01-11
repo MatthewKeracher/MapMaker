@@ -40,8 +40,9 @@ Ref.fileInput.addEventListener('change', Array.handleFileInputChange);
 
 //eventManager
 Ref.enableEventButton.addEventListener('click', this.handleeventEnableClick);
-Ref.disableEventButton.addEventListener('click', this.handleeventDisableClick);
- 
+Ref.disableEventButton.addEventListener('click', this.handleEventDisableClick);
+Ref.enableGroupEventButton.addEventListener('click', this.handleeventGroupEnableClick);
+Ref.disableGroupEventButton.addEventListener('click', this.handleEventGroupDisableClick);
 
 //editToolbar
 Ref.editEditButton.addEventListener('click', this.handleEditButtonClick);
@@ -61,22 +62,112 @@ Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange);
 }
 
 handleeventEnableClick() {
-  // Iterate through the ambienceSearchArray and enable all events
-  Events.searchArray.forEach(event => {
-    event.active = 1;
+  // Get the event to disable from Ref.eventManagerInput.value
+  const toDisable = Ref.eventManagerInput.value;
 
-    // Update the corresponding event in Ambience.ambienceArray
-    const indexInAmbienceArray = Events.eventsArray.findIndex(e => e.event === event.event);
-    if (indexInAmbienceArray !== -1) {
-      Events.eventsArray[indexInAmbienceArray].active = 1;
-    }
-  });
+  // Find the event in Events.eventsArray with a matching 'event' field
+  const eventToDisable = Events.eventsArray.find(event => event.event === toDisable);
 
-  console.log('All Events Enabled');
-  Ref.extraInfo2.classList.remove('showExtraInfo');
-  Events.showcurrentEvents(Events.searchArray);
+  if (eventToDisable) {
+      // Set the 'active' field of the found event to 1
+      eventToDisable.active = 1;
+
+      // Log the disabled event
+      console.log('Disabled event:', eventToDisable);
+
+      // Update the display of current events
+      Events.showcurrentEvents(Events.eventsArray);
+
+  } else {
+      // Log a message if the event to disable was not found
+      console.log('Event not found:', toDisable);
+  }
   
+};
+ 
+
+handleEventDisableClick() {
+
+   // Get the event to disable from Ref.eventManagerInput.value
+   const toDisable = Ref.eventManagerInput.value;
+
+   // Find the event in Events.eventsArray with a matching 'event' field
+   const eventToDisable = Events.eventsArray.find(event => event.event === toDisable);
+
+   if (eventToDisable) {
+       // Set the 'active' field of the found event to 0
+       eventToDisable.active = 0;
+
+       // Log the disabled event
+       console.log('Disabled event:', eventToDisable);
+
+       // Update the display of current events
+       Events.showcurrentEvents(Events.eventsArray);
+
+   } else {
+       // Log a message if the event to disable was not found
+       console.log('Event not found:', toDisable);
+   }
+};
+
+handleeventGroupEnableClick() {
+  // Get the event to enable from Ref.eventManagerInput.value
+  const toEnable = Ref.eventManagerInput.value;
+
+  // Find the event in Events.eventsArray with a matching 'event' field
+  const eventToEnable = Events.eventsArray.find(event => event.event === toEnable);
+
+  if (eventToEnable) {
+      // Set the 'active' field of all events with the same group to 1
+      Events.eventsArray.forEach(event => {
+          if (event.group === eventToEnable.group) {
+              event.active = 1;
+          }
+      });
+
+      // Log the enabled events
+      console.log('Enabled events with group:', eventToEnable.group);
+
+      // Update the display of current events
+      Events.showcurrentEvents(Events.eventsArray);
+  } else {
+      // Log a message if the event to enable was not found
+      console.log('Event not found:', toEnable);
+  }
 }
+
+
+handleEventGroupDisableClick() {
+ 
+    // Get the event to enable from Ref.eventManagerInput.value
+    const toDisable = Ref.eventManagerInput.value;
+
+    // Find the event in Events.eventsArray with a matching 'event' field
+    const eventToEnable = Events.eventsArray.find(event => event.event === toDisable);
+
+    if (eventToEnable) {
+        // Set the 'active' field of all events with the same group to 1
+        Events.eventsArray.forEach(event => {
+            if (event.group === eventToEnable.group) {
+                event.active = 0;
+            }
+        });
+
+        // Log the enabled events
+        console.log('Enabled events with group:', eventToEnable.group);
+
+        // Update the display of current events
+        Events.showcurrentEvents(Events.eventsArray);
+    } else {
+        // Log a message if the event to enable was not found
+        console.log('Event not found:', toDisable);
+    }
+}
+
+
+
+
+
 
 handleEscButtonClick(){
 
@@ -87,25 +178,6 @@ handleEscButtonClick(){
   NPCs.fixDisplay();
 
 };
-  
-
-handleeventDisableClick(){
-     // Iterate through the ambienceSearchArray and enable all events
-  Events.searchArray.forEach(event => {
-    event.active = 0;
-
-    // Update the corresponding event in Ambience.ambienceArray
-    const indexInAmbienceArray = Events.eventsArray.findIndex(e => e.event === event.event);
-    if (indexInAmbienceArray !== -1) {
-      Events.eventsArray[indexInAmbienceArray].active = 0;
-    }
-  });
-
-  console.log('All Events Enabled');
-  Ref.extraInfo2.classList.remove('showExtraInfo');
-  Events.showcurrentEvents(Events.searchArray);
-
-}
 
 handleMapButtonClick() {  
 Map.fetchAndProcessImage()

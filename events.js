@@ -10,6 +10,7 @@ phase: 0,
 hour: 0,
 current: '',
 eventDesc: "",
+focusEvent: "",
 
 tagsArray: [],
 eventsArray: [],
@@ -39,7 +40,7 @@ Ref.eventManagerInput.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
-// Call the searchAmbience function
+// Call the searchAmbience function;
 this.searchEvents(searchText);
 this.showcurrentEvents(this.searchArray);
 
@@ -265,13 +266,11 @@ tagDiv.addEventListener('click', () => {
 // -- LOCATION TAGS FUNCTIONS
 
 
-
-
-
-
 // -- USING EVENT MANAGER
 
 showcurrentEvents(data){
+
+console.log(data)
 
 Ref.extraContent.innerHTML = '';
 Ref.extraContent.style.display = 'block'; // Display the container
@@ -291,10 +290,19 @@ Ref.extraContent.appendChild(eventNameDiv);
 
 eventNameDiv.addEventListener('click', () => {
 Ref.eventManagerInput.value = event.event;
+this.focusEvent = event.event;
 this.eventsSearchArray = [event]; // Assign an array with a single element
 this.addEventInfo();
 Ref.extraInfo2.classList.add('showExtraInfo');
 });
+
+eventNameDiv.addEventListener('mouseover', () => {
+  //Ref.eventManagerInput.value = event.event;
+  this.focusEvent = event.event;
+  this.eventsSearchArray = [event]; // Assign an array with a single element
+  this.addEventInfo();
+  Ref.extraInfo2.classList.add('showExtraInfo');
+  });
 
 }
 
@@ -304,15 +312,20 @@ NPCs.fixDisplay();
 
 addEventInfo(){
 
-const contentId = Ref.eventManagerInput.value
+const contentId = this.focusEvent
 
 //Search for Event in the Array   
 const event = Object.values(this.eventsArray).find(event => event.event.toLowerCase() === contentId.toLowerCase());
 
 if (event) {
 
+//console.log(event)
+
 const eventInfo = [
-`<span class="misc">Event:</span>    ${event.event   || "None"} <br><hr> `,
+`<span class="misc">Status:</span>${event.active === 1 ? "Enabled" : "Disabled"} <br><hr>`,
+`<span class="misc">Event:</span>${event.event || "None"} <br><hr> `,
+`<span class="misc">Location:</span>${event.location || "None"} <br><hr>`,
+`<span class="misc">NPC:</span>  ${event.npc || "None"} <br><hr>`,
 `<span class="misc">Group:</span>  ${event.group || "None"} <br><hr>`,
 `<span class="misc">Description:</span> ${event.description || "None"}<br><br>`,
 
@@ -394,7 +407,7 @@ console.log(Ref.eventManagerInput.value);
 const activeEvents = [];
 
 for (const entry of this.eventsArray) {
-if (entry.active === 1 && entry.location === "All" | entry.active === 1 && entry.location === currentLocation ) {
+if (entry.active === 1 && entry.location === "All" || entry.active === 1 && entry.location === currentLocation ) {
 activeEvents.push(entry);
 }
 }
@@ -437,6 +450,7 @@ ambience.event === Ref.eventEvent.value
 
 const ambience = {
 group: Ref.eventGroup.value,
+active: 1,
 //main: Ref.ambienceMain.value,
 //second: Ref.ambienceSecond.value,
 event: Ref.eventEvent.value,

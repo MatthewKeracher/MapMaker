@@ -70,8 +70,10 @@
 <input class="EventField" type="textarea" id="eventManagerInput" name="eventManagerInput" required>
 
 <div class="eventToolbarContainer">
-<button class= "button" id="enableEventButton">  Enable   </button>
-<button class= "button" id="disableEventButton"> Disable  </button>
+<button class= "buttonSmall" id="enableEventButton">Enable</button>
+<button class= "buttonSmall" id="disableEventButton">Disable</button>
+<button class= "buttonLarge" id="enableGroupEventButton">Enable All</button>
+<button class= "buttonLarge" id="disableGroupEventButton">Disable All</button>
 </div>
 </div>
 
@@ -379,6 +381,36 @@ placeholder="Put any other information about this NPC here.
 
 <label for="ambienceContext">Tags</label>
 <input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
+
+
+<div class="event-checkbox-container">
+  <form>
+    <label class="npc-label">
+      <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateCheckboxes('npcCheckbox')">
+      NPC
+    </label>
+
+    <label>
+      <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateCheckboxes('locationCheckbox')">
+      Location
+    </label>
+  </form>
+</div>
+
+
+<script>
+  function updateCheckboxes(checkboxId) {
+    const npcCheckbox = document.getElementById('npcCheckbox');
+    const locationCheckbox = document.getElementById('locationCheckbox');
+
+    // Uncheck the other checkbox when one is checked
+    if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
+      locationCheckbox.checked = false;
+    } else if (checkboxId === 'locationCheckbox' && locationCheckbox.checked) {
+      npcCheckbox.checked = false;
+    }
+  }
+</script>
 
 <label for="eventLocation">Location(s)</label>
 <input class="lineField" type="textarea" id="eventLocation" name="eventLocation" placeholder="All, One, or by Location Tag" required>
