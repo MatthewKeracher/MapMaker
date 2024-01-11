@@ -183,23 +183,45 @@ Array.generateLocationOptions();
 },
 
 
-getNPCs(locationName, currentPhase) {
-const presentNPCs = [];
+getNPCs(locationName) {
+  const presentNPCs = [];
 
-// Apply different colors based on location type
-const phaseName = 
-currentPhase === 0 ? 'Morning' :
-currentPhase === 1 ? 'Afternoon' :
-currentPhase === 2 ? 'Night' : 'wild';
+  // Include normal NPCs (always present)
+  for (const npc of NPCs.npcArray) {
+      if (npc.MorningLocation === locationName) {
+          const npcStory = this.generateNPCStory(npc, locationName);
+          presentNPCs.push({ name: npc.name, story: npcStory });
+      }
 
-for (const npc of NPCs.npcArray) {
-if (npc[`${phaseName}Location`] === locationName) {
-const npcStory = this.generateNPCStory(npc, locationName, phaseName);
-presentNPCs.push({ name: npc.name, story: npcStory });
-}}
+      //Cycle through active events and place NPCs who should be there.
+      for (const event of Events.eventsArray){
+      if(npc.occupation === event.npc && npc.occupation !== '' && event.location === locationName && event.target === 'Location'){
+        console.log(npc.name)
+        const npcStory = this.generateNPCStory(npc, locationName);
+        presentNPCs.push({ name: npc.name, story: npcStory });
+      }}
+  
 
-return presentNPCs;
+  // // Include random NPCs with a probability (adjust as needed)
+  // const randomNPCProbability = 0.0; // 10% chance for a random NPC to be present
+  // if (Math.random() <= randomNPCProbability) {
+  //     const randomNPC = this.getRandomNPC();
+  //     const npcStory = this.generateNPCStory(randomNPC, locationName);
+  //     presentNPCs.push({ name: randomNPC.name, story: npcStory });
+  // }
+
+    }
+
+  return presentNPCs;
 },
+
+getRandomNPC() {
+  // Implement logic to retrieve a random NPC not normally associated with the location
+  // For example, you can select from a pool of NPCs that aren't tied to specific locations
+  const randomIndex = Math.floor(Math.random() * NPCs.npcArray.length);
+  return NPCs.npcArray[randomIndex];
+},
+
 
 generateNPCStory(npc, locationName) {
 let story = `<br>`;
@@ -210,7 +232,9 @@ ${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </
 //Search active events to see if any apply based on the location, or the individual. 
 
 const presentNPCEvents = Events.eventsArray.filter(event => 
-    (event.npc === npc.name || event.npc === 'All' || event.npc === npc.occupation) && (event.active === 1)
+    (event.npc === npc.name || event.npc === 'All' || event.npc === npc.occupation)
+    && (event.target === 'NPC' && event.active === 1 && npc.occupation !== '')
+    && (event.location === locationName || event.location === 'Home' && npc.MorningLocation === locationName)
   );
   
 

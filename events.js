@@ -391,25 +391,28 @@ itemList.appendChild(AllDiv);
 // Iterate through the sorted events
 for (const location of data) {
 const locationNameDiv = document.createElement('div');
-locationNameDiv.innerHTML = `[Group Goes Here] ${location.divId}</span>`;
+locationNameDiv.innerHTML = `<span class="${location.tags !== undefined ? 'cyan' : ''}">${location.tags !== undefined ? `[${location.tags}]` : ''}</span> ${location.divId}`;
 itemList.appendChild(locationNameDiv);
-
 locationNameDiv.addEventListener('click', () => {
 Ref.eventLocation.value = location.divId
 });
 }
 },
 
-async getEvent(currentLocation) {
+async getEvent(currentLocation, tags) {
 // Filter ambienceArray based on selected values
-console.log(Ref.eventManagerInput.value);
+//console.log(Ref.eventManagerInput.value);
+console.log(tags)
 
 const activeEvents = [];
 
 for (const entry of this.eventsArray) {
-if (entry.active === 1 && entry.location === "All" || entry.active === 1 && entry.location === currentLocation ) {
-activeEvents.push(entry);
-}
+  if (
+      entry.active === 1 && entry.target === 'Location' &&
+      (entry.location === "All" || entry.location === currentLocation || entry.location === tags)
+  ) {
+      activeEvents.push(entry);
+  }
 }
 
 console.log(activeEvents);
@@ -440,6 +443,15 @@ Ref.eventNPC.value = ambience.npc;
 Ref.eventLocation.value = ambience.location;
 Ref.ambienceDescription.value = ambience.description;
 Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
+
+//Check target and tick relevent box
+if(ambience.target === 'NPC'){
+Ref.npcCheckbox.checked = true;
+Ref.locationCheck.checked = false;
+}
+else{
+Ref.locationCheck.checked = true;
+Ref.npcCheckbox.checked = false;}
 });
 },
 
@@ -448,9 +460,21 @@ const existingAmbienceIndex = this.eventsArray.findIndex(ambience =>
 ambience.event === Ref.eventEvent.value         
 );
 
+let target 
+
+//Check to see if NPC checkbox is checked
+if (Ref.eventTarget.checked) {
+  // The checkbox is checked
+ target = 'NPC';
+} else {
+  // The checkbox is not checked
+ target = 'Location'
+}
+
 const ambience = {
 group: Ref.eventGroup.value,
 active: 1,
+target: target,
 //main: Ref.ambienceMain.value,
 //second: Ref.ambienceSecond.value,
 event: Ref.eventEvent.value,
@@ -464,7 +488,7 @@ npc: Ref.eventNPC.value,
 if (existingAmbienceIndex !== -1) {
 // Update the existing ambience entry
 this.eventsArray[existingAmbienceIndex] = ambience;
-console.log('Ambience updated:', ambience);
+console.log('Event updated:', ambience);
 } else {
 this.eventsArray.push(ambience);
 

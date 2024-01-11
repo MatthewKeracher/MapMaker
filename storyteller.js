@@ -22,9 +22,11 @@ const locationObject = Array.locationArray.find(entry => entry.divId === locatio
 Ref.locationLabel.textContent = locationName;
 Ref.editLocationName.value   = locationName;
 
+console.log('Tags : ' + locationObject.tags)
+
 if (locationObject) {
 //name the returned locationObject data 
-Events.getEvent(locationName);
+Events.getEvent(locationName, locationObject.tags);
 const locationText = Events.eventDesc + '<br><br>' + locationObject.description;
 
 this.miscArray = [];
