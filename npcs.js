@@ -186,40 +186,51 @@ Array.generateLocationOptions();
 getNPCs(locationName) {
   const presentNPCs = [];
 
-  // Include normal NPCs (always present)
-  for (const npc of NPCs.npcArray) {
-      if (npc.MorningLocation === locationName) {
-          const npcStory = this.generateNPCStory(npc, locationName);
-          presentNPCs.push({ name: npc.name, story: npcStory });
-      }
+  //Figure out who is 'free', who is 'doing something,' and who has a scheduling conflict.
 
-      //Cycle through active events and place NPCs who should be there.
-      for (const event of Events.eventsArray){
-      if(npc.occupation === event.npc && npc.occupation !== '' && event.location === locationName && event.target === 'Location'){
-        console.log(npc.name)
+
+  //NPCs who are 'doing something'.
+  for (const npc of NPCs.npcArray){
+    for(const event of Events.eventsArray){
+      if( (npc.name === event.npc || npc.occupation === event.npc) && event.active === 1 && event.target === 'NPC' && event.location === locationName){
         const npcStory = this.generateNPCStory(npc, locationName);
         presentNPCs.push({ name: npc.name, story: npcStory });
-      }}
-  
-
-  // // Include random NPCs with a probability (adjust as needed)
-  // const randomNPCProbability = 0.0; // 10% chance for a random NPC to be present
-  // if (Math.random() <= randomNPCProbability) {
-  //     const randomNPC = this.getRandomNPC();
-  //     const npcStory = this.generateNPCStory(randomNPC, locationName);
-  //     presentNPCs.push({ name: randomNPC.name, story: npcStory });
-  // }
-
+      }
     }
+  }
+
+  console.log(presentNPCs)
+
+  // // Include normal NPCs (always present)
+  // for (const npc of NPCs.npcArray) {
+  //     if (npc.MorningLocation === locationName) {
+  //         const npcStory = this.generateNPCStory(npc, locationName);
+  //         presentNPCs.push({ name: npc.name, story: npcStory });
+  //     }
+
+  //     //Cycle through active events and place NPCs who should be there.
+  //     for (const event of Events.eventsArray){
+  //     if( (npc.occupation === event.npc || npc.name === event.npc) 
+  //     && npc.occupation !== '' && event.active === 1 && event.location === locationName && event.target === 'Location'){
+  //       console.log(npc.name)
+  //       const npcStory = this.generateNPCStory(npc, locationName);
+  //       presentNPCs.push({ name: npc.name, story: npcStory });
+  //     }}
+
+  //     // Remove NPCs placed elsewhere by effects
+  //   presentNPCs.slice().forEach((npc, index) => {
+  //     for (const event of Events.eventsArray) {
+  //       if ((npc.name === event.npc || npc.occupation === event.npc) && event.active === 1 && (event.location !== locationName || event.location !== 'Home')) {
+  //         // Remove NPC from the list if placed elsewhere
+  //         console.log(npc.name)
+  //         presentNPCs.splice(index, 1);
+  //       }
+  //     }
+  //   });
+
+    // }
 
   return presentNPCs;
-},
-
-getRandomNPC() {
-  // Implement logic to retrieve a random NPC not normally associated with the location
-  // For example, you can select from a pool of NPCs that aren't tied to specific locations
-  const randomIndex = Math.floor(Math.random() * NPCs.npcArray.length);
-  return NPCs.npcArray[randomIndex];
 },
 
 

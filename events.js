@@ -108,12 +108,28 @@ this.loadLocationsList(Array.locationArray);
 })
 
 Ref.eventLocation.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
-this.searchLocations(searchText);
-console.log(this.searchArray);
-this.loadLocationsList(this.searchArray);
+  let searchText = event.target.value.toLowerCase();
 
-})
+  if (searchText.trim() === '') {
+      // Input box is empty, handle accordingly
+      console.log('Input box is empty');
+      // Additional logic for empty input, if needed
+      this.loadLocationsList(Array.locationArray);
+  } else if (!/^[a-zA-Z]+$/.test(searchText)) {
+      // Input box contains letters, handle accordingly
+      console.log('Input box contains letters');
+      // Additional logic for input with letters, if needed
+      let searchText = event.target.value.toLowerCase();
+      this.searchLocations(searchText);
+      console.log(this.searchArray);
+      this.loadLocationsList(this.searchArray);
+  } else {
+      // Input box has valid content, proceed with the search
+      this.searchLocations(searchText);
+      console.log(this.searchArray);
+      this.loadLocationsList(this.searchArray);
+  }
+});
 
 Ref.eventNPC.addEventListener('click', () => {
 NPCs.loadNPC(NPCs.npcArray)
@@ -158,15 +174,16 @@ this.loadEventListeners();
 },
 
 searchEvents: function(searchText) {
-this.eventsSearchArray = [];
-console.log(searchText)
+this.searchArray = [];
+console.log('Searching for Events including: ' + searchText)
 
-this.eventsSearchArray = this.eventsArray.filter((ambience) => {
-const group = ambience.group.toLowerCase();
-const event = ambience.event.toLowerCase();
+this.searchArray = this.eventsArray.filter((e) => {
+const group = e.group.toLowerCase();
+const event = e.event.toLowerCase();
 
 // Check if any of the properties contain the search text
 return group.includes(searchText) || event.includes(searchText);
+
 }); 
 
 },
@@ -174,11 +191,10 @@ return group.includes(searchText) || event.includes(searchText);
 // -- LOCATION search
 
 searchLocations: function(searchText) {
-this.eventsSearchArray = [];
-console.log(searchText);
+this.searchArray = [];
+console.log('Searching for Locations including: ' + searchText);
 
-
-this.eventsSearchArray = Array.locationArray.filter((location) => {
+this.searchArray = Array.locationArray.filter((location) => {
 //const group = location.group.toLowerCase();
 const name = location.divId.toLowerCase();
 // Check if any of the properties contain the search text
@@ -291,7 +307,7 @@ Ref.extraContent.appendChild(eventNameDiv);
 eventNameDiv.addEventListener('click', () => {
 Ref.eventManagerInput.value = event.event;
 this.focusEvent = event.event;
-this.eventsSearchArray = [event]; // Assign an array with a single element
+this.searchArray = [event]; // Assign an array with a single element
 this.addEventInfo();
 Ref.extraInfo2.classList.add('showExtraInfo');
 });
@@ -299,7 +315,7 @@ Ref.extraInfo2.classList.add('showExtraInfo');
 eventNameDiv.addEventListener('mouseover', () => {
   //Ref.eventManagerInput.value = event.event;
   this.focusEvent = event.event;
-  this.eventsSearchArray = [event]; // Assign an array with a single element
+  this.searchArray = [event]; // Assign an array with a single element
   this.addEventInfo();
   Ref.extraInfo2.classList.add('showExtraInfo');
   });
@@ -387,6 +403,10 @@ itemList.innerHTML = '';
 const AllDiv = document.createElement('div');
 AllDiv.innerHTML = "<span class= cyan>All</span>";
 itemList.appendChild(AllDiv);
+
+// const HomeDiv = document.createElement('div');
+// HomeDiv.innerHTML = "<span class= hotpink>Home</span>";
+// itemList.appendChild(HomeDiv);
 
 // Iterate through the sorted events
 for (const location of data) {
@@ -515,10 +535,10 @@ this.searchAmbience(searchText);
 },
 
 searchAmbience: function(searchText) {
-this.eventsSearchArray = [];
+this.searchArray = [];
 console.log('called')
 
-this.eventsSearchArray = this.eventsArray.filter((ambience) => {
+this.searchArray = this.eventsArray.filter((ambience) => {
 const group = ambience.group.toLowerCase();
 const event = ambience.event.toLowerCase();
 

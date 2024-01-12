@@ -376,27 +376,25 @@ placeholder="Put any other information about this NPC here.
 <form id="ambienceForm" class="ambienceForm">
 <div class="monsterFormContainer">
 
+  <div class="event-checkbox-container">
+    <form>
+      <label class="npc-label">
+        <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateCheckboxes('npcCheckbox')">
+        NPC
+      </label>
+  
+      <label>
+        <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateCheckboxes('locationCheckbox')">
+        Location
+      </label>
+    </form>
+  </div>
+
 <label for="ambienceTitle">Event</label>
 <input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="{... to Search" required>
 
 <label for="ambienceContext">Tags</label>
 <input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
-
-
-<div class="event-checkbox-container">
-  <form>
-    <label class="npc-label">
-      <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateCheckboxes('npcCheckbox')">
-      NPC
-    </label>
-
-    <label>
-      <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateCheckboxes('locationCheckbox')">
-      Location
-    </label>
-  </form>
-</div>
-
 
 <script>
   function updateCheckboxes(checkboxId) {
