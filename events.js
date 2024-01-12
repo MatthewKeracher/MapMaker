@@ -466,12 +466,15 @@ Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
 
 //Check target and tick relevent box
 if(ambience.target === 'NPC'){
-Ref.npcCheckbox.checked = true;
-Ref.locationCheck.checked = false;
+//Ref.npcCheckbox.checked = true;
+Ref.npcCheckbox.click();
+//Ref.locationCheck.checked = false;
 }
 else{
-Ref.locationCheck.checked = true;
-Ref.npcCheckbox.checked = false;}
+//Ref.locationCheck.checked = true;
+Ref.locationCheck.click();
+//Ref.npcCheckbox.checked = false;
+}
 });
 },
 

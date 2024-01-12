@@ -400,21 +400,38 @@ placeholder="Put any other information about this NPC here.
   function updateCheckboxes(checkboxId) {
     const npcCheckbox = document.getElementById('npcCheckbox');
     const locationCheckbox = document.getElementById('locationCheckbox');
+    const eventLocation = document.getElementById('eventLocation');
+    const eventNPC = document.getElementById('eventNPC');
 
     // Uncheck the other checkbox when one is checked
     if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
       locationCheckbox.checked = false;
+      // Hide and clear the Location text box
+      eventLocationLabel.textContent = 'Where are the NPCs?';
+      eventLocation.style.display = 'block';
+      eventNPCLabel.textContent = 'Who does this affect?';
+      eventNPC.style.display = 'block';
+      eventLocation.value = '';
     } else if (checkboxId === 'locationCheckbox' && locationCheckbox.checked) {
       npcCheckbox.checked = false;
+      // Hide and clear the NPC text box
+      eventNPCLabel.textContent = '';
+      eventNPC.style.display = 'none';
+      eventLocationLabel.textContent = 'Where does this affect?';
+      eventLocation.style.display = 'block';
+      eventNPC.value = '';
+    } else {
+      // Both checkboxes unchecked, show both text boxes
+           
     }
   }
 </script>
 
-<label for="eventLocation">Location(s)</label>
-<input class="lineField" type="textarea" id="eventLocation" name="eventLocation" placeholder="All, One, or by Location Tag" required>
+<label id="eventLocationLabel" for="eventLocation"></label>
+<input class="lineField" type="textarea" id="eventLocation" name="eventLocation" style="display: none;" placeholder="All, One, or by Location Tag" required>
 
-<label for="eventNPC">NPC(s)</label>
-<input class="lineField" type="textarea" id="eventNPC" name="eventNPC" placeholder="All, One, or by NPC Tag" required>
+<label id="eventNPCLabel" for="eventNPC"></label>
+<input class="lineField" type="textarea" id="eventNPC" name="eventNPC" style="display: none;" placeholder="All, One, or by NPC Tag" required>
 
 <label for="ambienceDescription">Description</label>
 <textarea class="largeField" type="textarea" id="ambienceDescription" name="ambienceDescription" 

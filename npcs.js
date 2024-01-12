@@ -192,14 +192,25 @@ getNPCs(locationName) {
   //NPCs who are 'doing something'.
   for (const npc of NPCs.npcArray){
     for(const event of Events.eventsArray){
-      if( (npc.name === event.npc || npc.occupation === event.npc) && event.active === 1 && event.target === 'NPC' && event.location === locationName){
+
+      if( 
+        
+        (npc.name === event.npc || npc.occupation === event.npc) && 
+        
+        event.active === 1 && 
+        event.target === 'NPC' && 
+        event.location === locationName)
+        
+        {
+
         const npcStory = this.generateNPCStory(npc, locationName);
         presentNPCs.push({ name: npc.name, story: npcStory });
-      }
+
+        }
     }
   }
 
-  console.log(presentNPCs)
+  return presentNPCs;
 
   // // Include normal NPCs (always present)
   // for (const npc of NPCs.npcArray) {
@@ -230,7 +241,7 @@ getNPCs(locationName) {
 
     // }
 
-  return presentNPCs;
+ 
 },
 
 
