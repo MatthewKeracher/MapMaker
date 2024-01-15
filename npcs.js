@@ -215,7 +215,8 @@ getNPCs(locationName) {
   
       if (
         (npc.name === event.npc || 
-          (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))) &&
+        (event.npc && event.npc.split(',').map(item => item.trim()).includes(npc.name)) ||
+        (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))) &&
         event.active === 1 &&
         event.target === 'NPC' &&
         event.location === locationName
@@ -240,6 +241,7 @@ let story = `<br>`;
 const presentNPCEvents = Events.eventsArray.filter(event => 
   (event.npc === npc.name || 
     event.npc === 'All' || 
+    (event.npc && event.npc.split(',').map(item => item.trim()).includes(npc.name)) ||
     (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))
   ) &&
   (event.target === 'NPC' && event.active === 1 && npc.occupation !== '') &&
@@ -256,7 +258,7 @@ if (presentNPCEvents.length > 0) {
 
   if (matchingItem) {
     relevantTag = matchingItem;
-  }
+  } else {relevantTag = npc.class} 
 }
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">

@@ -52,11 +52,11 @@ init: function () {
           Ref.itemList.style.display = 'block';
           Ref.itemList.innerHTML = ''; // Clear existing content
 
-          // fixDisplay()
-          const imageContainer = document.querySelector('.image-container');
-          const radiantDisplay = document.getElementById('radiantDisplay');
-          imageContainer.style.width = "45vw";
-          radiantDisplay.style.width = "45vw";
+          // // fixDisplay()
+          // const imageContainer = document.querySelector('.image-container');
+          // const radiantDisplay = document.getElementById('radiantDisplay');
+          // imageContainer.style.width = "45vw";
+          // radiantDisplay.style.width = "45vw";
 
           filteredItems.forEach(item => {
             const option = document.createElement('div');
@@ -88,11 +88,11 @@ init: function () {
           Ref.itemList.style.display = 'none';
           Ref.itemList.innerHTML = '';
 
-          // fixDisplay()
-          const imageContainer = document.querySelector('.image-container');
-          const radiantDisplay = document.getElementById('radiantDisplay');
-          imageContainer.style.width = "70vw";
-          radiantDisplay.style.width = "70vw";
+          // // fixDisplay()
+          // const imageContainer = document.querySelector('.image-container');
+          // const radiantDisplay = document.getElementById('radiantDisplay');
+          // imageContainer.style.width = "70vw";
+          // radiantDisplay.style.width = "70vw";
         }
       });
     }

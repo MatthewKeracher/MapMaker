@@ -29,7 +29,7 @@ margin: 0; /* Remove default margin */
     top: 0vh;
     right: 0vw;
     left: 0.5vw;
-    
+    opacity: 0.6;
     color: whitesmoke;   
     font-size: 3vh;
     text-align: center;

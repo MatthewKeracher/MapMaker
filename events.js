@@ -424,10 +424,10 @@ loadEventsList: function(data) {
   data.forEach(event => {
     const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
     const locationTags = locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
-    console.log(locationTags + ' :: ' + eventLocations)
+    //console.log(locationTags + ' :: ' + eventLocations)
   
     if (event.active === 1) {
-      if (eventLocations.includes(locationObject.divId)) {
+      if (eventLocations.includes(locationObject.divId) || event.location === 'All') {
         activeAtLocation.push(event);
       } else if (eventLocations.some(location => locationTags.includes(location))) {
         activeAtTag.push(event);
