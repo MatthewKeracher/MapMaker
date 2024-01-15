@@ -118,9 +118,16 @@ itemList.innerHTML = '';
 // Iterate through the sorted spells
 for (const spell of data) {
 const spellNameDiv = document.createElement('div');
+spellNameDiv.id = spell.Name
 spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}]<span class="yellow">${spell.Name}</span>`;
 itemList.appendChild(spellNameDiv);
 this.fillSpellsForm(spell, spellNameDiv);
+
+ //show Item info in ExtraInfo2 when hover over Div
+ spellNameDiv.addEventListener('mouseover', () => {
+    Ref.extraContent2.classList.add('showExtraInfo');
+    this.addSpellInfo(spellNameDiv.id);
+    });
 }
 
 itemList.style.display = 'block'; // Display the container

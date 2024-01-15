@@ -27,7 +27,7 @@ console.log('Tags : ' + locationObject.tags)
 if (locationObject) {
 //name the returned locationObject data 
 Events.getEvent(locationName, locationObject.tags);
-const locationText = locationObject.description + '<br><br>' + Events.eventDesc;
+const locationText = '<br>' + locationObject.description + '<br><br>' + Events.eventDesc;
 
 this.miscArray = [];
 this.monsterArray = [];

@@ -33,7 +33,8 @@ this.otherNPCs = [];
 
 for (const npc of NPCArray) {
 const npcNameDiv = document.createElement('div');
-npcNameDiv.textContent = ' [' + npc.occupation + ']  ' + npc.name ;            
+npcNameDiv.textContent = ' [' + npc.occupation + ']  ' + npc.name ;  
+npcNameDiv.id = npc.name;          
 
 this.sortNPCs(npc, npcNameDiv);
 this.fillNPCForm(npc, npcNameDiv);
@@ -46,11 +47,19 @@ const sortedNPCs = [...this.AlwaysNPCs, ...this.MorningNPCs, ...this.AfternoonNP
 // Append sorted divs to the itemList
 sortedNPCs.forEach(npcDiv => {
 itemList.appendChild(npcDiv);
+
+//show NPC info in ExtraInfo2 when hover over Div
+npcDiv.addEventListener('mouseover', () => {
+  //Ref.eventManagerInput.value = event.event;
+  // console.log(npcDiv.id)
+  Ref.extraInfo2.classList.add('showExtraInfo');
+  this.addNPCInfo(npcDiv.id);
+  });
+
+
 });
 
 itemList.style.display = 'block'; // Display the NPC names container
-
-this.fixDisplay();
 
 },
 
@@ -295,8 +304,6 @@ getRandomItem(itemsArray) {
     }
   },
 
-
-
 addNPCInfo(npcName) {
 const extraContent = document.getElementById('extraContent');
 
@@ -421,6 +428,7 @@ npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonste
 
 // Set the formatted content in the extraContent element
 extraContent.innerHTML = npcContent;
+extraContent2.innerHTML = npcContent;
 } else {
 // NPC not found
 extraContent.innerHTML = `NPC not found`;
@@ -469,15 +477,15 @@ const radiantDisplay = document.getElementById('radiantDisplay');
 
 try{
 
-if (Edit.editPage === 2 | Edit.editPage === 3 | Edit.editPage === 4 | Edit.editPage === 5 | Edit.editPage === 6) {
-imageContainer.style.width = "45vw";
-radiantDisplay.style.width = "45vw";
-Ref.itemList.style.display = "block";
-} else {
-imageContainer.style.width = "70vw";
-radiantDisplay.style.width = "70vw";
-Ref.itemList.style.display = "none";
-}
+// if (Edit.editPage === 2 | Edit.editPage === 3 | Edit.editPage === 4 | Edit.editPage === 5 | Edit.editPage === 6) {
+// imageContainer.style.width = "45vw";
+// radiantDisplay.style.width = "45vw";
+// Ref.itemList.style.display = "block";
+// } else {
+// imageContainer.style.width = "70vw";
+// radiantDisplay.style.width = "70vw";
+// Ref.itemList.style.display = "none";
+// }
 
 }catch{}
 

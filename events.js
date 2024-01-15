@@ -284,6 +284,8 @@ tagDiv.addEventListener('click', () => {
 
 // -- USING EVENT MANAGER
 
+
+
 showcurrentEvents(data){
 
 console.log(data)
@@ -291,17 +293,47 @@ console.log(data)
 Ref.extraContent.innerHTML = '';
 Ref.extraContent.style.display = 'block'; // Display the container
 
-// Partition the data into active and inactive events
-const activeEvents = data.filter(event => event.active === 1);
-const inactiveEvents = data.filter(event => event.active !== 1);
 
-// Concatenate the active and inactive events arrays, placing active events first
-const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
+// Sorting function for events
+const sortEvents = (eventA, eventB) => {
+  // First, sort by active/inactive status (active first)
+  const activeComparison = eventB.active - eventA.active;
+  if (activeComparison !== 0) {
+      return activeComparison;
+  }
+
+  // If both events have the same active status, sort by event group alphabetically
+  const groupComparison = eventA.group.localeCompare(eventB.group);
+  if (groupComparison !== 0) {
+      return groupComparison;
+  }
+
+  // If both events have the same group, sort by event target alphabetically
+  return eventA.target.localeCompare(eventB.target);
+};
+
+// Sort the data using the custom sorting function
+const sortedAmbienceArray = data.sort(sortEvents);
+
+
+// // Partition the data into active and inactive events
+// const activeEvents = data.filter(event => event.active === 1);
+// const inactiveEvents = data.filter(event => event.active !== 1);
+
+// // Concatenate the active and inactive events arrays, placing active events first
+// const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
 
 // Iterate through the sorted events and display them
 for (const event of sortedAmbienceArray) {
 const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `<span class="gray">[${event.group}]</span><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>`;
+eventNameDiv.innerHTML = `
+    <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+    <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target}]</span>
+    
+    <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+`;
+
+
 Ref.extraContent.appendChild(eventNameDiv);
 
 eventNameDiv.addEventListener('click', () => {
@@ -338,12 +370,12 @@ if (event) {
 //console.log(event)
 
 const eventInfo = [
-`<span class="misc">Status:</span>${event.active === 1 ? "Enabled" : "Disabled"} <br><hr>`,
-`<span class="misc">Event:</span>${event.event || "None"} <br><hr> `,
-`<span class="misc">Location:</span>${event.location || "None"} <br><hr>`,
-`<span class="misc">NPC:</span>  ${event.npc || "None"} <br><hr>`,
-`<span class="misc">Group:</span>  ${event.group || "None"} <br><hr>`,
-`<span class="misc">Description:</span> ${event.description || "None"}<br><br>`,
+`<span class="misc">Status:</span>${event.active === 1 ? "Enabled" : "Disabled"} <br><br>`,
+`<span class="misc">Event:</span>${event.event || "None"} <br><br> `,
+`<span class="misc">Location:</span>${event.location || "None"} <br><br>`,
+`<span class="misc">NPC:</span>  ${event.npc || "None"} <br><br>`,
+`<span class="misc">Group:</span>  ${event.group || "None"} <br><br>`,
+`<span class="hotpink">Description</span><br><hr> ${event.description || "None"}<br><br>`,
 
 ];
 
@@ -382,8 +414,14 @@ const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
 
 // Iterate through the sorted events
 for (const event of sortedAmbienceArray) {
-const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `[${event.group}]<span class="${event.active === 1 ? 'lime' : 'other-class'}">${event.event}</span>`;
+
+  const eventNameDiv = document.createElement('div');
+  eventNameDiv.innerHTML = `
+      <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target}]</span>
+      <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+      <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+  `;
+
 itemList.appendChild(eventNameDiv);
 this.fillAmbienceForm(event, eventNameDiv);
 }
@@ -479,20 +517,21 @@ Ref.locationCheck.click();
 },
 
 saveAmbience: function() {
+
+  let target 
+
+  //Check to see if NPC checkbox is checked
+  if (Ref.eventTarget.checked) {
+    // The checkbox is checked
+   target = 'NPC';
+  } else {
+    // The checkbox is not checked
+   target = 'Location'
+  }
+
 const existingAmbienceIndex = this.eventsArray.findIndex(ambience => 
-ambience.event === Ref.eventEvent.value         
+ambience.event === Ref.eventEvent.value && ambience.target === target      
 );
-
-let target 
-
-//Check to see if NPC checkbox is checked
-if (Ref.eventTarget.checked) {
-  // The checkbox is checked
- target = 'NPC';
-} else {
-  // The checkbox is not checked
- target = 'Location'
-}
 
 const ambience = {
 group: Ref.eventGroup.value,

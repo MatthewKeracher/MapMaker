@@ -40,7 +40,7 @@ transition: background-color 0.3s;
     }
 
 input[type="checkbox"] {
-transform: scale(3); /* You can adjust the scale factor to make them larger or smaller */
+transform: scale(2); /* You can adjust the scale factor to make them larger or smaller */
 
 }
 

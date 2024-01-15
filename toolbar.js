@@ -237,6 +237,7 @@ Ref.EditorContainer.style.display = 'flex';
 Ref.locationGroup.style.display = 'flex';
 
 Ref.eventManagerContainer.style.display = 'none';
+Ref.extraInfo2.classList.remove('showExtraInfo'); // Bookmark!
 Ref.Storyteller.style.display = 'none';
 Ref.locationLabel.style.display = 'none';
 

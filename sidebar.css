@@ -13,16 +13,16 @@ overflow: auto;
 .extraInfo {
 position: fixed;  
 right: 30.1vw; 
-width: 20vw;
+width: 30vw;
 height: 97vh;
 top:0;
 z-index:5;
 background-color: black;
-opacity: 1;  
+opacity: 0.8;  
 display: none; 
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-font-size: 1.9vh; 
+font-size: 1.8vh; 
 padding: 1vh; 
 text-align: left;
 overflow: auto;
@@ -34,7 +34,8 @@ text-align: left;
 }  
 
 #extraContent div:hover {
-background-color: limegreen; /* Change the background color on hover */
+background-color: whitesmoke; /* Change the background color on hover */
+opacity: 1;
 color: whitesmoke;
 cursor: pointer; /* Show pointer cursor on hover */
 } 
@@ -45,21 +46,21 @@ width: 0.1px; /* Set the width of the scrollbar */
 
 .extraInfo2 {
 position: fixed;  
-right: 51.0vw; 
+right: 60.0vw; 
 width: 20vw;
 height: 97vh;
 top:0;
-z-index:5;
+z-index:10;
 background-color: black;
-opacity: 1;  
+opacity: 0.8;  
 display: none; 
 color: bisque;
 font-family: monospace, 'Trebuchet MS', sans-serif;
-font-size: 1.9vh; 
+font-size: 1.8vh; 
 padding: 1vh; 
 text-align: left;
 overflow: auto;
-scrollbar-color: black;
+scrollbar-color: red;
 vertical-align: top; 
 flex-direction: column;
 resize: none;
@@ -74,15 +75,15 @@ width: 0.1px; /* Set the width of the scrollbar */
 #itemList,
 #itemList2 {
 color: gray;
-font-size: 2.0vh;
+font-size: 1.8vh;
 background-color: black;
-opacity: 1;
+opacity: 0.8;
 height: 100vh;
 border: transparent;
 padding: 5px;
 position: fixed; /* Use fixed position for screen coordinates */
 top: 0;
-left: 40vw;
+right: 30vw;
 width: 30vw;
 z-index: 10;
 overflow-y: auto;
@@ -136,6 +137,10 @@ color:gold
 
 .hotpink{
 color:hotpink;
+}
+
+.purple{
+    color:rgb(176, 17, 174);
 }
 
 .lime{

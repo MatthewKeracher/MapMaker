@@ -118,14 +118,22 @@ loadItemsList: function(data) {
     // Iterate through the sorted items
     for (const item of sortedItems) {
       const itemNameDiv = document.createElement('div');
+      itemNameDiv.id = item.Name;
       itemNameDiv.innerHTML = `[${item.Type}]<span class="lime">${item.Name}</span>`;
       itemList.appendChild(itemNameDiv);
       this.fillItemsForm(item, itemNameDiv);
+
+    //show Item info in ExtraInfo2 when hover over Div
+    itemNameDiv.addEventListener('mouseover', () => {
+    Ref.extraContent2.classList.add('showExtraInfo');
+    this.addIteminfo(itemNameDiv.id);
+    });
+
+
     }
   
     itemList.style.display = 'block'; // Display the container
   
-    NPCs.fixDisplay();
   },
   
 
