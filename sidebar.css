@@ -12,7 +12,7 @@ overflow: auto;
 
 .extraInfo {
 position: fixed;  
-right: 30.1vw; 
+right: 30vw; 
 width: 30vw;
 height: 97vh;
 top:0;
@@ -46,7 +46,7 @@ width: 0.1px; /* Set the width of the scrollbar */
 
 .extraInfo2 {
 position: fixed;  
-right: 60.0vw; 
+right: 61vw; 
 width: 20vw;
 height: 97vh;
 top:0;
@@ -84,7 +84,7 @@ padding: 5px;
 position: fixed; /* Use fixed position for screen coordinates */
 top: 0;
 right: 30vw;
-width: 30vw;
+width: 30.5vw;
 z-index: 10;
 overflow-y: auto;
 display: none;
@@ -161,6 +161,10 @@ color:rgb(246, 235, 10)
 
 .gray{
     color:gray
+}
+
+.white{
+    color: whitesmoke
 }
 
 

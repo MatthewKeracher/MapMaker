@@ -22,7 +22,7 @@ const locationObject = Array.locationArray.find(entry => entry.divId === locatio
 Ref.locationLabel.textContent = locationName;
 Ref.editLocationName.value   = locationName;
 
-console.log('Tags : ' + locationObject.tags)
+//console.log('Tags : ' + locationObject.tags)
 
 if (locationObject) {
 //name the returned locationObject data 
@@ -61,10 +61,15 @@ Ref.Storyteller.innerHTML = Story;
 
 //Update Editor Content
 Ref.textLocation.value = locationObject.description;
-console.log(locationObject.tags)
+//console.log(locationObject.tags)
 Ref.editLocationTags.value = locationObject.tags;
 
-NPCs.loadNPC(NPCs.npcArray)
+if(Edit.editPage === 2){
+  Events.loadEventsList(Events.eventsArray);
+}else if (Edit.editPage === 3){
+  NPCs.loadNPC(NPCs.npcArray)
+}
+
 this.showExtraContent()
 
 };
@@ -132,7 +137,7 @@ showExtraContent() {
      
       switch (contentType) {
         case 'npc':
-          NPCs.addNPCInfo(contentId,); // Handle NPCs
+          NPCs.addNPCInfo(contentId, "ExtraContent"); // Handle NPCs
           break;
         case 'monster':
           Monsters.addMonsterInfo(contentId, target); // Handle monsters
@@ -186,7 +191,7 @@ showExtraExtraContent() {
      
       switch (contentType) {
         case 'npc':
-          NPCs.addNPCInfo(contentId); // Handle NPCs
+          NPCs.addNPCInfo(contentId, "ExtraContent"); // Handle NPCs
           break;
         case 'monster':
           Monsters.addMonsterInfo(contentId); // Handle monsters

@@ -11,11 +11,9 @@ import Events from "./events.js";
 const NPCs = {
 npcArray: [],
 npcSearchArray:[],
-AlwaysNPCs : [],
-MorningNPCs : [],
-AfternoonNPCs : [],
-NightNPCs : [],
-otherNPCs : [],
+namedNPCs: [],
+groupedNPCs : [],
+absentNPCs: [],
 
 loadNPC: function(NPCArray) {
 
@@ -23,26 +21,27 @@ const itemList = document.getElementById('itemList'); // Do not delete!!
 
 // Clear the existing content
 itemList.innerHTML = '';
-
-this.AlwaysNPCs = [];
-this.MorningNPCs = [];
-this.AfternoonNPCs = [];
-this.NightNPCs = [];
-this.otherNPCs = [];
-
+this.namedNPCs = [];
+this.groupedNPCs = [];
+this.absentNPCs = [];
 
 for (const npc of NPCArray) {
-const npcNameDiv = document.createElement('div');
-npcNameDiv.textContent = ' [' + npc.occupation + ']  ' + npc.name ;  
+const npcNameDiv = document.createElement('div'); 
 npcNameDiv.id = npc.name;          
-
 this.sortNPCs(npc, npcNameDiv);
 this.fillNPCForm(npc, npcNameDiv);
+}
 
+// Add <hr> between namedNPCs and groupedNPCs if arrays are not empty
+if (this.namedNPCs.length > 0) {
+  this.namedNPCs.push(document.createElement('hr'));
+}
+if (this.groupedNPCs.length > 0) {
+  this.groupedNPCs.push(document.createElement('hr'));
 }
 
 // Concatenate arrays in desired order
-const sortedNPCs = [...this.AlwaysNPCs, ...this.MorningNPCs, ...this.AfternoonNPCs, ...this.NightNPCs, ...this.otherNPCs];
+const sortedNPCs = [...this.namedNPCs, ...this.groupedNPCs, ...this.absentNPCs];
 
 // Append sorted divs to the itemList
 sortedNPCs.forEach(npcDiv => {
@@ -56,48 +55,64 @@ npcDiv.addEventListener('mouseover', () => {
   this.addNPCInfo(npcDiv.id);
   });
 
-
 });
 
 itemList.style.display = 'block'; // Display the NPC names container
+Ref.extraInfo.classList.remove('showExtraInfo');
 
 },
 
-sortNPCs: function(npc, npcNameDiv){
+sortNPCs: function(npc, npcNameDiv) {
+  const currentLocation = Ref.locationLabel.textContent;
+  
+  // Array to track unique NPC names
+  const uniqueNames = [];
 
-// Colour code based on whether this is their Morning, Afternoon, or Night Location
+  // Filter eventsArray based on currentLocation
+const sortEvents = Events.eventsArray.filter(event => {
+  if (event.target === 'NPC' && event.active === 1) {
+    const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
+    return locations.includes(currentLocation);
+  }
+  return false; // If event.target is not 'NPC', filter it out
+});
 
-if (npc.MorningLocation   === Ref.locationLabel.textContent &&
-npc.AfternoonLocation === Ref.locationLabel.textContent &&
-npc.NightLocation     === Ref.locationLabel.textContent) {
+  // Check if npc.name matches event.npc for each event
+  sortEvents.forEach(event => {
+    if (npc.name === event.npc && !uniqueNames.includes(npc.name)) {
+      npcNameDiv.innerHTML = `<span class = "lime"> [${event.event}] </span>  <span class = "white"> ${npc.name} </span>` ;
+      this.namedNPCs.push(npcNameDiv);
 
-npcNameDiv.classList.add('Always');
+      // Add the name to the array to mark it as processed
+      uniqueNames.push(npc.name);
+    } else {
+      // Handle the case when npc.name doesn't match or it's already processed
+    }
+  });
 
-this.AlwaysNPCs.push(npcNameDiv);
+// Check if npc.occupation matches event.npc for each event
+sortEvents.forEach(event => {
+  const occupations = npc.occupation ? npc.occupation.split(',').map(item => item.trim()) : [];
 
-} else if (npc.MorningLocation === Ref.locationLabel.textContent) {
+  if (occupations.includes(event.npc) && !uniqueNames.includes(npc.name)) {
+    npcNameDiv.innerHTML = `<span class = "misc"> [${event.event}] </span> <span class = "white"> ${npc.name} </span>` ;
+    this.groupedNPCs.push(npcNameDiv);
 
-npcNameDiv.classList.add('Morning');
-this.MorningNPCs.push(npcNameDiv);
+    // Add the name to the array to mark it as processed
+    uniqueNames.push(npc.name);
+  } else {
+    // Handle the case when npc.occupation doesn't match or it's already processed
+  }
+});
 
-} else if (npc.AfternoonLocation === Ref.locationLabel.textContent) {
-
-npcNameDiv.classList.add('Afternoon');
-this.AfternoonNPCs.push(npcNameDiv);
-
-} else if (npc.NightLocation === Ref.locationLabel.textContent) {
-
-npcNameDiv.classList.add('Night');
-this.NightNPCs.push(npcNameDiv);
-
-} else {
-
-npcNameDiv.classList.add('npc-name'); // Add a class for styling
-this.otherNPCs.push(npcNameDiv);
-
+// Check if npc is not included in namedNPCs, add with class npc-name to absentNPCs
+if (!uniqueNames.includes(npc.name)) {
+  npcNameDiv.innerHTML = ` ${npc.name}` ;
+  this.absentNPCs.push(npcNameDiv);
 }
 
 },
+
 
 fillNPCForm: function(npc, npcNameDiv){
 
@@ -147,10 +162,7 @@ console.log(Ref.npcName.value)
 const npc = {
 name: Ref.npcName.value,
 occupation: Ref.npcTags.value,
-
 MorningLocation: Ref.MorningLocation.value,
-
-
 level: Ref.npcLevel.value,
 class: Ref.npcClass.value,
 str: Ref.STR.value,
@@ -198,57 +210,23 @@ getNPCs(locationName) {
   //Figure out who is 'free', who is 'doing something,' and who has a scheduling conflict.
 
 
-  //NPCs who are 'doing something'.
-  for (const npc of NPCs.npcArray){
-    for(const event of Events.eventsArray){
-
-      if( 
-        
-        (npc.name === event.npc || npc.occupation === event.npc) && 
-        
-        event.active === 1 && 
-        event.target === 'NPC' && 
-        event.location === locationName)
-        
-        {
-
+  for (const npc of NPCs.npcArray) {
+    for (const event of Events.eventsArray) {
+  
+      if (
+        (npc.name === event.npc || 
+          (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))) &&
+        event.active === 1 &&
+        event.target === 'NPC' &&
+        event.location === locationName
+      ) {
         const npcStory = this.generateNPCStory(npc, locationName);
         presentNPCs.push({ name: npc.name, story: npcStory });
-
-        }
+      }
     }
   }
-
+  
   return presentNPCs;
-
-  // // Include normal NPCs (always present)
-  // for (const npc of NPCs.npcArray) {
-  //     if (npc.MorningLocation === locationName) {
-  //         const npcStory = this.generateNPCStory(npc, locationName);
-  //         presentNPCs.push({ name: npc.name, story: npcStory });
-  //     }
-
-  //     //Cycle through active events and place NPCs who should be there.
-  //     for (const event of Events.eventsArray){
-  //     if( (npc.occupation === event.npc || npc.name === event.npc) 
-  //     && npc.occupation !== '' && event.active === 1 && event.location === locationName && event.target === 'Location'){
-  //       console.log(npc.name)
-  //       const npcStory = this.generateNPCStory(npc, locationName);
-  //       presentNPCs.push({ name: npc.name, story: npcStory });
-  //     }}
-
-  //     // Remove NPCs placed elsewhere by effects
-  //   presentNPCs.slice().forEach((npc, index) => {
-  //     for (const event of Events.eventsArray) {
-  //       if ((npc.name === event.npc || npc.occupation === event.npc) && event.active === 1 && (event.location !== locationName || event.location !== 'Home')) {
-  //         // Remove NPC from the list if placed elsewhere
-  //         console.log(npc.name)
-  //         presentNPCs.splice(index, 1);
-  //       }
-  //     }
-  //   });
-
-    // }
 
  
 },
@@ -257,16 +235,33 @@ getNPCs(locationName) {
 generateNPCStory(npc, locationName) {
 let story = `<br>`;
 
-story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
-${npc.occupation} is here. </span> <br>  <span class="hotpink"> (${npc.name}) </span>`
-
 //Search active events to see if any apply based on the location, or the individual. 
 
 const presentNPCEvents = Events.eventsArray.filter(event => 
-    (event.npc === npc.name || event.npc === 'All' || event.npc === npc.occupation)
-    && (event.target === 'NPC' && event.active === 1 && npc.occupation !== '')
-    && (event.location === locationName || event.location === 'Home' && npc.MorningLocation === locationName)
-  );
+  (event.npc === npc.name || 
+    event.npc === 'All' || 
+    (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))
+  ) &&
+  (event.target === 'NPC' && event.active === 1 && npc.occupation !== '') &&
+  (event.location === locationName || 
+    (event.location === 'All')
+  )
+);
+
+let relevantTag = ''; // Variable to store the relevant part of npc.occupation
+
+if (presentNPCEvents.length > 0) {
+  // Find the first matching item.trim() in npc.occupation
+  const matchingItem = npc.occupation.split(',').map(item => item.trim()).find(item => presentNPCEvents.some(event => event.npc === item));
+
+  if (matchingItem) {
+    relevantTag = matchingItem;
+  }
+}
+
+story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
+${npc.name} is here. </span> <br>  <span class="hotpink"> (${relevantTag}) </span>`;
+
   
 
 //console.log(locationEvents)
@@ -304,8 +299,16 @@ getRandomItem(itemsArray) {
     }
   },
 
-addNPCInfo(npcName) {
+addNPCInfo(npcName, target) {
 const extraContent = document.getElementById('extraContent');
+
+let targetLocation = '';
+
+if(target === 'ExtraContent'){
+targetLocation = Ref.extraContent
+} else {
+targetLocation = Ref.extraContent2
+}
 
 // Search for the NPC in the npcArray
 const findNPC = npcName.replace(/-/g, ' ');
@@ -427,11 +430,11 @@ npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonste
 
 
 // Set the formatted content in the extraContent element
-extraContent.innerHTML = npcContent;
-extraContent2.innerHTML = npcContent;
+targetLocation.innerHTML = npcContent;
+
 } else {
 // NPC not found
-extraContent.innerHTML = `NPC not found`;
+targetLocation.innerHTML = `NPC not found`;
 }
 },
 
@@ -452,23 +455,30 @@ this.searchNPC(searchText);
 }
 });
 
-},
-
-searchNPC: function(searchText){
-
-this.npcSearchArray = [];
-
-this.npcSearchArray = this.npcArray.filter((npc) => {
-const npcName = npc.name.toLowerCase();
-const npcOccupation = npc.occupation.toLowerCase();
-
-// Check if either the name or occupation contains the search text
-return npcName.includes(searchText.toLowerCase()) || npcOccupation.includes(searchText.toLowerCase());
+Ref.npcName.addEventListener('click', (event) => {
+Ref.extraInfo.classList.remove('showExtraInfo');
+this.loadNPC(NPCs.npcArray);
 });
 
-this.loadNPC(this.npcSearchArray);
-
 },
+
+searchNPC: function(searchText) {
+  this.npcSearchArray = [];
+
+  this.npcSearchArray = this.npcArray.filter((npc) => {
+    const npcName = npc.name.toLowerCase();
+    const npcOccupation = npc.occupation.toLowerCase();
+
+    // Split the occupation string into an array of words
+    const occupationWords = npcOccupation.split(',').map(word => word.trim());
+
+    // Check if either the name or any occupation word contains the search text
+    return npcName.includes(searchText.toLowerCase()) || occupationWords.some(word => word.includes(searchText.toLowerCase()));
+  });
+
+  this.loadNPC(this.npcSearchArray);
+},
+
 
 fixDisplay: function(){
 

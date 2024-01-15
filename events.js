@@ -110,6 +110,7 @@ this.loadLocationsList(Array.locationArray);
 Ref.eventLocation.addEventListener('input', (event) => {
   let searchText = event.target.value.toLowerCase();
 
+
   if (searchText.trim() === '') {
       // Input box is empty, handle accordingly
       console.log('Input box is empty');
@@ -191,30 +192,46 @@ return group.includes(searchText) || event.includes(searchText);
 // -- LOCATION search
 
 searchLocations: function(searchText) {
-this.searchArray = [];
-console.log('Searching for Locations including: ' + searchText);
+  this.searchArray = [];
+  console.log('Searching for Locations including: ' + searchText);
 
-this.searchArray = Array.locationArray.filter((location) => {
-//const group = location.group.toLowerCase();
-const name = location.divId.toLowerCase();
-// Check if any of the properties contain the search text
-return name.includes(searchText) //|| group.includes(searchText); 
-}); 
+  this.searchArray = Array.locationArray.filter((location) => {
+    const name = location.divId.toLowerCase();
+    const tags = location.tags.toLowerCase(); // Assuming tags is a comma-separated list
 
+    // Get the last term in the search text (or use the entire text if there is no comma)
+    const lastTerm = searchText.split(',').map(term => term.trim()).pop();
+
+    // Check if the name or any tag contains the last term in the search text
+    return name.includes(lastTerm) || tags.split(',').map(tag => tag.trim()).includes(lastTerm);
+  });
 },
+
+
 
 // -- TAGS Functions
 
-searchTags(searchText) {
-this.searchArray = [];
+searchTags: function(searchText) {
+  this.searchArray = [];
 
-this.searchArray = this.tagsArray.filter((tag) => {
-const tags = tag.toLowerCase();
+  this.searchArray = this.tagsArray.filter((tag) => {
+    const tags = tag.toLowerCase();
 
-// Check if the search text is included in the tag list
-return tags.includes(searchText.toLowerCase());
-});
+    // Split the searchText by commas and get the part after the last comma
+    const searchTerms = searchText.toLowerCase().split(',').map(term => term.trim());
+    const lastTerm = searchTerms.length > 1 ? searchTerms[searchTerms.length - 1] : searchTerms[0];
+
+    // Split the tag string into an array of individual tags
+    const tagList = tags.split(',').map(tag => tag.trim());
+
+    // Get the last tag in the list (or use the entire string if there is no comma)
+    const lastTag = tagList.length > 1 ? tagList[tagList.length - 1] : tags;
+
+    // Check if the last tag contains the last search term
+    return lastTag.includes(lastTerm);
+  });
 },
+
 
 // Function to extract tags from all Arrays
 fillTagsArray() {
@@ -315,14 +332,6 @@ const sortEvents = (eventA, eventB) => {
 // Sort the data using the custom sorting function
 const sortedAmbienceArray = data.sort(sortEvents);
 
-
-// // Partition the data into active and inactive events
-// const activeEvents = data.filter(event => event.active === 1);
-// const inactiveEvents = data.filter(event => event.active !== 1);
-
-// // Concatenate the active and inactive events arrays, placing active events first
-// const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
-
 // Iterate through the sorted events and display them
 for (const event of sortedAmbienceArray) {
 const eventNameDiv = document.createElement('div');
@@ -354,7 +363,7 @@ eventNameDiv.addEventListener('mouseover', () => {
 
 }
 
-NPCs.fixDisplay();
+
 
 },
 
@@ -398,38 +407,89 @@ console.log(`Event not found: ${contentId}`);
 
 
 loadEventsList: function(data) {
-const itemList = document.getElementById('itemList'); // Do not delete!!
-//console.log(data)
+  const itemList = document.getElementById('itemList');
+  itemList.innerHTML = '';
 
-// Clear the existing content
-itemList.innerHTML = '';
+  // Search Array.locationArray to find the currentLocation
+  const locationObject = Array.locationArray.find(location => location.divId === Ref.locationLabel.textContent);
 
-// Partition the ambienceArray into active and inactive events
-const activeEvents = data.filter(event => event.active === 1);
-const inactiveEvents = data.filter(event => event.active !== 1);
+  // Partition the ambienceArray into different groups
+  const activeAtLocation = [];
+  const activeAtTag = [];
+  const inactiveAtLocation = [];
+  const inactiveAtTag = [];
+  const activeElsewhere = [];
+  const inactiveElsewhere = [];
 
+  data.forEach(event => {
+    const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
+    const locationTags = locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
+    console.log(locationTags + ' :: ' + eventLocations)
+  
+    if (event.active === 1) {
+      if (eventLocations.includes(locationObject.divId)) {
+        activeAtLocation.push(event);
+      } else if (eventLocations.some(location => locationTags.includes(location))) {
+        activeAtTag.push(event);
+      } else {
+        activeElsewhere.push(event);
+      }
+    } else {
+      if (eventLocations.includes(locationObject.divId)) {
+        inactiveAtLocation.push(event);
+      } else if (eventLocations.some(location => locationTags.includes(location))) {
+        inactiveAtTag.push(event);
+      } else {
+        inactiveElsewhere.push(event);
+      }
+    }
+  });
+  
 
-// Concatenate the active and inactive events arrays, placing active events first
-const sortedAmbienceArray = [...activeEvents, ...inactiveEvents];
+  const locationEventsArray = [
+    ...activeAtLocation,
+    ...activeAtTag,
+    ...inactiveAtLocation,
+    ...inactiveAtTag,
+  ]
 
-// Iterate through the sorted events
-for (const event of sortedAmbienceArray) {
-
-  const eventNameDiv = document.createElement('div');
-  eventNameDiv.innerHTML = `
+  for (const event of locationEventsArray) {
+    const eventNameDiv = document.createElement('div');
+    eventNameDiv.innerHTML = `
       <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target}]</span>
       <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
       <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
-  `;
+    `;
 
-itemList.appendChild(eventNameDiv);
-this.fillAmbienceForm(event, eventNameDiv);
-}
+    itemList.appendChild(eventNameDiv);
+    this.fillAmbienceForm(event, eventNameDiv);
+  }
 
-itemList.style.display = 'block'; // Display the container
+  itemList.appendChild(document.createElement('hr'));
 
-NPCs.fixDisplay();
+
+  const restEvents = [
+    ...activeElsewhere,
+    ...inactiveElsewhere
+  ]
+
+  for (const event of restEvents) {
+    const eventNameDiv = document.createElement('div');
+    eventNameDiv.innerHTML = `
+      <span class="${event.target === 'NPC' ? 'gray' : 'gray'}">[${event.target}]</span>
+      <span class="${event.active === 1 ? 'gray' : 'gray'}">[${event.group}]</span>
+      <span class="${event.active === 1 ? 'gray' : 'gray'}">${event.event}</span>
+    `;
+  
+    itemList.appendChild(eventNameDiv);
+    this.fillAmbienceForm(event, eventNameDiv);
+  }
+
+  itemList.style.display = 'block'; // Display the container
+
 },
+
+
 
 loadLocationsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
@@ -460,20 +520,34 @@ Ref.eventLocation.value = location.divId
 async getEvent(currentLocation, tags) {
 // Filter ambienceArray based on selected values
 //console.log(Ref.eventManagerInput.value);
-console.log(tags)
+//console.log(tags)
 
 const activeEvents = [];
 
 for (const entry of this.eventsArray) {
   if (
-      entry.active === 1 && entry.target === 'Location' &&
-      (entry.location === "All" || entry.location === currentLocation || entry.location === tags)
+    entry.active === 1 && 
+    entry.target === 'Location' &&
+    (entry.location === "All" || 
+    (
+      entry.location.split(',').map(locItem => locItem.trim()).some(locItem => 
+        locItem === currentLocation
+      )
+    ) ||
+      (
+        tags.split(',').map(item => item.trim()).some(tag => 
+          entry.location.split(',').map(locItem => locItem.trim()).includes(tag)
+        )
+      )
+    )
   ) {
-      activeEvents.push(entry);
+    activeEvents.push(entry);
   }
 }
 
-console.log(activeEvents);
+
+
+//console.log(activeEvents);
 
 // Concatenate descriptions from active events into eventDesc
 this.eventDesc = activeEvents.map(entry => {
@@ -481,7 +555,7 @@ let description = `${entry.description}`;
 return description;
 }).join('<br><br>');
 
-console.log(this.eventDesc);
+//console.log(this.eventDesc);
 
 // Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
 // You can use it as needed.
@@ -503,12 +577,12 @@ Ref.ambienceDescription.value = ambience.description;
 Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
 
 //Check target and tick relevent box
-if(ambience.target === 'NPC'){
+if(ambience.target === 'NPC' && Ref.npcCheckbox.checked === false){
 //Ref.npcCheckbox.checked = true;
 Ref.npcCheckbox.click();
 //Ref.locationCheck.checked = false;
 }
-else{
+else if(ambience.target === 'Location' && Ref.locationCheck.checked === false){
 //Ref.locationCheck.checked = true;
 Ref.locationCheck.click();
 //Ref.npcCheckbox.checked = false;

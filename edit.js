@@ -103,6 +103,7 @@ init: function () {
 
 deleteLocation() {
 switch (this.editPage) {
+
   
 case 2:
   const ambienceTitle = document.getElementById('ambienceTitle').value;
@@ -304,7 +305,7 @@ npc.NightLocation = Ref.editLocationName.value;
 //Remove or Add editContainer contents depending on editPage no.
 pageChange(newPage){
 
-NPCs.fixDisplay();
+
 Ref.itemList.innerHTML = ``;
 Ref.extraInfo.classList.remove('showExtraInfo');
 

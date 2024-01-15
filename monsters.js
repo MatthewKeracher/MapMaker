@@ -137,7 +137,6 @@ this.fillMonsterForm(monster, monsterNameDiv);
 
 itemList.style.display = 'block'; // Display the NPC names container
 
-NPCs.fixDisplay();
 }, 
 
 fillMonsterForm: function(monster, monsterNameDiv){

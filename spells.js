@@ -132,7 +132,7 @@ this.fillSpellsForm(spell, spellNameDiv);
 
 itemList.style.display = 'block'; // Display the container
 
-NPCs.fixDisplay();
+
 },
 
 

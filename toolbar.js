@@ -175,7 +175,7 @@ handleEscButtonClick(){
   Ref.extraInfo2.classList.remove('showExtraInfo');
   Ref.itemList.style.display = "none";
   document.activeElement.blur();
-  NPCs.fixDisplay();
+  
 
 };
 
@@ -238,6 +238,7 @@ Ref.locationGroup.style.display = 'flex';
 
 Ref.eventManagerContainer.style.display = 'none';
 Ref.extraInfo2.classList.remove('showExtraInfo'); // Bookmark!
+Ref.itemList.style.display = 'none';
 Ref.Storyteller.style.display = 'none';
 Ref.locationLabel.style.display = 'none';
 
@@ -257,6 +258,7 @@ if (Edit.editMode) {
 Ref.stateLabel.style.display = 'none';
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
+Ref.extraInfo2.classList.remove('showExtraInfo');
 
 //Show Storyteller, pageChange()
 Edit.pageChange(1);
