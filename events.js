@@ -40,7 +40,6 @@ Ref.eventManagerInput.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
-// Call the searchAmbience function;
 this.searchEvents(searchText);
 this.showcurrentEvents(this.searchArray);
 
@@ -62,8 +61,6 @@ let searchText = event.target.value.toLowerCase();
 Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
 Ref.itemList.style.display = 'none';
-// Call the searchAmbience function
-console.log(searchText)
 this.searchTags(searchText); 
 this.showTags(this.searchArray);
 
@@ -278,23 +275,35 @@ target.value = `${currentText}, ${tag}`;
 }
 },
 
-// Function to populate the div elements list with tags
 showTags(data) {
-Ref.extraContent.innerHTML = '';
-Ref.extraContent.style.display = 'block'; // Display the container
+  Ref.extraContent.innerHTML = '';
+  Ref.extraContent.style.display = 'block'; // Display the container
+
+  // Use a Set to store unique tag values
+  const uniqueTagsSet = new Set();
+
+  // Iterate through the tags and display them
+  for (const tag of data) {
+    // Add the lowercase tag to the Set to ensure uniqueness
+    uniqueTagsSet.add(tag);
+  }
+
+  // Convert the Set back to an array
+  const uniqueTagsArray = [...uniqueTagsSet];
 
 
-// Iterate through the tags and display them
-for (const tag of data) {
-const tagDiv = document.createElement('div');
-tagDiv.innerHTML = `<span class="gray">${tag}</span>`;
-Ref.extraContent.appendChild(tagDiv);
+  // Iterate through unique tags and display them
+  for (const tag of uniqueTagsArray) {
+    const tagDiv = document.createElement('div');
+    tagDiv.innerHTML = `<span class="gray">${tag}</span>`;
+    Ref.extraContent.appendChild(tagDiv);
 
-tagDiv.addEventListener('click', () => {
-  this.addTag(tag)
-});
-}
+    tagDiv.addEventListener('click', () => {
+      this.addTag(tag);
+    });
+  }
 },
+
 
 // -- LOCATION TAGS FUNCTIONS
 
@@ -418,6 +427,8 @@ loadEventsList: function(data) {
   const activeAtTag = [];
   const inactiveAtLocation = [];
   const inactiveAtTag = [];
+  const activeAll = [];
+  const inactiveAll = [];
   const activeElsewhere = [];
   const inactiveElsewhere = [];
 
@@ -427,10 +438,12 @@ loadEventsList: function(data) {
     //console.log(locationTags + ' :: ' + eventLocations)
   
     if (event.active === 1) {
-      if (eventLocations.includes(locationObject.divId) || event.location === 'All') {
+      if (eventLocations.includes(locationObject.divId)) {
         activeAtLocation.push(event);
       } else if (eventLocations.some(location => locationTags.includes(location))) {
         activeAtTag.push(event);
+      } else if (event.location === 'All'& event.active === 1){
+        activeAll.push(event);
       } else {
         activeElsewhere.push(event);
       }
@@ -439,7 +452,9 @@ loadEventsList: function(data) {
         inactiveAtLocation.push(event);
       } else if (eventLocations.some(location => locationTags.includes(location))) {
         inactiveAtTag.push(event);
-      } else {
+      } else if (event.location === 'All'& event.active === 0){
+        inactiveAll.push(event);
+      }else {
         inactiveElsewhere.push(event);
       }
     }
@@ -456,7 +471,7 @@ loadEventsList: function(data) {
   for (const event of locationEventsArray) {
     const eventNameDiv = document.createElement('div');
     eventNameDiv.innerHTML = `
-      <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target}]</span>
+      <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
       <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
       <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
     `;
@@ -467,26 +482,55 @@ loadEventsList: function(data) {
 
   itemList.appendChild(document.createElement('hr'));
 
-
-  const restEvents = [
-    ...activeElsewhere,
-    ...inactiveElsewhere
+  const allEvents = [
+    ...activeAll,
+    ...inactiveAll,
   ]
 
-  for (const event of restEvents) {
-    const eventNameDiv = document.createElement('div');
-    eventNameDiv.innerHTML = `
-      <span class="${event.target === 'NPC' ? 'gray' : 'gray'}">[${event.target}]</span>
-      <span class="${event.active === 1 ? 'gray' : 'gray'}">[${event.group}]</span>
-      <span class="${event.active === 1 ? 'gray' : 'gray'}">${event.event}</span>
-    `;
+  for (const event of allEvents) {
+    
+  const eventNameDiv = document.createElement('div');
+
+  const isAllLocationActive = event.location === 'All' && event.active === 1;
+  const npcOrLocation = event.target === 'NPC' ? event.npc : event.location;
+
+  eventNameDiv.innerHTML = `
+    <span class="${isAllLocationActive ? 'white' : 'gray'}">
+      [${isAllLocationActive && event.npc !== 'All' ? 'All ' + npcOrLocation : npcOrLocation}]
+    </span>
+    <span class="${isAllLocationActive ? 'spell' : 'gray'}">[${event.group}]</span>
+    <span class="${isAllLocationActive ? 'lime' : 'gray'}">${event.event}</span>
+  `;
+
   
     itemList.appendChild(eventNameDiv);
     this.fillAmbienceForm(event, eventNameDiv);
   }
 
-  itemList.style.display = 'block'; // Display the container
+  itemList.appendChild(document.createElement('hr'));
 
+  //sort alphabetically by tag
+  const elsewhere = [
+    ...activeElsewhere,
+    ...inactiveElsewhere
+  ];
+
+  elsewhere.sort((a, b) => a.group.localeCompare(b.group));
+
+  for (const event of elsewhere) {
+    const eventNameDiv = document.createElement('div');
+    eventNameDiv.innerHTML = `
+      <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
+      <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+      <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+    `;
+
+    itemList.appendChild(eventNameDiv);
+    this.fillAmbienceForm(event, eventNameDiv);
+  }
+
+  itemList.style.display = 'block'; // Display the container
+  
 },
 
 

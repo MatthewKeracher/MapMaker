@@ -27,7 +27,7 @@ Ref.editLocationName.value   = locationName;
 if (locationObject) {
 //name the returned locationObject data 
 Events.getEvent(locationName, locationObject.tags);
-const locationText = '<br>' + locationObject.description + '<br><br>' + Events.eventDesc;
+const locationText = '<br>' + Events.eventDesc + '<br><br>' + locationObject.description;
 
 this.miscArray = [];
 this.monsterArray = [];
@@ -75,17 +75,25 @@ this.showExtraContent()
 };
 }, 
 
+getQuotes(locationText) {
+  const quotationMarks = /"([^"]+)"/g;
+
+  return locationText.replace(quotationMarks, (match, targetText) => {
+      return `<span class="hotpink">"${targetText}"</span>`;
+  });
+},
+
 addMiscInfo(contentId, miscArray) {
 const extraContent = document.getElementById('extraContent');  
 const MiscItem = miscArray.find(item => item.square === contentId);
   
   if (MiscItem) {
-    const withMonsters = Monsters.extraMonsters(MiscItem.curly);
-    const withItems = Items.extraItem(withMonsters);
-    const withSpells = Spells.extraSpell(withItems);
+    const withMonsters = Monsters.getMonsters(MiscItem.curly);
+    const withItems = Items.getItems(withMonsters);
+    const withSpells = Spells.getSpells(withItems); 
     const miscInfo = [ 
       
-    `<br><span class="misc">${MiscItem.square.toUpperCase()}</span><br><br>
+    `<br><span class="misc">${MiscItem.square}</span><br><br>
     <span class="withbreak">${withSpells}</span>`]
 
     extraContent.innerHTML = miscInfo;
@@ -105,7 +113,7 @@ getMisc(locationText, comboArray) {
     const square = match[1];
     const curly = match[2];
 
-    const replacement = `<span class="expandable misc" data-content-type="misc" divId="${square}">${square.toUpperCase()}</span>`;
+    const replacement = `<span class="expandable misc" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
 
     updatedText = updatedText.replace(match[0], replacement);
 
@@ -137,7 +145,7 @@ showExtraContent() {
      
       switch (contentType) {
         case 'npc':
-          NPCs.addNPCInfo(contentId, "ExtraContent"); // Handle NPCs
+          NPCs.addNPCInfo(contentId, target); // Handle NPCs
           break;
         case 'monster':
           Monsters.addMonsterInfo(contentId, target); // Handle monsters

@@ -6,6 +6,7 @@ import Items from "./items.js";
 import Monsters from "./monsters.js";
 import Spells from "./spells.js";
 import Events from "./events.js";
+import Storyteller from "./storyteller.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -301,6 +302,9 @@ getRandomItem(itemsArray) {
     }
   },
 
+
+
+
 addNPCInfo(npcName, target) {
 const extraContent = document.getElementById('extraContent');
 
@@ -343,7 +347,7 @@ npcContent += `<br>
 //need to run through getMonsters and getItems
 //want to put in Backstory as hover for extraextra
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-    npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.Backstory)))}</span>`;
+    npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
     }
 
 //RANDOM SPELLS FOR NPCS ------>
@@ -389,7 +393,7 @@ for (let i = 0; i < randomItemsLoop; i++) {
   }
 }
 
-npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(loot)))}</span>`;
+//npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(loot)))}</span>`;
 
 //RANDOM GARB OUTFITTER FOR NPCS ---->
 
@@ -421,7 +425,7 @@ const typesToSearch = [
     }
       
       
-npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(garb)))}</span>`;
+//npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(garb)))}</span>`;
 
 
 // if (foundNPC.MorningLocation) {

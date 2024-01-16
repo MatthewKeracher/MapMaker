@@ -37,7 +37,7 @@ getItems(locationText) {
     return locationText.replace(hashBrackets, (match, targetText) => {
         const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
         if (item) {
-            return `<span class="expandable item" data-content-type="item" divId="${item.Name}">${item.Name.toUpperCase()}</span>`;
+            return `<span class="expandable item" data-content-type="item" divId="${item.Name}">${item.Name}</span>`;
         } else {
             console.log(`Item not found: ${targetText}`);
             return match;
@@ -52,8 +52,8 @@ const hashBrackets = /#([^#]+)#/g;
 return contentId.replace(hashBrackets, (match, targetText) => {
 const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
 if (item) {
-console.log(item.Name);
-return this.addIteminfo(item.Name);
+//console.log(item.Name);
+return this.addIteminfo(item.Name, 'extraInfo2');
 } else {
 console.log(`Item not found: ${targetText}`);
 return match;
@@ -67,6 +67,9 @@ let targetLocation = '';
 
 if(target === 'ExtraContent'){
 targetLocation = Ref.extraContent
+} else if(target === 'extraInfo2'){
+targetLocation = Ref.extraInfo2
+Ref.extraInfo2.classList.add('showExtraInfo');
 } else {
 targetLocation = Ref.extraContent2
 }
@@ -125,7 +128,7 @@ loadItemsList: function(data) {
 
     //show Item info in ExtraInfo2 when hover over Div
     itemNameDiv.addEventListener('mouseover', () => {
-    Ref.extraContent2.classList.add('showExtraInfo');
+    Ref.extraInfo2.classList.add('showExtraInfo');
     this.addIteminfo(itemNameDiv.id);
     });
 

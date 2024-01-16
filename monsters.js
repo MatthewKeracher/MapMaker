@@ -33,7 +33,7 @@ getMonsters(locationText) {
   return locationText.replace(asteriskBrackets, (match, targetText) => {
     const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
     if (monster) {
-  return `<span class="expandable monster" data-content-type="monster" divId="${targetText}">${targetText.toUpperCase()}</span>`;
+  return `<span class="expandable monster" data-content-type="monster" divId="${targetText}">${targetText}</span>`;
   } else {
   console.log(`Monster not found: ${targetText}`);
   return match;
@@ -129,7 +129,7 @@ this.fillMonsterForm(monster, monsterNameDiv);
 
  //show Monster info in ExtraInfo2 when hover over Div
  monsterNameDiv.addEventListener('mouseover', () => {
-  Ref.extraContent2.classList.add('showExtraInfo');
+  Ref.extraInfo2.classList.add('showExtraInfo');
   this.addMonsterInfo(monsterNameDiv.id);
   });
 

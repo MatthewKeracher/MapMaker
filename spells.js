@@ -125,7 +125,7 @@ this.fillSpellsForm(spell, spellNameDiv);
 
  //show Item info in ExtraInfo2 when hover over Div
  spellNameDiv.addEventListener('mouseover', () => {
-    Ref.extraContent2.classList.add('showExtraInfo');
+    Ref.extraInfo2.classList.add('showExtraInfo');
     this.addSpellInfo(spellNameDiv.id);
     });
 }
