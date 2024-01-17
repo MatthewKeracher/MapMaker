@@ -307,7 +307,7 @@ break;
 
 case 3:
 NPCs.saveNPC();
-NPCs.loadNPC(NPCs.npcArray)
+NPCs.searchNPC()
 break;
 
 case 4:

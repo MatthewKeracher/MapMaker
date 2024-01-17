@@ -8,6 +8,8 @@ import Spells from "./spells.js";
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 
+
+
 // Define the NPCs module
 const NPCs = {
 npcArray: [],
@@ -15,6 +17,7 @@ npcSearchArray:[],
 namedNPCs: [],
 groupedNPCs : [],
 absentNPCs: [],
+
 
 loadNPC: function(NPCArray) {
 
@@ -114,7 +117,6 @@ if (!uniqueNames.includes(npc.name)) {
 
 },
 
-
 fillNPCForm: function(npc, npcNameDiv){
 
 // Add click event listener to each NPC name
@@ -129,7 +131,7 @@ console.log(npc)
 Ref.npcName.value = npc.name;
 Ref.npcTags.value = npc.occupation;
 
-Ref.MorningLocation.value = npc.MorningLocation;
+//Ref.MorningLocation.value = npc.MorningLocation;
 
 Ref.npcLevel.value = npc.level;
 Ref.npcClass.value = npc.class;
@@ -163,7 +165,7 @@ console.log(Ref.npcName.value)
 const npc = {
 name: Ref.npcName.value,
 occupation: Ref.npcTags.value,
-MorningLocation: Ref.MorningLocation.value,
+// MorningLocation: Ref.MorningLocation.value,
 level: Ref.npcLevel.value,
 class: Ref.npcClass.value,
 str: Ref.STR.value,
@@ -204,52 +206,59 @@ Array.generateLocationOptions();
 
 },
 
-
 getNPCs(locationName) {
-  const presentNPCs = [];
-
-  //Figure out who is 'free', who is 'doing something,' and who has a scheduling conflict.
-
+  const presentNPCsSet = new Set();
 
   for (const npc of NPCs.npcArray) {
     for (const event of Events.eventsArray) {
-  
-      if (
-        (npc.name === event.npc || 
-        (event.npc && event.npc.split(',').map(item => item.trim()).includes(npc.name)) ||
-        (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))) &&
-        event.active === 1 &&
-        event.target === 'NPC' &&
-        event.location === locationName
-      ) {
-        const npcStory = this.generateNPCStory(npc, locationName);
-        presentNPCs.push({ name: npc.name, story: npcStory });
-      }
-    }
-  }
-  
+
+      const eventNpcList = event.npc.split(',').map(item => item.trim());
+      const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+
+const npcNameMatches = npc.name === event.npc;
+const npcInEventList = eventNpcList.includes(npc.name);
+const eventInOccupationList = npcOccupationList.includes(event.npc);
+const commonElementExists = npc.occupation && event.npc && eventNpcList.some(tag => npcOccupationList.includes(tag));
+
+if ((npcNameMatches || npcInEventList || eventInOccupationList || commonElementExists) &&
+    event.active === 1 &&
+    event.target === 'NPC' &&
+    event.location === locationName) {
+    const npcStory = this.generateNPCStory(npc, locationName);
+    presentNPCsSet.add(JSON.stringify({ name: npc.name, story: npcStory }));
+}
+
+}}
+
+  // Convert the set back to an array
+  const presentNPCs = [...presentNPCsSet].map(JSON.parse);
+
   return presentNPCs;
-
- 
 },
-
 
 generateNPCStory(npc, locationName) {
 let story = `<br>`;
 
 //Search active events to see if any apply based on the location, or the individual. 
 
-const presentNPCEvents = Events.eventsArray.filter(event => 
-  (event.npc === npc.name || 
-    event.npc === 'All' || 
-    (event.npc && event.npc.split(',').map(item => item.trim()).includes(npc.name)) ||
-    (npc.occupation && npc.occupation.split(',').map(item => item.trim()).includes(event.npc))
-  ) &&
-  (event.target === 'NPC' && event.active === 1 && npc.occupation !== '') &&
-  (event.location === locationName || 
-    (event.location === 'All')
-  )
-);
+const presentNPCEvents = Events.eventsArray.filter(event => {
+  const eventNpcList = event.npc.split(',').map(item => item.trim());
+  const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+
+  const npcNameMatches = npc.name === event.npc;
+  const npcInEventList = eventNpcList.includes(npc.name);
+  const eventInOccupationList = npcOccupationList.includes(event.npc);
+  const commonElementExists = npc.occupation && event.npc && eventNpcList.some(tag => npcOccupationList.includes(tag));
+
+  return (
+    (npcNameMatches || npcInEventList || eventInOccupationList || commonElementExists) &&
+    event.target === 'NPC' &&
+    event.active === 1 &&
+    npc.occupation !== '' &&
+    (event.location === locationName || event.location === 'All')
+  );
+});
+
 
 let relevantTag = ''; // Variable to store the relevant part of npc.occupation
 
@@ -263,7 +272,7 @@ if (presentNPCEvents.length > 0) {
 }
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
-${npc.name} is here. </span> <br>  <span class="hotpink"> (${relevantTag}) </span>`;
+${npc.name} is here. </span> <br>`;
 
   
 
@@ -274,9 +283,23 @@ ${npc.name} is here. </span> <br>  <span class="hotpink"> (${relevantTag}) </spa
 // story += `<span class = "misc"> ${event.description} </span> \n`;
 // }
 
+
+
 for (const event of presentNPCEvents) {
-story += `${event.description} \n`;
+  // Define eventNpcList and npcOccupationList within the loop
+  const eventNpcList = event.npc.split(',').map(item => item.trim());
+  const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+
+  const sharedTag = event.npc && eventNpcList.find(tag => npcOccupationList.includes(tag));
+
+  if (sharedTag) {
+    story += `<span class="hotpink">${sharedTag}. </span>`;
+  }
+
+  story += `${event.description} \n`;
 }
+
+
 
 //console.log(story)
 return story;
@@ -301,9 +324,6 @@ getRandomItem(itemsArray) {
       return null;
     }
   },
-
-
-
 
 addNPCInfo(npcName, target) {
 const extraContent = document.getElementById('extraContent');
@@ -444,32 +464,22 @@ targetLocation.innerHTML = `NPC not found`;
 }
 },
 
-
-
 addNPCSearch: function(){
 
-Ref.npcName.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
+Ref.npcSearch.addEventListener('input', (event) => {
+this.searchNPC();
+})
 
-// Check if the searchText contains '{'
-if (searchText.includes('{')) {
-// Remove '{' from the searchText
-searchText = searchText.replace('{', '');
 
-// Call the searchNPC function
-this.searchNPC(searchText);
-}
-});
-
-Ref.npcName.addEventListener('click', (event) => {
-Ref.extraInfo.classList.remove('showExtraInfo');
-this.loadNPC(NPCs.npcArray);
+Ref.npcSearch.addEventListener('click', (event) => {
+this.searchNPC();
 });
 
 },
 
-searchNPC: function(searchText) {
+searchNPC: function() {
   this.npcSearchArray = [];
+  let searchText = Ref.npcSearch.value.toLowerCase();
 
   this.npcSearchArray = this.npcArray.filter((npc) => {
     const npcName = npc.name.toLowerCase();
@@ -485,29 +495,9 @@ searchNPC: function(searchText) {
   this.loadNPC(this.npcSearchArray);
 },
 
-
-fixDisplay: function(){
-
-const imageContainer = document.querySelector('.image-container');
-const radiantDisplay = document.getElementById('radiantDisplay');
-
-try{
-
-// if (Edit.editPage === 2 | Edit.editPage === 3 | Edit.editPage === 4 | Edit.editPage === 5 | Edit.editPage === 6) {
-// imageContainer.style.width = "45vw";
-// radiantDisplay.style.width = "45vw";
-// Ref.itemList.style.display = "block";
-// } else {
-// imageContainer.style.width = "70vw";
-// radiantDisplay.style.width = "70vw";
-// Ref.itemList.style.display = "none";
-// }
-
-}catch{}
-
-}
-
 };
 
 // Export the NPCs module
 export default NPCs;
+
+

@@ -97,7 +97,7 @@ const formattedItem = itemStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
-// Set the formatted content in the extraContent element
+// Set the formatted content in the target element
 targetLocation.innerHTML = formattedItem;
 
 return formattedItem;

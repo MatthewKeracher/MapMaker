@@ -111,18 +111,18 @@ monsterForm: document.querySelector('.monsterForm'),
 //npcForm
 npcForm: document.querySelector('.npcForm'),
 
-
+    npcSearch: document.getElementById('npcSearch'),
     npcName: document.getElementById('npcName'),
     npcTags: document.getElementById('npcOccupation'),
 
-    MorningLocation: document.getElementById('primaryLocation'),
-    MorningActivity: document.getElementById('MorningActivity'),
+    // MorningLocation: document.getElementById('primaryLocation'),
+    // MorningActivity: document.getElementById('MorningActivity'),
 
-    AfternoonLocation: document.getElementById('AfternoonLocation'),
-    AfternoonActivity: document.getElementById('AfternoonActivity'),
+    // AfternoonLocation: document.getElementById('AfternoonLocation'),
+    // AfternoonActivity: document.getElementById('AfternoonActivity'),
 
-    NightLocation: document.getElementById('NightLocation'),
-    NightActivity: document.getElementById('NightActivity'),
+    // NightLocation: document.getElementById('NightLocation'),
+    // NightActivity: document.getElementById('NightActivity'),
 
     npcLevel: document.getElementById('npcLevel'),
     npcClass: document.getElementById('npcClass'),

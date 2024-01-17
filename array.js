@@ -336,22 +336,22 @@ location.dataset.hasListener = true;
 
 generateLocationOptions() {
 // The Dropdowns
-const Morning = document.getElementById('primaryLocation');
+//const Morning = document.getElementById('primaryLocation');
 // const Afternoon = document.getElementById('AfternoonLocation');
 // const Night = document.getElementById('NightLocation');
 
 // Clear existing options
-Morning.innerHTML = '<option value="">None</option>';
+//Morning.innerHTML = '<option value="">None</option>';
 // Afternoon.innerHTML = '<option value="">None</option>';
 // Night.innerHTML = '<option value="">None</option>';
 
 // Generate options based on .selection div IDs for all dropdowns
-this.locationArray.forEach((location) => {
-//console.log(location.divId)
-const MorningOption = document.createElement('option');
-MorningOption.value = location.divId;
-MorningOption.textContent = location.divId;
-Morning.appendChild(MorningOption);
+// this.locationArray.forEach((location) => {
+// //console.log(location.divId)
+// const MorningOption = document.createElement('option');
+// MorningOption.value = location.divId;
+// MorningOption.textContent = location.divId;
+// Morning.appendChild(MorningOption);
 
 // const AfternoonOption = document.createElement('option');
 // AfternoonOption.value = location.divId;
@@ -362,7 +362,7 @@ Morning.appendChild(MorningOption);
 // NightOption.value = location.divId;
 // NightOption.textContent = location.divId;
 // Night.appendChild(NightOption);
-});
+// });
 },
 
 //Export and Import .csv of Arrays

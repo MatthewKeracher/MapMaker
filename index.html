@@ -279,8 +279,12 @@
 <form id="npcForm" class="npcForm">
 <div class="npcFormContainer">
 
+<label for="npcSearch">Search NPCs</label>
+<input class="lineField" type="textarea" id="npcSearch" name="npcSearch" placeholder="Search by Name or Tag" required>
+
 <label for="npcName">Full or Unique Name</label>
-<input class="lineField" type="textarea" id="npcName" name="npcName" placeholder="{... to Search" required>
+<input class="lineField" type="textarea" id="npcName" name="npcName" 
+placeholder="Full or Unique Name" required>
 
 <label for="npcOccupation">Tags</label>
 <input class="lineField" type="textarea" id="npcOccupation" name="npcOccupation"
@@ -305,40 +309,7 @@ placeholder="Put any other information about this NPC here.
 #... for Items
 ~... for Spells">
 </textarea>
-
-<br>
-
-<div id="locationContainer">
-    <!-- Primary Location for NPC -->
-    <label for="primaryLocation">Primary Location:</label>
-    <select class="smallSelect" id="primaryLocation" required></select>
   
-    <!-- Container for dynamically added elements -->
-    <div id="dynamicEventsContainer"></div>
-  
-    <!-- Button to add events -->
-    <button onclick="addEvent()">Add More</button>
-  </div>
-  
-  <script>
-  function addEvent() {
-    const dynamicContainer = document.getElementById('dynamicEventsContainer');
-  
-    const label = document.createElement('label');
-    label.textContent = 'Additional Location:';
-  
-    const select = document.createElement('select');
-    select.className = 'smallSelect';
-    select.id = 'additionalLocation';
-  
-    dynamicContainer.appendChild(label);
-    dynamicContainer.appendChild(select);
-
-  }
-  </script>
-  
-
-
 <br>
 
 <div class = "NPC-stats-all">
@@ -346,26 +317,26 @@ placeholder="Put any other information about this NPC here.
 <div class="NPC-stats-left"> 
 
 <label for="STR">Strength</label>
-<input class="stat" type="number" id="STR" name="STR">
+<input class="stat" type="number" id="STR" name="STR"> <br>
 
 <label for="DEX">Dexterity</label>
-<input class="stat" type="number" id="DEX" name="DEX">
+<input class="stat" type="number" id="DEX" name="DEX"> <br>
 
 <label for="INT">Intelligence</label>
-<input class="stat" type="number" id="INT" name="INT">    
+<input class="stat" type="number" id="INT" name="INT"> <br>  
 
 </div>
 
 <div class="NPC-stats-right"> 
 
 <label for="WIS">Wisdom</label>
-<input class="stat" type="number" id="WIS" name="WIS">
+<input class="stat" type="number" id="WIS" name="WIS"> <br>
 
 <label for="CON">Constitution</label>
-<input class="stat" type="number" id="CON" name="CON">
+<input class="stat" type="number" id="CON" name="CON"> <br>
 
 <label for="CHA">Charisma</label>
-<input class="stat" type="number" id="CHA" name="CHA">
+<input class="stat" type="number" id="CHA" name="CHA"> <br>
 
 </div>
 </div>
@@ -489,6 +460,7 @@ placeholder=
 <script type="module" src="monsters.js"></script> 
 <script type="module" src="npcs.js"></script> 
 <script type="module" src="ref.js"></script>
+<script type="module" src="classes.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 
