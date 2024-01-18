@@ -7,7 +7,7 @@ import Monsters from "./monsters.js";
 import Spells from "./spells.js";
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
-
+import NPCbuild from "./classes.js";
 
 
 // Define the NPCs module
@@ -18,6 +18,34 @@ namedNPCs: [],
 groupedNPCs : [],
 absentNPCs: [],
 
+
+
+loadAndBuild: async function(fileContent) {
+  try {
+      // Wait for the handleFileLoad to complete
+      await Array.handleFileLoad(fileContent);
+
+      // Now you can call buildNPC safely
+      await this.buildNPC();
+  } catch (error) {
+      console.error('Error loading file and building NPC:', error);
+  }
+},
+
+buildNPC: function() {
+
+  console.log('calling buildNPC()')
+
+  const npcInstances = NPCs.npcArray.map(npcData => new NPCbuild(npcData));
+          
+  // Now npcInstances is an array of NPC objects with the data from npcArray
+  // You can store or use these instances as needed.
+  NPCs.npcArray = npcInstances;
+  
+  // For example, you can log the properties of each NPC instance
+  //npcInstances.forEach(npc => console.log(npc));
+
+},
 
 loadNPC: function(NPCArray) {
 
@@ -305,25 +333,7 @@ for (const event of presentNPCEvents) {
 return story;
 },
 
-getNPCSpells(cleric, level){
 
-const filteredSpells = Spells.spellsArray.filter(spell => spell.Level <= level && spell.Class === cleric);
-
-console.log(filteredSpells);
-
-return filteredSpells
-
-},
-
-getRandomItem(itemsArray) {
-    if (itemsArray.length > 0) {
-      const randomIndex = Math.floor(Math.random() * itemsArray.length);
-      return itemsArray[randomIndex];
-    } else {
-      console.log("No items found.");
-      return null;
-    }
-  },
 
 addNPCInfo(npcName, target) {
 const extraContent = document.getElementById('extraContent');
@@ -343,25 +353,32 @@ const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
 if (foundNPC) {
 //console.log(foundNPC);
 // Format the NPC information into npcContent
-let npcContent = `<h3><span class="cyan">${foundNPC.name}</span></h3>`;
+let npcContent = `<h2><span class="cyan">${foundNPC.name}</span><br></h2>`;
 
 if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
-npcContent += `${foundNPC.occupation}.<br><br>`;
+npcContent += `<h3>${foundNPC.occupation}.<br><br>`;
 }
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
-npcContent += `<span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span><br>`;
+npcContent += `<span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span></h3><br><br>
+<h2><span class="hotpink"> HIT POINTS: </span> ${foundNPC.hitpoints} <br>`;
 }
 
 if (foundNPC.str) {
 npcContent += `<br>
-<span class="hotpink"> STR: </span> ${foundNPC.str} <br>
-<span class="hotpink"> DEX: </span> ${foundNPC.dex} <br>
-<span class="hotpink"> INT: </span> ${foundNPC.int} <br>
-<span class="hotpink"> WIS: </span> ${foundNPC.wis} <br>
-<span class="hotpink"> CON: </span> ${foundNPC.con} <br>
-<span class="hotpink"> CHA: </span> ${foundNPC.cha} <br>
+<span class="misc"> STR: </span> ${foundNPC.str} <br>
+<span class="misc"> DEX: </span> ${foundNPC.dex} <br>
+<span class="misc"> INT: </span> ${foundNPC.int} <br>
+<span class="misc"> WIS: </span> ${foundNPC.wis} <br>
+<span class="misc"> CON: </span> ${foundNPC.con} <br>
+<span class="misc"> CHA: </span> ${foundNPC.cha} </h2><br>
 `
+}
+
+if (foundNPC.magic){
+
+npcContent += `<h2>
+<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h2>`;
 }
 
 //need to run through getMonsters and getItems
@@ -370,48 +387,19 @@ if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
     npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
     }
 
-//RANDOM SPELLS FOR NPCS ------>
-
-//Need to filter by CLASS and LEVEL
-
-console.log(foundNPC.class + ' ' + foundNPC.level)
-
-const knownSpells = this.getNPCSpells(foundNPC.class, foundNPC.level)
-
-let magic = ``;
-let level = 0
-
-for (let i = 0; i < knownSpells.length; i++) {
-  const spell = knownSpells[i]
-  const newLevel = knownSpells[i].Level
-
-if (newLevel > level) {
-
-  magic += `<br> LEVEL ${newLevel} SPELLS <br> ~${spell.Name}~ <br>`;
-  level = newLevel;
-
-} else {
-
-  magic += `~${spell.Name}~ <br>`;
-
-}
-
-}
-
-npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(magic)))}</span>`;
 
 //RANDOM ITEMS FOR NPCS ----->
 
-const randomItemsLoop = 5; // Change this to the desired number of times
+// const randomItemsLoop = 5; // Change this to the desired number of times
 
-let loot = `<br> ${foundNPC.name} has nearby: <br><br>`;
+// let loot = `<br> ${foundNPC.name} has nearby: <br><br>`;
 
-for (let i = 0; i < randomItemsLoop; i++) {
-  const randomItem = this.getRandomItem(Items.itemsArray);
-  if (randomItem) {
-    loot += `#${randomItem.Name}# <br>`;
-  }
-}
+// for (let i = 0; i < randomItemsLoop; i++) {
+//   const randomItem = this.getRandomItem(Items.itemsArray);
+//   if (randomItem) {
+//     loot += `#${randomItem.Name}# <br>`;
+//   }
+// }
 
 //npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(loot)))}</span>`;
 

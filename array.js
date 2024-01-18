@@ -6,6 +6,7 @@ import Monsters from "./monsters.js";
 import Ref from "./ref.js";
 import Items from "./items.js";
 import Spells from "./spells.js";
+
 //import Papa from 'papaparse';
 
 const Array = {
@@ -127,94 +128,138 @@ event.target.remove();
 
 //For Loading...
 
-handleFileInputChange: (event) => {
-const file = event.target.files[0];
-if (file) {
-const reader = new FileReader();
-reader.onload = (e) => Array.handleFileLoad(e.target.result);
-reader.readAsText(file);
-}
-},  
+handleFileInputChange: async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        // Wrap the file reading logic in a Promise
+        const readFile = () => {
+            return new Promise((resolve, reject) => {
+                reader.onload = (e) => {
+                    const fileContent = e.target.result;
+
+                    if (fileContent) {
+                        resolve(fileContent);
+                    } else {
+                        reject('Error: File content is empty.');
+                    }
+                };
+                reader.onerror = (error) => reject(error);
+                reader.readAsText(file);
+            });
+        };
+
+        try {
+            // Wait for the file reading process to complete
+            const fileContent = await readFile();
+
+            // Now you can call loadAndBuild safely
+            await NPCs.loadAndBuild(fileContent);
+        } catch (error) {
+            console.error('Error handling file input:', error);
+        }
+    }
+},
+
+
+
+
 
 handleFileLoad(fileContent) {
-const data = JSON.parse(fileContent);
+    return new Promise((resolve, reject) => {
+        try {
+            if (fileContent) {
+                const data = JSON.parse(fileContent);
 
-try {
-//Handle Location Information
-//console.log(data.locations)
-this.displayLoadedLocationsOnMap(data.locations);
-} catch (error) {
-console.error('Error loading file:', error);
-}
+        try {
+            // Handle Location Information
+            // console.log(data.locations)
+            this.displayLoadedLocationsOnMap(data.locations);
+        } catch (error) {
+            console.error('Error loading file:', error);
+            reject(error);
+        }
 
-try {
-if (data.npcArray) {
-NPCs.npcArray = data.npcArray;
-//console.log(NPCs.npcArray);
-} else {
-console.log('NPC array data is not available.');
-}
-} catch (error) {
-console.error('Error loading NPC information:', error);
-}
+        try {
+            if (data.monstersArray) {
+                Monsters.monstersArray = data.monstersArray;
+            } else {
+                console.log('Monster array data is not available.');
+            }
+        } catch (error) {
+            console.error('Error loading Monster information:', error);
+            reject(error);
+        }
 
-try {
-if (data.monstersArray) {
-Monsters.monstersArray = data.monstersArray;
-//console.log( Monsters.monstersArray);
-} else {
-console.log('Monster array data is not available.');
-}
-} catch (error) {
-console.error('Error loading Monster information:', error);
-}
+        try {
+            if (data.itemsArray) {
+                Items.itemsArray = data.itemsArray;
+            } else {
+                console.log('Items array data is not available.');
+            }
+        } catch (error) {
+            console.error('Error loading Item information:', error);
+            reject(error);
+        }
 
-try {
-if (data.itemsArray) {
-Items.itemsArray = data.itemsArray;
-//console.log( Monsters.monstersArray);
-} else {
-console.log('Items array data is not available.');
-}
-} catch (error) {
-console.error('Error loading Item information:', error);
-}
+        try {
+            if (data.spellsArray) {
+                Spells.spellsArray = data.spellsArray;
+            } else {
+                console.log('Spells array data is not available.');
+            }
+        } catch (error) {
+            console.error('Error loading Item information:', error);
+            reject(error);
+        }
 
-try {
-if (data.spellsArray) {
-Spells.spellsArray = data.spellsArray;
-//console.log( Monsters.monstersArray);
-} else {
-console.log('Spells array data is not available.');
-}
-} catch (error) {
-console.error('Error loading Item information:', error);
-}
+        try {
+            if (data.eventsArray) {
+                Events.eventsArray = data.eventsArray;
+            } else {
+                console.log('Events/Ambience array data is not available.');
+            }
+        } catch (error) {
+            console.error('Error loading Item information:', error);
+            reject(error);
+        }
 
-try {
-if (data.eventsArray) {
-Events.eventsArray = data.eventsArray;
-//console.log(Events.eventsArray);
-} else {
-console.log('Events/Ambience array data is not available.');
-}
-} catch (error) {
-console.error('Error loading Item information:', error);
-}
+        try {
+            if (data.npcArray) {
+                NPCs.npcArray = data.npcArray;
+            } else {
+                console.log('NPC array data is not available.');
+            }
+        } catch (error) {
+            console.error('Error loading NPC information:', error);
+            reject(error);
+        }
 
+        try {
+            // Handle General Information
+            this.handleGeneralInformation(data.generalInformation);
+            // Ambience.initializeAmbienceDropdowns();
+            // Ambience.simConDrop();
+            // Ambience.simMainDrop();
+            // Ambience.radiateDisplay();
+        } catch (error) {
+            console.error('Error loading general information:', error);
+            reject(error);
+        }
 
-try{
-//Handle General Information
-this.handleGeneralInformation(data.generalInformation);
-//Ambience.initializeAmbienceDropdowns();
-//Ambience.simConDrop();
-//Ambience.simMainDrop();
-//Ambience.radiateDisplay();
-} catch (error) {
-console.error('Error loading general information:', error);
-}
-
+        resolve();
+            } else {
+                console.error('Error: File content is empty.');
+                reject('File content is empty.');
+            }
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            reject(error);
+        }
+    });
 },
+
 
 handleGeneralInformation: function (generalInfo) {
 const { interiorOrExterior, context, mainAmbience, secondAmbience } = generalInfo;
@@ -225,6 +270,7 @@ const { interiorOrExterior, context, mainAmbience, secondAmbience } = generalInf
 // document.getElementById('contextDropdown').value = context;
 // document.getElementById('mainAmbienceDropdown').value = mainAmbience;
 // document.getElementById('secondAmbienceDropdown').value = secondAmbience;
+
 },
 
 

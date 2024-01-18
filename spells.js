@@ -7,25 +7,27 @@ const Spells = {
 spellsArray: [],
 spellsSearchArray: [],
 
-//Load the Array
 async loadSpellsArray() {
+    try {
+        const response = await fetch('spells.json'); // Adjust the path if needed
+        const rawData = await response.json();
 
-try {
-const response = await fetch('spells.json'); // Adjust the path if needed
-const data = await response.json();
-this.spellsArray = data;
+        // Store the raw data if needed
+        this.rawSpellsArray = rawData;
 
-const noKeys = Array.extractValues(data);
-this.spellsArray = noKeys;
-//console.log(this.spellsArray);
+        // Extract values and assign to this.spellsArray
+        const noKeys = Array.extractValues(rawData);
+        this.spellsArray = noKeys;
 
-return data //.spells;
-} catch (error) {
-console.error('Error loading spells array:', error);
-return [];
-}
+        // Uncomment the following line if you want to log the extracted spellsArray
+        // console.log(this.spellsArray);
 
-},   
+        return this.spellsArray;
+    } catch (error) {
+        console.error('Error loading spells array:', error);
+        return [];
+    }
+}, 
 
 //Add to Storyteller
 

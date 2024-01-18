@@ -361,11 +361,14 @@ placeholder="Put any other information about this NPC here.
     </form>
   </div>
 
+<label for="eventSearch">Search Events</label>
+<input class="lineField" type="textarea" id="eventSearch" name="eventSearch" placeholder="Search by Name or Tag" required>
+
 <label for="ambienceTitle">Event</label>
-<input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="{... to Search" required>
+<input class="lineField" type="textarea" id="ambienceTitle" name="ambienceTitle" placeholder="Insert Unique Name" required>
 
 <label for="ambienceContext">Tags</label>
-<input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext"  required>
+<input class="lineField" type="textarea" id="ambienceContext" name="ambienceContext" placeholder="Tag 1, Tag 2, Tag 3, ..." required>
 
 <script>
   function updateCheckboxes(checkboxId) {

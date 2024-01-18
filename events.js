@@ -41,17 +41,18 @@ let searchText = event.target.value.toLowerCase();
 Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
 this.searchEvents(searchText);
-this.showcurrentEvents(this.searchArray);
+this.loadEventsList(this.searchArray, 'eventsManager');
 
 //this.getEvent();
-this.addEventInfo();
+//this.addEventInfo();
 
 })
 
 Ref.eventManagerInput.addEventListener('click', () => {
 Ref.extraInfo.classList.add('showExtraInfo');
 Ref.extraInfo2.classList.remove('showExtraInfo');
-this.showcurrentEvents(this.eventsArray);
+this.loadEventsList(this.eventsArray, 'eventsManager');
+
 })
 
 // NPC TAGS LISTENERS
@@ -96,7 +97,7 @@ this.showTags(this.tagsArray);
 
 // -- EVENTFORM LISTENERS
 
-Ref.eventEvent.addEventListener('click', () => {
+Ref.eventSearch.addEventListener('click', () => {
 this.loadEventsList(this.eventsArray)
 })
 
@@ -178,9 +179,11 @@ console.log('Searching for Events including: ' + searchText)
 this.searchArray = this.eventsArray.filter((e) => {
 const group = e.group.toLowerCase();
 const event = e.event.toLowerCase();
+const npc = e.npc.toLowerCase();
+const location = e.location.toLowerCase();
 
 // Check if any of the properties contain the search text
-return group.includes(searchText) || event.includes(searchText);
+return group.includes(searchText) || event.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
 
 }); 
 
@@ -310,90 +313,24 @@ showTags(data) {
 
 // -- USING EVENT MANAGER
 
-
-
-showcurrentEvents(data){
-
-console.log(data)
-
-Ref.extraContent.innerHTML = '';
-Ref.extraContent.style.display = 'block'; // Display the container
-
-
-// Sorting function for events
-const sortEvents = (eventA, eventB) => {
-  // First, sort by active/inactive status (active first)
-  const activeComparison = eventB.active - eventA.active;
-  if (activeComparison !== 0) {
-      return activeComparison;
-  }
-
-  // If both events have the same active status, sort by event group alphabetically
-  const groupComparison = eventA.group.localeCompare(eventB.group);
-  if (groupComparison !== 0) {
-      return groupComparison;
-  }
-
-  // If both events have the same group, sort by event target alphabetically
-  return eventA.target.localeCompare(eventB.target);
-};
-
-// Sort the data using the custom sorting function
-const sortedAmbienceArray = data.sort(sortEvents);
-
-// Iterate through the sorted events and display them
-for (const event of sortedAmbienceArray) {
-const eventNameDiv = document.createElement('div');
-eventNameDiv.innerHTML = `
-    <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
-    <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target}]</span>
-    
-    <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
-`;
-
-
-Ref.extraContent.appendChild(eventNameDiv);
-
-eventNameDiv.addEventListener('click', () => {
-Ref.eventManagerInput.value = event.event;
-this.focusEvent = event.event;
-this.searchArray = [event]; // Assign an array with a single element
-this.addEventInfo();
-Ref.extraInfo2.classList.add('showExtraInfo');
-});
-
-eventNameDiv.addEventListener('mouseover', () => {
-  //Ref.eventManagerInput.value = event.event;
-  this.focusEvent = event.event;
-  this.searchArray = [event]; // Assign an array with a single element
-  this.addEventInfo();
-  Ref.extraInfo2.classList.add('showExtraInfo');
-  });
-
-}
-
-
-
-},
-
-addEventInfo(){
+addEventInfo(data){
 
 const contentId = this.focusEvent
 
 //Search for Event in the Array   
-const event = Object.values(this.eventsArray).find(event => event.event.toLowerCase() === contentId.toLowerCase());
+const event = Object.values(this.eventsArray).find(event => event.event.toLowerCase() === data.event.toLowerCase() && event.target === data.target);
 
 if (event) {
 
 //console.log(event)
 
 const eventInfo = [
-`<span class="misc">Status:</span>${event.active === 1 ? "Enabled" : "Disabled"} <br><br>`,
-`<span class="misc">Event:</span>${event.event || "None"} <br><br> `,
-`<span class="misc">Location:</span>${event.location || "None"} <br><br>`,
-`<span class="misc">NPC:</span>  ${event.npc || "None"} <br><br>`,
-`<span class="misc">Group:</span>  ${event.group || "None"} <br><br>`,
-`<span class="hotpink">Description</span><br><hr> ${event.description || "None"}<br><br>`,
+
+`<h2><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event || "None"}</h2><hr>`,
+`<span class="cyan">Location: </span>${event.location || "None"} <br><br>`,
+`<span class="hotpink">NPC: </span>${event.npc || "None"} <br><br>`,
+`<span class="orange">Group: </span>${event.group || "None"} <br><br><br>`,
+`<span class="white">Description</span><br><hr> ${event.description || "None"}<br><br>`,
 
 ];
 
@@ -407,85 +344,132 @@ Ref.extraContent2.innerHTML = formattedItem;
 return formattedItem;
 
 } else {
-console.log(`Event not found: ${contentId}`);
+console.log(`Event not found: ${data.event}`);
 
 }
 
 },
 
+// Partition the ambienceArray into different groups
+ activeAtLocation : [],
+ activeAtTag : [],
+ inactiveAtLocation : [],
+ inactiveAtTag : [],
+ activeAll : [],
+ inactiveAll : [],
+ activeElsewhere : [],
+ inactiveElsewhere : [],
 
-
-loadEventsList: function(data) {
-  const itemList = document.getElementById('itemList');
-  itemList.innerHTML = '';
+ sortEvents: function(data) {
 
   // Search Array.locationArray to find the currentLocation
   const locationObject = Array.locationArray.find(location => location.divId === Ref.locationLabel.textContent);
 
   // Partition the ambienceArray into different groups
-  const activeAtLocation = [];
-  const activeAtTag = [];
-  const inactiveAtLocation = [];
-  const inactiveAtTag = [];
-  const activeAll = [];
-  const inactiveAll = [];
-  const activeElsewhere = [];
-  const inactiveElsewhere = [];
+  this.activeAtLocation = [];
+  this.activeAtTag = [];
+  this.inactiveAtLocation = [];
+  this.inactiveAtTag = [];
+  this.activeAll = [];
+  this.inactiveAll = [];
+  this.activeElsewhere = [];
+  this.inactiveElsewhere = [];
 
-  data.forEach(event => {
+ data.forEach(event => {
     const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-    const locationTags = locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
+    const locationTags = locationObject && locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
+    const currentLocation = locationObject? locationObject.divId : '';
     //console.log(locationTags + ' :: ' + eventLocations)
   
     if (event.active === 1) {
-      if (eventLocations.includes(locationObject.divId)) {
-        activeAtLocation.push(event);
+      if (eventLocations.includes(currentLocation)) {
+        this.activeAtLocation.push(event);
       } else if (eventLocations.some(location => locationTags.includes(location))) {
-        activeAtTag.push(event);
+        this.activeAtTag.push(event);
       } else if (event.location === 'All'& event.active === 1){
-        activeAll.push(event);
+        this.activeAll.push(event);
       } else {
-        activeElsewhere.push(event);
+        this.activeElsewhere.push(event);
       }
     } else {
-      if (eventLocations.includes(locationObject.divId)) {
-        inactiveAtLocation.push(event);
+      if (eventLocations.includes(currentLocation)) {
+        this.inactiveAtLocation.push(event);
       } else if (eventLocations.some(location => locationTags.includes(location))) {
-        inactiveAtTag.push(event);
+        this.inactiveAtTag.push(event);
       } else if (event.location === 'All'& event.active === 0){
-        inactiveAll.push(event);
+        this.inactiveAll.push(event);
       }else {
-        inactiveElsewhere.push(event);
+        this.inactiveElsewhere.push(event);
       }
-    }
+    } 
   });
   
+ },
+
+loadEventsList: function(data, destination) {
+
+  let target = '';
+
+  if(destination === 'eventsManager'){
+  target = Ref.extraContent;
+  }else{
+  target = Ref.itemList;
+  }
+  
+  target.innerHTML = '';
+
+  this.sortEvents(data);
 
   const locationEventsArray = [
-    ...activeAtLocation,
-    ...activeAtTag,
-    ...inactiveAtLocation,
-    ...inactiveAtTag,
+    ...this.activeAtLocation,
+    ...this.activeAtTag,
+    ...this.inactiveAtLocation,
+    ...this.inactiveAtTag,
   ]
+
+  const allEvents = [
+    ...this.activeAll,
+    ...this.inactiveAll,
+  ]
+
+  //sort alphabetically by tag
+  const elsewhere = [
+    ...this.activeElsewhere,
+    ...this.inactiveElsewhere
+  ];
+
+  elsewhere.sort((a, b) => a.group.localeCompare(b.group));
 
   for (const event of locationEventsArray) {
     const eventNameDiv = document.createElement('div');
     eventNameDiv.innerHTML = `
-      <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
-      <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
-      <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+    <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+    <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+    <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
+    
     `;
 
-    itemList.appendChild(eventNameDiv);
-    this.fillAmbienceForm(event, eventNameDiv);
+    target.appendChild(eventNameDiv);
+
+    if(destination === 'eventsManager'){
+      this.addCurrentEventEvents(event, eventNameDiv);
+      }else{
+      this.fillEventForm(event, eventNameDiv);
+      }
+
+      eventNameDiv.addEventListener('mouseover', () => {
+        //Ref.eventManagerInput.value = event.event;
+        this.focusEvent = event.event;
+        this.searchArray = [event]; // Assign an array with a single element
+        this.addEventInfo(event);
+        Ref.extraInfo2.classList.add('showExtraInfo');
+        });
+
   }
 
-  itemList.appendChild(document.createElement('hr'));
-
-  const allEvents = [
-    ...activeAll,
-    ...inactiveAll,
-  ]
+  if( locationEventsArray.length > 1){
+  target.appendChild(document.createElement('hr'));
+  }
 
   for (const event of allEvents) {
     
@@ -495,45 +479,66 @@ loadEventsList: function(data) {
   const npcOrLocation = event.target === 'NPC' ? event.npc : event.location;
 
   eventNameDiv.innerHTML = `
-    <span class="${isAllLocationActive ? 'white' : 'gray'}">
-      [${isAllLocationActive && event.npc !== 'All' ? 'All ' + npcOrLocation : npcOrLocation}]
-    </span>
-    <span class="${isAllLocationActive ? 'spell' : 'gray'}">[${event.group}]</span>
-    <span class="${isAllLocationActive ? 'lime' : 'gray'}">${event.event}</span>
+  <span class="${isAllLocationActive ? 'spell' : 'gray'}">[${event.group}]</span>
+  <span class="${isAllLocationActive ? 'lime' : 'gray'}">${event.event}</span>
+  <span class="${isAllLocationActive ? 'white' : 'gray'}">
+  [${isAllLocationActive && event.npc !== 'All' ? 'All ' + npcOrLocation : npcOrLocation}]
+  </span>
+    
+  
   `;
 
-  
-    itemList.appendChild(eventNameDiv);
-    this.fillAmbienceForm(event, eventNameDiv);
+    target.appendChild(eventNameDiv);
+    
+    if(destination === 'eventsManager'){
+      this.addCurrentEventEvents(event, eventNameDiv);
+      }else{
+      this.fillEventForm(event, eventNameDiv);
+      }
+
+      eventNameDiv.addEventListener('mouseover', () => {
+        //Ref.eventManagerInput.value = event.event;
+        this.focusEvent = event.event;
+        this.searchArray = [event]; // Assign an array with a single element
+        this.addEventInfo(event);
+        Ref.extraInfo2.classList.add('showExtraInfo');
+        });
   }
 
-  itemList.appendChild(document.createElement('hr'));
-
-  //sort alphabetically by tag
-  const elsewhere = [
-    ...activeElsewhere,
-    ...inactiveElsewhere
-  ];
-
-  elsewhere.sort((a, b) => a.group.localeCompare(b.group));
+  if( allEvents.length > 1){
+  target.appendChild(document.createElement('hr'));
+  }
 
   for (const event of elsewhere) {
     const eventNameDiv = document.createElement('div');
     eventNameDiv.innerHTML = `
-      <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
-      <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
-      <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+    <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+    <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+    <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
+    
     `;
 
-    itemList.appendChild(eventNameDiv);
-    this.fillAmbienceForm(event, eventNameDiv);
+    target.appendChild(eventNameDiv);
+    
+    if(destination === 'eventsManager'){
+    this.addCurrentEventEvents(event, eventNameDiv);
+    }else{
+    this.fillEventForm(event, eventNameDiv);
+    }
+
+    eventNameDiv.addEventListener('mouseover', () => {
+      //Ref.eventManagerInput.value = event.event;
+      this.focusEvent = event.event;
+      this.searchArray = [event]; // Assign an array with a single element
+      this.addEventInfo(event);
+      Ref.extraInfo2.classList.add('showExtraInfo');
+      });
+
   }
 
-  itemList.style.display = 'block'; // Display the container
+  target.style.display = 'block'; // Display the container
   
 },
-
-
 
 loadLocationsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
@@ -605,15 +610,25 @@ return description;
 // You can use it as needed.
 },
 
+addCurrentEventEvents(event, eventNameDiv){
 
+  eventNameDiv.addEventListener('click', () => {
+    Ref.eventManagerInput.value = event.event;
+    this.focusEvent = event.event;
+    this.searchArray = [event]; // Assign an array with a single element
+    this.addEventInfo(event);
+    Ref.extraInfo2.classList.add('showExtraInfo');
+    });
+  
+},
 
 
 // -- MAKING AND EDITING EVENTS
 
-fillAmbienceForm: function(ambience, ambienceNameDiv) {
+fillEventForm: function(ambience, ambienceNameDiv) {
 // Add click event listener to each ambience name
 ambienceNameDiv.addEventListener('click', () => {
-Ref.eventGroup.value = ambience.group;
+Ref.eventTags.value = ambience.group;
 Ref.eventEvent.value = ambience.event;
 Ref.eventNPC.value = ambience.npc;
 Ref.eventLocation.value = ambience.location;
@@ -652,7 +667,7 @@ ambience.event === Ref.eventEvent.value && ambience.target === target
 );
 
 const ambience = {
-group: Ref.eventGroup.value,
+group: Ref.eventTags.value,
 active: 1,
 target: target,
 //main: Ref.ambienceMain.value,
@@ -680,18 +695,13 @@ this.fillEventManager();
 },
 
 addAmbienceSearch: function() {
-Ref.eventEvent.addEventListener('input', (event) => {
+Ref.eventSearch.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
-
-// Check if the searchText contains '{'
-if (searchText.includes('{')) {
-// Remove '{' from the searchText
-searchText = searchText.replace('{', '');
 
 // Call the searchAmbience function
 this.searchAmbience(searchText);
-}
 });
+
 },
 
 searchAmbience: function(searchText) {
@@ -701,9 +711,11 @@ console.log('called')
 this.searchArray = this.eventsArray.filter((ambience) => {
 const group = ambience.group.toLowerCase();
 const event = ambience.event.toLowerCase();
+const npc = ambience.npc.toLowerCase();
+const location = ambience.location.toLowerCase();
 
 // Check if any of the properties contain the search text
-return group.includes(searchText) || event.includes(searchText);
+return group.includes(searchText) || event.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
 });
 
 this.loadEventsList(this.searchArray);
