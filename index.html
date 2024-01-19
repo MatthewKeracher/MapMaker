@@ -110,11 +110,20 @@
 <form id="itemForm" class="itemForm">
 <div class="itemFormContainer">
 
+<label for="itemSearch">Search Items</label>
+<input class="lineField" type="textarea" id="itemSearch" name="itemSearch" placeholder="Search by Name or Tag" required>
+
 <label for="itemName">Name</label>
-<input class="lineField" type="textarea" id="itemName" name="itemName" placeholder="{... to Search" required>
+<input class="lineField" type="textarea" id="itemName" name="itemName" placeholder="Unique Item Name" required>
 
 <label for="itemType">Type</label>
-<input class="lineField" type="textarea" id="itemType" name="itemType">
+<input class="lineField" type="textarea" id="itemType" name="itemType" placeholder="Collate with Others">
+
+<label for="itemTags">Tags</label>
+<input class="lineField" type="textarea" id="itemTags" name="itemTags" placeholder="Assign to Location, NPC, or Tag">
+
+<label for="itemDescription">Description</label>
+<textarea class="medField" type="textarea" id="itemDescription" name="itemDescription"></textarea>
 
 <br>
 
@@ -148,9 +157,6 @@
 
 </div>
 </div>
-
-<label for="itemDescription">Description</label>
-<textarea class="medField" type="textarea" id="itemDescription" name="itemDescription"></textarea>
 
 </div>
 </form>
@@ -343,7 +349,6 @@ placeholder="Put any other information about this NPC here.
 </div>
 </form>
 
-
 <form id="ambienceForm" class="ambienceForm">
 <div class="monsterFormContainer">
 
@@ -417,7 +422,6 @@ placeholder=
 </div>
 </form>
 
-
 <div class="SettingsContainer"> 
 
 
@@ -444,8 +448,6 @@ placeholder=
 </div>
 
 </div>
-
-
 </div>
 
 </main>

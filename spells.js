@@ -40,7 +40,7 @@ const tildeBrackets = /~([^~]+)~/g;
 return locationText.replace(tildeBrackets, (match, targetText) => {
 const spell = Object.values(this.spellsArray).find(spell => spell.Name.toLowerCase() === targetText.toLowerCase());
 if (spell) {
-return `<span class="expandable spell" data-content-type="spell" divId="${spell.Name}">${spell.Name.toUpperCase()}</span>`;
+return `<span class="expandable spell" data-content-type="spell" divId="${spell.Name}">${spell.Name}</span>`;
 } else {
 console.log(`Spell not found: ${targetText}`);
 return match;

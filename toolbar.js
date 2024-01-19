@@ -310,7 +310,8 @@ break;
 
 case 5:
 Items.saveItem();
-Items.loadItemsList(Items.itemsArray);
+Items.searchItem(itemSearch.value.toLowerCase());
+NPCs.buildNPC();
 break;
 
 case 6:

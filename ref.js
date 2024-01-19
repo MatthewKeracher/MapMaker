@@ -79,9 +79,10 @@ ambienceTaste: document.getElementById('ambienceTaste'),
 
 //objectForm
 itemForm: document.querySelector('.itemForm'),
-
+itemSearch: document.getElementById('itemSearch'),
 itemName: document.getElementById('itemName'),
 itemType: document.getElementById('itemType'),
+itemTags: document.getElementById('itemTags'),
 itemSize: document.getElementById('itemSize'),
 itemWeight: document.getElementById('itemWeight'),
 itemCost: document.getElementById('itemCost'),

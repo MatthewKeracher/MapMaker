@@ -6,6 +6,14 @@ overflow: auto;
 overflow-x: hidden;
 }
 
+#itemForm {
+    display: none;    
+    border-radius: 0;
+    background-color: transparent;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
 #spellsForm::-webkit-scrollbar {
 width: 0.1px; /* Set the width of the scrollbar */
 }

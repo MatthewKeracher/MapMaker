@@ -360,32 +360,51 @@ npcContent += `<h3>${foundNPC.occupation}.<br><br>`;
 }
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
-npcContent += `<span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span></h3><br><br>
-<h2><span class="hotpink"> HIT POINTS: </span> ${foundNPC.hitpoints} <br>`;
+npcContent += `<span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span></h3>
+<h3><span class="hotpink"> HIT POINTS: </span> ${foundNPC.hitPoints}</h3>`;
 }
 
 if (foundNPC.str) {
-npcContent += `<br>
+npcContent += `<h2>
 <span class="misc"> STR: </span> ${foundNPC.str} <br>
 <span class="misc"> DEX: </span> ${foundNPC.dex} <br>
 <span class="misc"> INT: </span> ${foundNPC.int} <br>
 <span class="misc"> WIS: </span> ${foundNPC.wis} <br>
 <span class="misc"> CON: </span> ${foundNPC.con} <br>
-<span class="misc"> CHA: </span> ${foundNPC.cha} </h2><br>
+<span class="misc"> CHA: </span> ${foundNPC.cha} </h2>
 `
 }
 
 if (foundNPC.magic){
-
-npcContent += `<h2>
-<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h2>`;
+npcContent += `<h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
 }
 
-//need to run through getMonsters and getItems
-//want to put in Backstory as hover for extraextra
+if (foundNPC.thiefSkills){
+  npcContent += `<h3><span class="withbreak">
+  <span class = "orange"> Remove Traps </span> ${foundNPC.thiefSkills.removeTraps} <br>
+  <span class = "orange"> Pick Pockets </span> ${foundNPC.thiefSkills.pickPockets} <br>
+  <span class = "orange"> Move Silently </span> ${foundNPC.thiefSkills.moveSilently} <br>
+  <span class = "orange"> Climb Walls </span> ${foundNPC.thiefSkills.climbWalls} <br>
+  <span class = "orange"> Hide </span> ${foundNPC.thiefSkills.hide} <br>
+  <span class = "orange"> Listen </span> ${foundNPC.thiefSkills.listen} <br>
+  </span></h3>`;
+}
+
+if (foundNPC.inventory) {
+  const inventoryItems = foundNPC.inventory.map(item => `#${item}# <br>`);
+  const formattedInventory = inventoryItems.join('');
+
+  npcContent += `<h3><span class="withbreak">Inventory: <br><br>${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
+}
+
+
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-    npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
-    }
+  npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
+}
+
+
+
+
 
 
 //RANDOM ITEMS FOR NPCS ----->
@@ -403,37 +422,8 @@ if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
 
 //npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(loot)))}</span>`;
 
-//RANDOM GARB OUTFITTER FOR NPCS ---->
 
-let garb = `<br> ${foundNPC.name} is wearing: <br><br>`
 
-const typesToSearch = [
-    'Head Garb', 
-    'Body Garb', 
-    'Hand Garb', 
-    'Garb' , 
-    'Leg Garb',
-    'Over Garb',
-    'Under Garb',
-    'Whole Garb',
-    'Winter Foot Garb',
-    'Winter Hand Garb' ];
-    
-    for (const type of typesToSearch) {
-      const filteredItems = Items.itemsArray.filter(item => item.Type === type);
-    
-      if (filteredItems.length > 0) {
-        const randomIndex = Math.floor(Math.random() * filteredItems.length);
-        const selectedItem = filteredItems[randomIndex];
-        //console.log(`${type}:`, selectedItem.Name);
-        garb += `#${selectedItem.Name}# <br>`;
-      } else {
-        console.log(`No matching items found for ${type}.`);
-      }
-    }
-      
-      
-//npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(garb)))}</span>`;
 
 
 // if (foundNPC.MorningLocation) {

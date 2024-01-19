@@ -81,7 +81,8 @@ if (item) {
 
     const itemStats = [
         `<hr><h3><span class="lime">${contentId.toUpperCase()}</span></h3>`,
-        `${item.Type}.<br><br>`,
+        `${item.Type}.<br>`,
+        `<span class="lime">Assigned to:</span> ${item.Tags};<br><br>`,
       
         `${item.Size ? `<span class="lime">Size:</span> ${item.Size};<br>` : ''}`,
         `${item.Weight ? `<span class="lime">Weight:</span> ${item.Weight};<br>` : ''}`,
@@ -119,24 +120,31 @@ loadItemsList: function(data) {
     const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
   
     // Iterate through the sorted items
-    for (const item of sortedItems) {
-      const itemNameDiv = document.createElement('div');
-      itemNameDiv.id = item.Name;
-      itemNameDiv.innerHTML = `[${item.Type}]<span class="lime">${item.Name}</span>`;
-      itemList.appendChild(itemNameDiv);
-      this.fillItemsForm(item, itemNameDiv);
-
-    //show Item info in ExtraInfo2 when hover over Div
+for (const item of sortedItems) {
+    const itemNameDiv = document.createElement('div');
+    itemNameDiv.id = item.Name;
+  
+    // Check if item.Tags is included in Ref.itemSearch.value
+    const tagsIncluded = item.Tags ? item.Tags.toLowerCase().includes(Ref.itemSearch.value.toLowerCase()) : false;
+  
+    // Apply lime or gray class based on the result
+    const className = tagsIncluded ? 'lime' : 'gray'
+  
+    // Set the inner HTML with the appropriate class
+    itemNameDiv.innerHTML = `[${item.Type}]<span class="${className}">${item.Name}</span>`;
+  
+    itemList.appendChild(itemNameDiv);
+    this.fillItemsForm(item, itemNameDiv);
+  
+    // Show Item info in ExtraInfo2 when hover over Div
     itemNameDiv.addEventListener('mouseover', () => {
-    Ref.extraInfo2.classList.add('showExtraInfo');
-    this.addIteminfo(itemNameDiv.id);
+      Ref.extraInfo2.classList.add('showExtraInfo');
+      this.addIteminfo(itemNameDiv.id);
     });
-
-
-    }
+  }
   
     itemList.style.display = 'block'; // Display the container
-  
+    
   },
   
 
@@ -145,8 +153,11 @@ fillItemsForm: function(item, itemNameDiv){
 // Add click event listener to each NPC name
 itemNameDiv.addEventListener('click', () => {
 
+itemNameDiv.innerHTML = `[${item.Type}]<span class="cyan">${item.Name}</span>`;
+
 Ref.itemName.value = item.Name;
 Ref.itemType.value = item.Type;
+Ref.itemTags.value = item.Tags;
 Ref.itemSize.value = item.Size;
 Ref.itemWeight.value = item.Weight;
 Ref.itemCost.value = item.Cost;
@@ -162,13 +173,13 @@ Ref.itemForm.style.display = 'flex'; // Display the itemForm
 
 saveItem: function() {
 
-    const existingItemIndex = this.itemsArray.findIndex(item => item.name === Ref.itemName.value);
-    console.log(Ref.itemName.value)
+    const existingItemIndex = this.itemsArray.findIndex(item => item.Name === Ref.itemName.value);
 
     const item = {
 
         Name: Ref.itemName.value,
         Type: Ref.itemType.value,
+        Tags: Ref.itemTags.value,
         Size: Ref.itemSize.value,
         Weight: Ref.itemWeight.value,
         Cost: Ref.itemCost.value,
@@ -182,46 +193,42 @@ saveItem: function() {
     if (existingItemIndex !== -1) {
     // Update the existing NPC entry
     this.itemsArray[existingItemIndex] = item;
-    console.log('Item updated:', item);
+    //this.itemsSearchArray[existingItemIndex] = item;
+    //console.log('Item updated:', item);
     } else {
     this.itemsArray.push(item);
+    //this.itemsSearchArray.push(item);
     }
     
     },
 
 addItemSearch: function(){
 
-Ref.itemName.addEventListener('input', (event) => {
+Ref.itemSearch.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 
-// Check if the searchText contains '{'
-if (searchText.includes('{')) {
-// Remove '{' from the searchText
-searchText = searchText.replace('{', '');
-
-// Call the searchMonster function
+// Call the searchItem function
 this.searchItem(searchText);
-}
+
 });
 
 },
 
-searchItem: function(searchText){
-
-    this.itemSearchArray = [];
-    
-    this.itemSearchArray = this.itemsArray.filter((item) => {
-    const itemName = item.Name.toLowerCase();
-    const itemType = item.Type.toLowerCase();
-    
-    // Check if either the name or occupation contains the search text
-    return itemName.includes(searchText.toLowerCase()) || itemType.includes(searchText.toLowerCase());
+searchItem: function(searchText) {
+    this.itemsSearchArray = [];
+ 
+    this.itemsSearchArray = this.itemsArray.filter((item) => {
+      const itemName = item.Name.toLowerCase();
+      const itemType = item.Type.toLowerCase();
+      const itemTags = item.Tags ? item.Tags.toLowerCase() : '';
+  
+      // Check if either the name or occupation contains the search text
+      return itemName.includes(searchText.toLowerCase()) || itemType.includes(searchText.toLowerCase()) || itemTags.includes(searchText.toLowerCase());
     });
-    
-    this.loadItemsList(this.itemSearchArray);
-    
-    },
-
+    //console.log('searching for... ' + searchText)
+    this.loadItemsList(this.itemsSearchArray);
+  },
+  
 
 };
 
