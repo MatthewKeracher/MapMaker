@@ -61,6 +61,24 @@ return match;
 });
 },
 
+standardizeCost(cost) {
+    // Use regex to find the figure followed by a space and optional '+'
+    const match = cost.match(/(\d+)(\s*\+*)/);
+  
+    if (match) {
+      // Extract the figure and optional '+'
+      const figure = match[1];
+      const plusSign = match[2];
+  
+      // Divide the figure by 100 and add back the optional '+'
+      const inGold = figure / 100 + plusSign;
+  
+      return inGold;
+    }
+  
+    return cost; // Return the original cost if no match is found
+  },
+
 addIteminfo(contentId, target) {
 
 let targetLocation = '';
@@ -76,21 +94,23 @@ targetLocation = Ref.extraContent2
 
 //Search for Item in the Array   
 const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === contentId.toLowerCase());
+const newCost = this.standardizeCost(item.Cost) + 'Gold Pieces';
+
 
 if (item) {
 
     const itemStats = [
-        `<hr><h3><span class="lime">${contentId.toUpperCase()}</span></h3>`,
-        `${item.Type}.<br>`,
-        `<span class="lime">Assigned to:</span> ${item.Tags};<br><br>`,
-      
-        `${item.Size ? `<span class="lime">Size:</span> ${item.Size};<br>` : ''}`,
-        `${item.Weight ? `<span class="lime">Weight:</span> ${item.Weight};<br>` : ''}`,
-        `${item.Cost ? `<span class="lime">Cost:</span> ${item.Cost};<br>` : ''}`,
+        `<br><h3><span class="misc">${contentId}</span>`,
+        `<br>${item.Cost ? `(${newCost})</h3><hr>` : ''}`,
+        `<span class="cyan">${item.Type}</span>.<br>`,
+        
+        `<h3>${item.Size ? `<span class="lime">Size:</span> ${item.Size};<br>` : ''}`,
+        `${item.Weight ? `<span class="lime">Weight:</span> ${item.Weight} lbs;<br>` : ''}`,
         `${item.Damage ? `<span class="lime">Damage:</span> ${item.Damage};<br>` : ''}`,
         `${item.Range ? `<span class="lime">Range:</span> ${item.Range};<br>` : ''}`,
         `${item.AC ? `<span class="lime">Armour Class:</span> ${item.AC};<br><br>` : ''}`,
-        `${item.Description ? `<span class="lime">Description:</span> <br><br> ${item.Description}` : ''}`,
+        `</h3><span class="hotpink">Assigned to:</span> ${item.Tags};<br><br>`,
+        `${item.Description ? `<br> ${item.Description}` : ''}`,
       ];
       
 

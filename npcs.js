@@ -356,13 +356,19 @@ if (foundNPC) {
 let npcContent = `<h2><span class="cyan">${foundNPC.name}</span><br></h2>`;
 
 if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
-npcContent += `<h3>${foundNPC.occupation}.<br><br>`;
+npcContent += `<h3><span class="hotpink">${foundNPC.occupation}.</span><hr>`;
+}
+
+if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
+  npcContent += `<span class="lime">Backstory:</span><br><br>
+  <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
 }
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
-npcContent += `<span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span></h3>
+npcContent += `<hr><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span></h3>
 <h3><span class="hotpink"> HIT POINTS: </span> ${foundNPC.hitPoints}</h3>`;
 }
+
 
 if (foundNPC.str) {
 npcContent += `<h2>
@@ -376,11 +382,11 @@ npcContent += `<h2>
 }
 
 if (foundNPC.magic){
-npcContent += `<h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
+npcContent += `<hr><h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
 }
 
 if (foundNPC.thiefSkills){
-  npcContent += `<h3><span class="withbreak">
+  npcContent += `<hr><h3><span class="withbreak">
   <span class = "orange"> Remove Traps </span> ${foundNPC.thiefSkills.removeTraps} <br>
   <span class = "orange"> Pick Pockets </span> ${foundNPC.thiefSkills.pickPockets} <br>
   <span class = "orange"> Move Silently </span> ${foundNPC.thiefSkills.moveSilently} <br>
@@ -394,13 +400,12 @@ if (foundNPC.inventory) {
   const inventoryItems = foundNPC.inventory.map(item => `#${item}# <br>`);
   const formattedInventory = inventoryItems.join('');
 
-  npcContent += `<h3><span class="withbreak">Inventory: <br><br>${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
+  npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br><br>
+  <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
 }
 
 
-if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-  npcContent += `<br><br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
-}
+
 
 
 

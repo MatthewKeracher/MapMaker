@@ -206,7 +206,7 @@ if (classTable) {
 // Find spellSlots for NPC's Level
 const levelEntry = classTable.find(entry => entry.level === level);
 const spellBook = Spells.spellsArray.filter(spell => spell.Class === characterClass);
-this.magic = '';
+this.magic = '<span class = "cyan">Casting:</span><br><br>';
 
 // Start at Level 1
 let levelCheck = 0;
@@ -224,7 +224,7 @@ levelSpells.splice(randomIndex, 1);
 
 // Check for End of Loop
 if (levelCheck < chosenSpell.Level) {
-this.magic += `<br> LEVEL ${levelIndex + 1} SPELLS <br>`;
+this.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
 levelCheck = chosenSpell.Level;
 }
 

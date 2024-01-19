@@ -27,16 +27,24 @@ Ref.editLocationName.value   = locationName;
 if (locationObject) {
 //name the returned locationObject data 
 Events.getEvent(locationName, locationObject.tags);
-const locationText = '<br>' + Events.eventDesc + '<br><br>' + locationObject.description;
+
+//Add locationItmems
+const locationItems = this.addLocationItems(locationObject);
+const locationItemsFormatted = `[${locationName} Items List]{<hr><br><br> #${locationItems.join('# <br><br>#')}#}`;
+
+const locationText = '<br>' + Events.eventDesc + '<br><br>' + locationItemsFormatted + '<br><br>' + locationObject.description;
 
 this.miscArray = [];
 this.monsterArray = [];
 const squareCurly = this.getMisc(locationText, this.miscArray);
 
+
 const formattedMonsters = await Monsters.getMonsters(squareCurly);
 const formattedSpells = await Spells.getSpells(formattedMonsters);
 const formattedLocation = await Items.getItems(formattedSpells);
 //console.log(presentMonsters)
+
+
 
 const location = Ref.locationLabel.textContent;
 const presentNPCs = NPCs.getNPCs(location, Events.phase);
@@ -93,13 +101,37 @@ const MiscItem = miscArray.find(item => item.square === contentId);
     const withSpells = Spells.getSpells(withItems); 
     const miscInfo = [ 
       
-    `<br><span class="misc">${MiscItem.square}</span><br><br>
+    `<br><h3><span class="misc">${MiscItem.square}</span></h3>
     <span class="withbreak">${withSpells}</span>`]
 
     extraContent.innerHTML = miscInfo;
   } else {
     console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
   }
+},
+
+addLocationItems(locationObject){
+
+  let locationItems = '';
+
+    // Filter itemsArray based on location Name and Tags
+    const filteredItems = Items.itemsArray.filter(item => {
+      const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
+  
+      // Check if the item matches the criteria
+      return (
+        (itemTags.includes(locationObject.divId)) ||
+        (locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
+      );
+    });
+  
+    // Format each item and add to this.inventory
+    locationItems = filteredItems.map(item => item.Name);
+  
+    // Log the names of the items
+    console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
+  
+    return locationItems;
 },
 
 

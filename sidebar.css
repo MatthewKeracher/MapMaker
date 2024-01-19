@@ -21,6 +21,7 @@ background-color: black;
 opacity: 0.8;  
 display: none; 
 color: bisque;
+line-height: 1.5; 
 font-family: monospace, 'Trebuchet MS', sans-serif;
 font-size: 1.8vh; 
 padding: 1vh; 
@@ -47,7 +48,7 @@ width: 0.1px; /* Set the width of the scrollbar */
 .extraInfo2 {
 position: fixed;  
 right: 61vw; 
-width: 20vw;
+width: 30vw;
 height: 97vh;
 top:0;
 z-index:10;
@@ -55,6 +56,7 @@ background-color: black;
 opacity: 0.8;  
 display: none; 
 color: bisque;
+line-height: 1.5; 
 font-family: monospace, 'Trebuchet MS', sans-serif;
 font-size: 1.8vh; 
 padding: 1vh; 
