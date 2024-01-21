@@ -1,7 +1,12 @@
-import Ref from "./ref.js";
-import NPCs from "./npcs.js";
-import Items from "./items.js";
+// Import the necessary module
+import Edit from "./edit.js";
 import Array from "./array.js";
+import Ref from "./ref.js";
+import Items from "./items.js";
+import Spells from "./spells.js";
+import Events from "./events.js";
+import Storyteller from "./storyteller.js";
+import NPCs from "./npcs.js";
 
 const Monsters = {
 
@@ -57,15 +62,7 @@ return match;
 },
 
 addMonsterInfo(contentId, target) {
-
-  let targetLocation = '';
-
-  if(target === 'ExtraContent'){
-  targetLocation = Ref.extraContent
-  } else {
-  targetLocation = Ref.extraContent2
-  }
-
+  
 //Search for Monster in the Array   
 const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === contentId.toLowerCase());
 
@@ -73,22 +70,27 @@ if (monster) {
 
 const monsterStats = [
 
-`<hr><h3><span class="hotpink">${contentId.toUpperCase()}</span></h3>`,
-`${monster.Type}<br><br>`,
+  `<h1><span class="monster">${contentId}</span></h1>`,
+  `<h3><span class = "cyan">${monster.Type}.</span><hr>`,
+  
+  `${monster.NoApp ?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Number Appearing"># App:</span>        ${monster.NoApp}          <br>` : ''}`,
+  `${monster.SaveAs?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Save As">Save As:</span>     ${monster.SaveAs}         <br>` : ''}`,
+  `${monster.Morale ?       `<span class="expandable hotpink" data-content-type="rule" divId="Monster Morale">Morale:</span>      ${monster.Morale}         <br>` : ''}`,
+  `${monster.Movement ?     `<span class="expandable hotpink" data-content-type="rule" divId="Monster Movement">Movement:</span>  ${monster.Movement}       <br>` : ''} <hr>`,
 
-`<span class="hotpink"># App:</span> ${monster.Appearing};<br>`,
-`<span class="hotpink">Morale:</span> ${monster.Morale};<br>`,
-`<span class="hotpink">Movement:</span> ${monster.Mvmt};<br>`,
-`<span class="hotpink">Armour Class:</span> ${monster.AC};<br>`,
-`<span class="hotpink">Hit Dice:</span> ${monster.HD};<br>`,
-`<span class="hotpink">Hit Dice Range:</span> ${monster.HDSort};<br>`,
-`<span class="hotpink">No. Attacks:</span> ${monster.Attacks};<br>`,
-`<span class="hotpink">Damage:</span> ${monster.Damage};<br>`,          
-`<span class="hotpink">Special:</span> ${monster.Special || "None"};<br>`,
-`<span class="hotpink">Save As:</span> ${monster["Save As "]};<br>`,
-`<span class="hotpink">Treasure:</span> ${monster.Treasure || "None"};<br>`,
-`<span class="hotpink">Experience Points:</span> ${monster.XP};<br><br> `,
-`<span class="hotpink">Description:</span> <br><br> ${monster.Description.replace(/\./g, '.<br><br>')}`,
+  `${monster.AC ?           `<span class="expandable orange"  data-content-type="rule" divId="Monster Armour Class">Armour Class:</span>    ${monster.AC}              <br>` : ''}`,
+  `${monster.HD ?           `<span class="expandable orange"  data-content-type="rule" divId="Monster Hit Dice">Hit Dice:</span>        ${monster.HD}              <br>` : ''}`,
+  `${monster.HDSort ?       `<span class="expandable orange"  data-content-type="rule" divId=""> HD Sort:</span>                  ${monster.HDSort}              ` : ''} <hr>`,
+
+  `${monster.Attacks ?      `<span class="expandable lime"    data-content-type="rule" divId="Monster Attacks">Attacks:</span>    ${monster.Attacks}        <br>` : ''}`,
+  `${monster.Damage ?       `<span class="expandable lime"    data-content-type="rule" divId="Monster Damage">Damage:</span>      ${monster.Damage}             ` : ''} <hr>`,
+
+  `${monster.Treasure ?     `<span class="expandable spell"    data-content-type="rule" divId="Monster Treasure">Treasure:</span>    ${monster.Treasure}       <br>` : ''}`,
+  `${monster.XP ?           `<span class="expandable spell"    data-content-type="rule" divId="Monster XP">Experience Points:</span> ${monster.XP}                 ` : ''} <hr>`,
+
+  `${monster.Special ?      `<span class="expandable monster" data-content-type="rule" divId="Monster Special">Special:</span>        ${monster.Special}        <hr>` : ''} `,
+
+  `${monster.Description ?  `</h3><span class = "withbreak">${Spells.getSpells(this.getMonsters(Items.getItems(monster.Description)))}<span>`: ''}`,
 
 ];
 
@@ -97,7 +99,7 @@ const formattedMonster = monsterStats
 .join(" ");
 
 // Set the formatted content in the extraContent element
-targetLocation.innerHTML = formattedMonster;
+target.innerHTML = formattedMonster;
 
 return formattedMonster;
 
@@ -130,7 +132,7 @@ this.fillMonsterForm(monster, monsterNameDiv);
  //show Monster info in ExtraInfo2 when hover over Div
  monsterNameDiv.addEventListener('mouseover', () => {
   Ref.extraInfo2.classList.add('showExtraInfo');
-  this.addMonsterInfo(monsterNameDiv.id);
+  this.addMonsterInfo(monsterNameDiv.id, Ref.extraInfo2);
   });
 
 }

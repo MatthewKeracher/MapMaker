@@ -28,9 +28,23 @@ if (locationObject) {
 //name the returned locationObject data 
 Events.getEvent(locationName, locationObject.tags);
 
-//Add locationItmems
 const locationItems = this.addLocationItems(locationObject);
-const locationItemsFormatted = `[${locationName} Items List]{<hr><br><br> #${locationItems.join('# <br><br>#')}#}`;
+
+let previousTag = '';
+let previousType = '';
+
+  const locationItemsTagged = locationItems.map(item => {
+
+  const tagToDisplay = item.Tag !== previousTag ? `<br><span class = "hotpink">Items for ${item.Tag}</span><br>` : '';
+  previousTag = item.Tag;
+
+  const typetoDisplay = item.Type !== previousType ? `<br><span class = "underline">${item.Type}</span><br>` : '';
+  previousType = item.Type;
+
+  return `${tagToDisplay}${typetoDisplay}#${item.Name}#`;
+  });
+
+const locationItemsFormatted = `[${locationName} Items List]{<hr>${locationItemsTagged.join('<br>')}}`;
 
 const locationText = '<br>' + Events.eventDesc + '<br><br>' + locationItemsFormatted + '<br><br>' + locationObject.description;
 
@@ -78,7 +92,8 @@ if(Edit.editPage === 2){
   NPCs.loadNPC(NPCs.npcArray)
 }
 
-this.showExtraContent()
+this.showExpandable(Ref.Storyteller, Ref.extraContent);
+
 
 };
 }, 
@@ -91,9 +106,29 @@ getQuotes(locationText) {
   });
 },
 
-addMiscInfo(contentId, miscArray) {
+
+addRulesInfo(contentId, target) {
+ 
+  const rulesItem = this.rulesArray.find(rule => rule.name === contentId);
+
+  console.log('addingRulesInfo...' + contentId)
+    
+    if (rulesItem) { 
+      const showRule = [ 
+        
+      `<br><h3><span class="misc">${rulesItem.name}</span></h3>
+      <span class="withbreak">${rulesItem.body}</span>`]
+  
+      target.innerHTML = showRule;
+
+    } else {
+      console.log(`Rule with name "${contentId}" not found in the rulesArray.`);
+    }
+  },
+
+addMiscInfo(contentId, target) {
 const extraContent = document.getElementById('extraContent');  
-const MiscItem = miscArray.find(item => item.square === contentId);
+const MiscItem = this.miscArray.find(item => item.square === contentId);
   
   if (MiscItem) {
     const withMonsters = Monsters.getMonsters(MiscItem.curly);
@@ -104,7 +139,7 @@ const MiscItem = miscArray.find(item => item.square === contentId);
     `<br><h3><span class="misc">${MiscItem.square}</span></h3>
     <span class="withbreak">${withSpells}</span>`]
 
-    extraContent.innerHTML = miscInfo;
+    target.innerHTML = miscInfo;
   } else {
     console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
   }
@@ -124,12 +159,38 @@ addLocationItems(locationObject){
         (locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
       );
     });
-  
+
     // Format each item and add to this.inventory
-    locationItems = filteredItems.map(item => item.Name);
-  
+    locationItems = filteredItems.map(item => ({
+     Name: item.Name,
+     Type: item.Type,
+     Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
+        tag === locationObject.divId || 
+        (locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(locTag => locTag === tag))
+        ) : ''
+    }));
+
+    // Sort the inventory alphabetically by item.Tag and then by item.Name
+    locationItems.sort((a, b) => {
+    // Compare item.Tag first
+    if (a.Tag > b.Tag) return 1;
+    if (a.Tag < b.Tag) return -1;
+
+    // If item.Tags are the same, compare item.Type
+    if (a.Type > b.Type) return 1;
+    if (a.Type < b.Type) return -1;
+
+    // If item.Type are the same, compare item.Name
+    if (a.Name > b.Name) return 1;
+    if (a.Name < b.Name) return -1;
+
+    return 0; // Both item.Tag and item.Name are equal
+
+});
+
     // Log the names of the items
-    console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
+    //console.log(locationItems)
+    //console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
   
     return locationItems;
 },
@@ -157,105 +218,406 @@ getMisc(locationText, comboArray) {
 },
 
 
-showExtraContent() {
-  const expandableStoryteller = Ref.Storyteller.querySelectorAll('.expandable');
-  const target = 'ExtraContent'
-  
-            // console.log('List all divs found for expandableStoryteller:');
-            // expandableStoryteller.forEach((div, index) => {
-            //   console.log(`Div ${index + 1}:`);
-            //   console.log('Element:', div);
-            //   console.log('Text Content:', div.textContent);
-            //   console.log('Data Attributes:', div.dataset);
-            // });            
+showExpandable(source, target) {
 
- expandableStoryteller.forEach(expandableElement => {
-    expandableElement.addEventListener('mouseenter', (event) => {
-      
-      const contentType = event.target.getAttribute('data-content-type');
-      const contentId = event.target.getAttribute('divId');
-     
-      switch (contentType) {
-        case 'npc':
-          NPCs.addNPCInfo(contentId, target); // Handle NPCs
-          break;
-        case 'monster':
-          Monsters.addMonsterInfo(contentId, target); // Handle monsters
-          break;
-          case 'item':
-          Items.addIteminfo(contentId, target); // Handle items
-          break;
-          case 'spell':
-          Spells.addSpellInfo(contentId, target); // Handle spells
-          break;
-        case 'misc':
-          this.addMiscInfo(contentId, this.miscArray);
-          break;
-        default:
-          console.log('Unknown content type');
-      }          
+const expandableElements = source.querySelectorAll('.expandable');
 
-    Ref.extraInfo.classList.add('showExtraInfo');
-    this.showExtraExtraContent(); 
-      
-    });
+expandableElements.forEach(element => {
 
-    Ref.extraInfoContainer.addEventListener('mouseleave', () => {
-    //Ref.extraInfo.classList.remove('showExtraInfo');
-    Ref.extraInfo2.classList.remove('showExtraInfo');
-         
-    });
-  });
+element.addEventListener('mouseenter', (event) => {
+
+const contentType = event.target.getAttribute('data-content-type');
+const contentId = event.target.getAttribute('divId');
+
+switch (contentType) {
+    case 'npc':
+    NPCs.addNPCInfo(contentId, target); // Handle NPCs
+    break;
+    case 'monster':
+    Monsters.addMonsterInfo(contentId, target); // Handle monsters
+    break;
+    case 'item':
+    Items.addIteminfo(contentId, target); // Handle items
+    break;
+    case 'spell':
+    Spells.addSpellInfo(contentId, target); // Handle spells
+    break;
+    case 'misc':
+    this.addMiscInfo(contentId, target);
+    break;
+    case 'rules':
+    this.addRulesInfo(contentId, this.rulesArray);
+    break;
+    default:
+    console.log('Unknown content type');
+}          
+
+Ref.extraInfo.classList.add('showExtraInfo');
+this.showExtraExpandable(Ref.extraInfo2); 
+
+});
+
+Ref.extraInfoContainer.addEventListener('mouseleave', () => {
+//Ref.extraInfo.classList.remove('showExtraInfo');
+Ref.extraInfo2.classList.remove('showExtraInfo');
+
+});
+});
 },
 
-showExtraExtraContent() {
+showExtraExpandable(target) {
  
-  const expandableExtra = Ref.extraInfo.querySelectorAll('.expandable');
-  const extraInfo2 = document.querySelector('.extraInfo2');
-
-  // console.log('List all divs found for expandableExtra:');
-  //           expandableExtra.forEach((div, index) => {
-  //             console.log(`Div ${index + 1}:`);
-  //             console.log('Element:', div);
-  //             console.log('Text Content:', div.textContent);
-  //             console.log('Data Attributes:', div.dataset);
-  //           });
-
-  expandableExtra.forEach(expandableElement => {
+  const expandableElements = Ref.extraInfo.querySelectorAll('.expandable');
+  
+  expandableElements.forEach(element => {
     
-    expandableElement.addEventListener('mouseenter', (event) => {
+    element.addEventListener('mouseenter', (event) => {
       
-      console.log('selected')
       const contentType = event.target.getAttribute('data-content-type');
       const contentId = event.target.getAttribute('divId');
      
       switch (contentType) {
         case 'npc':
-          NPCs.addNPCInfo(contentId, "ExtraContent"); // Handle NPCs
-          break;
+        NPCs.addNPCInfo(contentId, target); // Handle NPCs
+        break;
         case 'monster':
-          Monsters.addMonsterInfo(contentId); // Handle monsters
-          break;
-          case 'item':
-          Items.addIteminfo(contentId); // Handle items
-          break;
-          case 'spell':
-          Spells.addSpellInfo(contentId); // Handle spells
-          break;
+        Monsters.addMonsterInfo(contentId, target); // Handle Monsters
+        break;
+        case 'item':
+        Items.addIteminfo(contentId, target); // Handle Items
+        break;
+        case 'spell':
+        Spells.addSpellInfo(contentId, target); // Handle Spells
+        break;
         case 'misc':
-          this.addMiscInfo(contentId, this.miscArray);
-          break;
+        this.addMiscInfo(contentId, target); //Handle Misc
+        break;
+        case 'rule':
+        this.addRulesInfo(contentId, target); //Handle Rule
+        break;
         default:
-          console.log('Unknown content type');
+        console.log('Unknown content type');
       }        
 
-      extraInfo2.classList.add('showExtraInfo');
+      target.classList.add('showExtraInfo');
       
     });   
 
   });
 
 },
+
+showFloatingExpandable(target) {
+ 
+  const expandableElements = Ref.extraInfo.querySelectorAll('.expandable');
+  
+  expandableElements.forEach(element => {
+    
+    element.addEventListener('mouseenter', (event) => {
+      
+      const contentType = event.target.getAttribute('data-content-type');
+      const contentId = event.target.getAttribute('divId');
+     
+      switch (contentType) {
+        case 'npc':
+        NPCs.addNPCInfo(contentId, target); // Handle NPCs
+        break;
+        case 'monster':
+        Monsters.addMonsterInfo(contentId, target); // Handle Monsters
+        break;
+        case 'item':
+        Items.addIteminfo(contentId, target); // Handle Items
+        break;
+        case 'spell':
+        Spells.addSpellInfo(contentId, target); // Handle Spells
+        break;
+        case 'misc':
+        this.addMiscInfo(contentId, target); //Handle Misc
+        break;
+        case 'rule':
+        this.addRulesInfo(contentId, target); //Handle Rule
+        break;
+        default:
+        console.log('Unknown content type');
+      }        
+
+      target.classList.add('showExtraInfo');
+      
+    });   
+
+  });
+
+},
+
+
+
+rulesArray: [
+{name: 'Spellcasting',
+body:`The number of spells of each level which a Magic User may cast per day is shown on the appropriate table in the Characters section starting on page 3. 
+
+Magic-Users cast spells through the exercise of knowledge and will. They prepare spells by study of their <span class="hotpink">spellbooks</span>; each Magic-User has their own <span class="hotpink">spellbook</span> containing the magical formulae for each spell the Magic-User has learned. 
+
+<span class="hotpink">Spellbooks</span> are written in a magical script that can only be read by the one who wrote it, or through the use of the spell read magic. All Magic-Users begin play knowing read magic, and it is so ingrained that it can be prepared without a <span class="hotpink">spellbook</span>. 
+
+ A Magic-User <span class="hotpink"> may only prepare spells after resting </span> (i.e. a good night's sleep) , and needs one turn per each three spell levels to do so (rounding fractions up). Spells prepared but not used on a previous day are not lost. 
+
+For example, a 3rd level Magic-User preparing all three of their available spells (two 1st level and one 2nd level) is preparing a total of 4 levels of spells, and thus needs 2 turns (4 divided by 3 and rounded up). Rules for the acquisition of new spells are found in the Game Master's section on page 186.
+
+Spells prepared but not used persist from day to day; only those actually cast must be replaced. A spellcaster may choose to dismiss a prepared spell (without casting it) in order to prepare a different spell of that level. 
+
+Spellcasters must have at least one hand free, and be able to speak, in order to cast spells; thus, binding and gagging a spellcaster is an effective means of preventing them from casting spells. 
+
+In combat, casting a spell usually takes the same time as making an attack. 
+
+If a spellcaster is attacked (even if not hit) or must make a saving throw (whether successful or not) on the Initiative number on which they are casting a spell, the spell is spoiled and lost. 
+
+As a specific exception, two spell casters releasing their spells at each other on the same Initiative number will both succeed in their casting; one caster may disrupt another with a spell only if they have a better Initiative, and choose to delay casting the spell until right before the other caster. Some spells are reversible; such spells are shown with an asterisk after the name.
+
+ `
+},
+{name: 'Orsons',
+body:`The number of spells of each level which a Cleric may cast per day is shown on the appropriate table in the Characters section starting on page 3. 
+
+Clerics receive their spells through faith and prayer. Each day, generally in the morning, a Cleric must pray for at least three turns in order to prepare spells. Of course, the Cleric may be expected to pray more than this in order to remain in their deity's good graces. Because they gain their spells through prayer, a Cleric may prepare any spell of any level they are able to cast. In some cases the Cleric's deity may limit the availability of certain spells; for instance, a deity devoted to healing may refuse to grant reversed healing spells. 
+
+Spells prepared but not used persist from day to day; only those actually cast must be replaced. A spellcaster may choose to dismiss a prepared spell (without casting it) in order to prepare a different spell of that level. 
+
+Spellcasters must have at least one hand free, and be able to speak, in order to cast spells; thus, binding and gagging a spellcaster is an effective means of preventing them from casting spells. 
+
+In combat, casting a spell usually takes the same time as making an attack. 
+
+If a spellcaster is attacked (even if not hit) or must make a saving throw (whether successful or not) on the Initiative number on which they are casting a spell, the spell is spoiled and lost. 
+
+As a specific exception, two spell casters releasing their spells at each other on the same Initiative number will both succeed in their casting; one caster may disrupt another with a spell only if they have a better Initiative, and choose to delay casting the spell until right before the other caster. Some spells are reversible; such spells are shown with an asterisk after the name.`
+},
+{
+name: 'Turn Undead',
+body:`Clerics can Turn the undead, that is, drive away undead monsters by means of faith alone. 
+
+The Cleric brandishes their holy symbol and calls upon the power of their divine patron. 
+
+The player rolls 1d20 and tells the GM the result. 
+
+Note that the player should always roll, even if the GM knows the character can't succeed (or can't fail), as telling the player whether or not to roll may reveal too much. 
+
+The GM looks up the Cleric's level on the Clerics vs. Undead table, and cross-references it with the undead type or Hit Dice. (The Hit Dice row is provided for use with undead monsters not found in the Core Rules; only use the Hit Dice row if the specific type of undead monster is not on the table and no guidance is given in the monster's description. Note that the hit dice given are not necessarily the same as the hit dice of the monster given for that column.) If the table indicates "No" for that combination, it is not possible for the Cleric to affect that type of undead monster. If the table gives a number, that is the minimum number needed on 1d20 to Turn that type of undead. If the table says "T" for that combination, that type of undead is automatically affected (no roll needed). If the result shown is a "D," then that type of undead will be Damaged (and possibly destroyed) rather than Turned.
+
+If the roll is a success, 2d6 hit dice of undead monsters are affected; surplus hit dice are lost (so if zombies are being Turned and a roll of 7 is made, at most 3 zombies can be Turned), but a minimum of one creature will always be affected if the first roll succeeds. 
+
+If a mixed group of undead (say, a wight and a pair of zombies) is to be Turned, the player still rolls just once. The result is checked against the weakest sort first (the zombies), and if they are successfully Turned, the same result is checked against the next higher type of undead.
+
+Likewise, the 2d6 hit dice are rolled only once. 
+
+For example, if the group described above is to be Turned by a 2nd level Cleric, they would first need to have rolled a 15 or higher to Turn the zombies. 
+
+If this is a success, 2d6 are rolled; assuming the 2d6 roll is a 7, this would Turn both zombies and leave a remainder of 3 hit dice of effect. Wights are, in fact, 3 hit die monsters, so assuming the original 1d20 roll was a 20, the wight is Turned as well. 
+
+Obviously, were it a group of 3 zombies and a wight, the 2d6 roll would have to be a total of 9 or higher to affect them all. 
+
+If a Cleric succeeds at Turning the undead, but not all undead monsters present are affected, they may try again in the next round to affect those which remain. 
+
+If any roll to Turn the Undead fails, that Cleric may not attempt to Turn Undead again for one full turn. A partial failure (possible against a mixed group) counts as a failure for this purpose. 
+
+Undead monsters which are Turned flee from the Cleric and their party at maximum movement. 
+
+If the party pursue and corner the Turned undead, they may resume attacking the party; but if left alone, the monsters will not return or attempt to attack the Cleric or those near them for at least 2d4 turns. 
+
+Undead monsters subject to a D (Damaged) result suffer 1d8 damage per level of the Cleric (roll once and apply the same damage to all undead monsters affected); those reduced to zero hit points are utterly destroyed, being blasted into little more than dust. Those surviving this damage are still Turned as above.`
+},
+{
+name: 'Monster Name',
+body: `The first thing given for each monster is its name (or its most common name if the monster is known by more than one). If an asterisk appears after the monster's name, it indicates that the monster is only able to be hit by special weapons (such as silver or magical weapons, or creatures affected only by fire, etc.) which makes the monster harder to defeat.`
+},
+{
+name: 'Monster Armour Class',
+body: `This line lists the creature’s Armor Class. If the monster customarily wears armor, the first listed AC value is with that armor, and the second, in parentheses, is unarmored. Some monsters are only able to be hit (damaged) by silver or magical weapons; these are indicated with (s); some monsters may only be hit with magical weapons, indicated by (m). `
+},
+{
+name: 'Monster Hit Dice',
+body: `This is the creature’s number of hit dice, including any bonus hit points. Monsters always roll eight sided dice (d8) for hit points, unless otherwise noted. So for example, a creature with 3+2 hit dice rolls 3d8 and adds 2 points to the total. A few monsters may be marked as having ½ hit dice; this means 1d4 points, and the creature has "less than one hit die" for attack bonus purposes. `
+},
+{
+name: 'Monster Movement',
+body: ` This is the monster's movement rate, or rates for those monsters able to move in more than one fashion. For example, bugbears have a normal walking movement of 30', and this is all that is listed for them. Mermaids can only move about in the water, and so their movement is given as Swim 40'. Pegasi can both walk and fly, so their movement is listed as 80' Fly 160'. In addition, a distance may appear in parentheses after a movement figure; this is the creature's turning distance (as explained in Maneuverability on page 51). If a turning distance is not listed, assume 5'.`
+},
+{
+name: 'Monster Attacks',
+body: `This is the number (and sometimes type or types) of attacks the monster can perform. For example, goblins may attack once with a weapon, so they are marked 1 weapon. Ghouls are marked 2 claws, 1 bite as they can attack with both claws and also bite in one round. Some monsters have alternate attacks, such as the triceratops with an attack of 1 gore or 1 trample which means that the creature can do a gore attack or a trample attack, but not both in the same round. `
+},
+{
+name: 'Monster Damage',
+body: ` The damage figures caused by successful attacks by the monster. Generally, this will be defined in terms of one or more die rolls.`
+},
+{
+name: 'Monster Number Appearing',
+body: `This is given in terms of one or more die rolls. Monsters that only appear underground and have no lairs will have a single die roll; those that have lairs and/or those that can be found in the wilderness will be noted appropriately. For example, a monster noted as "1d6, Wild 2d6, Lair 3d6" is encountered in groups of 1d6 individuals in a dungeon setting, 2d6 individuals in the wilderness, or 3d6 individuals in a lair. Note that number appearing applies to combatants. Non-combatant monsters (juveniles, and sometimes females) do not count in this number. The text of the monster description should explain this in detail where it matters, but the GM is always the final arbiter.`
+},
+{
+name: 'Monster Save As',
+body: `This is the character class and level the monster uses for saving throws.
+Most monsters save as Fighters of a level equal to their hit dice, but this is not always the case.`
+},
+{
+name: 'Monster Morale',
+body: `The number that must be rolled equal to or less than on 2d6 for the monster to pass a Morale Check. Monsters having a Morale of 12 never fail morale checks, and fight until destroyed (or until they have no enemies left). Morale is explained further on page 57.`
+},
+{
+name: 'Monster Treasure',
+body: `This describes any valuables the monster is likely to have. See the Treasure section on page 162 for more details about interpreting the letter codes which usually appear here. A monster's treasure is normally found in its lair, unless described otherwise; sometimes for monsters who live in towns or other large groups this line will describe both the lair treasure as well as treasure carried by random individuals. `
+},
+{
+name: 'Monster XP',
+body: `This is the number of experience points awarded for defeating this monster. In some cases, the figure will vary; for instance, Dragons of different age categories will have different XP values. Review the Experience Points awards table in the Adventure section on page 49 to calculate the correct figure in these cases. `
+},
+{
+name: 'Monster Special',
+body: `Some monsters have a special ability. `
+},
+{
+name: 'Hit Points',
+body: `When a character is injured, they lose hit points from their current total. Note that this does not change the figure rolled, but rather reduces the current total; healing will restore hit points, up to but not exceeding the rolled figure.
+
+When their hit point total reaches 0, your character may be dead. This may not be the end for the character; don't tear up the character sheet.
+
+First level characters begin play with a single hit die of the given type, plus the Constitution bonus or penalty, with a minimum of 1 hit point. Each time a character gains a level, the player should roll another hit die and add the character's Constitution bonus or penalty, with the result again being a minimum of 1 point. Add this amount to the character's maximum hit points figure.
+
+Note that, after 9th level, characters receive a fixed number of hit points each level, as shown in the advancement table for the class, and no longer add the Constitution bonus or penalty.`
+},
+{
+name: 'Strength',
+body: `As the name implies, this ability measures the character's raw physical power. 
+
+Strength is the Prime Requisite for Fighters. Apply the ability bonus or penalty for Strength to all attack and damage rolls in melee (hand to hand) combat. 
+
+Note that a penalty here will not reduce damage from a successful attack below one point in any case (see How to Attack on page 53 and Damage on page 55, both in the Combat section, for details).`
+},
+{
+name: 'Dexterity',
+body: `This ability measures the character's quickness and balance as well as aptitude with tools. 
+
+Dexterity is the Prime Requisite for Thieves. 
+
+The Dexterity bonus or penalty is applied to all attack rolls with missile (ranged) weapons, to the character's Armor Class value, and to the character's Initiative die roll.`
+},  
+{
+name: 'Intelligence',
+body: `This is the ability to learn and apply knowledge. 
+
+Intelligence is the Prime Requisite for Magic-Users. 
+
+The ability bonus for Intelligence is added to the number of languages the character is able to learn to read and write; if the character has an Intelligence penalty, they cannot read more than a word or two, and will only know their native language.`
+},  
+{
+name: 'Wisdom',
+body: `A combination of intuition, willpower, and common sense. 
+
+Wisdom is the Prime Requisite for Clerics. 
+
+The Wisdom bonus or penalty may apply to some saving throws vs. magical attacks, particularly those affecting the target's will.`
+},  
+{
+name: 'Constitution',
+body: `A combination of general health and vitality. 
+
+Apply the Constitution bonus or penalty to each hit die rolled by the character. Note that a penalty here will not reduce any hit die roll to less than 1 point.`
+},
+{
+name: 'Charisma',
+body: `This is the ability to influence or even lead people; those with high Charisma are well-liked, or at least highly respected. 
+
+Apply the Charisma bonus or penalty to reaction rolls. 
+
+Also, the number of retainers a character may hire, and the loyalty of those retainers, is affected by Charisma.`
+},  
+{
+name: 'Money',
+body: `Monetary values are usually expressed in gold pieces. In addition to gold coins, there are coins made of platinum, silver, electrum (an alloy of gold and silver), and copper. They are valued as follows:
+
+1 platinum piece (pp) = 5 gold pieces (gp)
+1 gold piece (gp) = 10 silver pieces (sp)
+1 electrum piece (ep) = 5 silver pieces (sp)
+1 silver piece (sp) = 10 copper pieces (cp)
+
+For game purposes, assume that one gold piece weighs 1/20th of a pound, and that ten coins will "fit" in a cubic inch of storage space (this isn't literally accurate, but works well enough when applied to a box or chest).
+
+First-level characters generally begin the game with 3d6 x 10 gp, though the GM may choose some other amount.`
+},
+{
+name: 'Thief Skills',
+body: `The numbers for each skill are percentages; instructions for making these rolls are in Using the Dice on page 2.
+
+Thieves have a number of special abilities, described below. 
+
+One turn (ten minutes) must usually be spent to use any of these abilities, as determined by the GM. The GM may choose to make any of these rolls on behalf of the player to help maintain the proper state of uncertainty. Also note that the GM may apply situational adjustments (plus or minus percentage points) as they see fit; for instance, it's obviously harder to climb a wall slick with slime than one that is dry, so the GM might apply a penalty of 20% for the slimy wall.
+
+<span class = "hotpink"> Open Locks </span> allows the Thief to unlock a lock without a proper key. It may only be tried once per lock. If the attempt fails, the Thief must wait until they have gained another level of experience before trying again.
+
+<span class = "hotpink"> Remove Traps </span> is generally rolled twice: first to detect the trap, and second to disarm it. The GM will make these rolls as the player won't know for sure if the character is successful or not until someone actually tests the trapped (or suspected) area.
+
+<span class = "hotpink"> Pick Pockets </span> allows the Thief to lift the wallet, cut the purse, etc. of a victim without being noticed. If the roll fails, the Thief didn't get what they wanted; but further, the intended victim (or an onlooker, at the GM's option) will notice the attempt if the die roll is more than two times the target number (or if the die roll is 00).
+
+<span class = "hotpink"> Move Silently </span>, like Remove Traps, is always rolled by the GM. The Thief will usually believe they are moving silently regardless of the die roll, but opponents they are trying to avoid will hear the Thief if the roll is failed.
+
+<span class = "hotpink"> Climb Walls </span> permits the Thief to climb sheer surfaces with few or no visible handholds. This ability should normally be rolled by the player. If the roll fails, the Thief falls from about halfway up the wall or other vertical surface. The GM may require multiple rolls if the distance climbed is more than 100 feet. See Falling Damage on page 59 for the consequences of failing this roll.
+
+<span class = "hotpink"> Hide </span> permits the Thief to hide in any shadowed area large enough to contain their body. Like Move Silently, the Thief always believes they are being successful, so the GM makes the roll. A Thief hiding in shadows must remain still for this ability to work.
+
+<span class = "hotpink"> Listen </span> is generally used to listen at a door, or to try to listen for distant sounds in a dungeon. The GM must decide what noises the Thief might hear; a successful roll means only that a noise could have been heard. The GM should always make this roll for the player. Note that the Thief and their party must try to be quiet in order for the Thief to use this ability.`
+},
+{ 
+name: 'Thief', 
+body: `Thieves are those who take what they want or need by stealth, disarming traps and picking locks to get to the gold they crave; or "borrowing" money from pockets, beltpouches, etc. right under the nose of the "mark" without the victim ever knowing.
+
+Thieves fight better than Magic-Users but not as well as Fighters. Avoidance of honest work leads Thieves to be less hardy than the other classes, though they do pull ahead of the Magic-Users at higher levels.
+
+The <span class = "hotpink"> Prime Requisite for Thieves is Dexterity </span>; a character must have a Dexterity score of 9 or higher to become a Thief. They may use any weapon, but may not wear metal armor as it interferes with stealthy activities, nor may they use shields of any sort. Leather armor is acceptable, however.
+
+Finally, Thieves can perform a <span class = "hotpink"> Sneak Attack </span> any time they are behind an opponent in melee and it is likely the opponent doesn't know the Thief is there. The GM may require a Move Silently or Hide roll to determine this. The Sneak Attack is made with a +4 attack bonus and does double damage if it is successful. A Thief usually can't make a Sneak Attack on the same opponent twice in any given combat.
+
+The <span class = "hotpink"> Sneak Attack </span> can be performed with any melee (but not missile) weapon, or may be performed bare-handed (in which case subduing damage is done, as explained on page 55). Also, the <span class = "hotpink"> Sneak Attack </span> can be performed with the "flat of the blade;" the bonuses and penalties cancel out, so the attack has a +0 attack bonus and does normal damage; the damage done in this case is subduing damage.`
+},
+{ 
+name: 'Fighter', 
+body: `Fighters include soldiers, guardsmen, barbarian warriors, and anyone else for whom fighting is a way of life. They train in combat, and they generally approach problems head-on, weapon in hand.
+
+Not surprisingly, Fighters are the best at fighting of all the classes. They are also the hardiest, able to take more punishment than any other class. Although they are not skilled in the ways of magic, Fighters can nonetheless use many magic items, including but not limited to magical weapons and armor.
+
+The <span class = "hotpink"> Prime Requisite for Fighters is Strength </span>; a character must have a Strength score of 9 or higher to become a Fighter. Members of this class may wear any armor and use any weapon.`
+},
+
+{ 
+name: 'Magic-User', 
+body: `Magic-Users are those who seek and use knowledge of the arcane. They do magic not as the Cleric does, by faith in a greater power, but rather through insight and understanding.
+
+Magic-Users are the worst of all the classes at fighting; hours spent studying massive tomes of magic do not lead a character to become strong or adept with weapons. They are the least hardy, equal to Thieves at lower levels but quickly falling behind.
+
+The Prime Requisite for Magic-Users is Intelligence; a character must have an Intelligence score of 9 or higher to become a Magic-User. The only weapons they become proficient with are the dagger and the walking staff (or cudgel). Magic-Users may not wear armor of any sort nor use a shield as such things interfere with spellcasting.
+
+A first level Magic-User begins play knowing read magic and one other spell of first level. These spells are written in a spellbook provided by their master. The GM may roll for the spell, assign it as they see fit, or allow the player to choose it, at their option. See the Spells section for more details.`
+},
+{ 
+name: 'Cleric', 
+body: `Clerics are those who have devoted themselves to the service of a deity, pantheon, or other belief system. 
+
+Most Clerics spend their time in mundane forms of service, such as preaching and ministering in a temple.
+
+However, there are those who are called to go abroad from the temple and serve their deity in a more direct way, smiting undead monsters and aiding in the battle against evil and chaos.
+
+Player character Clerics are assumed to be among the latter group.
+
+Clerics fight about as well as Thieves, but not as well as Fighters.
+
+They are hardier than Thieves, at least at lower levels, as they are accustomed to physical labor that the Thief would deftly avoid.
+
+Clerics can cast spells of divine nature starting at 2nd level, and they have the power to Turn the Undead, that is, to drive away undead monsters by means of faith alone (refer to page 57 in the Encounter section for details).
+
+The Prime Requisite for Clerics is Wisdom; a character must have a Wisdom score of 9 or higher to become a Cleric.
+
+They may wear any armor but may only use blunt weapons, specifically including warhammer, mace, maul, club, quarterstaff, and sling.`
+},
+// Add more entries as needed
+],
+
 
 
 };

@@ -66,14 +66,6 @@ return match;
 
 addSpellInfo(contentId, target) {
 
-let targetLocation = '';
-
-if(target === 'ExtraContent'){
-targetLocation = Ref.extraContent
-} else {
-targetLocation = Ref.extraContent2
-}
-
 //Search for Spell in the Array   
 const spell = Object.values(this.spellsArray).find(spell => spell.Name.toLowerCase() === contentId.toLowerCase());
 
@@ -81,14 +73,19 @@ if (spell) {
 
 const spellStats = [
 
-`<hr><h3><span class="spell">${contentId.toUpperCase()}</span></h3>`,
-`${spell.Class} ${spell.Level}.<br><br>`,
+`<h2><span class="spell">${contentId}</span></h2>`,
+`<h3><span class = "cyan">${spell.Class} Level ${spell.Level}.</span><hr>`,
 
-`<span class="spell">Range:</span>  ${spell.Range || "None"} <br>`,
-`<span class="spell">Duration:</span>  ${spell.Duration || "None"} <br><br> `,
-`<span class="spell">Description:</span> <br><br> ${spell.Description || "None"};<br><br> `,
-`<span class="spell">Reverse:</span> ${spell.Reverse || "None"};<br><br> `,
-`<span class="spell">Note:</span> ${spell.Note || "None"};<br><br>`,
+`${spell.Range ?        `<span class="spell">Range:</span>       ${spell.Range}      <br>` : ''}`,
+`${spell.Duration ?     `<span class="spell">Duration:</span>    ${spell.Duration}   <br><hr>` : ''} </h3>`,
+`${spell.Description ?  `<span class="spell">Description:</span> ${spell.Description} <br><br>` : ''}`,
+`${spell.Reverse ?      `<span class="spell">Reverse:</span>     ${spell.Reverse}    <br><br>` : ''}`,
+`${spell.Note ?         `<span class="spell">Note:</span>        ${spell.Note}       <br><br>` : ''} `,
+
+// `<span class="spell">Duration:</span>  ${spell.Duration || "None"} <br><br> `,
+// `<span class="spell">Description:</span> <br><br> ${spell.Description || "None"};<br><br> `,
+// `<span class="spell">Reverse:</span> ${spell.Reverse || "None"};<br><br> `,
+// `<span class="spell">Note:</span> ${spell.Note || "None"}; </h3>`,
 
 ];
 
@@ -97,7 +94,7 @@ const formattedItem = spellStats
 .join(" ");
 
 // Set the formatted content in the extraContent element
-targetLocation.innerHTML = formattedItem;
+target.innerHTML = formattedItem;
 
 return formattedItem;
 
@@ -128,7 +125,7 @@ this.fillSpellsForm(spell, spellNameDiv);
  //show Item info in ExtraInfo2 when hover over Div
  spellNameDiv.addEventListener('mouseover', () => {
     Ref.extraInfo2.classList.add('showExtraInfo');
-    this.addSpellInfo(spellNameDiv.id);
+    this.addSpellInfo(spellNameDiv.id, Ref.extraInfo2);
     });
 }
 

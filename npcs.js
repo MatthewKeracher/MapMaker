@@ -34,7 +34,7 @@ loadAndBuild: async function(fileContent) {
 
 buildNPC: function() {
 
-  console.log('calling buildNPC()')
+  //console.log('calling buildNPC()')
 
   const npcInstances = NPCs.npcArray.map(npcData => new NPCbuild(npcData));
           
@@ -84,7 +84,7 @@ npcDiv.addEventListener('mouseover', () => {
   //Ref.eventManagerInput.value = event.event;
   // console.log(npcDiv.id)
   Ref.extraInfo2.classList.add('showExtraInfo');
-  this.addNPCInfo(npcDiv.id);
+  this.addNPCInfo(npcDiv.id, Ref.extraInfo2);
   });
 
 });
@@ -154,7 +154,7 @@ if(Edit.editPage === 3){
 
 Ref.npcForm.style.display = 'flex'; // Display the npcForm
 
-console.log(npc)
+//console.log(npc)
 
 Ref.npcName.value = npc.name;
 Ref.npcTags.value = npc.occupation;
@@ -189,7 +189,7 @@ saveNPC: function() {
 
 // Check if an NPC with the same name already exists
 const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName.value);
-console.log(Ref.npcName.value)
+
 const npc = {
 name: Ref.npcName.value,
 occupation: Ref.npcTags.value,
@@ -206,15 +206,43 @@ cha: Ref.CHA.value,
 Backstory: Ref.Backstory.value,
 };
 
-if (existingNPCIndex !== -1) {
+if (existingNPCIndex !== -1 && Ref.npcName.value !== '') {
 // Update the existing NPC entry
 this.npcArray[existingNPCIndex] = npc;
 console.log('NPC updated:', npc);
-} else {
+} 
+
+else if (Ref.npcName.value === '' && Ref.npcTags !== ''){
+console.log('Add ' + Ref.npcTags.value + ' to all Selected NPC Tags')
+this.bulkAddTag(Ref.npcTags.value)
+} 
+
+else {
 // Add the created NPC to the npcArray
 this.npcArray.push(npc);
 //console.log('New NPC added:', npc);
 }
+
+},
+
+bulkAddTag(npcTags){
+
+  // Iterate over itemsSearchArray and update Tags
+  this.npcSearchArray.forEach(npc => {
+    if (npc.occupation) {
+      // Split existing Tags into an array
+      const existingTags = npc.occupation.split(',').map(tag => tag.trim());
+  
+      // Check if the new tag is not already present
+      if (!existingTags.includes(npcTags)) {
+        // If not present, append the new tag value
+        npc.occupation += `, ${npcTags}`;
+      }
+    } else {
+      // If Tags is empty, set it to the new tag value
+      npc.occupation = npcTags;
+    }
+  });
 
 },
 
@@ -336,114 +364,134 @@ return story;
 
 
 addNPCInfo(npcName, target) {
-const extraContent = document.getElementById('extraContent');
 
-let targetLocation = '';
-
-if(target === 'ExtraContent'){
-targetLocation = Ref.extraContent
-} else {
-targetLocation = Ref.extraContent2
-}
-
-// Search for the NPC in the npcArray
 const findNPC = npcName.replace(/-/g, ' ');
 const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
 
 if (foundNPC) {
-//console.log(foundNPC);
-// Format the NPC information into npcContent
+
 let npcContent = `<h2><span class="cyan">${foundNPC.name}</span><br></h2>`;
 
 if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
-npcContent += `<h3><span class="hotpink">${foundNPC.occupation}.</span><hr>`;
+npcContent += `<h3><span class="hotpink">${foundNPC.occupation}.</span></h3>`;
 }
 
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-  npcContent += `<span class="lime">Backstory:</span><br><br>
+  npcContent += `<h3><hr><span class="lime">Backstory:</span></h3>
   <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
 }
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
-npcContent += `<hr><span class="cyan">Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}</span></h3>
-<h3><span class="hotpink"> HIT POINTS: </span> ${foundNPC.hitPoints}</h3>`;
-}
 
+npcContent += `<hr><h3>
+<span class="expandable cyan" data-content-type="rule" divId="${foundNPC.class}">
+
+Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}
+
+</span></h3>
+
+<h3><span class="expandable hotpink" data-content-type="rule" divId="Hit Points">HIT POINTS: </span> ${foundNPC.hitPoints}</h3>`;
+}
 
 if (foundNPC.str) {
 npcContent += `<h2>
-<span class="misc"> STR: </span> ${foundNPC.str} <br>
-<span class="misc"> DEX: </span> ${foundNPC.dex} <br>
-<span class="misc"> INT: </span> ${foundNPC.int} <br>
-<span class="misc"> WIS: </span> ${foundNPC.wis} <br>
-<span class="misc"> CON: </span> ${foundNPC.con} <br>
-<span class="misc"> CHA: </span> ${foundNPC.cha} </h2>
+<span class="expandable misc" data-content-type="rule" divId="Strength"> STR: </span> ${foundNPC.str}  (${foundNPC.strMod}) <br>
+<span class="expandable misc" data-content-type="rule" divId="Dexterity"> DEX: </span> ${foundNPC.dex}  (${foundNPC.dexMod})<br>
+<span class="expandable misc" data-content-type="rule" divId="Intelligence"> INT: </span> ${foundNPC.int}  (${foundNPC.intMod})<br>
+<span class="expandable misc" data-content-type="rule" divId="Wisdom"> WIS: </span> ${foundNPC.wis}  (${foundNPC.wisMod})<br>
+<span class="expandable misc" data-content-type="rule" divId="Constitution"> CON: </span> ${foundNPC.con}  (${foundNPC.conMod})<br>
+<span class="expandable misc" data-content-type="rule" divId="Charisma"> CHA: </span> ${foundNPC.cha}  (${foundNPC.chaMod})</h2>
 `
+}
+
+if (foundNPC.Skills){
+
+  npcContent +=
+  `<hr><h3>
+  <span class="expandable cyan" 
+   data-content-type="rule"
+
+   divId="${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}">
+          ${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}:</span> <br><br>` +
+
+  // Skills common to multiple classes
+  `${foundNPC.Skills.removeTraps ? `<span class="orange">Remove Traps</span> ${foundNPC.Skills.removeTraps}<br>` : ''}` +
+  `${foundNPC.Skills.pickPockets ? `<span class="orange">Pick Pockets</span> ${foundNPC.Skills.pickPockets}<br>` : ''}` +
+  `${foundNPC.Skills.moveSilently ? `<span class="orange">Move Silently</span> ${foundNPC.Skills.moveSilently}<br>` : ''}` +
+  `${foundNPC.Skills.climbWalls ? `<span class="orange">Climb Walls</span> ${foundNPC.Skills.climbWalls}<br>` : ''}` +
+  `${foundNPC.Skills.hide ? `<span class="orange">Hide</span> ${foundNPC.Skills.hide}<br>` : ''}` +
+  `${foundNPC.Skills.listen ? `<span class="orange">Listen</span> ${foundNPC.Skills.listen}<br>` : ''}` 
+
+// Cleric-specific skills
+if(foundNPC.class === 'Cleric'){
+
+npcContent+= 
+
+`${foundNPC.Skills.Skeleton && foundNPC.Skills.Skeleton === 'Damaged'? `<span class="orange">Skeleton</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Skeleton && foundNPC.Skills.Skeleton !== 'Damaged' && foundNPC.Skills.Skeleton !== 'No' ? `<span class="orange">Skeleton</span> ${foundNPC.Skills.Skeleton}<br>` :
+''}` +
+
+`${foundNPC.Skills.Zombie && foundNPC.Skills.Zombie === 'Damaged'? `<span class="orange">Zombie</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Zombie && foundNPC.Skills.Zombie !== 'Damaged' && foundNPC.Skills.Zombie !== 'No' ? `<span class="orange">Zombie</span> ${foundNPC.Skills.Zombie}<br>` :
+''}` +
+
+`${foundNPC.Skills.Ghoul && foundNPC.Skills.Ghoul === 'Damaged'? `<span class="orange">Ghoul</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Ghoul && foundNPC.Skills.Ghoul !== 'Damaged' && foundNPC.Skills.Ghoul !== 'No' ? `<span class="orange">Ghoul</span> ${foundNPC.Skills.Ghoul}<br>` :
+''}` +
+
+`${foundNPC.Skills.Wight && foundNPC.Skills.Wight === 'Damaged'? `<span class="orange">Wight</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Wight && foundNPC.Skills.Wight !== 'Damaged' && foundNPC.Skills.Wight !== 'No' ? `<span class="orange">Wight</span> ${foundNPC.Skills.Wight}<br>` :
+''}` +
+
+`${foundNPC.Skills.Wraith && foundNPC.Skills.Wraith === 'Damaged'? `<span class="orange">Wraith</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Wraith && foundNPC.Skills.Wraith !== 'Damaged' && foundNPC.Skills.Wraith !== 'No' ? `<span class="orange">Wraith</span> ${foundNPC.Skills.Wraith}<br>` :
+''}` +
+
+`${foundNPC.Skills.Mummy && foundNPC.Skills.Mummy === 'Damaged'? `<span class="orange">Mummy</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Mummy && foundNPC.Skills.Mummy !== 'Damaged' && foundNPC.Skills.Mummy !== 'No' ? `<span class="orange">Mummy</span> ${foundNPC.Skills.Mummy}<br>` :
+''}` +
+
+`${foundNPC.Skills.Spectre && foundNPC.Skills.Spectre === 'Damaged'? `<span class="orange">Spectre</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Spectre && foundNPC.Skills.Spectre !== 'Damaged' && foundNPC.Skills.Spectre !== 'No' ? `<span class="orange">Spectre</span> ${foundNPC.Skills.Spectre}<br>` :
+''}` +
+
+`${foundNPC.Skills.Vampire && foundNPC.Skills.Vampire === 'Damaged'? `<span class="orange">Vampire</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Vampire && foundNPC.Skills.Vampire !== 'Damaged' && foundNPC.Skills.Vampire !== 'No' ? `<span class="orange">Vampire</span> ${foundNPC.Skills.Vampire}<br>` :
+''}` +
+
+`${foundNPC.Skills.Ghost && foundNPC.Skills.Ghost === 'Damaged'? `<span class="orange">Ghost</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
+foundNPC.Skills.Ghost && foundNPC.Skills.Ghost !== 'Damaged' && foundNPC.Skills.Ghost !== 'No' ? `<span class="orange">Ghost</span> ${foundNPC.Skills.Ghost}<br>` :
+''}` 
+
+} 
+
+npcContent+= `</h3>`;
+
 }
 
 if (foundNPC.magic){
 npcContent += `<hr><h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
 }
 
-if (foundNPC.thiefSkills){
-  npcContent += `<hr><h3><span class="withbreak">
-  <span class = "orange"> Remove Traps </span> ${foundNPC.thiefSkills.removeTraps} <br>
-  <span class = "orange"> Pick Pockets </span> ${foundNPC.thiefSkills.pickPockets} <br>
-  <span class = "orange"> Move Silently </span> ${foundNPC.thiefSkills.moveSilently} <br>
-  <span class = "orange"> Climb Walls </span> ${foundNPC.thiefSkills.climbWalls} <br>
-  <span class = "orange"> Hide </span> ${foundNPC.thiefSkills.hide} <br>
-  <span class = "orange"> Listen </span> ${foundNPC.thiefSkills.listen} <br>
-  </span></h3>`;
-}
 
 if (foundNPC.inventory) {
-  const inventoryItems = foundNPC.inventory.map(item => `#${item}# <br>`);
+  let previousTag = '';
+
+  const inventoryItems = foundNPC.inventory.map(item => {
+    const tagToDisplay = item.Tag !== previousTag ? `<br><span class = "hotpink">${item.Tag}:</span> <br>` : '';
+    previousTag = item.Tag;
+    return `${tagToDisplay}#${item.Name}# <br>`;
+  });
+
   const formattedInventory = inventoryItems.join('');
 
-  npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br><br>
+  npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br>
   <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
 }
 
-
-
-
-
-
-
-
-
-//RANDOM ITEMS FOR NPCS ----->
-
-// const randomItemsLoop = 5; // Change this to the desired number of times
-
-// let loot = `<br> ${foundNPC.name} has nearby: <br><br>`;
-
-// for (let i = 0; i < randomItemsLoop; i++) {
-//   const randomItem = this.getRandomItem(Items.itemsArray);
-//   if (randomItem) {
-//     loot += `#${randomItem.Name}# <br>`;
-//   }
-// }
-
-//npcContent += `<br><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(loot)))}</span>`;
-
-
-
-
-
-// if (foundNPC.MorningLocation) {
-// npcContent += `<br><br>
-// They can always be found at 
-// <span class="lime">[${foundNPC.MorningLocation}]</span>`;
-// }
-
-
-// Set the formatted content in the extraContent element
-targetLocation.innerHTML = npcContent;
-
+target.innerHTML = npcContent;
 } else {
-// NPC not found
-targetLocation.innerHTML = `NPC not found`;
+target.innerHTML = `NPC not found`;
 }
 },
 

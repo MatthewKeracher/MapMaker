@@ -53,7 +53,7 @@ return contentId.replace(hashBrackets, (match, targetText) => {
 const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
 if (item) {
 //console.log(item.Name);
-return this.addIteminfo(item.Name, 'extraInfo2');
+return this.addIteminfo(item.Name, Ref.extraInfo2);
 } else {
 console.log(`Item not found: ${targetText}`);
 return match;
@@ -81,17 +81,6 @@ standardizeCost(cost) {
 
 addIteminfo(contentId, target) {
 
-let targetLocation = '';
-
-if(target === 'ExtraContent'){
-targetLocation = Ref.extraContent
-} else if(target === 'extraInfo2'){
-targetLocation = Ref.extraInfo2
-Ref.extraInfo2.classList.add('showExtraInfo');
-} else {
-targetLocation = Ref.extraContent2
-}
-
 //Search for Item in the Array   
 const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === contentId.toLowerCase());
 const newCost = this.standardizeCost(item.Cost) + 'Gold Pieces';
@@ -99,18 +88,20 @@ const newCost = this.standardizeCost(item.Cost) + 'Gold Pieces';
 
 if (item) {
 
+  //`<span class="expandable" data-content-type="rule" divId="Money"">${foundNPC.class} Skills:</span><br>`
+
     const itemStats = [
-        `<br><h3><span class="misc">${contentId}</span>`,
-        `<br>${item.Cost ? `(${newCost})</h3><hr>` : ''}`,
+        `<h2><span class="misc">${contentId}</span></h2>`,
+        `<h3><span class="expandable" data-content-type="rule" divId="Money">${item.Cost ? `(${newCost})` : ''}</span><hr>`,
         `<span class="cyan">${item.Type}</span>.<br>`,
         
-        `<h3>${item.Size ? `<span class="lime">Size:</span> ${item.Size};<br>` : ''}`,
-        `${item.Weight ? `<span class="lime">Weight:</span> ${item.Weight} lbs;<br>` : ''}`,
-        `${item.Damage ? `<span class="lime">Damage:</span> ${item.Damage};<br>` : ''}`,
-        `${item.Range ? `<span class="lime">Range:</span> ${item.Range};<br>` : ''}`,
-        `${item.AC ? `<span class="lime">Armour Class:</span> ${item.AC};<br><br>` : ''}`,
-        `</h3><span class="hotpink">Assigned to:</span> ${item.Tags};<br><br>`,
-        `${item.Description ? `<br> ${item.Description}` : ''}`,
+        `${item.Size ? `<span class="lime">Size:</span> ${item.Size}<br>` : ''}`,
+        `${item.Weight ? `<span class="lime">Weight:</span> ${item.Weight} lbs<br>` : ''}`,
+        `${item.Damage ? `<span class="lime">Damage:</span> ${item.Damage}<br>` : ''}`,
+        `${item.Range ? `<span class="lime">Range:</span> ${item.Range}<br>` : ''}`,
+        `${item.AC ? `<span class="lime">Armour Class:</span> ${item.AC}<br><br>` : ''}`,
+        `<span class="hotpink">Assigned to:</span> ${item.Tags}<hr></h3>`,
+        `${item.Description ? ` ${item.Description} ` : ''}`,
       ];
       
 
@@ -119,7 +110,7 @@ const formattedItem = itemStats
 .join(" ");
 
 // Set the formatted content in the target element
-targetLocation.innerHTML = formattedItem;
+target.innerHTML = formattedItem;
 
 return formattedItem;
 
@@ -159,7 +150,7 @@ for (const item of sortedItems) {
     // Show Item info in ExtraInfo2 when hover over Div
     itemNameDiv.addEventListener('mouseover', () => {
       Ref.extraInfo2.classList.add('showExtraInfo');
-      this.addIteminfo(itemNameDiv.id);
+      this.addIteminfo(itemNameDiv.id, Ref.extraInfo2);
     });
   }
   
@@ -215,12 +206,36 @@ saveItem: function() {
     this.itemsArray[existingItemIndex] = item;
     //this.itemsSearchArray[existingItemIndex] = item;
     //console.log('Item updated:', item);
+    } else if (existingItemIndex === -1 && Ref.itemName.value === '' && Ref.itemTags !== ''){
+    console.log('Change all Selected Items Tags')
+    this.bulkAddTag(Ref.itemTags.value)
     } else {
     this.itemsArray.push(item);
     //this.itemsSearchArray.push(item);
     }
     
     },
+
+bulkAddTag(itemTags){
+
+  // Iterate over itemsSearchArray and update Tags
+  this.itemsSearchArray.forEach(item => {
+    if (item.Tags) {
+      // Split existing Tags into an array
+      const existingTags = item.Tags.split(',').map(tag => tag.trim());
+  
+      // Check if the new tag is not already present
+      if (!existingTags.includes(itemTags)) {
+        // If not present, append the new tag value
+        item.Tags += `, ${itemTags}`;
+      }
+    } else {
+      // If Tags is empty, set it to the new tag value
+      item.Tags = itemTags;
+    }
+  });
+
+},
 
 addItemSearch: function(){
 

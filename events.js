@@ -327,10 +327,10 @@ if (event) {
 const eventInfo = [
 
 `<h2><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event || "None"}</h2><hr>`,
-`<span class="cyan">Location: </span>${event.location || "None"} <br><br>`,
-`<span class="hotpink">NPC: </span>${event.npc || "None"} <br><br>`,
-`<span class="orange">Group: </span>${event.group || "None"} <br><br><br>`,
-`<span class="white">Description</span><br><hr> ${event.description || "None"}<br><br>`,
+`<h3><span class="cyan">Location: </span>${event.location || "None"} <br>`,
+`<span class="hotpink">NPC: </span>${event.npc || "None"} <br>`,
+`<span class="orange">Group: </span>${event.group || "None"} <br></h3>`,
+`<hr> ${event.description || "None"}`,
 
 ];
 

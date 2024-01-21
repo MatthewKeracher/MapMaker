@@ -311,7 +311,6 @@ break;
 case 5:
 Items.saveItem();
 Items.searchItem(itemSearch.value.toLowerCase());
-NPCs.buildNPC();
 break;
 
 case 6:
@@ -326,6 +325,8 @@ default:
 break;
 
 }
+
+NPCs.buildNPC();
 
 };
 

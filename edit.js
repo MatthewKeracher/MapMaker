@@ -85,8 +85,8 @@ init: function () {
             Ref.itemList.appendChild(option);
           });
         } else {
-          Ref.itemList.style.display = 'none';
-          Ref.itemList.innerHTML = '';
+          //Ref.itemList.style.display = 'none';
+          //Ref.itemList.innerHTML = '';
 
           // // fixDisplay()
           // const imageContainer = document.querySelector('.image-container');
@@ -319,6 +319,10 @@ Ref.locationGroup.style.display  = "flex";
 Ref.textLocation.style.display = "flex";
 
 //Hide
+
+Ref.itemList.style.display = "none";
+Ref.extraInfo2.classList.remove('showExtraInfo');
+//Ref.extraInfo2.style.display = "none";
 
 Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";
