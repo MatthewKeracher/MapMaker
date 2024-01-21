@@ -390,7 +390,9 @@ Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}
 
 </span></h3>
 
-<h3><span class="expandable hotpink" data-content-type="rule" divId="Hit Points">HIT POINTS: </span> ${foundNPC.hitPoints}</h3>`;
+<h3><span class="expandable hotpink" data-content-type="rule" divId="Hit Points">HIT POINTS: </span> ${foundNPC.hitPoints} <br>
+<span class="expandable lime" data-content-type="rule" divId="Attack Bonus">ATTACK BONUS: </span> +${foundNPC.attackBonus}</h3>`;
+
 }
 
 if (foundNPC.str) {
@@ -420,7 +422,9 @@ if (foundNPC.Skills){
   `${foundNPC.Skills.moveSilently ? `<span class="orange">Move Silently</span> ${foundNPC.Skills.moveSilently}<br>` : ''}` +
   `${foundNPC.Skills.climbWalls ? `<span class="orange">Climb Walls</span> ${foundNPC.Skills.climbWalls}<br>` : ''}` +
   `${foundNPC.Skills.hide ? `<span class="orange">Hide</span> ${foundNPC.Skills.hide}<br>` : ''}` +
-  `${foundNPC.Skills.listen ? `<span class="orange">Listen</span> ${foundNPC.Skills.listen}<br>` : ''}` 
+  `${foundNPC.Skills.listen ? `<span class="orange">Listen</span> ${foundNPC.Skills.listen}<br>` : ''}` +
+  `${foundNPC.Skills.poison ? `<span class="orange">Poison</span> ${foundNPC.Skills.poison}<br>` : ''}` +
+  `${foundNPC.Skills.tracking ? `<span class="orange">Tracking</span> ${foundNPC.Skills.tracking}<br>` : ''}`
 
 // Cleric-specific skills
 if(foundNPC.class === 'Cleric'){
@@ -487,6 +491,25 @@ if (foundNPC.inventory) {
 
   npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br>
   <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
+}
+
+if (foundNPC.savingThrows){
+
+  npcContent +=
+  `<hr><h3>
+  <span class="expandable cyan" 
+   data-content-type="rule"
+
+   divId="Saving Throws">
+          Saving Throws:</span> <br><br>` +
+
+  // savingThrows common to multiple classes
+  `${foundNPC.savingThrows.deathRay ? `<span class="orange">Death Ray</span> ${foundNPC.savingThrows.deathRay}<br>` : ''}` +
+  `${foundNPC.savingThrows.magicWands ? `<span class="orange">Magic Wands</span> ${foundNPC.savingThrows.magicWands}<br>` : ''}` +
+  `${foundNPC.savingThrows.paralysisPetrify ? `<span class="orange">Paralysis & Petrify</span> ${foundNPC.savingThrows.paralysisPetrify}<br>` : ''}` +
+  `${foundNPC.savingThrows.dragonBreath ? `<span class="orange">Dragon Breath</span> ${foundNPC.savingThrows.dragonBreath}<br>` : ''}` +
+  `${foundNPC.savingThrows.spells ? `<span class="orange">Spells</span> ${foundNPC.savingThrows.spells}<br>` : ''}` 
+
 }
 
 target.innerHTML = npcContent;

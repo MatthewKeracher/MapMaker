@@ -106,7 +106,6 @@ getQuotes(locationText) {
   });
 },
 
-
 addRulesInfo(contentId, target) {
  
   const rulesItem = this.rulesArray.find(rule => rule.name === contentId);
@@ -213,7 +212,6 @@ getMisc(locationText, comboArray) {
 
   return updatedText;
 },
-
 
 showExpandable(source, target) {
 
@@ -366,6 +364,32 @@ showFloatingExpandable() {
 
 
 rulesArray: [
+{name: 'Attack Bonus',
+ body: `To roll "to hit," the attacker rolls 1d20 and adds their <span class = "lime">attack bonus (AB) </span>, as shown on the Attack Bonus table, as well as <span class = "spell"> Strength </span> bonus (if performing a melee attack) or <span class = "spell"> Dexterity </span> bonus (if performing a missile attack)  and any other adjustments required by the situation. If the total is equal to or greater than the opponent's Armor Class, the attack hits and damage is rolled. A <span class="hotpink">natural "1"</span> on the die roll is always a failure. A <span class="cyan">natural "20"</span> is always a hit, if the opponent can be hit at all (for example, monsters that can only be hit by silver or magic weapons cannot be hit by normal weapons, so a natural "20" with a normal weapon will not hit such a monster).
+ 
+ Attacks made from behind an opponent usually receive a +2 attack bonus. This does not combine with the Sneak Attack ability.`
+},
+{name: 'Saving Throws',
+ body:`Saving throws represent the ability of a character or creature to resist or avoid special attacks, such as spells or poisons. 
+ 
+ Saving throws are made by rolling a d20 against a target number based on the character's class and level; for monsters, a comparable class and level are provided for the purpose of determining the monster's saving throw figures. As with attack rolls, a natural (unadjusted) roll of 20 is always a success, and a natural 1 is always a failure.
+
+ The five categories of saving throw as follows: <span class="hotpink">Death Ray or Poison, Magic Wands, Paralysis or Petrify, Dragon Breath, and Spells</span>. Spells and monster special attacks will indicate which category applies (when a saving throw is allowed), but in some unusual situations the Game Master will need to choose a category. 
+ 
+ One way to make this choice is to interpret the categories metaphorically. For example, a GM might be writing an adventure wherein there is a trap that pours burning oil on the hapless adventurers. Avoiding the oil might be considered similar to avoiding Dragon Breath. Or perhaps a stone idol shoots beams of energy from its glaring eyes when approached. This attack may be considered similar to a Magic Wand, or if especially potent, a Spell. The saving throw vs. Death Ray is often used as a "catch all" save versus many of the "ordinary" dangers encountered in a dungeon environment. 
+
+ In general, saving throw rolls are not adjusted by ability score bonus or penalty figures. There are a few exceptions: 
+ 
+ • Poison saving throws are adjusted by the character's Constitution modifier. 
+ 
+ • Saving throws against illusions (such as phantasmal force) are adjusted by the character's Intelligence modifier. 
+ 
+ • Saving throws against charm spells (and other forms of mind control) are adjusted by the character's Wisdom modifier. The GM may decide on other saving throw adjustments as they see fit. 
+
+ <span class="cyan">Item Saving Throws</span>
+ 
+ Area effects (such as fireball or lightning bolt spells) may damage items carried by a character as well as injuring the character. For simplicity, assume that items carried are unaffected if the character or creature carrying them makes their own saving throw. However, very fragile items (paper vs. fire, glass vs. physical impact, etc.) may still be considered subject to damage even if the bearer makes their save. In any case where one or more items may be subject to damage, use the saving throw roll of the bearer to determine if the item is damaged or not. For example, if a character holding an open spellbook is struck by a fireball spell, they must save vs. Spells, and then save again at the same odds for the spellbook. The GM should feel free to amend this rule as they wish; for instance, a backpack full of fragile items might be given a single saving throw rather than laboriously rolling for each and every item.`
+},
 {name: 'Spellcasting',
 body:`The number of spells of each level which a Magic User may cast per day is shown on the appropriate table in the Characters section starting on page 3. 
 
@@ -404,8 +428,7 @@ If a spellcaster is attacked (even if not hit) or must make a saving throw (whet
 
 As a specific exception, two spell casters releasing their spells at each other on the same Initiative number will both succeed in their casting; one caster may disrupt another with a spell only if they have a better Initiative, and choose to delay casting the spell until right before the other caster. Some spells are reversible; such spells are shown with an asterisk after the name.`
 },
-{
-name: 'Turn Undead',
+{name: 'Turn Undead',
 body:`Clerics can Turn the undead, that is, drive away undead monsters by means of faith alone. 
 
 The Cleric brandishes their holy symbol and calls upon the power of their divine patron. 
@@ -438,57 +461,58 @@ If the party pursue and corner the Turned undead, they may resume attacking the 
 
 Undead monsters subject to a D (Damaged) result suffer 1d8 damage per level of the Cleric (roll once and apply the same damage to all undead monsters affected); those reduced to zero hit points are utterly destroyed, being blasted into little more than dust. Those surviving this damage are still Turned as above.`
 },
-{
-name: 'Monster Name',
+{name: 'Monster Name',
 body: `The first thing given for each monster is its name (or its most common name if the monster is known by more than one). If an asterisk appears after the monster's name, it indicates that the monster is only able to be hit by special weapons (such as silver or magical weapons, or creatures affected only by fire, etc.) which makes the monster harder to defeat.`
 },
-{
-name: 'Monster Armour Class',
+{name: 'Monster Armour Class',
 body: `This line lists the creature’s Armor Class. If the monster customarily wears armor, the first listed AC value is with that armor, and the second, in parentheses, is unarmored. Some monsters are only able to be hit (damaged) by silver or magical weapons; these are indicated with (s); some monsters may only be hit with magical weapons, indicated by (m). `
 },
-{
-name: 'Monster Hit Dice',
+{name: 'Monster Hit Dice',
 body: `This is the creature’s number of hit dice, including any bonus hit points. Monsters always roll eight sided dice (d8) for hit points, unless otherwise noted. So for example, a creature with 3+2 hit dice rolls 3d8 and adds 2 points to the total. A few monsters may be marked as having ½ hit dice; this means 1d4 points, and the creature has "less than one hit die" for attack bonus purposes. `
 },
-{
-name: 'Monster Movement',
+{name: 'Monster Movement',
 body: ` This is the monster's movement rate, or rates for those monsters able to move in more than one fashion. For example, bugbears have a normal walking movement of 30', and this is all that is listed for them. Mermaids can only move about in the water, and so their movement is given as Swim 40'. Pegasi can both walk and fly, so their movement is listed as 80' Fly 160'. In addition, a distance may appear in parentheses after a movement figure; this is the creature's turning distance (as explained in Maneuverability on page 51). If a turning distance is not listed, assume 5'.`
 },
-{
-name: 'Monster Attacks',
+{name: 'Monster Attacks',
 body: `This is the number (and sometimes type or types) of attacks the monster can perform. For example, goblins may attack once with a weapon, so they are marked 1 weapon. Ghouls are marked 2 claws, 1 bite as they can attack with both claws and also bite in one round. Some monsters have alternate attacks, such as the triceratops with an attack of 1 gore or 1 trample which means that the creature can do a gore attack or a trample attack, but not both in the same round. `
 },
-{
-name: 'Monster Damage',
+{name: 'Monster Damage',
 body: ` The damage figures caused by successful attacks by the monster. Generally, this will be defined in terms of one or more die rolls.`
 },
-{
-name: 'Monster Number Appearing',
+{name: 'Monster Number Appearing',
 body: `This is given in terms of one or more die rolls. Monsters that only appear underground and have no lairs will have a single die roll; those that have lairs and/or those that can be found in the wilderness will be noted appropriately. For example, a monster noted as "1d6, Wild 2d6, Lair 3d6" is encountered in groups of 1d6 individuals in a dungeon setting, 2d6 individuals in the wilderness, or 3d6 individuals in a lair. Note that number appearing applies to combatants. Non-combatant monsters (juveniles, and sometimes females) do not count in this number. The text of the monster description should explain this in detail where it matters, but the GM is always the final arbiter.`
 },
-{
-name: 'Monster Save As',
+{name: 'Monster Save As',
 body: `This is the character class and level the monster uses for saving throws.
 Most monsters save as Fighters of a level equal to their hit dice, but this is not always the case.`
 },
-{
-name: 'Monster Morale',
-body: `The number that must be rolled equal to or less than on 2d6 for the monster to pass a Morale Check. Monsters having a Morale of 12 never fail morale checks, and fight until destroyed (or until they have no enemies left). Morale is explained further on page 57.`
+{name: 'Monster Morale',
+body: `The number that must be rolled equal to or less than on 2d6 for the monster to pass a Morale Check. Monsters having a Morale of 12 never fail morale checks, and fight until destroyed (or until they have no enemies left). 
+
+NPCs and monsters don't always fight to the death; in fact, most will try to avoid death whenever possible. 
+
+Each monster listing includes the monster's Morale score, a figure between 2 and 12. To make a Morale check, roll 2d6; if the roll is equal to or less than the Morale score, the monster or monsters are willing to stand and fight. If the roll is higher, the monster has lost its nerve. Monsters with a Morale score of 12 never fail a Morale check; they always fight to the death.
+
+In general, Morale is checked when monster(s) first encounter opposition, and again when the monster party is reduced to half strength (by numbers if more than one monster, or by hit points if the monster is alone).
+
+For this purpose, monsters incapacitated by sleep, charm, or hold magic are counted as if dead.
+
+The Game Master may apply adjustments to a monster's Morale score at their discretion. Generally, adjustments should not total more than +2 or -2. No adjustment is ever applied to a Morale score of 12.
+
+A monster that fails a Morale check will generally attempt to flee; intelligent monsters or NPCs may try to surrender, if the GM so desires.
+
+Note that special rules apply to retainers, as explained further on page 46. `
 },
-{
-name: 'Monster Treasure',
+{name: 'Monster Treasure',
 body: `This describes any valuables the monster is likely to have. See the Treasure section on page 162 for more details about interpreting the letter codes which usually appear here. A monster's treasure is normally found in its lair, unless described otherwise; sometimes for monsters who live in towns or other large groups this line will describe both the lair treasure as well as treasure carried by random individuals. `
 },
-{
-name: 'Monster XP',
+{name: 'Monster XP',
 body: `This is the number of experience points awarded for defeating this monster. In some cases, the figure will vary; for instance, Dragons of different age categories will have different XP values. Review the Experience Points awards table in the Adventure section on page 49 to calculate the correct figure in these cases. `
 },
-{
-name: 'Monster Special',
+{name: 'Monster Special',
 body: `Some monsters have a special ability. `
 },
-{
-name: 'Hit Points',
+{name: 'Hit Points',
 body: `When a character is injured, they lose hit points from their current total. Note that this does not change the figure rolled, but rather reduces the current total; healing will restore hit points, up to but not exceeding the rolled figure.
 
 When their hit point total reaches 0, your character may be dead. This may not be the end for the character; don't tear up the character sheet.
@@ -497,54 +521,47 @@ First level characters begin play with a single hit die of the given type, plus 
 
 Note that, after 9th level, characters receive a fixed number of hit points each level, as shown in the advancement table for the class, and no longer add the Constitution bonus or penalty.`
 },
-{
-name: 'Strength',
+{name: 'Strength',
 body: `As the name implies, this ability measures the character's raw physical power. 
 
 Strength is the Prime Requisite for Fighters. Apply the ability bonus or penalty for Strength to all attack and damage rolls in melee (hand to hand) combat. 
 
 Note that a penalty here will not reduce damage from a successful attack below one point in any case (see How to Attack on page 53 and Damage on page 55, both in the Combat section, for details).`
 },
-{
-name: 'Dexterity',
+{name: 'Dexterity',
 body: `This ability measures the character's quickness and balance as well as aptitude with tools. 
 
 Dexterity is the Prime Requisite for Thieves. 
 
 The Dexterity bonus or penalty is applied to all attack rolls with missile (ranged) weapons, to the character's Armor Class value, and to the character's Initiative die roll.`
 },  
-{
-name: 'Intelligence',
+{name: 'Intelligence',
 body: `This is the ability to learn and apply knowledge. 
 
 Intelligence is the Prime Requisite for Magic-Users. 
 
 The ability bonus for Intelligence is added to the number of languages the character is able to learn to read and write; if the character has an Intelligence penalty, they cannot read more than a word or two, and will only know their native language.`
 },  
-{
-name: 'Wisdom',
+{name: 'Wisdom',
 body: `A combination of intuition, willpower, and common sense. 
 
 Wisdom is the Prime Requisite for Clerics. 
 
 The Wisdom bonus or penalty may apply to some saving throws vs. magical attacks, particularly those affecting the target's will.`
 },  
-{
-name: 'Constitution',
+{name: 'Constitution',
 body: `A combination of general health and vitality. 
 
 Apply the Constitution bonus or penalty to each hit die rolled by the character. Note that a penalty here will not reduce any hit die roll to less than 1 point.`
 },
-{
-name: 'Charisma',
+{name: 'Charisma',
 body: `This is the ability to influence or even lead people; those with high Charisma are well-liked, or at least highly respected. 
 
 Apply the Charisma bonus or penalty to reaction rolls. 
 
 Also, the number of retainers a character may hire, and the loyalty of those retainers, is affected by Charisma.`
 },  
-{
-name: 'Money',
+{name: 'Money',
 body: `Monetary values are usually expressed in gold pieces. In addition to gold coins, there are coins made of platinum, silver, electrum (an alloy of gold and silver), and copper. They are valued as follows:
 
 <span class = "hotpink">1 platinum piece (pp) = 5 gold pieces (gp)
@@ -555,6 +572,17 @@ body: `Monetary values are usually expressed in gold pieces. In addition to gold
 For game purposes, assume that one gold piece weighs 1/20th of a pound, and that ten coins will "fit" in a cubic inch of storage space (this isn't literally accurate, but works well enough when applied to a box or chest).
 
 First-level characters generally begin the game with 3d6 x 10 gp, though the GM may choose some other amount.`
+},
+{name: 'Ranger Skills',
+body: `Rangers can Move Silently, Hide, and Track when in wilderness areas, at percentages given in the table below. Apply a -20% penalty when attempting these abilities in urban areas. 
+
+Move Silently and Hide may not be used in armor heavier than leather.
+
+<span class = "hotpink"> Move Silently </span> is always rolled by the GM. The Ranger will usually believe they are moving silently regardless of the die roll, but opponents they are trying to avoid will hear the Ranger if the roll is failed.
+
+<span class = "hotpink"> Hide </span> permits the Ranger to hide in any shadowed area large enough to contain their body. The Ranger always believes they are being successful, so the GM makes the roll. A Ranger hiding in shadows must remain still for this ability to work.
+
+<span class = "hotpink"> Tracking </span> permits the Ranger track the trail of someone. When tracking, the Ranger must roll once per hour traveled or lose the trail. `
 },
 {
 name: 'Thief Skills',
@@ -629,7 +657,27 @@ The Prime Requisite for Clerics is Wisdom; a character must have a Wisdom score 
 
 They may wear any armor but may only use blunt weapons, specifically including warhammer, mace, maul, club, quarterstaff, and sling.`
 },
-// Add more entries as needed
+{name: 'Ranger',
+body: `Rangers are specialized warriors who roam the borderlands, where their mission is to keep the beasts and monsters of the untamed lands at bay. They generally operate alone or in small groups, and rely on stealth and surprise to meet their objectives.
+
+To become a Ranger, a character must have a Strength score of 9 or higher (just as with any Fighter), a Wisdom of 11 or higher, and a Dexterity of 11 or higher. They may use any weapon and may wear any armor, but note that some of the Ranger’s special talents and abilities are unavailable when wearing heavier than leather armor. Humans, Elves, and Halflings may become Rangers. If the Half-Humans supplement is used, Half-Elves and Half-Orcs may also become Rangers.
+
+A Ranger must declare a chosen enemy. Against this chosen enemy, the Ranger gets a bonus of +3 to damage. This enemy might be a certain category of creature such as giants, humanoids, or dragons. With the GM's permission, the list might include rival organizations, nations, or similar agencies. 
+
+Rangers are always expert bowmen. When using any regular bow (shortbow or longbow, but not crossbow), a Ranger adds +2 to his or her Attack Bonus. At 5th level, a Ranger may fire three arrows every two rounds (a 3/2 rate of fire). This means one attack on every odd round, two on every even round, with the second attack coming at the end of the round. At 9th level, the Ranger may fire two arrows every round, with the second attack coming at the end of the round. `},
+{name: 'Assassin',
+body:`There are those who make their living dealing death from the shadows. These people are called assassins. Most are trained by secret guilds or societies; civilized lands generally forbid and destroy such organizations. 
+
+The <span class = "hotpink"> Prime Requisite for Assassins is Dexterity </span>; a character must have a Dexterity score of 9 or higher to become a Assassin. They may use any weapon, but may not wear metal armor as it interferes with stealthy activities, nor may they use shields of any sort. Leather armor is acceptable, however. Only humans may become Assassins.
+
+Those abilities special to the Assassin class are as follows: 
+
+<span class = "hotpink">Poison:</span>Assassins learn the art of making lethal poisons. Poisons are often quite expensive to make; it is not uncommon for a single application of contact poison to cost 500 gp or more. The GM is advised to take care that poison does not become too much of an easy solution for the Assassin. 
+
+<span class = "hotpink"> Assassinate: </span> This is the Assassin's primary special ability. As with the Thief's Sneak Attack ability, any time an Assassin is behind an opponent in melee and it is reasonably likely the opponent doesn't know they are there, an attempt to assassinate may be made. The attack must be carried out with a one-handed piercing weapon, such as a dagger or sword. The attack is rolled at an attack bonus of +4, and if the attack hits, the victim must roll a saving throw vs. Death Ray or be instantly killed. If this saving throw is a success, the victim still suffers normal weapon damage. At the GM's option, characters two or more levels lower than the Assassin may be denied a saving throw.
+
+<span class = "hotpink"> Waylay: </span> An Assassin can attempt to knock out an opponent in a single strike. This is performed in much the same way as the Assassinate ability, but the Assassin must be using a weapon that does subduing damage normally (i.e. a club or cudgel). The attack is rolled at a +4 attack bonus; if the Assassin hits, the victim must make a saving throw vs. Death Ray or be knocked unconscious. If this roll is made, the victim still suffers normal subduing damage. Creatures knocked unconscious by a Waylay attack will remain that way for 2d8 turns if not awakened. Note that bounty hunters are often Assassins, who use the Waylay ability in the course of their (more or less) lawful activities.`}
+
 ],
 
 

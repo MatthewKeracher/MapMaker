@@ -133,6 +133,7 @@ this.fillMonsterForm(monster, monsterNameDiv);
  monsterNameDiv.addEventListener('mouseover', () => {
   Ref.extraInfo2.classList.add('showExtraInfo');
   this.addMonsterInfo(monsterNameDiv.id, Ref.extraInfo2);
+  //Storyteller.showFloatingExpandable(Ref.extraInfo2);
   });
 
 }

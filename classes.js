@@ -24,52 +24,79 @@ abilityScoreTable = [
 // Add more ranges as needed
 ];
 
+
 //Magic User
 magicUserTable = [
-{ level: 1, exp: 0, hitDice: '1d4', spells: [1, 0, 0, 0, 0, 0] },
-{ level: 2, exp: 2500, hitDice: '2d4', spells: [2, 0, 0, 0, 0, 0] },
-{ level: 3, exp: 5000, hitDice: '3d4', spells: [2, 1, 0, 0, 0, 0] },
-{ level: 4, exp: 10000, hitDice: '4d4', spells: [2, 2, 0, 0, 0, 0] },
-{ level: 5, exp: 20000, hitDice: '5d4', spells: [2, 2, 1, 0, 0, 0] },
-{ level: 6, exp: 40000, hitDice: '6d4', spells: [3, 2, 2, 0, 0, 0] },
-{ level: 7, exp: 80000, hitDice: '7d4', spells: [3, 2, 2, 1, 0, 0] },
-{ level: 8, exp: 150000, hitDice: '8d4', spells: [3, 3, 2, 2, 0, 0] },
-{ level: 9, exp: 300000, hitDice: '9d4', spells: [3, 3, 2, 2, 1, 0] },
-{ level: 10, exp: 450000, hitDice: '9d4+1', spells: [4, 3, 3, 2, 2, 0] },
-{ level: 11, exp: 600000, hitDice: '9d4+2', spells: [4, 4, 3, 2, 2, 1] },
-{ level: 12, exp: 750000, hitDice: '9d4+3', spells: [4, 4, 3, 3, 2, 2] },
-{ level: 13, exp: 900000, hitDice: '9d4+4', spells: [4, 4, 4, 3, 2, 2] },
-{ level: 14, exp: 1050000, hitDice: '9d4+5', spells: [4, 4, 4, 3, 3, 2] },
-{ level: 15, exp: 1200000, hitDice: '9d4+6', spells: [5, 4, 4, 3, 3, 2] },
-{ level: 16, exp: 1350000, hitDice: '9d4+7', spells: [5, 5, 4, 3, 3, 2] },
-{ level: 17, exp: 1500000, hitDice: '9d4+8', spells: [5, 5, 4, 4, 3, 3] },
-{ level: 18, exp: 1650000, hitDice: '9d4+9', spells: [6, 5, 4, 4, 3, 3] },
-{ level: 19, exp: 1800000, hitDice: '9d4+10', spells: [6, 5, 5, 4, 3, 3] },
-{ level: 20, exp: 1950000, hitDice: '9d4+11', spells: [6, 5, 5, 4, 4, 3] },
+{ level: 1, exp: 0, hitDice: '1d4', spells: [1, 0, 0, 0, 0, 0], attackBonus: 1},
+{ level: 2, exp: 2500, hitDice: '2d4', spells: [2, 0, 0, 0, 0, 0], attackBonus: 1},
+{ level: 3, exp: 5000, hitDice: '3d4', spells: [2, 1, 0, 0, 0, 0], attackBonus: 1},
+{ level: 4, exp: 10000, hitDice: '4d4', spells: [2, 2, 0, 0, 0, 0], attackBonus: 2},
+{ level: 5, exp: 20000, hitDice: '5d4', spells: [2, 2, 1, 0, 0, 0], attackBonus: 2},
+{ level: 6, exp: 40000, hitDice: '6d4', spells: [3, 2, 2, 0, 0, 0], attackBonus: 3},
+{ level: 7, exp: 80000, hitDice: '7d4', spells: [3, 2, 2, 1, 0, 0], attackBonus: 3},
+{ level: 8, exp: 150000, hitDice: '8d4', spells: [3, 3, 2, 2, 0, 0], attackBonus: 3},
+{ level: 9, exp: 300000, hitDice: '9d4', spells: [3, 3, 2, 2, 1, 0], attackBonus: 4},
+{ level: 10, exp: 450000, hitDice: '9d4+1', spells: [4, 3, 3, 2, 2, 0], attackBonus: 4},
+{ level: 11, exp: 600000, hitDice: '9d4+2', spells: [4, 4, 3, 2, 2, 1], attackBonus: 4},
+{ level: 12, exp: 750000, hitDice: '9d4+3', spells: [4, 4, 3, 3, 2, 2], attackBonus: 4},
+{ level: 13, exp: 900000, hitDice: '9d4+4', spells: [4, 4, 4, 3, 2, 2], attackBonus: 5},
+{ level: 14, exp: 1050000, hitDice: '9d4+5', spells: [4, 4, 4, 3, 3, 2], attackBonus: 5},
+{ level: 15, exp: 1200000, hitDice: '9d4+6', spells: [5, 4, 4, 3, 3, 2], attackBonus: 5},
+{ level: 16, exp: 1350000, hitDice: '9d4+7', spells: [5, 5, 4, 3, 3, 2], attackBonus: 6},
+{ level: 17, exp: 1500000, hitDice: '9d4+8', spells: [5, 5, 4, 4, 3, 3], attackBonus: 6},
+{ level: 18, exp: 1650000, hitDice: '9d4+9', spells: [6, 5, 4, 4, 3, 3], attackBonus: 6},
+{ level: 19, exp: 1800000, hitDice: '9d4+10', spells: [6, 5, 5, 4, 3, 3], attackBonus: 7},
+{ level: 20, exp: 1950000, hitDice: '9d4+11', spells: [6, 5, 5, 4, 4, 3], attackBonus: 7},
 ];
+
+// Magic-User Saving Throws
+magicUserSavingThrowTable = [
+  { level: 1, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 16, spells: 15 },
+  { level: 2, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
+  { level: 3, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
+  { level: 4, deathRay: 12, magicWands: 13, paralysisPetrify: 12, dragonBreath: 15, spells: 13 },
+  { level: 5, deathRay: 12, magicWands: 12, paralysisPetrify: 11, dragonBreath: 14, spells: 13 },
+  { level: 6, deathRay: 11, magicWands: 11, paralysisPetrify: 10, dragonBreath: 14, spells: 12 },
+  { level: 7, deathRay: 11, magicWands: 11, paralysisPetrify: 10, dragonBreath: 13, spells: 12 },
+  { level: 8, deathRay: 10, magicWands: 10, paralysisPetrify: 9, dragonBreath: 13, spells: 11 },
+  { level: 9, deathRay: 10, magicWands: 9, paralysisPetrify: 9, dragonBreath: 13, spells: 11 },
+  { level: 10, deathRay: 9, magicWands: 9, paralysisPetrify: 8, dragonBreath: 12, spells: 10 },
+  { level: 11, deathRay: 9, magicWands: 8, paralysisPetrify: 7, dragonBreath: 12, spells: 11 },
+  { level: 12, deathRay: 8, magicWands: 7, paralysisPetrify: 6, dragonBreath: 11, spells: 11 },
+  { level: 13, deathRay: 8, magicWands: 7, paralysisPetrify: 6, dragonBreath: 11, spells: 10 },
+  { level: 14, deathRay: 7, magicWands: 6, paralysisPetrify: 5, dragonBreath: 10, spells: 10 },
+  { level: 15, deathRay: 7, magicWands: 6, paralysisPetrify: 5, dragonBreath: 10, spells: 9 },
+  { level: 16, deathRay: 6, magicWands: 5, paralysisPetrify: 4, dragonBreath: 9, spells: 9 },
+  { level: 17, deathRay: 6, magicWands: 5, paralysisPetrify: 4, dragonBreath: 9, spells: 8 },
+  { level: 18, deathRay: 5, magicWands: 4, paralysisPetrify: 3, dragonBreath: 8, spells: 8 },
+  { level: 19, deathRay: 5, magicWands: 4, paralysisPetrify: 3, dragonBreath: 8, spells: 7 },
+  { level: 20, deathRay: 4, magicWands: 3, paralysisPetrify: 2, dragonBreath: 7, spells: 6 },
+  // Add more levels as needed
+];
+
 
 //Thief General
 thiefTable = [
-{ level: 1, exp: 0, hitDice: '1d4' },
-{ level: 2, exp: 1250, hitDice: '2d4' },
-{ level: 3, exp: 2500, hitDice: '3d4' },
-{ level: 4, exp: 5000, hitDice: '4d4' },
-{ level: 5, exp: 10000, hitDice: '5d4' },
-{ level: 6, exp: 20000, hitDice: '6d4' },
-{ level: 7, exp: 40000, hitDice: '7d4' },
-{ level: 8, exp: 75000, hitDice: '8d4' },
-{ level: 9, exp: 150000, hitDice: '9d4' },
-{ level: 10, exp: 225000, hitDice: '9d4+2' },
-{ level: 11, exp: 300000, hitDice: '9d4+4' },
-{ level: 12, exp: 375000, hitDice: '9d4+6' },
-{ level: 13, exp: 450000, hitDice: '9d4+8' },
-{ level: 14, exp: 525000, hitDice: '9d4+10' },
-{ level: 15, exp: 600000, hitDice: '9d4+12' },
-{ level: 16, exp: 675000, hitDice: '9d4+14' },
-{ level: 17, exp: 750000, hitDice: '9d4+16' },
-{ level: 18, exp: 825000, hitDice: '9d4+18' },
-{ level: 19, exp: 900000, hitDice: '9d4+20' },
-{ level: 20, exp: 975000, hitDice: '9d4+22' },
+{ level: 1, exp: 0, hitDice: '1d4' , attackBonus: 1, attackBonus: 1},
+{ level: 2, exp: 1250, hitDice: '2d4' , attackBonus: 1},
+{ level: 3, exp: 2500, hitDice: '3d4' , attackBonus: 2},
+{ level: 4, exp: 5000, hitDice: '4d4' , attackBonus: 2},
+{ level: 5, exp: 10000, hitDice: '5d4' , attackBonus: 3},
+{ level: 6, exp: 20000, hitDice: '6d4' , attackBonus: 3},
+{ level: 7, exp: 40000, hitDice: '7d4' , attackBonus: 4},
+{ level: 8, exp: 75000, hitDice: '8d4' , attackBonus: 4},
+{ level: 9, exp: 150000, hitDice: '9d4' , attackBonus: 5},
+{ level: 10, exp: 225000, hitDice: '9d4+2' , attackBonus: 5},
+{ level: 11, exp: 300000, hitDice: '9d4+4' , attackBonus: 5},
+{ level: 12, exp: 375000, hitDice: '9d4+6' , attackBonus: 6},
+{ level: 13, exp: 450000, hitDice: '9d4+8' , attackBonus: 6},
+{ level: 14, exp: 525000, hitDice: '9d4+10' , attackBonus: 6},
+{ level: 15, exp: 600000, hitDice: '9d4+12' , attackBonus: 7},
+{ level: 16, exp: 675000, hitDice: '9d4+14' , attackBonus: 7},
+{ level: 17, exp: 750000, hitDice: '9d4+16' , attackBonus: 7},
+{ level: 18, exp: 825000, hitDice: '9d4+18' , attackBonus: 8},
+{ level: 19, exp: 900000, hitDice: '9d4+20' , attackBonus: 8},
+{ level: 20, exp: 975000, hitDice: '9d4+22' , attackBonus: 8},
 ];
 
 //Thief Skills Table
@@ -96,55 +123,105 @@ thiefSkillsTable = [
 { level: 20, openLocks: 88, removeTraps: 83, pickPockets: 99, moveSilently: 93, climbWalls: 99, hide: 73, listen: 95 },
 ];
 
+// Thief Saving Throw Progression
+thiefSavingThrowTable = [
+  { level: 1, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 16, spells: 15 },
+  { level: 2, deathRay: 12, magicWands: 14, paralysisPetrify: 12, dragonBreath: 15, spells: 14 },
+  { level: 3, deathRay: 12, magicWands: 14, paralysisPetrify: 12, dragonBreath: 15, spells: 14 },
+  { level: 4, deathRay: 11, magicWands: 13, paralysisPetrify: 12, dragonBreath: 14, spells: 13 },
+  { level: 5, deathRay: 11, magicWands: 13, paralysisPetrify: 11, dragonBreath: 13, spells: 13 },
+  { level: 6, deathRay: 10, magicWands: 12, paralysisPetrify: 11, dragonBreath: 12, spells: 12 },
+  { level: 7, deathRay: 10, magicWands: 12, paralysisPetrify: 11, dragonBreath: 12, spells: 12 },
+  { level: 8, deathRay: 9, magicWands: 12, paralysisPetrify: 10, dragonBreath: 11, spells: 11 },
+  { level: 9, deathRay: 9, magicWands: 10, paralysisPetrify: 10, dragonBreath: 10, spells: 11 },
+  { level: 10, deathRay: 8, magicWands: 10, paralysisPetrify: 9, dragonBreath: 9, spells: 10 },
+  { level: 11, deathRay: 7, magicWands: 9, paralysisPetrify: 9, dragonBreath: 8, spells: 9 },
+  { level: 12, deathRay: 7, magicWands: 9, paralysisPetrify: 8, dragonBreath: 7, spells: 9 },
+  { level: 13, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 14, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 15, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 16, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 17, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 18, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 19, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+  { level: 20, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
+];
+
+
 //Fighter
 fighterTable = [
-{ level: 1, expPoints: 0, hitDice: '1d8' },
-{ level: 2, expPoints: 2000, hitDice: '2d8' },
-{ level: 3, expPoints: 4000, hitDice: '3d8' },
-{ level: 4, expPoints: 8000, hitDice: '4d8' },
-{ level: 5, expPoints: 16000, hitDice: '5d8' },
-{ level: 6, expPoints: 32000, hitDice: '6d8' },
-{ level: 7, expPoints: 64000, hitDice: '7d8' },
-{ level: 8, expPoints: 120000, hitDice: '8d8' },
-{ level: 9, expPoints: 240000, hitDice: '9d8' },
-{ level: 10, expPoints: 360000, hitDice: '9d8+2' },
-{ level: 11, expPoints: 480000, hitDice: '9d8+4' },
-{ level: 12, expPoints: 600000, hitDice: '9d8+6' },
-{ level: 13, expPoints: 720000, hitDice: '9d8+8' },
-{ level: 14, expPoints: 840000, hitDice: '9d8+10' },
-{ level: 15, expPoints: 960000, hitDice: '9d8+12' },
-{ level: 16, expPoints: 1080000, hitDice: '9d8+14' },
-{ level: 17, expPoints: 1200000, hitDice: '9d8+16' },
-{ level: 18, expPoints: 1320000, hitDice: '9d8+18' },
-{ level: 19, expPoints: 1440000, hitDice: '9d8+20' },
-{ level: 20, expPoints: 1560000, hitDice: '9d8+22' },
+{ level: 1, expPoints: 0, hitDice: '1d8' , attackBonus: 1},
+{ level: 2, expPoints: 2000, hitDice: '2d8' , attackBonus: 2},
+{ level: 3, expPoints: 4000, hitDice: '3d8' , attackBonus: 2},
+{ level: 4, expPoints: 8000, hitDice: '4d8' , attackBonus: 3},
+{ level: 5, expPoints: 16000, hitDice: '5d8' , attackBonus: 4},
+{ level: 6, expPoints: 32000, hitDice: '6d8' , attackBonus: 4},
+{ level: 7, expPoints: 64000, hitDice: '7d8' , attackBonus: 5},
+{ level: 8, expPoints: 120000, hitDice: '8d8' , attackBonus: 6},
+{ level: 9, expPoints: 240000, hitDice: '9d8' , attackBonus: 6},
+{ level: 10, expPoints: 360000, hitDice: '9d8+2' , attackBonus: 6},
+{ level: 11, expPoints: 480000, hitDice: '9d8+4' , attackBonus: 7},
+{ level: 12, expPoints: 600000, hitDice: '9d8+6' , attackBonus: 7},
+{ level: 13, expPoints: 720000, hitDice: '9d8+8' , attackBonus: 8},
+{ level: 14, expPoints: 840000, hitDice: '9d8+10' , attackBonus: 8},
+{ level: 15, expPoints: 960000, hitDice: '9d8+12' , attackBonus: 8},
+{ level: 16, expPoints: 1080000, hitDice: '9d8+14' , attackBonus: 9},
+{ level: 17, expPoints: 1200000, hitDice: '9d8+16' , attackBonus: 9},
+{ level: 18, expPoints: 1320000, hitDice: '9d8+18' , attackBonus: 10},
+{ level: 19, expPoints: 1440000, hitDice: '9d8+20' , attackBonus: 10},
+{ level: 20, expPoints: 1560000, hitDice: '9d8+22' , attackBonus: 10},
 ];
+
+// Fighter Saving Throw Progression
+fighterSavingThrowTable = [
+  { level: 0, deathRay: 13, magicWands: 14, paralysisPetrify: 15, dragonBreath: 16, spells: 18 },
+  { level: 1, deathRay: 12, magicWands: 13, paralysisPetrify: 14, dragonBreath: 15, spells: 17 },
+  { level: 2, deathRay: 11, magicWands: 12, paralysisPetrify: 14, dragonBreath: 15, spells: 16 },
+  { level: 3, deathRay: 11, magicWands: 11, paralysisPetrify: 13, dragonBreath: 14, spells: 15 },
+  { level: 4, deathRay: 10, magicWands: 11, paralysisPetrify: 12, dragonBreath: 14, spells: 15 },
+  { level: 5, deathRay: 10, magicWands: 10, paralysisPetrify: 11, dragonBreath: 13, spells: 14 },
+  { level: 6, deathRay: 9, magicWands: 9, paralysisPetrify: 10, dragonBreath: 12, spells: 14 },
+  { level: 7, deathRay: 9, magicWands: 9, paralysisPetrify: 10, dragonBreath: 12, spells: 14 },
+  { level: 8, deathRay: 8, magicWands: 8, paralysisPetrify: 9, dragonBreath: 13, spells: 13 },
+  { level: 9, deathRay: 8, magicWands: 8, paralysisPetrify: 9, dragonBreath: 13, spells: 13 },
+  { level: 10, deathRay: 7, magicWands: 7, paralysisPetrify: 8, dragonBreath: 12, spells: 12 },
+  { level: 11, deathRay: 7, magicWands: 7, paralysisPetrify: 8, dragonBreath: 12, spells: 12 },
+  { level: 12, deathRay: 6, magicWands: 6, paralysisPetrify: 7, dragonBreath: 11, spells: 11 },
+  { level: 13, deathRay: 6, magicWands: 6, paralysisPetrify: 7, dragonBreath: 11, spells: 11 },
+  { level: 14, deathRay: 5, magicWands: 5, paralysisPetrify: 6, dragonBreath: 10, spells: 10 },
+  { level: 15, deathRay: 5, magicWands: 5, paralysisPetrify: 6, dragonBreath: 10, spells: 10 },
+  { level: 16, deathRay: 4, magicWands: 4, paralysisPetrify: 5, dragonBreath: 9, spells: 9 },
+  { level: 17, deathRay: 4, magicWands: 4, paralysisPetrify: 5, dragonBreath: 9, spells: 9 },
+  { level: 18, deathRay: 3, magicWands: 3, paralysisPetrify: 4, dragonBreath: 8, spells: 8 },
+  { level: 19, deathRay: 3, magicWands: 3, paralysisPetrify: 4, dragonBreath: 8, spells: 8 },
+  { level: 20, deathRay: 2, magicWands: 2, paralysisPetrify: 3, dragonBreath: 7, spells: 7 },
+  // Add more levels as needed
+];
+
 
 //Cleric
-
 clericTable = [
-{ level: 1, expPoints: 0, hitDice: '1d6', spells: [0, 0, 0, 0, 0, 0] },
-{ level: 2, expPoints: 1500, hitDice: '2d6', spells: [1, 0, 0, 0, 0, 0] },
-{ level: 3, expPoints: 3000, hitDice: '3d6', spells: [2, 0, 0, 0, 0, 0] },
-{ level: 4, expPoints: 6000, hitDice: '4d6', spells: [2, 1, 0, 0, 0, 0] },
-{ level: 5, expPoints: 12000, hitDice: '5d6', spells: [2, 2, 0, 0, 0, 0] },
-{ level: 6, expPoints: 24000, hitDice: '6d6', spells: [2, 2, 1, 0, 0, 0] },
-{ level: 7, expPoints: 48000, hitDice: '7d6', spells: [3, 2, 2, 0, 0, 0] },
-{ level: 8, expPoints: 90000, hitDice: '8d6', spells: [3, 2, 2, 1, 0, 0] },
-{ level: 9, expPoints: 180000, hitDice: '9d6', spells: [3, 3, 2, 2, 0, 0] },
-{ level: 10, expPoints: 270000, hitDice: '9d6+1', spells: [3, 3, 2, 2, 1, 0] },
-{ level: 11, expPoints: 360000, hitDice: '9d6+2', spells: [4, 3, 3, 2, 2, 0] },
-{ level: 12, expPoints: 450000, hitDice: '9d6+3', spells: [4, 4, 3, 2, 2, 1] },
-{ level: 13, expPoints: 540000, hitDice: '9d6+4', spells: [4, 4, 3, 3, 2, 2] },
-{ level: 14, expPoints: 630000, hitDice: '9d6+5', spells: [4, 4, 4, 3, 2, 2] },
-{ level: 15, expPoints: 720000, hitDice: '9d6+6', spells: [4, 4, 4, 3, 3, 2] },
-{ level: 16, expPoints: 810000, hitDice: '9d6+7', spells: [5, 4, 4, 3, 3, 2] },
-{ level: 17, expPoints: 900000, hitDice: '9d6+8', spells: [5, 5, 4, 3, 3, 2] },
-{ level: 18, expPoints: 990000, hitDice: '9d6+9', spells: [5, 5, 4, 4, 3, 3] },
-{ level: 19, expPoints: 1080000, hitDice: '9d6+10', spells: [6, 5, 4, 4, 3, 3] },
-{ level: 20, expPoints: 1170000, hitDice: '9d6+11', spells: [6, 5, 5, 4, 3, 3] },
+{ level: 1, expPoints: 0, hitDice: '1d6', spells: [0, 0, 0, 0, 0, 0] , attackBonus: 1},
+{ level: 2, expPoints: 1500, hitDice: '2d6', spells: [1, 0, 0, 0, 0, 0] , attackBonus: 1},
+{ level: 3, expPoints: 3000, hitDice: '3d6', spells: [2, 0, 0, 0, 0, 0] , attackBonus: 2},
+{ level: 4, expPoints: 6000, hitDice: '4d6', spells: [2, 1, 0, 0, 0, 0] , attackBonus: 2},
+{ level: 5, expPoints: 12000, hitDice: '5d6', spells: [2, 2, 0, 0, 0, 0] , attackBonus: 3},
+{ level: 6, expPoints: 24000, hitDice: '6d6', spells: [2, 2, 1, 0, 0, 0] , attackBonus: 3},
+{ level: 7, expPoints: 48000, hitDice: '7d6', spells: [3, 2, 2, 0, 0, 0] , attackBonus: 4},
+{ level: 8, expPoints: 90000, hitDice: '8d6', spells: [3, 2, 2, 1, 0, 0] , attackBonus: 4},
+{ level: 9, expPoints: 180000, hitDice: '9d6', spells: [3, 3, 2, 2, 0, 0] , attackBonus: 5},
+{ level: 10, expPoints: 270000, hitDice: '9d6+1', spells: [3, 3, 2, 2, 1, 0] , attackBonus: 5},
+{ level: 11, expPoints: 360000, hitDice: '9d6+2', spells: [4, 3, 3, 2, 2, 0] , attackBonus: 5},
+{ level: 12, expPoints: 450000, hitDice: '9d6+3', spells: [4, 4, 3, 2, 2, 1] , attackBonus: 6},
+{ level: 13, expPoints: 540000, hitDice: '9d6+4', spells: [4, 4, 3, 3, 2, 2] , attackBonus: 6},
+{ level: 14, expPoints: 630000, hitDice: '9d6+5', spells: [4, 4, 4, 3, 2, 2] , attackBonus: 6},
+{ level: 15, expPoints: 720000, hitDice: '9d6+6', spells: [4, 4, 4, 3, 3, 2] , attackBonus: 7},
+{ level: 16, expPoints: 810000, hitDice: '9d6+7', spells: [5, 4, 4, 3, 3, 2] , attackBonus: 7},
+{ level: 17, expPoints: 900000, hitDice: '9d6+8', spells: [5, 5, 4, 3, 3, 2] , attackBonus: 7},
+{ level: 18, expPoints: 990000, hitDice: '9d6+9', spells: [5, 5, 4, 4, 3, 3] , attackBonus: 8},
+{ level: 19, expPoints: 1080000, hitDice: '9d6+10', spells: [6, 5, 4, 4, 3, 3] , attackBonus: 8},
+{ level: 20, expPoints: 1170000, hitDice: '9d6+11', spells: [6, 5, 5, 4, 3, 3] , attackBonus: 8},
 ];
-
 
 //Cleric Turn Undead
 clericsVsUndeadTable = [
@@ -168,6 +245,31 @@ clericsVsUndeadTable = [
 { level: 18, Skeleton: 'Damaged', Zombie: 'Damaged', Ghoul: 'Damaged', Wight: 'Damaged', Wraith: 'Automatic', Mummy: 'Automatic', Spectre: 3, Vampire: 7, Ghost: 11 },
 { level: 19, Skeleton: 'Damaged', Zombie: 'Damaged', Ghoul: 'Damaged', Wight: 'Damaged', Wraith: 'Damaged', Mummy: 'Automatic', Spectre: 2, Vampire: 5, Ghost: 9 },
 { level: 20, Skeleton: 'Damaged', Zombie: 'Damaged', Ghoul: 'Damaged', Wight: 'Damaged', Wraith: 'Damaged', Mummy: 'Automatic', Spectre: 'Automatic', Vampire: 3, Ghost: 7 },
+];
+
+//Cleric Saving Throwns
+clericSavingThrowTable = [
+  { level: 1, deathRay: 11, magicWands: 12, paralysisPetrify: 14, dragonBreath: 16, spells: 15 },
+  { level: 2, deathRay: 10, magicWands: 11, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
+  { level: 3, deathRay: 9, magicWands: 10, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
+  { level: 4, deathRay: 9, magicWands: 10, paralysisPetrify: 12, dragonBreath: 14, spells: 13 },
+  { level: 5, deathRay: 8, magicWands: 9, paralysisPetrify: 12, dragonBreath: 14, spells: 13 },
+  { level: 6, deathRay: 8, magicWands: 9, paralysisPetrify: 11, dragonBreath: 13, spells: 12 },
+  { level: 7, deathRay: 7, magicWands: 8, paralysisPetrify: 11, dragonBreath: 13, spells: 12 },
+  { level: 8, deathRay: 7, magicWands: 8, paralysisPetrify: 10, dragonBreath: 12, spells: 11 },
+  { level: 9, deathRay: 6, magicWands: 7, paralysisPetrify: 10, dragonBreath: 12, spells: 11 },
+  { level: 10, deathRay: 6, magicWands: 7, paralysisPetrify: 9, dragonBreath: 11, spells: 10 },
+  { level: 11, deathRay: 5, magicWands: 6, paralysisPetrify: 9, dragonBreath: 11, spells: 10 },
+  { level: 12, deathRay: 5, magicWands: 6, paralysisPetrify: 8, dragonBreath: 10, spells: 9 },
+  { level: 13, deathRay: 4, magicWands: 5, paralysisPetrify: 8, dragonBreath: 10, spells: 9 },
+  { level: 14, deathRay: 4, magicWands: 5, paralysisPetrify: 7, dragonBreath: 9, spells: 8 },
+  { level: 15, deathRay: 3, magicWands: 4, paralysisPetrify: 7, dragonBreath: 9, spells: 8 },
+  { level: 16, deathRay: 3, magicWands: 4, paralysisPetrify: 6, dragonBreath: 8, spells: 7 },
+  { level: 17, deathRay: 2, magicWands: 3, paralysisPetrify: 6, dragonBreath: 8, spells: 7 },
+  { level: 18, deathRay: 2, magicWands: 3, paralysisPetrify: 5, dragonBreath: 7, spells: 6 },
+  { level: 19, deathRay: 1, magicWands: 2, paralysisPetrify: 5, dragonBreath: 7, spells: 6 },
+  { level: 20, deathRay: 1, magicWands: 2, paralysisPetrify: 4, dragonBreath: 6, spells: 5 },
+  // Add more levels as needed
 ];
 
 // Ranger
@@ -298,6 +400,8 @@ this.getHitPoints(this.class, this.level);
 this.getMagic(this.class, this.level);
 this.getCharacterSkills(this.class, this.level);
 this.getInventory(this.class, this.occupation, this.name);
+this.getSavingThrows(this.class,this.level);
+this.getAttackBonus(this.class,this.level);
 
 }
 
@@ -368,6 +472,81 @@ mapSkills(skillTable, level, skillNames) {
   return skills;
 }
 
+getSavingThrows(characterClass, characterLevel) {
+  let skillTable;
+  let level = parseInt(characterLevel, 10);
+  let savingThrows = {};
+
+  switch (characterClass) {
+      case 'Fighter':
+      skillTable = this.fighterSavingThrowTable;
+      
+      break;
+      case 'Ranger':
+      skillTable = this.fighterSavingThrowTable;
+      
+      break;
+      case 'Thief':
+      skillTable = this.thiefSavingThrowTable;
+      
+      break;
+      case 'Assassin':
+      skillTable = this.thiefSavingThrowTable;
+      
+      break;
+      case 'Cleric':
+      skillTable = this.clericSavingThrowTable;
+      
+      break;
+      case 'Magic User':
+      skillTable = this.magicUserSavingThrowTable;
+      
+      break;
+      default:
+      return null;
+  }
+
+  savingThrows = this.mapSkills(skillTable, level, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
+  this.savingThrows = savingThrows;
+}
+
+getAttackBonus(characterClass, characterLevel){
+
+let Table;
+let level = parseInt(characterLevel, 10);
+
+switch (characterClass) {
+  case 'Fighter':
+    Table = this.fighterTable;
+    
+    break;
+    case 'Ranger':
+    Table = this.fighterTable;
+    
+    break;
+    case 'Thief':
+    Table = this.thiefTable;
+    
+    break;
+    case 'Assassin':
+    Table = this.thiefTable;
+    
+    break;
+    case 'Cleric':
+    Table = this.clericTable;
+    
+    break;
+    case 'Magic User':
+    Table = this.magicUserTable;
+    break;
+  
+    default:
+    return null;
+}
+
+  let tableReturn = this.mapSkills(Table, level, ['attackBonus']);
+  this.attackBonus = tableReturn.attackBonus;
+}
 
 getMagic(characterClass, characterLevel) {
 let classTable;
@@ -403,6 +582,7 @@ levelSpells.splice(randomIndex, 1);
 // Check for End of Loop
 if (levelCheck < chosenSpell.Level) {
 this.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
+//Bug here if Character is over level 15?
 levelCheck = chosenSpell.Level;
 }
 

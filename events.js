@@ -532,6 +532,7 @@ loadEventsList: function(data, destination) {
       this.searchArray = [event]; // Assign an array with a single element
       this.addEventInfo(event);
       Ref.extraInfo2.classList.add('showExtraInfo');
+      this.addEventInfo(eventNameDiv.id, Ref.extraInfo2);
       });
 
   }
