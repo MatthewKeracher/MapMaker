@@ -105,6 +105,25 @@ cursor: pointer; /* Show pointer cursor on hover */
 width: 5px; /* Set the width of the scrollbar */
 }
 
+/* Add styles for the floating box */
+.floating-box {
+    background-color: #0e0d0d; /* Background color */
+    border: 1px solid #ccc; /* Border color */
+    padding: 10px; /* Padding inside the box */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle lift effect */
+    max-width: 30vw; /* Maximum width of the box */
+    z-index: 1000; /* Ensure it appears above other elements */
+
+    color: bisque;
+    line-height: 1.5; 
+    font-family: monospace, 'Trebuchet MS', sans-serif;
+    font-size: 1.9vh; 
+
+  }
+  
+  
+  
+
 .spacer {
 height: 20vh; /* Set the height you desire */
 }

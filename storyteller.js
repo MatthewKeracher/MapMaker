@@ -110,13 +110,11 @@ getQuotes(locationText) {
 addRulesInfo(contentId, target) {
  
   const rulesItem = this.rulesArray.find(rule => rule.name === contentId);
-
-  console.log('addingRulesInfo...' + contentId)
     
     if (rulesItem) { 
       const showRule = [ 
         
-      `<br><h3><span class="misc">${rulesItem.name}</span></h3>
+      `<h3><span class="misc">${rulesItem.name}</span></h3>
       <span class="withbreak">${rulesItem.body}</span>`]
   
       target.innerHTML = showRule;
@@ -195,7 +193,6 @@ addLocationItems(locationObject){
     return locationItems;
 },
 
-
 getMisc(locationText, comboArray) {
   const squareBrackets = /\[([^\]]+)\]\{([^}]+)\}/g;
 
@@ -257,8 +254,7 @@ this.showExtraExpandable(Ref.extraInfo2);
 
 });
 
-Ref.extraInfoContainer.addEventListener('mouseleave', () => {
-//Ref.extraInfo.classList.remove('showExtraInfo');
+Ref.extraInfo.addEventListener('mouseenter', () => {
 Ref.extraInfo2.classList.remove('showExtraInfo');
 
 });
@@ -300,6 +296,7 @@ showExtraExpandable(target) {
       }        
 
       target.classList.add('showExtraInfo');
+      this.showFloatingExpandable();
       
     });   
 
@@ -307,9 +304,8 @@ showExtraExpandable(target) {
 
 },
 
-showFloatingExpandable(target) {
- 
-  const expandableElements = Ref.extraInfo.querySelectorAll('.expandable');
+showFloatingExpandable() {
+  const expandableElements = Ref.extraInfo2.querySelectorAll('.expandable');
   
   expandableElements.forEach(element => {
     
@@ -317,36 +313,54 @@ showFloatingExpandable(target) {
       
       const contentType = event.target.getAttribute('data-content-type');
       const contentId = event.target.getAttribute('divId');
+
+      // Create a floating box div
+      const floatingBox = document.createElement('div');
+      floatingBox.classList.add('floating-box');
+      floatingBox.divId = "floatingBox"
+      
+      // Position the floating box next to the target element
+      const rect = event.target.getBoundingClientRect();
+      floatingBox.style.position = 'absolute';
+      floatingBox.style.zIndex = 100;
+      floatingBox.style.top = rect.bottom + 'px'; // Adjust the top position as needed
+      floatingBox.style.left = rect.left + 'px';
+
+      // Append the floating box to the document body
+      document.body.appendChild(floatingBox);
+
+      // Remove the floating box when leaving the element
+      element.addEventListener('mouseleave', () => {
+        document.body.removeChild(floatingBox);
+      });
      
       switch (contentType) {
         case 'npc':
-        NPCs.addNPCInfo(contentId, target); // Handle NPCs
+        NPCs.addNPCInfo(contentId, floatingBox); // Handle NPCs
         break;
         case 'monster':
-        Monsters.addMonsterInfo(contentId, target); // Handle Monsters
+        Monsters.addMonsterInfo(contentId, floatingBox); // Handle Monsters
         break;
         case 'item':
-        Items.addIteminfo(contentId, target); // Handle Items
+        Items.addIteminfo(contentId, floatingBox); // Handle Items
         break;
         case 'spell':
-        Spells.addSpellInfo(contentId, target); // Handle Spells
+        Spells.addSpellInfo(contentId, floatingBox); // Handle Spells
         break;
         case 'misc':
-        this.addMiscInfo(contentId, target); //Handle Misc
+        this.addMiscInfo(contentId, floatingBox); //Handle Misc
         break;
         case 'rule':
-        this.addRulesInfo(contentId, target); //Handle Rule
+        this.addRulesInfo(contentId, floatingBox); //Handle Rule
         break;
         default:
         console.log('Unknown content type');
-      }        
+      }  
 
-      target.classList.add('showExtraInfo');
-      
-    });   
+      //floatingBox.innerHTML = content; // Set the content of the box
 
+    });
   });
-
 },
 
 
@@ -533,10 +547,10 @@ Also, the number of retainers a character may hire, and the loyalty of those ret
 name: 'Money',
 body: `Monetary values are usually expressed in gold pieces. In addition to gold coins, there are coins made of platinum, silver, electrum (an alloy of gold and silver), and copper. They are valued as follows:
 
-1 platinum piece (pp) = 5 gold pieces (gp)
+<span class = "hotpink">1 platinum piece (pp) = 5 gold pieces (gp)
 1 gold piece (gp) = 10 silver pieces (sp)
 1 electrum piece (ep) = 5 silver pieces (sp)
-1 silver piece (sp) = 10 copper pieces (cp)
+1 silver piece (sp) = 10 copper pieces (cp) </span>
 
 For game purposes, assume that one gold piece weighs 1/20th of a pound, and that ten coins will "fit" in a cubic inch of storage space (this isn't literally accurate, but works well enough when applied to a box or chest).
 
