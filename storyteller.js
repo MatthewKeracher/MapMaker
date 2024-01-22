@@ -16,19 +16,16 @@ async changeContent(locationDiv) {
 
 let Story = ``
 
-const locationName = locationDiv.id;
-const locationObject = Array.locationArray.find(entry => entry.divId === locationName);
+const locName = locationDiv.id;
+const locObj = Array.locationArray.find(entry => entry.divId === locName);
 
-Ref.locationLabel.textContent = locationName;
-Ref.editLocationName.value   = locationName;
+Ref.locationLabel.textContent = locName;
+Ref.editLocationName.value   = locName;
 
-//console.log('Tags : ' + locationObject.tags)
+if (locObj) {
+Events.getEvent(locName, locObj.tags);
 
-if (locationObject) {
-//name the returned locationObject data 
-Events.getEvent(locationName, locationObject.tags);
-
-const locationItems = this.addLocationItems(locationObject);
+const locationItems = this.addLocationItems(locObj);
 
 let previousTag = '';
 let previousType = '';
@@ -44,30 +41,29 @@ let previousType = '';
   return `${tagToDisplay}${typetoDisplay}#${item.Name}#`;
   });
 
-const locationItemsFormatted = `[${locationName} Items List]{<hr>${locationItemsTagged.join('<br>')}}`;
+const locationItemsFormatted = `[${locName} Items List]{<hr>${locationItemsTagged.join('<br>')}}`;
 
-const locationText = '<br>' + Events.eventDesc + '<br><br>' + locationItemsFormatted + '<br><br>' + locationObject.description;
+const locationText = '<br>' + locObj.description + '<br><br>' +  locationItemsFormatted + '<br><br>' +   Events.eventDesc ;
 
+//Feed locationText through filters too generate hypertext elements. 
 this.miscArray = [];
 this.monsterArray = [];
+
 const squareCurly = this.getMisc(locationText, this.miscArray);
+const withMonsters = await Monsters.getMonsters(squareCurly);
+const withSpells = await Spells.getSpells(withMonsters);
+const withItems = await Items.getItems(withSpells);
 
-
-const formattedMonsters = await Monsters.getMonsters(squareCurly);
-const formattedSpells = await Spells.getSpells(formattedMonsters);
-const formattedLocation = await Items.getItems(formattedSpells);
-//console.log(presentMonsters)
-
-
-
-const location = Ref.locationLabel.textContent;
-const presentNPCs = NPCs.getNPCs(location, Events.phase);
-
-
+const finalStory = withItems;
 
 Story += `
-<span class="withbreak">${formattedLocation}</span>
+<span class="withbreak">${finalStory}</span>
 `;
+
+//---
+
+//Generate NPC Divs
+const presentNPCs = NPCs.getNPCs(locName);
 
 if (presentNPCs.length === 0) {
 Story += `<br> There is nobody around.`;
@@ -77,23 +73,24 @@ const npcStory = npcWithStory.story;
 Story += `<span class="withbreak">${npcStory}</span>`;
 }
 }
+//---
 
-//Apply formattedStory to Storyteller
+//Finish Up.
 Ref.Storyteller.innerHTML = Story;
 
 //Update Editor Content
-Ref.textLocation.value = locationObject.description;
-//console.log(locationObject.tags)
-Ref.editLocationTags.value = locationObject.tags;
+Ref.textLocation.value = locObj.description;
+Ref.editLocationTags.value = locObj.tags;
 
-if(Edit.editPage === 2){
-  Events.loadEventsList(Events.eventsArray);
-}else if (Edit.editPage === 3){
-  NPCs.loadNPC(NPCs.npcArray)
-}
+  if(Edit.editPage === 2){
+    Events.loadEventsList(Events.eventsArray);
+  }else if (Edit.editPage === 3){
+    NPCs.loadNPC(NPCs.npcArray)
+  }
 
+//Tell expandable Divs what to show.
 this.showExpandable(Ref.Storyteller, Ref.extraContent);
-
+//---
 
 };
 }, 

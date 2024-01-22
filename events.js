@@ -102,32 +102,35 @@ this.loadEventsList(this.eventsArray)
 })
 
 Ref.eventLocation.addEventListener('click', () => {
-this.loadLocationsList(Array.locationArray);
+const subLocations = this.eventsArray.filter(Event => Event.target === "Location");
+const allLocations = [...Array.locationArray, ...subLocations]
+
+this.loadLocationsList(allLocations);
 })
 
 Ref.eventLocation.addEventListener('input', (event) => {
-  let searchText = event.target.value.toLowerCase();
+const subLocations = this.eventsArray.filter(Event => Event.target === "Location");
+const allLocations = [...Array.locationArray, ...subLocations]
 
+let searchText = event.target.value.toLowerCase();
 
-  if (searchText.trim() === '') {
-      // Input box is empty, handle accordingly
-      console.log('Input box is empty');
-      // Additional logic for empty input, if needed
-      this.loadLocationsList(Array.locationArray);
-  } else if (!/^[a-zA-Z]+$/.test(searchText)) {
-      // Input box contains letters, handle accordingly
-      console.log('Input box contains letters');
-      // Additional logic for input with letters, if needed
-      let searchText = event.target.value.toLowerCase();
-      this.searchLocations(searchText);
-      console.log(this.searchArray);
-      this.loadLocationsList(this.searchArray);
-  } else {
-      // Input box has valid content, proceed with the search
-      this.searchLocations(searchText);
-      console.log(this.searchArray);
-      this.loadLocationsList(this.searchArray);
-  }
+if (searchText.trim() === '') {
+
+this.loadLocationsList(allLocations);
+
+} else if (!/^[a-zA-Z]+$/.test(searchText)) {
+// Turn into lower case for search.
+let searchText = event.target.value.toLowerCase();
+
+this.searchLocations(searchText);
+this.loadLocationsList(this.searchArray);
+
+} else {
+// Input box has valid content, proceed with the search.
+this.searchLocations(searchText);
+this.loadLocationsList(this.searchArray);
+}
+
 });
 
 Ref.eventNPC.addEventListener('click', () => {
@@ -193,9 +196,10 @@ return group.includes(searchText) || event.includes(searchText) || npc.includes(
 
 searchLocations: function(searchText) {
   this.searchArray = [];
-  console.log('Searching for Locations including: ' + searchText);
+  //console.log('Searching for Locations including: ' + searchText);
 
-  this.searchArray = Array.locationArray.filter((location) => {
+  const searchArray1 = Array.locationArray.filter((location) => {
+    
     const name = location.divId.toLowerCase();
     const tags = location.tags.toLowerCase(); // Assuming tags is a comma-separated list
 
@@ -203,8 +207,23 @@ searchLocations: function(searchText) {
     const lastTerm = searchText.split(',').map(term => term.trim()).pop();
 
     // Check if the name or any tag contains the last term in the search text
-    return name.includes(lastTerm) || tags.split(',').map(tag => tag.trim()).includes(lastTerm);
+    return name.includes(lastTerm) || tags.includes(lastTerm) || tags.split(',').map(tag => tag.trim()).includes(lastTerm);
   });
+
+  const searchArray2 = Events.eventsArray.filter((event) => {
+    
+    const name = event.event.toLowerCase();
+    const location = event.location.toLowerCase(); // Assuming tags is a comma-separated list
+
+    // Get the last term in the search text (or use the entire text if there is no comma)
+    const lastTerm = searchText.split(',').map(term => term.trim()).pop();
+
+    // Check if the name or any tag contains the last term in the search text
+    return name.includes(lastTerm) || location.includes(lastTerm) || location.split(',').map(location => location.trim()).includes(lastTerm);
+  });
+
+  this.searchArray = [...searchArray1, ...searchArray2]
+
 },
 
 
@@ -543,72 +562,120 @@ loadEventsList: function(data, destination) {
 
 loadLocationsList: function(data) {
 const itemList = document.getElementById('itemList'); // Do not delete!!
-//console.log(data)
-
-// Clear the existing content
 itemList.innerHTML = '';
 
 const AllDiv = document.createElement('div');
 AllDiv.innerHTML = "<span class= cyan>All</span>";
+AllDiv.setAttribute('divId', 'All');
+AllDiv.setAttribute('location', 'All');
 itemList.appendChild(AllDiv);
 
-// const HomeDiv = document.createElement('div');
-// HomeDiv.innerHTML = "<span class= hotpink>Home</span>";
-// itemList.appendChild(HomeDiv);
-
-// Iterate through the sorted events
+//Loop through Data and make NameDivs
 for (const location of data) {
-const locationNameDiv = document.createElement('div');
-locationNameDiv.innerHTML = `<span class="${location.tags !== undefined ? 'cyan' : ''}">${location.tags !== undefined ? `[${location.tags}]` : ''}</span> ${location.divId}`;
-itemList.appendChild(locationNameDiv);
-locationNameDiv.addEventListener('click', () => {
-Ref.eventLocation.value = location.divId
+
+  const locNameDiv = document.createElement('div');
+
+if(location.divId){
+  locNameDiv.innerHTML = `<span class="${location.tags !== undefined ? 'cyan' : ''}"><hr>${location.tags !== undefined ? `[${location.tags}]` : ''}
+  </span> <span class="hotpink">${location.divId}</span>`;
+  locNameDiv.setAttribute('divId', location.divId);
+  locNameDiv.setAttribute('location', location.divId);
+  itemList.appendChild(locNameDiv);
+  
+} else if(location.target === "Location") {
+  locNameDiv.innerHTML = `<span class="${location.location !== undefined ? 'cyan' : ''}">${location.location === 'All' ? `[${location.location}]` : ''}
+  </span><span class="misc">${location.event} </span>`;
+  locNameDiv.setAttribute('divId', location.event);
+  locNameDiv.setAttribute('location', location.location);
+  itemList.appendChild(locNameDiv);
+}
+
+//Add CLICK Event to each NameDiv
+locNameDiv.addEventListener('click', () => {
+  const divId = locNameDiv.getAttribute('divId');
+  Ref.eventLocation.value = divId;
 });
 }
+
+// Convert HTMLCollection to an array
+const divArray = [...itemList.children];
+
+// Sort the array based on divId
+divArray.sort((a, b) => {
+  const divIdA = a.getAttribute('location');
+  const divIdB = b.getAttribute('location');
+
+  return divIdA.localeCompare(divIdB);
+});
+
+// Clear the itemList before appending sorted divs
+itemList.innerHTML = '';
+
+// Append the sorted divs to the itemList
+divArray.forEach(div => {
+  itemList.appendChild(div);
+});
+
+
 },
 
 async getEvent(currentLocation, tags) {
-// Filter ambienceArray based on selected values
-//console.log(Ref.eventManagerInput.value);
-//console.log(tags)
-
 const activeEvents = [];
+const subLocations = this.eventsArray.filter(entry => entry.location === currentLocation)
 
+//Search for events active by 'All', Location Name, or by Tag
 for (const entry of this.eventsArray) {
-  if (
+if (
     entry.active === 1 && 
-    entry.target === 'Location' &&
-    (entry.location === "All" || 
-    (
-      entry.location.split(',').map(locItem => locItem.trim()).some(locItem => 
-        locItem === currentLocation
-      )
-    ) ||
-      (
-        tags.split(',').map(item => item.trim()).some(tag => 
-          entry.location.split(',').map(locItem => locItem.trim()).includes(tag)
-        )
-      )
-    )
-  ) {
-    activeEvents.push(entry);
-  }
+  (
+    (entry.location === "All") || 
+    (entry.location.split(',').map(locItem => locItem.trim()).some(locItem => locItem === currentLocation)) ||
+    (subLocations.some(subLoc => subLoc.event === entry.location)) ||
+    (tags.split(',').map(item => item.trim()).some(tag => entry.location.split(',').map(locItem => locItem.trim()).includes(tag)))
+  )
+  ){activeEvents.push(entry);}
 }
 
+//Seperate activeEvents by Target (NPC||Location)
+const npcEvents      = activeEvents.filter(entry => entry.target === 'NPC');
+const locationEvents = activeEvents.filter(entry => entry.target === 'Location');
 
+locationEvents.sort((a, b) => {
+  // Compare item.Tag first
+  if (a.event > b.event) return 1;
+  if (a.event < b.event) return -1;
+});
 
-//console.log(activeEvents);
+// Create an array of matching NPC events for each Location event
+const matchedEvents = locationEvents.map(locEvent => {
+  const matchedNPCs = npcEvents.filter(npcEvent => npcEvent.location === locEvent.event);
+  return {
+    location: locEvent,
+    npc: matchedNPCs,
+  };
+});
 
-// Concatenate descriptions from active events into eventDesc
-this.eventDesc = activeEvents.map(entry => {
-let description = `${entry.description}`;
-return description;
-}).join('<br><br>');
+// Concatenate location description and NPC event descriptions
+this.eventDesc = matchedEvents.map(entry => {
+  let locDesc = `${entry.location.description}`;
+  let npcDesc = '';
 
-//console.log(this.eventDesc);
+      //Generate NPC Divs
+      const presentNPCs = NPCs.getNPCs(entry.location.event, currentLocation);
+      
+      if (presentNPCs.length === 0) {
+        npcDesc += `<br>There is nobody around. <br>`;
+      } else {
+      for (const npcWithStory of presentNPCs) {
+      const npcStory = npcWithStory.story;
+        npcDesc += `<span class="withbreak">${npcStory}</span>`;
+      }
+      }
 
-// Now you have a formatted eventDesc containing all descriptions of active events with the specified title.
-// You can use it as needed.
+        locDesc += npcDesc;
+  
+  return locDesc;
+}).join('<br>');
 },
 
 addCurrentEventEvents(event, eventNameDiv){

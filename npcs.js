@@ -262,14 +262,14 @@ Array.generateLocationOptions();
 
 },
 
-getNPCs(locationName) {
-  const presentNPCsSet = new Set();
+getNPCs(subLocation, Location) {
+const presentNPCsSet = new Set();
 
-  for (const npc of NPCs.npcArray) {
-    for (const event of Events.eventsArray) {
+for (const npc of NPCs.npcArray) {
+for (const event of Events.eventsArray) {
 
-      const eventNpcList = event.npc.split(',').map(item => item.trim());
-      const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+const eventNpcList = event.npc.split(',').map(item => item.trim());
+const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
 
 const npcNameMatches = npc.name === event.npc;
 const npcInEventList = eventNpcList.includes(npc.name);
@@ -277,19 +277,19 @@ const eventInOccupationList = npcOccupationList.includes(event.npc);
 const commonElementExists = npc.occupation && event.npc && eventNpcList.some(tag => npcOccupationList.includes(tag));
 
 if ((npcNameMatches || npcInEventList || eventInOccupationList || commonElementExists) &&
-    event.active === 1 &&
-    event.target === 'NPC' &&
-    event.location === locationName) {
-    const npcStory = this.generateNPCStory(npc, locationName);
-    presentNPCsSet.add(JSON.stringify({ name: npc.name, story: npcStory }));
+event.active === 1 &&
+event.target === 'NPC' &&
+event.location === subLocation) {
+const npcStory = this.generateNPCStory(npc, subLocation);
+presentNPCsSet.add(JSON.stringify({ name: npc.name, story: npcStory }));
 }
 
 }}
 
-  // Convert the set back to an array
-  const presentNPCs = [...presentNPCsSet].map(JSON.parse);
+// Convert the set back to an array
+const presentNPCs = [...presentNPCsSet].map(JSON.parse);
 
-  return presentNPCs;
+return presentNPCs;
 },
 
 generateNPCStory(npc, locationName) {
