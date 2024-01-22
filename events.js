@@ -664,7 +664,7 @@ this.eventDesc = matchedEvents.map(entry => {
       const presentNPCs = NPCs.getNPCs(entry.location.event, currentLocation);
       
       if (presentNPCs.length === 0) {
-        npcDesc += `<br>There is nobody around. <br>`;
+        npcDesc += `There is nobody around. <br>`;
       } else {
       for (const npcWithStory of presentNPCs) {
       const npcStory = npcWithStory.story;
@@ -675,7 +675,7 @@ this.eventDesc = matchedEvents.map(entry => {
         locDesc += npcDesc;
   
   return locDesc;
-}).join('<br>');
+}).join('');
 },
 
 addCurrentEventEvents(event, eventNameDiv){

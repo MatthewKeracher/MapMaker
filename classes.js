@@ -658,6 +658,8 @@ getInventory(characterClass, occupation, characterName) {
   );
   });
 
+  //If the tag is preceded by '?' there is only a chance they have the item, or only one of that type.
+
   // Format each item and add to this.inventory
 this.inventory = filteredItems.map(item => ({
   Name: item.Name,
@@ -671,10 +673,6 @@ this.inventory = filteredItems.map(item => ({
 // Sort the inventory alphabetically by item.Tag
 this.inventory.sort((a, b) => (a.Tag > b.Tag) ? 1 : -1);
 
-//console.log(this.inventory);
-
-  // Log the names of the items
-  //console.log(this.inventory.length !== 0 ? "Character Inventory:" + JSON.stringify(this.inventory) : '');
 }
 
 }

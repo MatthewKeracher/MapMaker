@@ -199,7 +199,7 @@ getMisc(locationText, comboArray) {
     const square = match[1];
     const curly = match[2];
 
-    const replacement = `<span class="expandable misc" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
+    const replacement = `<h3><span class="expandable misc" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span></h3>`;
 
     updatedText = updatedText.replace(match[0], replacement);
 

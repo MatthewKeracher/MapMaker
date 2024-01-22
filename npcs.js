@@ -293,7 +293,7 @@ return presentNPCs;
 },
 
 generateNPCStory(npc, locationName) {
-let story = `<br>`;
+let story = ``;
 
 //Search active events to see if any apply based on the location, or the individual. 
 
