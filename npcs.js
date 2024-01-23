@@ -95,52 +95,59 @@ Ref.extraInfo.classList.remove('showExtraInfo');
 },
 
 sortNPCs: function(npc, npcNameDiv) {
-  const currentLocation = Ref.locationLabel.textContent;
-  
-  // Array to track unique NPC names
-  const uniqueNames = [];
+const currentLocation = Ref.locationLabel.textContent;
 
-  // Filter eventsArray based on currentLocation
-const sortEvents = Events.eventsArray.filter(event => {
-  if (event.target === 'NPC' && event.active === 1) {
-    const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-    return locations.includes(currentLocation);
-  }
-  return false; // If event.target is not 'NPC', filter it out
+// Array to track unique NPC names
+const uniqueNames = [];
+
+//get subLocations
+const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
+
+subLocations.forEach(subLoc => {
+  console.log(subLoc.event.toString());
 });
 
-  // Check if npc.name matches event.npc for each event
-  sortEvents.forEach(event => {
-    if (npc.name === event.npc && !uniqueNames.includes(npc.name)) {
-      npcNameDiv.innerHTML = `<span class = "lime"> [${event.event}] </span>  <span class = "white"> ${npc.name} </span>` ;
-      this.namedNPCs.push(npcNameDiv);
+// Filter eventsArray based on currentLocation
+const sortEvents = Events.eventsArray.filter(event => {
+if (event.target === 'NPC' && event.active === 1) {
+const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
+return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.event));
+}
+return false; // If event.target is not 'NPC', filter it out
+});
 
-      // Add the name to the array to mark it as processed
-      uniqueNames.push(npc.name);
-    } else {
-      // Handle the case when npc.name doesn't match or it's already processed
-    }
-  });
+// Check if npc.name matches event.npc for each event
+sortEvents.forEach(event => {
+if (npc.name === event.npc && !uniqueNames.includes(npc.name)) {
+npcNameDiv.innerHTML = `<span class = "lime"> [${event.event}] </span>  <span class = "white"> ${npc.name} </span>` ;
+this.namedNPCs.push(npcNameDiv);
+
+// Add the name to the array to mark it as processed
+uniqueNames.push(npc.name);
+} else {
+// Handle the case when npc.name doesn't match or it's already processed
+}
+});
 
 // Check if npc.occupation matches event.npc for each event
 sortEvents.forEach(event => {
-  const occupations = npc.occupation ? npc.occupation.split(',').map(item => item.trim()) : [];
+const occupations = npc.occupation ? npc.occupation.split(',').map(item => item.trim()) : [];
 
-  if (occupations.includes(event.npc) && !uniqueNames.includes(npc.name)) {
-    npcNameDiv.innerHTML = `<span class = "misc"> [${event.event}] </span> <span class = "white"> ${npc.name} </span>` ;
-    this.groupedNPCs.push(npcNameDiv);
+if (occupations.includes(event.npc) && !uniqueNames.includes(npc.name)) {
+npcNameDiv.innerHTML = `<span class = "misc"> [${event.event}] </span> <span class = "white"> ${npc.name} </span>` ;
+this.groupedNPCs.push(npcNameDiv);
 
-    // Add the name to the array to mark it as processed
-    uniqueNames.push(npc.name);
-  } else {
-    // Handle the case when npc.occupation doesn't match or it's already processed
-  }
+// Add the name to the array to mark it as processed
+uniqueNames.push(npc.name);
+} else {
+// Handle the case when npc.occupation doesn't match or it's already processed
+}
 });
 
 // Check if npc is not included in namedNPCs, add with class npc-name to absentNPCs
 if (!uniqueNames.includes(npc.name)) {
-  npcNameDiv.innerHTML = ` ${npc.name}` ;
-  this.absentNPCs.push(npcNameDiv);
+npcNameDiv.innerHTML = ` ${npc.name}` ;
+this.absentNPCs.push(npcNameDiv);
 }
 
 },
@@ -327,18 +334,7 @@ if (presentNPCEvents.length > 0) {
   } else {relevantTag = npc.class} 
 }
 
-story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}">
-${npc.name} is here. </span> <br>`;
-
-  
-
-//console.log(locationEvents)
-//console.log(presentNPCEvents)
-
-// for (const event of locationEvents) {
-// story += `<span class = "misc"> ${event.description} </span> \n`;
-// }
-
+story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
 
 
 for (const event of presentNPCEvents) {
@@ -350,11 +346,12 @@ for (const event of presentNPCEvents) {
 
   if (sharedTag) {
     story += `<span class="hotpink">${sharedTag}. </span>`;
+  } else{
+    story += `<span class="hotpink">${event.group}. </span>`;
   }
 
-  story += `${event.description} \n`;
+  story += `${event.description}<br>`;
 }
-
 
 
 //console.log(story)

@@ -3,6 +3,7 @@ import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Storyteller from "./storyteller.js";
 import Array from "./array.js";
+import Items from "./items.js";
 
 const Events = {
 
@@ -619,9 +620,10 @@ divArray.forEach(div => {
 
 },
 
-async getEvent(currentLocation, tags) {
+async getEvent(currentLocation, locObj) {
 const activeEvents = [];
 const subLocations = this.eventsArray.filter(entry => entry.location === currentLocation)
+const tags = locObj.tags
 
 //Search for events active by 'All', Location Name, or by Tag
 for (const entry of this.eventsArray) {
@@ -641,10 +643,20 @@ const npcEvents      = activeEvents.filter(entry => entry.target === 'NPC');
 const locationEvents = activeEvents.filter(entry => entry.target === 'Location');
 
 locationEvents.sort((a, b) => {
-  // Compare item.Tag first
+  // If a's location is 'All', it should come first
+  if (a.location === 'All') return -1;
+  // If b's location is 'All', it should come first
+  if (b.location === 'All') return 1;
+  
+  // For other cases, compare based on the event property
   if (a.event > b.event) return 1;
   if (a.event < b.event) return -1;
+
+  return 0;
 });
+
+const allCount = locationEvents.filter(entry => entry.location === 'All').length;
+
 
 // Create an array of matching NPC events for each Location event
 const matchedEvents = locationEvents.map(locEvent => {
@@ -656,24 +668,65 @@ const matchedEvents = locationEvents.map(locEvent => {
 });
 
 // Concatenate location description and NPC event descriptions
-this.eventDesc = matchedEvents.map(entry => {
-  let locDesc = `${entry.location.description}`;
-  let npcDesc = '';
+this.eventDesc = matchedEvents.map((entry, index) => {
+let locDesc = '<br>';
+let npcDesc = '';
+let currentAll = index + 1;
 
-      //Generate NPC Divs
-      const presentNPCs = NPCs.getNPCs(entry.location.event, currentLocation);
-      
-      if (presentNPCs.length === 0) {
-        npcDesc += `There is nobody around. <br>`;
-      } else {
-      for (const npcWithStory of presentNPCs) {
-      const npcStory = npcWithStory.story;
-        npcDesc += `<span class="withbreak">${npcStory}</span>`;
-      }
-      }
+//Get Items for SubLocation
+const eventItems = this.addEventItems(entry.location.event);
+let previousTag = '';
+let previousType = '';
+let eventItemsFormatted = '';
 
-        locDesc += npcDesc;
+const eventItemsTagged = eventItems.map(item => {
+
+  const tagToDisplay = item.Tag !== previousTag ? `` : '';
+  previousTag = item.Tag;
+
+  const typetoDisplay = item.Type !== previousType ? `<br><span class = 'underline'>${item.Type}</span><br>` : '';
+  previousType = item.Type;
+
+  return `${tagToDisplay}${typetoDisplay}#${item.Name}#`;
+  });
+
+if(eventItemsTagged.length > 0){
+eventItemsFormatted = `<span class = "cyan"> | </span> [Items List]{<hr>${eventItemsTagged.join('<br>')}}`;
+}
+
+//---
+
+if (entry.location.location === 'All') {
+console.log(currentAll - allCount)
+  if (currentAll - allCount === 0 || allCount === 0) {
+    //If last 'All' event or if there are no 'All' events, enter location description.
+    locDesc = `<span class="all">${entry.location.description}</span> <br><br> ${locObj.description} <br><br><hr>`;
+  } else {
+    locDesc = `<span class="all">${entry.location.description}</span><br><br>`;
+  }} 
   
+  else if (entry.location !== 'All'){
+
+//Generate NPC Divs
+const presentNPCs = NPCs.getNPCs(entry.location.event, currentLocation);
+
+if (entry.npc.length === 0) {
+npcDesc += `<span class = "cyan">There is nobody around. </span><br>`;
+} else {
+for (const npcWithStory of presentNPCs) {
+const npcStory = npcWithStory.story;
+npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
+}
+}
+
+//Put together.
+locDesc = 
+`<h3> <span class = "hotpink"> ${entry.location.event} </span> ${eventItemsFormatted} </h3>            
+${npcDesc}  
+<span class = "beige"> ${entry.location.description} </span> <br><br><hr>`;
+        
+}
+
   return locDesc;
 }).join('');
 },
@@ -688,6 +741,52 @@ addCurrentEventEvents(event, eventNameDiv){
     Ref.extraInfo2.classList.add('showExtraInfo');
     });
   
+},
+
+addEventItems(event){
+
+  let locationItems = '';
+
+    // Filter itemsArray based on location Name and Tags
+    const filteredItems = Items.itemsArray.filter(item => {
+      const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
+      
+      // Check if the item matches the criteria
+      return (
+        (itemTags.includes(event))
+      );
+    });
+
+    // Format each item and add to this.inventory
+    locationItems = filteredItems.map(item => ({
+     Name: item.Name,
+     Type: item.Type,
+     Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
+        tag === event) : ''}));
+
+  // Sort the inventory alphabetically by item.Tag and then by item.Name
+  locationItems.sort((a, b) => {
+    // Compare item.Tag first
+    if (a.Tag > b.Tag) return 1;
+    if (a.Tag < b.Tag) return -1;
+
+    // If item.Tags are the same, compare item.Type
+    if (a.Type > b.Type) return 1;
+    if (a.Type < b.Type) return -1;
+
+    // If item.Type are the same, compare item.Name
+    if (a.Name > b.Name) return 1;
+    if (a.Name < b.Name) return -1;
+
+    return 0; // Both item.Tag and item.Name are equal
+
+});
+
+    // Log the names of the items
+    //console.log(locationItems)
+    //console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
+  
+    return locationItems;
 },
 
 

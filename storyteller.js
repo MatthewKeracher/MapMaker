@@ -23,33 +23,14 @@ Ref.locationLabel.textContent = locName;
 Ref.editLocationName.value   = locName;
 
 if (locObj) {
-Events.getEvent(locName, locObj.tags);
-
-const locationItems = this.addLocationItems(locObj);
-
-let previousTag = '';
-let previousType = '';
-
-  const locationItemsTagged = locationItems.map(item => {
-
-  const tagToDisplay = item.Tag !== previousTag ? `<br><span class = "hotpink">Items for ${item.Tag}</span><br>` : '';
-  previousTag = item.Tag;
-
-  const typetoDisplay = item.Type !== previousType ? `<br><span class = "underline">${item.Type}</span><br>` : '';
-  previousType = item.Type;
-
-  return `${tagToDisplay}${typetoDisplay}#${item.Name}#`;
-  });
-
-const locationItemsFormatted = `[${locName} Items List]{<hr>${locationItemsTagged.join('<br>')}}`;
-
-const locationText = '<br>' + locObj.description + '<br><br>' +  locationItemsFormatted + '<br><br>' +   Events.eventDesc ;
+Events.getEvent(locName, locObj);
 
 //Feed locationText through filters too generate hypertext elements. 
 this.miscArray = [];
 this.monsterArray = [];
-
-const squareCurly = this.getMisc(locationText, this.miscArray);
+//console.log(Events.eventDesc)
+const squareCurly = this.getMisc(Events.eventDesc, this.miscArray);
+//console.log(squareCurly)
 const withMonsters = await Monsters.getMonsters(squareCurly);
 const withSpells = await Spells.getSpells(withMonsters);
 const withItems = await Items.getItems(withSpells);
@@ -60,19 +41,6 @@ Story += `
 <span class="withbreak">${finalStory}</span>
 `;
 
-//---
-
-//Generate NPC Divs
-const presentNPCs = NPCs.getNPCs(locName);
-
-if (presentNPCs.length === 0) {
-Story += `<br> There is nobody around.`;
-} else {
-for (const npcWithStory of presentNPCs) {
-const npcStory = npcWithStory.story;
-Story += `<span class="withbreak">${npcStory}</span>`;
-}
-}
 //---
 
 //Finish Up.
@@ -199,12 +167,13 @@ getMisc(locationText, comboArray) {
     const square = match[1];
     const curly = match[2];
 
-    const replacement = `<h3><span class="expandable misc" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span></h3>`;
+    const replacement = `<span class="expandable misc" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
 
     updatedText = updatedText.replace(match[0], replacement);
 
     // Store the square curly combo in the provided array
     comboArray.push({ square, curly });
+  
   }
 
   return updatedText;

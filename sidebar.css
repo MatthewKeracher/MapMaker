@@ -121,7 +121,9 @@ width: 5px; /* Set the width of the scrollbar */
 
   }
   
-  
+  h3 {
+    margin-bottom: 0; /* Set margin-bottom to 0 or adjust as needed */
+  }
   
 
 .spacer {
@@ -190,6 +192,14 @@ color: whitesmoke
 
 .red{
 color: rgb(212, 21, 21)
+}
+
+.beige{
+  color: beige
+}
+
+.all{
+  color: rgb(108, 184, 238)
 }
 
 .underline{
