@@ -375,47 +375,34 @@ locationEventsArray: [],
 allEvents: [],
 elsewhere: [],
 
- sortEvents: function(data) {
-
-  // Search Array.locationArray to find the currentLocation
+sortEvents: function(data) {
   const locationObject = Array.locationArray.find(location => location.divId === Ref.locationLabel.textContent);
-  const subLocations = locationObject? Events.eventsArray.filter(event => event.target === "Location" && event.location === locationObject.divId) : [];
- 
-  // Partition the ambienceArray into different groups
+  const subLocations = locationObject ? Events.eventsArray.filter(event => event.target === "Location" && event.location === locationObject.divId) : [];
+
   this.locationEventsArray = [];
   this.allEvents = [];
   this.elsewhere = [];
 
- data.forEach(event => {
-    const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-    const locationTags = locationObject && locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
-    const currentLocation = locationObject? locationObject.divId : '';
-    //console.log(locationTags + ' :: ' + eventLocations)
-  
-    if (event.active === 1) {
-      if (eventLocations.includes(currentLocation)) {
-        this.locationEventsArray.push(event);
-      } else if (eventLocations.some(location => locationTags.includes(location)) || subLocations.some(subLoc => eventLocations.includes(subLoc.event))) {
-        this.locationEventsArray.push(event);
-      } else if (event.location === 'All'& event.active === 1){
-        this.allEvents.push(event);
+  data.forEach(event => {
+      const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
+      const locationTags = locationObject && locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
+      const currentLocation = locationObject ? locationObject.divId : '';
+
+      const isActive = event.active === 1;
+      const isInCurrentLocation = eventLocations.includes(currentLocation);
+      const isLocationTagMatch = locationTags.some(tag => eventLocations.includes(tag)) || subLocations.some(subLoc => eventLocations.includes(subLoc.event));
+
+      if ((isActive && isInCurrentLocation) || (isActive && isLocationTagMatch)) {
+          this.locationEventsArray.push(event);
+      } else if (!isActive && (isInCurrentLocation || isLocationTagMatch)) {
+          this.locationEventsArray.push(event);
+      } else if (event.location === 'All' && event.active === isActive) {
+          this.allEvents.push(event);
       } else {
-        this.elsewhere.push(event);
+          this.elsewhere.push(event);
       }
-    } else {
-      if (eventLocations.includes(currentLocation)) {
-        this.locationEventsArray.push(event);
-      } else if (eventLocations.some(location => locationTags.includes(location))) {
-        this.locationEventsArray.push(event);
-      } else if (event.location === 'All'& event.active === 0){
-        this.allEvents.push(event);
-      }else {
-        this.elsewhere.push(event);
-      }
-    } 
   });
-  
- },
+},
 
 loadEventsList: function(data, target, origin) {
 
@@ -424,44 +411,77 @@ loadEventsList: function(data, target, origin) {
   this.sortEvents(data);
 
   this.locationEventsArray = this.locationEventsArray.sort((a, b) => {
-    
-    if (a.event === b.location) return 1;
-    if (b.event !== a.location) return -1;
+    const extractNumber = str => {
+        // Extract the numeric part from the beginning of the string
+        const match = str.match(/^(\d+(\.\d+)?)/);
+        return match ? parseFloat(match[1]) : NaN;
+    };
 
-    return a.event.localeCompare(b.location);
-  });
-  
-  console.log(this.locationEventsArray);  
+    const getSortValue = element => {
+        // If the string starts with a number, return the numeric part; otherwise, return the string itself
+        return isNaN(extractNumber(element)) ? element : extractNumber(element);
+    };
 
-  this.elsewhere.sort((a, b) => a.group.localeCompare(b.group));
+    const aValue = getSortValue(a.event);
+    const bValue = getSortValue(b.event);
+
+    if (aValue === bValue) return 0;
+    return aValue < bValue ? -1 : 1;
+
+});
+
+    // Iterate over the locationEventsArray
+    for (let i = 0; i < this.locationEventsArray.length; i++) {
+    const currentEvent = this.locationEventsArray[i];
+
+    // Check if the current event has target 'NPC'
+    if (currentEvent.target === 'NPC') {
+    const npcEventIndex = this.locationEventsArray.findIndex(event =>
+    event.event === currentEvent.location
+    );
+
+    // Move the NPC event after the corresponding location event
+    if (npcEventIndex !== -1) {
+    // Remove the NPC event from its current position
+    const removedEvent = this.locationEventsArray.splice(i, 1)[0];
+    // Insert the NPC event after the corresponding location event
+    this.locationEventsArray.splice(npcEventIndex + 1, 0, removedEvent);
+    }
+
+}};
+
 
   for (const event of this.locationEventsArray) {
     const eventNameDiv = document.createElement('div');
-    eventNameDiv.innerHTML = `
+
+    if(event.target === 'NPC' && event.active === 1){
+      eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+    }
+    else if (event.target === 'Location' && event.active === 1 ){
+      eventNameDiv.innerHTML = `<span class="cyan">${event.event} </span>`;
+    }
+    else if (event.target === 'NPC'){
+      eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+    }
+    else{
+      eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
+    }
    
-    <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
-    
-    `;
-
-    // <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
-    //<span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
-    
-
     target.appendChild(eventNameDiv);
 
-    if(origin === 'eventsManager'){
-      this.addCurrentEventEvents(event, eventNameDiv);
-      }else{
-      this.fillEventForm(event, eventNameDiv);
-      }
+          if(origin === 'eventsManager'){
+          this.addCurrentEventEvents(event, eventNameDiv);
+          }else{
+          this.fillEventForm(event, eventNameDiv);
+          }
 
-      eventNameDiv.addEventListener('mouseover', () => {
-        //Ref.eventManagerInput.value = event.event;
-        this.focusEvent = event.event;
-        this.searchArray = [event]; // Assign an array with a single element
-        this.addEventInfo(event);
-        Ref.Left.classList.add('showLeft');
-        });
+          eventNameDiv.addEventListener('mouseover', () => {
+          //Ref.eventManagerInput.value = event.event;
+          this.focusEvent = event.event;
+          this.searchArray = [event]; // Assign an array with a single element
+          this.addEventInfo(event);
+          Ref.Left.classList.add('showLeft');
+          });
 
   }
 
@@ -469,22 +489,37 @@ loadEventsList: function(data, target, origin) {
   target.appendChild(document.createElement('hr'));
   }
 
+
+
   for (const event of this.allEvents) {
     
   const eventNameDiv = document.createElement('div');
 
-  const isAllLocationActive = event.location === 'All' && event.active === 1;
-  const npcOrLocation = event.target === 'NPC' ? event.npc : event.location;
+  if(event.target === 'NPC' && event.active === 1){
+    eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+  }
+  else if (event.target === 'Location' && event.active === 1 ){
+    eventNameDiv.innerHTML = `<span class="cyan">${event.event} </span>`;
+  }
+  else if (event.target === 'NPC'){
+    eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+  }
+  else{
+    eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
+  }
 
-  eventNameDiv.innerHTML = `
-  <span class="${isAllLocationActive ? 'spell' : 'gray'}">[${event.group}]</span>
-  <span class="${isAllLocationActive ? 'lime' : 'gray'}">${event.event}</span>
-  <span class="${isAllLocationActive ? 'white' : 'gray'}">
-  [${isAllLocationActive && event.npc !== 'All' ? 'All ' + npcOrLocation : npcOrLocation}]
-  </span>
+  // const isAllLocationActive = event.location === 'All' && event.active === 1;
+  // const npcOrLocation = event.target === 'NPC' ? event.npc : event.location;
+
+  // eventNameDiv.innerHTML = `
+  // <span class="${isAllLocationActive ? 'spell' : 'gray'}">[${event.group}]</span>
+  // <span class="${isAllLocationActive ? 'lime' : 'gray'}">${event.event}</span>
+  // <span class="${isAllLocationActive ? 'white' : 'gray'}">
+  // [${isAllLocationActive && event.npc !== 'All' ? 'All ' + npcOrLocation : npcOrLocation}]
+  // </span>
     
   
-  `;
+  // `;
 
     target.appendChild(eventNameDiv);
     
@@ -507,14 +542,29 @@ loadEventsList: function(data, target, origin) {
   target.appendChild(document.createElement('hr'));
   }
 
+  this.elsewhere.sort((a, b) => a.group.localeCompare(b.group));
+
   for (const event of this.elsewhere) {
     const eventNameDiv = document.createElement('div');
-    eventNameDiv.innerHTML = `
-    <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
-    <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
-    <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
+    // eventNameDiv.innerHTML = `
+    // // <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+    // // <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
+    // // <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
     
-    `;
+    // // `;
+
+    if(event.target === 'NPC' && event.active === 1){
+      eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+    }
+    else if (event.target === 'Location' && event.active === 1 ){
+      eventNameDiv.innerHTML = `<span class="cyan">${event.event} </span>`;
+    }
+    else if (event.target === 'NPC'){
+      eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+    }
+    else{
+      eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
+    }
 
     target.appendChild(eventNameDiv);
     
@@ -675,7 +725,7 @@ eventItemsFormatted = `<span class = "cyan"> | </span> [Items List]{<hr>${eventI
 //---
 
 if (entry.location.location === 'All') {
-console.log(currentAll - allCount)
+
   if (currentAll - allCount === 0 || allCount === 0) {
     //If last 'All' event or if there are no 'All' events, enter location description.
     locDesc = `<span class="all">${entry.location.description}</span> <br><br> ${locObj.description} <br><br><hr>`;
@@ -874,134 +924,6 @@ optionElement.text = option;
 dropdown.appendChild(optionElement);
 });
 },
-
-radiateDisplay(){
-
-const overlay = document.getElementById('radiantDisplay');
-const radianceDropdown = document.getElementById('radianceDropdown').value;
-
-if(radianceDropdown === 'exterior'){
-switch (this.phase) {
-case 0: // Morning
-switch (this.hour) {
-case 0: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-break;
-
-case 1: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.1";
-
-break;
-
-case 2: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-
-break;
-
-case 3: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.3";
-
-break;
-
-default:
-break;
-}
-break;
-
-case 1: // Afternoon
-switch (this.hour) {
-case 0: 
-
-overlay.style.backgroundColor = "gold"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-break;
-
-case 1: 
-
-overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-overlay.style.opacity = "0.1";
-
-break;
-
-case 2: 
-
-overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-overlay.style.opacity = "0.2";
-
-
-break;
-
-case 3: 
-
-overlay.style.backgroundColor = "skyblue"; /* Set your desired background color */
-overlay.style.opacity = "0.3";
-
-break;
-
-default:
-break;
-}
-break;
-
-case 2: // Night
-switch (this.hour) {
-case 0: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.4";
-
-break;
-
-case 1: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.5";
-
-break;
-
-case 2: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.6";
-
-
-break;
-
-case 3: 
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.7";
-
-break;
-
-default:
-break;
-}
-break;
-
-default:
-break;
-}
-}else{
-
-overlay.style.backgroundColor = "midnightblue"; /* Set your desired background color */
-overlay.style.opacity = "0.5";
-
-}
-
-
-}
 
 
 }

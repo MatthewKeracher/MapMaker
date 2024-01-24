@@ -109,10 +109,8 @@ const formattedItem = itemStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
-// Set the formatted content in the target element
-console.log(target)
 target.innerHTML = formattedItem;
-//target.style.display = "block";
+
 
 return formattedItem;
 
