@@ -7,6 +7,19 @@ height: 15vh;
 font-size: 2vh;
 }
 
+.idInput{
+height: 1vh;
+width: 3vw;
+margin: 1vh;
+font-size: 2vh;
+text-align: center;
+color: lime;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+border: 0.2vh solid gray;
+padding: 0.8vh;
+background-color: black;
+}
+
 label{
 color: whitesmoke;
 }

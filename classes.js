@@ -13,7 +13,8 @@ import NPCs from "./npcs.js";
 
 class NPCbuild {
 
-abilityScoreTable = [
+//Ability Scores & Modifiers
+static abilityScoreTable = [
 { range: { min: 3, max: 3 }, bonus: -3 },
 { range: { min: 4, max: 5 }, bonus: -2 },
 { range: { min: 6, max: 8 }, bonus: -1 },
@@ -24,9 +25,24 @@ abilityScoreTable = [
 // Add more ranges as needed
 ];
 
+static getModifiers(npc) {
+  // Array of ability scores
+  const abilityScores = [npc.str, npc.dex, npc.int, npc.wis, npc.con, npc.cha];
+  
+  // Calculate modifiers for each ability score
+  const modifiers = abilityScores.map(score => {
+    const modifierEntry = NPCbuild.abilityScoreTable.find(entry => score >= entry.range.min && score <= entry.range.max);
+    return modifierEntry ? modifierEntry.bonus : 0;
+  });
+
+  // Assign modifiers back to the respective properties
+  [npc.strMod, npc.dexMod, npc.intMod, npc.wisMod, npc.conMod, npc.chaMod] = modifiers;
+
+  npc.Modifiers = modifiers;
+}
 
 //Magic User
-magicUserTable = [
+static magicUserTable = [
 { level: 1, exp: 0, hitDice: '1d4', spells: [1, 0, 0, 0, 0, 0], attackBonus: 1},
 { level: 2, exp: 2500, hitDice: '2d4', spells: [2, 0, 0, 0, 0, 0], attackBonus: 1},
 { level: 3, exp: 5000, hitDice: '3d4', spells: [2, 1, 0, 0, 0, 0], attackBonus: 1},
@@ -50,7 +66,7 @@ magicUserTable = [
 ];
 
 // Magic-User Saving Throws
-magicUserSavingThrowTable = [
+static magicUserSavingThrowTable = [
   { level: 1, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 16, spells: 15 },
   { level: 2, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
   { level: 3, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
@@ -74,9 +90,8 @@ magicUserSavingThrowTable = [
   // Add more levels as needed
 ];
 
-
 //Thief General
-thiefTable = [
+static thiefTable = [
 { level: 1, exp: 0, hitDice: '1d4' , attackBonus: 1, attackBonus: 1},
 { level: 2, exp: 1250, hitDice: '2d4' , attackBonus: 1},
 { level: 3, exp: 2500, hitDice: '3d4' , attackBonus: 2},
@@ -100,7 +115,7 @@ thiefTable = [
 ];
 
 //Thief Skills Table
-thiefSkillsTable = [
+static thiefSkillsTable = [
 { level: 1, openLocks: 25, removeTraps: 20, pickPockets: 30, moveSilently: 25, climbWalls: 80, hide: 10, listen: 30 },
 { level: 2, openLocks: 30, removeTraps: 25, pickPockets: 35, moveSilently: 30, climbWalls: 81, hide: 15, listen: 34 },
 { level: 3, openLocks: 35, removeTraps: 30, pickPockets: 40, moveSilently: 35, climbWalls: 82, hide: 20, listen: 38 },
@@ -124,7 +139,7 @@ thiefSkillsTable = [
 ];
 
 // Thief Saving Throw Progression
-thiefSavingThrowTable = [
+static thiefSavingThrowTable = [
   { level: 1, deathRay: 13, magicWands: 14, paralysisPetrify: 13, dragonBreath: 16, spells: 15 },
   { level: 2, deathRay: 12, magicWands: 14, paralysisPetrify: 12, dragonBreath: 15, spells: 14 },
   { level: 3, deathRay: 12, magicWands: 14, paralysisPetrify: 12, dragonBreath: 15, spells: 14 },
@@ -147,9 +162,8 @@ thiefSavingThrowTable = [
   { level: 20, deathRay: 6, magicWands: 8, paralysisPetrify: 8, dragonBreath: 6, spells: 8 },
 ];
 
-
 //Fighter
-fighterTable = [
+static fighterTable = [
 { level: 1, expPoints: 0, hitDice: '1d8' , attackBonus: 1},
 { level: 2, expPoints: 2000, hitDice: '2d8' , attackBonus: 2},
 { level: 3, expPoints: 4000, hitDice: '3d8' , attackBonus: 2},
@@ -173,7 +187,7 @@ fighterTable = [
 ];
 
 // Fighter Saving Throw Progression
-fighterSavingThrowTable = [
+static fighterSavingThrowTable = [
   { level: 0, deathRay: 13, magicWands: 14, paralysisPetrify: 15, dragonBreath: 16, spells: 18 },
   { level: 1, deathRay: 12, magicWands: 13, paralysisPetrify: 14, dragonBreath: 15, spells: 17 },
   { level: 2, deathRay: 11, magicWands: 12, paralysisPetrify: 14, dragonBreath: 15, spells: 16 },
@@ -198,9 +212,8 @@ fighterSavingThrowTable = [
   // Add more levels as needed
 ];
 
-
 //Cleric
-clericTable = [
+static clericTable = [
 { level: 1, expPoints: 0, hitDice: '1d6', spells: [0, 0, 0, 0, 0, 0] , attackBonus: 1},
 { level: 2, expPoints: 1500, hitDice: '2d6', spells: [1, 0, 0, 0, 0, 0] , attackBonus: 1},
 { level: 3, expPoints: 3000, hitDice: '3d6', spells: [2, 0, 0, 0, 0, 0] , attackBonus: 2},
@@ -224,7 +237,7 @@ clericTable = [
 ];
 
 //Cleric Turn Undead
-clericsVsUndeadTable = [
+static clericsVsUndeadTable = [
 { level: 1, Skeleton: 13, Zombie: 17, Ghoul: 19, Wight: 'No', Wraith: 'No', Mummy: 'No', Spectre: 'No', Vampire: 'No', Ghost: 'No' },
 { level: 2, Skeleton: 11, Zombie: 15, Ghoul: 18, Wight: 20, Wraith: 'No', Mummy: 'No', Spectre: 'No', Vampire: 'No', Ghost: 'No' },
 { level: 3, Skeleton: 9, Zombie: 13, Ghoul: 17, Wight: 19, Wraith: 'No', Mummy: 'No', Spectre: 'No', Vampire: 'No', Ghost: 'No' },
@@ -248,7 +261,7 @@ clericsVsUndeadTable = [
 ];
 
 //Cleric Saving Throwns
-clericSavingThrowTable = [
+static clericSavingThrowTable = [
   { level: 1, deathRay: 11, magicWands: 12, paralysisPetrify: 14, dragonBreath: 16, spells: 15 },
   { level: 2, deathRay: 10, magicWands: 11, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
   { level: 3, deathRay: 9, magicWands: 10, paralysisPetrify: 13, dragonBreath: 15, spells: 14 },
@@ -273,7 +286,7 @@ clericSavingThrowTable = [
 ];
 
 // Ranger
-rangerTable = [
+static rangerTable = [
 { level: 1, expPoints: 0, hitDice: '1d8' },
 { level: 2, expPoints: 2200, hitDice: '2d8' },
 { level: 3, expPoints: 4400, hitDice: '3d8' },
@@ -298,7 +311,7 @@ rangerTable = [
 ];
 
 //Ranger Skills
-rangerSkillsTable = [
+static rangerSkillsTable = [
 { level: 1, moveSilently: 25, hide: 10, tracking: 40 },
 { level: 2, moveSilently: 30, hide: 15, tracking: 44 },
 { level: 3, moveSilently: 35, hide: 20, tracking: 48 },
@@ -323,7 +336,7 @@ rangerSkillsTable = [
 ];
 
 //Assassin
-assassinTable = [
+static assassinTable = [
 { level: 1, expPoints: 0, hitDice: '1d4' },
 { level: 2, expPoints: 1375, hitDice: '2d4' },
 { level: 3, expPoints: 2750, hitDice: '3d4' },
@@ -348,7 +361,7 @@ assassinTable = [
 ];
 
 // Assassin Abilities
-assassinSkillsTable = [
+static assassinSkillsTable = [
 { level: 1, openLocks: 15, pickPockets: 20, moveSilently: 20, climbWalls: 70, hide: 5, listen: 25, poison: 25 },
 { level: 2, openLocks: 19, pickPockets: 25, moveSilently: 25, climbWalls: 72, hide: 10, listen: 29, poison: 30 },
 { level: 3, openLocks: 23, pickPockets: 30, moveSilently: 30, climbWalls: 74, hide: 15, listen: 33, poison: 35 },
@@ -373,8 +386,6 @@ assassinSkillsTable = [
 
 ];
 
-
-
 constructor(data) {
 
 
@@ -392,62 +403,46 @@ this.int = data.int || this.rollScore();
 this.wis = data.wis || this.rollScore();
 this.con = data.con || this.rollScore();
 this.cha = data.cha || this.rollScore();
-
-this.getModifiers();
-
 this.Backstory = data.Backstory;
-this.getHitPoints(this.class, this.level);
-this.getMagic(this.class, this.level);
-this.getCharacterSkills(this.class, this.level);
-this.getInventory(this.class, this.occupation, this.name);
-this.getSavingThrows(this.class,this.level);
-this.getAttackBonus(this.class,this.level);
+
+
+NPCbuild.getModifiers(this);
+NPCbuild.getCharacterSkills(this);
+NPCbuild.getHitPoints(this);
+NPCbuild.getMagic(this);
+NPCbuild.getInventory(this);
+NPCbuild.getSavingThrows(this);
+NPCbuild.getAttackBonus(this);
 
 }
-
-getModifiers() {
-  // Array of ability scores
-  const abilityScores = [this.str, this.dex, this.int, this.wis, this.con, this.cha];
-
-  // Calculate modifiers for each ability score
-  const modifiers = abilityScores.map(score => {
-    const modifierEntry = this.abilityScoreTable.find(entry => score >= entry.range.min && score <= entry.range.max);
-    return modifierEntry ? modifierEntry.bonus : 0;
-  });
-
-  // Assign modifiers back to the respective properties
-  [this.strMod, this.dexMod, this.intMod, this.wisMod, this.conMod, this.chaMod] = modifiers;
-
-  this.Modifiers = modifiers;
-}
-
 
 rollScore() {
-return Math.floor(Math.random() * (18 - 3 + 1)) + 3;
-}
+  return Math.floor(Math.random() * (18 - 3 + 1)) + 3;
+  }
 
-getCharacterSkills(characterClass, characterLevel) {
+
+static getCharacterSkills(npc) {
   let skillTable;
-  let level = parseInt(characterLevel, 10);
+  let level = parseInt(npc.level, 10);
   let skills = {};
 
   // Determine the skill table based on character class
-  switch (characterClass) {
+  switch (npc.class) {
     case 'Ranger':
-      skillTable = this.rangerSkillsTable;
-      skills = this.mapSkills(skillTable, level, ['tracking', 'moveSilently', 'hide']);
+      skillTable = NPCbuild.rangerSkillsTable;
+      skills = NPCbuild.mapSkills(skillTable, level, ['tracking', 'moveSilently', 'hide']);
       break;
     case 'Thief':
-      skillTable = this.thiefSkillsTable;
-      skills = this.mapSkills(skillTable, level, ['openLocks', 'removeTraps', 'pickPockets', 'moveSilently', 'climbWalls', 'hide', 'listen']);
+      skillTable = NPCbuild.thiefSkillsTable;
+      skills = NPCbuild.mapSkills(skillTable, level, ['openLocks', 'removeTraps', 'pickPockets', 'moveSilently', 'climbWalls', 'hide', 'listen']);
       break;
     case 'Assassin':
-      skillTable = this.assassinSkillsTable;
-      skills = this.mapSkills(skillTable, level, ['openLocks', 'pickPockets', 'moveSilently', 'climbWalls', 'hide', 'listen', 'poison']);
+      skillTable = NPCbuild.assassinSkillsTable;
+      skills = NPCbuild.mapSkills(skillTable, level, ['openLocks', 'pickPockets', 'moveSilently', 'climbWalls', 'hide', 'listen', 'poison']);
     break;
     case 'Cleric':
-      skillTable = this.clericsVsUndeadTable;
-      skills = this.mapSkills(skillTable, level, ['Skeleton', 'Zombie', 'Ghoul', 'Wight', 'Wraith', 'Mummy', 'Spectre', 'Vampire', 'Ghost']);
+      skillTable = NPCbuild.clericsVsUndeadTable;
+      skills = NPCbuild.mapSkills(skillTable, level, ['Skeleton', 'Zombie', 'Ghoul', 'Wight', 'Wraith', 'Mummy', 'Spectre', 'Vampire', 'Ghost']);
       break;
     default:
       // Return null or handle the case where the class is not supported
@@ -455,10 +450,10 @@ getCharacterSkills(characterClass, characterLevel) {
   }
 
   // Assign the skills object to the corresponding property
-  this.Skills = skills;
+  npc.Skills = skills;
 }
 
-mapSkills(skillTable, level, skillNames) {
+static mapSkills(skillTable, level, skillNames) {
   const levelEntry = skillTable.find(entry => entry.level === level);
   const skills = {};
 
@@ -472,97 +467,97 @@ mapSkills(skillTable, level, skillNames) {
   return skills;
 }
 
-getSavingThrows(characterClass, characterLevel) {
+static getSavingThrows(npc) {
   let skillTable;
-  let level = parseInt(characterLevel, 10);
+  let level = parseInt(npc.level, 10);
   let savingThrows = {};
 
-  switch (characterClass) {
+  switch (npc.class) {
       case 'Fighter':
-      skillTable = this.fighterSavingThrowTable;
+      skillTable = NPCbuild.fighterSavingThrowTable;
       
       break;
       case 'Ranger':
-      skillTable = this.fighterSavingThrowTable;
+      skillTable = NPCbuild.fighterSavingThrowTable;
       
       break;
       case 'Thief':
-      skillTable = this.thiefSavingThrowTable;
+      skillTable = NPCbuild.thiefSavingThrowTable;
       
       break;
       case 'Assassin':
-      skillTable = this.thiefSavingThrowTable;
+      skillTable = NPCbuild.thiefSavingThrowTable;
       
       break;
       case 'Cleric':
-      skillTable = this.clericSavingThrowTable;
+      skillTable = NPCbuild.clericSavingThrowTable;
       
       break;
       case 'Magic User':
-      skillTable = this.magicUserSavingThrowTable;
+      skillTable = NPCbuild.magicUserSavingThrowTable;
       
       break;
       default:
       return null;
   }
 
-  savingThrows = this.mapSkills(skillTable, level, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
-  this.savingThrows = savingThrows;
+  savingThrows = NPCbuild.mapSkills(skillTable, level, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
+  npc.savingThrows = savingThrows;
 }
 
-getAttackBonus(characterClass, characterLevel){
+static getAttackBonus(npc){
 
 let Table;
-let level = parseInt(characterLevel, 10);
+let level = parseInt(npc.level, 10);
 
-switch (characterClass) {
+switch (npc.class) {
   case 'Fighter':
-    Table = this.fighterTable;
+    Table = NPCbuild.fighterTable;
     
     break;
     case 'Ranger':
-    Table = this.fighterTable;
+    Table = NPCbuild.fighterTable;
     
     break;
     case 'Thief':
-    Table = this.thiefTable;
+    Table = NPCbuild.thiefTable;
     
     break;
     case 'Assassin':
-    Table = this.thiefTable;
+    Table = NPCbuild.thiefTable;
     
     break;
     case 'Cleric':
-    Table = this.clericTable;
+    Table = NPCbuild.clericTable;
     
     break;
     case 'Magic User':
-    Table = this.magicUserTable;
+    Table = NPCbuild.magicUserTable;
     break;
   
     default:
     return null;
 }
 
-  let tableReturn = this.mapSkills(Table, level, ['attackBonus']);
-  this.attackBonus = tableReturn.attackBonus;
+  let tableReturn = NPCbuild.mapSkills(Table, level, ['attackBonus']);
+  npc.attackBonus = tableReturn.attackBonus;
 }
 
-getMagic(characterClass, characterLevel) {
+static getMagic(npc) {
 let classTable;
-let level = parseInt(characterLevel, 10);
+let level = parseInt(npc.level, 10);
 
-if (characterClass === 'Magic User') {
-classTable = this.magicUserTable;
-} else if (characterClass === 'Cleric') {
-classTable = this.clericTable;
+if (npc.class === 'Magic User') {
+classTable = NPCbuild.magicUserTable;
+} else if (npc.class === 'Cleric') {
+classTable = NPCbuild.clericTable;
 }
 
 if (classTable) {
 // Find spellSlots for NPC's Level
 const levelEntry = classTable.find(entry => entry.level === level);
-const spellBook = Spells.spellsArray.filter(spell => spell.Class === characterClass);
-this.magic =  `${characterClass === 'Cleric' ? `<span class="expandable cyan" data-content-type="rule" divId="Orsons">Orsons:</span>`:
+const spellBook = Spells.spellsArray.filter(spell => spell.Class === npc.class);
+npc.magic =  `${npc.class === 'Cleric' ? `<span class="expandable cyan" data-content-type="rule" divId="Orsons">Orsons:</span>`:
 `<span class="expandable cyan" data-content-type="rule" divId="Spellcasting">Spells:</span>`}<br><br>`
 
 // Start at Level 1
@@ -581,19 +576,19 @@ levelSpells.splice(randomIndex, 1);
 
 // Check for End of Loop
 if (levelCheck < chosenSpell.Level) {
-this.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
+npc.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
 //Bug here if Character is over level 15?
 levelCheck = chosenSpell.Level;
 }
 
-this.magic += `~${chosenSpell.Name}~<br>`;
+npc.magic += `~${chosenSpell.Name}~<br>`;
 
 }
 }
 }
 }
 
-rollHitDice(hitDice) {
+static rollHitDice(hitDice) {
 const regex = /(\d+)d(\d+)([+-]\d+)?/; // Regular expression to match dice notation
 const match = hitDice.match(regex);
 
@@ -615,24 +610,24 @@ total += modifier;
 return total;
 }
 
-getHitPoints(characterClass, characterLevel) {
+static getHitPoints(npc) {
 let classTable;
-let level = parseInt(characterLevel, 10);
+let level = parseInt(npc.level, 10);
 
-if (characterClass === 'Magic User') {
-classTable = this.magicUserTable;
-} else if (characterClass === 'Cleric') {
-classTable = this.clericTable;
-} else if (characterClass === 'Fighter') {
-classTable = this.fighterTable;
-} else if (characterClass === 'Thief') {
-classTable = this.thiefTable;
-} else if (characterClass === 'Ranger') {
-classTable = this.rangerTable;
-} else if (characterClass === 'Assassin') {
-classTable = this.assassinTable;
+if (npc.class === 'Magic User') {
+classTable = NPCbuild.magicUserTable;
+} else if (npc.class === 'Cleric') {
+classTable = NPCbuild.clericTable;
+} else if (npc.class === 'Fighter') {
+classTable = NPCbuild.fighterTable;
+} else if (npc.class === 'Thief') {
+classTable = NPCbuild.thiefTable;
+} else if (npc.class === 'Ranger') {
+classTable = NPCbuild.rangerTable;
+} else if (npc.class === 'Assassin') {
+classTable = NPCbuild.assassinTable;
 } else {
-this.hitPoints = Math.floor(Math.random() * (5 - 1 + 1));
+npc.hitPoints = Math.floor(Math.random() * (5 - 1 + 1));
 }
 
 if(classTable){
@@ -641,37 +636,37 @@ let levelEntry = classTable.find(entry => entry.level === level);
 let hitDice = levelEntry.hitDice;
 
 // Calculate hit points using the rollHitDice function
-this.hitPoints = this.rollHitDice(hitDice); 
+npc.hitPoints = NPCbuild.rollHitDice(hitDice); 
 }
 
 }
 
-getInventory(characterClass, occupation, characterName) {
+static getInventory(npc) {
   // Filter itemsArray based on characterClass and occupation
   const filteredItems = Items.itemsArray.filter(item => {
   const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
 
   // Check if the item matches the criteria
   return (
-  (characterClass === '' || itemTags.includes(characterClass) || itemTags.includes(characterName)) ||
-  (occupation && occupation.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
+  (npc.class === '' || itemTags.includes(npc.class) || itemTags.includes(npc.name)) ||
+  (npc.occupation && npc.occupation.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
   );
   });
 
   //If the tag is preceded by '?' there is only a chance they have the item, or only one of that type.
 
-  // Format each item and add to this.inventory
-this.inventory = filteredItems.map(item => ({
+  // Format each item and add to npc.inventory
+npc.inventory = filteredItems.map(item => ({
   Name: item.Name,
   Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
-    tag === characterClass || 
-    tag === characterName  ||
-    (occupation && occupation.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
+    tag === npc.class || 
+    tag === npc.name  ||
+    (npc.occupation && npc.occupation.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
   ) : ''
 }));
 
 // Sort the inventory alphabetically by item.Tag
-this.inventory.sort((a, b) => (a.Tag > b.Tag) ? 1 : -1);
+npc.inventory.sort((a, b) => (a.Tag > b.Tag) ? 1 : -1);
 
 }
 

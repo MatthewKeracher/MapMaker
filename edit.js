@@ -48,9 +48,9 @@ init: function () {
 
           console.log(searchText);
 
-          // Show ExtraContent
-          Ref.itemList.style.display = 'block';
-          Ref.itemList.innerHTML = ''; // Clear existing content
+          // Show Centre
+          Ref.Centre.style.display = 'block';
+          Ref.Centre.innerHTML = ''; // Clear existing content
 
           // // fixDisplay()
           // const imageContainer = document.querySelector('.image-container');
@@ -80,19 +80,12 @@ init: function () {
                 ) + replacement + text.substring(cursorPosition);
                 event.target.value = newText;
                 
-              Ref.itemList.style.display = 'none'; // Hide Ref.optionsList
+              //Ref.Centre.style.display = 'none'; // Hide Ref.optionsList
             });
-            Ref.itemList.appendChild(option);
+            Ref.Centre.appendChild(option);
           });
         } else {
-          //Ref.itemList.style.display = 'none';
-          //Ref.itemList.innerHTML = '';
-
-          // // fixDisplay()
-          // const imageContainer = document.querySelector('.image-container');
-          // const radiantDisplay = document.getElementById('radiantDisplay');
-          // imageContainer.style.width = "70vw";
-          // radiantDisplay.style.width = "70vw";
+          
         }
       });
     }
@@ -103,26 +96,20 @@ init: function () {
 
 deleteLocation() {
 switch (this.editPage) {
-
-  
+ 
 case 2:
-  const ambienceTitle = document.getElementById('ambienceTitle').value;
-  const ambienceIndex = Events.eventsArray.findIndex(ambience => ambience.event === ambienceTitle);
-  const ambienceForm = document.getElementById('ambienceForm');
-  
-  if (ambienceIndex !== -1) {
-  const confirmation = window.confirm("Are you sure you want to delete this Event?");
-  if (confirmation) {
-  Events.eventsArray.splice(ambienceIndex, 1); // Remove ambience from ambienceArray
-  
-  // Update the ambience list with the updated ambienceArray
-  Events.loadEventsList(Events.eventsArray);
-  
-  // Reset the ambience form fields
-  ambienceForm.reset();
-  }
-  }
-  break;
+const index = Events.eventsArray.findIndex(event => parseInt(event.id) === parseInt(Ref.eventId.value));
+
+if (index !== -1) {
+const confirmation = window.confirm("Are you sure you want to delete " + Events.eventsArray[index].event + "?");
+
+if (confirmation) {
+Events.eventsArray.splice(index, 1); 
+Events.loadEventsList(Events.eventsArray, Ref.Centre);
+Ref.eventForm.reset();
+}
+}
+break;
 
 case 3:
 const npcName = document.getElementById('npcName').value;
@@ -306,8 +293,8 @@ npc.NightLocation = Ref.editLocationName.value;
 pageChange(newPage){
 
 
-Ref.itemList.innerHTML = ``;
-Ref.extraInfo.classList.remove('showExtraInfo');
+Ref.Centre.innerHTML = ``;
+Ref.Centre.classList.remove('showCentre');
 
 
 switch (newPage) {
@@ -320,14 +307,12 @@ Ref.textLocation.style.display = "flex";
 
 //Hide
 
-Ref.itemList.style.display = "none";
-Ref.extraInfo2.classList.remove('showExtraInfo');
-//Ref.extraInfo2.style.display = "none";
-
+Ref.Centre.style.display = "none";
+Ref.Left.classList.remove('showLeft');
 Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
-Ref.ambienceForm.style.display = "none";
+Ref.eventForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -336,7 +321,7 @@ break;
 case 2:
 //Show
 Ref.stateLabel.textContent = "editing Events (" + newPage + ")";
-Ref.ambienceForm.style.display = "flex";
+Ref.eventForm.style.display = "flex";
 
 
 //Hide
@@ -349,7 +334,7 @@ Ref.textLocation.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
-Events.loadEventsList(Events.eventsArray);
+Events.loadEventsList(Events.eventsArray, Ref.Centre);
 
 break;
 
@@ -365,7 +350,7 @@ Ref.monsterForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.ambienceForm.style.display = "none";
+Ref.eventForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -386,7 +371,7 @@ Ref.npcForm.style.display = "none"
 Ref.itemForm.style.display = "none";
 Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.ambienceForm.style.display = "none";
+Ref.eventForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -405,7 +390,7 @@ Ref.monsterForm.style.display = "none";
 Ref.npcForm.style.display = "none"
 Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.ambienceForm.style.display = "none";
+Ref.eventForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 Ref.spellsForm.style.display = "none";
 
@@ -426,7 +411,7 @@ Ref.npcForm.style.display = "none";
 Ref.itemForm.style.display = "none";
 Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
-Ref.ambienceForm.style.display = "none";
+Ref.eventForm.style.display = "none";
 Ref.SettingsContainer.style.display = "none";
 
 Spells.loadSpellsList(Spells.spellsArray);
@@ -446,7 +431,7 @@ Ref.itemForm.style.display = "none";
 Ref.locationGroup.style.display  = "none";
 Ref.textLocation.style.display = "none";
 Ref.spellsForm.style.display = "none";
-Ref.ambienceForm.style.display = "none";
+Ref.eventForm.style.display = "none";
 
 break;
 

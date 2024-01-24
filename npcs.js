@@ -49,10 +49,10 @@ buildNPC: function() {
 
 loadNPC: function(NPCArray) {
 
-const itemList = document.getElementById('itemList'); // Do not delete!!
+const Centre = document.getElementById('Centre'); // Do not delete!!
 
 // Clear the existing content
-itemList.innerHTML = '';
+Centre.innerHTML = '';
 this.namedNPCs = [];
 this.groupedNPCs = [];
 this.absentNPCs = [];
@@ -75,22 +75,23 @@ if (this.groupedNPCs.length > 0) {
 // Concatenate arrays in desired order
 const sortedNPCs = [...this.namedNPCs, ...this.groupedNPCs, ...this.absentNPCs];
 
-// Append sorted divs to the itemList
+// Append sorted divs to the Centre
 sortedNPCs.forEach(npcDiv => {
-itemList.appendChild(npcDiv);
+Centre.appendChild(npcDiv);
 
-//show NPC info in ExtraInfo2 when hover over Div
+//show NPC info in Left when hover over Div
 npcDiv.addEventListener('mouseover', () => {
   //Ref.eventManagerInput.value = event.event;
   // console.log(npcDiv.id)
-  Ref.extraInfo2.classList.add('showExtraInfo');
-  this.addNPCInfo(npcDiv.id, Ref.extraInfo2);
+  Ref.Left.classList.add('showLeft');
+  Ref.Centre.style.display = 'block';
+  this.addNPCInfo(npcDiv.id, Ref.Left);
   });
 
 });
 
-itemList.style.display = 'block'; // Display the NPC names container
-Ref.extraInfo.classList.remove('showExtraInfo');
+Ref.Centre.style.display = 'block';
+Ref.Centre.classList.remove('showCentre');
 
 },
 
@@ -104,7 +105,7 @@ const uniqueNames = [];
 const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
 
 subLocations.forEach(subLoc => {
-  console.log(subLoc.event.toString());
+  //console.log(subLoc.event.toString());
 });
 
 // Filter eventsArray based on currentLocation
@@ -190,6 +191,7 @@ Ref.eventNPC.value = npc.name
 
 },
 
+
 saveNPC: function() {
 
 //if not empty
@@ -200,7 +202,6 @@ const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName
 const npc = {
 name: Ref.npcName.value,
 occupation: Ref.npcTags.value,
-// MorningLocation: Ref.MorningLocation.value,
 level: Ref.npcLevel.value,
 class: Ref.npcClass.value,
 str: Ref.STR.value,
@@ -535,12 +536,13 @@ searchNPC: function() {
   this.npcSearchArray = this.npcArray.filter((npc) => {
     const npcName = npc.name.toLowerCase();
     const npcOccupation = npc.occupation.toLowerCase();
+    const npcClass = npc.class.toLowerCase();
 
     // Split the occupation string into an array of words
     const occupationWords = npcOccupation.split(',').map(word => word.trim());
 
     // Check if either the name or any occupation word contains the search text
-    return npcName.includes(searchText.toLowerCase()) || occupationWords.some(word => word.includes(searchText.toLowerCase()));
+    return npcClass.includes(searchText) || npcName.includes(searchText) || occupationWords.some(word => word.includes(searchText));
   });
 
   this.loadNPC(this.npcSearchArray);

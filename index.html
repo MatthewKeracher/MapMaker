@@ -36,19 +36,9 @@
 
 </div>
 
-<!-- Bookmark -->
+<div class = "Centre" id="Centre"></div>
+<div class = "Left" id="Left"></div>
 
-<div class="extraInfoContainer" id="extraInfoContainer">
-
-<div class = "extraInfo" id="extraInfo">
-<div class="extraContent" id="extraContent"></div>
-</div>
-
-<div class = "extraInfo2" id="extraInfo2">
-<div class="extraContent2" id="extraContent2"></div>
-</div>
-
-</div> 
 
 <div class = "editToolbar" id="editToolbar"> 
 
@@ -106,8 +96,6 @@
 ~... for Spells"></textarea>  
 
 </div>  
-
-<!-- <div id="itemList"></div> Bookmark-->
 
 <form id="itemForm" class="itemForm">
 <div class="itemFormContainer">
@@ -351,7 +339,7 @@ placeholder="Put any other information about this NPC here.
 </div>
 </form>
 
-<form id="ambienceForm" class="ambienceForm">
+<form id="eventForm" class="eventForm">
 <div class="monsterFormContainer">
 
   <div class="event-checkbox-container">
@@ -365,7 +353,9 @@ placeholder="Put any other information about this NPC here.
         <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateCheckboxes('locationCheckbox')">
         Location
       </label>
+
     </form>
+    <input class ="idInput" id="eventId" name="eventId"></input>
   </div>
 
 <label for="eventSearch">Search Events</label>

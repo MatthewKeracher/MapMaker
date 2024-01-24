@@ -93,7 +93,7 @@ const formattedItem = spellStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
-// Set the formatted content in the extraContent element
+// Set the formatted content in the Centre element
 target.innerHTML = formattedItem;
 
 return formattedItem;
@@ -106,10 +106,10 @@ console.log(`Monster not found: ${contentId}`);
 },
 
 loadSpellsList: function(data) {
-const itemList = document.getElementById('itemList'); // Do not delete!!
+const Centre = document.getElementById('Centre'); // Do not delete!!
 
 // Clear the existing content
-itemList.innerHTML = '';
+Centre.innerHTML = '';
 
 // Sort the items by item type alphabetically
 //const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
@@ -119,17 +119,17 @@ for (const spell of data) {
 const spellNameDiv = document.createElement('div');
 spellNameDiv.id = spell.Name
 spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}]<span class="yellow">${spell.Name}</span>`;
-itemList.appendChild(spellNameDiv);
+Centre.appendChild(spellNameDiv);
 this.fillSpellsForm(spell, spellNameDiv);
 
- //show Item info in ExtraInfo2 when hover over Div
+ //show Item info in Left when hover over Div
  spellNameDiv.addEventListener('mouseover', () => {
-    Ref.extraInfo2.classList.add('showExtraInfo');
-    this.addSpellInfo(spellNameDiv.id, Ref.extraInfo2);
+    Ref.Left.classList.add('showLeft');
+    this.addSpellInfo(spellNameDiv.id, Ref.Left);
     });
 }
 
-itemList.style.display = 'block'; // Display the container
+Centre.style.display = 'block'; // Display the container
 
 
 },

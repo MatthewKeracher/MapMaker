@@ -51,13 +51,13 @@ Ref.textLocation.value = locObj.description;
 Ref.editLocationTags.value = locObj.tags;
 
   if(Edit.editPage === 2){
-    Events.loadEventsList(Events.eventsArray);
+    Events.loadEventsList(Events.eventsArray, Ref.Centre);
   }else if (Edit.editPage === 3){
     NPCs.loadNPC(NPCs.npcArray)
   }
 
 //Tell expandable Divs what to show.
-this.showExpandable(Ref.Storyteller, Ref.extraContent);
+this.showExpandable(Ref.Storyteller, Ref.Centre);
 //---
 
 };
@@ -89,7 +89,7 @@ addRulesInfo(contentId, target) {
   },
 
 addMiscInfo(contentId, target) {
-const extraContent = document.getElementById('extraContent');  
+const Centre = document.getElementById('Centre');  
 const MiscItem = this.miscArray.find(item => item.square === contentId);
   
   if (MiscItem) {
@@ -186,7 +186,7 @@ const expandableElements = source.querySelectorAll('.expandable');
 expandableElements.forEach(element => {
 
 element.addEventListener('mouseenter', (event) => {
-
+console.log('tag')
 const contentType = event.target.getAttribute('data-content-type');
 const contentId = event.target.getAttribute('divId');
 
@@ -213,13 +213,13 @@ switch (contentType) {
     console.log('Unknown content type');
 }          
 
-Ref.extraInfo.classList.add('showExtraInfo');
-this.showExtraExpandable(Ref.extraInfo2); 
+Ref.Centre.classList.add('showCentre');
+this.showExtraExpandable(Ref.Left); 
 
 });
 
-Ref.extraInfo.addEventListener('mouseenter', () => {
-Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.Centre.addEventListener('mouseenter', () => {
+Ref.Left.classList.remove('showLeft');
 
 });
 });
@@ -227,7 +227,7 @@ Ref.extraInfo2.classList.remove('showExtraInfo');
 
 showExtraExpandable(target) {
  
-  const expandableElements = Ref.extraInfo.querySelectorAll('.expandable');
+  const expandableElements = Ref.Centre.querySelectorAll('.expandable');
   
   expandableElements.forEach(element => {
     
@@ -259,7 +259,7 @@ showExtraExpandable(target) {
         console.log('Unknown content type');
       }        
 
-      target.classList.add('showExtraInfo');
+      target.classList.add('showCentre');
       this.showFloatingExpandable();
       
     });   
@@ -269,7 +269,7 @@ showExtraExpandable(target) {
 },
 
 showFloatingExpandable() {
-  const expandableElements = Ref.extraInfo2.querySelectorAll('.expandable');
+  const expandableElements = Ref.Left.querySelectorAll('.expandable');
   
   expandableElements.forEach(element => {
     

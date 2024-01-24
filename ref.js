@@ -33,13 +33,10 @@ editLocationTags: document.getElementById('editLocationTags'),
 
 textLocation: document.getElementById('textLocation'),
 
-itemList: document.getElementById('itemList'),
+//Centre: document.getElementById('Centre'),
 expandableElements: document.querySelectorAll('.expandable'),
-extraInfoContainer: document.getElementById('extraInfoContainer'),
-extraInfo: document.querySelector('.extraInfo'),
-extraInfo2: document.querySelector('.extraInfo2'),
-extraContent: document.querySelector('.extraContent'),
-extraContent2: document.querySelector('.extraContent2'),
+Centre: document.querySelector('.Centre'),
+Left: document.querySelector('.Left'),
 
 
 //spellsForm
@@ -55,27 +52,21 @@ spellRange: document.getElementById('spellRange'),
 spellDuration: document.getElementById('spellDuration'),
 
 
-//ambienceForm:
+//eventForm:
 
 timePassingCheckbox : document.getElementById('timePassingCheckbox'),
-
-ambienceForm: document.querySelector('.ambienceForm'),
+eventForm: document.querySelector('.eventForm'),
+eventId: document.getElementById('eventId'),
 eventSearch: document.getElementById('eventSearch'),
-eventEvent: document.getElementById('ambienceTitle'),
+eventName: document.getElementById('ambienceTitle'),
 eventTags: document.getElementById('ambienceContext'),
 eventLocation: document.getElementById('eventLocation'),
 eventNPC: document.getElementById('eventNPC'),
 eventTarget: document.getElementById('npcCheckbox'),
 locationCheck: document.getElementById('locationCheckbox'),
 npcCheckbox: document.getElementById('npcCheckbox'),
-ambienceMain: document.getElementById('ambienceMain'),
-ambienceSecond: document.getElementById('ambienceSecond'),
-ambienceDescription: document.getElementById('ambienceDescription'),
-ambienceSight: document.getElementById('ambienceSight'),
-ambienceSmell: document.getElementById('ambienceSmell'),
-ambienceSounds: document.getElementById('ambienceTouch'),
-ambienceFeel: document.getElementById('ambienceFeel'),
-ambienceTaste: document.getElementById('ambienceTaste'),
+eventDescription: document.getElementById('ambienceDescription'),
+
 
 //objectForm
 itemForm: document.querySelector('.itemForm'),

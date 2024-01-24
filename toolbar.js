@@ -78,7 +78,7 @@ handleeventEnableClick() {
       console.log('Disabled event:', eventToDisable);
 
       // Update the display of current events
-      Events.loadEventsList(Events.eventsArray, 'eventsManager');
+      Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
 
   } else {
       // Log a message if the event to disable was not found
@@ -104,7 +104,7 @@ handleEventDisableClick() {
        console.log('Disabled event:', eventToDisable);
 
        // Update the display of current events
-       Events.loadEventsList(Events.eventsArray, 'eventsManager');
+       Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
 
    } else {
        // Log a message if the event to disable was not found
@@ -128,7 +128,7 @@ if (eventsToEnable.length > 0) {
     console.log('Enabled events with matching event names');
 
     // Update the display of current events
-    Events.loadEventsList(Events.searchArray, 'eventsManager');
+    Events.loadEventsList(Events.searchArray, Ref.Centre, 'eventsManager');
 } else {
     // Log a message if no matching events are found
     console.log('No matching events found to Enable');
@@ -152,7 +152,7 @@ handleEventGroupDisableClick() {
         console.log('Disabled events with matching event names');
 
         // Update the display of current events
-        Events.loadEventsList(Events.searchArray, 'eventsManager');
+        Events.loadEventsList(Events.searchArray, Ref.Centre, 'eventsManager');
     } else {
         // Log a message if no matching events are found
         console.log('No matching events found to disable');
@@ -162,9 +162,9 @@ handleEventGroupDisableClick() {
 
 handleEscButtonClick(){
 
-  Ref.extraInfo.classList.remove('showExtraInfo');
-  Ref.extraInfo2.classList.remove('showExtraInfo');
-  Ref.itemList.style.display = "none";
+  Ref.Centre.classList.remove('showCentre');
+  Ref.Left.classList.remove('showLeft');
+  Ref.Centre.style.display = "none";
   document.activeElement.blur();
   Ref.eventManagerInput.value = '';
   
@@ -230,8 +230,8 @@ Ref.EditorContainer.style.display = 'flex';
 Ref.locationGroup.style.display = 'flex';
 
 Ref.eventManagerContainer.style.display = 'none';
-Ref.extraInfo2.classList.remove('showExtraInfo'); // Bookmark!
-Ref.itemList.style.display = 'none';
+Ref.Left.classList.remove('showLeft'); // Bookmark!
+Ref.Centre.style.display = 'none';
 Ref.Storyteller.style.display = 'none';
 Ref.locationLabel.style.display = 'none';
 
@@ -251,7 +251,7 @@ if (Edit.editMode) {
 Ref.stateLabel.style.display = 'none';
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
-Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.Left.classList.remove('showLeft');
 
 //Show Storyteller, pageChange()
 Edit.pageChange(1);
@@ -293,8 +293,8 @@ Edit.saveLocation();
 break;
 
 case 2:
-Events.saveAmbience();
-Events.loadEventsList(Events.eventsArray);
+Events.saveEvent();
+Events.loadEventsList(Events.eventsArray, Ref.Centre);
 //Events.getEvent();
 break;
 
@@ -345,7 +345,7 @@ document.getElementById('textLocation').value = "";
 break;
 
 case 2:
-NPCs.clearForm(Ref.ambienceForm);
+NPCs.clearForm(Ref.eventForm);
 
 break;
 

@@ -53,7 +53,7 @@ return contentId.replace(hashBrackets, (match, targetText) => {
 const item = Object.values(this.itemsArray).find(item => item.Name.toLowerCase() === targetText.toLowerCase());
 if (item) {
 //console.log(item.Name);
-return this.addIteminfo(item.Name, Ref.extraInfo2);
+return this.addIteminfo(item.Name, Ref.Left);
 } else {
 console.log(`Item not found: ${targetText}`);
 return match;
@@ -122,10 +122,10 @@ console.log(`Monster not found: ${contentId}`);
 },
 
 loadItemsList: function(data) {
-    const itemList = document.getElementById('itemList'); // Do not delete!!
+    const Centre = document.getElementById('Centre'); // Do not delete!!
   
     // Clear the existing content
-    itemList.innerHTML = '';
+    Centre.innerHTML = '';
   
     // Sort the items by item type alphabetically
     const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
@@ -144,17 +144,17 @@ for (const item of sortedItems) {
     // Set the inner HTML with the appropriate class
     itemNameDiv.innerHTML = `[${item.Type}]<span class="${className}">${item.Name}</span>`;
   
-    itemList.appendChild(itemNameDiv);
+    Centre.appendChild(itemNameDiv);
     this.fillItemsForm(item, itemNameDiv);
   
-    // Show Item info in ExtraInfo2 when hover over Div
+    // Show Item info in Left when hover over Div
     itemNameDiv.addEventListener('mouseover', () => {
-      Ref.extraInfo2.classList.add('showExtraInfo');
-      this.addIteminfo(itemNameDiv.id, Ref.extraInfo2);
+      Ref.Left.classList.add('showLeft');
+      this.addIteminfo(itemNameDiv.id, Ref.Left);
     });
   }
   
-    itemList.style.display = 'block'; // Display the container
+    Centre.style.display = 'block'; // Display the container
     
   },
   

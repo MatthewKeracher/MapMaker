@@ -10,7 +10,7 @@ overflow: auto;
 
 } 
 
-.extraInfo {
+.Centre {
 position: fixed;  
 right: 30vw; 
 width: 30vw;
@@ -34,18 +34,18 @@ resize: none;
 text-align: left;
 }  
 
-#extraContent div:hover {
+#Centre div:hover {
 background-color: whitesmoke; /* Change the background color on hover */
 opacity: 1;
 color: whitesmoke;
 cursor: pointer; /* Show pointer cursor on hover */
 } 
 
-.extraInfo::-webkit-scrollbar {
+.Centre::-webkit-scrollbar {
 width: 0.1px; /* Set the width of the scrollbar */
 }
 
-.extraInfo2 {
+.Left {
 position: fixed;  
 right: 61vw; 
 width: 30vw;
@@ -70,38 +70,20 @@ text-align: left;
 }  
 
 
-.extraInfo2::-webkit-scrollbar {
+.Left::-webkit-scrollbar {
 width: 0.1px; /* Set the width of the scrollbar */
 }
 
-#itemList,
-#itemList2 {
-color: gray;
-font-size: 1.8vh;
-background-color: black;
-opacity: 0.8;
-height: 98vh;
-border: transparent;
-padding: 0px;
-position: fixed; /* Use fixed position for screen coordinates */
-top: 0;
-right: 30vw;
-width: 31vw;
-z-index: 10;
-overflow-y: auto;
-display: none;
-scrollbar-color: black;
-}
 
-#itemList div:hover,
-#itemList2 div:hover {
+#Centre div:hover,
+#Left div:hover {
 background-color: gray; /* Change the background color on hover */
 color: whitesmoke;
 cursor: pointer; /* Show pointer cursor on hover */
 }  
 
-#itemList::-webkit-scrollbar,
-#itemList2::-webkit-scrollbar {
+#Centre::-webkit-scrollbar,
+#Left::-webkit-scrollbar {
 width: 5px; /* Set the width of the scrollbar */
 }
 
@@ -130,7 +112,11 @@ width: 5px; /* Set the width of the scrollbar */
 height: 20vh; /* Set the height you desire */
 }
 
-.showExtraInfo {
+.showCentre {
+display: block;
+}
+
+.showLeft {
 display: block;
 }
 

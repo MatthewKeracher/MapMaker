@@ -60,32 +60,15 @@ saveAs(blob, filename);
 },
 
 exportArray: function () {
-// Extract general information from the dropdowns
-//const interiorOrExterior = document.getElementById('radianceDropdown').value;
-//const context = document.getElementById('contextDropdown').value;
-//const mainAmbience = document.getElementById('mainAmbienceDropdown').value;
-//const secondAmbience = document.getElementById('secondAmbienceDropdown').value || null;
-//const timePassing = Ref.timePassingCheckbox.
-
-// Create the general information object
-const generalInfo = {
-//interiorOrExterior,
-//context,
-//mainAmbience,
-//secondAmbience
-};
-
-//console.log(Items.itemsArray);
 
 // Create the main object to be exported
 const exportData = {
-generalInformation: generalInfo,
+eventsArray: Events.eventsArray,
 locations: this.locationArray,                
 npcArray: NPCs.npcArray,
 monstersArray: Monsters.monstersArray,
 itemsArray: Items.itemsArray,
 spellsArray: Spells.spellsArray,
-eventsArray: Events.eventsArray
 };
 
 const json = JSON.stringify(exportData, null, 2);
@@ -163,8 +146,40 @@ handleFileInputChange: async (event) => {
 },
 
 
+generateUniqueId(array, scope) {
 
+if(scope === 'array'){
+    
+const largestId = array.reduce((maxId, entry) => (entry.id && entry.id > maxId) ? entry.id : maxId, 0);
+let newId = largestId + 1;
 
+for (const entry of array) {
+if (!entry.id) {
+entry.id = newId;
+newId++;
+}
+}}
+
+else if(scope === 'entry'){
+
+const largestId = array.reduce((maxId, entry) => (entry.id && entry.id > maxId) ? entry.id : maxId, 0);
+
+return largestId + 1;
+
+}},
+
+loadDataArray(data, object, arrayName) {
+    try {
+      if (data[arrayName]) {
+        object[arrayName] = data[arrayName];
+      } else {
+        console.log(`${arrayName} data is not available.`);
+      }
+    } catch (error) {
+      console.error(`Error loading ${arrayName} information:`, error);
+      throw error;
+    }
+  },
 
 handleFileLoad(fileContent) {
     return new Promise((resolve, reject) => {
@@ -173,8 +188,6 @@ handleFileLoad(fileContent) {
                 const data = JSON.parse(fileContent);
 
         try {
-            // Handle Location Information
-            // console.log(data.locations)
             this.displayLoadedLocationsOnMap(data.locations);
         } catch (error) {
             console.error('Error loading file:', error);
@@ -182,69 +195,26 @@ handleFileLoad(fileContent) {
         }
 
         try {
-            if (data.monstersArray) {
-                Monsters.monstersArray = data.monstersArray;
-            } else {
-                console.log('Monster array data is not available.');
-            }
+            //BROKEN this.generateUniqueId(data.monstersArray, 'array');
+            this.generateUniqueId(data.itemsArray, 'array');
+            this.generateUniqueId(data.spellsArray, 'array');
+            this.generateUniqueId(data.eventsArray, 'array');
+            this.generateUniqueId(data.npcArray, 'array');
         } catch (error) {
-            console.error('Error loading Monster information:', error);
+            // Handle the error if needed
+            console.error('Error generating ID;s:', error);
             reject(error);
         }
 
         try {
-            if (data.itemsArray) {
-                Items.itemsArray = data.itemsArray;
-            } else {
-                console.log('Items array data is not available.');
-            }
+            this.loadDataArray(data, Monsters, 'monstersArray');
+            this.loadDataArray(data, Items, 'itemsArray');
+            this.loadDataArray(data, Spells, 'spellsArray');
+            this.loadDataArray(data, Events, 'eventsArray');
+            this.loadDataArray(data, NPCs, 'npcArray');
         } catch (error) {
-            console.error('Error loading Item information:', error);
-            reject(error);
-        }
-
-        try {
-            if (data.spellsArray) {
-                Spells.spellsArray = data.spellsArray;
-            } else {
-                console.log('Spells array data is not available.');
-            }
-        } catch (error) {
-            console.error('Error loading Item information:', error);
-            reject(error);
-        }
-
-        try {
-            if (data.eventsArray) {
-                Events.eventsArray = data.eventsArray;
-            } else {
-                console.log('Events/Ambience array data is not available.');
-            }
-        } catch (error) {
-            console.error('Error loading Item information:', error);
-            reject(error);
-        }
-
-        try {
-            if (data.npcArray) {
-                NPCs.npcArray = data.npcArray;
-            } else {
-                console.log('NPC array data is not available.');
-            }
-        } catch (error) {
-            console.error('Error loading NPC information:', error);
-            reject(error);
-        }
-
-        try {
-            // Handle General Information
-            this.handleGeneralInformation(data.generalInformation);
-            // Ambience.initializeAmbienceDropdowns();
-            // Ambience.simConDrop();
-            // Ambience.simMainDrop();
-            // Ambience.radiateDisplay();
-        } catch (error) {
-            console.error('Error loading general information:', error);
+            // Handle the error if needed
+            console.error('Error loading data:', error);
             reject(error);
         }
 
@@ -258,19 +228,6 @@ handleFileLoad(fileContent) {
             reject(error);
         }
     });
-},
-
-
-handleGeneralInformation: function (generalInfo) {
-const { interiorOrExterior, context, mainAmbience, secondAmbience } = generalInfo;
-
-//console.log(generalInfo);
-// Set the values of the dropdowns
-// document.getElementById('radianceDropdown').value = interiorOrExterior;
-// document.getElementById('contextDropdown').value = context;
-// document.getElementById('mainAmbienceDropdown').value = mainAmbience;
-// document.getElementById('secondAmbienceDropdown').value = secondAmbience;
-
 },
 
 

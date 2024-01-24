@@ -39,10 +39,10 @@ loadEventListeners(){
 
 Ref.eventManagerInput.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
-Ref.extraInfo.classList.add('showExtraInfo');
-Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.Centre.classList.add('showCentre');
+Ref.Left.classList.remove('showLeft');
 this.searchEvents(searchText);
-this.loadEventsList(this.searchArray, 'eventsManager');
+this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
 
 //this.getEvent();
 //this.addEventInfo();
@@ -50,9 +50,9 @@ this.loadEventsList(this.searchArray, 'eventsManager');
 })
 
 Ref.eventManagerInput.addEventListener('click', () => {
-Ref.extraInfo.classList.add('showExtraInfo');
-Ref.extraInfo2.classList.remove('showExtraInfo');
-this.loadEventsList(this.eventsArray, 'eventsManager');
+Ref.Centre.classList.add('showCentre');
+Ref.Left.classList.remove('showLeft');
+this.loadEventsList(this.eventsArray, Ref.Centre, 'eventsManager');
 
 })
 
@@ -60,18 +60,18 @@ this.loadEventsList(this.eventsArray, 'eventsManager');
 
 Ref.npcTags.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
-Ref.extraInfo.classList.add('showExtraInfo');
-Ref.extraInfo2.classList.remove('showExtraInfo');
-Ref.itemList.style.display = 'none';
+Ref.Centre.classList.add('showCentre');
+Ref.Left.classList.remove('showLeft');
+Ref.Centre.style.display = 'none';
 this.searchTags(searchText); 
 this.showTags(this.searchArray);
 
 })
 
 Ref.npcTags.addEventListener('click', () => {
-Ref.extraInfo.classList.add('showExtraInfo');
-Ref.extraInfo2.classList.remove('showExtraInfo');
-Ref.itemList.style.display = 'none';
+Ref.Centre.classList.add('showCentre');
+Ref.Left.classList.remove('showLeft');
+Ref.Centre.style.display = 'none';
 this.fillTagsArray();
 this.showTags(this.tagsArray);
 })
@@ -80,8 +80,8 @@ this.showTags(this.tagsArray);
 
 Ref.editLocationTags.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
-Ref.extraInfo.classList.add('showExtraInfo');
-Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.Centre.classList.add('showCentre');
+Ref.Left.classList.remove('showLeft');
 // Call the searchAmbience function
 console.log(searchText)
 this.searchTags(searchText); 
@@ -90,8 +90,8 @@ this.showTags(this.searchArray);
 })
 
 Ref.editLocationTags.addEventListener('click', () => {
-Ref.extraInfo.classList.add('showExtraInfo');
-Ref.extraInfo2.classList.remove('showExtraInfo');
+Ref.Centre.classList.add('showCentre');
+Ref.Left.classList.remove('showLeft');
 this.fillTagsArray();
 this.showTags(this.tagsArray);
 })
@@ -99,7 +99,7 @@ this.showTags(this.tagsArray);
 // -- EVENTFORM LISTENERS
 
 Ref.eventSearch.addEventListener('click', () => {
-this.loadEventsList(this.eventsArray)
+this.loadEventsList(this.eventsArray, Ref.Centre)
 })
 
 Ref.eventLocation.addEventListener('click', () => {
@@ -299,8 +299,8 @@ target.value = `${currentText}, ${tag}`;
 },
 
 showTags(data) {
-  Ref.extraContent.innerHTML = '';
-  Ref.extraContent.style.display = 'block'; // Display the container
+  Ref.Centre.innerHTML = '';
+  Ref.Centre.style.display = 'block'; // Display the container
 
   // Use a Set to store unique tag values
   const uniqueTagsSet = new Set();
@@ -319,7 +319,7 @@ showTags(data) {
   for (const tag of uniqueTagsArray) {
     const tagDiv = document.createElement('div');
     tagDiv.innerHTML = `<span class="gray">${tag}</span>`;
-    Ref.extraContent.appendChild(tagDiv);
+    Ref.Centre.appendChild(tagDiv);
 
     tagDiv.addEventListener('click', () => {
       this.addTag(tag);
@@ -358,8 +358,8 @@ const formattedItem = eventInfo
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
-// Set the formatted content in the extraContent element
-Ref.extraContent2.innerHTML = formattedItem;
+// Set the formatted content in the Centre element
+Ref.Left.innerHTML = formattedItem;
 
 return formattedItem;
 
@@ -371,29 +371,20 @@ console.log(`Event not found: ${data.event}`);
 },
 
 // Partition the ambienceArray into different groups
- activeAtLocation : [],
- activeAtTag : [],
- inactiveAtLocation : [],
- inactiveAtTag : [],
- activeAll : [],
- inactiveAll : [],
- activeElsewhere : [],
- inactiveElsewhere : [],
+locationEventsArray: [],
+allEvents: [],
+elsewhere: [],
 
  sortEvents: function(data) {
 
   // Search Array.locationArray to find the currentLocation
   const locationObject = Array.locationArray.find(location => location.divId === Ref.locationLabel.textContent);
-
+  const subLocations = locationObject? Events.eventsArray.filter(event => event.target === "Location" && event.location === locationObject.divId) : [];
+ 
   // Partition the ambienceArray into different groups
-  this.activeAtLocation = [];
-  this.activeAtTag = [];
-  this.inactiveAtLocation = [];
-  this.inactiveAtTag = [];
-  this.activeAll = [];
-  this.inactiveAll = [];
-  this.activeElsewhere = [];
-  this.inactiveElsewhere = [];
+  this.locationEventsArray = [];
+  this.allEvents = [];
+  this.elsewhere = [];
 
  data.forEach(event => {
     const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
@@ -403,75 +394,62 @@ console.log(`Event not found: ${data.event}`);
   
     if (event.active === 1) {
       if (eventLocations.includes(currentLocation)) {
-        this.activeAtLocation.push(event);
-      } else if (eventLocations.some(location => locationTags.includes(location))) {
-        this.activeAtTag.push(event);
+        this.locationEventsArray.push(event);
+      } else if (eventLocations.some(location => locationTags.includes(location)) || subLocations.some(subLoc => eventLocations.includes(subLoc.event))) {
+        this.locationEventsArray.push(event);
       } else if (event.location === 'All'& event.active === 1){
-        this.activeAll.push(event);
+        this.allEvents.push(event);
       } else {
-        this.activeElsewhere.push(event);
+        this.elsewhere.push(event);
       }
     } else {
       if (eventLocations.includes(currentLocation)) {
-        this.inactiveAtLocation.push(event);
+        this.locationEventsArray.push(event);
       } else if (eventLocations.some(location => locationTags.includes(location))) {
-        this.inactiveAtTag.push(event);
+        this.locationEventsArray.push(event);
       } else if (event.location === 'All'& event.active === 0){
-        this.inactiveAll.push(event);
+        this.allEvents.push(event);
       }else {
-        this.inactiveElsewhere.push(event);
+        this.elsewhere.push(event);
       }
     } 
   });
   
  },
 
-loadEventsList: function(data, destination) {
+loadEventsList: function(data, target, origin) {
 
-  let target = '';
-
-  if(destination === 'eventsManager'){
-  target = Ref.extraContent;
-  }else{
-  target = Ref.itemList;
-  }
-  
   target.innerHTML = '';
-
+  
   this.sortEvents(data);
 
-  const locationEventsArray = [
-    ...this.activeAtLocation,
-    ...this.activeAtTag,
-    ...this.inactiveAtLocation,
-    ...this.inactiveAtTag,
-  ]
+  this.locationEventsArray = this.locationEventsArray.sort((a, b) => {
+    
+    if (a.event === b.location) return 1;
+    if (b.event !== a.location) return -1;
 
-  const allEvents = [
-    ...this.activeAll,
-    ...this.inactiveAll,
-  ]
+    return a.event.localeCompare(b.location);
+  });
+  
+  console.log(this.locationEventsArray);  
 
-  //sort alphabetically by tag
-  const elsewhere = [
-    ...this.activeElsewhere,
-    ...this.inactiveElsewhere
-  ];
+  this.elsewhere.sort((a, b) => a.group.localeCompare(b.group));
 
-  elsewhere.sort((a, b) => a.group.localeCompare(b.group));
-
-  for (const event of locationEventsArray) {
+  for (const event of this.locationEventsArray) {
     const eventNameDiv = document.createElement('div');
     eventNameDiv.innerHTML = `
-    <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+   
     <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
-    <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
     
     `;
 
+    // <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
+    //<span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
+    
+
     target.appendChild(eventNameDiv);
 
-    if(destination === 'eventsManager'){
+    if(origin === 'eventsManager'){
       this.addCurrentEventEvents(event, eventNameDiv);
       }else{
       this.fillEventForm(event, eventNameDiv);
@@ -482,16 +460,16 @@ loadEventsList: function(data, destination) {
         this.focusEvent = event.event;
         this.searchArray = [event]; // Assign an array with a single element
         this.addEventInfo(event);
-        Ref.extraInfo2.classList.add('showExtraInfo');
+        Ref.Left.classList.add('showLeft');
         });
 
   }
 
-  if( locationEventsArray.length > 1){
+  if( this.locationEventsArray.length > 1){
   target.appendChild(document.createElement('hr'));
   }
 
-  for (const event of allEvents) {
+  for (const event of this.allEvents) {
     
   const eventNameDiv = document.createElement('div');
 
@@ -510,7 +488,7 @@ loadEventsList: function(data, destination) {
 
     target.appendChild(eventNameDiv);
     
-    if(destination === 'eventsManager'){
+    if(origin === 'eventsManager'){
       this.addCurrentEventEvents(event, eventNameDiv);
       }else{
       this.fillEventForm(event, eventNameDiv);
@@ -521,15 +499,15 @@ loadEventsList: function(data, destination) {
         this.focusEvent = event.event;
         this.searchArray = [event]; // Assign an array with a single element
         this.addEventInfo(event);
-        Ref.extraInfo2.classList.add('showExtraInfo');
+        Ref.Left.classList.add('showLeft');
         });
   }
 
-  if( allEvents.length > 1){
+  if( this.allEvents.length > 1){
   target.appendChild(document.createElement('hr'));
   }
 
-  for (const event of elsewhere) {
+  for (const event of this.elsewhere) {
     const eventNameDiv = document.createElement('div');
     eventNameDiv.innerHTML = `
     <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
@@ -540,7 +518,7 @@ loadEventsList: function(data, destination) {
 
     target.appendChild(eventNameDiv);
     
-    if(destination === 'eventsManager'){
+    if(origin === 'eventsManager'){
     this.addCurrentEventEvents(event, eventNameDiv);
     }else{
     this.fillEventForm(event, eventNameDiv);
@@ -551,25 +529,25 @@ loadEventsList: function(data, destination) {
       this.focusEvent = event.event;
       this.searchArray = [event]; // Assign an array with a single element
       this.addEventInfo(event);
-      Ref.extraInfo2.classList.add('showExtraInfo');
-      this.addEventInfo(eventNameDiv.id, Ref.extraInfo2);
+      Ref.Left.classList.add('showLeft');
+      this.addEventInfo(eventNameDiv.id, Ref.Left);
       });
 
   }
 
-  target.style.display = 'block'; // Display the container
+  Ref.Centre.style.display = 'block'; // Display the container
   
 },
 
 loadLocationsList: function(data) {
-const itemList = document.getElementById('itemList'); // Do not delete!!
-itemList.innerHTML = '';
+const Centre = document.getElementById('Centre'); // Do not delete!!
+Centre.innerHTML = '';
 
 const AllDiv = document.createElement('div');
 AllDiv.innerHTML = "<span class= cyan>All</span>";
 AllDiv.setAttribute('divId', 'All');
 AllDiv.setAttribute('location', 'All');
-itemList.appendChild(AllDiv);
+Centre.appendChild(AllDiv);
 
 //Loop through Data and make NameDivs
 for (const location of data) {
@@ -581,14 +559,14 @@ if(location.divId){
   </span> <span class="hotpink">${location.divId}</span>`;
   locNameDiv.setAttribute('divId', location.divId);
   locNameDiv.setAttribute('location', location.divId);
-  itemList.appendChild(locNameDiv);
+  Centre.appendChild(locNameDiv);
   
 } else if(location.target === "Location") {
   locNameDiv.innerHTML = `<span class="${location.location !== undefined ? 'cyan' : ''}">${location.location === 'All' ? `[${location.location}]` : ''}
   </span><span class="misc">${location.event} </span>`;
   locNameDiv.setAttribute('divId', location.event);
   locNameDiv.setAttribute('location', location.location);
-  itemList.appendChild(locNameDiv);
+  Centre.appendChild(locNameDiv);
 }
 
 //Add CLICK Event to each NameDiv
@@ -599,7 +577,7 @@ locNameDiv.addEventListener('click', () => {
 }
 
 // Convert HTMLCollection to an array
-const divArray = [...itemList.children];
+const divArray = [...Centre.children];
 
 // Sort the array based on divId
 divArray.sort((a, b) => {
@@ -609,12 +587,12 @@ divArray.sort((a, b) => {
   return divIdA.localeCompare(divIdB);
 });
 
-// Clear the itemList before appending sorted divs
-itemList.innerHTML = '';
+// Clear the Centre before appending sorted divs
+Centre.innerHTML = '';
 
-// Append the sorted divs to the itemList
+// Append the sorted divs to the Centre
 divArray.forEach(div => {
-  itemList.appendChild(div);
+  Centre.appendChild(div);
 });
 
 
@@ -738,7 +716,7 @@ addCurrentEventEvents(event, eventNameDiv){
     this.focusEvent = event.event;
     this.searchArray = [event]; // Assign an array with a single element
     this.addEventInfo(event);
-    Ref.extraInfo2.classList.add('showExtraInfo');
+    Ref.Left.classList.add('showLeft');
     });
   
 },
@@ -792,74 +770,69 @@ addEventItems(event){
 
 // -- MAKING AND EDITING EVENTS
 
-fillEventForm: function(ambience, ambienceNameDiv) {
+fillEventForm: function(event, ambienceNameDiv) {
 // Add click event listener to each ambience name
 ambienceNameDiv.addEventListener('click', () => {
-Ref.eventTags.value = ambience.group;
-Ref.eventEvent.value = ambience.event;
-Ref.eventNPC.value = ambience.npc;
-Ref.eventLocation.value = ambience.location;
-Ref.ambienceDescription.value = ambience.description;
-Ref.ambienceForm.style.display = 'flex'; // Display the ambienceForm
+Ref.eventId.value = event.id;
+Ref.eventTags.value = event.group;
+Ref.eventName.value = event.event;
+Ref.eventNPC.value = event.npc;
+Ref.eventLocation.value = event.location;
+Ref.eventDescription.value = event.description;
+Ref.eventForm.style.display = 'flex'; // Display the eventForm
 
 //Check target and tick relevent box
-if(ambience.target === 'NPC' && Ref.npcCheckbox.checked === false){
+if(event.target === 'NPC' && Ref.npcCheckbox.checked === false){
 //Ref.npcCheckbox.checked = true;
 Ref.npcCheckbox.click();
 //Ref.locationCheck.checked = false;
 }
-else if(ambience.target === 'Location' && Ref.locationCheck.checked === false){
+else if(event.target === 'Location' && Ref.locationCheck.checked === false){
 //Ref.locationCheck.checked = true;
 Ref.locationCheck.click();
 //Ref.npcCheckbox.checked = false;
+
+
 }
 });
 },
 
-saveAmbience: function() {
-
-  let target 
-
-  //Check to see if NPC checkbox is checked
+saveEvent: function() {
+  
+  let target;
   if (Ref.eventTarget.checked) {
-    // The checkbox is checked
-   target = 'NPC';
+      target = 'NPC';
   } else {
-    // The checkbox is not checked
-   target = 'Location'
+      target = 'Location';
   }
 
-const existingAmbienceIndex = this.eventsArray.findIndex(ambience => 
-ambience.event === Ref.eventEvent.value && ambience.target === target      
-);
+  const index = this.eventsArray.findIndex(event => event.Id === Ref.eventId.value && event.event === Ref.eventName.value);
 
-const ambience = {
-group: Ref.eventTags.value,
-active: 1,
-target: target,
-//main: Ref.ambienceMain.value,
-//second: Ref.ambienceSecond.value,
-event: Ref.eventEvent.value,
-description: Ref.ambienceDescription.value,
-location: Ref.eventLocation.value,
-npc: Ref.eventNPC.value,
-//touch: Ref.ambienceTouch.value,
-//feel: Ref.ambienceFeel.value
-};
+  const event = {
+      id: Ref.eventId.value, 
+      active: 1,
+      target: target,
+      event: Ref.eventName.value,
+      group: Ref.eventTags.value,
+      description: Ref.eventDescription.value,
+      location: Ref.eventLocation.value,
+      npc: Ref.eventNPC.value,
+  };
 
-if (existingAmbienceIndex !== -1) {
-// Update the existing ambience entry
-this.eventsArray[existingAmbienceIndex] = ambience;
-console.log('Event updated:', ambience);
-} else {
-this.eventsArray.push(ambience);
+  if (index !== -1) {
+      // Update the existing event entry
+      this.eventsArray[index] = event;
+      console.log('Event updated:', event);
+  } else {
+      // Make a new event entry
+      event.id = Array.generateUniqueId(this.eventsArray, 'entry');
+      Ref.eventId.value = event.id
+      this.eventsArray.push(event);
+  }
 
-}
-
-
-this.fillEventManager();
-
+  this.fillEventManager();
 },
+
 
 addAmbienceSearch: function() {
 Ref.eventSearch.addEventListener('input', (event) => {
@@ -885,7 +858,7 @@ const location = ambience.location.toLowerCase();
 return group.includes(searchText) || event.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
 });
 
-this.loadEventsList(this.searchArray);
+this.loadEventsList(this.searchArray, Ref.Centre);
 },
 
 populateDropdown(dropdown, options, replace) {

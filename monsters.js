@@ -98,7 +98,7 @@ const formattedMonster = monsterStats
 .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
 .join(" ");
 
-// Set the formatted content in the extraContent element
+// Set the formatted content in the Centre element
 target.innerHTML = formattedMonster;
 
 return formattedMonster;
@@ -112,10 +112,10 @@ console.log(`Monster not found: ${contentId}`);
 
 // Edit Monsters
 loadMonsterList: function(data) {
-const itemList = document.getElementById('itemList'); // Do not delete!!
+const Centre = document.getElementById('Centre'); // Do not delete!!
 
 // Clear the existing content
-itemList.innerHTML = '';
+Centre.innerHTML = '';
 
 // Get an array of monster names and sort them alphabetically
 const monsterNames = Object.keys(data).sort();
@@ -126,19 +126,19 @@ const monster = data[monsterName];
 const monsterNameDiv = document.createElement('div');
 monsterNameDiv.id = monster.Name;
 monsterNameDiv.innerHTML = `[${monster.Type}]<span class="hotpink">${monster.Name}</span>`;
-itemList.appendChild(monsterNameDiv);
+Centre.appendChild(monsterNameDiv);
 this.fillMonsterForm(monster, monsterNameDiv);
 
- //show Monster info in ExtraInfo2 when hover over Div
+ //show Monster info in Left when hover over Div
  monsterNameDiv.addEventListener('mouseover', () => {
-  Ref.extraInfo2.classList.add('showExtraInfo');
-  this.addMonsterInfo(monsterNameDiv.id, Ref.extraInfo2);
-  //Storyteller.showFloatingExpandable(Ref.extraInfo2);
+  Ref.Left.classList.add('showLeft');
+  this.addMonsterInfo(monsterNameDiv.id, Ref.Left);
+  //Storyteller.showFloatingExpandable(Ref.Left);
   });
 
 }
 
-itemList.style.display = 'block'; // Display the NPC names container
+Centre.style.display = 'block'; // Display the NPC names container
 
 }, 
 
