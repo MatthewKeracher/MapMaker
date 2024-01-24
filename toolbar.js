@@ -162,9 +162,8 @@ handleEventGroupDisableClick() {
 
 handleEscButtonClick(){
 
-  Ref.Centre.classList.remove('showCentre');
-  Ref.Left.classList.remove('showLeft');
   Ref.Centre.style.display = "none";
+  Ref.Left.style.display = "none";
   document.activeElement.blur();
   Ref.eventManagerInput.value = '';
   

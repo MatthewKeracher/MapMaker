@@ -110,7 +110,9 @@ const formattedItem = itemStats
 .join(" ");
 
 // Set the formatted content in the target element
+console.log(target)
 target.innerHTML = formattedItem;
+//target.style.display = "block";
 
 return formattedItem;
 

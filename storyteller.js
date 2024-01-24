@@ -89,7 +89,7 @@ addRulesInfo(contentId, target) {
   },
 
 addMiscInfo(contentId, target) {
-const Centre = document.getElementById('Centre');  
+
 const MiscItem = this.miscArray.find(item => item.square === contentId);
   
   if (MiscItem) {
@@ -102,6 +102,7 @@ const MiscItem = this.miscArray.find(item => item.square === contentId);
     <span class="withbreak">${withSpells}</span>`]
 
     target.innerHTML = miscInfo;
+
   } else {
     console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
   }
@@ -186,7 +187,7 @@ const expandableElements = source.querySelectorAll('.expandable');
 expandableElements.forEach(element => {
 
 element.addEventListener('mouseenter', (event) => {
-console.log('tag')
+console.log('mouseenter')
 const contentType = event.target.getAttribute('data-content-type');
 const contentId = event.target.getAttribute('divId');
 
@@ -213,7 +214,7 @@ switch (contentType) {
     console.log('Unknown content type');
 }          
 
-Ref.Centre.classList.add('showCentre');
+target.style.display = "block";
 this.showExtraExpandable(Ref.Left); 
 
 });
@@ -259,7 +260,7 @@ showExtraExpandable(target) {
         console.log('Unknown content type');
       }        
 
-      target.classList.add('showCentre');
+      target.style.display = "block";
       this.showFloatingExpandable();
       
     });   

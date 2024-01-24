@@ -52,12 +52,6 @@ init: function () {
           Ref.Centre.style.display = 'block';
           Ref.Centre.innerHTML = ''; // Clear existing content
 
-          // // fixDisplay()
-          // const imageContainer = document.querySelector('.image-container');
-          // const radiantDisplay = document.getElementById('radiantDisplay');
-          // imageContainer.style.width = "45vw";
-          // radiantDisplay.style.width = "45vw";
-
           filteredItems.forEach(item => {
             const option = document.createElement('div');
             option.textContent = item.Name || item; // Use "Name" property if available
@@ -307,7 +301,7 @@ Ref.textLocation.style.display = "flex";
 
 //Hide
 
-Ref.Centre.style.display = "none";
+//Ref.Centre.style.display = "none";
 Ref.Left.classList.remove('showLeft');
 Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";

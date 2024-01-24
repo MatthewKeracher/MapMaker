@@ -510,7 +510,9 @@ if (foundNPC.savingThrows){
 
 }
 
+
 target.innerHTML = npcContent;
+
 } else {
 target.innerHTML = `NPC not found`;
 }
