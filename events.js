@@ -492,6 +492,46 @@ loadEventsList: function(data, target, origin) {
 
 
   for (const event of this.allEvents) {
+
+    this.allEvents = this.allEvents.sort((a, b) => {
+      const extractNumber = str => {
+          // Extract the numeric part from the beginning of the string
+          const match = str.match(/^(\d+(\.\d+)?)/);
+          return match ? parseFloat(match[1]) : NaN;
+      };
+  
+      const getSortValue = element => {
+          // If the string starts with a number, return the numeric part; otherwise, return the string itself
+          return isNaN(extractNumber(element)) ? element : extractNumber(element);
+      };
+  
+      const aValue = getSortValue(a.event);
+      const bValue = getSortValue(b.event);
+  
+      if (aValue === bValue) return 0;
+      return aValue < bValue ? -1 : 1;
+  
+  });
+
+    // Iterate over the allEvents
+    for (let i = 0; i < this.allEvents.length; i++) {
+      const currentEvent = this.allEvents[i];
+  
+      // Check if the current event has target 'NPC'
+      if (currentEvent.target === 'NPC') {
+      const npcEventIndex = this.allEvents.findIndex(event =>
+      event.event === currentEvent.location
+      );
+  
+      // Move the NPC event after the corresponding location event
+      if (npcEventIndex !== -1) {
+      // Remove the NPC event from its current position
+      const removedEvent = this.allEvents.splice(i, 1)[0];
+      // Insert the NPC event after the corresponding location event
+      this.allEvents.splice(npcEventIndex + 1, 0, removedEvent);
+      }
+  
+  }};
     
   const eventNameDiv = document.createElement('div');
 
