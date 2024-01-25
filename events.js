@@ -392,11 +392,11 @@ sortEvents: function(data) {
       const isInCurrentLocation = eventLocations.includes(currentLocation);
       const isLocationTagMatch = locationTags.some(tag => eventLocations.includes(tag)) || subLocations.some(subLoc => eventLocations.includes(subLoc.event));
 
-      if ((isActive && isInCurrentLocation) || (isActive && isLocationTagMatch)) {
+      if ((isActive && isInCurrentLocation)|| (isActive && isLocationTagMatch) && event.location !== 'All') {
           this.locationEventsArray.push(event);
       } else if (!isActive && (isInCurrentLocation || isLocationTagMatch)) {
           this.locationEventsArray.push(event);
-      } else if (event.location === 'All' && event.active === isActive) {
+      } else if (event.location === 'All') {
           this.allEvents.push(event);
       } else {
           this.elsewhere.push(event);
@@ -409,6 +409,8 @@ loadEventsList: function(data, target, origin) {
   target.innerHTML = '';
   
   this.sortEvents(data);
+
+  // EVENTS AT CURRENT LOCATION
 
   this.locationEventsArray = this.locationEventsArray.sort((a, b) => {
     const extractNumber = str => {
@@ -450,7 +452,6 @@ loadEventsList: function(data, target, origin) {
 
 }};
 
-
   for (const event of this.locationEventsArray) {
     const eventNameDiv = document.createElement('div');
 
@@ -489,7 +490,7 @@ loadEventsList: function(data, target, origin) {
   target.appendChild(document.createElement('hr'));
   }
 
-
+// EVENT.LOCATION === ALL
 
   for (const event of this.allEvents) {
 
@@ -548,19 +549,6 @@ loadEventsList: function(data, target, origin) {
     eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
   }
 
-  // const isAllLocationActive = event.location === 'All' && event.active === 1;
-  // const npcOrLocation = event.target === 'NPC' ? event.npc : event.location;
-
-  // eventNameDiv.innerHTML = `
-  // <span class="${isAllLocationActive ? 'spell' : 'gray'}">[${event.group}]</span>
-  // <span class="${isAllLocationActive ? 'lime' : 'gray'}">${event.event}</span>
-  // <span class="${isAllLocationActive ? 'white' : 'gray'}">
-  // [${isAllLocationActive && event.npc !== 'All' ? 'All ' + npcOrLocation : npcOrLocation}]
-  // </span>
-    
-  
-  // `;
-
     target.appendChild(eventNameDiv);
     
     if(origin === 'eventsManager'){
@@ -582,22 +570,66 @@ loadEventsList: function(data, target, origin) {
   target.appendChild(document.createElement('hr'));
   }
 
-  this.elsewhere.sort((a, b) => a.group.localeCompare(b.group));
+//EVENTS.LOCATION == ELSEWHERE
+
+// Assuming your array is named 'eventsArray'
+this.elsewhere = this.elsewhere.sort((a, b) => {
+  // Compare events based on their 'location' property
+  const locationA = a.location.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+  const locationB = b.location.toLowerCase();
+
+  if (locationA === locationB) {
+    // If locations are the same, compare events based on their 'event' property
+    const eventA = a.event.toLowerCase();
+    const eventB = b.event.toLowerCase();
+
+    return eventA.localeCompare(eventB);
+  }
+
+  // Otherwise, compare based on 'location' property
+  return locationA.localeCompare(locationB);
+}).reduce((result, currentEvent, index, array) => {
+  if (index > 0 && currentEvent.location !== array[index - 1].location) {
+    // Insert <hr> when a new location is encountered
+    result.push({ locationSeparator: true, location: currentEvent.location });
+    console.log(currentEvent.event)
+  }
+  result.push(currentEvent);
+  return result;
+}, []);
+
+    // Iterate over the elsewhere array
+    for (let i = 0; i < this.elsewhere.length; i++) {
+    const currentEvent = this.elsewhere[i];
+
+    // Check if the current event has target 'NPC'
+    if (currentEvent.target === 'NPC') {
+    const npcEventIndex = this.elsewhere.findIndex(event =>
+    event.event === currentEvent.location
+    );
+
+
+    // Move the NPC event after the corresponding location event
+    if (npcEventIndex !== -1) {
+    // Remove the NPC event from its current position
+    const removedEvent = this.elsewhere.splice(i, 1)[0];
+    // Insert the NPC event after the corresponding location event
+    this.elsewhere.splice(npcEventIndex + 1, 0 , removedEvent);
+    }
+
+}};
 
   for (const event of this.elsewhere) {
     const eventNameDiv = document.createElement('div');
-    // eventNameDiv.innerHTML = `
-    // // <span class="${event.active === 1 ? 'spell' : 'gray'}">[${event.group}]</span>
-    // // <span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event}</span>
-    // // <span class="${event.target === 'NPC' ? 'hotpink' : 'cyan'}">[${event.target === 'NPC' ? event.npc : event.location}]</span>
     
-    // // `;
-
-    if(event.target === 'NPC' && event.active === 1){
+    if(event.locationSeparator === true){
+      eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
+    }
+    else if(event.target === 'NPC' && event.active === 1){
       eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
     }
     else if (event.target === 'Location' && event.active === 1 ){
-      eventNameDiv.innerHTML = `<span class="cyan">${event.event} </span>`;
+      eventNameDiv.innerHTML = `<span class="misc">${event.event} </span>`;
     }
     else if (event.target === 'NPC'){
       eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
