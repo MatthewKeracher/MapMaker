@@ -95,7 +95,7 @@ case 2:
 const index = Events.eventsArray.findIndex(event => parseInt(event.id) === parseInt(Ref.eventId.value));
 
 if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + Events.eventsArray[index].event + "?");
+const confirmation = window.confirm("Are you sure you want to delete " + Events.eventsArray[index].name + "?");
 
 if (confirmation) {
 Events.eventsArray.splice(index, 1); 

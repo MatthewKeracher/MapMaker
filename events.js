@@ -23,8 +23,9 @@ try {
 const response = await fetch('ambience.json'); // Adjust the path if needed
 const data = await response.json();
 this.eventsArray = data;
-//console.log(this.ambienceArray)
-this.fillEventManager();
+this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
+Ref.Centre.style.display = 'none'; // Display the container
+this.loadEventListeners();
 return data;
 
 } catch (error) {
@@ -96,6 +97,26 @@ this.fillTagsArray();
 this.showTags(this.tagsArray);
 })
 
+// EVENT TAGS LISTENERS
+
+Ref.eventTags.addEventListener('input', (event) => {
+  let searchText = event.target.value.toLowerCase();
+  Ref.Centre.classList.add('showCentre');
+  Ref.Left.classList.remove('showLeft');
+  // Call the searchAmbience function
+  console.log(searchText)
+  this.searchTags(searchText); 
+  this.showTags(this.searchArray);
+  
+  })
+  
+  Ref.eventTags.addEventListener('click', () => {
+  Ref.Centre.classList.add('showCentre');
+  Ref.Left.classList.remove('showLeft');
+  this.fillTagsArray();
+  this.showTags(this.tagsArray);
+  })
+
 // -- EVENTFORM LISTENERS
 
 Ref.eventSearch.addEventListener('click', () => {
@@ -143,57 +164,34 @@ let searchText = event.target.value.toLowerCase();
 NPCs.searchNPC(searchText);
 })},
 
-fillEventManager() {
-// Create an object to keep track of unique items
-const uniqueItems = {};
-
-// Reference to the dropdown element
-const eventManagerDropdown = Ref.eventManagerInput;
-
-// Clear existing options
-eventManagerDropdown.innerHTML = '';
-
-// Iterate through the ambienceArray and add unique titles to the dropdown
-this.eventsArray.forEach(ambience => {
-const title = ambience.event;
-
-// Check if the title is unique
-if (!uniqueItems[title]) {
-// Create a new option element
-const option = document.createElement('option');
-option.value = title;
-option.text = title;
-
-// Add the option to the dropdown
-eventManagerDropdown.appendChild(option);
-
-// Mark the title as seen
-uniqueItems[title] = true;
-}
-});
-
-// Call EventLoad() if needed
-this.loadEventListeners();
+addEventsSearch: function() {
+  Ref.eventSearch.addEventListener('input', (event) => {
+  let searchText = event.target.value.toLowerCase();
+  
+  // Call the searchAmbience function
+  this.searchEvents(searchText);
+  });
+  
 },
 
 searchEvents: function(searchText) {
 this.searchArray = [];
-console.log('Searching for Events including: ' + searchText)
+//console.log('Searching for Events including: ' + searchText)
 
 this.searchArray = this.eventsArray.filter((e) => {
 const group = e.group.toLowerCase();
-const event = e.event.toLowerCase();
+const name = e.name.toLowerCase();
 const npc = e.npc.toLowerCase();
 const location = e.location.toLowerCase();
 
 // Check if any of the properties contain the search text
-return group.includes(searchText) || event.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
+return group.includes(searchText) || name.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
 
 }); 
 
-},
+this.loadEventsList(this.searchArray, Ref.Centre);
 
-// -- LOCATION search
+},
 
 searchLocations: function(searchText) {
   this.searchArray = [];
@@ -213,7 +211,7 @@ searchLocations: function(searchText) {
 
   const searchArray2 = Events.eventsArray.filter((event) => {
     
-    const name = event.event.toLowerCase();
+    const name = event.name.toLowerCase();
     const location = event.location.toLowerCase(); // Assuming tags is a comma-separated list
 
     // Get the last term in the search text (or use the entire text if there is no comma)
@@ -226,10 +224,6 @@ searchLocations: function(searchText) {
   this.searchArray = [...searchArray1, ...searchArray2]
 
 },
-
-
-
-// -- TAGS Functions
 
 searchTags: function(searchText) {
   this.searchArray = [];
@@ -251,7 +245,6 @@ searchTags: function(searchText) {
     return lastTag.includes(lastTerm);
   });
 },
-
 
 // Function to extract tags from all Arrays
 fillTagsArray() {
@@ -327,18 +320,10 @@ showTags(data) {
   }
 },
 
-
-// -- LOCATION TAGS FUNCTIONS
-
-
-// -- USING EVENT MANAGER
-
 addEventInfo(data){
 
-const contentId = this.focusEvent
-
 //Search for Event in the Array   
-const event = Object.values(this.eventsArray).find(event => event.event.toLowerCase() === data.event.toLowerCase() && event.target === data.target);
+const event = this.eventsArray.find(event => event.name === data.name && event.target === data.target);
 
 if (event) {
 
@@ -346,7 +331,7 @@ if (event) {
 
 const eventInfo = [
 
-`<h2><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.event || "None"}</h2><hr>`,
+`<h2><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.name || "None"}</h2><hr>`,
 `<h3><span class="cyan">Location: </span>${event.location || "None"} <br>`,
 `<span class="hotpink">NPC: </span>${event.npc || "None"} <br>`,
 `<span class="orange">Group: </span>${event.group || "None"} <br></h3>`,
@@ -370,296 +355,124 @@ console.log(`Event not found: ${data.event}`);
 
 },
 
-// Partition the ambienceArray into different groups
-locationEventsArray: [],
-allEvents: [],
-elsewhere: [],
-
-sortEvents: function(data) {
-  const locationObject = Array.locationArray.find(location => location.divId === Ref.locationLabel.textContent);
-  const subLocations = locationObject ? Events.eventsArray.filter(event => event.target === "Location" && event.location === locationObject.divId) : [];
-
-  this.locationEventsArray = [];
-  this.allEvents = [];
-  this.elsewhere = [];
-
-  data.forEach(event => {
-      const eventLocations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-      const locationTags = locationObject && locationObject.tags ? locationObject.tags.split(',').map(item => item.trim()) : [];
-      const currentLocation = locationObject ? locationObject.divId : '';
-
-      const isActive = event.active === 1;
-      const isInCurrentLocation = eventLocations.includes(currentLocation);
-      const isLocationTagMatch = locationTags.some(tag => eventLocations.includes(tag)) || subLocations.some(subLoc => eventLocations.includes(subLoc.event));
-
-      if ((isActive && isInCurrentLocation)|| (isActive && isLocationTagMatch) && event.location !== 'All') {
-          this.locationEventsArray.push(event);
-      } else if (!isActive && (isInCurrentLocation || isLocationTagMatch)) {
-          this.locationEventsArray.push(event);
-      } else if (event.location === 'All') {
-          this.allEvents.push(event);
-      } else {
-          this.elsewhere.push(event);
-      }
-  });
-},
-
 loadEventsList: function(data, target, origin) {
 
   target.innerHTML = '';
-  
-  this.sortEvents(data);
+  Ref.Centre.style.display = 'block'; // Display the container
 
-  // EVENTS AT CURRENT LOCATION
+data = data.sort((a, b) => {
+  const locationA = a.location.toLowerCase();
+  const locationB = b.location.toLowerCase();
 
-  this.locationEventsArray = this.locationEventsArray.sort((a, b) => {
-    const extractNumber = str => {
-        // Extract the numeric part from the beginning of the string
-        const match = str.match(/^(\d+(\.\d+)?)/);
-        return match ? parseFloat(match[1]) : NaN;
-    };
+  if (locationA === locationB) {
+    const eventA = a.name.toLowerCase();
+    const eventB = b.name.toLowerCase();
+    return eventA.localeCompare(eventB);
+  }
 
-    const getSortValue = element => {
-        // If the string starts with a number, return the numeric part; otherwise, return the string itself
-        return isNaN(extractNumber(element)) ? element : extractNumber(element);
-    };
-
-    const aValue = getSortValue(a.event);
-    const bValue = getSortValue(b.event);
-
-    if (aValue === bValue) return 0;
-    return aValue < bValue ? -1 : 1;
-
+  return locationA.localeCompare(locationB);
 });
 
-    // Iterate over the locationEventsArray
-    for (let i = 0; i < this.locationEventsArray.length; i++) {
-    const currentEvent = this.locationEventsArray[i];
+// Move NPC Events after Location Events
+const tempArray = [];
 
-    // Check if the current event has target 'NPC'
-    if (currentEvent.target === 'NPC') {
-    const npcEventIndex = this.locationEventsArray.findIndex(event =>
-    event.event === currentEvent.location
-    );
+for (const event of data) {
+if (event.target === 'Location') {
+// If the event is a location, add it to the tempArray
+tempArray.push(event);
+}
+}
 
-    // Move the NPC event after the corresponding location event
-    if (npcEventIndex !== -1) {
-    // Remove the NPC event from its current position
-    const removedEvent = this.locationEventsArray.splice(i, 1)[0];
-    // Insert the NPC event after the corresponding location event
-    this.locationEventsArray.splice(npcEventIndex + 1, 0, removedEvent);
-    }
+for (const event of data) {
+if (event.target === 'NPC') {
+// If the event is an NPC, find its corresponding location in tempArray
+const index = tempArray.findIndex(locationEvent => locationEvent.name === event.location);
 
-}};
+if (index !== -1) {
+// If the corresponding location is found, insert the NPC event after it
+tempArray.splice(index + 1, 0, event);
+} else {
+// If the corresponding location is not found, add the NPC event to the end
+tempArray.push(event);
+}
+}
+}
 
-  for (const event of this.locationEventsArray) {
+// Update the data array with the events in the correct order
+data = tempArray;
+
+data = data.reduce((result, currentEvent, index, array) => {
+  const reversedArray = array.slice(0, index).reverse();
+  const lastLocationIndex = reversedArray.findIndex(event => event.target === 'Location');
+
+  if (currentEvent.target === 'Location'){
+  if (index > 0 && lastLocationIndex !== -1 && currentEvent.location !== reversedArray[lastLocationIndex].location) {
+    // Insert <hr> when a new location is encountered after the last 'Location' event
+    result.push({ locationSeparator: true, location: currentEvent.location });
+  }
+  }
+
+  if (currentEvent.target === 'NPC'){
+  if (index > 0 && (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name)) {
+  // Insert <hr> when a new location is encountered after the last 'Location' event
+  result.push({ locationSeparator: true, location: currentEvent.location });
+  }
+  }
+
+  result.push(currentEvent);
+  return result;
+}, []);
+
+//Move currentLocation entries to the top.
+
+let currentLocation = Ref.locationLabel.textContent !== '' ? Ref.locationLabel.textContent : 'All';  
+
+let startIndex = data.findIndex(event => event.locationSeparator && event.location === currentLocation);
+
+let nextSeparatorIndex = data.findIndex((event, index) => index > startIndex && event.locationSeparator);
+
+let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
+
+    data = [...eventsToMove, ...data];
+
+
+  //Format EventDiv
+  for (const event of data) {
     const eventNameDiv = document.createElement('div');
 
-    if(event.target === 'NPC' && event.active === 1){
-      eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+    if(event.locationSeparator === true){
+      eventNameDiv.classList.add('no-hover');
+      eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
+    }
+    else if(event.target === 'NPC' && event.active === 1){
+      eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
     }
     else if (event.target === 'Location' && event.active === 1 ){
-      eventNameDiv.innerHTML = `<span class="cyan">${event.event} </span>`;
+      eventNameDiv.innerHTML = `<span class="misc">${event.name} </span>`;
     }
     else if (event.target === 'NPC'){
-      eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
+      eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
     }
     else{
-      eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
-    }
+      eventNameDiv.innerHTML = `<span class="gray">${event.name} </span>`;
+    };
    
     target.appendChild(eventNameDiv);
 
           if(origin === 'eventsManager'){
-          this.addCurrentEventEvents(event, eventNameDiv);
+          this.addCurrentEventNames(event, eventNameDiv);
           }else{
           this.fillEventForm(event, eventNameDiv);
           }
 
           eventNameDiv.addEventListener('mouseover', () => {
-          //Ref.eventManagerInput.value = event.event;
-          this.focusEvent = event.event;
+          this.focusEvent = event.name;
           this.searchArray = [event]; // Assign an array with a single element
           this.addEventInfo(event);
           Ref.Left.classList.add('showLeft');
           });
 
-  }
-
-  if( this.locationEventsArray.length > 1){
-  target.appendChild(document.createElement('hr'));
-  }
-
-// EVENT.LOCATION === ALL
-
-  for (const event of this.allEvents) {
-
-    this.allEvents = this.allEvents.sort((a, b) => {
-      const extractNumber = str => {
-          // Extract the numeric part from the beginning of the string
-          const match = str.match(/^(\d+(\.\d+)?)/);
-          return match ? parseFloat(match[1]) : NaN;
-      };
-  
-      const getSortValue = element => {
-          // If the string starts with a number, return the numeric part; otherwise, return the string itself
-          return isNaN(extractNumber(element)) ? element : extractNumber(element);
-      };
-  
-      const aValue = getSortValue(a.event);
-      const bValue = getSortValue(b.event);
-  
-      if (aValue === bValue) return 0;
-      return aValue < bValue ? -1 : 1;
-  
-  });
-
-    // Iterate over the allEvents
-    for (let i = 0; i < this.allEvents.length; i++) {
-      const currentEvent = this.allEvents[i];
-  
-      // Check if the current event has target 'NPC'
-      if (currentEvent.target === 'NPC') {
-      const npcEventIndex = this.allEvents.findIndex(event =>
-      event.event === currentEvent.location
-      );
-  
-      // Move the NPC event after the corresponding location event
-      if (npcEventIndex !== -1) {
-      // Remove the NPC event from its current position
-      const removedEvent = this.allEvents.splice(i, 1)[0];
-      // Insert the NPC event after the corresponding location event
-      this.allEvents.splice(npcEventIndex + 1, 0, removedEvent);
-      }
-  
-  }};
-    
-  const eventNameDiv = document.createElement('div');
-
-  if(event.target === 'NPC' && event.active === 1){
-    eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
-  }
-  else if (event.target === 'Location' && event.active === 1 ){
-    eventNameDiv.innerHTML = `<span class="cyan">${event.event} </span>`;
-  }
-  else if (event.target === 'NPC'){
-    eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
-  }
-  else{
-    eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
-  }
-
-    target.appendChild(eventNameDiv);
-    
-    if(origin === 'eventsManager'){
-      this.addCurrentEventEvents(event, eventNameDiv);
-      }else{
-      this.fillEventForm(event, eventNameDiv);
-      }
-
-      eventNameDiv.addEventListener('mouseover', () => {
-        //Ref.eventManagerInput.value = event.event;
-        this.focusEvent = event.event;
-        this.searchArray = [event]; // Assign an array with a single element
-        this.addEventInfo(event);
-        Ref.Left.classList.add('showLeft');
-        });
-  }
-
-  if( this.allEvents.length > 1){
-  target.appendChild(document.createElement('hr'));
-  }
-
-//EVENTS.LOCATION == ELSEWHERE
-
-// Assuming your array is named 'eventsArray'
-this.elsewhere = this.elsewhere.sort((a, b) => {
-  // Compare events based on their 'location' property
-  const locationA = a.location.toLowerCase(); // Convert to lowercase for case-insensitive comparison
-  const locationB = b.location.toLowerCase();
-
-  if (locationA === locationB) {
-    // If locations are the same, compare events based on their 'event' property
-    const eventA = a.event.toLowerCase();
-    const eventB = b.event.toLowerCase();
-
-    return eventA.localeCompare(eventB);
-  }
-
-  // Otherwise, compare based on 'location' property
-  return locationA.localeCompare(locationB);
-}).reduce((result, currentEvent, index, array) => {
-  if (index > 0 && currentEvent.location !== array[index - 1].location) {
-    // Insert <hr> when a new location is encountered
-    result.push({ locationSeparator: true, location: currentEvent.location });
-    console.log(currentEvent.event)
-  }
-  result.push(currentEvent);
-  return result;
-}, []);
-
-    // Iterate over the elsewhere array
-    for (let i = 0; i < this.elsewhere.length; i++) {
-    const currentEvent = this.elsewhere[i];
-
-    // Check if the current event has target 'NPC'
-    if (currentEvent.target === 'NPC') {
-    const npcEventIndex = this.elsewhere.findIndex(event =>
-    event.event === currentEvent.location
-    );
-
-
-    // Move the NPC event after the corresponding location event
-    if (npcEventIndex !== -1) {
-    // Remove the NPC event from its current position
-    const removedEvent = this.elsewhere.splice(i, 1)[0];
-    // Insert the NPC event after the corresponding location event
-    this.elsewhere.splice(npcEventIndex + 1, 0 , removedEvent);
-    }
-
-}};
-
-  for (const event of this.elsewhere) {
-    const eventNameDiv = document.createElement('div');
-    
-    if(event.locationSeparator === true){
-      eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
-    }
-    else if(event.target === 'NPC' && event.active === 1){
-      eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
-    }
-    else if (event.target === 'Location' && event.active === 1 ){
-      eventNameDiv.innerHTML = `<span class="misc">${event.event} </span>`;
-    }
-    else if (event.target === 'NPC'){
-      eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.event} </span>`;
-    }
-    else{
-      eventNameDiv.innerHTML = `<span class="gray">${event.event} </span>`;
-    }
-
-    target.appendChild(eventNameDiv);
-    
-    if(origin === 'eventsManager'){
-    this.addCurrentEventEvents(event, eventNameDiv);
-    }else{
-    this.fillEventForm(event, eventNameDiv);
-    }
-
-    eventNameDiv.addEventListener('mouseover', () => {
-      //Ref.eventManagerInput.value = event.event;
-      this.focusEvent = event.event;
-      this.searchArray = [event]; // Assign an array with a single element
-      this.addEventInfo(event);
-      Ref.Left.classList.add('showLeft');
-      this.addEventInfo(eventNameDiv.id, Ref.Left);
-      });
-
-  }
-
-  Ref.Centre.style.display = 'block'; // Display the container
-  
-},
+}},
 
 loadLocationsList: function(data) {
 const Centre = document.getElementById('Centre'); // Do not delete!!
@@ -732,7 +545,7 @@ if (
   (
     (entry.location === "All") || 
     (entry.location.split(',').map(locItem => locItem.trim()).some(locItem => locItem === currentLocation)) ||
-    (subLocations.some(subLoc => subLoc.event === entry.location)) ||
+    (subLocations.some(subLoc => subLoc.name === entry.location)) ||
     (tags.split(',').map(item => item.trim()).some(tag => entry.location.split(',').map(locItem => locItem.trim()).includes(tag)))
   )
   ){activeEvents.push(entry);}
@@ -748,9 +561,9 @@ locationEvents.sort((a, b) => {
   // If b's location is 'All', it should come first
   if (b.location === 'All') return 1;
   
-  // For other cases, compare based on the event property
-  if (a.event > b.event) return 1;
-  if (a.event < b.event) return -1;
+  // For other cases, compare based on the name property
+  if (a.name > b.name) return 1;
+  if (a.name < b.name) return -1;
 
   return 0;
 });
@@ -760,7 +573,7 @@ const allCount = locationEvents.filter(entry => entry.location === 'All').length
 
 // Create an array of matching NPC events for each Location event
 const matchedEvents = locationEvents.map(locEvent => {
-  const matchedNPCs = npcEvents.filter(npcEvent => npcEvent.location === locEvent.event);
+  const matchedNPCs = npcEvents.filter(npcEvent => npcEvent.location === locEvent.name);
   return {
     location: locEvent,
     npc: matchedNPCs,
@@ -774,7 +587,7 @@ let npcDesc = '';
 let currentAll = index + 1;
 
 //Get Items for SubLocation
-const eventItems = this.addEventItems(entry.location.event);
+const eventItems = this.addEventItems(entry.location.name);
 let previousTag = '';
 let previousType = '';
 let eventItemsFormatted = '';
@@ -808,7 +621,7 @@ if (entry.location.location === 'All') {
   else if (entry.location !== 'All'){
 
 //Generate NPC Divs
-const presentNPCs = NPCs.getNPCs(entry.location.event, currentLocation);
+const presentNPCs = NPCs.getNPCs(entry.location.name, currentLocation);
 
 if (entry.npc.length === 0) {
 npcDesc += `<span class = "cyan">There is nobody around. </span><br>`;
@@ -821,7 +634,7 @@ npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
 
 //Put together.
 locDesc = 
-`<h3> <span class = "hotpink"> ${entry.location.event} </span> ${eventItemsFormatted} </h3>            
+`<h3> <span class = "hotpink"> ${entry.location.name} </span> ${eventItemsFormatted} </h3>            
 ${npcDesc}  
 <span class = "beige"> ${entry.location.description} </span> <br><br><hr>`;
         
@@ -831,11 +644,11 @@ ${npcDesc}
 }).join('');
 },
 
-addCurrentEventEvents(event, eventNameDiv){
+addCurrentEventNames(event, eventNameDiv){
 
   eventNameDiv.addEventListener('click', () => {
-    Ref.eventManagerInput.value = event.event;
-    this.focusEvent = event.event;
+    Ref.eventManagerInput.value = event.name;
+    this.focusEvent = event.name;
     this.searchArray = [event]; // Assign an array with a single element
     this.addEventInfo(event);
     Ref.Left.classList.add('showLeft');
@@ -889,15 +702,12 @@ addEventItems(event){
     return locationItems;
 },
 
-
-// -- MAKING AND EDITING EVENTS
-
 fillEventForm: function(event, ambienceNameDiv) {
 // Add click event listener to each ambience name
 ambienceNameDiv.addEventListener('click', () => {
 Ref.eventId.value = event.id;
 Ref.eventTags.value = event.group;
-Ref.eventName.value = event.event;
+Ref.eventName.value = event.name;
 Ref.eventNPC.value = event.npc;
 Ref.eventLocation.value = event.location;
 Ref.eventDescription.value = event.description;
@@ -921,6 +731,8 @@ Ref.locationCheck.click();
 
 saveEvent: function() {
   
+  const index = this.eventsArray.findIndex(event => event.id === parseInt(Ref.eventId.value) && event.name === Ref.eventName.value);
+
   let target;
   if (Ref.eventTarget.checked) {
       target = 'NPC';
@@ -928,13 +740,11 @@ saveEvent: function() {
       target = 'Location';
   }
 
-  const index = this.eventsArray.findIndex(event => event.Id === Ref.eventId.value && event.event === Ref.eventName.value);
-
   const event = {
-      id: Ref.eventId.value, 
+      id: parseInt(Ref.eventId.value), 
       active: 1,
       target: target,
-      event: Ref.eventName.value,
+      name: Ref.eventName.value,
       group: Ref.eventTags.value,
       description: Ref.eventDescription.value,
       location: Ref.eventLocation.value,
@@ -950,38 +760,13 @@ saveEvent: function() {
       event.id = Array.generateUniqueId(this.eventsArray, 'entry');
       Ref.eventId.value = event.id
       this.eventsArray.push(event);
+      console.log('Event added:', event);
   }
 
-  this.fillEventManager();
+  this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
 },
 
 
-addAmbienceSearch: function() {
-Ref.eventSearch.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
-
-// Call the searchAmbience function
-this.searchAmbience(searchText);
-});
-
-},
-
-searchAmbience: function(searchText) {
-this.searchArray = [];
-console.log('called')
-
-this.searchArray = this.eventsArray.filter((ambience) => {
-const group = ambience.group.toLowerCase();
-const event = ambience.event.toLowerCase();
-const npc = ambience.npc.toLowerCase();
-const location = ambience.location.toLowerCase();
-
-// Check if any of the properties contain the search text
-return group.includes(searchText) || event.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
-});
-
-this.loadEventsList(this.searchArray, Ref.Centre);
-},
 
 populateDropdown(dropdown, options, replace) {
 

@@ -1,20 +1,5 @@
 [
-{
-"active": 1,
-"group": "Summer Weather",
-"event": "Summer Morning",
-"location": "All",
-"npc": "",
-"description": "A refreshing summer morning as flowers bloom and the world awakens."
-},
-{
-"active": 1,
-"group": "Winter Weather",
-"event": "Summer Sweating",
-"location": "",
-"npc": "All",
-"description": "They are sweating."
-}
+
 
 ]
 

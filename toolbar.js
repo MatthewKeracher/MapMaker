@@ -25,7 +25,7 @@ Events.loadEventsArray();
 Edit.init();
 
 Monsters.addMonsterSearch();
-Events.addAmbienceSearch();
+Events.addEventsSearch();
 NPCs.addNPCSearch();
 Spells.addSpellSearch();
 Items.addItemSearch();
@@ -68,7 +68,7 @@ handleeventEnableClick() {
   const toDisable = Ref.eventManagerInput.value;
 
   // Find the event in Events.eventsArray with a matching 'event' field
-  const eventToDisable = Events.eventsArray.find(event => event.event === toDisable);
+  const eventToDisable = Events.eventsArray.find(event => event.name === toDisable);
 
   if (eventToDisable) {
       // Set the 'active' field of the found event to 1
@@ -94,7 +94,7 @@ handleEventDisableClick() {
    const toDisable = Ref.eventManagerInput.value;
 
    // Find the event in Events.eventsArray with a matching 'event' field
-   const eventToDisable = Events.eventsArray.find(event => event.event === toDisable);
+   const eventToDisable = Events.eventsArray.find(event => event.name === toDisable);
 
    if (eventToDisable) {
        // Set the 'active' field of the found event to 0
@@ -115,7 +115,7 @@ handleEventDisableClick() {
 handleeventGroupEnableClick() {
   // Find events in Events.eventsArray based on matching event names from Events.searchArray
   const eventsToEnable = Events.eventsArray.filter(event =>
-    Events.searchArray.some(searchEvent => searchEvent.event === event.event)
+    Events.searchArray.some(searchEvent => searchevent.name === event.name)
 );
 
 if (eventsToEnable.length > 0) {
@@ -139,7 +139,7 @@ if (eventsToEnable.length > 0) {
 handleEventGroupDisableClick() {
     // Find events in Events.eventsArray based on matching event names from Events.searchArray
     const eventsToDisable = Events.eventsArray.filter(event =>
-        Events.searchArray.some(searchEvent => searchEvent.event === event.event)
+        Events.searchArray.some(searchEvent => searchevent.name === event.name)
     );
 
     if (eventsToDisable.length > 0) {
@@ -256,6 +256,7 @@ Ref.Left.classList.remove('showLeft');
 Edit.pageChange(1);
 Ref.EditorContainer.style.display = 'none';
 Ref.locationGroup.style.display = 'none';
+Ref.Centre.style.display = 'none';
 
 Ref.eventManagerContainer.style.display = '';
 Ref.Storyteller.style.display = 'flex';

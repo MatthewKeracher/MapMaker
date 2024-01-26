@@ -81,7 +81,7 @@ Centre.appendChild(npcDiv);
 
 //show NPC info in Left when hover over Div
 npcDiv.addEventListener('mouseover', () => {
-  //Ref.eventManagerInput.value = event.event;
+  //Ref.eventManagerInput.value = event.name;
   // console.log(npcDiv.id)
   Ref.Left.classList.add('showLeft');
   Ref.Centre.style.display = 'block';
@@ -105,7 +105,7 @@ const uniqueNames = [];
 const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
 
 subLocations.forEach(subLoc => {
-  //console.log(subLoc.event.toString());
+  //console.log(subLoc.name.toString());
 });
 
 // Filter eventsArray based on currentLocation
@@ -120,7 +120,7 @@ return false; // If event.target is not 'NPC', filter it out
 // Check if npc.name matches event.npc for each event
 sortEvents.forEach(event => {
 if (npc.name === event.npc && !uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = `<span class = "lime"> [${event.event}] </span>  <span class = "white"> ${npc.name} </span>` ;
+npcNameDiv.innerHTML = `<span class = "lime"> [${event.name}] </span>  <span class = "white"> ${npc.name} </span>` ;
 this.namedNPCs.push(npcNameDiv);
 
 // Add the name to the array to mark it as processed
@@ -135,7 +135,7 @@ sortEvents.forEach(event => {
 const occupations = npc.occupation ? npc.occupation.split(',').map(item => item.trim()) : [];
 
 if (occupations.includes(event.npc) && !uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = `<span class = "misc"> [${event.event}] </span> <span class = "white"> ${npc.name} </span>` ;
+npcNameDiv.innerHTML = `<span class = "misc"> [${event.name}] </span> <span class = "white"> ${npc.name} </span>` ;
 this.groupedNPCs.push(npcNameDiv);
 
 // Add the name to the array to mark it as processed
@@ -359,8 +359,6 @@ for (const event of presentNPCEvents) {
 return story;
 },
 
-
-
 addNPCInfo(npcName, target) {
 
 const findNPC = npcName.replace(/-/g, ' ');
@@ -523,7 +521,6 @@ addNPCSearch: function(){
 Ref.npcSearch.addEventListener('input', (event) => {
 this.searchNPC();
 })
-
 
 Ref.npcSearch.addEventListener('click', (event) => {
 this.searchNPC();
