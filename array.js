@@ -197,7 +197,7 @@ handleFileLoad(fileContent) {
         }
 
         try {
-            //BROKEN this.generateUniqueId(data.monstersArray, 'array');
+            this.generateUniqueId(data.monstersArray, 'array');
             this.generateUniqueId(data.itemsArray, 'array');
             this.generateUniqueId(data.spellsArray, 'array');
             this.generateUniqueId(data.eventsArray, 'array');
