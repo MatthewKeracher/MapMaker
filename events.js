@@ -251,7 +251,7 @@ fillTagsArray() {
 this.tagsArray = [];
 
 for (const NPC of NPCs.npcArray) {
-let tags = NPC.occupation || [];
+let tags = NPC.tags || [];
 
 try{
 tags = tags.split(',').map(keyword => keyword.trim());

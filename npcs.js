@@ -130,18 +130,18 @@ uniqueNames.push(npc.name);
 }
 });
 
-// Check if npc.occupation matches event.npc for each event
+// Check if npc.tags matches event.npc for each event
 sortEvents.forEach(event => {
-const occupations = npc.occupation ? npc.occupation.split(',').map(item => item.trim()) : [];
+const tagss = npc.tags ? npc.tags.split(',').map(item => item.trim()) : [];
 
-if (occupations.includes(event.npc) && !uniqueNames.includes(npc.name)) {
+if (tagss.includes(event.npc) && !uniqueNames.includes(npc.name)) {
 npcNameDiv.innerHTML = `<span class = "misc"> [${event.name}] </span> <span class = "white"> ${npc.name} </span>` ;
 this.groupedNPCs.push(npcNameDiv);
 
 // Add the name to the array to mark it as processed
 uniqueNames.push(npc.name);
 } else {
-// Handle the case when npc.occupation doesn't match or it's already processed
+// Handle the case when npc.tags doesn't match or it's already processed
 }
 });
 
@@ -165,7 +165,7 @@ Ref.npcForm.style.display = 'flex'; // Display the npcForm
 //console.log(npc)
 
 Ref.npcName.value = npc.name;
-Ref.npcTags.value = npc.occupation;
+Ref.npcTags.value = npc.tags;
 
 //Ref.MorningLocation.value = npc.MorningLocation;
 
@@ -201,7 +201,7 @@ const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName
 
 const npc = {
 name: Ref.npcName.value,
-occupation: Ref.npcTags.value,
+tags: Ref.npcTags.value,
 level: Ref.npcLevel.value,
 class: Ref.npcClass.value,
 str: Ref.STR.value,
@@ -237,18 +237,18 @@ bulkAddTag(npcTags){
 
   // Iterate over itemsSearchArray and update Tags
   this.npcSearchArray.forEach(npc => {
-    if (npc.occupation) {
+    if (npc.tags) {
       // Split existing Tags into an array
-      const existingTags = npc.occupation.split(',').map(tag => tag.trim());
+      const existingTags = npc.tags.split(',').map(tag => tag.trim());
   
       // Check if the new tag is not already present
       if (!existingTags.includes(npcTags)) {
         // If not present, append the new tag value
-        npc.occupation += `, ${npcTags}`;
+        npc.tags += `, ${npcTags}`;
       }
     } else {
       // If Tags is empty, set it to the new tag value
-      npc.occupation = npcTags;
+      npc.tags = npcTags;
     }
   });
 
@@ -277,14 +277,14 @@ for (const npc of NPCs.npcArray) {
 for (const event of Events.eventsArray) {
 
 const eventNpcList = event.npc.split(',').map(item => item.trim());
-const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+const npctagsList = npc.tags.split(',').map(item => item.trim());
 
 const npcNameMatches = npc.name === event.npc;
 const npcInEventList = eventNpcList.includes(npc.name);
-const eventInOccupationList = npcOccupationList.includes(event.npc);
-const commonElementExists = npc.occupation && event.npc && eventNpcList.some(tag => npcOccupationList.includes(tag));
+const eventIntagsList = npctagsList.includes(event.npc);
+const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => npctagsList.includes(tag));
 
-if ((npcNameMatches || npcInEventList || eventInOccupationList || commonElementExists) &&
+if ((npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
 event.active === 1 &&
 event.target === 'NPC' &&
 event.location === subLocation) {
@@ -307,28 +307,28 @@ let story = ``;
 
 const presentNPCEvents = Events.eventsArray.filter(event => {
   const eventNpcList = event.npc.split(',').map(item => item.trim());
-  const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+  const npctagsList = npc.tags.split(',').map(item => item.trim());
 
   const npcNameMatches = npc.name === event.npc;
   const npcInEventList = eventNpcList.includes(npc.name);
-  const eventInOccupationList = npcOccupationList.includes(event.npc);
-  const commonElementExists = npc.occupation && event.npc && eventNpcList.some(tag => npcOccupationList.includes(tag));
+  const eventIntagsList = npctagsList.includes(event.npc);
+  const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => npctagsList.includes(tag));
 
   return (
-    (npcNameMatches || npcInEventList || eventInOccupationList || commonElementExists) &&
+    (npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
     event.target === 'NPC' &&
     event.active === 1 &&
-    npc.occupation !== '' &&
+    npc.tags !== '' &&
     (event.location === locationName || event.location === 'All')
   );
 });
 
 
-let relevantTag = ''; // Variable to store the relevant part of npc.occupation
+let relevantTag = ''; // Variable to store the relevant part of npc.tags
 
 if (presentNPCEvents.length > 0) {
-  // Find the first matching item.trim() in npc.occupation
-  const matchingItem = npc.occupation.split(',').map(item => item.trim()).find(item => presentNPCEvents.some(event => event.npc === item));
+  // Find the first matching item.trim() in npc.tags
+  const matchingItem = npc.tags.split(',').map(item => item.trim()).find(item => presentNPCEvents.some(event => event.npc === item));
 
   if (matchingItem) {
     relevantTag = matchingItem;
@@ -339,11 +339,11 @@ story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name
 
 
 for (const event of presentNPCEvents) {
-  // Define eventNpcList and npcOccupationList within the loop
+  // Define eventNpcList and npctagsList within the loop
   const eventNpcList = event.npc.split(',').map(item => item.trim());
-  const npcOccupationList = npc.occupation.split(',').map(item => item.trim());
+  const npctagsList = npc.tags.split(',').map(item => item.trim());
 
-  const sharedTag = event.npc && eventNpcList.find(tag => npcOccupationList.includes(tag));
+  const sharedTag = event.npc && eventNpcList.find(tag => npctagsList.includes(tag));
 
   if (sharedTag) {
     story += `<span class="hotpink">${sharedTag}. </span>`;
@@ -368,8 +368,8 @@ if (foundNPC) {
 
 let npcContent = `<h2><span class="cyan">${foundNPC.name}</span><br></h2>`;
 
-if (foundNPC.occupation && foundNPC.occupation !== "undefined") {
-npcContent += `<h3><span class="hotpink">${foundNPC.occupation}.</span></h3>`;
+if (foundNPC.tags && foundNPC.tags !== "undefined") {
+npcContent += `<h3><span class="hotpink">${foundNPC.tags}.</span></h3>`;
 }
 
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
@@ -534,14 +534,14 @@ searchNPC: function() {
 
   this.npcSearchArray = this.npcArray.filter((npc) => {
     const npcName = npc.name.toLowerCase();
-    const npcOccupation = npc.occupation.toLowerCase();
+    const npctags = npc.tags.toLowerCase();
     const npcClass = npc.class.toLowerCase();
 
-    // Split the occupation string into an array of words
-    const occupationWords = npcOccupation.split(',').map(word => word.trim());
+    // Split the tags string into an array of words
+    const tagsWords = npctags.split(',').map(word => word.trim());
 
-    // Check if either the name or any occupation word contains the search text
-    return npcClass.includes(searchText) || npcName.includes(searchText) || occupationWords.some(word => word.includes(searchText));
+    // Check if either the name or any tags word contains the search text
+    return npcClass.includes(searchText) || npcName.includes(searchText) || tagsWords.some(word => word.includes(searchText));
   });
 
   this.loadNPC(this.npcSearchArray);

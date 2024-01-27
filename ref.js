@@ -106,7 +106,7 @@ npcForm: document.querySelector('.npcForm'),
 
     npcSearch: document.getElementById('npcSearch'),
     npcName: document.getElementById('npcName'),
-    npcTags: document.getElementById('npcOccupation'),
+    npcTags: document.getElementById('npctags'),
 
     // MorningLocation: document.getElementById('primaryLocation'),
     // MorningActivity: document.getElementById('MorningActivity'),

@@ -209,7 +209,7 @@ const spellName = spell.Name.toLowerCase();
 const spellClass = spell.Class.toLowerCase();
 const spellLevel = spell.Level.toLowerCase();
 
-// Check if either the name or occupation contains the search text
+// Check if either the name or tags contains the search text
 return spellName.includes(searchText.toLowerCase()) || spellClass.includes(searchText.toLowerCase());
 });
 

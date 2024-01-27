@@ -257,7 +257,7 @@ searchItem: function(searchText) {
       const itemType = item.Type.toLowerCase();
       const itemTags = item.Tags ? item.Tags.toLowerCase() : '';
   
-      // Check if either the name or occupation contains the search text
+      // Check if either the name or tags contains the search text
       return itemName.includes(searchText.toLowerCase()) || itemType.includes(searchText.toLowerCase()) || itemTags.includes(searchText.toLowerCase());
     });
     //console.log('searching for... ' + searchText)

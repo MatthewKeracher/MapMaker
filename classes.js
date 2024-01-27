@@ -392,7 +392,7 @@ constructor(data) {
 //Character Sheet
 
 this.name = data.name;
-this.occupation = data.occupation;
+this.tags = data.tags;
 
 this.level = data.level || 0;
 this.class = data.class || 'Peasant';
@@ -682,14 +682,14 @@ npc.hitPoints = NPCbuild.rollHitDice(hitDice);
 }
 
 static getInventory(npc) {
-  // Filter itemsArray based on characterClass and occupation
+  // Filter itemsArray based on characterClass and tags
   const filteredItems = Items.itemsArray.filter(item => {
   const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
 
   // Check if the item matches the criteria
   return (
   (npc.class === '' || itemTags.includes(npc.class) || itemTags.includes(npc.name)) ||
-  (npc.occupation && npc.occupation.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
+  (npc.tags && npc.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
   );
   });
 
@@ -701,7 +701,7 @@ npc.inventory = filteredItems.map(item => ({
   Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
     tag === npc.class || 
     tag === npc.name  ||
-    (npc.occupation && npc.occupation.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
+    (npc.tags && npc.tags.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
   ) : ''
 }));
 
