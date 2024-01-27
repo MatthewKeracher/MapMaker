@@ -112,22 +112,27 @@ console.log(`Monster not found: ${contentId}`);
 
 // Edit Monsters
 loadMonsterList: function(data) {
-const Centre = document.getElementById('Centre'); // Do not delete!!
 
 // Clear the existing content
-Centre.innerHTML = '';
-
-// Get an array of monster names and sort them alphabetically
-const monsterNames = Object.keys(data).sort();
+Ref.Centre.innerHTML = '';
+Ref.Centre.style.display = 'block'; // Display the NPC names container
 
 // Iterate through the sorted monster names
-for (const monsterName of monsterNames) {
-const monster = data[monsterName];
+for (const monster of data) {
 const monsterNameDiv = document.createElement('div');
 monsterNameDiv.id = monster.Name;
 monsterNameDiv.innerHTML = `[${monster.Type}]<span class="hotpink">${monster.Name}</span>`;
-Centre.appendChild(monsterNameDiv);
-this.fillMonsterForm(monster, monsterNameDiv);
+Ref.Centre.appendChild(monsterNameDiv);
+
+monsterNameDiv.addEventListener('click', () => {
+
+  if(Edit.editPage === 3){
+    Ref.monsterTemplate.value = monsterNameDiv.id;
+    }else{
+    this.fillMonsterForm(monster, monsterNameDiv);
+    }
+
+});
 
  //show Monster info in Left when hover over Div
  monsterNameDiv.addEventListener('mouseover', () => {
@@ -137,8 +142,6 @@ this.fillMonsterForm(monster, monsterNameDiv);
   });
 
 }
-
-Centre.style.display = 'block'; // Display the NPC names container
 
 }, 
 
@@ -225,21 +228,19 @@ this.searchMonster(searchText);
 },
 
 searchMonster: function(searchText) {
-this.monsterSearchObject = {};
-
-for (const monsterName in this.monstersArray) {
-if (Object.hasOwnProperty.call(this.monstersArray, monsterName)) {
-const monster = this.monstersArray[monsterName];
-const monsterNameLower = monster.Name.toLowerCase();
-const monsterTypeLower = monster.Type.toLowerCase();
-
-if (monsterNameLower.includes(searchText.toLowerCase()) || monsterTypeLower.includes(searchText.toLowerCase())) {
-this.monsterSearchObject[monsterName] = monster;
-}
-}
-}
-
-this.loadMonsterList(this.monsterSearchObject);
+  this.searchArray = [];
+  //console.log('Searching for Events including: ' + searchText)
+  
+  this.searchArray = this.monstersArray.filter((e) => {
+  const type = e.Type.toLowerCase();
+  const name = e.Name.toLowerCase();
+  
+  // Check if any of the properties contain the search text
+  return type.includes(searchText) || name.includes(searchText);
+  
+  }); 
+  
+  this.loadMonsterList(this.searchArray);
 },
 
 

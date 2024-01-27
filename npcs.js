@@ -163,7 +163,7 @@ if(Edit.editPage === 3){
 Ref.npcForm.style.display = 'flex'; // Display the npcForm
 
 //console.log(npc)
-
+Ref.npcId.value = parseInt(npc.id);
 Ref.npcName.value = npc.name;
 Ref.npcTags.value = npc.tags;
 
@@ -171,6 +171,7 @@ Ref.npcTags.value = npc.tags;
 
 Ref.npcLevel.value = npc.level;
 Ref.npcClass.value = npc.class;
+Ref.monsterTemplate.value = npc.monsterTemplate;
 
 Ref.STR.value = npc.str;  
 Ref.DEX.value = npc.dex; 
@@ -200,10 +201,12 @@ saveNPC: function() {
 const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName.value);
 
 const npc = {
+id: parseInt(Ref.npcId.value),
 name: Ref.npcName.value,
 tags: Ref.npcTags.value,
 level: Ref.npcLevel.value,
 class: Ref.npcClass.value,
+monsterTemplate: Ref.monsterTemplate.value,
 str: Ref.STR.value,
 dex: Ref.DEX.value,
 int: Ref.INT.value,
@@ -228,7 +231,7 @@ this.bulkAddTag(Ref.npcTags.value)
 else {
 // Add the created NPC to the npcArray
 this.npcArray.push(npc);
-//console.log('New NPC added:', npc);
+console.log('New NPC added:', npc);
 }
 
 },
@@ -526,6 +529,19 @@ Ref.npcSearch.addEventListener('click', (event) => {
 this.searchNPC();
 });
 
+Ref.monsterTemplate.addEventListener('click', (event) => {
+Monsters.loadMonsterList(Monsters.monstersArray);
+});
+
+Ref.monsterTemplate.addEventListener('input', (event) => {
+ 
+let searchText = event.target.value.toLowerCase();
+
+// Call the searchMonster function
+Monsters.searchMonster(searchText);
+
+});
+
 },
 
 searchNPC: function() {
@@ -536,12 +552,13 @@ searchNPC: function() {
     const npcName = npc.name.toLowerCase();
     const npctags = npc.tags.toLowerCase();
     const npcClass = npc.class.toLowerCase();
+    //const monsterTemplate = npc.monsterTemplate.toLowerCase();
 
     // Split the tags string into an array of words
     const tagsWords = npctags.split(',').map(word => word.trim());
 
     // Check if either the name or any tags word contains the search text
-    return npcClass.includes(searchText) || npcName.includes(searchText) || tagsWords.some(word => word.includes(searchText));
+    return npcClass.includes(searchText) || npcName.includes(searchText)  || tagsWords.some(word => word.includes(searchText)); //|| monsterTemplate.includes(searchText)
   });
 
   this.loadNPC(this.npcSearchArray);

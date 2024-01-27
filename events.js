@@ -527,8 +527,8 @@ if(location.divId){
   
 } else if(location.target === "Location") {
   locNameDiv.innerHTML = `<span class="${location.location !== undefined ? 'cyan' : ''}">${location.location === 'All' ? `[${location.location}]` : ''}
-  </span><span class="misc">${location.event} </span>`;
-  locNameDiv.setAttribute('divId', location.event);
+  </span><span class="misc">${location.name} </span>`;
+  locNameDiv.setAttribute('divId', location.name);
   locNameDiv.setAttribute('location', location.location);
   Centre.appendChild(locNameDiv);
 }

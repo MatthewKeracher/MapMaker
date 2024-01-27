@@ -390,12 +390,13 @@ constructor(data) {
 
 
 //Character Sheet
-
+this.id = data.id;
 this.name = data.name;
 this.tags = data.tags;
 
-this.level = data.level || 0;
-this.class = data.class || 'Peasant';
+this.level = data.level || 1;
+this.class = data.class || 'Fighter';
+this.monsterTemplate = data.monsterTemplate;
 
 this.str = data.str || this.rollScore(this, "str"); 
 this.dex = data.dex || this.rollScore(this, "dex");
@@ -413,6 +414,23 @@ NPCbuild.getMagic(this);
 NPCbuild.getInventory(this);
 NPCbuild.getSavingThrows(this);
 NPCbuild.getAttackBonus(this);
+
+if(this.monsterTemplate !== undefined){
+NPCbuild.getMonster(this);}
+
+}
+
+static getMonster(npc){
+
+console.log(npc.monsterTemplate)
+// Find Monster
+const stats = Monsters.monstersArray.filter(monster => monster.Name === npc.monsterTemplate);
+const saveAs = stats[0].SaveAs;
+
+const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
+
+let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
+npc.savingThrows = savingThrows;
 
 }
 
