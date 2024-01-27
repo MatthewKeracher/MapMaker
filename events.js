@@ -360,18 +360,41 @@ loadEventsList: function(data, target, origin) {
   target.innerHTML = '';
   Ref.Centre.style.display = 'block'; // Display the container
 
-data = data.sort((a, b) => {
-  const locationA = a.location.toLowerCase();
-  const locationB = b.location.toLowerCase();
+    data = data.sort((a, b) => {
+    const locationA = a.location.toLowerCase();
+    const locationB = b.location.toLowerCase();
 
-  if (locationA === locationB) {
+    if (locationA === locationB) {
     const eventA = a.name.toLowerCase();
     const eventB = b.name.toLowerCase();
-    return eventA.localeCompare(eventB);
-  }
 
-  return locationA.localeCompare(locationB);
-});
+    // Custom function to handle events starting with numbers
+    const compareEvents = (event1, event2) => {
+    // Extract numbers from event names
+    const numA = parseFloat(event1.match(/\d+(\.\d+)?/));
+    const numB = parseFloat(event2.match(/\d+(\.\d+)?/));
+
+    // If both events start with numbers, compare them numerically
+    if (!isNaN(numA) && !isNaN(numB)) {
+    return numA - numB;
+    }
+
+    // If only one of them starts with a number, prioritize it
+    if (!isNaN(numA)) {
+    return -1;
+    } else if (!isNaN(numB)) {
+    return 1;
+    }
+
+    // If none of them start with numbers, use localeCompare
+    return event1.localeCompare(event2);
+    };
+
+    return compareEvents(eventA, eventB);
+    }
+
+    return locationA.localeCompare(locationB);
+    });
 
 // Move NPC Events after Location Events
 const tempArray = [];
@@ -404,16 +427,17 @@ data = tempArray;
 data = data.reduce((result, currentEvent, index, array) => {
   const reversedArray = array.slice(0, index).reverse();
   const lastLocationIndex = reversedArray.findIndex(event => event.target === 'Location');
-
+  
   if (currentEvent.target === 'Location'){
-  if (index > 0 && lastLocationIndex !== -1 && currentEvent.location !== reversedArray[lastLocationIndex].location) {
+    
+  if (lastLocationIndex === -1 || currentEvent.location !== reversedArray[lastLocationIndex].location) {
     // Insert <hr> when a new location is encountered after the last 'Location' event
     result.push({ locationSeparator: true, location: currentEvent.location });
   }
   }
 
   if (currentEvent.target === 'NPC'){
-  if (index > 0 && (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name)) {
+  if (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name) {
   // Insert <hr> when a new location is encountered after the last 'Location' event
   result.push({ locationSeparator: true, location: currentEvent.location });
   }
@@ -425,7 +449,10 @@ data = data.reduce((result, currentEvent, index, array) => {
 
 //Move currentLocation entries to the top.
 
-let currentLocation = Ref.locationLabel.textContent !== '' ? Ref.locationLabel.textContent : 'All';  
+
+let currentLocation = Ref.locationLabel.textContent;  
+
+if(currentLocation !== ''){
 
 let startIndex = data.findIndex(event => event.locationSeparator && event.location === currentLocation);
 
@@ -434,6 +461,8 @@ let nextSeparatorIndex = data.findIndex((event, index) => index > startIndex && 
 let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
 
     data = [...eventsToMove, ...data];
+
+};
 
 
   //Format EventDiv

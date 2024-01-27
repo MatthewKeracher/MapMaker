@@ -397,12 +397,12 @@ this.occupation = data.occupation;
 this.level = data.level || 0;
 this.class = data.class || 'Peasant';
 
-this.str = data.str || this.rollScore(); 
-this.dex = data.dex || this.rollScore();
-this.int = data.int || this.rollScore();
-this.wis = data.wis || this.rollScore();
-this.con = data.con || this.rollScore();
-this.cha = data.cha || this.rollScore();
+this.str = data.str || this.rollScore(this, "str"); 
+this.dex = data.dex || this.rollScore(this, "dex");
+this.int = data.int || this.rollScore(this, "int");
+this.wis = data.wis || this.rollScore(this, "wis");
+this.con = data.con || this.rollScore(this, "con");
+this.cha = data.cha || this.rollScore(this, "cha");
 this.Backstory = data.Backstory;
 
 
@@ -416,9 +416,49 @@ NPCbuild.getAttackBonus(this);
 
 }
 
-rollScore() {
-  return Math.floor(Math.random() * (18 - 3 + 1)) + 3;
-  }
+rollScore(npc, score) {
+
+let prime
+
+  switch (npc.class) {
+    case 'Fighter':
+    prime = 'str'
+
+    break;
+    case 'Ranger':
+    prime = 'dex'
+    break;
+    case 'Thief':
+    prime = 'dex'
+
+    break;
+    case 'Assassin':
+    prime = 'dex'
+
+    break;
+    case 'Cleric':
+    prime = 'wis'
+
+    break;
+    case 'Magic User':
+    prime = 'int'
+    
+    break;
+    default:
+    return "";
+}
+
+if(prime === score){
+
+  return Math.floor(Math.random() * (18 - 10 + 1));
+
+
+}else{
+
+  return Math.floor(Math.random() * (18 - 3 + 1));
+
+}
+}
 
 
 static getCharacterSkills(npc) {

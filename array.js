@@ -151,7 +151,7 @@ generateUniqueId(array, scope) {
 if(scope === 'array'){
     
 const largestId = array.reduce((maxId, entry) => (entry.id && entry.id > maxId) ? entry.id : maxId, 0);
-console.log(largestId);
+//console.log(largestId);
 let newId = largestId + 1;
 
 for (const entry of array) {
