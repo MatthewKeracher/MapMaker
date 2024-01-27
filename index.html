@@ -275,6 +275,68 @@
 <form id="npcForm" class="npcForm">
 <div class="npcFormContainer">
 
+  <!-- <div class="npc-checkbox-container">
+    <form>
+      <label class="npc-label">
+        <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateNPCCheckboxes('npcCheckbox')">
+        NPC
+      </label>
+  
+      <label>
+        <input type="checkbox" name="monsterCheckbox" id="monsterCheckbox" onchange="updateNPCCheckboxes('monsterCheckbox')">
+        Monster
+      </label>
+
+    </form>
+    
+  </div> -->
+
+  <!-- <script>
+    function updateNPCCheckboxes(checkboxId) {
+      const npcCheckbox = document.getElementById('npcCheckbox');
+      const monsterCheckbox = document.getElementById('monsterCheckbox');
+
+      const npcLevel = document.getElementById('npcLevel');
+      const npcClass = document.getElementById('npcClass');
+      const npcLevelLabel = document.getElementById('npcLevelLabel');
+      const npcClassLabel = document.getElementById('npcClassLabel');
+
+      const monsterTemplate = document.getElementById('monsterTemplate');
+      const monsterTemplateLabel = document.getElementById('monsterTemplateLabel');
+  
+      // Uncheck the other checkbox when one is checked
+      if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
+        monsterCheckbox.checked = false;
+
+        monsterTemplate.style.display = 'none';
+        monsterTemplateLabel.style.display = 'none';
+
+        // Hide and clear the Location text box
+        npcLevelLabel.style.display = 'flex';
+        npcLevel.style.display = 'flex';
+        npcClassLabel.style.display = 'flex';
+        npcClass.style.display = 'flex';
+
+      } else if (checkboxId === 'monsterCheckbox' && monsterCheckbox.checked) {
+        npcCheckbox.checked = false;
+
+        monsterTemplate.style.display = 'block';
+        monsterTemplateLabel.style.display = 'block';
+
+        // Hide and clear the NPC form fields
+        npcLevelLabel.style.display = 'none';
+        npcLevel.style.display = 'none';
+        npcClassLabel.style.display = 'none';
+        npcClass.style.display = 'none';
+      } else {
+        // Both checkboxes unchecked, show both text boxes
+             
+      }
+    }
+  </script> -->
+
+<input class ="idInput" id="npcId" name="npcId" placeholder="Id#"></input> <br>
+
 <label for="npcSearch">Search NPCs</label>
 <input class="lineField" type="textarea" id="npcSearch" name="npcSearch" placeholder="Search by Name or Tag" required>
 
@@ -288,10 +350,13 @@ placeholder="Villager, Potter, Man at Arms">
 
 <br>
 
-<label for="npcLevel">Level</label>
+<label id = "monsterTemplateLabel" for="monsterTemplate">Set Monster Type:</label>
+<input class="lineField" type="textarea" id="monsterTemplate" name="monsterTemplate" placeholder="Optional">
+
+<label id = "npcLevelLabel" for="npcLevel">Level</label>
 <input class="stat" type="number" id="npcLevel" name="npcLevel">
 
-<label for="npcClass">Class</label>
+<label id = "npcClassLabel" for="npcClass">Class</label>
 <input class="halfField" type="textarea" id="npcClass" name="npcClass">
 
 <br><br>
@@ -342,20 +407,23 @@ placeholder="Put any other information about this NPC here.
 <form id="eventForm" class="eventForm">
 <div class="monsterFormContainer">
 
+ 
+
   <div class="event-checkbox-container">
     <form>
+      <input class ="idInput" id="eventId" name="eventId" placeholder="Id#"></input>
+
       <label class="npc-label">
-        <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateCheckboxes('npcCheckbox')">
+        <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateEventCheckboxes('npcCheckbox')">
         NPC
       </label>
   
       <label>
-        <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateCheckboxes('locationCheckbox')">
+        <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateEventCheckboxes('locationCheckbox')">
         Location
       </label>
 
     </form>
-    <input class ="idInput" id="eventId" name="eventId"></input>
   </div>
 
 <label for="eventSearch">Search Events</label>
@@ -368,7 +436,7 @@ placeholder="Put any other information about this NPC here.
 <input class="lineField" type="textarea" id="eventTags" name="eventTags" placeholder="Tag 1, Tag 2, Tag 3, ..." required>
 
 <script>
-  function updateCheckboxes(checkboxId) {
+  function updateEventCheckboxes(checkboxId) {
     const npcCheckbox = document.getElementById('npcCheckbox');
     const locationCheckbox = document.getElementById('locationCheckbox');
     const eventLocation = document.getElementById('eventLocation');

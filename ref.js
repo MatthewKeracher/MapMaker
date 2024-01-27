@@ -119,6 +119,7 @@ npcForm: document.querySelector('.npcForm'),
 
     npcLevel: document.getElementById('npcLevel'),
     npcClass: document.getElementById('npcClass'),
+    monsterTemplate: document.getElementById('monsterTemplate'),
 
     STR: document.getElementById('STR'),
     DEX: document.getElementById('DEX'),

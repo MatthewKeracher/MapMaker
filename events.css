@@ -58,9 +58,10 @@ transform: scale(2); /* You can adjust the scale factor to make them larger or s
 }
 
 
-.event-checkbox-container {
+.event-checkbox-container,
+.npc-checkbox-container {
 text-align: left;
-padding: 1vw;
+padding: 0vw;
 }
 
 
