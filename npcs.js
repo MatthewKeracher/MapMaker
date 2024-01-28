@@ -49,10 +49,10 @@ buildNPC: function() {
 
 loadNPC: function(NPCArray) {
 
-const Centre = document.getElementById('Centre'); // Do not delete!!
+Ref.Centre.style.display = 'block';
 
 // Clear the existing content
-Centre.innerHTML = '';
+Ref.Centre.innerHTML = '';
 this.namedNPCs = [];
 this.groupedNPCs = [];
 this.absentNPCs = [];
@@ -77,21 +77,18 @@ const sortedNPCs = [...this.namedNPCs, ...this.groupedNPCs, ...this.absentNPCs];
 
 // Append sorted divs to the Centre
 sortedNPCs.forEach(npcDiv => {
-Centre.appendChild(npcDiv);
+Ref.Centre.appendChild(npcDiv);
 
 //show NPC info in Left when hover over Div
 npcDiv.addEventListener('mouseover', () => {
   //Ref.eventManagerInput.value = event.name;
   // console.log(npcDiv.id)
-  Ref.Left.classList.add('showLeft');
+  Ref.Left.style.display = 'block';
   Ref.Centre.style.display = 'block';
   this.addNPCInfo(npcDiv.id, Ref.Left);
   });
 
 });
-
-Ref.Centre.style.display = 'block';
-Ref.Centre.classList.remove('showCentre');
 
 },
 
@@ -394,6 +391,19 @@ Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}
 
 }
 
+if (foundNPC.monsterTemplate){
+
+  npcContent += `<h3>
+
+  <span class="expandable cyan"     data-content-type="rule" divId="Monster Armour Class">ARMOUR CLASS:</span> ${foundNPC.AC} <br>
+  <span class="expandable lime"  data-content-type="rule" divId="Monster Damage">ATTACKS:</span> ${foundNPC.attacks} <br>
+  <span class="expandable hotpink"  data-content-type="rule" divId="Monster Damage">DAMAGE:</span> ${foundNPC.damage} <br>
+  <span class="expandable spell"    data-content-type="rule" divId="Monster XP">XP:</span> ${foundNPC.XP} <br>
+    
+  </h3>`
+
+}
+
 if (foundNPC.str) {
 npcContent += `<h2>
 <span class="expandable misc" data-content-type="rule" divId="Strength"> STR: </span> ${foundNPC.str}  (${foundNPC.strMod}) <br>
@@ -404,6 +414,7 @@ npcContent += `<h2>
 <span class="expandable misc" data-content-type="rule" divId="Charisma"> CHA: </span> ${foundNPC.cha}  (${foundNPC.chaMod})</h2>
 `
 }
+
 
 if (foundNPC.Skills){
 
@@ -476,8 +487,8 @@ if (foundNPC.magic){
 npcContent += `<hr><h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
 }
 
+if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
 
-if (foundNPC.inventory) {
   let previousTag = '';
 
   const inventoryItems = foundNPC.inventory.map(item => {
@@ -486,10 +497,36 @@ if (foundNPC.inventory) {
     return `${tagToDisplay}#${item.Name}# <br>`;
   });
 
+  console.log(foundNPC.treasure)
+ 
   const formattedInventory = inventoryItems.join('');
 
-  npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br>
-  <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
+  npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br>` +
+  
+  `${foundNPC.treasure.Copper ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Silver ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Electrum ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Gold ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Platinum ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Gems ? `<span class="expandable misc" data-content-type="rule" divId="Money">
+  
+   ${foundNPC.treasure.Gems.numberFound}
+   ${foundNPC.treasure.Gems.type}
+   ${foundNPC.treasure.Gems.gemType}
+   (${foundNPC.treasure.Gems.baseValue} gp each)
+   
+   </span><br>` : ''}` +
+
+   `${foundNPC.treasure.Jewelry ? `<span class="expandable misc" data-content-type="rule" divId="Money">
+  
+   ${foundNPC.treasure.Jewelry.type}
+   ${foundNPC.treasure.Jewelry.jewelryType}
+   (${foundNPC.treasure.Jewelry.baseValue} gp)
+   
+   </span><br>` : ''}` +
+
+ 
+  `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
 }
 
 if (foundNPC.savingThrows){

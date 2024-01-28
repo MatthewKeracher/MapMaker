@@ -20,11 +20,10 @@ Items.loadItemsArray();
 Spells.loadSpellsArray();
 Events.loadEventsArray();
 
-
 //Edit.addPredictiveContent();
 Edit.init();
 
-Monsters.addMonsterSearch();
+Monsters.addMonsterFormEvents();
 Events.addEventsSearch();
 NPCs.addNPCSearch();
 Spells.addSpellSearch();

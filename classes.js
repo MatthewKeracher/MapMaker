@@ -386,6 +386,312 @@ static assassinSkillsTable = [
 
 ];
 
+//Treasure Table
+static treasureTable = {
+  A: {
+    Copper: { percentage: 50, dice: '5d6' },
+    Silver: { percentage: 60, dice: '5d6' },
+    Electrum: { percentage: 40, dice: '5d4' },
+    Gold: { percentage: 70, dice: '10d6' },
+    Platinum: { percentage: 50, dice: '1d10' },
+    Gems: { percentage: 50, dice: '6d6' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 50, dice: '6d6' }
+  },
+  B: {
+    Copper: { percentage: 75, dice: '5d10' },
+    Silver: { percentage: 50, dice: '5d6' },
+    Electrum: { percentage: 50, dice: '5d4' },
+    Gold: { percentage: 50, dice: '3d6' },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 25, dice: '1d6' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 25, dice: '1d6' }
+  },
+  C: {
+    Copper: { percentage: 60, dice: '6d6' },
+    Silver: { percentage: 60, dice: '5d4' },
+    Electrum: { percentage: 30, dice: '2d6' },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 25, dice: '1d4' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 25, dice: '1d4' },
+    Special: { percentage: 15, dice: '1d2' }
+  },
+  D: {
+    Copper: { percentage: 30, dice: '4d6' },
+    Silver: { percentage: 45, dice: '6d6' },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 90, dice: '5d8' },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 30, dice: '1d8' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 30, dice: '1d8' },
+    Special: { percentage: 20, dice: '1d2', additional: '+ 1 potion' }
+  },
+  E: {
+    Copper: { percentage: 30, dice: '2d8' },
+    Silver: { percentage: 60, dice: '6d10' },
+    Electrum: { percentage: 50, dice: '3d8' },
+    Gold: { percentage: 50, dice: '4d10' },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 10, dice: '1d10' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 10, dice: '1d10' },
+    Special: { percentage: 30, dice: '1d4', additional: '+ 1 scroll' }
+  },
+  F: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 40, dice: '3d8' },
+    Electrum: { percentage: 50, dice: '4d8' },
+    Gold: { percentage: 85, dice: '6d10' },
+    Platinum: { percentage: 70, dice: '2d8' },
+    Gems: { percentage: 20, dice: '2d12' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 10, dice: '1d12' },
+    Special: { percentage: 35, dice: '1d4', exceptions: ['weapons'], additional: ['+ 1 potion', '+ 1 scroll'] }
+  },
+  G: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 90, dice: '4d6x10' },
+    Platinum: { percentage: 75, dice: '5d8' },
+    Gems: { percentage: 25, dice: '3d6' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 25, dice: '1d10' },
+    Special: { percentage: 50, dice: '1d4', additional: '+ 1 scroll' }
+  },
+  H: {
+    Copper: { percentage: '*', dice: '8d10' },
+    Silver: { percentage: '*', dice: '6d10x10' },
+    Electrum: { percentage: '*', dice: '3d10x10' },
+    Gold: { percentage: '*', dice: '5d8x10' },
+    Platinum: { percentage: '*', dice: '9d8' },
+    Gems: { percentage: 25, dice: '3d6' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 25, dice: '1d10' },
+    Special: { percentage: 50, dice: '1d4', additional: '+ 1 scroll' }
+  },
+  I: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 80, dice: '3d10' },
+    Gems: { percentage: 50, dice: '2d6' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 50, dice: '2d6' },
+    Special: { percentage: 15, dice: 'any 1' }
+  },
+  J: {
+    Copper: { percentage: 45, dice: '3d8' },
+    Silver: { percentage: 45, dice: '1d8' },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  K: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 90, dice: '2d10' },
+    Electrum: { percentage: 35, dice: '1d8' },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 100, dice: '6d6' },
+    Jewelry: { percentage: 100, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  L: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 50, dice: '1d4' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  M: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 90, dice: '4d10' },
+    Platinum: { percentage: 90, dice: '2d8x10' },
+    Gems: { percentage: 55, dice: '5d4' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 45, dice: '2d6' }
+  },
+  N: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null },
+    Special: { percentage: 40, dice: '2d4', additional: 'potions' }
+  },
+  O: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null },
+    Special: { percentage: 50, dice: '1d4', additional: 'scrolls' }
+  },
+  P: {
+    Copper: { percentage: 0, dice: '3d8' },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  Q: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: '3d6' },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  R: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: '2d6' },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  S: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: '2d4' },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  T: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 0, dice: null },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 0, dice: null },
+    Platinum: { percentage: 0, dice: '1d6' },
+    Gems: { percentage: 0, dice: null },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 0, dice: null }
+  },
+  U: {
+    Copper: { percentage: 50, dice: '1d20' },
+    Silver: { percentage: 50, dice: '1d20' },
+    Electrum: { percentage: 0, dice: null },
+    Gold: { percentage: 25, dice: '1d20' },
+    Platinum: { percentage: 0, dice: null },
+    Gems: { percentage: 5, dice: '1d4' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 5, dice: '1d4' },
+    Special: { percentage: 2, dice: 'any 1' }
+  },
+  V: {
+    Copper: { percentage: 0, dice: null },
+    Silver: { percentage: 25, dice: '1d20' },
+    Electrum: { percentage: 25, dice: '1d20' },
+    Gold: { percentage: 50, dice: '1d20' },
+    Platinum: { percentage: 25, dice: '1d20' },
+    Gems: { percentage: 10, dice: '1d4' },
+    Jewelry: { percentage: 50, dice: '6d6' },
+    magicItems: { percentage: 10, dice: '1d4' },
+    Special: { percentage: 5, dice: 'any 1' }
+  }
+};
+
+//Gems Table
+static gemsValueTable = [
+  { type: 'Ornamental', baseValue: 10, numberFound: '1d10' },
+  { type: 'Semiprecious', baseValue: 50, numberFound: '1d8' },
+  { type: 'Fancy', baseValue: 100, numberFound: '1d6' },
+  { type: 'Precious', baseValue: 500, numberFound: '1d4' },
+  { type: 'Gem', baseValue: 1000, numberFound: '1d2' },
+  { type: 'Jewel', baseValue: 5000, numberFound: '1' },
+];
+
+static gemTypeTable = [
+  { range: [1, 5], type: 'Alexandrite' },
+  { range: [6, 12], type: 'Amethyst' },
+  { range: [13, 20], type: 'Aventurine' },
+  { range: [21, 30], type: 'Chlorastrolite' },
+  { range: [31, 40], type: 'Diamond' },
+  { range: [41, 43], type: 'Emerald' },
+  { range: [44, 48], type: 'Fire Opal' },
+  { range: [49, 57], type: 'Fluorospar' },
+  { range: [58, 63], type: 'Garnet' },
+  { range: [64, 68], type: 'Heliotrope' },
+  { range: [69, 78], type: 'Malachite' },
+  { range: [79, 88], type: 'Rhodonite' },
+  { range: [89, 91], type: 'Ruby' },
+  { range: [92, 95], type: 'Sapphire' },
+  { range: [96, 100], type: 'Topaz' },
+];
+
+static valueAdjustmentTable = [
+  { roll: 2, adjustment: 0.5 }, // Next Lower Value Row
+  { roll: 3, adjustment: 0.5 },
+  { roll: 4, adjustment: 0.75 },
+  { roll: 5, adjustment: 1 },   // Normal Value
+  { roll: 6, adjustment: 1 },   // Normal Value
+  { roll: 7, adjustment: 1 },   // Normal Value
+  { roll: 8, adjustment: 1 },   // Normal Value
+  { roll: 9, adjustment: 1 },   // Normal Value
+  { roll: 10, adjustment: 1.5 },
+  { roll: 11, adjustment: 2 },
+  { roll: 12, adjustment: 2 },  // Next Higher Value Row
+];
+
+static jewelryTable = [
+  { range: [1, 6], type: 'Anklet' },
+  { range: [7, 12], type: 'Belt' },
+  { range: [13, 14], type: 'Bowl' },
+  { range: [15, 21], type: 'Bracelet' },
+  { range: [22, 27], type: 'Brooch' },
+  { range: [28, 32], type: 'Buckle' },
+  { range: [33, 37], type: 'Chain' },
+  { range: [38, 40], type: 'Choker' },
+  { range: [41, 42], type: 'Circlet' },
+  { range: [43, 47], type: 'Clasp' },
+  { range: [48, 51], type: 'Comb' },
+  { range: [52, 52], type: 'Crown' },
+  { range: [53, 55], type: 'Cup' },
+  { range: [56, 62], type: 'Earring' },
+  { range: [63, 65], type: 'Flagon' },
+  { range: [66, 68], type: 'Goblet' },
+  { range: [69, 73], type: 'Knife' },
+  { range: [74, 77], type: 'Letter Opener' },
+  { range: [78, 80], type: 'Locket' },
+  { range: [81, 82], type: 'Medal' },
+  { range: [83, 89], type: 'Necklace' },
+  { range: [90, 90], type: 'Plate' },
+  { range: [91, 95], type: 'Pin' },
+  { range: [96, 96], type: 'Scepter' },
+  { range: [97, 99], type: 'Statuette' },
+  { range: [100, 100], type: 'Tiara' },
+];
+
 constructor(data) {
 
 
@@ -420,18 +726,143 @@ NPCbuild.getMonster(this);}
 
 }
 
+static rollGemDice(numDice, numSides) {
+  let total = 0;
+
+  for (let i = 0; i < numDice; i++) {
+    total += Math.floor(Math.random() * numSides) + 1;
+  }
+
+  return total;
+}
+
+// Function to generate a gem or jewelry item
+static generateGemOrJewelry() {
+  const gemValueEntry = NPCbuild.gemsValueTable[Math.floor(Math.random() * NPCbuild.gemsValueTable.length)];
+  const roll = NPCbuild.rollGemDice(1, 100);
+
+  const gemTypeEntry = NPCbuild.gemTypeTable.find(entry => {    
+  return roll >= entry.range[0] && roll <= entry.range[1];
+  });
+
+  const valueAdjustmentEntry = NPCbuild.valueAdjustmentTable[Math.floor(Math.random() * NPCbuild.valueAdjustmentTable.length)];
+
+  const adjustedValue = gemValueEntry.baseValue * valueAdjustmentEntry.adjustment;
+  const numFound = NPCbuild.rollGemDice(1, 6); // Assume 1d6 for the number of found gems
+
+  return {
+    type: gemValueEntry.type,
+    gemType: gemTypeEntry.type,
+    baseValue: adjustedValue,
+    numberFound: numFound,
+  };
+}
+
+// Function to generate a jewelry item
+static generateJewelry() {
+  const roll = NPCbuild.rollGemDice(1, 100);
+  
+  const jewelryEntry = NPCbuild.jewelryTable.find(entry => {  
+  return roll >= entry.range[0] && roll <= entry.range[1];
+  });
+
+  return {
+    type: 'Jewelry',
+    jewelryType: jewelryEntry.type,
+    baseValue: NPCbuild.rollGemDice(2, 8) * 100, // Standard items of jewelry are valued at 2d8x100 gp value
+  };
+}
+
 static getMonster(npc){
 
 console.log(npc.monsterTemplate)
+
 // Find Monster
 const stats = Monsters.monstersArray.filter(monster => monster.Name === npc.monsterTemplate);
+
+//Saving Throws
 const saveAs = stats[0].SaveAs;
-
 const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
-
 let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
+
 npc.savingThrows = savingThrows;
 
+
+//HitPoints
+const matches = stats[0].HD.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
+const baseDice = parseInt(matches[1], 10);
+const bonusDice = matches[2] ? parseInt(matches[2], 10) : 0;
+const specialBonus = matches[3] ? parseInt(matches[3], 10) : 0;
+const totalHitPoints = baseDice * 8 + bonusDice + specialBonus;
+
+npc.hitPoints = totalHitPoints;
+npc.attackBonus = baseDice;
+npc.AC = stats[0].AC;
+npc.attacks = stats[0].Attacks;
+npc.damage = stats[0].Damage;
+npc.XP = stats[0].XP;
+
+//Treasure
+const treasureType = stats[0].Treasure
+const lootEntry = NPCbuild.treasureTable[treasureType];
+const loot = NPCbuild.genLoot(lootEntry);
+
+npc.treasure = loot;
+
+}
+
+// Function to roll dice based on a given dice notation (e.g., '1d20')
+static rollDice(diceNotation) {
+  const [numDice, numSides] = diceNotation.split('d').map(Number);
+  let total = 0;
+
+  for (let i = 0; i < numDice; i++) {
+    total += Math.floor(Math.random() * numSides) + 1;
+  }
+
+  return total;
+}
+
+// Function to calculate the actual amount for each treasure type
+static genLoot(treasureDetails) {
+const result = {};
+
+for (const resource in treasureDetails) {
+const { percentage, dice } = treasureDetails[resource];
+
+if (resource !== 'Gems' && resource !== 'Jewelry') {
+
+if(Math.random() * 100 < percentage){
+result[resource] = NPCbuild.rollDice(dice);
+} else {
+result[resource] = 0;
+}
+
+}else if (resource === 'Gems'){
+
+if(Math.random() * 100 < percentage){
+
+  result[resource] = NPCbuild.generateGemOrJewelry();
+
+} else {
+result[resource] = '';
+}
+
+} else if (resource === 'Jewelry'){
+
+  if(Math.random() * 100 < percentage){
+  
+    result[resource] = NPCbuild.generateJewelry();
+  
+  } else {
+  result[resource] = '';
+  }
+  
+  }
+
+}
+
+return result;
 }
 
 rollScore(npc, score) {
@@ -477,7 +908,6 @@ if(prime === score){
 
 }
 }
-
 
 static getCharacterSkills(npc) {
   let skillTable;

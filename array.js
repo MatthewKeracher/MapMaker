@@ -29,8 +29,6 @@ valuesArray.push(value);
 return valuesArray;
 },
 
-
-
 //For Saving...
 
 addNewLocation(location) {

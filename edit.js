@@ -301,7 +301,7 @@ Ref.textLocation.style.display = "flex";
 
 //Hide
 
-//Ref.Centre.style.display = "none";
+Ref.Centre.style.display = "none";
 Ref.Left.classList.remove('showLeft');
 Ref.npcForm.style.display = "none";
 Ref.monsterForm.style.display = "none";
@@ -316,6 +316,7 @@ case 2:
 //Show
 Ref.stateLabel.textContent = "editing Events (" + newPage + ")";
 Ref.eventForm.style.display = "flex";
+
 
 
 //Hide
