@@ -220,9 +220,14 @@ this.npcArray[existingNPCIndex] = npc;
 console.log('NPC updated:', npc);
 } 
 
-else if (Ref.npcName.value === '' && Ref.npcTags !== ''){
-console.log('Add ' + Ref.npcTags.value + ' to all Selected NPC Tags')
-this.bulkAddTag(Ref.npcTags.value)
+else if (Ref.npcName.value === '' && Ref.npcTags.value !== '' && Ref.monsterTemplate.value === ''){
+console.log('Add ' + Ref.npcTags.value + ' to all Selected NPCs')
+this.bulkAdd(Ref.npcTags.value, 'tags')
+} 
+
+else if (Ref.npcName.value === '' && Ref.npcTags.value === '' && Ref.monsterTemplate.value !== ''){
+  console.log('Add ' + Ref.monsterTemplate.value + ' to all Selected NPCs')
+  this.bulkAdd(Ref.monsterTemplate.value, 'monsterTemplate')
 } 
 
 else {
@@ -233,26 +238,37 @@ console.log('New NPC added:', npc);
 
 },
 
-bulkAddTag(npcTags){
+bulkAdd(data, target){
 
-  // Iterate over itemsSearchArray and update Tags
-  this.npcSearchArray.forEach(npc => {
-    if (npc.tags) {
-      // Split existing Tags into an array
-      const existingTags = npc.tags.split(',').map(tag => tag.trim());
-  
-      // Check if the new tag is not already present
-      if (!existingTags.includes(npcTags)) {
-        // If not present, append the new tag value
-        npc.tags += `, ${npcTags}`;
-      }
-    } else {
-      // If Tags is empty, set it to the new tag value
-      npc.tags = npcTags;
-    }
-  });
+// Iterate over itemsSearchArray and update Tags
+//console.log('bulkAdd')
 
-},
+if(target === 'tags'){
+
+this.npcSearchArray.forEach(npc => {
+
+if (npc.tags) {
+// Split existing Tags into an array
+const existingTags = npc.tags.split(',').map(tag => tag.trim());
+
+// Check if the new tag is not already present
+if (!existingTags.includes(data)) {
+// If not present, append the new tag value
+npc.tags += `, ${data}`;
+}
+} else {
+// If Tags is empty, set it to the new tag value
+npc.tags = data;
+}
+
+})};
+
+if (target === 'monsterTemplate'){
+//console.log('monster')
+this.npcSearchArray.forEach(npc => {
+npc.monsterTemplate = data
+
+})}},
 
 clearForm: function(form){
 
@@ -415,7 +431,6 @@ npcContent += `<h2>
 `
 }
 
-
 if (foundNPC.Skills){
 
   npcContent +=
@@ -503,30 +518,35 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
 
   npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br>` +
   
-  `${foundNPC.treasure.Copper ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Silver ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Electrum ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Gold ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Platinum ? `<span class="expandable misc" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Gems ? `<span class="expandable misc" data-content-type="rule" divId="Money">
+  `${foundNPC.treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Electrum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Gold ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
+  `${foundNPC.treasure.Platinum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
   
-   ${foundNPC.treasure.Gems.numberFound}
-   ${foundNPC.treasure.Gems.type}
-   ${foundNPC.treasure.Gems.gemType}
-   (${foundNPC.treasure.Gems.baseValue} gp each)
-   
-   </span><br>` : ''}` +
+  //Loop through Gems
+  `${foundNPC.treasure.Gems ? `<span class="expandable" data-content-type="rule" divId="Money">
+  ${foundNPC.treasure.Gems.map(gem => `
+  ${gem.numberFound} ${gem.type} ${gem.gemType} (${gem.baseValue} gp each)
+  `).join('<br>')}
+  </span><br>` : ''} ` +
 
-   `${foundNPC.treasure.Jewelry ? `<span class="expandable misc" data-content-type="rule" divId="Money">
-  
-   ${foundNPC.treasure.Jewelry.type}
-   ${foundNPC.treasure.Jewelry.jewelryType}
-   (${foundNPC.treasure.Jewelry.baseValue} gp)
-   
-   </span><br>` : ''}` +
+  //Loop through Jewelry
+  `${foundNPC.treasure.Jewelry ? `<span class="expandable" data-content-type="rule" divId="Money">
+  ${foundNPC.treasure.Jewelry.map(Jewelry => `
+  ${Jewelry.type} ${Jewelry.jewelryType} (${Jewelry.baseValue} gp)
+  `).join('<br>')}
+  </span><br>` : ''} ` +
 
+  //Loop through magicItems
+  `${foundNPC.treasure.magicItems ? `<span class="expandable" data-content-type="rule" divId="Money">
+  ${foundNPC.treasure.magicItems.map(item => `
+  ${item.name} ${item.bonus}
+  `).join('<br>')}
+  </span><br>` : ''} ` +
  
   `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
+  
 }
 
 if (foundNPC.savingThrows){
