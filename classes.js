@@ -70,7 +70,7 @@ static genLoot(treasureDetails) {
   if(Math.random() * 100 < percentage){
 
     const quant = NPCbuild.rollDice(dice);
-        console.log('Quant: ' + quant);
+        
         const gemsResult = [];  // Use a different variable here
 
         for (let i = 0; i < quant; i++) {
@@ -89,7 +89,7 @@ static genLoot(treasureDetails) {
   if(Math.random() * 100 < percentage){
   
     const quant = NPCbuild.rollDice(dice);
-    console.log('Quant: ' + quant);
+    
     const jewResults = [];  // Use a different variable here
 
     for (let i = 0; i < quant; i++) {
@@ -108,7 +108,7 @@ static genLoot(treasureDetails) {
   if(Math.random() * 100 < percentage){
   
     const quant = NPCbuild.rollDice(dice);
-    console.log('Quant: ' + quant);
+    
     const magicItemResults = [];  // Use a different variable here
 
     for (let i = 0; i < quant; i++) {
@@ -141,54 +141,58 @@ const itemType = itemTypeEntry.item;
 
 if(itemType === 'Miscellaneous Items'){
 
-  const miscRoll = NPCbuild.rollDice('1d100');
-  
-  const miscTableEntry = NPCbuild.miscellaneousItemsTable.find(entry => {    
-  return miscRoll >= entry.range[0] && miscRoll <= entry.range[1];
-  });
-  
-  const subTable = miscTableEntry.subtable;
-  const miscEffect = '';
-  const miscFormType = '';
-  
-  if(subTable === 'Effect Subtable 1'){
+const miscRoll = NPCbuild.rollDice('1d100');
 
-    const subTableRoll = NPCbuild.rollDice('1d100');
-    
-    const subTableEntry = NPCbuild.effectSubtable1.find(entry => {    
-    return subTableRoll >= entry.range[0] && subTableRoll <= entry.range[1];
-    });
-    
-     miscEffect = subTableEntry.effect;
-     miscFormType = subTableEntry.form;
+const miscTableEntry = NPCbuild.miscellaneousItemsTable.find(entry => {    
+return miscRoll >= entry.range[0] && miscRoll <= entry.range[1];
+});
 
-  } else if(subTable === 'Effect Subtable 2'){
+const subTable = miscTableEntry.subtable;
+let miscEffect 
+let miscFormType 
 
-    const subTableRoll = NPCbuild.rollDice('1d100');
-    
-    const subTableEntry = NPCbuild.effectSubtable2.find(entry => {    
-    return subTableRoll >= entry.range[0] && subTableRoll <= entry.range[1];
-    });
-    
-     miscEffect = subTableEntry.effect;
-     miscFormType = subTableEntry.form;
+if(subTable === 'Effect Subtable 1'){
 
-  }
+const subTableRoll = NPCbuild.rollDice('1d100');
 
-  const formRoll = NPCbuild.rollDice('1d100');
-    
-    const formTableEntry = NPCbuild.effectSubtable2.find(entry => {    
-    return formRoll >= entry.range[0] && formRoll <= entry.range[1];
-    });
-    
-     form = formTableEntry.form;
+const subTableEntry = NPCbuild.effectSubtable1.find(entry => {    
+return subTableRoll >= entry.range[0] && subTableRoll <= entry.range[1];
+});
 
-  return {
-  name: form + ' of ' + miscEffect,
-  bonus: '',
-  };
-  
-  }
+miscEffect = subTableEntry.effect;
+miscFormType = subTableEntry.form;
+
+} else if(subTable === 'Effect Subtable 2'){
+
+const subTableRoll = NPCbuild.rollDice('1d100');
+
+const subTableEntry = NPCbuild.effectSubtable2.find(entry => {    
+return subTableRoll >= entry.range[0] && subTableRoll <= entry.range[1];
+});
+
+miscEffect = subTableEntry.effect;
+miscFormType = subTableEntry.form;
+
+}
+
+const formRoll = NPCbuild.rollDice('1d100');
+// Accessing the chance ranges for the specified letter
+const formTypeTable = NPCbuild.formTable[miscFormType];
+
+const formTypeEntry = formTypeTable.find(entry => {    
+return formRoll >= entry.chance[0] && formRoll <= entry.chance[1];
+});
+
+const form = formTypeEntry.item; 
+console.log(form)
+
+
+return {
+name: form + ' of ' + miscEffect,
+bonus: '',
+};
+
+}
 
 if(itemType === 'Wand, Staff, or Rod'){
 
@@ -218,7 +222,7 @@ return scrollRoll >= entry.range[0] && scrollRoll <= entry.range[1];
 const scrollName = scrollTableEntry.type;
 
 return {
-name: scrollName,
+name: 'Scroll of ' + scrollName,
 bonus: '',
 };
 
@@ -1574,23 +1578,68 @@ static effectSubtable2 = [
   { range: [100, 100], effect: 'Wishes', form: 'C' },
 ];
 
-static formTable = [
-  { form: 'Bell (or Chime)', chance: ['A: 01-02', 'B: 01-17'] },
-  { form: 'Belt or Girdle', chance: ['A: 03-05', 'B: 01-07'] },
-  { form: 'Boots', chance: ['A: 06-13', 'B: 01-25'] },
-  { form: 'Bowl', chance: ['A: 14-15', 'B: 01-17'] },
-  { form: 'Cloak', chance: ['A: 16-28', 'B: 08-38'] },
-  { form: 'Crystal Ball or Orb', chance: ['A: 29-31', 'B: 18-67'] },
-  { form: 'Drums', chance: ['A: 32-33', 'B: 18-50'] },
-  { form: 'Helm', chance: ['A: 34-38', 'B: 01-40'] },
-  { form: 'Horn', chance: ['A: 39-43', 'B: 51-00'] },
-  { form: 'Lens', chance: ['A: 44-46', 'B: 01-17'] },
-  { form: 'Mirror', chance: ['A: 47-49', 'B: 18-21', 'C: 68-00'] },
-  { form: 'Pendant', chance: ['A: 50-67', 'B: 26-50', 'C: 01-40', 'D: 22-50', 'E: 41-80', 'F: 39-50'] },
-  { form: 'Ring', chance: ['A: 68-00', 'B: 51-00', 'C: 41-00', 'D: 51-00', 'E: 81-00', 'F: 51-00'] },
-];
+static formTable = {
 
+  A : [
+    { item: "Bell (or Chime)", chance: [1,2]},
+    { item: "Belt or Girdle", chance: [2,5]},
+    { item: "Boots", chance: [6,13]},
+    { item: "Bowl", chance: [14,15]},
+    { item: "Cloak", chance: [16,28]},
+    { item: "Crystal Ball or Orb", chance: [29,31]},
+    { item: "Drums", chance: [32,33]},
+    { item: "Helm", chance: [34,38]},
+    { item: "Horn", chance: [39,43]},
+    { item: "Lens", chance: [44,46]},
+    { item: "Mirror", chance: [47,49]},
+    { item: "Pendant", chance: [50,67]},
+    { item: "Ring", chance: [68,100]}
+  ],
 
+  B : [
+    { item: "Boots", chance: [1,25] },
+    { item: "Pendant", chance: [26,50]},
+    { item: "Ring", chance: [51,100]}
+  ],
+
+  C : [
+    { item: "Pendant", chance: [1,40]},
+    { item: "Ring", chance: [41,100]}
+  ],
+
+  D : [
+    { item: "Lens", chance: [1,17]},
+    { item: "Mirror", chance: [18,21]},
+    { item: "Pendant", chance: [22,50]},
+    { item: "Ring", chance: [51,100]}
+  ],
+
+  E : [
+    { item: "Helm", chance: [1,40] },
+    { item: "Pendant", chance: [41,80]},
+    { item: "Ring", chance: [81,100]}
+  ],
+
+  F : [
+    { item: "Belt or Girdle", chance: [1,7] },
+    { item: "Cloak", chance: [8,38] },
+    { item: "Pendant", chance: [39,50] },
+    { item: "Ring", chance: [51,100] }
+  ],
+
+  G : [
+    { item: "Bell (or Chime)", chance: [1,17]},
+    { item: "Drums", chance: [18,50]},
+    { item: "Horn", chance: [51,100]},
+  ],
+
+  H : [ 
+    { item: "Bowl", chance: [1,17]},   
+    { item: "Crystal Ball or Orb", chance:[18,67]}, 
+    { item: "Mirror", chance:[68,100]}, 
+  ]
+
+}
 
 }
 
