@@ -33,7 +33,6 @@ async loadSpellsArray() {
 
 //addPredictive Items is now with addPredictive Monsters
 
-
 getSpells(locationText) {
 const tildeBrackets = /~([^~]+)~/g;
 
@@ -47,7 +46,6 @@ return match;
 }
 });
 },
-
 
 extraSpell(contentId) {
 const tildeBrackets = /~([^~]+)~/g;
@@ -133,7 +131,6 @@ Centre.style.display = 'block'; // Display the container
 
 
 },
-
 
 fillSpellsForm: function(spell, spellNameDiv){
 

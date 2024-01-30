@@ -29,14 +29,12 @@ async loadMonstersArray() {
   return [];
   }
   
-  },   
-
+},   
 
 getMonsters(locationText) {
 const asteriskBrackets = /\*([^*]+)\*/g;
-
 return locationText.replace(asteriskBrackets, (match, targetText) => {
-const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
+const monster = this.monstersArray.find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
 if (monster) {
 return `<span class="expandable monster" data-content-type="monster" divId="${targetText}">${targetText}</span>`;
 } else {
@@ -45,7 +43,6 @@ return match;
 }
 });
 },
-
 
 addMonsterFormEvents: function(){
 
@@ -74,7 +71,7 @@ extraMonsters(contentId) {
 const asteriskBrackets = /\*([^*]+)\*/g;
 
 return contentId.replace(asteriskBrackets, (match, targetText) => {
-const monster = Object.values(this.monstersArray).find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
+const monster = this.monstersArray.find(monster => monster.Name.toLowerCase() === targetText.toLowerCase());
 if (monster) {
 return this.addMonsterInfo(targetText);
 } else {
@@ -84,7 +81,9 @@ return match;
 });
 },
 
-addMonsterInfo(monster, target) {
+addMonsterInfo(monsterName, target) {
+
+const monster = this.monstersArray.find(monster => monster.Name === monsterName)
 
 const monsterStats = [
 
@@ -125,6 +124,7 @@ target.innerHTML = formattedMonster;
 
 loadMonsterList: function(data) {
 
+console.log(data);
 // Clear the existing content
 Ref.Centre.innerHTML = '';
 Ref.Centre.style.display = 'block'; 
@@ -149,7 +149,7 @@ this.fillMonsterForm(monster, monsterDiv);
 //show Monster info in Left when hover over Div
 monsterDiv.addEventListener('mouseover', () => {
 Ref.Left.style.display = 'block';
-this.addMonsterInfo(monster, Ref.Left);
+this.addMonsterInfo(monster.Name, Ref.Left);
 });
 
 }

@@ -179,6 +179,10 @@ color: rgb(212, 21, 21)
   color: rgb(108, 184, 238)
 }
 
+.teal{
+  color: rgb(3, 195, 195);
+}
+
 .underline{
 text-decoration: underline;
 }

@@ -189,13 +189,14 @@ Ref.eventNPC.value = npc.name
 
 },
 
-
 saveNPC: function() {
 
 //if not empty
 
 // Check if an NPC with the same name already exists
-const existingNPCIndex = this.npcArray.findIndex(npc => npc.name === Ref.npcName.value);
+const index = this.npcArray.findIndex(npc => npc.id === parseInt(Ref.eventId.value) && npc.name === Ref.npcName.value);
+
+//const index = this.npcArray.findIndex(npc => npc.name === Ref.npcName.value);
 
 const npc = {
 id: parseInt(Ref.npcId.value),
@@ -214,9 +215,9 @@ cha: Ref.CHA.value,
 Backstory: Ref.Backstory.value,
 };
 
-if (existingNPCIndex !== -1 && Ref.npcName.value !== '') {
+if (index !== -1 && Ref.npcName.value !== '') {
 // Update the existing NPC entry
-this.npcArray[existingNPCIndex] = npc;
+this.npcArray[index] = npc;
 console.log('NPC updated:', npc);
 } 
 
@@ -232,8 +233,11 @@ else if (Ref.npcName.value === '' && Ref.npcTags.value === '' && Ref.monsterTemp
 
 else {
 // Add the created NPC to the npcArray
+npc.id = Array.generateUniqueId(this.npcArray, 'entry');
+Ref.npcId.value = npc.id
 this.npcArray.push(npc);
 console.log('New NPC added:', npc);
+
 }
 
 },
@@ -385,7 +389,17 @@ if (foundNPC) {
 let npcContent = `<h2><span class="cyan">${foundNPC.name}</span><br></h2>`;
 
 if (foundNPC.tags && foundNPC.tags !== "undefined") {
-npcContent += `<h3><span class="hotpink">${foundNPC.tags}.</span></h3>`;
+npcContent += `<h3>
+
+<span>
+${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} </br>` : ''}
+</span>
+
+<span>
+${foundNPC.tags}.
+</span>
+
+</h3>`;
 }
 
 if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
@@ -396,14 +410,31 @@ if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
 if (foundNPC.class && foundNPC.class !== "N/A") {
 
 npcContent += `<hr><h3>
-<span class="expandable cyan" data-content-type="rule" divId="${foundNPC.class}">
 
+<span class="expandable cyan"
+data-content-type="rule"
+divId="${foundNPC.class}">
 Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}
+</span>
+</h3>
 
-</span></h3>
+<h3>
+<span class="expandable teal"
+data-content-type="rule"
+divId="Hit Points">
+HIT POINTS:
+</span>
+${foundNPC.hitPoints}
+<br>
 
-<h3><span class="expandable hotpink" data-content-type="rule" divId="Hit Points">HIT POINTS: </span> ${foundNPC.hitPoints} <br>
-<span class="expandable lime" data-content-type="rule" divId="Attack Bonus">ATTACK BONUS: </span> +${foundNPC.attackBonus}</h3>`;
+<span class="expandable teal"
+data-content-type="rule"
+divId="Attack Bonus">
+ATTACK BONUS:
+</span>
++${foundNPC.attackBonus}
+
+</h3>`;
 
 }
 
@@ -411,12 +442,49 @@ if (foundNPC.monsterTemplate){
 
   npcContent += `<h3>
 
-  <span class="expandable cyan"     data-content-type="rule" divId="Monster Armour Class">ARMOUR CLASS:</span> ${foundNPC.AC} <br>
-  <span class="expandable lime"  data-content-type="rule" divId="Monster Damage">ATTACKS:</span> ${foundNPC.attacks} <br>
-  <span class="expandable hotpink"  data-content-type="rule" divId="Monster Damage">DAMAGE:</span> ${foundNPC.damage} <br>
-  <span class="expandable spell"    data-content-type="rule" divId="Monster XP">XP:</span> ${foundNPC.XP} <br>
+  <span 
+  class="expandable hotpink"  
+  data-content-type="rule" 
+  divId="Monster Damage">
+  ATTACKS:
+  </span>
+  ${foundNPC.attacks}
+  <br>
+
+  <span
+  class="expandable hotpink"
+  data-content-type="rule"
+  divId="Monster Damage">
+  DAMAGE:
+  </span>
+  ${foundNPC.damage}
+  <br>
+
+  <span class="expandable hotpink"
+  data-content-type="rule"
+  divId="Monster Armour Class">
+  ARMOUR CLASS:
+  </span>
+  ${foundNPC.AC}
+  <br>
+
+  <span class="expandable hotpink"
+  data-content-type="rule"
+  divId="Monster Movement">
+  MOVEMENT:
+  </span>
+  ${foundNPC.movement}
+  <br>
+  
+  <span class="expandable hotpink"
+  data-content-type="rule" 
+  divId="Monster XP">
+  XP:
+  </span>
+  ${foundNPC.XP}
+  <br>
     
-  </h3>`
+  </h3>`;
 
 }
 
@@ -516,7 +584,13 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
  
   const formattedInventory = inventoryItems.join('');
 
-  npcContent += `<hr><h3><span class ="cyan">Inventory:</span><br>` +
+  npcContent += 
+  
+  `${foundNPC.treasure.length > 0 || foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
+
+  `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`+
+
+  `${foundNPC.treasure.length > 0 ? `<br><span class= "hotpink"> ${foundNPC.monsterTemplate}:</span> <br>` : '' }`  +
   
   `${foundNPC.treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
   `${foundNPC.treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
@@ -525,27 +599,27 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
   `${foundNPC.treasure.Platinum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
   
   //Loop through Gems
-  `${foundNPC.treasure.Gems ? `<span class="expandable" data-content-type="rule" divId="Money">
+  `${foundNPC.treasure.Gems ? `<span class="orange">
   ${foundNPC.treasure.Gems.map(gem => `
-  ${gem.numberFound} ${gem.type} ${gem.gemType} (${gem.baseValue} gp each)
+  ${gem.numberFound} ${gem.gemType} (${gem.type}; ${gem.baseValue} gp each)
   `).join('<br>')}
   </span><br>` : ''} ` +
 
   //Loop through Jewelry
-  `${foundNPC.treasure.Jewelry ? `<span class="expandable" data-content-type="rule" divId="Money">
+  `${foundNPC.treasure.Jewelry ? `<span class="teal">
   ${foundNPC.treasure.Jewelry.map(Jewelry => `
   ${Jewelry.type} ${Jewelry.jewelryType} (${Jewelry.baseValue} gp)
   `).join('<br>')}
   </span><br>` : ''} ` +
 
   //Loop through magicItems
-  `${foundNPC.treasure.magicItems ? `<span class="expandable" data-content-type="rule" divId="Money">
+  `${foundNPC.treasure.magicItems ? `<span class="expandable lime">
   ${foundNPC.treasure.magicItems.map(item => `
   ${item.name} ${item.bonus}
   `).join('<br>')}
   </span><br>` : ''} ` +
- 
-  `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span></h3>`;
+
+  `</h3>`;
   
 }
 

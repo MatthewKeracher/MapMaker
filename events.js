@@ -278,6 +278,7 @@ addTag(tag) {
 
 let target = Ref.editLocationTags; //DEFAULT
 
+if (Edit.editPage === 2){target = Ref.eventTags};
 if (Edit.editPage === 3){target = Ref.npcTags};
 
 const currentText = target.value;

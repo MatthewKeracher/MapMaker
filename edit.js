@@ -36,8 +36,8 @@ init: function () {
             );
           } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
             searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-            filteredItems = Object.keys(Monsters.monstersArray).filter(monsterName =>
-              monsterName.toLowerCase().includes(searchText.toLowerCase())
+            filteredItems = Monsters.monstersArray.filter(monster =>
+              monster.Name.toLowerCase().includes(searchText.toLowerCase())
             );
           } else {
             searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
@@ -59,7 +59,7 @@ init: function () {
               const replacement = openBraceIndex !== -1
                 ? `#${item.Name}#`
                 : openAsteriskIndex !== -1
-                ? `*${item}*`
+                ? `*${item.Name}*`
                 : openTildeIndex !== -1 // Add this line
                 ? `~${item.Name}~` // Add this line
                 : ''; // Add this line for ~
