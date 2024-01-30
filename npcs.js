@@ -194,7 +194,7 @@ saveNPC: function() {
 //if not empty
 
 // Check if an NPC with the same name already exists
-const index = this.npcArray.findIndex(npc => npc.id === parseInt(Ref.eventId.value) && npc.name === Ref.npcName.value);
+const index = this.npcArray.findIndex(npc => npc.id === parseInt(Ref.npcId.value) && npc.name === Ref.npcName.value);
 
 //const index = this.npcArray.findIndex(npc => npc.name === Ref.npcName.value);
 
@@ -214,6 +214,8 @@ cha: Ref.CHA.value,
 
 Backstory: Ref.Backstory.value,
 };
+
+console.log(index)
 
 if (index !== -1 && Ref.npcName.value !== '') {
 // Update the existing NPC entry
@@ -586,11 +588,11 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
 
   npcContent += 
   
-  `${foundNPC.treasure.length > 0 || foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
+  `${foundNPC.monsterTemplate !== '' || foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
 
   `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`+
 
-  `${foundNPC.treasure.length > 0 ? `<br><span class= "hotpink"> ${foundNPC.monsterTemplate}:</span> <br>` : '' }`  +
+  `${foundNPC.monsterTemplate !== '' ? `<br><span class= "hotpink"> ${foundNPC.monsterTemplate}:</span> <br>` : '' }`  +
   
   `${foundNPC.treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
   `${foundNPC.treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +

@@ -37,7 +37,7 @@ init: function () {
           } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
             searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
             filteredItems = Monsters.monstersArray.filter(monster =>
-              monster.Name.toLowerCase().includes(searchText.toLowerCase())
+              monster.name.toLowerCase().includes(searchText.toLowerCase())
             );
           } else {
             searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
@@ -92,13 +92,13 @@ deleteLocation() {
 switch (this.editPage) {
  
 case 2:
-const index = Events.eventsArray.findIndex(event => parseInt(event.id) === parseInt(Ref.eventId.value));
+const eventIndex = Events.eventsArray.findIndex(event => parseInt(event.id) === parseInt(Ref.eventId.value));
 
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + Events.eventsArray[index].name + "?");
+if (eventIndex !== -1) {
+const confirmation = window.confirm("Are you sure you want to delete " + Events.eventsArray[eventIndex].name + "?");
 
 if (confirmation) {
-Events.eventsArray.splice(index, 1); 
+Events.eventsArray.splice(eventIndex, 1); 
 Events.loadEventsList(Events.eventsArray, Ref.Centre);
 Ref.eventForm.reset();
 }
@@ -126,17 +126,15 @@ npcForm.reset(); // Call the reset() method to clear the form fields
 break;
 
 case 4:
-const monsterName = document.getElementById('monsterName').value;
-const monsterToDelete = Monsters.monstersArray[monsterName];
-const monsterForm = document.getElementById('monsterForm');
+const monsterIndex = Monsters.monstersArray.findIndex(monster => parseInt(monster.id) === parseInt(Ref.monsterId.value));
 
-if (monsterToDelete) {
-const confirmation = window.confirm("Are you sure you want to delete this Monster?");
+if (monsterIndex !== -1) {
+const confirmation = window.confirm("Are you sure you want to delete " + Monsters.monstersArray[monsterIndex].name + "?");
+
 if (confirmation) {
-delete Monsters.monstersArray[monsterName];
-
-Monsters.loadMonsterList(Monsters.monstersArray); // No need to pass the updated array
-monsterForm.reset(); // Call the reset() method to clear the form fields
+Monsters.monstersArray.splice(monsterIndex, 1); 
+Monsters.loadMonsterList(Monsters.monstersArray, Ref.Centre);
+Ref.eventForm.reset();
 }
 }
 break;

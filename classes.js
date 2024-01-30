@@ -352,10 +352,11 @@ baseValue: NPCbuild.rollDice('2d8') * 100, // Standard items of jewelry are valu
 static getMonster(npc){
 
 // Find Monster
-const stats = Monsters.monstersArray.filter(monster => monster.Name === npc.monsterTemplate);
+const stats = Monsters.monstersArray.filter(monster => monster.name === npc.monsterTemplate);
+
 
 //Saving Throws
-const saveAs = stats[0].SaveAs;
+const saveAs = stats[0].saveAs;
 const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
 let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
 
@@ -363,7 +364,7 @@ npc.savingThrows = savingThrows;
 
 
 //HitPoints
-const matches = stats[0].HD.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
+const matches = stats[0].hd.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
 const baseDice = parseInt(matches[1], 10);
 const bonusDice = matches[2] ? parseInt(matches[2], 10) : 0;
 const specialBonus = matches[3] ? parseInt(matches[3], 10) : 0;
@@ -371,16 +372,16 @@ const totalHitPoints = baseDice * 8 + bonusDice + specialBonus;
 
 npc.hitPoints = totalHitPoints;
 npc.attackBonus = baseDice;
-npc.AC = stats[0].AC;
-npc.attacks = stats[0].Attacks;
-npc.damage = stats[0].Damage;
-npc.XP = stats[0].XP;
-npc.class = stats[0].Type;
+npc.AC = stats[0].ac;
+npc.attacks = stats[0].attacks;
+npc.damage = stats[0].damage;
+npc.XP = stats[0].xp;
+npc.class = stats[0].type;
 npc.level = monsterLevel;
-npc.movement = stats[0].Movement;
+npc.movement = stats[0].movement;
 
 //Treasure
-const treasureType = stats[0].Treasure
+const treasureType = stats[0].treasure
 const lootEntry = NPCbuild.treasureTable[treasureType];
 const loot = NPCbuild.genLoot(lootEntry);
 
@@ -1177,7 +1178,7 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 K: {
@@ -1186,9 +1187,9 @@ Silver: { percentage: 90, dice: '2d10' },
 Electrum: { percentage: 35, dice: '1d8' },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
-Gems: { percentage: 100, dice: '1d4' },
-Jewelry: { percentage: 100, dice: '1d4' },
-magicItems: { percentage: 100, dice: '1d4' }
+Gems: { percentage: 0, dice: null },
+Jewelry: { percentage: 0, dice: null },
+magicItems: { percentage: 0, dice: null }
 },
 L: {
 Copper: { percentage: 0, dice: null },
