@@ -581,9 +581,55 @@ if (
   ){activeEvents.push(entry);}
 }
 
+//For Events happening at the Location and not a subLocation, insert this into a random subLocation!
+//Isolate these events, and then insert into NPCEvents with a random subLocation.
+
+
 //Seperate activeEvents by Target (NPC||Location)
-const npcEvents      = activeEvents.filter(entry => entry.target === 'NPC');
+const npcEvents = activeEvents.filter(entry => entry.target === 'NPC');
+
 const locationEvents = activeEvents.filter(entry => entry.target === 'Location');
+
+const randEvents = activeEvents.filter(entry => entry.location === currentLocation && entry.target === 'NPC');
+
+for(const event of randEvents){
+const possibleLocations = locationEvents.filter(loc => loc.location !== 'All');
+console.log(possibleLocations);
+
+if(possibleLocations.length === 0){
+
+const newsubLocation = {
+  name: currentLocation,
+  description: "",
+  group: event.group,
+  active: 1, 
+  npc: event.npc, 
+  target: "Location", 
+  location: currentLocation
+}
+
+console.log(newsubLocation);
+locationEvents.push(newsubLocation)
+
+}
+  
+const randomIndex = Math.floor(Math.random() * possibleLocations.length);
+
+const newEvent = {
+  name: event.name,
+  description: event.description,
+  group: event.group,
+  active: 1, 
+  npc: event.npc, 
+  target: event.target, 
+  location: locationEvents[randomIndex].name
+}
+
+console.log(newEvent);
+npcEvents.push(newEvent)
+
+}
+
 
 locationEvents.sort((a, b) => {
   // If a's location is 'All', it should come first
@@ -651,7 +697,7 @@ if (entry.location.location === 'All') {
   else if (entry.location !== 'All'){
 
 //Generate NPC Divs
-const presentNPCs = NPCs.getNPCs(entry.location.name, currentLocation);
+const presentNPCs = NPCs.getNPCs(entry.location.name, npcEvents);
 
 if (entry.npc.length === 0) {
 npcDesc += `<span class = "cyan">There is nobody around. </span><br>`;
@@ -664,9 +710,12 @@ npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
 
 //Put together.
 locDesc = 
-`<h3> <span class = "hotpink"> ${entry.location.name} </span> ${eventItemsFormatted} </h3>            
+`<h3> ${entry.location.name !== currentLocation ? `<span class = "hotpink"> ${entry.location.name} </span>` : ''}` +
+` ${eventItemsFormatted} </h3>            
 ${npcDesc}  
-<span class = "beige"> ${entry.location.description} </span> <br><br><hr>`;
+${entry.location.name !== currentLocation ? `<span class = "beige"> ${entry.location.description} </span> <br><br>` : ''}` + 
+
+`<hr>`;
         
 }
 

@@ -292,11 +292,11 @@ Array.generateLocationOptions();
 
 },
 
-getNPCs(subLocation, Location) {
+getNPCs(subLocation, npcEvents) {
 const presentNPCsSet = new Set();
 
 for (const npc of NPCs.npcArray) {
-for (const event of Events.eventsArray) {
+for (const event of npcEvents) {
 
 const eventNpcList = event.npc.split(',').map(item => item.trim());
 const npctagsList = npc.tags.split(',').map(item => item.trim());
@@ -305,12 +305,13 @@ const npcNameMatches = npc.name === event.npc;
 const npcInEventList = eventNpcList.includes(npc.name);
 const eventIntagsList = npctagsList.includes(event.npc);
 const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => npctagsList.includes(tag));
+const isHere = event.location === subLocation;
 
 if ((npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
 event.active === 1 &&
 event.target === 'NPC' &&
-event.location === subLocation) {
-const npcStory = this.generateNPCStory(npc, subLocation);
+isHere) {
+const npcStory = this.generateNPCStory(npc, subLocation, npcEvents);
 presentNPCsSet.add(JSON.stringify({ name: npc.name, story: npcStory }));
 }
 
@@ -318,16 +319,16 @@ presentNPCsSet.add(JSON.stringify({ name: npc.name, story: npcStory }));
 
 // Convert the set back to an array
 const presentNPCs = [...presentNPCsSet].map(JSON.parse);
-
+//console.log(subLocation, presentNPCs)
 return presentNPCs;
 },
 
-generateNPCStory(npc, locationName) {
+generateNPCStory(npc, subLocation, npcEvents) {
 let story = ``;
 
 //Search active events to see if any apply based on the location, or the individual. 
 
-const presentNPCEvents = Events.eventsArray.filter(event => {
+const presentNPCEvents = npcEvents.filter(event => {
   const eventNpcList = event.npc.split(',').map(item => item.trim());
   const npctagsList = npc.tags.split(',').map(item => item.trim());
 
@@ -341,10 +342,9 @@ const presentNPCEvents = Events.eventsArray.filter(event => {
     event.target === 'NPC' &&
     event.active === 1 &&
     npc.tags !== '' &&
-    (event.location === locationName || event.location === 'All')
+    (event.location === subLocation || event.location === 'All')
   );
 });
-
 
 let relevantTag = ''; // Variable to store the relevant part of npc.tags
 
@@ -359,7 +359,6 @@ if (presentNPCEvents.length > 0) {
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
 
-
 for (const event of presentNPCEvents) {
   // Define eventNpcList and npctagsList within the loop
   const eventNpcList = event.npc.split(',').map(item => item.trim());
@@ -373,7 +372,7 @@ for (const event of presentNPCEvents) {
     story += `<span class="hotpink">${event.group}. </span>`;
   }
 
-  const options = event.description.split('?').filter(Boolean);
+  const options = event.description.split('??').filter(Boolean);
 
   if (options.length > 0) {
     const randomIndex = Math.floor(Math.random() * options.length);
