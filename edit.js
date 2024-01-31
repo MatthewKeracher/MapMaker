@@ -86,7 +86,6 @@ Ref.Centre.appendChild(option);
 });
 },
 
-
 deleteLocation() {
 let array;
 let id;
@@ -211,36 +210,36 @@ switch (this.editPage) {
 // Move a Location -- Unfinished
 moveLocation(source,target) {
 
-if (!Edit.moveMode) {
-
-
-} else {
-
-if (Edit.editMode) { 
-
-const sourceDivId = Ref.locationLabel.textContent;
-
-console.log('Moving ' + targetDivId + ' to ' + sourceDivId)
-
-const sourceEntry = Array.locationArray.find(entry => entry.divId === sourceDivId);
-const targetEntryIndex = Array.locationArray.find(entry => entry.divId === targetDivId);
-
-if (sourceEntry !== -1 && targetEntryIndex !== -1) {
-const sourceEntry = Array.locationArray[sourceEntry];
-const targetEntry = Array.locationArray[targetEntryIndex];
-
-// Copy information from sourceEntry to targetEntry
-targetEntry.description = sourceEntry.description;
-
-
-// Optionally, you can clear the source entry information
-sourceEntry.description = '';
-
-}
-
-editMoveButton.click();
-
-}}},
+  if (!Edit.moveMode) {
+  
+  
+  } else {
+  
+  if (Edit.editMode) { 
+  
+  const sourceDivId = Ref.locationLabel.textContent;
+  
+  console.log('Moving ' + targetDivId + ' to ' + sourceDivId)
+  
+  const sourceEntry = Array.locationArray.find(entry => entry.divId === sourceDivId);
+  const targetEntryIndex = Array.locationArray.find(entry => entry.divId === targetDivId);
+  
+  if (sourceEntry !== -1 && targetEntryIndex !== -1) {
+  const sourceEntry = Array.locationArray[sourceEntry];
+  const targetEntry = Array.locationArray[targetEntryIndex];
+  
+  // Copy information from sourceEntry to targetEntry
+  targetEntry.description = sourceEntry.description;
+  
+  
+  // Optionally, you can clear the source entry information
+  sourceEntry.description = '';
+  
+  }
+  
+  editMoveButton.click();
+  
+  }}},
 
 // Save a Location
 saveLocation() {

@@ -368,7 +368,8 @@ const matches = stats[0].hd.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
 const baseDice = parseInt(matches[1], 10);
 const bonusDice = matches[2] ? parseInt(matches[2], 10) : 0;
 const specialBonus = matches[3] ? parseInt(matches[3], 10) : 0;
-const totalHitPoints = baseDice * 8 + bonusDice + specialBonus;
+console.log(baseDice)
+const totalHitPoints = NPCbuild.rollDice(baseDice+'d8') + bonusDice + specialBonus;
 
 npc.hitPoints = totalHitPoints;
 npc.attackBonus = baseDice;
@@ -1101,9 +1102,8 @@ Electrum: { percentage: 30, dice: '2d6' },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 25, dice: '1d4' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 25, dice: '1d4' },
-Special: { percentage: 15, dice: '1d2' }
+Jewelry: { percentage: 50, dice: '1d4' },
+magicItems: { percentage: 15, dice: '1d2' },
 },
 D: {
 Copper: { percentage: 30, dice: '4d6' },
@@ -1112,9 +1112,8 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 90, dice: '5d8' },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 30, dice: '1d8' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 30, dice: '1d8' },
-Special: { percentage: 20, dice: '1d2', additional: '+ 1 potion' }
+Jewelry: { percentage: 30, dice: '1d8' },
+magicItems: { percentage: 20, dice: '1d2' }, //plus potion
 },
 E: {
 Copper: { percentage: 30, dice: '2d8' },
@@ -1123,9 +1122,8 @@ Electrum: { percentage: 50, dice: '3d8' },
 Gold: { percentage: 50, dice: '4d10' },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 10, dice: '1d10' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 10, dice: '1d10' },
-Special: { percentage: 30, dice: '1d4', additional: '+ 1 scroll' }
+Jewelry: { percentage: 10, dice: '1d10' },
+magicItems: { percentage: 30, dice: '1d4' }, //plus scroll
 },
 F: {
 Copper: { percentage: 0, dice: null },
@@ -1134,9 +1132,9 @@ Electrum: { percentage: 50, dice: '4d8' },
 Gold: { percentage: 85, dice: '6d10' },
 Platinum: { percentage: 70, dice: '2d8' },
 Gems: { percentage: 20, dice: '2d12' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 10, dice: '1d12' },
-Special: { percentage: 35, dice: '1d4', exceptions: ['weapons'], additional: ['+ 1 potion', '+ 1 scroll'] }
+Jewelry: { percentage: 10, dice: '1d12' },
+magicItems: { percentage: 35, dice: '1d4' },
+Special: { percentage: 35, dice: '1d4'}, //exceptions: ['weapons'], additional: ['+ 1 potion', '+ 1 scroll'] }
 },
 G: {
 Copper: { percentage: 0, dice: null },
@@ -1145,9 +1143,8 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 90, dice: '4d6x10' },
 Platinum: { percentage: 75, dice: '5d8' },
 Gems: { percentage: 25, dice: '3d6' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 25, dice: '1d10' },
-Special: { percentage: 50, dice: '1d4', additional: '+ 1 scroll' }
+Jewelry: { percentage: 25, dice: '1d10' },
+magicItems: { percentage: 50, dice: '1d4' }, //plus scroll
 },
 H: {
 Copper: { percentage: '*', dice: '8d10' },
@@ -1156,7 +1153,7 @@ Electrum: { percentage: '*', dice: '3d10x10' },
 Gold: { percentage: '*', dice: '5d8x10' },
 Platinum: { percentage: '*', dice: '9d8' },
 Gems: { percentage: 25, dice: '3d6' },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 25, dice: '1d10' },
 magicItems: { percentage: 25, dice: '1d10' },
 Special: { percentage: 50, dice: '1d4', additional: '+ 1 scroll' }
 },
@@ -1168,8 +1165,7 @@ Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 80, dice: '3d10' },
 Gems: { percentage: 50, dice: '2d6' },
 Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 50, dice: '2d6' },
-Special: { percentage: 15, dice: 'any 1' }
+magicItems: { percentage: 15, dice: '1d1' },
 },
 J: {
 Copper: { percentage: 45, dice: '3d8' },
@@ -1198,7 +1194,7 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 50, dice: '1d4' },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 M: {
@@ -1206,10 +1202,10 @@ Copper: { percentage: 0, dice: null },
 Silver: { percentage: 0, dice: null },
 Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 90, dice: '4d10' },
-Platinum: { percentage: 90, dice: '2d8x10' },
+Platinum: { percentage: 90, dice: '2d8' }, //x10
 Gems: { percentage: 55, dice: '5d4' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 45, dice: '2d6' }
+Jewelry: { percentage: 45, dice: '2d6' },
+magicItems: { percentage: 0, dice: null }
 },
 N: {
 Copper: { percentage: 0, dice: null },
@@ -1218,9 +1214,8 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 0, dice: null },
-Special: { percentage: 40, dice: '2d4', additional: 'potions' }
+Jewelry: { percentage: 0, dice: null },
+magicItems: { percentage: 40, dice: '2d4' }, //only potions
 },
 O: {
 Copper: { percentage: 0, dice: null },
@@ -1229,48 +1224,47 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 0, dice: null },
-Special: { percentage: 50, dice: '1d4', additional: 'scrolls' }
+Jewelry: { percentage: 0, dice: null },
+magicItems: { percentage: 50, dice: '1d4' }, //only scrolls
 },
 P: {
-Copper: { percentage: 0, dice: '3d8' },
+Copper: { percentage: 100, dice: '3d8' },
 Silver: { percentage: 0, dice: null },
 Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 Q: {
 Copper: { percentage: 0, dice: null },
-Silver: { percentage: 0, dice: '3d6' },
+Silver: { percentage: 100, dice: '3d6' },
 Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 R: {
 Copper: { percentage: 0, dice: null },
 Silver: { percentage: 0, dice: null },
-Electrum: { percentage: 0, dice: '2d6' },
+Electrum: { percentage: 100, dice: '2d6' },
 Gold: { percentage: 0, dice: null },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 S: {
 Copper: { percentage: 0, dice: null },
 Silver: { percentage: 0, dice: null },
 Electrum: { percentage: 0, dice: null },
-Gold: { percentage: 0, dice: '2d4' },
+Gold: { percentage: 100, dice: '2d4' },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 T: {
@@ -1278,9 +1272,9 @@ Copper: { percentage: 0, dice: null },
 Silver: { percentage: 0, dice: null },
 Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 0, dice: null },
-Platinum: { percentage: 0, dice: '1d6' },
+Platinum: { percentage: 100, dice: '1d6' },
 Gems: { percentage: 0, dice: null },
-Jewelry: { percentage: 50, dice: '6d6' },
+Jewelry: { percentage: 0, dice: null },
 magicItems: { percentage: 0, dice: null }
 },
 U: {
@@ -1290,9 +1284,8 @@ Electrum: { percentage: 0, dice: null },
 Gold: { percentage: 25, dice: '1d20' },
 Platinum: { percentage: 0, dice: null },
 Gems: { percentage: 5, dice: '1d4' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 5, dice: '1d4' },
-Special: { percentage: 2, dice: 'any 1' }
+Jewelry: { percentage: 5, dice: '1d4' },
+magicItems: { percentage: 2, dice: '1d1' },
 },
 V: {
 Copper: { percentage: 0, dice: null },
@@ -1301,9 +1294,8 @@ Electrum: { percentage: 25, dice: '1d20' },
 Gold: { percentage: 50, dice: '1d20' },
 Platinum: { percentage: 25, dice: '1d20' },
 Gems: { percentage: 10, dice: '1d4' },
-Jewelry: { percentage: 50, dice: '6d6' },
-magicItems: { percentage: 10, dice: '1d4' },
-Special: { percentage: 5, dice: 'any 1' }
+Jewelry: { percentage: 10, dice: '1d4' },
+magicItems: { percentage: 5, dice: '1d1' },
 }
 };
 

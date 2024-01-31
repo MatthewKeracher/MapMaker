@@ -369,12 +369,22 @@ for (const event of presentNPCEvents) {
 
   if (sharedTag) {
     story += `<span class="hotpink">${sharedTag}. </span>`;
-  } else{
+  } else {
     story += `<span class="hotpink">${event.group}. </span>`;
   }
 
-  story += `${event.description}<br>`;
+  const options = event.description.split('?').filter(Boolean);
+
+  if (options.length > 0) {
+    const randomIndex = Math.floor(Math.random() * options.length);
+    const selectedOption = options[randomIndex].trim();
+
+    story += `${selectedOption}<br>`;
+  } else {
+    story += `${event.description}<br>`;
+  }
 }
+
 
 
 //console.log(story)
