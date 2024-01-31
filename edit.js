@@ -15,191 +15,197 @@ editPage: 1,
 divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 
 init: function () {
-  this.divIds.forEach((divId) => {
-    const divElement = document.getElementById(divId);
-    if (divElement) {
-      divElement.addEventListener('input', (event) => {
-        const text = event.target.value;
-        const cursorPosition = event.target.selectionStart;
-        const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-        const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
-        const openTildeIndex = text.lastIndexOf('~', cursorPosition); // Add this line for ~
+this.divIds.forEach((divId) => {
+const divElement = document.getElementById(divId);
+if (divElement) {
+divElement.addEventListener('input', (event) => {
+const text = event.target.value;
+const cursorPosition = event.target.selectionStart;
+const openBraceIndex = text.lastIndexOf('#', cursorPosition);
+const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+const openTildeIndex = text.lastIndexOf('~', cursorPosition); // Add this line for ~
 
-        if (openBraceIndex !== -1 || openAsteriskIndex !== -1 || openTildeIndex !== -1) { // Add openTildeIndex here
-          let searchText;
-          let filteredItems;
+if (openBraceIndex !== -1 || openAsteriskIndex !== -1 || openTildeIndex !== -1) { // Add openTildeIndex here
+let searchText;
+let filteredItems;
 
-          if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
-            searchText = text.substring(openBraceIndex + 1, cursorPosition);
-            filteredItems = Items.itemsArray.filter(item =>
-              item.Name.toLowerCase().includes(searchText.toLowerCase())
-            );
-          } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
-            searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-            filteredItems = Monsters.monstersArray.filter(monster =>
-              monster.name.toLowerCase().includes(searchText.toLowerCase())
-            );
-          } else {
-            searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
-            filteredItems = Spells.spellsArray.filter(spell =>
-              spell.Name.toLowerCase().includes(searchText.toLowerCase())
-              );
-          }
+if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
+searchText = text.substring(openBraceIndex + 1, cursorPosition);
+filteredItems = Items.itemsArray.filter(item =>
+item.Name.toLowerCase().includes(searchText.toLowerCase())
+);
+} else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
+searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
+filteredItems = Monsters.monstersArray.filter(monster =>
+monster.name.toLowerCase().includes(searchText.toLowerCase())
+);
+} else {
+searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
+filteredItems = Spells.spellsArray.filter(spell =>
+spell.Name.toLowerCase().includes(searchText.toLowerCase())
+);
+}
 
-          console.log(searchText);
+console.log(searchText);
 
-          // Show Centre
-          Ref.Centre.style.display = 'block';
-          Ref.Centre.innerHTML = ''; // Clear existing content
+// Show Centre
+Ref.Centre.style.display = 'block';
+Ref.Centre.innerHTML = ''; // Clear existing content
 
-          filteredItems.forEach(item => {
-            const option = document.createElement('div');
-            option.textContent = item.Name || item; // Use "Name" property if available
-            option.addEventListener('click', () => {
-              const replacement = openBraceIndex !== -1
-                ? `#${item.Name}#`
-                : openAsteriskIndex !== -1
-                ? `*${item.Name}*`
-                : openTildeIndex !== -1 // Add this line
-                ? `~${item.Name}~` // Add this line
-                : ''; // Add this line for ~
-                
-                const newText = text.substring(
-                  0,
-                  openBraceIndex !== -1
-                    ? openBraceIndex
-                    : openAsteriskIndex !== -1
-                    ? openAsteriskIndex
-                    : openTildeIndex // Add this line for ~
-                ) + replacement + text.substring(cursorPosition);
-                event.target.value = newText;
-                
-              //Ref.Centre.style.display = 'none'; // Hide Ref.optionsList
-            });
-            Ref.Centre.appendChild(option);
-          });
-        } else {
-          
-        }
-      });
-    }
-  });
+filteredItems.forEach(item => {
+const option = document.createElement('div');
+option.textContent = item.Name || item; // Use "Name" property if available
+option.addEventListener('click', () => {
+const replacement = openBraceIndex !== -1
+  ? `#${item.Name}#`
+  : openAsteriskIndex !== -1
+  ? `*${item.Name}*`
+  : openTildeIndex !== -1 // Add this line
+  ? `~${item.Name}~` // Add this line
+  : ''; // Add this line for ~
+  
+  const newText = text.substring(
+    0,
+    openBraceIndex !== -1
+      ? openBraceIndex
+      : openAsteriskIndex !== -1
+      ? openAsteriskIndex
+      : openTildeIndex // Add this line for ~
+  ) + replacement + text.substring(cursorPosition);
+  event.target.value = newText;
+  
+//Ref.Centre.style.display = 'none'; // Hide Ref.optionsList
+});
+Ref.Centre.appendChild(option);
+});
+} else {
+
+}
+});
+}
+});
 },
 
 
-
 deleteLocation() {
+let array;
+let id;
+let index;
+
 switch (this.editPage) {
- 
-case 2:
-const eventIndex = Events.eventsArray.findIndex(event => parseInt(event.id) === parseInt(Ref.eventId.value));
 
-if (eventIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + Events.eventsArray[eventIndex].name + "?");
+    case 2:
 
-if (confirmation) {
-Events.eventsArray.splice(eventIndex, 1); 
-Events.loadEventsList(Events.eventsArray, Ref.Centre);
-Ref.eventForm.reset();
-}
-}
-break;
+      array = Events.eventsArray;
+      id = Ref.eventId.value;
+      index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
-case 3:
-const npcName = document.getElementById('npcName').value;
-const npcIndex = NPCs.npcArray.findIndex(npc => npc.name === npcName);
-const npcForm = document.getElementById('npcForm');
+      if (index !== -1) {
+      const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
 
-if (npcIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete this NPC?");
-if (confirmation) {
-NPCs.npcArray.splice(npcIndex, 1); // Remove NPC from npcArray
+      if (confirmation) {
+      array.splice(index, 1); 
+      Events.loadEventsList(array, Ref.Centre);
+      Ref.eventForm.reset();
+      }
+      }
 
-// Filter and update npcArray to remove empty entries
-//NPCs.npcArray = this.filterEmptyEntries(NPCs.npcArray);
+    break;
 
-NPCs.loadNPC(NPCs.npcArray); // Refresh the NPC form with updated npcArray
+    case 3:
 
-npcForm.reset(); // Call the reset() method to clear the form fields
-}
-}
-break;
+      array = NPCs.npcArray;
+      id = Ref.npcId.value;
+      index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
-case 4:
-const monsterIndex = Monsters.monstersArray.findIndex(monster => parseInt(monster.id) === parseInt(Ref.monsterId.value));
+      if (index !== -1) {
+      const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
 
-if (monsterIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + Monsters.monstersArray[monsterIndex].name + "?");
+      if (confirmation) {
+      array.splice(index, 1); 
+      NPCs.loadNPC(array, Ref.Centre);
+      Ref.npcForm.reset();
+      }
+      }
 
-if (confirmation) {
-Monsters.monstersArray.splice(monsterIndex, 1); 
-Monsters.loadMonsterList(Monsters.monstersArray, Ref.Centre);
-Ref.eventForm.reset();
-}
-}
-break;
+    break;
 
-case 5:
-const itemName = document.getElementById('itemName').value;
-const itemIndex = Items.itemsArray.findIndex(item => item.Name === itemName);
-const itemForm = document.getElementById('itemForm');
+    case 4:
 
-if (itemIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete this Item?");
-if (confirmation) {
-Items.itemsArray.splice(itemIndex, 1); // Remove NPC from npcArray
+      array = Monsters.monstersArray;
+      id = Ref.monsterId.value;
+      index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
-// Filter and update npcArray to remove empty entries
-//NPCs.npcArray = this.filterEmptyEntries(NPCs.npcArray);
+      if (index !== -1) {
+      const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
 
-Items.loadItemsList(Items.itemsArray); // Refresh the NPC form with updated npcArray
-itemForm.reset(); // Call the reset() method to clear the form fields
-}
-}
-break;
+      if (confirmation) {
+      array.splice(index, 1); 
+      Monsters.loadMonsterList(array, Ref.Centre);
+      Ref.monsterForm.reset();
+      }
+      }
 
-case 6:
-const spellName = document.getElementById('spellName').value;
-const spellIndex = Spells.spellsArray.findIndex(spell => spell.Name === spellName);
-const spellsForm = document.getElementById('spellsForm');
+    break;
 
-if (spellIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete this spell?");
-if (confirmation) {
-Spells.spellsArray.splice(spellIndex, 1); // Remove ambience from ambienceArray
+    case 5:
 
-// Update the ambience list with the updated ambienceArray
-Spells.loadSpellsList(Spells.spellsArray);
+    array = Items.itemsArray;
+    id = Ref.itemId.value;
+    index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
-// Reset the ambience form fields
-spellsForm.reset();
-}
-}
-break;
+    if (index !== -1) {
+    const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
 
+    if (confirmation) {
+    array.splice(index, 1); 
+    Items.loadItemsList(array, Ref.Centre);
+    Ref.itemForm.reset();
+    }
+    }
 
+    break;
 
-default:
-// For any other case
-const divId = Ref.locationLabel.textContent;
+    case 6:
+    
+    array = Spells.spellsArray;
+    id = Ref.spellId.value;
+    index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
-const matchingEntryIndex = Array.locationArray.findIndex(entry => entry.divId === divId);
+    if (index !== -1) {
+    const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
 
-if (matchingEntryIndex !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete this entry?");
-if (confirmation) {
-// Remove the entry from locationArray
-Array.locationArray.splice(matchingEntryIndex, 1);
+    if (confirmation) {
+    array.splice(index, 1); 
+    Spells.loadSpellsList(array, Ref.Centre);
+    Ref.spellsForm.reset();
+    }
+    }
 
-// Remove the corresponding <div> element from the DOM
-const divToRemove = document.getElementById(divId);
-if (divToRemove) {
-divToRemove.remove();
-}
-}
-}
-break;
-}
+    break;
+
+    default:
+    // For locations.
+    const divId = Ref.locationLabel.textContent;
+    array = Array.locationArray;
+    index = array.findIndex(entry => entry.divId === divId);
+
+    if (index !== -1) {
+    const confirmation = window.confirm("Are you sure you want to delete " + array[index].divId + "?");
+
+    if (confirmation) {
+    // Remove the entry from locationArray
+    array.splice(index, 1);
+
+    // Remove the corresponding <div> element from the DOM
+    const divToRemove = document.getElementById(divId);
+    if (divToRemove) {
+    divToRemove.remove();
+    }
+    }
+    }
+    break;
+    }
 },
 
 // Move a Location -- Unfinished

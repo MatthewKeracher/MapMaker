@@ -42,6 +42,7 @@ Left: document.querySelector('.Left'),
 //spellsForm
 spellsForm: document.querySelector('.spellsForm'),
 
+spellId: document.getElementById('spellId'),
 spellName: document.getElementById('spellName'),
 spellClass: document.getElementById('spellClass'),
 spellLevel: document.getElementById('spellLevel'),
@@ -70,6 +71,7 @@ eventDescription: document.getElementById('ambienceDescription'),
 
 //objectForm
 itemForm: document.querySelector('.itemForm'),
+itemId: document.getElementById('itemId'),
 itemSearch: document.getElementById('itemSearch'),
 itemName: document.getElementById('itemName'),
 itemType: document.getElementById('itemType'),

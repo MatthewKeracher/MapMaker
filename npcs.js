@@ -572,6 +572,25 @@ if (foundNPC.magic){
 npcContent += `<hr><h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
 }
 
+if (foundNPC.savingThrows){
+
+  npcContent +=
+  `<hr><h3>
+  <span class="expandable cyan" 
+   data-content-type="rule"
+
+   divId="Saving Throws">
+          Saving Throws:</span> <br><br>` +
+
+  // savingThrows common to multiple classes
+  `${foundNPC.savingThrows.deathRay ? `<span class="orange">Death Ray</span> ${foundNPC.savingThrows.deathRay}<br>` : ''}` +
+  `${foundNPC.savingThrows.magicWands ? `<span class="orange">Magic Wands</span> ${foundNPC.savingThrows.magicWands}<br>` : ''}` +
+  `${foundNPC.savingThrows.paralysisPetrify ? `<span class="orange">Paralysis & Petrify</span> ${foundNPC.savingThrows.paralysisPetrify}<br>` : ''}` +
+  `${foundNPC.savingThrows.dragonBreath ? `<span class="orange">Dragon Breath</span> ${foundNPC.savingThrows.dragonBreath}<br>` : ''}` +
+  `${foundNPC.savingThrows.spells ? `<span class="orange">Spells</span> ${foundNPC.savingThrows.spells}<br>` : ''}` 
+
+}
+
 if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
 
   let previousTag = '';
@@ -583,16 +602,18 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
   });
 
   console.log(foundNPC.treasure)
+  const allEmptyOrZero = Object.values(foundNPC.treasure).every(value => value === "" || value === 0);
+
  
   const formattedInventory = inventoryItems.join('');
 
   npcContent += 
   
-  `${foundNPC.monsterTemplate !== '' || foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
+  `${!allEmptyOrZero || foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
 
   `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`+
 
-  `${foundNPC.monsterTemplate !== '' ? `<br><span class= "hotpink"> ${foundNPC.monsterTemplate}:</span> <br>` : '' }`  +
+  `${!allEmptyOrZero ? `<br><span class= "hotpink"> ${foundNPC.monsterTemplate}:</span> <br>` : '' }`  +
   
   `${foundNPC.treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
   `${foundNPC.treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
@@ -625,24 +646,7 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
   
 }
 
-if (foundNPC.savingThrows){
 
-  npcContent +=
-  `<hr><h3>
-  <span class="expandable cyan" 
-   data-content-type="rule"
-
-   divId="Saving Throws">
-          Saving Throws:</span> <br><br>` +
-
-  // savingThrows common to multiple classes
-  `${foundNPC.savingThrows.deathRay ? `<span class="orange">Death Ray</span> ${foundNPC.savingThrows.deathRay}<br>` : ''}` +
-  `${foundNPC.savingThrows.magicWands ? `<span class="orange">Magic Wands</span> ${foundNPC.savingThrows.magicWands}<br>` : ''}` +
-  `${foundNPC.savingThrows.paralysisPetrify ? `<span class="orange">Paralysis & Petrify</span> ${foundNPC.savingThrows.paralysisPetrify}<br>` : ''}` +
-  `${foundNPC.savingThrows.dragonBreath ? `<span class="orange">Dragon Breath</span> ${foundNPC.savingThrows.dragonBreath}<br>` : ''}` +
-  `${foundNPC.savingThrows.spells ? `<span class="orange">Spells</span> ${foundNPC.savingThrows.spells}<br>` : ''}` 
-
-}
 
 
 target.innerHTML = npcContent;

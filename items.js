@@ -163,6 +163,7 @@ itemNameDiv.addEventListener('click', () => {
 
 itemNameDiv.innerHTML = `[${item.Type}]<span class="cyan">${item.Name}</span>`;
 
+Ref.itemId.value = item.id;
 Ref.itemName.value = item.Name;
 Ref.itemType.value = item.Type;
 Ref.itemTags.value = item.Tags;
@@ -185,6 +186,7 @@ const existingItemIndex = this.itemsArray.findIndex(item => item.Name === Ref.it
 
 const item = {
 
+id: Ref.itemId.value,
 Name: Ref.itemName.value,
 Type: Ref.itemType.value,
 Tags: Ref.itemTags.value,

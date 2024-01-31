@@ -100,6 +100,8 @@
 <form id="itemForm" class="itemForm">
 <div class="itemFormContainer">
 
+<input class ="idInput" id="itemId" name="itemId" placeholder="Id#"></input> <br>
+
 <label for="itemSearch">Search Items</label>
 <input class="lineField" type="textarea" id="itemSearch" name="itemSearch" placeholder="Search by Name or Tag" required>
 
@@ -154,45 +156,48 @@
 <form id="spellsForm" class="spellsForm">
 <div class="spellsFormContainer">
 
+<input class ="idInput" id="spellId" name="spellId" placeholder="Id#"></input> <br>
+
+
 <label for="spellName">Name</label>
 <input class="lineField" type="textarea" id="spellName" name="spellName" placeholder="{... to Search" required>
 <br>
 
 <div class = "Monster-stats-all">
 
-    <div class="Monster-stats-left"> 
+<div class="Monster-stats-left"> 
 
-    <label for="spellClass">Class</label>
-    <input class="halfField" type="textarea" id="spellClass" name="spellClass">
-      
-    
-    </div>
-    
-    <div class="Monster-stats-right"> 
-    
-    <label for="spellLevel">Level</label>
-    <input class="halfField" type="textarea" id="spellLevel" name="spellLevel">
-    
-    </div>
-    </div>
+<label for="spellClass">Class</label>
+<input class="halfField" type="textarea" id="spellClass" name="spellClass">
 
-    <div class = "Monster-stats-all">
 
-        <div class="Monster-stats-left"> 
-      
-        <label for="spellRange">Range</label>
-        <input class="halfField" type="textarea" id="spellRange" name="spellRange">
-        
-        </div>
-        
-        <div class="Monster-stats-right"> 
-        
-        <label for="spellDuration">Duration</label>
-        <input class="halfField" type="textarea" id="spellDuration" name="spellDuration">
-           
-        
-        </div>
-        </div>
+</div>
+
+<div class="Monster-stats-right"> 
+
+<label for="spellLevel">Level</label>
+<input class="halfField" type="textarea" id="spellLevel" name="spellLevel">
+
+</div>
+</div>
+
+<div class = "Monster-stats-all">
+
+<div class="Monster-stats-left"> 
+
+<label for="spellRange">Range</label>
+<input class="halfField" type="textarea" id="spellRange" name="spellRange">
+
+</div>
+
+<div class="Monster-stats-right"> 
+
+<label for="spellDuration">Duration</label>
+<input class="halfField" type="textarea" id="spellDuration" name="spellDuration">
+
+
+</div>
+</div>
 
 <label for="spellDescription">Description</label>
 <textarea class="medField" type="textarea" id="spellDescription" name="spellDescription"></textarea>
@@ -280,65 +285,65 @@
 <form id="npcForm" class="npcForm">
 <div class="npcFormContainer">
 
-  <!-- <div class="npc-checkbox-container">
-    <form>
-      <label class="npc-label">
-        <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateNPCCheckboxes('npcCheckbox')">
-        NPC
-      </label>
-  
-      <label>
-        <input type="checkbox" name="monsterCheckbox" id="monsterCheckbox" onchange="updateNPCCheckboxes('monsterCheckbox')">
-        Monster
-      </label>
+<!-- <div class="npc-checkbox-container">
+<form>
+<label class="npc-label">
+<input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateNPCCheckboxes('npcCheckbox')">
+NPC
+</label>
 
-    </form>
-    
-  </div> -->
+<label>
+<input type="checkbox" name="monsterCheckbox" id="monsterCheckbox" onchange="updateNPCCheckboxes('monsterCheckbox')">
+Monster
+</label>
 
-  <!-- <script>
-    function updateNPCCheckboxes(checkboxId) {
-      const npcCheckbox = document.getElementById('npcCheckbox');
-      const monsterCheckbox = document.getElementById('monsterCheckbox');
+</form>
 
-      const npcLevel = document.getElementById('npcLevel');
-      const npcClass = document.getElementById('npcClass');
-      const npcLevelLabel = document.getElementById('npcLevelLabel');
-      const npcClassLabel = document.getElementById('npcClassLabel');
+</div> -->
 
-      const monsterTemplate = document.getElementById('monsterTemplate');
-      const monsterTemplateLabel = document.getElementById('monsterTemplateLabel');
-  
-      // Uncheck the other checkbox when one is checked
-      if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
-        monsterCheckbox.checked = false;
+<!-- <script>
+function updateNPCCheckboxes(checkboxId) {
+const npcCheckbox = document.getElementById('npcCheckbox');
+const monsterCheckbox = document.getElementById('monsterCheckbox');
 
-        monsterTemplate.style.display = 'none';
-        monsterTemplateLabel.style.display = 'none';
+const npcLevel = document.getElementById('npcLevel');
+const npcClass = document.getElementById('npcClass');
+const npcLevelLabel = document.getElementById('npcLevelLabel');
+const npcClassLabel = document.getElementById('npcClassLabel');
 
-        // Hide and clear the Location text box
-        npcLevelLabel.style.display = 'flex';
-        npcLevel.style.display = 'flex';
-        npcClassLabel.style.display = 'flex';
-        npcClass.style.display = 'flex';
+const monsterTemplate = document.getElementById('monsterTemplate');
+const monsterTemplateLabel = document.getElementById('monsterTemplateLabel');
 
-      } else if (checkboxId === 'monsterCheckbox' && monsterCheckbox.checked) {
-        npcCheckbox.checked = false;
+// Uncheck the other checkbox when one is checked
+if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
+monsterCheckbox.checked = false;
 
-        monsterTemplate.style.display = 'block';
-        monsterTemplateLabel.style.display = 'block';
+monsterTemplate.style.display = 'none';
+monsterTemplateLabel.style.display = 'none';
 
-        // Hide and clear the NPC form fields
-        npcLevelLabel.style.display = 'none';
-        npcLevel.style.display = 'none';
-        npcClassLabel.style.display = 'none';
-        npcClass.style.display = 'none';
-      } else {
-        // Both checkboxes unchecked, show both text boxes
-             
-      }
-    }
-  </script> -->
+// Hide and clear the Location text box
+npcLevelLabel.style.display = 'flex';
+npcLevel.style.display = 'flex';
+npcClassLabel.style.display = 'flex';
+npcClass.style.display = 'flex';
+
+} else if (checkboxId === 'monsterCheckbox' && monsterCheckbox.checked) {
+npcCheckbox.checked = false;
+
+monsterTemplate.style.display = 'block';
+monsterTemplateLabel.style.display = 'block';
+
+// Hide and clear the NPC form fields
+npcLevelLabel.style.display = 'none';
+npcLevel.style.display = 'none';
+npcClassLabel.style.display = 'none';
+npcClass.style.display = 'none';
+} else {
+// Both checkboxes unchecked, show both text boxes
+
+}
+}
+</script> -->
 
 <input class ="idInput" id="npcId" name="npcId" placeholder="Id#"></input> <br>
 
@@ -375,7 +380,7 @@ placeholder="Put any other information about this NPC here.
 #... for Items
 ~... for Spells">
 </textarea>
-  
+
 <br>
 
 <div class = "NPC-stats-all">
@@ -412,24 +417,24 @@ placeholder="Put any other information about this NPC here.
 <form id="eventForm" class="eventForm">
 <div class="monsterFormContainer">
 
- 
 
-  <div class="event-checkbox-container">
-    <form>
-      <input class ="idInput" id="eventId" name="eventId" placeholder="Id#"></input>
 
-      <label class="npc-label">
-        <input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateEventCheckboxes('npcCheckbox')">
-        NPC
-      </label>
-  
-      <label>
-        <input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateEventCheckboxes('locationCheckbox')">
-        Location
-      </label>
+<div class="event-checkbox-container">
+<form>
+<input class ="idInput" id="eventId" name="eventId" placeholder="Id#"></input>
 
-    </form>
-  </div>
+<label class="npc-label">
+<input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateEventCheckboxes('npcCheckbox')">
+NPC
+</label>
+
+<label>
+<input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateEventCheckboxes('locationCheckbox')">
+Location
+</label>
+
+</form>
+</div>
 
 <label for="eventSearch">Search Events</label>
 <input class="lineField" type="textarea" id="eventSearch" name="eventSearch" placeholder="Search by Name or Tag" required>
@@ -441,33 +446,33 @@ placeholder="Put any other information about this NPC here.
 <input class="lineField" type="textarea" id="eventTags" name="eventTags" placeholder="Tag 1, Tag 2, Tag 3, ..." required>
 
 <script>
-  function updateEventCheckboxes(checkboxId) {
-    const npcCheckbox = document.getElementById('npcCheckbox');
-    const locationCheckbox = document.getElementById('locationCheckbox');
-    const eventLocation = document.getElementById('eventLocation');
-    const eventNPC = document.getElementById('eventNPC');
+function updateEventCheckboxes(checkboxId) {
+const npcCheckbox = document.getElementById('npcCheckbox');
+const locationCheckbox = document.getElementById('locationCheckbox');
+const eventLocation = document.getElementById('eventLocation');
+const eventNPC = document.getElementById('eventNPC');
 
-    // Uncheck the other checkbox when one is checked
-    if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
-      locationCheckbox.checked = false;
-      // Hide and clear the Location text box
-      eventLocationLabel.textContent = 'Where are the NPCs?';
-      eventLocation.style.display = 'block';
-      eventNPCLabel.textContent = 'Who does this affect?';
-      eventNPC.style.display = 'block';
-    } else if (checkboxId === 'locationCheckbox' && locationCheckbox.checked) {
-      npcCheckbox.checked = false;
-      // Hide and clear the NPC text box
-      eventNPCLabel.textContent = '';
-      eventNPC.style.display = 'none';
-      eventLocationLabel.textContent = 'Where does this affect?';
-      eventLocation.style.display = 'block';
-      eventNPC.value = '';
-    } else {
-      // Both checkboxes unchecked, show both text boxes
-           
-    }
-  }
+// Uncheck the other checkbox when one is checked
+if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
+locationCheckbox.checked = false;
+// Hide and clear the Location text box
+eventLocationLabel.textContent = 'Where are the NPCs?';
+eventLocation.style.display = 'block';
+eventNPCLabel.textContent = 'Who does this affect?';
+eventNPC.style.display = 'block';
+} else if (checkboxId === 'locationCheckbox' && locationCheckbox.checked) {
+npcCheckbox.checked = false;
+// Hide and clear the NPC text box
+eventNPCLabel.textContent = '';
+eventNPC.style.display = 'none';
+eventLocationLabel.textContent = 'Where does this affect?';
+eventLocation.style.display = 'block';
+eventNPC.value = '';
+} else {
+// Both checkboxes unchecked, show both text boxes
+
+}
+}
 </script>
 
 <label id="eventLocationLabel" for="eventLocation"></label>

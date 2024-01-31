@@ -137,6 +137,7 @@ fillSpellsForm: function(spell, spellNameDiv){
 // Add click event listener to each NPC name
 spellNameDiv.addEventListener('click', () => {
 
+Ref.spellId.value = spell.id,
 Ref.spellName.value = spell.Name;
 Ref.spellClass.value = spell.Class;
 Ref.spellLevel.value = spell.Level;
@@ -159,6 +160,7 @@ console.log(Ref.spellName.value)
 
 const item = {
 
+id: Ref.spellId.value,
 Name: Ref.spellName.value,
 Class: Ref.spellClass.value,
 Level: Ref.spellLevel.value,
