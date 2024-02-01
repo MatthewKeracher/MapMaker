@@ -249,7 +249,7 @@ if (Edit.editMode) {
 Ref.stateLabel.style.display = 'none';
 Edit.editMode = false;
 editEditButton.classList.remove('click-button');
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 
 //Show Storyteller, pageChange()
 Edit.pageChange(1);
