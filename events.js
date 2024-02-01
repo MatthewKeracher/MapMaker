@@ -410,12 +410,17 @@ tempArray.push(event);
 for (const event of data) {
 if (event.target === 'NPC') {
 // If the event is an NPC, find its corresponding location in tempArray
-const index = tempArray.findIndex(locationEvent => locationEvent.name === event.location);
+const index = tempArray.findIndex(locationEvent => locationEvent.name === event.location || locationEvent.location == event.location);
 
-if (index !== -1) {
+if (index !== -1 && tempArray[index].name === event.location) {
 // If the corresponding location is found, insert the NPC event after it
 tempArray.splice(index + 1, 0, event);
-} else {
+
+} else if(index !== -1 && tempArray[index].location === event.location){
+//If wandering event, put before subLocations
+tempArray.splice(index, 0, event);  
+}
+else {
 // If the corresponding location is not found, add the NPC event to the end
 tempArray.push(event);
 }
@@ -427,20 +432,21 @@ data = tempArray;
 
 data = data.reduce((result, currentEvent, index, array) => {
   const reversedArray = array.slice(0, index).reverse();
-  const lastLocationIndex = reversedArray.findIndex(event => event.target === 'Location');
+  const lastLocationIndex = reversedArray.findIndex(event => event.target === 'Location' || event.location === currentEvent.location);
   
   if (currentEvent.target === 'Location'){
     
   if (lastLocationIndex === -1 || currentEvent.location !== reversedArray[lastLocationIndex].location) {
     // Insert <hr> when a new location is encountered after the last 'Location' event
-    result.push({ locationSeparator: true, location: currentEvent.location });
+    result.push({name: currentEvent.location, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
   }
   }
-
+  
   if (currentEvent.target === 'NPC'){
-  if (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name) {
+
+  if (array[index-1] === undefined || (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name)) {
   // Insert <hr> when a new location is encountered after the last 'Location' event
-  result.push({ locationSeparator: true, location: currentEvent.location });
+  result.push({ name: currentEvent.location, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
   }
   }
 
@@ -473,21 +479,58 @@ let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
     if(event.locationSeparator === true){
       eventNameDiv.classList.add('no-hover');
       eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
+      target.appendChild(eventNameDiv);
     }
     else if(event.target === 'NPC' && event.active === 1){
       eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
+      target.appendChild(eventNameDiv);
+
+        NPCs.searchNPC(event.npc.toLowerCase());
+        
+        for (const npc of NPCs.npcSearchArray){
+          const npcNameDiv = document.createElement('div');
+          npcNameDiv.id = npc.name
+          npcNameDiv.innerHTML = `<span class="teal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
+          target.appendChild(npcNameDiv);
+
+          npcNameDiv.addEventListener('mouseover', () => {
+            Ref.Left.style.display = 'block';
+            Ref.Centre.style.display = 'block';
+            NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
+            });
+        }
+    
     }
     else if (event.target === 'Location' && event.active === 1 ){
       eventNameDiv.innerHTML = `<span class="misc">${event.name} </span>`;
+      target.appendChild(eventNameDiv);
     }
+
     else if (event.target === 'NPC'){
       eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
+      target.appendChild(eventNameDiv);
+      
+      NPCs.searchNPC(event.npc.toLowerCase());
+      
+      for (const npc of NPCs.npcSearchArray){
+        const npcNameDiv = document.createElement('div');
+        npcNameDiv.id = npc.name
+        npcNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
+        target.appendChild(npcNameDiv);
+
+        npcNameDiv.addEventListener('mouseover', () => {
+          Ref.Left.style.display = 'block';
+          Ref.Centre.style.display = 'block';
+          NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
+          });
+        
+      }
     }
     else{
       eventNameDiv.innerHTML = `<span class="gray">${event.name} </span>`;
+      target.appendChild(eventNameDiv);
     };
-   
-    target.appendChild(eventNameDiv);
+
 
           if(origin === 'eventsManager'){
           this.addCurrentEventNames(event, eventNameDiv);
@@ -501,6 +544,7 @@ let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
           this.addEventInfo(event);
           Ref.Left.classList.add('showLeft');
           });
+
 
 }},
 
@@ -594,7 +638,6 @@ const randEvents = activeEvents.filter(entry => entry.location === currentLocati
 
 for(const event of randEvents){
 const possibleLocations = locationEvents.filter(loc => loc.location !== 'All');
-console.log(possibleLocations);
 
 if(possibleLocations.length === 0){
 
@@ -625,7 +668,6 @@ const newEvent = {
   location: locationEvents[randomIndex].name
 }
 
-console.log(newEvent);
 npcEvents.push(newEvent)
 
 }

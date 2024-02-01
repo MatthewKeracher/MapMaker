@@ -299,7 +299,8 @@ break;
 
 case 3:
 NPCs.saveNPC();
-NPCs.searchNPC()
+NPCs.searchNPC(Ref.npcSearch.value.toLowerCase())
+this.loadNPC(this.npcSearchArray);
 break;
 
 case 4:

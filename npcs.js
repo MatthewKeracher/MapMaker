@@ -17,6 +17,7 @@ npcSearchArray:[],
 namedNPCs: [],
 groupedNPCs : [],
 absentNPCs: [],
+uniqueNames: [],
 
 
 
@@ -53,21 +54,32 @@ Ref.Centre.style.display = 'block';
 
 // Clear the existing content
 Ref.Centre.innerHTML = '';
-this.namedNPCs = [];
 this.groupedNPCs = [];
 this.absentNPCs = [];
+this.uniqueNames = [];
+
+const currentLocation = Ref.locationLabel.textContent;
+const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
+
+// Filter eventsArray based on currentLocation
+const sortEvents = Events.eventsArray.filter(event => {
+if (event.target === 'NPC' && event.active === 1) {
+const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
+return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.name));
+}
+return false; // If event.target is not 'NPC', filter it out
+});
+
+//console.log(sortEvents)
 
 for (const npc of NPCArray) {
 const npcNameDiv = document.createElement('div'); 
-npcNameDiv.id = npc.name;          
-this.sortNPCs(npc, npcNameDiv);
+npcNameDiv.id = npc.name; 
+this.sortNPCs(npc, npcNameDiv, sortEvents);
 this.fillNPCForm(npc, npcNameDiv);
 }
 
 // Add <hr> between namedNPCs and groupedNPCs if arrays are not empty
-if (this.namedNPCs.length > 0) {
-  this.namedNPCs.push(document.createElement('hr'));
-}
 if (this.groupedNPCs.length > 0) {
   this.groupedNPCs.push(document.createElement('hr'));
 }
@@ -92,59 +104,36 @@ npcDiv.addEventListener('mouseover', () => {
 
 },
 
-sortNPCs: function(npc, npcNameDiv) {
-const currentLocation = Ref.locationLabel.textContent;
+sortNPCs: function(npc, npcNameDiv, sortEvents) {
 
-// Array to track unique NPC names
-const uniqueNames = [];
+//Takes NPCs one at a time and sorts them. 
 
-//get subLocations
-const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
-
-subLocations.forEach(subLoc => {
-  //console.log(subLoc.name.toString());
-});
-
-// Filter eventsArray based on currentLocation
-const sortEvents = Events.eventsArray.filter(event => {
-if (event.target === 'NPC' && event.active === 1) {
-const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.event));
-}
-return false; // If event.target is not 'NPC', filter it out
-});
-
-// Check if npc.name matches event.npc for each event
+// Is the NPC named directly in sortEvents?
 sortEvents.forEach(event => {
-if (npc.name === event.npc && !uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = `<span class = "lime"> [${event.name}] </span>  <span class = "white"> ${npc.name} </span>` ;
-this.namedNPCs.push(npcNameDiv);
-
-// Add the name to the array to mark it as processed
-uniqueNames.push(npc.name);
-} else {
-// Handle the case when npc.name doesn't match or it's already processed
-}
-});
-
-// Check if npc.tags matches event.npc for each event
-sortEvents.forEach(event => {
-const tagss = npc.tags ? npc.tags.split(',').map(item => item.trim()) : [];
-
-if (tagss.includes(event.npc) && !uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = `<span class = "misc"> [${event.name}] </span> <span class = "white"> ${npc.name} </span>` ;
+if (npc.name === event.npc && !this.uniqueNames.includes(npc.name)) {
+npcNameDiv.innerHTML = `<span class = "white"> ${npc.name} </span>` ;
 this.groupedNPCs.push(npcNameDiv);
+this.uniqueNames.push(npc.name);
+} 
+});
 
-// Add the name to the array to mark it as processed
-uniqueNames.push(npc.name);
-} else {
-// Handle the case when npc.tags doesn't match or it's already processed
+//Is the NPC named indirectly through tags in sortEvents?
+sortEvents.forEach(event => {
+const npcTags = npc.tags ? npc.tags.split(',').map(item => item.trim()) : [];
+const eventTags = event.npc.split(',').map(item => item.trim());
+
+const matchingTag = eventTags.find(eventTag => npcTags.includes(eventTag) && !this.uniqueNames.includes(eventTag));
+
+if (matchingTag) {
+npcNameDiv.innerHTML = `<span class="white">${npc.name}</span>`;
+this.groupedNPCs.push(npcNameDiv);
+this.uniqueNames.push(npc.name);
 }
 });
 
-// Check if npc is not included in namedNPCs, add with class npc-name to absentNPCs
-if (!uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = ` ${npc.name}` ;
+// Mark absent NPCs are somewhere else.
+if (!this.uniqueNames.includes(npc.name)) {
+npcNameDiv.innerHTML = `${npc.name}` ;
 this.absentNPCs.push(npcNameDiv);
 }
 
@@ -384,9 +373,6 @@ for (const event of presentNPCEvents) {
   }
 }
 
-
-
-//console.log(story)
 return story;
 },
 
@@ -610,7 +596,7 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
     return `${tagToDisplay}#${item.Name}# <br>`;
   });
 
-  console.log(foundNPC.treasure)
+  //console.log(foundNPC.treasure)
   const allEmptyOrZero = Object.values(foundNPC.treasure).every(value => value === "" || value === 0);
 
  
@@ -667,12 +653,14 @@ target.innerHTML = `NPC not found`;
 
 addNPCSearch: function(){
 
-Ref.npcSearch.addEventListener('input', (event) => {
-this.searchNPC();
+Ref.npcSearch.addEventListener('input', () => {
+this.searchNPC(Ref.npcSearch.value.toLowerCase());
+this.loadNPC(this.npcSearchArray);
 })
 
-Ref.npcSearch.addEventListener('click', (event) => {
-this.searchNPC();
+Ref.npcSearch.addEventListener('click', () => {
+this.searchNPC(Ref.npcSearch.value.toLowerCase());
+this.loadNPC(this.npcSearchArray);
 });
 
 Ref.monsterTemplate.addEventListener('click', (event) => {
@@ -690,24 +678,21 @@ Monsters.searchMonster(searchText);
 
 },
 
-searchNPC: function() {
+searchNPC: function(searchText) {
   this.npcSearchArray = [];
-  let searchText = Ref.npcSearch.value.toLowerCase();
-
+  
   this.npcSearchArray = this.npcArray.filter((npc) => {
     const npcName = npc.name.toLowerCase();
     const npctags = npc.tags.toLowerCase();
     const npcClass = npc.class.toLowerCase();
-    //const monsterTemplate = npc.monsterTemplate.toLowerCase();
-
-    // Split the tags string into an array of words
     const tagsWords = npctags.split(',').map(word => word.trim());
+    
 
-    // Check if either the name or any tags word contains the search text
-    return npcClass.includes(searchText) || npcName.includes(searchText)  || tagsWords.some(word => word.includes(searchText)); //|| monsterTemplate.includes(searchText)
+    return npcClass.includes(searchText) || 
+           npcName.includes(searchText)  || 
+           tagsWords.some(word => word.includes(searchText))
   });
 
-  this.loadNPC(this.npcSearchArray);
 },
 
 };
