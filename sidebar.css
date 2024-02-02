@@ -139,6 +139,10 @@ color:gold
 color:hotpink;
 }
 
+.fadepink{
+  color:rgba(255, 105, 180, 0.722);
+  }
+
 .purple{
 color:rgb(176, 17, 174);
 }
@@ -161,6 +165,14 @@ color:rgb(246, 235, 10)
 
 .gray{
 color:gray
+}
+
+.lightgray{
+  color:#ccc 
+}
+
+.darkgray{
+  color:#636363e0 
 }
 
 .white{

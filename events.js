@@ -399,13 +399,13 @@ loadEventsList: function(data, target, origin) {
 
 // Move NPC Events after Location Events
 const tempArray = [];
+const locationsList = Array.locationArray.map(location => location.divId);
 
 for (const event of data) {
-if (event.target === 'Location') {
+if (event.target === 'Location' && (locationsList.includes(event.location) || event.location === 'All')) {
 // If the event is a location, add it to the tempArray
 tempArray.push(event);
-}
-}
+}}
 
 for (const event of data) {
 if (event.target === 'NPC') {
@@ -461,77 +461,191 @@ let currentLocation = Ref.locationLabel.textContent;
 
 if(currentLocation !== ''){
 
-let startIndex = data.findIndex(event => event.locationSeparator && event.location === currentLocation);
+  //Figure out for current location events:
 
-let nextSeparatorIndex = data.findIndex((event, index) => index > startIndex && event.locationSeparator);
+    let startIndex = data.findIndex(event => event.locationSeparator && event.location === currentLocation);
 
-let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
+    let nextSeparatorIndex = data.findIndex((event, index) => index > startIndex && event.locationSeparator);
 
-    data = [...eventsToMove, ...data];
+    let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
+
+  //Figure out for global events:
+
+    let startIndexAll = data.findIndex(event => event.locationSeparator && event.location === "All");
+
+    let nextSeparatorIndexAll = data.findIndex((event, index) => index > startIndexAll && event.locationSeparator);
+
+    let eventsToMoveAll = data.splice(startIndexAll, nextSeparatorIndexAll - startIndexAll);
+
+
+    data = [...eventsToMoveAll, ...eventsToMove, ...data];
 
 };
+ 
+let subLocationActive = true;
 
-
-  //Format EventDiv
+  //Format EventDiv and add NPCs
   for (const event of data) {
     const eventNameDiv = document.createElement('div');
 
-    if(event.locationSeparator === true){
-      eventNameDiv.classList.add('no-hover');
-      eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
-      target.appendChild(eventNameDiv);
-    }
-    else if(event.target === 'NPC' && event.active === 1){
-      eventNameDiv.innerHTML = `<span class="hotpink">&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
-      target.appendChild(eventNameDiv);
+        //All Location
+        if(event.location === 'All' && event.target === 'Location'){
+          
+          let allEventColour;
 
-        NPCs.searchNPC(event.npc.toLowerCase());
+          if(event.active === 1){
+          allEventColour = "lime"
+          }
+          else if(event.active === 0){
+          allEventColour = "gray"
+          }
+
+          eventNameDiv.id = event.name;
+          eventNameDiv.className = allEventColour;
+          eventNameDiv.innerHTML = `<span>${event.name} </span>`;
+          target.appendChild(eventNameDiv);
+
+
+        } else
+    
+        //New Location
+        if(event.locationSeparator === true){
         
-        for (const npc of NPCs.npcSearchArray){
+        //Make an array of taggedEvents
+        // const tagLocations = this.eventsArray.filter(event => event.target === 'Location');
+        // console.log(tagLocations);
+
+        //Add locationSeparator
+        eventNameDiv.classList.add('no-hover');
+        eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
+        target.appendChild(eventNameDiv);
+
+        }
+
+          //subLocation
+          else if (event.target === 'Location'){
+
+          let eventColour;
+
+          if(event.active === 1){
+          eventColour = "misc";
+          subLocationActive = true;
+          }
+          else if(event.active === 0){
+          eventColour = "lightgray";
+          subLocationActive = false;
+          }
+
+          eventNameDiv.className = eventColour;
+          eventNameDiv.innerHTML = `<span>${event.name} </span>`;
+          target.appendChild(eventNameDiv);
+          
+        }
+
+          //Active NPC Event
+          else if(event.target === 'NPC'){
+          
+          let eventColour
+          let npcColour
+          let allEventColour
+
+          if(event.active === 1 && subLocationActive){
+          eventColour = "hotpink";
+          npcColour = "teal";
+          allEventColour = "fadepink"}
+          else if(event.active === 0 || !subLocationActive){
+          eventColour = "lightgray";
+          npcColour = "gray";
+          allEventColour = "darkgray";
+          }
+
+          if(event.location !== 'All'){
+          eventNameDiv.className = eventColour;
+          eventNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
+          target.appendChild(eventNameDiv);
+
+          NPCs.searchNPC(event.npc.toLowerCase());
+
+          if(NPCs.npcSearchArray.length === NPCs.npcArray.length){
+
+          const npcNameDiv = document.createElement('div');
+          npcNameDiv.className = npcColour;
+          npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any</span>`;
+          target.appendChild(npcNameDiv);
+
+          }else 
+          
+          if(event.location === 'All'){
+          //Do nothing.
+
+          }else{
+
+          for (const npc of NPCs.npcSearchArray){
           const npcNameDiv = document.createElement('div');
           npcNameDiv.id = npc.name
-          npcNameDiv.innerHTML = `<span class="teal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
+          npcNameDiv.className = npcColour;
+          npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
           target.appendChild(npcNameDiv);
 
           npcNameDiv.addEventListener('mouseover', () => {
-            Ref.Left.style.display = 'block';
-            Ref.Centre.style.display = 'block';
-            NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
-            });
-        }
-    
-    }
-    else if (event.target === 'Location' && event.active === 1 ){
-      eventNameDiv.innerHTML = `<span class="misc">${event.name} </span>`;
-      target.appendChild(eventNameDiv);
-    }
-
-    else if (event.target === 'NPC'){
-      eventNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
-      target.appendChild(eventNameDiv);
-      
-      NPCs.searchNPC(event.npc.toLowerCase());
-      
-      for (const npc of NPCs.npcSearchArray){
-        const npcNameDiv = document.createElement('div');
-        npcNameDiv.id = npc.name
-        npcNameDiv.innerHTML = `<span class="gray">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
-        target.appendChild(npcNameDiv);
-
-        npcNameDiv.addEventListener('mouseover', () => {
           Ref.Left.style.display = 'block';
           Ref.Centre.style.display = 'block';
           NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
           });
+          
+          //Add div elements for 'All' Events affecting this NPC.
+          const npcTags = npc.tags.split(',').map(word => word.trim());
+
+          const allEvents = this.eventsArray.filter(event => {
+          const eventTags = event.npc.split(',').map(word => word.trim());
+          return (
+          event.location === 'All' &&
+          (
+          event.npc === npc.name || 
+          npcTags.some(tag => eventTags.includes(tag))
+          )
+          );
+          });
+
+          for (const event of allEvents){
+
+            const allEventDiv = document.createElement('div');
+            allEventDiv.id = event.name;
+            allEventDiv.className = allEventColour;
+            allEventDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
+            target.appendChild(allEventDiv);
+
+            allEventDiv.addEventListener('mouseover', () => {
+            this.focusEvent = event.name;
+            this.searchArray = [event]; // Assign an array with a single element
+            this.addEventInfo(event);
+            Ref.Left.classList.add('showLeft');
+            });
+
+            if(origin === 'eventsManager'){
+              this.addCurrentEventNames(event, allEventDiv);
+              }else{
+              this.fillEventForm(event, allEventDiv);
+              }
+
+          }
         
-      }
-    }
-    else{
-      eventNameDiv.innerHTML = `<span class="gray">${event.name} </span>`;
-      target.appendChild(eventNameDiv);
-    };
+          }}
 
+          } else
 
+          if(event.location === 'All'){
+
+          //Do nothing.
+
+          }
+
+          else{
+          eventNameDiv.innerHTML = `<span class="lightgray">${event.name} </span>`;
+          target.appendChild(eventNameDiv);
+          };
+
+        }
           if(origin === 'eventsManager'){
           this.addCurrentEventNames(event, eventNameDiv);
           }else{
