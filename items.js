@@ -98,7 +98,7 @@ const itemStats = [
 `${item.Damage ? `<span class="lime">Damage:</span> ${item.Damage}<br>` : ''}`,
 `${item.Range ? `<span class="lime">Range:</span> ${item.Range}<br>` : ''}`,
 `${item.AC ? `<span class="lime">Armour Class:</span> ${item.AC}<br><br>` : ''}`,
-`<span class="hotpink">Assigned to:</span> ${item.Tags}<hr></h3>`,
+`${item.Tags ? `<span class="hotpink">Assigned to:</span> ${item.Tags}<br>` : ''}<hr></h3>`,
 `${item.Description ? ` ${item.Description} ` : ''}`,
 ];
 
@@ -119,58 +119,72 @@ console.log(`Monster not found: ${contentId}`);
 
 },
 
+showHide: function (section) {
+    const sectionItems = document.querySelectorAll(`[section="${section}"]`);
+    
+    sectionItems.forEach((item, index) => {
+        item.style.display = index === 0 ? 'block' : item.style.display === 'none' ? 'block' : 'none';
+    });
+},
+
+
 loadItemsList: function(data) {
 const Centre = document.getElementById('Centre'); // Do not delete!!
-
-// Clear the existing content
 Centre.innerHTML = '';
 
-// Sort the items by item type alphabetically
+// 1. Sort the items by item type alphabetically.
 data = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
 
+// 2. Attach Section Heads.
 data = data.reduce((result, currentItem, index, array) => {
-    const reversedArray = array.slice(0, index).reverse();
-    const lastItemIndex = reversedArray.findIndex(item => item.Type === currentItem.Type);
-        
-    if (lastItemIndex === -1 || currentItem.Type !== reversedArray[lastItemIndex].Type) {
-        // Insert <hr> when a new location is encountered after the last 'Location' item
-        result.push({name: currentItem.Type, locationSeparator: true});
-    }
-    
-    result.push(currentItem);
-    return result;
-    }, []);
+const reversedArray = array.slice(0, index).reverse();
+const lastItemIndex = reversedArray.findIndex(item => item.Type === currentItem.Type);
 
+if (lastItemIndex === -1 || currentItem.Type !== reversedArray[lastItemIndex].Type) {
+result.push({name: currentItem.Type, sectionHead: true});
+}
+result.push(currentItem);
+return result;
+}, []);
 
-// Iterate through the sorted items
+let currentSection = 0; // Keep track of the current section.
+
+// 3. Iterate through the sorted items.
 for (const item of data) {
-
-
 const itemNameDiv = document.createElement('div');
 
-if(item.locationSeparator === true){
+if(item.sectionHead){
 
-    itemNameDiv.classList.add('no-hover');
-    itemNameDiv.innerHTML = `<hr><span class="cyan">${item.name}</span>`;
-    Centre.appendChild(itemNameDiv);
+itemNameDiv.id = item.name;
+currentSection++
+console.log(currentSection, item.name)
+
+itemNameDiv.innerHTML = `<hr><span section=${currentSection} class="cyan">${item.name}</span>`;
+Centre.appendChild(itemNameDiv);
+
+itemNameDiv.addEventListener('click', ((section) => {
+    return () => {
+        this.showHide(section);
+    };
+})(currentSection));
 
 }else{
 
 itemNameDiv.id = item.Name;
+itemNameDiv.section = currentSection;
 
 // Check if item.Tags is included in Ref.itemSearch.value
 const tagsIncluded = item.Tags ? item.Tags.toLowerCase().includes(Ref.itemSearch.value.toLowerCase()) : false;
 
 // Apply lime or gray class based on the result
 const className = tagsIncluded ? 'lime' : 'gray'
-
-// Set the inner HTML with the appropriate class
-itemNameDiv.innerHTML = `<span class="${className}">&nbsp;&nbsp;${item.Name}</span>`;
+itemNameDiv.innerHTML = `<span section=${currentSection} class="${className}" style="display: none;">&nbsp;&nbsp;${item.Name}</span>`;
 
 Centre.appendChild(itemNameDiv);
+
+//Set div behaviours.
 this.fillItemsForm(item, itemNameDiv);
 
-// Show Item info in Left when hover over Div
 itemNameDiv.addEventListener('mouseover', () => {
 Ref.Left.classList.add('showLeft');
 this.addIteminfo(itemNameDiv.id, Ref.Left);
@@ -187,7 +201,7 @@ fillItemsForm: function(item, itemNameDiv){
 // Add click item listener to each NPC name
 itemNameDiv.addEventListener('click', () => {
 
-itemNameDiv.innerHTML = `[${item.Type}]<span class="cyan">${item.Name}</span>`;
+//itemNameDiv.innerHTML = `[${item.Type}]<span class="cyan">${item.Name}</span>`;
 
 Ref.itemId.value = item.id;
 Ref.itemName.value = item.Name;
