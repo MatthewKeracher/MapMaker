@@ -138,30 +138,77 @@ loadMonsterList: function(data) {
 Ref.Centre.innerHTML = '';
 Ref.Centre.style.display = 'block'; 
 
-// Iterate through the sorted monster names
-for (const monster of data) {
-const monsterDiv = document.createElement('div');
-monsterDiv.id = monster.name;
-monsterDiv.innerHTML = `[${monster.type}]<span class="hotpink">${monster.name}</span>`;
-Ref.Centre.appendChild(monsterDiv);
+// 1. Sort the items by item type alphabetically.
+data = data.slice().sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
 
-monsterDiv.addEventListener('click', () => {
+// 2. Attach Section Heads.
+data = data.reduce((result, currentEntry, index, array) => {
+  const reversedArray = array.slice(0, index).reverse();
+  const lastItemIndex = reversedArray.findIndex(entry => entry.type === currentEntry.type);
+  
+  if (lastItemIndex === -1 || currentEntry.Type !== reversedArray[lastItemIndex].Type) {
+  result.push({type: currentEntry.type, sectionHead: true});
+  }
+  result.push(currentEntry);
+  return result;
+  }, []);
+
+  let currentSection = 0; // Keep track of the current section.
+
+// 3. Iterate through the sorted monsters.
+
+for (const monster of data) {
+const monsterNameDiv = document.createElement('div');
+
+if(monster.sectionHead){
+
+  monsterNameDiv.id = monster.type;
+  currentSection++
+  
+  monsterNameDiv.innerHTML = `<hr><span section=${currentSection} class="hotpink">${monster.type}</span>`;
+  Ref.Centre.appendChild(monsterNameDiv);
+  
+  monsterNameDiv.addEventListener('click', ((section) => {
+      return () => {
+          Items.showHide(section);
+      };
+  })(currentSection));
+  
+  }else if (monster.type){
+
+    monsterNameDiv.id = monster.name;
+    
+    monsterNameDiv.innerHTML = `<span section=${currentSection} style="display: none;">&nbsp;&nbsp;${monster.name}</span>`;
+    
+    Ref.Centre.appendChild(monsterNameDiv);
+
+  }else {
+
+    monsterNameDiv.id = monster.name;
+    
+    monsterNameDiv.innerHTML = `<span class="gray" section=${currentSection}>&nbsp;&nbsp;${monster.name}</span>`;
+    
+    Ref.Centre.appendChild(monsterNameDiv);
+  }
+
+
+monsterNameDiv.addEventListener('click', () => {
 
 if(Edit.editPage === 3){
-Ref.monsterTemplate.value = monsterDiv.id;
+Ref.monsterTemplate.value = monsterNameDiv.id;
 }else{
-this.fillMonsterForm(monster, monsterDiv);
+this.fillMonsterForm(monster, monsterNameDiv);
 }
 
 });
 
 //show Monster info in Left when hover over Div
-monsterDiv.addEventListener('mouseover', () => {
+monsterNameDiv.addEventListener('mouseover', () => {
 Ref.Left.style.display = 'block';
 this.addMonsterInfo(monster.name, Ref.Left);
 });
 
-}
+  }
 
 }, 
 

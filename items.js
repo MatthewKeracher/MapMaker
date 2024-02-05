@@ -119,18 +119,44 @@ console.log(`Monster not found: ${contentId}`);
 
 },
 
-showHide: function (section) {
-    const sectionItems = document.querySelectorAll(`[section="${section}"]`);
+showHide: function (section, subsection) {
+
+     if (section && subsection){
+
+        if (subsection === 'header'){
+
+        const sectionItems = document.querySelectorAll(`[section="${section}"]`);
+
+        sectionItems.forEach((item, index) => {
+        const displayStyle = sectionItems[1].style.display;
+        item.style.display = index === 0 ? 'block' : 
+        (index === 1 ? (displayStyle === 'block' ? 'none' : 'block') : displayStyle);
+
+        })
+
+        }else{
+
+        const subSectionItems = document.querySelectorAll(`[section="${section}"][subsection="${subsection}"]`);
+        
+        subSectionItems.forEach((item, index) => {
+            item.style.display = index === 0 ? 'block' : item.style.display === 'none' ? 'block' : 'none';
+        });
+
+        }} else if(!subsection){
+
+        const sectionItems = document.querySelectorAll(`[section="${section}"]`);
     
-    sectionItems.forEach((item, index) => {
-        item.style.display = index === 0 ? 'block' : item.style.display === 'none' ? 'block' : 'none';
-    });
+        sectionItems.forEach((item, index) => {
+            item.style.display = index === 0 ? 'block' : item.style.display === 'none' ? 'block' : 'none';
+        });
+
+
+        }
 },
 
-
 loadItemsList: function(data) {
-const Centre = document.getElementById('Centre'); // Do not delete!!
-Centre.innerHTML = '';
+Ref.Centre.innerHTML = '';
+Ref.Centre.style.display = 'block'; 
 
 // 1. Sort the items by item type alphabetically.
 data = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
@@ -157,10 +183,9 @@ if(item.sectionHead){
 
 itemNameDiv.id = item.name;
 currentSection++
-console.log(currentSection, item.name)
 
 itemNameDiv.innerHTML = `<hr><span section=${currentSection} class="cyan">${item.name}</span>`;
-Centre.appendChild(itemNameDiv);
+Ref.Centre.appendChild(itemNameDiv);
 
 itemNameDiv.addEventListener('click', ((section) => {
     return () => {
@@ -168,10 +193,9 @@ itemNameDiv.addEventListener('click', ((section) => {
     };
 })(currentSection));
 
-}else{
+}else if(item.Type){
 
 itemNameDiv.id = item.Name;
-itemNameDiv.section = currentSection;
 
 // Check if item.Tags is included in Ref.itemSearch.value
 const tagsIncluded = item.Tags ? item.Tags.toLowerCase().includes(Ref.itemSearch.value.toLowerCase()) : false;
@@ -180,7 +204,7 @@ const tagsIncluded = item.Tags ? item.Tags.toLowerCase().includes(Ref.itemSearch
 const className = tagsIncluded ? 'lime' : 'gray'
 itemNameDiv.innerHTML = `<span section=${currentSection} class="${className}" style="display: none;">&nbsp;&nbsp;${item.Name}</span>`;
 
-Centre.appendChild(itemNameDiv);
+Ref.Centre.appendChild(itemNameDiv);
 
 //Set div behaviours.
 this.fillItemsForm(item, itemNameDiv);
@@ -189,12 +213,29 @@ itemNameDiv.addEventListener('mouseover', () => {
 Ref.Left.classList.add('showLeft');
 this.addIteminfo(itemNameDiv.id, Ref.Left);
 });
-}
-}
 
-Centre.style.display = 'block'; // Display the container
+} else{
 
-},
+    itemNameDiv.id = item.Name;
+    
+    // Check if item.Tags is included in Ref.itemSearch.value
+    const tagsIncluded = item.Tags ? item.Tags.toLowerCase().includes(Ref.itemSearch.value.toLowerCase()) : false;
+    
+    // Apply lime or gray class based on the result
+    const className = tagsIncluded ? 'lime' : 'gray'
+    itemNameDiv.innerHTML = `<span section=${currentSection} class="${className}">&nbsp;&nbsp;${item.Name}</span>`;
+    
+    Ref.Centre.appendChild(itemNameDiv);
+    
+    //Set div behaviours.
+    this.fillItemsForm(item, itemNameDiv);
+    
+    itemNameDiv.addEventListener('mouseover', () => {
+    Ref.Left.classList.add('showLeft');
+    this.addIteminfo(itemNameDiv.id, Ref.Left);
+    });
+    
+    }}},
 
 fillItemsForm: function(item, itemNameDiv){
 

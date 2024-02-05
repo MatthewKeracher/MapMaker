@@ -1,6 +1,7 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Array from "./array.js";
+import Items from "./items.js";
 
 const Spells = {
 
@@ -104,32 +105,115 @@ console.log(`Monster not found: ${contentId}`);
 },
 
 loadSpellsList: function(data) {
-const Centre = document.getElementById('Centre'); // Do not delete!!
 
-// Clear the existing content
-Centre.innerHTML = '';
+Ref.Centre.innerHTML = '';
+Ref.Centre.style.display = 'block'; // Display the container
 
-// Sort the items by item type alphabetically
-//const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+// 1. Sort the items by item type alphabetically and then by Level numerically.
+data = data.slice().sort((a, b) => {
+    const classComparison = a.Class.localeCompare(b.Class);
+    
+    if (classComparison !== 0) {
+        // If classes are different, return the result of class comparison
+        return classComparison;
+    } else {
+        // If classes are the same, sort by Level numerically
+        return a.Level - b.Level || a.Name.localeCompare(b.Name);
+    }
+});
+
+// 2. Attach Section Heads.
+data = data.reduce((result, currentEntry, index, array) => {
+    const reversedArray = array.slice(0, index).reverse();
+    const lastEntryIndex = reversedArray.findIndex(entry => entry.Class === currentEntry.Class);
+
+    if (lastEntryIndex === -1 || currentEntry.Class !== reversedArray[lastEntryIndex].Class) {
+        // For a new class, push the class as the type and set the level as a subSectionHead
+        result.push({type: currentEntry.Class, sectionHead: true, subSectionHead: currentEntry.Level});
+        result.push({type: currentEntry.Level, subSectionHead: currentEntry.Level});
+    } else if (currentEntry.Level !== reversedArray[lastEntryIndex].Level) {
+        // If the Level changes within the same class, push the Level as a subSectionHead
+        result.push({type: currentEntry.Level, subSectionHead: currentEntry.Level});
+    }
+
+    result.push(currentEntry);
+    return result;
+}, []);
+
+
+let currentSection = 0; // Keep track of the current section.
+let currentSubSection = 0;
 
 // Iterate through the sorted spells
 for (const spell of data) {
 const spellNameDiv = document.createElement('div');
-spellNameDiv.id = spell.Name
-spellNameDiv.innerHTML = `[${spell.Class} ${spell.Level}]<span class="yellow">${spell.Name}</span>`;
-Centre.appendChild(spellNameDiv);
-this.fillSpellsForm(spell, spellNameDiv);
 
- //show Item info in Left when hover over Div
- spellNameDiv.addEventListener('mouseover', () => {
-    Ref.Left.classList.add('showLeft');
-    this.addSpellInfo(spellNameDiv.id, Ref.Left);
-    });
+    if(spell.sectionHead){
+
+        spellNameDiv.id = spell.Class;
+        currentSection++
+        currentSubSection = 0;
+        
+        spellNameDiv.innerHTML = `<hr><span section=${currentSection} subsection=${currentSubSection} class="cyan">${spell.type}</span>`;
+        Ref.Centre.appendChild(spellNameDiv);
+        
+        spellNameDiv.addEventListener('click', ((section, subsection) => {
+            return () => {
+                Items.showHide(section, subsection);
+            };
+        })(currentSection, 'header'));
+
+    
+    } else if (spell.subSectionHead){
+
+        spellNameDiv.id = spell.Level;
+        currentSubSection++
+
+        spellNameDiv.innerHTML = `<span section=${currentSection} subsection=${currentSubSection} class="hotpink" style="display: none;"><hr> Level ${spell.type}</span>`;
+        Ref.Centre.appendChild(spellNameDiv);
+
+        spellNameDiv.addEventListener('click', ((section, subsection) => {
+            return () => {
+                Items.showHide(section, subsection);
+            };
+        })(currentSection, currentSubSection));
+
+
+    
+    }else if (spell.Class && spell.Level){
+
+        spellNameDiv.id = spell.Name;
+
+        spellNameDiv.innerHTML = `<span section=${currentSection} subsection=${currentSubSection} style="display: none;">&nbsp;&nbsp;${spell.Name}</span>`;
+
+        Ref.Centre.appendChild(spellNameDiv);
+        
+        this.fillSpellsForm(spell, spellNameDiv);
+
+            //show Item info in Left when hover over Div
+            spellNameDiv.addEventListener('mouseover', () => {
+            Ref.Left.classList.add('showLeft');
+            this.addSpellInfo(spellNameDiv.id, Ref.Left);
+            });
+    
+    }else {
+
+        spellNameDiv.id = spell.Name;
+
+        spellNameDiv.innerHTML = `<span class = "gray"> &nbsp;&nbsp;${spell.Name}</span>`;
+
+        Ref.Centre.appendChild(spellNameDiv);
+
+        this.fillSpellsForm(spell, spellNameDiv);
+
+        //show Item info in Left when hover over Div
+        spellNameDiv.addEventListener('mouseover', () => {
+        Ref.Left.classList.add('showLeft');
+        this.addSpellInfo(spellNameDiv.id, Ref.Left);
+        });
+
+    }
 }
-
-Centre.style.display = 'block'; // Display the container
-
-
 },
 
 fillSpellsForm: function(spell, spellNameDiv){
