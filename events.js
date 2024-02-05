@@ -156,7 +156,7 @@ this.loadLocationsList(this.searchArray);
 });
 
 Ref.eventNPC.addEventListener('click', () => {
-NPCs.loadNPC(NPCs.npcArray)
+// NPCs.loadNPC(NPCs.npcArray)
 })
 
 Ref.eventNPC.addEventListener('input', (event) => {
@@ -175,23 +175,41 @@ addEventsSearch: function() {
 },
 
 searchEvents: function(searchText) {
-this.searchArray = [];
-//console.log('Searching for Events including: ' + searchText)
+  this.searchArray = [];
+  const uniqueEventIds = new Set();
+  
+  // 1. Search for Events with NPCs.
+  NPCs.searchNPC(searchText);
+  
+  for (const npc of NPCs.npcSearchArray) {
+    const filteredEvents = this.eventsArray.filter((e) => {
+      const eventNPC = e.npc.toLowerCase();
+      const npcName = npc.name.toLowerCase();
+      const npcTags = npc.tags.toLowerCase().split(',').map(tag => tag.trim());
+      return eventNPC.includes(npcName) || npcTags.some(tag => eventNPC.includes(tag));
+    });
+      this.searchArray = this.searchArray.concat(filteredEvents);
+    }
 
-this.searchArray = this.eventsArray.filter((e) => {
-const group = e.group.toLowerCase();
-const name = e.name.toLowerCase();
-const npc = e.npc.toLowerCase();
-const location = e.location.toLowerCase();
+  // 2. Search for Events with searchText.
+  const filteredEvents = this.eventsArray.filter((e) => {
+    const group = e.group.toLowerCase();
+    const name = e.name.toLowerCase();
+    const npc = e.npc.toLowerCase();
+    const location = e.location.toLowerCase();
+    return group.includes(searchText) || name.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
+  });
 
-// Check if any of the properties contain the search text
-return group.includes(searchText) || name.includes(searchText) || npc.includes(searchText) || location.includes(searchText);
+  // 3. Use Set to automatically remove duplicates.
+  const uniqueSearchArray = new Set([...this.searchArray, ...filteredEvents]);
+  this.searchArray = [...uniqueSearchArray];
 
-}); 
-
-this.loadEventsList(this.searchArray, Ref.Centre);
+  //Return search results to list.
+  this.loadEventsList(this.searchArray, Ref.Centre);
 
 },
+
+
 
 searchLocations: function(searchText) {
   this.searchArray = [];
@@ -438,7 +456,7 @@ data = data.reduce((result, currentEvent, index, array) => {
     
   if (lastLocationIndex === -1 || currentEvent.location !== reversedArray[lastLocationIndex].location) {
     // Insert <hr> when a new location is encountered after the last 'Location' event
-    result.push({name: currentEvent.location, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
+    result.push({name: currentEvent.location, active: 1, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
   }
   }
   
@@ -446,7 +464,7 @@ data = data.reduce((result, currentEvent, index, array) => {
 
   if (array[index-1] === undefined || (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name)) {
   // Insert <hr> when a new location is encountered after the last 'Location' event
-  result.push({ name: currentEvent.location, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
+  result.push({ name: currentEvent.location, active: 1, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
   }
   }
 
@@ -464,27 +482,34 @@ if(currentLocation !== ''){
   //Figure out for current location events:
 
     let startIndex = data.findIndex(event => event.locationSeparator && event.location === currentLocation);
-
     let nextSeparatorIndex = data.findIndex((event, index) => index > startIndex && event.locationSeparator);
-
     let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
 
   //Figure out for global events:
 
     let startIndexAll = data.findIndex(event => event.locationSeparator && event.location === "All");
-
     let nextSeparatorIndexAll = data.findIndex((event, index) => index > startIndexAll && event.locationSeparator);
-
     let eventsToMoveAll = data.splice(startIndexAll, nextSeparatorIndexAll - startIndexAll);
-
 
     data = [...eventsToMoveAll, ...eventsToMove, ...data];
 
-};
+}
+
+if(data.filter(event => event.location === 'All').length > 0){
+
+  //Figure out for global events:
+
+    let startIndexAll = data.findIndex(event => event.locationSeparator && event.location === "All");
+    let nextSeparatorIndexAll = data.findIndex((event, index) => index > startIndexAll && event.locationSeparator);
+    let eventsToMoveAll = data.splice(startIndexAll, nextSeparatorIndexAll - startIndexAll);
+
+    data = [...eventsToMoveAll, ...data];
+
+}
  
 let subLocationActive = true;
 
-  //Format EventDiv and add NPCs
+  //Format EventDiv and add NPCs BOOKMARK
   for (const event of data) {
     const eventNameDiv = document.createElement('div');
 
@@ -512,7 +537,7 @@ let subLocationActive = true;
         if(event.locationSeparator === true){
         
         //Make an array of taggedEvents
-        // const tagLocations = this.eventsArray.filter(event => event.target === 'Location');
+        // const tagLocations = this.eventsArray.filter(event => !locationsList.includes(event.location) && event.target === 'Location');
         // console.log(tagLocations);
 
         //Add locationSeparator
@@ -549,14 +574,13 @@ let subLocationActive = true;
           let npcColour
           let allEventColour
 
-          if(event.active === 1 && subLocationActive){
+          if(event.active === 1){
           eventColour = "hotpink";
           npcColour = "teal";
-          allEventColour = "fadepink"}
+          }
           else if(event.active === 0 || !subLocationActive){
           eventColour = "lightgray";
           npcColour = "gray";
-          allEventColour = "darkgray";
           }
 
           if(event.location !== 'All'){
@@ -576,7 +600,8 @@ let subLocationActive = true;
           }else 
           
           if(event.location === 'All'){
-          //Do nothing.
+          
+          //do nothing.
 
           }else{
 
@@ -610,6 +635,12 @@ let subLocationActive = true;
           });
 
           for (const event of allEvents){
+            
+            if(event.active === 1){
+              allEventColour = "fadepink"}
+              else if(event.active === 0 || !subLocationActive){
+              allEventColour = "darkgray";
+              }
 
             const allEventDiv = document.createElement('div');
             allEventDiv.id = event.name;
@@ -626,7 +657,7 @@ let subLocationActive = true;
 
             if(origin === 'eventsManager'){
               this.addCurrentEventNames(event, allEventDiv);
-              }else{
+              }else if (Edit.editPage === 2){
               this.fillEventForm(event, allEventDiv);
               }
 
@@ -660,9 +691,38 @@ let subLocationActive = true;
           this.addEventInfo(event);
           Ref.Left.classList.add('showLeft');
           });
+}
+
+const unassignedDiv = document.createElement('div');
+unassignedDiv.classList.add('no-hover');
+unassignedDiv.innerHTML = `<hr><span class="orange">Unassigned NPCs</span>`;
+target.appendChild(unassignedDiv);
+
+for (const npc of NPCs.npcArray) {
+  const npcNameDiv = document.getElementById(npc.name);
+  const divExists = npcNameDiv !== null;
+
+  if(!divExists){
+    
+    const npcNameDiv = document.createElement('div');
+    npcNameDiv.id = npc.name
+    npcNameDiv.className = "gray";
+    npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
+    target.appendChild(npcNameDiv);
+
+    NPCs.fillNPCForm(npc,npcNameDiv);
+
+    npcNameDiv.addEventListener('mouseover', () => {
+    Ref.Left.style.display = 'block';
+    Ref.Centre.style.display = 'block';
+    NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
+    });
+
+  }
+}
 
 
-}},
+},
 
 loadLocationsList: function(data) {
 const Centre = document.getElementById('Centre'); // Do not delete!!

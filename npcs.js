@@ -171,7 +171,7 @@ Ref.CHA.value = npc.cha;
 Ref.Backstory.value = npc.Backstory;
 }else{
 
-Ref.eventNPC.value = npc.name
+//Ref.eventNPC.value = npc.name
 
 
 }
@@ -658,14 +658,22 @@ target.innerHTML = `NPC not found`;
 
 addNPCSearch: function(){
 
-Ref.npcSearch.addEventListener('input', () => {
-this.searchNPC(Ref.npcSearch.value.toLowerCase());
-this.loadNPC(this.npcSearchArray);
+Ref.npcSearch.addEventListener('input', (event) => {
+// this.searchNPC(Ref.npcSearch.value.toLowerCase());
+// this.loadNPC(this.npcSearchArray);
+let searchText = event.target.value.toLowerCase();
+  
+// Call the searchAmbience function
+Events.searchEvents(searchText);
 })
 
-Ref.npcSearch.addEventListener('click', () => {
-this.searchNPC(Ref.npcSearch.value.toLowerCase());
-this.loadNPC(this.npcSearchArray);
+Ref.npcSearch.addEventListener('click', (event) => {
+// this.searchNPC(Ref.npcSearch.value.toLowerCase());
+// this.loadNPC(this.npcSearchArray);
+let searchText = event.target.value.toLowerCase();
+  
+// Call the searchAmbience function
+Events.searchEvents(searchText);
 });
 
 Ref.monsterTemplate.addEventListener('click', (event) => {

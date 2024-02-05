@@ -40,10 +40,10 @@ Ref.saveButton.addEventListener('click', this.handleSaveButtonClick);
 Ref.fileInput.addEventListener('change', Array.handleFileInputChange); 
 
 //eventManager
-Ref.enableEventButton.addEventListener('click', this.handleeventEnableClick);
-Ref.disableEventButton.addEventListener('click', this.handleEventDisableClick);
-Ref.enableGroupEventButton.addEventListener('click', this.handleeventGroupEnableClick);
-Ref.disableGroupEventButton.addEventListener('click', this.handleEventGroupDisableClick);
+Ref.enableEventButton.addEventListener('click', () => this.changEventStatus(1, "one"));
+Ref.disableEventButton.addEventListener('click', () => this.changEventStatus(0, "one"));
+// Ref.enableGroupEventButton.addEventListener('click', () => this.changEventStatus(1, "many"));
+// Ref.disableGroupEventButton.addEventListener('click', () => this.changEventStatus(0, "many"));
 
 //editToolbar
 Ref.editEditButton.addEventListener('click', this.handleEditButtonClick);
@@ -62,102 +62,25 @@ Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange);
 
 }
 
-handleeventEnableClick() {
-  // Get the event to disable from Ref.eventManagerInput.value
-  const toDisable = Ref.eventManagerInput.value;
-
-  // Find the event in Events.eventsArray with a matching 'event' field
-  const eventToDisable = Events.eventsArray.find(event => event.name === toDisable);
-
-  if (eventToDisable) {
-      // Set the 'active' field of the found event to 1
-      eventToDisable.active = 1;
-
-      // Log the disabled event
-      console.log('Disabled event:', eventToDisable);
-
-      // Update the display of current events
-      Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
-
-  } else {
-      // Log a message if the event to disable was not found
-      console.log('Event not found:', toDisable);
-  }
+changEventStatus(y, scope) {
   
+    if (scope === 'one') {
+
+    const eventName = Ref.eventManagerInput.value;
+    const eventEntry = Events.eventsArray.find(event => event.name === eventName);
+
+    if (eventEntry) {eventEntry.active = y} else {console.log('Event not found:', eventName)};
+
+    } else if(scope === 'many') {
+
+    const eventsToEnable = Events.eventsArray.filter(event => Events.searchArray.some(searchEvent => searchEvent.name === event.name));
+
+    if (eventsToEnable.length > 0) {eventsToEnable.forEach(event => {event.active = y})} else {console.log('No matching events found to Enable')}}
+
+//console.log(Events.searchArray.length);
+Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
+
 };
- 
-
-handleEventDisableClick() {
-
-   // Get the event to disable from Ref.eventManagerInput.value
-   const toDisable = Ref.eventManagerInput.value;
-
-   // Find the event in Events.eventsArray with a matching 'event' field
-   const eventToDisable = Events.eventsArray.find(event => event.name === toDisable);
-
-   if (eventToDisable) {
-       // Set the 'active' field of the found event to 0
-       eventToDisable.active = 0;
-
-       // Log the disabled event
-       console.log('Disabled event:', eventToDisable);
-
-       // Update the display of current events
-       Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
-
-   } else {
-       // Log a message if the event to disable was not found
-       console.log('Event not found:', toDisable);
-   }
-};
-
-handleeventGroupEnableClick() {
-  // Find events in Events.eventsArray based on matching event names from Events.searchArray
-  const eventsToEnable = Events.eventsArray.filter(event =>
-    Events.searchArray.some(searchEvent => searchevent.name === event.name)
-);
-
-if (eventsToEnable.length > 0) {
-    // Set the 'active' field of matching events to 0 (disable)
-    eventsToEnable.forEach(event => {
-        event.active = 1;
-    });
-
-    // Log the disabled events
-    console.log('Enabled events with matching event names');
-
-    // Update the display of current events
-    Events.loadEventsList(Events.searchArray, Ref.Centre, 'eventsManager');
-} else {
-    // Log a message if no matching events are found
-    console.log('No matching events found to Enable');
-}
-}
-
-
-handleEventGroupDisableClick() {
-    // Find events in Events.eventsArray based on matching event names from Events.searchArray
-    const eventsToDisable = Events.eventsArray.filter(event =>
-        Events.searchArray.some(searchEvent => searchevent.name === event.name)
-    );
-
-    if (eventsToDisable.length > 0) {
-        // Set the 'active' field of matching events to 0 (disable)
-        eventsToDisable.forEach(event => {
-            event.active = 0;
-        });
-
-        // Log the disabled events
-        console.log('Disabled events with matching event names');
-
-        // Update the display of current events
-        Events.loadEventsList(Events.searchArray, Ref.Centre, 'eventsManager');
-    } else {
-        // Log a message if no matching events are found
-        console.log('No matching events found to disable');
-    }
-}
-
 
 handleEscButtonClick(){
 
@@ -299,8 +222,10 @@ break;
 
 case 3:
 NPCs.saveNPC();
-NPCs.searchNPC(Ref.npcSearch.value.toLowerCase())
-NPCs.loadNPC(NPCs.npcSearchArray);
+Events.saveEvent();
+Events.loadEventsList(Events.eventsArray, Ref.Centre);
+// NPCs.searchNPC(Ref.npcSearch.value.toLowerCase())
+// NPCs.loadNPC(NPCs.npcSearchArray);
 break;
 
 case 4:
@@ -346,12 +271,12 @@ break;
 
 case 2:
 NPCs.clearForm(Ref.eventForm);
-
+Events.loadEventsList(Events.eventsArray, Ref.Centre);
 break;
 
 case 3:
 NPCs.clearForm(Ref.npcForm);
-
+Events.loadEventsList(Events.eventsArray, Ref.Centre);
 break;
 
 case 4:
