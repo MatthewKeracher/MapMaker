@@ -587,6 +587,8 @@ let subLocationActive = true;
           npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
           target.appendChild(npcNameDiv);
 
+          NPCs.fillNPCForm(npc,npcNameDiv);
+
           npcNameDiv.addEventListener('mouseover', () => {
           Ref.Left.style.display = 'block';
           Ref.Centre.style.display = 'block';
@@ -856,7 +858,7 @@ if (entry.location.location === 'All') {
 const presentNPCs = NPCs.getNPCs(entry.location.name, npcEvents);
 
 if (entry.npc.length === 0) {
-npcDesc += `<span class = "cyan">There is nobody around. </span><br>`;
+npcDesc += `<br> <span class = "cyan">There is nobody around. </span><br><br>`;
 } else {
 for (const npcWithStory of presentNPCs) {
 const npcStory = npcWithStory.story;
@@ -867,9 +869,11 @@ npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
 //Put together.
 locDesc = 
 `<h3> ${entry.location.name !== currentLocation ? `<span class = "hotpink"> ${entry.location.name} </span>` : ''}` +
-` ${eventItemsFormatted} </h3>            
-${npcDesc}  
-${entry.location.name !== currentLocation ? `<span class = "beige"> ${entry.location.description} </span> <br><br>` : ''}` + 
+` ${eventItemsFormatted} </h3>` +         
+  
+`${entry.location.name !== currentLocation ? `<span class = "beige"><br> ${entry.location.description} </span> <br>` : ''}` + 
+
+`<br>${npcDesc}` +
 
 `<hr>`;
         

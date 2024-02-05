@@ -13,8 +13,6 @@ import NPCs from "./npcs.js";
 
 class NPCbuild {
 
-
-
 constructor(data) {
 
 
@@ -23,18 +21,17 @@ this.id = data.id;
 this.name = data.name;
 this.tags = data.tags;
 
-this.level = data.level || 1;
-this.class = data.class;
+this.level = data.level === ''? 1 : data.level;
+this.class = data.class === ''? 'Fighter' : data.class;
 this.monsterTemplate = data.monsterTemplate;
 
-this.str = data.str || NPCbuild.rollScore(this, "str"); 
-this.dex = data.dex || NPCbuild.rollScore(this, "dex");
-this.int = data.int || NPCbuild.rollScore(this, "int");
-this.wis = data.wis || NPCbuild.rollScore(this, "wis");
-this.con = data.con || NPCbuild.rollScore(this, "con");
-this.cha = data.cha || NPCbuild.rollScore(this, "cha");
-this.Backstory = data.Backstory;
+const attributes = ["str", "dex", "int", "wis", "con", "cha"];
 
+for (const attribute of attributes) {
+  this[attribute] = data[attribute] === ''? NPCbuild.rollScore(this, attribute) : data[attribute];
+}
+
+this.Backstory = data.Backstory;
 
 NPCbuild.getModifiers(this);
 NPCbuild.getCharacterSkills(this);
@@ -43,11 +40,95 @@ NPCbuild.getMagic(this);
 NPCbuild.getInventory(this);
 NPCbuild.getSavingThrows(this);
 NPCbuild.getAttackBonus(this);
-
-if(this.monsterTemplate !== undefined){
-NPCbuild.getMonster(this);} else {this.treasure = ''};
+NPCbuild.getMonster(this);
 
 }
+
+static getMonster(npc){
+
+  //console.log(npc.name, npc.monsterTemplate)
+  // Find Monster
+  const stats = Monsters.monstersArray.filter(monster => monster.name === npc.monsterTemplate);
+
+  if(stats.length !== 0){
+  
+  //Saving Throws
+  const saveAs = stats[0].saveAs;
+  const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
+  let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
+  
+  npc.savingThrows = savingThrows;
+  
+  //HitPoints
+  const matches = stats[0].hd.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
+  const baseDice = parseInt(matches[1], 10);
+  const bonusDice = matches[2] ? parseInt(matches[2], 10) : 0;
+  const specialBonus = matches[3] ? parseInt(matches[3], 10) : 0;
+  //console.log(baseDice)
+  const totalHitPoints = NPCbuild.rollDice(baseDice+'d8') + bonusDice + specialBonus;
+  
+  npc.hitPoints = totalHitPoints;
+  npc.attackBonus = baseDice;
+  npc.AC = stats[0].ac;
+  npc.attacks = stats[0].attacks;
+  npc.damage = stats[0].damage;
+  npc.XP = stats[0].xp;
+  npc.level = monsterLevel;
+  npc.movement = stats[0].movement;
+
+  //Get Treasure
+  
+  const rawTreasureTypes = stats[0].treasure.split(',');
+
+  // Use a regular expression to match valid treasure types (A, B, C)
+  const treasureTypes = rawTreasureTypes.map(entry => {
+  const match = entry.match(/[A-Za-z]/);
+  return match ? match[0] : null;
+  }).filter(entry => entry !== null);
+
+let allLoot = {
+  Copper: 0,
+  Electrum: 0,
+  Gems: [],
+  Gold: 0,
+  Jewelry: [],
+  Platinum: 0,
+  Silver: 0,
+  magicItems: [] // Assuming magicItems is an array
+};
+
+for (const treasureType of treasureTypes) {
+  const lootEntry = NPCbuild.treasureTable[treasureType];
+  const loot = NPCbuild.genLoot(lootEntry);
+ 
+
+  // Accumulate the loot values within the same entry
+  allLoot.Copper += loot.Copper || 0;
+  allLoot.Electrum += loot.Electrum || 0;
+  allLoot.Gems = loot.Gems || allLoot.Gems;
+  allLoot.Gold += loot.Gold || 0;
+  allLoot.Jewelry = loot.Jewelry || allLoot.Jewelry;
+  allLoot.Platinum += loot.Platinum || 0;
+  allLoot.Silver += loot.Silver || 0;
+
+  // Concatenate magicItems arrays
+  allLoot.magicItems = allLoot.magicItems.concat(loot.magicItems || []);
+}
+
+// Convert the combinedLoot object into an array of a single entry
+const lootArray = [allLoot];
+
+npc.treasure = lootArray;
+//console.log(npc.treasure)
+  
+
+  } else {
+    
+    this.treasure = undefined;
+  
+  }
+  
+  }
 
 // Function to calculate the actual amount for each treasure type
 static genLoot(treasureDetails) {
@@ -347,47 +428,6 @@ type: gem.type +' '+ gem.gemType,
 jewelryType: jewelryEntry.type,
 baseValue: NPCbuild.rollDice('2d8') * 100, // Standard items of jewelry are valued at 2d8x100 gp value
 };
-}
-
-static getMonster(npc){
-
-// Find Monster
-const stats = Monsters.monstersArray.filter(monster => monster.name === npc.monsterTemplate);
-
-
-//Saving Throws
-const saveAs = stats[0].saveAs;
-const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
-let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
-
-npc.savingThrows = savingThrows;
-
-
-//HitPoints
-const matches = stats[0].hd.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
-const baseDice = parseInt(matches[1], 10);
-const bonusDice = matches[2] ? parseInt(matches[2], 10) : 0;
-const specialBonus = matches[3] ? parseInt(matches[3], 10) : 0;
-console.log(baseDice)
-const totalHitPoints = NPCbuild.rollDice(baseDice+'d8') + bonusDice + specialBonus;
-
-npc.hitPoints = totalHitPoints;
-npc.attackBonus = baseDice;
-npc.AC = stats[0].ac;
-npc.attacks = stats[0].attacks;
-npc.damage = stats[0].damage;
-npc.XP = stats[0].xp;
-npc.class = stats[0].type;
-npc.level = monsterLevel;
-npc.movement = stats[0].movement;
-
-//Treasure
-const treasureType = stats[0].treasure
-const lootEntry = NPCbuild.treasureTable[treasureType];
-const loot = NPCbuild.genLoot(lootEntry);
-
-npc.treasure = loot;
-
 }
 
 static getCharacterSkills(npc) {
@@ -708,10 +748,8 @@ prime = 'wis'
 break;
 case 'Magic User':
 prime = 'int'
-
 break;
 default:
-return "";
 }
 
 if(prime === score){

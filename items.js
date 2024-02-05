@@ -126,11 +126,36 @@ const Centre = document.getElementById('Centre'); // Do not delete!!
 Centre.innerHTML = '';
 
 // Sort the items by item type alphabetically
-const sortedItems = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+data = data.slice().sort((a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name));
+
+data = data.reduce((result, currentItem, index, array) => {
+    const reversedArray = array.slice(0, index).reverse();
+    const lastItemIndex = reversedArray.findIndex(item => item.Type === currentItem.Type);
+        
+    if (lastItemIndex === -1 || currentItem.Type !== reversedArray[lastItemIndex].Type) {
+        // Insert <hr> when a new location is encountered after the last 'Location' item
+        result.push({name: currentItem.Type, locationSeparator: true});
+    }
+    
+    result.push(currentItem);
+    return result;
+    }, []);
+
 
 // Iterate through the sorted items
-for (const item of sortedItems) {
+for (const item of data) {
+
+
 const itemNameDiv = document.createElement('div');
+
+if(item.locationSeparator === true){
+
+    itemNameDiv.classList.add('no-hover');
+    itemNameDiv.innerHTML = `<hr><span class="cyan">${item.name}</span>`;
+    Centre.appendChild(itemNameDiv);
+
+}else{
+
 itemNameDiv.id = item.Name;
 
 // Check if item.Tags is included in Ref.itemSearch.value
@@ -140,7 +165,7 @@ const tagsIncluded = item.Tags ? item.Tags.toLowerCase().includes(Ref.itemSearch
 const className = tagsIncluded ? 'lime' : 'gray'
 
 // Set the inner HTML with the appropriate class
-itemNameDiv.innerHTML = `[${item.Type}]<span class="${className}">${item.Name}</span>`;
+itemNameDiv.innerHTML = `<span class="${className}">&nbsp;&nbsp;${item.Name}</span>`;
 
 Centre.appendChild(itemNameDiv);
 this.fillItemsForm(item, itemNameDiv);
@@ -151,6 +176,7 @@ Ref.Left.classList.add('showLeft');
 this.addIteminfo(itemNameDiv.id, Ref.Left);
 });
 }
+}
 
 Centre.style.display = 'block'; // Display the container
 
@@ -158,7 +184,7 @@ Centre.style.display = 'block'; // Display the container
 
 fillItemsForm: function(item, itemNameDiv){
 
-// Add click event listener to each NPC name
+// Add click item listener to each NPC name
 itemNameDiv.addEventListener('click', () => {
 
 itemNameDiv.innerHTML = `[${item.Type}]<span class="cyan">${item.Name}</span>`;
@@ -238,8 +264,8 @@ item.Tags = itemTags;
 
 addItemSearch: function(){
 
-Ref.itemSearch.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
+Ref.itemSearch.addEventListener('input', (item) => {
+let searchText = item.target.value.toLowerCase();
 
 // Call the searchItem function
 this.searchItem(searchText);

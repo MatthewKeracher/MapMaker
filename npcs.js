@@ -10,6 +10,7 @@ import Storyteller from "./storyteller.js";
 import NPCbuild from "./classes.js";
 
 
+
 // Define the NPCs module
 const NPCs = {
 npcArray: [],
@@ -50,57 +51,59 @@ buildNPC: function() {
 
 loadNPC: function(NPCArray) {
 
-Ref.Centre.style.display = 'block';
+  Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
 
-// Clear the existing content
-Ref.Centre.innerHTML = '';
-this.groupedNPCs = [];
-this.absentNPCs = [];
-this.uniqueNames = [];
+// Ref.Centre.style.display = 'block';
 
-const currentLocation = Ref.locationLabel.textContent;
-const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
+// // Clear the existing content
+// Ref.Centre.innerHTML = '';
+// this.groupedNPCs = [];
+// this.absentNPCs = [];
+// this.uniqueNames = [];
 
-// Filter eventsArray based on currentLocation
-const sortEvents = Events.eventsArray.filter(event => {
-if (event.target === 'NPC' && event.active === 1) {
-const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.name));
-}
-return false; // If event.target is not 'NPC', filter it out
-});
+// const currentLocation = Ref.locationLabel.textContent;
+// const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
 
-//console.log(sortEvents)
+// // Filter eventsArray based on currentLocation
+// const sortEvents = Events.eventsArray.filter(event => {
+// if (event.target === 'NPC' && event.active === 1) {
+// const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
+// return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.name));
+// }
+// return false; // If event.target is not 'NPC', filter it out
+// });
 
-for (const npc of NPCArray) {
-const npcNameDiv = document.createElement('div'); 
-npcNameDiv.id = npc.name; 
-this.sortNPCs(npc, npcNameDiv, sortEvents);
-this.fillNPCForm(npc, npcNameDiv);
-}
+// //console.log(sortEvents)
 
-// Add <hr> between namedNPCs and groupedNPCs if arrays are not empty
-if (this.groupedNPCs.length > 0) {
-  this.groupedNPCs.push(document.createElement('hr'));
-}
+// for (const npc of NPCArray) {
+// const npcNameDiv = document.createElement('div'); 
+// npcNameDiv.id = npc.name; 
+// this.sortNPCs(npc, npcNameDiv, sortEvents);
+// this.fillNPCForm(npc, npcNameDiv);
+// }
 
-// Concatenate arrays in desired order
-const sortedNPCs = [...this.namedNPCs, ...this.groupedNPCs, ...this.absentNPCs];
+// // Add <hr> between namedNPCs and groupedNPCs if arrays are not empty
+// if (this.groupedNPCs.length > 0) {
+//   this.groupedNPCs.push(document.createElement('hr'));
+// }
 
-// Append sorted divs to the Centre
-sortedNPCs.forEach(npcDiv => {
-Ref.Centre.appendChild(npcDiv);
+// // Concatenate arrays in desired order
+// const sortedNPCs = [...this.namedNPCs, ...this.groupedNPCs, ...this.absentNPCs];
 
-//show NPC info in Left when hover over Div
-npcDiv.addEventListener('mouseover', () => {
-  //Ref.eventManagerInput.value = event.name;
-  // console.log(npcDiv.id)
-  Ref.Left.style.display = 'block';
-  Ref.Centre.style.display = 'block';
-  this.addNPCInfo(npcDiv.id, Ref.Left);
-  });
+// // Append sorted divs to the Centre
+// sortedNPCs.forEach(npcDiv => {
+// Ref.Centre.appendChild(npcDiv);
 
-});
+// //show NPC info in Left when hover over Div
+// npcDiv.addEventListener('mouseover', () => {
+//   //Ref.eventManagerInput.value = event.name;
+//   // console.log(npcDiv.id)
+//   Ref.Left.style.display = 'block';
+//   Ref.Centre.style.display = 'block';
+//   this.addNPCInfo(npcDiv.id, Ref.Left);
+//   });
+
+// });
 
 },
 
@@ -140,7 +143,6 @@ this.absentNPCs.push(npcNameDiv);
 },
 
 fillNPCForm: function(npc, npcNameDiv){
-
 // Add click event listener to each NPC name
 npcNameDiv.addEventListener('click', () => {
 
@@ -586,7 +588,7 @@ if (foundNPC.savingThrows){
 
 }
 
-if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
+if(foundNPC.inventory){
 
   let previousTag = '';
 
@@ -596,43 +598,49 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
     return `${tagToDisplay}#${item.Name}# <br>`;
   });
 
-  //console.log(foundNPC.treasure)
-  const allEmptyOrZero = Object.values(foundNPC.treasure).every(value => value === "" || value === 0);
-
- 
   const formattedInventory = inventoryItems.join('');
 
   npcContent += 
   
-  `${!allEmptyOrZero || foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
+  `${foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
+  `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`
 
-  `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`+
+}
 
-  `${!allEmptyOrZero ? `<br><span class= "hotpink"> ${foundNPC.monsterTemplate}:</span> <br>` : '' }`  +
+if (foundNPC.treasure) {
+
+  let treasure = foundNPC.treasure[0]
+
+  console.log(foundNPC.name, treasure)
+  const allEmptyOrZero = Object.values(treasure).every(value => value.length === 0 || value === 0);
+
+  npcContent += 
   
-  `${foundNPC.treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Electrum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Gold ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
-  `${foundNPC.treasure.Platinum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${foundNPC.treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
+  `${!allEmptyOrZero ? `<br><hr><span class= "hotpink"> Treasure:</span> <br>` : '' }`  +
+  
+  `${treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
+  `${treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
+  `${treasure.Electrum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
+  `${treasure.Gold ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
+  `${treasure.Platinum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
   
   //Loop through Gems
-  `${foundNPC.treasure.Gems ? `<span class="orange">
-  ${foundNPC.treasure.Gems.map(gem => `
+  `${treasure.Gems.length > 0 ? `<span class="orange">
+  ${treasure.Gems.map(gem => `
   ${gem.numberFound} ${gem.gemType} (${gem.type}; ${gem.baseValue} gp each)
   `).join('<br>')}
   </span><br>` : ''} ` +
 
   //Loop through Jewelry
-  `${foundNPC.treasure.Jewelry ? `<span class="teal">
-  ${foundNPC.treasure.Jewelry.map(Jewelry => `
+  `${treasure.Jewelry.length > 0 ? `<span class="teal">
+  ${treasure.Jewelry.map(Jewelry => `
   ${Jewelry.type} ${Jewelry.jewelryType} (${Jewelry.baseValue} gp)
   `).join('<br>')}
   </span><br>` : ''} ` +
 
   //Loop through magicItems
-  `${foundNPC.treasure.magicItems ? `<span class="expandable lime">
-  ${foundNPC.treasure.magicItems.map(item => `
+  `${treasure.magicItems.length > 0 ? `<span class="expandable lime">
+  ${treasure.magicItems.map(item => `
   ${item.name} ${item.bonus}
   `).join('<br>')}
   </span><br>` : ''} ` +
@@ -640,9 +648,6 @@ if (foundNPC.inventory.length !== 0 || foundNPC.monsterTemplate) {
   `</h3>`;
   
 }
-
-
-
 
 target.innerHTML = npcContent;
 
