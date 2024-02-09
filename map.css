@@ -21,7 +21,7 @@
                 position: fixed;
                 top: 0;
                 left: 0;
-                width: 70vw;
+                width: 67vw;
                 height: 100vh;
                 pointer-events: none; /* Allow interactions with elements beneath the overlay */
               }          

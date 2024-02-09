@@ -1,0 +1,88 @@
+/* Everything in the Centre Panel */
+
+.Centre {
+
+/* Position */
+position: fixed;
+top:0;  
+right: 34.1vw; 
+width: 33vw;
+height: 100vh;
+z-index:10;
+
+/* Text */  
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5; 
+text-align: left;
+
+/* Appearance */
+background-color: black;
+opacity: 1;
+display: none;
+padding: 1vh; 
+overflow: auto;
+scrollbar-color: black;
+flex-direction: column;
+} 
+
+.form {
+display: block;    
+border-radius: 0;
+background-color: transparent;
+overflow: auto;
+overflow-x: hidden;
+}
+
+#form::-webkit-scrollbar {
+width: 0.1px; /* Set the width of the scrollbar */
+}
+
+.centreLabel{
+/* Position */
+margin: 1vh;
+
+/* Text */
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5;
+text-align: left;  
+
+/* Appearance */
+background-color: black;
+
+}
+
+.centreText {
+
+/* Position */
+min-height: 4vh;
+width: 30vw;
+margin: 1vh;
+
+/* Text */
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+
+/* Appearance */
+border: 0.2vh solid gray;
+padding: 0.6vh;
+background-color: black;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+
+.centreText:focus{
+/* Appearance */
+background-color: black;
+border-color: hotpink;
+color: hotpink;
+outline: 0.2vh solid hotpink;
+border-radius: 0;
+padding: 0.8vh;
+}
+

@@ -1,0 +1,53 @@
+body {
+background-color: black;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+margin: 0; /* Remove default margin */
+}
+
+.center-screen {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+}
+
+.center-screen img {
+width: 90vw; /* Reset width to auto to allow resizing */
+
+display: block; /* Remove any default spacing */
+margin: 0 auto; /* Horizontally center the image */
+}
+
+.floating-box {
+background-color: #0e0d0d; /* Background color */
+border: 1px solid #ccc; /* Border color */
+padding: 10px; /* Padding inside the box */
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle lift effect */
+max-width: 30vw; /* Maximum width of the box */
+z-index: 1000; /* Ensure it appears above other elements */
+
+color: bisque;
+line-height: 1.5; 
+font-family: monospace, 'Trebuchet MS', sans-serif;
+font-size: 1.9vh; 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

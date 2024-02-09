@@ -4,7 +4,7 @@ import Monsters from "./monsters.js";
 import NPCs from "./npcs.js";
 import Items from "./items.js";
 import Spells from "./spells.js";
-import Edit from "./edit.js";
+import editor from "./editor.js";
 import Ref from "./ref.js";
 
 const Storyteller = {
@@ -50,9 +50,9 @@ Ref.Storyteller.innerHTML = Story;
 Ref.textLocation.value = locObj.description;
 Ref.editLocationTags.value = locObj.tags;
 
-  if(Edit.editPage === 2){
+  if(editor.editPage === 2){
     Events.loadEventsList(Events.eventsArray, Ref.Centre);
-  }else if (Edit.editPage === 3){
+  }else if (editor.editPage === 3){
     NPCs.loadNPC(NPCs.npcArray)
   }
 
@@ -202,7 +202,7 @@ switch (contentType) {
     Items.addIteminfo(contentId, target); // Handle items
     break;
     case 'spell':
-    Spells.addSpellInfo(contentId, target); // Handle spells
+    editor.addInfo(contentId, target); // Handle spells
     break;
     case 'misc':
     this.addMiscInfo(contentId, target);
@@ -220,7 +220,7 @@ this.showExtraExpandable(Ref.Left);
 });
 
 Ref.Centre.addEventListener('mouseenter', () => {
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 
 });
 });
@@ -248,7 +248,7 @@ showExtraExpandable(target) {
         Items.addIteminfo(contentId, target); // Handle Items
         break;
         case 'spell':
-        Spells.addSpellInfo(contentId, target); // Handle Spells
+        editor.addInfo(contentId, target); // Handle Spells
         break;
         case 'misc':
         this.addMiscInfo(contentId, target); //Handle Misc
@@ -310,7 +310,7 @@ showFloatingExpandable() {
         Items.addIteminfo(contentId, floatingBox); // Handle Items
         break;
         case 'spell':
-        Spells.addSpellInfo(contentId, floatingBox); // Handle Spells
+        editor.addInfo(contentId, floatingBox); // Handle Spells
         break;
         case 'misc':
         this.addMiscInfo(contentId, floatingBox); //Handle Misc

@@ -17,7 +17,6 @@ inputElement.addEventListener("change", async (event) => {
 
     if (file) {
 
-       
         // Remove the existing map and its associated elements
         const existingMap = document.getElementById('imageContainer');
         if (existingMap) {
@@ -49,10 +48,6 @@ inputElement.addEventListener("change", async (event) => {
         this.mapHeight = mapElement.naturalHeight;
         this.mapWidth  = mapElement.naturalWidth;
 
-        //console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
-
-        this.radiantDisplay();
-        Ref.stateLabel.textContent = '';
         
 
 });
@@ -61,24 +56,6 @@ inputElement.addEventListener("change", async (event) => {
 inputElement.click();
 },
 
-
-radiantDisplay() {
-    // Create a new div element for the overlay layer
-    const overlay = document.createElement("div");
-    overlay.className = "overlay-layer"; // You can define a class for styling
-    overlay.id = "radiantDisplay"
-    //console.log('Width: ' + this.mapWidth + ' ; Height: ' + this.mapHeight)
-    // overlay.style.width = this.mapWidth; // Match the width
-    // overlay.style.height = this.mapHeight; // Match the height
-  
-    // Add the overlay div to the image container
-    const imageContainer = document.getElementById("imageContainer");
-    if (imageContainer) {
-      imageContainer.appendChild(overlay);
-    }
-    
-  },
-  
 increaseOpacity() {
     const locations = document.querySelectorAll('.selection');
 

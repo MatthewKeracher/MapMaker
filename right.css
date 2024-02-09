@@ -1,0 +1,84 @@
+/* Everything to do with the Right --> Editor */
+
+.Right {
+
+/* Position */
+position: fixed;
+top:7vh;  
+right: 0vw; 
+width: 33vw;
+height: 93vh;
+z-index:5;
+
+/* Text */  
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5; 
+text-align: left;
+
+/* Appearance */
+background-color: black;
+opacity: 1;
+display: none;
+padding: 1vh; 
+overflow: auto;
+scrollbar-color: transparent;
+flex-direction: column;
+
+} 
+
+.Editor {
+
+/* Position */
+position: fixed;
+top:7vh;  
+right: 0vw; 
+width: 33vw;
+height: 93vh;
+z-index:5;
+
+/* Text */  
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5; 
+text-align: left;
+
+/* Appearance */
+background-color: black;
+opacity: 1;
+display: none;
+padding: 1vh; 
+overflow: auto;
+scrollbar-color: transparent;
+flex-direction: column;
+
+} 
+
+.eventManager {
+
+/* Position */
+height: 4vh;
+width: 31vw;
+right: 0vw;
+margin: 0vh;
+vertical-align: middle;
+
+/* Text */
+font-size: 2vh;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: hotpink;
+text-align: left;
+
+/* Appearance */
+background-color: transparent;
+border-color: hotpink;
+outline: 0.2vh solid hotpink;
+border-radius: 0;
+padding: 0.8vh;
+
+}
+
+
+

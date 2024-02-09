@@ -1,0 +1,85 @@
+/* Everything to do with the left panel */
+
+.Left {
+
+/* Position */
+position: fixed;
+top:0;  
+right: 68.2vw; 
+width: 31vw;
+height: 100vh;
+z-index:5;
+
+/* Text */  
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5; 
+text-align: left;
+
+/* Appearance */
+background-color: black;
+opacity: 1;
+display: none;
+padding: 1vh; 
+overflow: auto;
+scrollbar-color: transparent;
+flex-direction: column;
+} 
+
+#Left::-webkit-scrollbar {
+width: 5px; /* Set the width of the scrollbar */
+}
+
+
+#Left div:not(.no-hover):hover {
+background-color: rgba(245, 245, 245, 0.474);
+cursor: pointer;
+}
+
+.leftLabel{
+/* Position */
+margin: 1vh;
+
+/* Text */
+font-family: monospace, 'Trebuchet MS', sans-serif;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5;
+text-align: left;  
+
+/* Appearance */
+background-color: black;
+
+}
+
+.leftText {
+
+/* Position */
+min-height: 4vh;
+width: 28vw;
+margin: 1vh;
+
+/* Text */
+font-size: 2vh;
+color: gray;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+
+/* Appearance */
+border: 0.2vh solid gray;
+padding: 0.6vh;
+background-color: black;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+
+.leftText:focus{
+/* Appearance */
+background-color: black;
+border-color: hotpink;
+color: hotpink;
+outline: 0.2vh solid hotpink;
+border-radius: 0;
+padding: 0.8vh;
+}

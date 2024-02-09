@@ -3,27 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- List of style sheets -->
-<link rel="stylesheet" href="style.css">
+
+
+<!-- STYLESHEETS -->
+<link rel="stylesheet" href="main.css">
 <link rel="stylesheet" href="map.css">    
 <link rel="stylesheet" href="toolbar.css">
-<link rel="stylesheet" href="sidebar.css">
 <link rel="stylesheet" href="storyteller.css">
-<link rel="stylesheet" href="edit.css">
-<link rel="stylesheet" href="npcs.css">
-<link rel="stylesheet" href="locations.css">
-<link rel="stylesheet" href="monsters.css">
-<link rel="stylesheet" href="events.css">
+<link rel="stylesheet" href="right.css">
+<link rel="stylesheet" href="centre.css">
+<link rel="stylesheet" href="left.css">
+<link rel="stylesheet" href="text.css">
 
 <link rel="icon" type="image/x-icon" href="data:," />
 <title>Excel_DM</title>
 </head>
+
 <body>
 
-<header>
+<!-- EXCEL_DM LOGO -->
+<div class="center-screen">
+<img id="Banner" src="BannerLogo.gif" alt="Your GIF">
+</div>
 
-</header>
 
+<!-- TOOLBARS -->
 <div class = "mainToolbar" id="mainToolbar">
 
 <button class= "button" id="mapButton"  >[M]ap</button>
@@ -36,10 +40,6 @@
 
 </div>
 
-<div class = "Centre" id="Centre"></div>
-<div class = "Left" id="Left"></div>
-
-
 <div class = "editToolbar" id="editToolbar"> 
 
 <button class= "button" id="editEditButton"    >[E]dit   </button>
@@ -51,499 +51,44 @@
 
 <main>
 
-<div class="center-screen">
-<img id="Banner" src="BannerLogo.gif" alt="Your GIF">
-</div>
+<div class=  "Right"  id="Right" >
 
-<div class="sidebar">
+<!-- EVENTS MANAGER -->
 
-<div class="eventManagerContainer">
+<input class="eventManager" type="textarea" id="eventManager" name="eventManager" required> </div>
 
-<input class="EventField" type="textarea" id="eventManagerInput" name="eventManagerInput" required>
-
-<div class="eventToolbarContainer">
-<button class= "buttonSmall" id="enableEventButton">Enable</button>
-<button class= "buttonSmall" id="disableEventButton">Disable</button>
-<!-- <button class= "buttonLarge" id="enableGroupEventButton">Enable All</button>
-<button class= "buttonLarge" id="disableGroupEventButton">Disable All</button> -->
-</div>
-</div>
-
-<br>
-
-<label class="stateLabel" id = "stateLabel">Load Map and Data</label>
+<!-- STORYTELLER -->
 
 <label class="locationLabel" id = "locationLabel"></label>
 
 <div class="Storyteller" id="Storyteller"></div>   
 
-<div class="EditorContainer">    
+<!-- EDITOR -->
 
-<div class = "locationGroup">    
-
-<label for="editLocationName">Location</label>
-<input class="lineField" id="editLocationName" placeholder="Unique Location Name">
-
-<label for="editLocationTags">Tags</label>
-<input class="lineField" id="editLocationTags" placeholder="Location Group Tags">
-
-<label for="textLocation">Description</label>
-<textarea class="largeField" id="textLocation" placeholder=
-"Enter information about the location here.
-
-*... for Monsters
-#... for Items
-~... for Spells"></textarea>  
-
-</div>  
-
-<form id="itemForm" class="itemForm">
-<div class="itemFormContainer">
-
-<input class ="idInput" id="itemId" name="itemId" placeholder="Id#"></input> <br>
-
-<label for="itemSearch">Search Items</label>
-<input class="lineField" type="textarea" id="itemSearch" name="itemSearch" placeholder="Search by Name or Tag" required>
-
-<label for="itemName">Name</label>
-<input class="lineField" type="textarea" id="itemName" name="itemName" placeholder="Unique Item Name" required>
-
-<label for="itemType">Type</label>
-<input class="lineField" type="textarea" id="itemType" name="itemType" placeholder="Collate with Others">
-
-<label for="itemTags">Tags</label>
-<input class="lineField" type="textarea" id="itemTags" name="itemTags" placeholder="Assign to Location, NPC, or Tag">
-
-<label for="itemDescription">Description</label>
-<textarea class="medField" type="textarea" id="itemDescription" name="itemDescription"></textarea>
-
-<br>
-
-<div class = "Monster-stats-all">
-
-<div class="Monster-stats-left"> 
-
-<label for="itemSize">Size</label>
-<input class="halfField" type="textarea" id="itemSize" name="itemSize">
-
-<label for="itemWeight">Weight</label>
-<input class="halfField" type="textarea" id="itemWeight" name="itemWeight">
-
-<label for="itemCost">Cost</label>
-<input class="halfField" type="textarea" id="itemCost" name="itemCost">
-
+<div id= "Editor" class="Editor"></div>
 </div>
 
-<div class="Monster-stats-right"> 
-
-<label for="itemDamage">Damage</label>
-<input class="halfField" type="textarea" id="itemDamage" name="itemDamage">
-
-<label for="itemRange">Range</label>
-<input class="halfField" type="textarea" id="itemRange" name="itemRange">
-
-<label for="itemAC">Armour Class</label>
-<input class="halfField" type="textarea" id="itemAC" name="itemAC">
-
-
-
-</div>
-</div>
-
-</div>
-</form>
-
-<form id="spellsForm" class="spellsForm">
-<div class="spellsFormContainer">
-
-<input class ="idInput" id="spellId" name="spellId" placeholder="Id#"></input> <br>
-
-
-<label for="spellName">Name</label>
-<input class="lineField" type="textarea" id="spellName" name="spellName" placeholder="{... to Search" required>
-<br>
-
-<div class = "Monster-stats-all">
-
-<div class="Monster-stats-left"> 
-
-<label for="spellClass">Class</label>
-<input class="halfField" type="textarea" id="spellClass" name="spellClass">
-
-
-</div>
-
-<div class="Monster-stats-right"> 
-
-<label for="spellLevel">Level</label>
-<input class="halfField" type="textarea" id="spellLevel" name="spellLevel">
-
-</div>
-</div>
-
-<div class = "Monster-stats-all">
-
-<div class="Monster-stats-left"> 
-
-<label for="spellRange">Range</label>
-<input class="halfField" type="textarea" id="spellRange" name="spellRange">
-
-</div>
-
-<div class="Monster-stats-right"> 
-
-<label for="spellDuration">Duration</label>
-<input class="halfField" type="textarea" id="spellDuration" name="spellDuration">
-
-
-</div>
-</div>
-
-<label for="spellDescription">Description</label>
-<textarea class="medField" type="textarea" id="spellDescription" name="spellDescription"></textarea>
-
-<label for="spellReverse">Reverse</label>
-<textarea class="medField" type="textarea" id="spellReverse" name="spellReverse"></textarea>
-
-<label for="spellNote">Note</label>
-<textarea class="medField" type="textarea" id="spellNote" name="spellNote"></textarea>
-
-
-
-</div>
-</form>
-
-<form id="monsterForm" class="monsterForm">
-<div class="monsterFormContainer">
-
-<input class ="idInput" id="monsterId" name="monsterId" placeholder="Id#"></input> <br>
-
-<label for="monsterSearch">Search Monsters</label>
-<input class="lineField" type="textarea" id="monsterSearch" name="monsterSearch" placeholder="Search by Name or Tag" required>
-
-<label for="monsterName">Name</label>
-<input class="lineField" type="textarea" id="monsterName" name="monsterName" required>
-
-<label for="monsterType">Type</label>
-<input class="lineField" type="textarea" id="monsterType" name="monsterType" required>
-
-<label for="monsterAppearing"># Appearing</label>
-<input class="lineField" type="textarea" id="monsterAppearing" name="monsterAppearing">
-
-<label for="monsterDescription">Description</label>
-<textarea class="largeField" type="textarea" id="monsterDescription" name="monsterDescription"></textarea>
-
-<br>
-
-<div class = "Monster-stats-all">
-
-<div class="Monster-stats-left"> 
-
-<label for="monsterAttacks">Attacks</label>
-<input class="halfField" type="textarea" id="monsterAttacks" name="monsterAttacks">
-
-<label for="monsterDamage">Damage</label>
-<input class="halfField" type="textarea" id="monsterDamage" name="monsterDamage">
-
-<label for="monsterHD">Hit Dice</label>
-<input class="halfField" type="textarea" id="monsterHD" name="monsterHD">
-
-<label for="monsterSaveAs">Save As</label>
-<input class="halfField" type="textarea" id="monsterSaveAs" name="monsterSaveAs">
-
-<label for="monsterCustomTreasure">Custome Treasure</label>
-<input class="halfField" type="textarea" id="monsterCustomTreasure" name="monsterCustomTreasure" placeholder="100 gp">
-
-</div>
-
-<div class="Monster-stats-right"> 
-
-<label for="monsterMorale">Morale</label>
-<input class="halfField" type="textarea" id="monsterMorale" name="monsterMorale">
-
-<label for="monsterMovement">Movement</label>
-<input class="halfField" type="textarea" id="monsterMovement" name="monsterMovement">
-
-<label for="monsterAC">Armour Class</label>
-<input class="halfField" type="textarea" id="monsterAC" name="monsterAC">
-
-<label for="monsterXP">Exp Points</label>
-<input class="halfField" type="textarea" id="monsterXP" name="monsterXP">
-
-<label for="monsterTreasure">Treasure Type</label>
-<input class="halfField" type="textarea" id="monsterTreasure" name="monsterTreasure" placeholder="K, Q">
-
-</div>
-</div>
-
-<label for="monsterSpecial">Special</label>
-<textarea class="medField" type="textarea" id="monsterSpecial" name="monsterSpecial"></textarea>
-
-</div>
-</form>
-
-<form id="npcForm" class="npcForm">
-<div class="npcFormContainer">
-
-<!-- <div class="npc-checkbox-container">
-<form>
-<label class="npc-label">
-<input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateNPCCheckboxes('npcCheckbox')">
-NPC
-</label>
-
-<label>
-<input type="checkbox" name="monsterCheckbox" id="monsterCheckbox" onchange="updateNPCCheckboxes('monsterCheckbox')">
-Monster
-</label>
-
-</form>
-
-</div> -->
-
-<!-- <script>
-function updateNPCCheckboxes(checkboxId) {
-const npcCheckbox = document.getElementById('npcCheckbox');
-const monsterCheckbox = document.getElementById('monsterCheckbox');
-
-const npcLevel = document.getElementById('npcLevel');
-const npcClass = document.getElementById('npcClass');
-const npcLevelLabel = document.getElementById('npcLevelLabel');
-const npcClassLabel = document.getElementById('npcClassLabel');
-
-const monsterTemplate = document.getElementById('monsterTemplate');
-const monsterTemplateLabel = document.getElementById('monsterTemplateLabel');
-
-// Uncheck the other checkbox when one is checked
-if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
-monsterCheckbox.checked = false;
-
-monsterTemplate.style.display = 'none';
-monsterTemplateLabel.style.display = 'none';
-
-// Hide and clear the Location text box
-npcLevelLabel.style.display = 'flex';
-npcLevel.style.display = 'flex';
-npcClassLabel.style.display = 'flex';
-npcClass.style.display = 'flex';
-
-} else if (checkboxId === 'monsterCheckbox' && monsterCheckbox.checked) {
-npcCheckbox.checked = false;
-
-monsterTemplate.style.display = 'block';
-monsterTemplateLabel.style.display = 'block';
-
-// Hide and clear the NPC form fields
-npcLevelLabel.style.display = 'none';
-npcLevel.style.display = 'none';
-npcClassLabel.style.display = 'none';
-npcClass.style.display = 'none';
-} else {
-// Both checkboxes unchecked, show both text boxes
-
-}
-}
-</script> -->
-
-<input class ="idInput" id="npcId" name="npcId" placeholder="Id#"></input> <br>
-
-<label for="npcSearch">Search NPCs</label>
-<input class="lineField" type="textarea" id="npcSearch" name="npcSearch" placeholder="Search by Name or Tag" required>
-
-<label for="npcName">Full or Unique Name</label>
-<input class="lineField" type="textarea" id="npcName" name="npcName" 
-placeholder="Full or Unique Name" required>
-
-<label for="npctags">Tags</label>
-<input class="lineField" type="textarea" id="npctags" name="npctags"
-placeholder="Villager, Potter, Man at Arms">
-
-<br>
-
-<label id = "monsterTemplateLabel" for="monsterTemplate">Set Monster Type:</label>
-<input class="lineField" type="textarea" id="monsterTemplate" name="monsterTemplate" placeholder="Optional">
-
-<label id = "npcLevelLabel" for="npcLevel">Level</label>
-<input class="stat" type="number" id="npcLevel" name="npcLevel">
-
-<label id = "npcClassLabel" for="npcClass">Class</label>
-<input class="halfField" type="textarea" id="npcClass" name="npcClass">
-
-<br><br>
-
-
-<label for="npcBackStory">Backstory</label>
-<textarea class="largeField" type="textarea" id="npcBackStory" name="npcBackStory" 
-placeholder="Put any other information about this NPC here.
-
-*... for Monsters
-#... for Items
-~... for Spells">
-</textarea>
-
-<br>
-
-<div class = "NPC-stats-all">
-
-<div class="NPC-stats-left"> 
-
-<label for="STR">Strength</label>
-<input class="stat" type="number" id="STR" name="STR"> <br>
-
-<label for="DEX">Dexterity</label>
-<input class="stat" type="number" id="DEX" name="DEX"> <br>
-
-<label for="INT">Intelligence</label>
-<input class="stat" type="number" id="INT" name="INT"> <br>  
-
-</div>
-
-<div class="NPC-stats-right"> 
-
-<label for="WIS">Wisdom</label>
-<input class="stat" type="number" id="WIS" name="WIS"> <br>
-
-<label for="CON">Constitution</label>
-<input class="stat" type="number" id="CON" name="CON"> <br>
-
-<label for="CHA">Charisma</label>
-<input class="stat" type="number" id="CHA" name="CHA"> <br>
-
-</div>
-</div>
-</div>
-</form>
-
-<form id="eventForm" class="eventForm">
-<div class="monsterFormContainer">
-
-
-
-<div class="event-checkbox-container">
-<form>
-<input class ="idInput" id="eventId" name="eventId" placeholder="Id#"></input>
-
-<label class="npc-label">
-<input type="checkbox" name="npcCheckbox" id="npcCheckbox" onchange="updateEventCheckboxes('npcCheckbox')">
-NPC
-</label>
-
-<label>
-<input type="checkbox" name="locationCheckbox" id="locationCheckbox" onchange="updateEventCheckboxes('locationCheckbox')">
-Location
-</label>
-
-</form>
-</div>
-
-<label for="eventSearch">Search Events</label>
-<input class="lineField" type="textarea" id="eventSearch" name="eventSearch" placeholder="Search by Name or Tag" required>
-
-<label for="eventName">Event</label>
-<input class="lineField" type="textarea" id="eventName" name="eventName" placeholder="Insert Unique Name" required>
-
-<label for="eventTags">Tags</label>
-<input class="lineField" type="textarea" id="eventTags" name="eventTags" placeholder="Tag 1, Tag 2, Tag 3, ..." required>
-
-<script>
-function updateEventCheckboxes(checkboxId) {
-const npcCheckbox = document.getElementById('npcCheckbox');
-const locationCheckbox = document.getElementById('locationCheckbox');
-const eventLocation = document.getElementById('eventLocation');
-const eventNPC = document.getElementById('eventNPC');
-
-// Uncheck the other checkbox when one is checked
-if (checkboxId === 'npcCheckbox' && npcCheckbox.checked) {
-locationCheckbox.checked = false;
-// Hide and clear the Location text box
-eventLocationLabel.textContent = 'Where are the NPCs?';
-eventLocation.style.display = 'block';
-eventNPCLabel.textContent = 'Who does this affect?';
-eventNPC.style.display = 'block';
-} else if (checkboxId === 'locationCheckbox' && locationCheckbox.checked) {
-npcCheckbox.checked = false;
-// Hide and clear the NPC text box
-eventNPCLabel.textContent = '';
-eventNPC.style.display = 'none';
-eventLocationLabel.textContent = 'Where does this affect?';
-eventLocation.style.display = 'block';
-eventNPC.value = '';
-} else {
-// Both checkboxes unchecked, show both text boxes
-
-}
-}
-</script>
-
-<label id="eventLocationLabel" for="eventLocation"></label>
-<input class="lineField" type="textarea" id="eventLocation" name="eventLocation" style="display: none;" placeholder="All, One, or by Location Tag" required>
-
-<label id="eventNPCLabel" for="eventNPC"></label>
-<input class="lineField" type="textarea" id="eventNPC" name="eventNPC" style="display: none;" placeholder="All, One, or by NPC Tag" required>
-
-<label for="ambienceDescription">Description</label>
-<textarea class="largeField" type="textarea" id="ambienceDescription" name="ambienceDescription" 
-placeholder=
-"*... for Monsters
-#... for Items
-~... for Spells
-
-?A 
-?B
-
-50% A or B">
-</textarea>
-
-</div>
-</form>
-
-<div class="SettingsContainer"> 
-
-
-<label for="exportDropdown">Select Array:</label>
-<select id="exportDropdown">
-<option value="">Select Array!</option>
-<option value="NPCs">NPCs</option>
-<option value="Locations">Locations</option>
-</select>
-
-<div class = "exportToolbar" id="exportToolbar"> 
-<button type="button" class = "button" id="importData">Import</button>
-<input type="file" id="csvFileInput" style="display: none">
-<button type="button" class = "button" id="exportData">Export</button>
-</div>
-
-</div>
-
-<div class = "bottomToolbar" id="bottomToolbar"> 
-
-<button class= "button" id="prevButton"    >[P]revious </button>
-<button class= "button" id="nextButton"    >[N]ext   </button>    
-
-</div>
-
-</div>
-</div>
+<div class = "Centre" id="Centre"></div>
+<div class = "Left"   id="Left">  </div>
 
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
+<script type="module" src="load.js"></script> 
 <script type="module" src="map.js"></script> 
 <script type="module" src="spells.js"></script> 
 <script type="module" src="toolbar.js"></script> 
 <script type="module" src="hotkeys.js"></script> 
 <script type="module" src="add.js"></script>
 <script type="module" src="array.js"></script>
-<script type="module" src="edit.js"></script>
+<script type="module" src="editor.js"></script>
 <script type="module" src="events.js"></script> 
 <script type="module" src="monsters.js"></script> 
 <script type="module" src="npcs.js"></script> 
 <script type="module" src="ref.js"></script>
 <script type="module" src="classes.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-
 
 
 </body>

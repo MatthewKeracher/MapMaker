@@ -1,11 +1,9 @@
-
-
 .editToolbar{
 position: fixed;
 top: 0vh; 
 right: 0vw; 
 z-index: 5;
-width: 30vw;
+width: 34vw;
 display: none; 
 flex-direction: row; 
 }
@@ -15,20 +13,10 @@ position: fixed;
 top: 0vh; 
 right: 0vw; 
 z-index: 5;
-width: 30vw;
+width: 34vw;
 display: flex; 
 flex-direction: row; 
 }
-
-.exportToolbar {
-    position: fixed;
-    bottom: 10vh; 
-    right: 14vw; 
-    z-index: 5;
-    width: 15vw;
-    display: flex; 
-    flex-direction: row; 
-    }
 
 .button {
 width: 100%; /* Make each button fill the width of the toolbar */
@@ -52,7 +40,7 @@ background-color: lime;
 .bottomToolbar{ 
 position: fixed;
 bottom: 1vh;
-right: 1vw;
+left: 1vw;
 width: 28vw;
 display: none; 
 flex-direction: row; 

@@ -1,5 +1,6 @@
 // Import the necessary module
-import Edit from "./edit.js";
+import editor from "./editor.js";
+import load from "./load.js";
 import Array from "./array.js";
 import Ref from "./ref.js";
 import Items from "./items.js";
@@ -10,26 +11,7 @@ import NPCs from "./npcs.js";
 
 const Monsters = {
 
-monstersArray: [],
-
-//Load the Array
-async loadMonstersArray() {
-
-try {
-const response = await fetch('monsters.json'); // Adjust the path if needed
-const data = await response.json();
-this.monstersArray = data;
-
-// const noKeys = Array.extractValues(data);
-// this.monstersArray = noKeys;
-
-return data //.monsters;
-} catch (error) {
-console.error('Error loading monsters array:', error);
-return [];
-}
-
-},   
+monstersArray: load.Data.monsters,  
 
 searchMonster: function(searchText) {
   this.searchArray = [];
@@ -44,7 +26,7 @@ searchMonster: function(searchText) {
   
   }); 
   
-  this.loadMonsterList(this.searchArray);
+  editor.loadList(this.searchArray, "Monster Search Results");
 },
 
 getMonsters(locationText) {
@@ -62,19 +44,19 @@ return match;
 
 addMonsterFormEvents: function(){
 
-Ref.monsterSearch.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
+// Ref.monsterSearch.addEventListener('input', (event) => {
+// let searchText = event.target.value.toLowerCase();
 
-// Call the searchMonster function
-this.searchMonster(searchText);
+// // Call the searchMonster function
+// this.searchMonster(searchText);
 
-});
+// });
 
-//Add MonsterList show on Click
-Ref.monsterSearch.addEventListener('click', () => {
-//Ref.Centre.style.display = 'block';
-this.loadMonsterList(this.monstersArray)
-});
+// //Add MonsterList show on Click
+// Ref.monsterSearch.addEventListener('click', () => {
+// //Ref.Centre.style.display = 'block';
+// editor.loadList(this.monstersArray, "All Monsters")
+// });
 
 },
 
@@ -102,7 +84,7 @@ const monsterStats = [
 `<h3><span class = "cyan">${monster.type}.</span><hr>`,
 
 `${monster.noApp ?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Number Appearing"># App:</span>        ${monster.noApp}          <br>` : ''}`,
-`${monster.saveAs?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Save As">Save As:</span>     ${monster.saveAs}         <br>` : ''}`,
+`${monster.subType?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Save As">Save As:</span>     ${monster.subType}         <br>` : ''}`,
 `${monster.morale ?       `<span class="expandable hotpink" data-content-type="rule" divId="Monster Morale">Morale:</span>      ${monster.morale}         <br>` : ''}`,
 `${monster.movement ?     `<span class="expandable hotpink" data-content-type="rule" divId="Monster Movement">Movement:</span>  ${monster.movement}       <br>` : ''} <hr>`,
 
@@ -132,107 +114,8 @@ target.innerHTML = formattedMonster;
 
 },
 
-loadMonsterList: function(data) {
-
-// Clear the existing content
-Ref.Centre.innerHTML = '';
-Ref.Centre.style.display = 'block'; 
-
-// 1. Sort the items by item type alphabetically.
-data = data.slice().sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
-
-// 2. Attach Section Heads.
-data = data.reduce((result, currentEntry, index, array) => {
-  const reversedArray = array.slice(0, index).reverse();
-  const lastItemIndex = reversedArray.findIndex(entry => entry.type === currentEntry.type);
-  
-  if (lastItemIndex === -1 || currentEntry.Type !== reversedArray[lastItemIndex].Type) {
-  result.push({type: currentEntry.type, sectionHead: true});
-  }
-  result.push(currentEntry);
-  return result;
-  }, []);
-
-  let currentSection = 0; // Keep track of the current section.
-
-// 3. Iterate through the sorted monsters.
-
-for (const monster of data) {
-const monsterNameDiv = document.createElement('div');
-
-if(monster.sectionHead){
-
-  monsterNameDiv.id = monster.type;
-  currentSection++
-  
-  monsterNameDiv.innerHTML = `<hr><span section=${currentSection} class="hotpink">${monster.type}</span>`;
-  Ref.Centre.appendChild(monsterNameDiv);
-  
-  monsterNameDiv.addEventListener('click', ((section) => {
-      return () => {
-          Items.showHide(section);
-      };
-  })(currentSection));
-  
-  }else if (monster.type){
-
-    monsterNameDiv.id = monster.name;
-    
-    monsterNameDiv.innerHTML = `<span section=${currentSection} style="display: none;">&nbsp;&nbsp;${monster.name}</span>`;
-    
-    Ref.Centre.appendChild(monsterNameDiv);
-
-  }else {
-
-    monsterNameDiv.id = monster.name;
-    
-    monsterNameDiv.innerHTML = `<span class="gray" section=${currentSection}>&nbsp;&nbsp;${monster.name}</span>`;
-    
-    Ref.Centre.appendChild(monsterNameDiv);
-  }
 
 
-monsterNameDiv.addEventListener('click', () => {
-
-if(Edit.editPage === 3){
-Ref.monsterTemplate.value = monsterNameDiv.id;
-}else{
-this.fillMonsterForm(monster, monsterNameDiv);
-}
-
-});
-
-//show Monster info in Left when hover over Div
-monsterNameDiv.addEventListener('mouseover', () => {
-Ref.Left.style.display = 'block';
-this.addMonsterInfo(monster.name, Ref.Left);
-});
-
-  }
-
-}, 
-
-fillMonsterForm: function(monster, monsterNameDiv){
-
-Ref.monsterId.value = monster.id;
-Ref.monsterName.value = monster.name;
-Ref.monsterType.value = monster.type;
-Ref.monsterAppearing.value = monster.noApp;
-Ref.monsterMorale.value = monster.morale;
-Ref.monsterMovement.value = monster.movement;
-Ref.monsterAC.value = monster.ac;
-Ref.monsterHD.value = monster.hd;
-Ref.monsterAttacks.value = monster.attacks;
-Ref.monsterDamage.value = monster.damage;
-Ref.monsterSpecial.value = monster.special;  
-Ref.monsterSaveAs.value = monster.saveAs; 
-Ref.monsterTreasure.value = monster.treasure; 
-Ref.monsterXP.value = monster.xp; 
-Ref.monsterDescription.value = monster.description; 
-
-Ref.monsterForm.style.display = 'flex'; // Display the monsterForm
-
-},
 
 saveMonster: function() {
 
@@ -246,6 +129,7 @@ const monster = {
 id: parseInt(Ref.monsterId.value),
 name: monsterName,
 type: Ref.monsterType.value,
+subType: Ref.monsterSaveAs.value,
 noApp: Ref.monsterAppearing.value,
 morale: Ref.monsterMorale.value,
 movement: Ref.monsterMovement.value,
@@ -254,7 +138,6 @@ hd: Ref.monsterHD.value,
 attacks: Ref.monsterAttacks.value,
 damage: Ref.monsterDamage.value,
 special: Ref.monsterSpecial.value,
-saveAs: Ref.monsterSaveAs.value,
 treasure: Ref.monsterTreasure.value,
 xp: Ref.monsterXP.value,
 description: Ref.monsterDescription.value

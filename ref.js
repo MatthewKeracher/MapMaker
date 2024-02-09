@@ -1,4 +1,4 @@
-import Edit from "./edit.js";
+import editor from "./editor.js";
 
 const Ref = {
 
@@ -8,14 +8,10 @@ imageContainer: document.querySelector('.image-container'),
 radiantDisplay: document.getElementById('radiantDisplay'),
 mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
-stateLabel: document.getElementById('stateLabel'),
 
-//SettingContainer
-SettingsContainer: document.querySelector('.SettingsContainer'),
 
 //eventManager
-eventManagerContainer: document.querySelector('.eventManagerContainer'),
-eventManagerInput: document.getElementById('eventManagerInput'),
+eventManager: document.getElementById('eventManager'),
 enableEventButton: document.getElementById('enableEventButton'),
 disableEventButton: document.getElementById('disableEventButton'),
 enableGroupEventButton: document.getElementById('enableGroupEventButton'),
@@ -27,7 +23,7 @@ Storyteller: document.getElementById('Storyteller'),
 
 //EditContainer
 locationGroup: document.querySelector('.locationGroup'),
-EditorContainer: document.querySelector('.EditorContainer'),
+Editor: document.getElementById('Editor'),
 editLocationName: document.getElementById('editLocationName'),
 editLocationTags: document.getElementById('editLocationTags'),
 
@@ -35,22 +31,23 @@ textLocation: document.getElementById('textLocation'),
 
 //Centre: document.getElementById('Centre'),
 expandableElements: document.querySelectorAll('.expandable'),
+Right: document.getElementById('Right'),
 Centre: document.querySelector('.Centre'),
 Left: document.querySelector('.Left'),
 
 
 //spellsForm
-spellsForm: document.querySelector('.spellsForm'),
-
-spellId: document.getElementById('spellId'),
-spellName: document.getElementById('spellName'),
-spellClass: document.getElementById('spellClass'),
-spellLevel: document.getElementById('spellLevel'),
-spellDescription: document.getElementById('spellDescription'),
-spellReverse: document.getElementById('spellReverse'),
-spellNote: document.getElementById('spellNote'),
-spellRange: document.getElementById('spellRange'),
-spellDuration: document.getElementById('spellDuration'),
+// form: document.getElementById('form'),
+// search: document.getElementById('search'),
+// Id: document.getElementById('Id'),
+// name: document.getElementById('name'),
+// type: document.getElementById('type'),
+// subType: document.getElementById('subType'),
+// description: document.getElementById('description'),
+// reverse: document.getElementById('reverse'),
+// note: document.getElementById('note'),
+// range: document.getElementById('range'),
+// duration: document.getElementById('duration'),
 
 
 //eventForm:
@@ -143,10 +140,6 @@ addButton: document.getElementById('addButton'),
 editButton: document.getElementById('editButton'),
 saveButton: document.getElementById('saveButton'),
 fileInput: document.getElementById('fileInput'),
-
-bottomToolbar: document.getElementById('bottomToolbar'),
-nextButton: document.getElementById('nextButton'),
-prevButton: document.getElementById('prevButton'),
 
 //Export .csv
 exportData: document.getElementById('exportData'),

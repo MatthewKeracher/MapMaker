@@ -1,7 +1,8 @@
 
-import Edit from "./edit.js";
+import editor from "./editor.js";
 import Map from "./map.js";
 import toolbar from "./toolbar.js";
+import Ref from "./ref.js";
 
 class Hotkeys{
 
@@ -9,14 +10,13 @@ init() {
 
 document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
-const Sidebar = document.querySelector('.sidebar');
-const editMode = Edit.editMode
+const editMode = editor.editMode
 
 if (key === 'escape') {
 toolbar.handleEscButtonClick();
 }
 
-if (!Sidebar.contains(document.activeElement)) {
+if (!Ref.Right.contains(document.activeElement)) {
 
 if (!editMode){
 switch (key) {
@@ -59,12 +59,6 @@ case 'c':
 case 'd':
     editDeleteButton.click();
     break;
-case 'n':
-    nextButton.click();
-break;
-case 'p':
-    prevButton.click();
-break;
 
 }}}
 

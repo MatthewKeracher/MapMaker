@@ -1,4 +1,4 @@
-import Edit from "./edit.js";
+import editor from "./editor.js";
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Storyteller from "./storyteller.js";
@@ -17,31 +17,14 @@ tagsArray: [],
 eventsArray: [],
 searchArray: [],
 
-async loadEventsArray() {
-
-try {
-const response = await fetch('ambience.json'); // Adjust the path if needed
-const data = await response.json();
-this.eventsArray = data;
-this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
-Ref.Centre.style.display = 'none'; // Display the container
-this.loadEventListeners();
-return data;
-
-} catch (error) {
-console.error('Error loading ambience array:', error);
-return [];
-}
-},
-
 loadEventListeners(){
 
 // -- EVENT MANAGER LISTENERS
 
-Ref.eventManagerInput.addEventListener('input', (event) => {
+Ref.eventManager.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 Ref.Centre.classList.add('showCentre');
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 this.searchEvents(searchText);
 this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
 
@@ -50,9 +33,9 @@ this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
 
 })
 
-Ref.eventManagerInput.addEventListener('click', () => {
+Ref.eventManager.addEventListener('click', () => {
 Ref.Centre.classList.add('showCentre');
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 this.loadEventsList(this.eventsArray, Ref.Centre, 'eventsManager');
 
 })
@@ -62,8 +45,8 @@ this.loadEventsList(this.eventsArray, Ref.Centre, 'eventsManager');
 Ref.npcTags.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 Ref.Centre.classList.add('showCentre');
-Ref.Left.classList.remove('showLeft');
-Ref.Centre.style.display = 'none';
+// Ref.Left.style.display = 'none';
+// Ref.Centre.style.display = 'none';
 this.searchTags(searchText); 
 this.showTags(this.searchArray);
 
@@ -71,7 +54,7 @@ this.showTags(this.searchArray);
 
 Ref.npcTags.addEventListener('click', () => {
 Ref.Centre.classList.add('showCentre');
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 Ref.Centre.style.display = 'none';
 this.fillTagsArray();
 this.showTags(this.tagsArray);
@@ -82,7 +65,7 @@ this.showTags(this.tagsArray);
 Ref.editLocationTags.addEventListener('input', (event) => {
 let searchText = event.target.value.toLowerCase();
 Ref.Centre.classList.add('showCentre');
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 // Call the searchAmbience function
 console.log(searchText)
 this.searchTags(searchText); 
@@ -92,7 +75,7 @@ this.showTags(this.searchArray);
 
 Ref.editLocationTags.addEventListener('click', () => {
 Ref.Centre.classList.add('showCentre');
-Ref.Left.classList.remove('showLeft');
+Ref.Left.style.display = 'none';
 this.fillTagsArray();
 this.showTags(this.tagsArray);
 })
@@ -102,7 +85,7 @@ this.showTags(this.tagsArray);
 Ref.eventTags.addEventListener('input', (event) => {
   let searchText = event.target.value.toLowerCase();
   Ref.Centre.classList.add('showCentre');
-  Ref.Left.classList.remove('showLeft');
+  Ref.Left.style.display = 'none';
   // Call the searchAmbience function
   console.log(searchText)
   this.searchTags(searchText); 
@@ -112,7 +95,7 @@ Ref.eventTags.addEventListener('input', (event) => {
   
   Ref.eventTags.addEventListener('click', () => {
   Ref.Centre.classList.add('showCentre');
-  Ref.Left.classList.remove('showLeft');
+  Ref.Left.style.display = 'none';
   this.fillTagsArray();
   this.showTags(this.tagsArray);
   })
@@ -165,12 +148,12 @@ NPCs.searchNPC(searchText);
 })},
 
 addEventsSearch: function() {
-  Ref.eventSearch.addEventListener('input', (event) => {
-  let searchText = event.target.value.toLowerCase();
+  // Ref.eventSearch.addEventListener('input', (event) => {
+  // let searchText = event.target.value.toLowerCase();
   
-  // Call the searchAmbience function
-  this.searchEvents(searchText);
-  });
+  // // Call the searchAmbience function
+  // this.searchEvents(searchText);
+  // });
   
 },
 
@@ -296,8 +279,8 @@ addTag(tag) {
 
 let target = Ref.editLocationTags; //DEFAULT
 
-if (Edit.editPage === 2){target = Ref.eventTags};
-if (Edit.editPage === 3){target = Ref.npcTags};
+if (editor.editPage === 2){target = Ref.eventTags};
+if (editor.editPage === 3){target = Ref.npcTags};
 
 const currentText = target.value;
 
@@ -652,12 +635,12 @@ let subLocationActive = true;
             this.focusEvent = event.name;
             this.searchArray = [event]; // Assign an array with a single element
             this.addEventInfo(event);
-            Ref.Left.classList.add('showLeft');
+            Ref.Left.style.display = 'block';
             });
 
             if(origin === 'eventsManager'){
               this.addCurrentEventNames(event, allEventDiv);
-              }else if (Edit.editPage === 2){
+              }else if (editor.editPage === 2){
               this.fillEventForm(event, allEventDiv);
               }
 
@@ -689,7 +672,7 @@ let subLocationActive = true;
           this.focusEvent = event.name;
           this.searchArray = [event]; // Assign an array with a single element
           this.addEventInfo(event);
-          Ref.Left.classList.add('showLeft');
+          Ref.Left.style.display = 'block';
           });
 }
 
@@ -946,11 +929,11 @@ locDesc =
 addCurrentEventNames(event, eventNameDiv){
 
   eventNameDiv.addEventListener('click', () => {
-    Ref.eventManagerInput.value = event.name;
+    Ref.eventManager.value = event.name;
     this.focusEvent = event.name;
     this.searchArray = [event]; // Assign an array with a single element
     this.addEventInfo(event);
-    Ref.Left.classList.add('showLeft');
+    Ref.Left.style.display = 'block';
     });
   
 },

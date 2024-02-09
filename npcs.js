@@ -1,5 +1,5 @@
 // Import the necessary module
-import Edit from "./edit.js";
+import editor from "./editor.js";
 import Array from "./array.js";
 import Ref from "./ref.js";
 import Items from "./items.js";
@@ -146,7 +146,7 @@ fillNPCForm: function(npc, npcNameDiv){
 // Add click event listener to each NPC name
 npcNameDiv.addEventListener('click', () => {
 
-if(Edit.editPage === 3){
+if(editor.editPage === 3){
 
 Ref.npcForm.style.display = 'flex'; // Display the npcForm
 
@@ -658,36 +658,34 @@ target.innerHTML = `NPC not found`;
 
 addNPCSearch: function(){
 
-Ref.npcSearch.addEventListener('input', (event) => {
-// this.searchNPC(Ref.npcSearch.value.toLowerCase());
-// this.loadNPC(this.npcSearchArray);
-let searchText = event.target.value.toLowerCase();
+// Ref.npcSearch.addEventListener('input', (event) => {
+// // let searchText = event.target.value.toLowerCase();
   
-// Call the searchAmbience function
-Events.searchEvents(searchText);
-})
+// // // Call the searchAmbience function
+// // Events.searchEvents(searchText);
+// })
 
-Ref.npcSearch.addEventListener('click', (event) => {
-// this.searchNPC(Ref.npcSearch.value.toLowerCase());
-// this.loadNPC(this.npcSearchArray);
-let searchText = event.target.value.toLowerCase();
+// Ref.npcSearch.addEventListener('click', (event) => {
+// // this.searchNPC(Ref.npcSearch.value.toLowerCase());
+// // this.loadNPC(this.npcSearchArray);
+// let searchText = event.target.value.toLowerCase();
   
-// Call the searchAmbience function
-Events.searchEvents(searchText);
-});
+// // Call the searchAmbience function
+// Events.searchEvents(searchText);
+// });
 
-Ref.monsterTemplate.addEventListener('click', (event) => {
-Monsters.loadMonsterList(Monsters.monstersArray);
-});
+// Ref.monsterTemplate.addEventListener('click', (event) => {
+// editor.loadList(Monsters.monstersArray, "All Monsters");
+// });
 
-Ref.monsterTemplate.addEventListener('input', (event) => {
+// Ref.monsterTemplate.addEventListener('input', (event) => {
  
-let searchText = event.target.value.toLowerCase();
+// let searchText = event.target.value.toLowerCase();
 
-// Call the searchMonster function
-Monsters.searchMonster(searchText);
+// // Call the searchMonster function
+// Monsters.searchMonster(searchText);
 
-});
+// });
 
 },
 

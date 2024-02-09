@@ -3,107 +3,98 @@ import Ref from "./ref.js";
 import Map   from "./map.js";
 import Add   from "./add.js";
 import Array from "./array.js";
-import Edit from "./edit.js";
+import editor from "./editor.js";
 import Events from "./events.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items  from "./items.js";
 import Spells  from "./spells.js";
+import load from "./load.js";
 
 class Toolbar{
 
 init() {   
 
 //Base Load Arrays
-Monsters.loadMonstersArray();
-Items.loadItemsArray();
-Spells.loadSpellsArray();
-Events.loadEventsArray();
+// Monsters.loadMonstersArray();
+// Items.loadItemsArray();
+// Spells.loadSpellsArray();
+// Events.loadEventsArray();
+load.loadDefault();
 
-//Edit.addPredictiveContent();
-Edit.init();
+//editor.addPredictiveContent();
+editor.init();
 
 Monsters.addMonsterFormEvents();
 Events.addEventsSearch();
 NPCs.addNPCSearch();
-Spells.addSpellSearch();
+Spells.addSearch();
 Items.addItemSearch();
 
 //Ambience.getAmbience();
 
 //mainToolbar
-Ref.mapButton.addEventListener('click', this.handleMapButtonClick);
-Ref.dataButton.addEventListener('click', this.handleDataButtonClick);
-Ref.addButton.addEventListener('click', this.handleAddButtonClick); 
-Ref.editButton.addEventListener('click', this.handleEditButtonClick);
-Ref.saveButton.addEventListener('click', this.handleSaveButtonClick);  
-Ref.fileInput.addEventListener('change', Array.handleFileInputChange); 
+Ref.mapButton.addEventListener('click', this.mapButton);
+Ref.dataButton.addEventListener('click', this.dataButton);
+Ref.addButton.addEventListener('click', this.addButon); 
+Ref.editButton.addEventListener('click', this.editButton);
+Ref.saveButton.addEventListener('click', this.saveButton);  
+Ref.fileInput.addEventListener('change', Array.loadSaveFile); 
 
-//eventManager
-Ref.enableEventButton.addEventListener('click', () => this.changEventStatus(1, "one"));
-Ref.disableEventButton.addEventListener('click', () => this.changEventStatus(0, "one"));
-// Ref.enableGroupEventButton.addEventListener('click', () => this.changEventStatus(1, "many"));
-// Ref.disableGroupEventButton.addEventListener('click', () => this.changEventStatus(0, "many"));
+//eventManager -- change to a doubleClick.
+// Ref.enableEventButton.addEventListener('click', () => this.changEventStatus(1, "one"));
+// Ref.disableEventButton.addEventListener('click', () => this.changEventStatus(0, "one"));
 
 //editToolbar
-Ref.editEditButton.addEventListener('click', this.handleEditButtonClick);
-Ref.editSaveButton.addEventListener('click', this.handleeditSaveButtonButtonClick);
-Ref.editClearButton.addEventListener('click', this.handleeditClearButtonClick); 
-Ref.editDeleteButton.addEventListener('click', this.handleeditDeleteButtonClick);
-
-//bottomToolbar
-Ref.nextButton.addEventListener('click', this.handleNextButtonClick);
-Ref.prevButton.addEventListener('click', this.handleeditPrevButtonButtonClick);
-
-//Data Import & Export
-Ref.exportData.addEventListener('click', this.handleexportDataClick);
-Ref.importData.addEventListener('click', this.handleimportDataClick);
-Ref.csvFileInput.addEventListener('change', Array.handleCSVFileInputChange); 
+Ref.editEditButton.addEventListener('click', this.editButton);
+Ref.editSaveButton.addEventListener('click', this.saveFormButton);
+Ref.editClearButton.addEventListener('click', this.clearFormButton); 
+Ref.editDeleteButton.addEventListener('click', this.deleteFormButton);
 
 }
 
 changEventStatus(y, scope) {
-  
-    if (scope === 'one') {
 
-    const eventName = Ref.eventManagerInput.value;
-    const eventEntry = Events.eventsArray.find(event => event.name === eventName);
+if (scope === 'one') {
 
-    if (eventEntry) {eventEntry.active = y} else {console.log('Event not found:', eventName)};
+const eventName = Ref.eventManager.value;
+const eventEntry = Events.eventsArray.find(event => event.name === eventName);
 
-    } else if(scope === 'many') {
+if (eventEntry) {eventEntry.active = y} else {console.log('Event not found:', eventName)};
 
-    const eventsToEnable = Events.eventsArray.filter(event => Events.searchArray.some(searchEvent => searchEvent.name === event.name));
+} else if(scope === 'many') {
 
-    if (eventsToEnable.length > 0) {eventsToEnable.forEach(event => {event.active = y})} else {console.log('No matching events found to Enable')}}
+const eventsToEnable = Events.eventsArray.filter(event => Events.searchArray.some(searchEvent => searchEvent.name === event.name));
+
+if (eventsToEnable.length > 0) {eventsToEnable.forEach(event => {event.active = y})} else {console.log('No matching events found to Enable')}}
 
 //console.log(Events.searchArray.length);
 Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
 
 };
 
-handleEscButtonClick(){
+escButton(){
 
-  Ref.Centre.style.display = "none";
-  Ref.Left.style.display = "none";
-  document.activeElement.blur();
-  Ref.eventManagerInput.value = '';
-  
+Ref.Centre.style.display = "none";
+Ref.Left.style.display = "none";
+document.activeElement.blur();
+Ref.eventManager.value = '';
+
 
 };
 
-handleMapButtonClick() {  
+mapButton() {  
 Map.fetchAndProcessImage()
 document.getElementById('Banner').style.display = "none";
 };
 
-handleDataButtonClick() {
+dataButton() {
 const fileInput = document.getElementById('fileInput');
 fileInput.click();
 
 };
 
-handleAddButtonClick() {
+addButon() {
 const mapElement = document.getElementById('mapElement');
 if(!Add.addMode){
 Add.addMode = true;
@@ -134,75 +125,70 @@ selection.style.pointerEvents = 'auto';
 }}
 };
 
-handleEditButtonClick() {
+editButton() {
 
-Edit.editPage = 1;
+if (!editor.editMode) {
 
+editor.editMode = true; // Now editing.
 
-if (!Edit.editMode) {
-
-Edit.editMode = true;
-Ref.stateLabel.style.display = 'flex';
 editEditButton.classList.add('click-button');
 
-//Hide Storyteller, pageChange()
-Edit.pageChange(Edit.editPage)
-Ref.EditorContainer.style.display = 'flex';
-Ref.locationGroup.style.display = 'flex';
-
-Ref.eventManagerContainer.style.display = 'none';
-Ref.Left.classList.remove('showLeft'); // Bookmark!
-Ref.Centre.style.display = 'none';
-Ref.Storyteller.style.display = 'none';
+//Hide Storyteller
+Ref.eventManager.style.display = 'none';
 Ref.locationLabel.style.display = 'none';
+Ref.Storyteller.style.display = 'none';
+
+//Show Editor loadLists()
+Ref.Editor.style.display = 'block';
+//Ref.Centre.style.display = 'block';
+//Ref.Left.style.display = 'block';
+
+editor.loadList(load.Data);
 
 //Switch Toolbars
 Ref.mainToolbar.style.display = 'none';
 Ref.editToolbar.style.display = 'flex';
-Ref.bottomToolbar.style.display = 'flex';
 
 // Add the event listeners to each .selection element
 Ref.locationDivs.forEach((div) => {
-div.addEventListener('mouseenter', Edit.handleMouseHover);
-div.addEventListener('mouseleave', Edit.handleMouseHover);
+div.addEventListener('mouseenter', editor.handleMouseHover);
+div.addEventListener('mouseleave', editor.handleMouseHover);
 });
-} else {
 
-if (Edit.editMode) {
-Ref.stateLabel.style.display = 'none';
-Edit.editMode = false;
+} else { if (editor.editMode) {
+
+editor.editMode = false; // Now Storytelling.
+
 editEditButton.classList.remove('click-button');
-Ref.Left.style.display = 'none';
 
-//Show Storyteller, pageChange()
-Edit.pageChange(1);
-Ref.EditorContainer.style.display = 'none';
-Ref.locationGroup.style.display = 'none';
+//Show Storyteller
+Ref.eventManager.style.display = 'block';
+Ref.locationLabel.style.display = 'block';
+Ref.Storyteller.style.display = 'block';
+
+//Hide Editor, Centre, Left
+Ref.Editor.style.display = 'none';
 Ref.Centre.style.display = 'none';
-
-Ref.eventManagerContainer.style.display = '';
-Ref.Storyteller.style.display = 'flex';
-Ref.locationLabel.style.display = 'flex';
+Ref.Left.style.display = 'none';
 
 //Switch Toolbars
 Ref.mainToolbar.style.display = 'flex';
 Ref.editToolbar.style.display = 'none';
-Ref.bottomToolbar.style.display = 'flex';
 
 // Remove the event listeners from each .selection element
 Ref.locationDivs.forEach((div) => {
-div.removeEventListener('mouseenter', Edit.handleMouseHover);
-div.removeEventListener('mouseleave', Edit.handleMouseHover);
+div.removeEventListener('mouseenter', editor.handleMouseHover);
+div.removeEventListener('mouseleave', editor.handleMouseHover);
 });
 }}};
 
-handleSaveButtonClick(){
+saveButton(){
 Array.exportArray();
 };  
 
-handleeditSaveButtonButtonClick(){
+saveFormButton(){
 
-const Page = Edit.editPage
+const Page = editor.editPage
 
 editSaveButton.classList.add('click-button');
 setTimeout(() => {
@@ -211,7 +197,7 @@ editSaveButton.classList.remove('click-button');
 
 switch (Page) {
 case 1:
-Edit.saveLocation();
+editor.saveLocation();
 break;
 
 case 2:
@@ -230,7 +216,7 @@ break;
 
 case 4:
 Monsters.saveMonster();
-Monsters.loadMonsterList(Monsters.monstersArray);
+Spells.loadSpellsList(Monsters.monstersArray);
 break;
 
 case 5:
@@ -255,9 +241,9 @@ NPCs.buildNPC();
 
 };
 
-handleeditClearButtonClick(){
+clearFormButton(){
 
-const Page = Edit.editPage
+const Page = editor.editPage
 
 editClearButton.classList.add('click-button');
 setTimeout(() => {
@@ -298,44 +284,10 @@ default:
 break;
 }}
 
-handleeditMoveButtonButtonClick(){
-
-if (!Edit.moveMode) {
-Edit.moveMode = true;
-editMoveButton.classList.add('click-button');
-
-} else {
-if (Edit.editMode) {
-Edit.moveMode = false;
-editMoveButton.classList.remove('click-button');
-
-}}};
-
-handleeditDeleteButtonClick(){
-Edit.deleteLocation();
+deleteFormButton(){
+editor.deleteLocation();
 };
 
-handleNextButtonClick(){
-if (Edit.editPage < 6) {
-Edit.editPage = Edit.editPage + 1;
-Edit.pageChange(Edit.editPage);
-}};
-
-handleeditPrevButtonButtonClick(){
-
-if (Edit.editPage > 1) {
-Edit.editPage = Edit.editPage - 1;
-Edit.pageChange(Edit.editPage)
-}};
-
-handleexportDataClick(){
-Array.exportNPCArrayToCSV();
-}
-
-handleimportDataClick(){
-const CSVfileInput = document.getElementById('csvFileInput');
-CSVfileInput.click();
-}
 
 };
 

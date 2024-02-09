@@ -1,5 +1,5 @@
 // Import the necessary module
-import Edit from "./edit.js";
+import editor from "./editor.js";
 import Array from "./array.js";
 import Ref from "./ref.js";
 import Items from "./items.js";
