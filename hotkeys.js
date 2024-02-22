@@ -13,10 +13,10 @@ const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
 const editMode = editor.editMode
 
 if (key === 'escape') {
-toolbar.handleEscButtonClick();
+toolbar.escButton();
 }
 
-if (!Ref.Right.contains(document.activeElement)) {
+if (!Ref.Centre.contains(document.activeElement) && !Ref.Right.contains(document.activeElement)) {
 
 if (!editMode){
 switch (key) {

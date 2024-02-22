@@ -141,6 +141,8 @@ editButton: document.getElementById('editButton'),
 saveButton: document.getElementById('saveButton'),
 fileInput: document.getElementById('fileInput'),
 
+centreToolbar: document.getElementById('centreToolbar'),
+
 //Export .csv
 exportData: document.getElementById('exportData'),
 importData: document.getElementById('importData'),

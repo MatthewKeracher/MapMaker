@@ -15,12 +15,9 @@ class Toolbar{
 
 init() {   
 
-//Base Load Arrays
-// Monsters.loadMonstersArray();
-// Items.loadItemsArray();
-// Spells.loadSpellsArray();
-// Events.loadEventsArray();
 load.loadDefault();
+
+Ref.locationLabel.textContent = 'Load Map and Data.';
 
 //editor.addPredictiveContent();
 editor.init();
@@ -77,6 +74,7 @@ escButton(){
 
 Ref.Centre.style.display = "none";
 Ref.Left.style.display = "none";
+Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
 Ref.eventManager.value = '';
 
@@ -134,7 +132,7 @@ editor.editMode = true; // Now editing.
 editEditButton.classList.add('click-button');
 
 //Hide Storyteller
-Ref.eventManager.style.display = 'none';
+//Ref.eventManager.style.display = 'none';
 Ref.locationLabel.style.display = 'none';
 Ref.Storyteller.style.display = 'none';
 

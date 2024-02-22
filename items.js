@@ -2,32 +2,12 @@ import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Array from "./array.js";
 import Spells from "./spells.js";
+import load from "./load.js";
 
 const Items = {
 
 itemsArray: [],
 itemsSearchArray: [],
-
-//Load the Array
-async loadItemsArray() {
-
-try {
-const response = await fetch('items.json'); // Adjust the path if needed
-const data = await response.json();
-this.itemsArray = data;
-
-const noKeys = Array.extractValues(data);
-this.itemsArray = noKeys;
-
-return data //.monsters;
-} catch (error) {
-console.error('Error loading items array:', error);
-return [];
-}
-
-},   
-
-//Add to Storyteller
 
 //addPredictive Items is now with addPredictive Monsters
 
@@ -35,7 +15,7 @@ getItems(locationText) {
 const hashBrackets = /#([^#]+)#/g;
 
 return locationText.replace(hashBrackets, (match, targetText) => {
-const item = Object.values(this.itemsArray).find(item => item.name.toLowerCase() === targetText.toLowerCase());
+const item = Object.values(load.Data.items).find(item => item.name.toLowerCase() === targetText.toLowerCase());
 if (item) {
 return `<span class="expandable item" data-content-type="item" divId="${item.name}">${item.name}</span>`;
 } else {
@@ -81,7 +61,7 @@ return cost; // Return the original cost if no match is found
 addIteminfo(contentId, target) {
 
 //Search for Item in the Array   
-const item = Object.values(this.itemsArray).find(item => item.name.toLowerCase() === contentId.toLowerCase());
+const item = Object.values(load.Data.items).find(item => item.name.toLowerCase() === contentId.toLowerCase());
 const newCost = this.standardizeCost(item.cost) + 'Gold Pieces';
 
 

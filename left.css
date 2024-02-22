@@ -4,11 +4,11 @@
 
 /* Position */
 position: fixed;
-top:0;  
-right: 68.2vw; 
-width: 31vw;
-height: 100vh;
-z-index:5;
+top:1vh;  
+right: 70vw; 
+width: 27vw;
+height: 96vh;
+z-index:10;
 
 /* Text */  
 font-family: monospace, 'Trebuchet MS', sans-serif;
@@ -19,12 +19,13 @@ text-align: left;
 
 /* Appearance */
 background-color: black;
-opacity: 1;
+opacity: 0.85;
 display: none;
 padding: 1vh; 
 overflow: auto;
-scrollbar-color: transparent;
+scrollbar-color: black;
 flex-direction: column;
+outline: 0.2vh solid rgb(195, 201, 11);
 } 
 
 #Left::-webkit-scrollbar {
@@ -37,37 +38,22 @@ background-color: rgba(245, 245, 245, 0.474);
 cursor: pointer;
 }
 
-.leftLabel{
-/* Position */
-margin: 1vh;
-
-/* Text */
-font-family: monospace, 'Trebuchet MS', sans-serif;
-color: whitesmoke;
-font-size: 1.9vh;
-line-height: 1.5;
-text-align: left;  
-
-/* Appearance */
-background-color: black;
-
-}
-
 .leftText {
 
 /* Position */
-min-height: 4vh;
-width: 28vw;
-margin: 1vh;
+min-height: 2vh;
+width: 27vw;
+margin: 0vh;
+height: 77vh;
 
 /* Text */
 font-size: 2vh;
-color: gray;
+color: whitesmoke;
 font-family: monospace, 'Trebuchet MS', sans-serif;
+line-height: 1.5;
 
 /* Appearance */
-border: 0.2vh solid gray;
-padding: 0.6vh;
+border: none;
 background-color: black;
 vertical-align: middle;
 resize: none;
@@ -78,8 +64,8 @@ border-radius: 0;
 /* Appearance */
 background-color: black;
 border-color: hotpink;
-color: hotpink;
-outline: 0.2vh solid hotpink;
+color: lime;
+outline: none;
 border-radius: 0;
-padding: 0.8vh;
 }
+

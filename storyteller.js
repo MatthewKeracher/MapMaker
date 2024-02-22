@@ -20,7 +20,7 @@ const locName = locationDiv.id;
 const locObj = Array.locationArray.find(entry => entry.divId === locName);
 
 Ref.locationLabel.textContent = locName;
-Ref.editLocationName.value   = locName;
+//Ref.editLocationName.value   = locName;
 
 if (locObj) {
 Events.getEvent(locName, locObj);
@@ -47,8 +47,8 @@ Story += `
 Ref.Storyteller.innerHTML = Story;
 
 //Update Editor Content
-Ref.textLocation.value = locObj.description;
-Ref.editLocationTags.value = locObj.tags;
+//Ref.textLocation.value = locObj.description;
+//Ref.editLocationTags.value = locObj.tags;
 
   if(editor.editPage === 2){
     Events.loadEventsList(Events.eventsArray, Ref.Centre);
@@ -208,7 +208,7 @@ switch (contentType) {
     this.addMiscInfo(contentId, target);
     break;
     case 'rules':
-    this.addRulesInfo(contentId, this.rulesArray);
+    this.addRulesInfo(contentId, target);
     break;
     default:
     console.log('Unknown content type');
@@ -219,10 +219,10 @@ this.showExtraExpandable(Ref.Left);
 
 });
 
-Ref.Centre.addEventListener('mouseenter', () => {
-Ref.Left.style.display = 'none';
+// Ref.Centre.addEventListener('mouseenter', () => {
+// Ref.Left.style.display = 'none';
 
-});
+// });
 });
 },
 
@@ -253,9 +253,9 @@ showExtraExpandable(target) {
         case 'misc':
         this.addMiscInfo(contentId, target); //Handle Misc
         break;
-        case 'rule':
-        this.addRulesInfo(contentId, target); //Handle Rule
-        break;
+        // case 'rule':
+        // this.addRulesInfo(contentId, target); //Handle Rule
+        // break;
         default:
         console.log('Unknown content type');
       }        
@@ -270,7 +270,10 @@ showExtraExpandable(target) {
 },
 
 showFloatingExpandable() {
-  const expandableElements = Ref.Left.querySelectorAll('.expandable');
+const expandableElementsLeft = Ref.Left.querySelectorAll('.expandable');
+const expandableElementsCentre = Ref.Centre.querySelectorAll('.expandable');
+const expandableElements = [...expandableElementsLeft, ...expandableElementsCentre];
+
   
   expandableElements.forEach(element => {
     

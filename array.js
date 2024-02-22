@@ -322,7 +322,6 @@ if (!location.dataset.hasListener) {
 
 location.addEventListener('click', () => {
 Storyteller.changeContent(location);
-editor.moveLocation(location);
 NPCs.clearForm(Ref.npcForm);
 
 });

@@ -1,6 +1,6 @@
 .editToolbar{
 position: fixed;
-top: 0vh; 
+top: 8vh; 
 right: 0vw; 
 z-index: 5;
 width: 34vw;
@@ -10,13 +10,24 @@ flex-direction: row;
 
 .mainToolbar {
 position: fixed;
-top: 0vh; 
+top: 8vh; 
 right: 0vw; 
 z-index: 5;
 width: 34vw;
 display: flex; 
 flex-direction: row; 
 }
+
+.centreToolbar{
+position: fixed;
+bottom: 1.5vh; 
+right: 35.5vw; 
+z-index: 100;
+width: 33vw;
+display: none; 
+flex-direction: row;     
+}
+
 
 .button {
 width: 100%; /* Make each button fill the width of the toolbar */

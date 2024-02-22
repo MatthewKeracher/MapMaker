@@ -269,17 +269,17 @@ npc.monsterTemplate = data
 
 clearForm: function(form){
 
-const inputFields = form.querySelectorAll('input, textarea, select'); 
-inputFields.forEach(formElement => {
-if (formElement.tagName === 'SELECT') {
-// For select elements, set the selected index to -1 to clear the selection
-formElement.selectedIndex = -1;
-} else {
-formElement.value = ''; 
-}
-});
+// const inputFields = form.querySelectorAll('input, textarea, select'); 
+// inputFields.forEach(formElement => {
+// if (formElement.tagName === 'SELECT') {
+// // For select elements, set the selected index to -1 to clear the selection
+// formElement.selectedIndex = -1;
+// } else {
+// formElement.value = ''; 
+// }
+// });
 
-Array.generateLocationOptions();
+// Array.generateLocationOptions();
 
 },
 
@@ -385,11 +385,19 @@ const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
 
 if (foundNPC) {
 
-let npcContent = `<h2><span class="cyan">${foundNPC.name}</span><br></h2>`;
+let npcContent = ``;
+Ref.Left.innerHTML = '';
+
+//BACKSTORY, NAME and TAGS in Left
+
+
+
+Ref.Left.innerHTML = 
+`<h2><span class="lime">${foundNPC.name}</span><br></h2>`;
 
 if (foundNPC.tags && foundNPC.tags !== "undefined") {
-npcContent += `<h3>
-
+Ref.Left.innerHTML += 
+`<h3>
 <span>
 ${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} </br>` : ''}
 </span>
@@ -398,26 +406,36 @@ ${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTempla
 ${foundNPC.tags}.
 </span>
 
-</h3>`;
+</h3><hr>`;
 }
 
-if (foundNPC.Backstory && foundNPC.Backstory !== "undefined") {
-  npcContent += `<h3><hr><span class="lime">Backstory:</span></h3>
-  <span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(Storyteller.getQuotes(foundNPC.Backstory))))}</span>`;
-}
+//Design and Fill
+Ref.Left.innerHTML += `<h3><span class="lime">Backstory:</span></h3>`;
+
+const backStoryText = document.createElement('textarea');
+backStoryText.id = 'backStoryText';
+backStoryText.classList.add('leftText'); 
+backStoryText.textContent = foundNPC.Backstory || 'none';
+
+//Attach and display.
+Ref.Left.appendChild(backStoryText);
+Ref.Left.style.display = 'block';
+
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
 
-npcContent += `<hr><h3>
+target.innerHTML += `<h2>
 
 <span class="expandable cyan"
 data-content-type="rule"
 divId="${foundNPC.class}">
 Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}
 </span>
-</h3>
+</h2>
 
-<h3>
+<hr>`
+
+npcContent += `<h3>
 <span class="expandable teal"
 data-content-type="rule"
 divId="Hit Points">
@@ -433,9 +451,16 @@ ATTACK BONUS:
 </span>
 +${foundNPC.attackBonus}
 
-</h3>`;
+</h3>
+
+<hr>`;
 
 }
+
+const container = document.createElement('div');
+container.classList.add('form');
+container.id = 'npcInfo'
+
 
 if (foundNPC.monsterTemplate){
 
@@ -487,15 +512,44 @@ if (foundNPC.monsterTemplate){
 
 }
 
+
+
 if (foundNPC.str) {
-npcContent += `<h2>
-<span class="expandable misc" data-content-type="rule" divId="Strength"> STR: </span> ${foundNPC.str}  (${foundNPC.strMod}) <br>
-<span class="expandable misc" data-content-type="rule" divId="Dexterity"> DEX: </span> ${foundNPC.dex}  (${foundNPC.dexMod})<br>
-<span class="expandable misc" data-content-type="rule" divId="Intelligence"> INT: </span> ${foundNPC.int}  (${foundNPC.intMod})<br>
-<span class="expandable misc" data-content-type="rule" divId="Wisdom"> WIS: </span> ${foundNPC.wis}  (${foundNPC.wisMod})<br>
-<span class="expandable misc" data-content-type="rule" divId="Constitution"> CON: </span> ${foundNPC.con}  (${foundNPC.conMod})<br>
-<span class="expandable misc" data-content-type="rule" divId="Charisma"> CHA: </span> ${foundNPC.cha}  (${foundNPC.chaMod})</h2>
-`
+
+const statContainer = document.createElement('div');
+statContainer.classList.add('input-container');
+
+const statNames = {
+  "STR": "Strength",
+  "DEX": "Dexterity",
+  "INT": "Intelligence",
+  "WIS": "Wisdom",
+  "CON": "Constitution",
+  "CHA": "Charisma"
+};
+
+let statBlock = `<h2>`;
+["STR", "DEX", "INT", "WIS", "CON", "CHA"].forEach(stat => {
+  
+  statBlock += 
+
+  `<label class="expandable teal" data-content-type="rule" divId="${statNames[stat]}">
+  ${stat}: 
+  </label>
+
+  <input class="centreStat" type="text" value="${foundNPC[stat.toLowerCase()]}">
+  
+  (${foundNPC[`${stat.toLowerCase()}Mod`]})
+  
+  <br>`;
+
+});
+
+statBlock += `</h2>`;
+
+statContainer.innerHTML = statBlock;
+target.appendChild(statContainer);
+
 }
 
 if (foundNPC.Skills){
@@ -506,7 +560,7 @@ if (foundNPC.Skills){
    data-content-type="rule"
 
    divId="${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}">
-          ${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}:</span> <br><br>` +
+          ${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}:</span> <br>` +
 
   // Skills common to multiple classes
   `${foundNPC.Skills.removeTraps ? `<span class="orange">Remove Traps</span> ${foundNPC.Skills.removeTraps}<br>` : ''}` +
@@ -577,7 +631,7 @@ if (foundNPC.savingThrows){
    data-content-type="rule"
 
    divId="Saving Throws">
-          Saving Throws:</span> <br><br>` +
+          Saving Throws:</span> <br>` +
 
   // savingThrows common to multiple classes
   `${foundNPC.savingThrows.deathRay ? `<span class="orange">Death Ray</span> ${foundNPC.savingThrows.deathRay}<br>` : ''}` +
@@ -602,7 +656,7 @@ if(foundNPC.inventory){
 
   npcContent += 
   
-  `${foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span><br>` : '' }`  +
+  `${foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span>` : '' }`  +
   `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`
 
 }
@@ -649,10 +703,14 @@ if (foundNPC.treasure) {
   
 }
 
-target.innerHTML = npcContent;
+container.innerHTML += npcContent;
+target.appendChild(container);
+
+Ref.centreToolbar.style.display = 'flex';
+
 
 } else {
-target.innerHTML = `NPC not found`;
+target.innerHTML += `NPC not found`;
 }
 },
 

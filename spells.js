@@ -56,7 +56,7 @@ return contentId.replace(tildeBrackets, (match, targetText) => {
 const spell = Object.values(this.spellsArray).find(spell => spell.name.toLowerCase() === targetText.toLowerCase());
 if (spell) {
 console.log(spell.name);
-return editor.addInfo(spell.name);
+return editor.createForm(spell);
 } else {
 console.log(`Spell not found: ${targetText}`);
 return match;

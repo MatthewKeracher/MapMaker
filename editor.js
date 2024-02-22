@@ -91,17 +91,17 @@ return string.charAt(0).toUpperCase() + string.slice(1);
 
 loadList: function(data) {
 
+//Where to put list...
 let target = Ref.Editor
-//target.innerHTML = '';
+target.innerHTML = '';
 target.style.display = 'block'; 
 
 // 0. Iterate over each property in the data object
 for (const key in data) {
-
 let obj = data[key];
 
 // 1. Sort the items by item type alphabetically and then by Level numerically.
-obj.sort = obj.slice().sort((a, b) => {
+obj.sort((a, b) => {
 const typeComparison = a.type.localeCompare(b.type);
 
 if (typeComparison !== 0) {
@@ -113,19 +113,25 @@ return a.subType - b.subType || a.name.localeCompare(b.name);
 }
 });
 
-// 2. Attach Section Heads.
+
+// 2. Attach Key, Section and subSection Heads.
 obj = obj.reduce((result, currentEntry, index, array) => {
+
 const reversedArray = array.slice(0, index).reverse();
 const lastEntryIndex = reversedArray.findIndex(entry => entry.type === currentEntry.type);
 
 if (lastEntryIndex === -1 || currentEntry.type !== reversedArray[lastEntryIndex].type) {
-// For a new class, push the class as the type and set the level as a subSectionHead
-result.push({type: currentEntry.type, sectionHead: true, subSectionHead: currentEntry.subType});
+
+result.push({sectionHead: true, key: key, type: currentEntry.type, subType: currentEntry.subType});
+
 if(currentEntry.subType){
-result.push({type: currentEntry.subType, subSectionHead: currentEntry.subType})};
+
+result.push({subSectionHead: true, type: currentEntry.type, subType: currentEntry.subType})};
+
 } else if (currentEntry.subType !== reversedArray[lastEntryIndex].subType) {
-// If the Level changes within the same class, push the Level as a subSectionHead
-result.push({type: currentEntry.subType, subSectionHead: currentEntry.subType});
+
+result.push({subSectionHead: true, type: currentEntry.type, subType: currentEntry.subType});
+
 }
 
 result.push(currentEntry);
@@ -133,125 +139,181 @@ return result;
 }, []);
 
 //list Title
-const titleDiv = document.createElement('titleDiv');
+const titleDiv = document.createElement(key);
+
+titleDiv.setAttribute("scope", 'key');
+titleDiv.setAttribute("id", key);
 
 titleDiv.innerHTML = 
 `<h3>
-<span id = "${this.proper(key)}"
+<span
 class ="hotpink"
-style="display: block;"
-show="true">
+style="display: block;">
 ${this.proper(key)}
 </span></h3>`;
 
-target.appendChild(titleDiv);
-
-titleDiv.addEventListener('click', ((section, subsection, dataType) => {
-return () => {
-this.showHide(section, subsection, dataType);
-};
-})("section", null, key));
+target.appendChild(titleDiv)
+this.listEvents(null, titleDiv);
 
 let currentSection = 0; // Keep track of the current section.
 let currentSubSection = 0;
+
 
 // 3. Iterate through the sorted entries.
 for (const entry of obj) {
 const nameDiv = document.createElement('div');
 
-nameDiv.innerHTML = 
-`<span 
-id = "${entry.type}"
-key = "${key}"
-keyShow = "false"
-section ="${currentSection}"
-subsection ="${currentSubSection}"></span>`
-
-nameDiv.id = entry.name;
-
 //3.1 Section Heads --- Type
 if(entry.sectionHead){
-
-//nameDiv.id = entry.type;
 currentSection++
 currentSubSection = 0;
-nameDiv.innerHTML += 
-`<span class ="cyan"> 
-<hr>&nbsp;&nbsp;${entry.type}
+
+nameDiv.setAttribute("scope", 'section');
+nameDiv.setAttribute("id", currentSection);
+
+let entryName = entry.type === ''? 'Misc' : entry.type;
+
+nameDiv.innerHTML = 
+`<span id = "${entryName}" class = "cyan"> 
+<hr>&nbsp;${entryName}
 </span>`;
 
 //3.2 subSection Heads --- subType 
 } else if (entry.subSectionHead){
-
-//nameDiv.id = entry.subType;
 currentSubSection++
 
-nameDiv.innerHTML+= 
-`<span class ="hotpink" style="display: none;">
-<hr>&nbsp;&nbsp;&nbsp; Level ${entry.type}</span>`;
+nameDiv.setAttribute("scope", 'subsection');
+nameDiv.setAttribute("id", currentSubSection);
+nameDiv.setAttribute('style', "display: none")
+
+let entryName = entry.type === ''? 'Misc' : entry.subType;
+
+nameDiv.innerHTML= 
+`<span id = "${entryName}" class ="hotpink">
+<hr>&nbsp; Level ${entryName}</span>`;
 
 //3.3 subSection Entries   
 }else if (entry.type && entry.subType){
 
-nameDiv.innerHTML += 
-`<span class ="white">
+nameDiv.setAttribute('style', "display: none")
+
+nameDiv.innerHTML = 
+`<span id = "${entry.name}" class ="white">
 &nbsp;&nbsp;&nbsp;&nbsp;${entry.name}
 </span>`;
 
 //3.4 no subSection
 }else if (entry.type){
 
-nameDiv.innerHTML += 
-`<span class ="white">
+nameDiv.setAttribute('style', "display: none")
+
+nameDiv.innerHTML = 
+`<span id = "${entry.name}" class ="white">
 &nbsp;&nbsp;${entry.name}
 </span>`;
 
 //3.5 Other Entries
 }else {
 
+nameDiv.setAttribute('style', "display: none")
+
 nameDiv.innerHTML = 
-`<span id = "${entry.name}"
-dataType = ${key}
-class = "gray"> 
+`<span id = "${entry.name}" class = "gray"> 
 &nbsp;&nbsp;${entry.name}
 </span>`;
 
 }
 
+
+nameDiv.setAttribute('key', key)
+nameDiv.setAttribute('keyShow', "true")
+nameDiv.setAttribute('section', currentSection)
+nameDiv.setAttribute('sectionShow', "false")
+nameDiv.setAttribute('subsection', currentSubSection)
+nameDiv.setAttribute('subsectionShow', "false")
+
 target.appendChild(nameDiv);
-this.entryDivEvents(entry, nameDiv, currentSection, currentSubSection, key);
+this.listEvents(entry, nameDiv);
 
-}
+}}
 
-};
 },
 
-showHide: function (section, subsection, key) {
-console.log('showHide')
+listEvents: function(entry, div){
+
+div.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+});
+
+div.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+});
+
+if(div.getAttribute('scope')){
+//1. showHide
+div.addEventListener('click', () => {
+this.showHide(div);
+});
+
+}else{
+
+//1. showEntry
+div.addEventListener('click', () => {
+const form = editor.createForm(entry)
+Ref.Centre.style.display = 'block';
+Ref.Centre.appendChild(form);
+
+});
+
+
+
+}},
+
+showHide: function (div) {
+const scope = div.getAttribute("scope");
 let items
 
-if (section === 'section'){ //has clicked on a keyHeading
-    
-items = document.querySelectorAll(`[key="${key}"]`);
+if (scope === 'key'){ //has clicked on a keyHeading
 
-let showing = items[0].style.display
-let display = showing === 'block'? 'none' : 'block';
+let key = div.getAttribute("id")
 
-items.forEach((item) => {
+items = document.querySelectorAll(`[key="${key}"]`); 
 
-item.style.display = display;
 
-})
+items.forEach(item => {
+
+const keyShow = item.getAttribute('keyShow');
+const isHeader = item.getAttribute('subSection') === '0'? true : false;
+
+if(isHeader){
+
+const newKeyShow = keyShow === 'true'? 'false' : 'true';
+item.setAttribute('keyShow', newKeyShow); 
+
+const keyDisplay = newKeyShow === 'true'? 'block' : 'none';
+item.style.display = keyDisplay;
+
+}else{
+
+item.style.display = 'none';
 
 }
 
-else if (subsection === 'header'){ //has clicked on a sectionHeading
+item.setAttribute('sectionShow', "false")
+item.setAttribute('subSectionShow', "false")
 
-items = document.querySelectorAll(`[section="${section}"]`);
+})}
 
-items.forEach((item, index) => {
+else if (scope === 'section'){ //has clicked on a section heading
 
-if(index > 0){ 
+let key = div.getAttribute("key")
+let section = div.getAttribute("id")
+
+items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
+
+items.forEach((item,index) => {
+
+if(index > 0){
 
 const sectionShow = item.getAttribute('sectionShow');
 
@@ -261,138 +323,157 @@ item.setAttribute('sectionShow', newSectionShow);
 const sectionDisplay = newSectionShow === 'true'? 'block' : 'none';
 item.style.display = sectionDisplay;
 
-//if(newSectionShow === 'true'){console.log('Now Showing')}else{console.log('Now Hiding.')};
+item.setAttribute('subSectionShow', "true")
 
-//reset all subSectionShows
+}}) 
+}
 
-item.setAttribute('subSectionShow', "true");
+else if (scope === 'subsection'){ //has clicked on a subSection Heading
 
-}})}
+let key = div.getAttribute("key")
+let section = div.getAttribute("section")
+let subSection = div.getAttribute("id")
 
-else if(subsection){ //has clicked on a subSection
+items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
 
-items = document.querySelectorAll(`[section="${section}"][subsection="${subsection}"]`);
+items.forEach((item,index) => {
 
-items.forEach((item, index) => {
+if(index > 0){
 
-if(index > 0){ 
+const subSectionShow = item.getAttribute('subsectionshow');
 
-const subSectionShow = item.getAttribute('subSectionShow');
+const newSubSectionShow = subSectionShow === 'true'? 'false' : 'true';
+item.setAttribute('subSectionShow', newSubSectionShow); 
 
-const newSubShow = subSectionShow === 'true'? 'false' : 'true'; 
-item.setAttribute('subSectionShow', newSubShow);
-
-const subSectionDisplay = newSubShow === 'true'? 'block' : 'none';
+const subSectionDisplay = newSubSectionShow === 'true'? 'block' : 'none';
 item.style.display = subSectionDisplay;
 
-//if(newSubShow === 'true'){console.log('Now Showing')}else{console.log('Now Hiding.')};
+item.setAttribute('sectionShow', "true")
 
+}
 
-}})}   
+})  }
 
 },
 
 createForm: function (obj){
 
-// Check if there is an existing form
-const existingForm = document.getElementById('editForm');
-if (existingForm) {
-existingForm.remove(); // Remove the existing form
-}
+    ['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.remove();
+        }
+    });
 
+Ref.Centre.innerHTML = '';
+    
 const form = document.createElement('form');
-form.id = 'editForm'
+form.id = 'editForm';
 form.classList.add('form');
 
+const excludedKeys = ['id', 'name', 'type', 'subType']; // Define keys to exclude
+
+//1. Make Type Manually
+
+const typeArea = document.createElement('textarea');
+typeArea.id = 'typeArea';
+typeArea.classList.add('centreType'); 
+typeArea.value = obj.type || 'none';
+
+Ref.Centre.appendChild(typeArea);
+
+//2. Make subType Manually
+
+const subTypeArea = document.createElement('textarea');
+subTypeArea.id = 'subTypeArea';
+subTypeArea.classList.add('centreSubType'); 
+subTypeArea.value = obj.subType || 'none';
+
+Ref.Centre.appendChild(subTypeArea);
+
+//3. Make Name Manually
+
+const nameArea = document.createElement('textarea');
+nameArea.id = 'nameArea';
+nameArea.classList.add('centreName'); 
+nameArea.value = obj.name || 'insert name here';
+
+Ref.Centre.appendChild(nameArea);
+
+setTimeout(function() {
+nameArea.style.height = nameArea.scrollHeight + 'px';
+}, 0);
+
+
+const breaker = document.createElement('hr')
+breaker.id = 'breaker';
+Ref.Centre.appendChild(breaker);
+
+//4. Generate Fields Dynamically
 
 for (const key in obj) {
-if (obj.hasOwnProperty(key)) {
-const label = document.createElement('label');
-label.textContent = this.proper(key);
-label.classList.add('leftLabel'); // Add a CSS class to the label
+if (obj.hasOwnProperty(key) && !excludedKeys.includes(key)) { // Check if key is not excluded
+// Create a container div for each label and textarea pair
+const container = document.createElement('div');
+container.classList.add('input-container');
 
+// Create label element
+const label = document.createElement('input');
+label.value = this.proper(key);
+label.classList.add('centreLabel'); // Add a CSS class to the label
+
+// Create textarea element
 const textarea = document.createElement('textarea');
 textarea.name = key;
-textarea.classList.add('leftText'); // Add a CSS class to the textarea
+textarea.classList.add('centreText'); // Add a CSS class to the textarea
+textarea.value = obj[key] || 'none';
 
-// Check the initial height
-textarea.value = obj[key] || '';
-textarea.style.height = 'auto';
-textarea.style.height = textarea.scrollHeight + 'px';
-
-textarea.addEventListener('focus', function() {
+textarea.addEventListener('input', function() {
 // Calculate the height based on the scroll height of the textarea
-this.style.height = 'auto';
+this.style.height = 'auto'; 
 this.style.height = this.scrollHeight + 'px';
-// Set the caret position to the end
-this.selectionStart = this.selectionEnd = this.value.length;
+
 });
 
 textarea.addEventListener('blur', function() {
-// Calculate the height based on the scroll height of the textarea
-this.style.height = '3vh'; // Set a default height
+// Remove empty space at the end of the textarea value
+this.value = this.value.trim();
+
 });
 
-form.appendChild(label);
-form.appendChild(document.createElement('br')); // Add a line break
-form.appendChild(textarea);
+// Append label and textarea to the container
+container.appendChild(label);
+container.appendChild(textarea);
+
+// Append container to the form
+form.appendChild(container);
+
+setTimeout(function() {
+textarea.style.height = textarea.scrollHeight + 'px';
+}, 0);
 }
 }
+
+//0. Make ID Manually
+
+const existingId = document.getElementById('centreId');
+if (existingId) {
+existingId.remove(); // Remove the existing form
+}
+
+const idArea = document.createElement('textarea');
+idArea.id = 'centreId';
+idArea.classList.add('centreId'); 
+idArea.value = obj.id || 'N/A';
+
+Ref.Centre.appendChild(idArea);
 
 
 return form;
 
 },
 
-entryDivEvents: function(entry, entryDiv, currentSection, currentSubSection, key){
 
-if(entry.sectionHead === true){
-
-//1. showHide
-entryDiv.addEventListener('click', ((section, subsection, key) => {
-return () => {
-this.showHide(section, subsection, key);
-};
-})(currentSection, currentSubSection, key));
-
-}else{
-
-//1. showEntry
-entryDiv.addEventListener('mouseover', () => {
-this.addInfo(entry)
-Ref.Centre.style.display = 'block';
-});
-
-//2. fillForm
-entryDiv.addEventListener('click', () => {
-const form = editor.createForm(entry)
-Ref.Left.style.display = 'block';
-Ref.Left.appendChild(form);
-});
-
-}},
-
-addInfo(entry) {
-
-let addInfo = [
-
-`<h2><span class="spell">${entry.name}</span></h2>`,
-`<h3><span class = "cyan">${entry.type} Level ${entry.subType}.</span><hr>`,
-
-];
-
-for (const key in entry) {
-if (entry.hasOwnProperty(key)) {
-const value = entry[key];
-if (value) {
-addInfo += `<span class="hotpink">${key.charAt(0).toUpperCase() + key.slice(1)}:</span> ${value}<br>`;
-}
-}
-}
-
-Ref.Centre.innerHTML = addInfo;
-
-},
 
 deleteLocation() {
 let array;
@@ -515,7 +596,6 @@ break;
 }
 },
 
-
 // Save a Location
 saveLocation() {
 const divId = Ref.locationLabel.textContent; // Get the divId for the location you're saving
@@ -560,8 +640,6 @@ npc.NightLocation = Ref.editLocationName.value;
 
 
 }, 
-
-
 
 };
 

@@ -4,10 +4,10 @@
 
 /* Position */
 position: fixed;
-top:0;  
-right: 34.1vw; 
+top:1vh;  
+right: 35vw; 
 width: 33vw;
-height: 100vh;
+height: 96vh;
 z-index:10;
 
 /* Text */  
@@ -19,13 +19,22 @@ text-align: left;
 
 /* Appearance */
 background-color: black;
-opacity: 1;
+opacity: 0.85;
 display: none;
 padding: 1vh; 
 overflow: auto;
 scrollbar-color: black;
 flex-direction: column;
+outline: 0.2vh solid rgb(11, 201, 201);
 } 
+
+.Centre hr {
+border: none;
+width: 33vw;
+height: 0.05vh; /* Adjust the height of the line */
+background-color: rgb(11, 201, 201); /* Color of the line */
+box-shadow: 0 0 0 0.1vh rgb(11, 201, 201); /* Creates a solid outline effect */
+}
 
 .form {
 display: block;    
@@ -33,56 +42,223 @@ border-radius: 0;
 background-color: transparent;
 overflow: auto;
 overflow-x: hidden;
+max-height: 73vh; /* Adjust the value as needed */
 }
 
 #form::-webkit-scrollbar {
 width: 0.1px; /* Set the width of the scrollbar */
 }
 
-.centreLabel{
+.centreId{
 /* Position */
-margin: 1vh;
-
-/* Text */
-font-family: monospace, 'Trebuchet MS', sans-serif;
-color: whitesmoke;
-font-size: 1.9vh;
-line-height: 1.5;
-text-align: left;  
-
-/* Appearance */
-background-color: black;
-
-}
-
-.centreText {
-
-/* Position */
-min-height: 4vh;
-width: 30vw;
+position: fixed;
+bottom: 9vh; 
+right: 50vw; 
+height: 2vh;
+width: 3vw;
 margin: 1vh;
 
 /* Text */
 font-size: 2vh;
-color: gray;
+color: rgba(15, 158, 15, 0.598);
 font-family: monospace, 'Trebuchet MS', sans-serif;
+font-weight: bold;
 
 /* Appearance */
-border: 0.2vh solid gray;
-padding: 0.6vh;
+border: none;
+padding: 0.1vh;
+background-color: transparent;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+
+.centreName{
+/* Position */
+height: 4vh;
+width: 28vw;
+margin: 1vh;
+
+/* Text */
+font-size: 3vh;
+color: cyan;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+font-weight: bold;
+
+/* Appearance */
+border: none;
+padding: 0.1vh;
 background-color: black;
 vertical-align: middle;
 resize: none;
 border-radius: 0;
 }
 
-.centreText:focus{
+.centreName:focus{
 /* Appearance */
 background-color: black;
 border-color: hotpink;
-color: hotpink;
-outline: 0.2vh solid hotpink;
+color: lime;
+outline: none;
 border-radius: 0;
-padding: 0.8vh;
 }
+
+.centreType{
+/* Position */
+height: 2.5vh;
+width: 15vw;
+margin: 1vh;
+
+/* Text */
+font-size: 2.2vh;
+color: rgb(11, 201, 201);
+font-family: monospace, 'Trebuchet MS', sans-serif;
+font-weight: bold;
+
+/* Appearance */
+border: none;
+padding: 0.1vh;
+background-color: black;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+
+.centreType:focus{
+/* Appearance */
+background-color: black;
+border-color: hotpink;
+color: lime;
+outline: none;
+border-radius: 0;
+}
+
+.centreSubType{
+
+/* Position */
+height: 2.5vh;
+width: 14vw;
+margin: 1vh;
+
+/* Text */
+font-size: 2.2vh;
+color: rgb(11, 201, 201);
+font-family: monospace, 'Trebuchet MS', sans-serif;
+font-weight: bold;
+text-align: right;
+
+/* Appearance */
+border: none;
+padding: 0.1vh;
+background-color: black;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+
+.centreSubType:focus{
+/* Appearance */
+background-color: black;
+color: lime;
+outline: none;
+border-radius: 0;
+}
+
+.input-container {
+display: flex; 
+align-items: flex-start;
+margin-bottom: 0; 
+}
+
+.centreLabel{
+
+/* Position */
+min-height: 2vh;
+width: 15vh;
+margin: 1vh;
+
+/* Text */
+font-size: 2vh;
+color: hotpink;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+font-weight: bold;
+text-align: right;
+line-height: 1.5;
+
+/* Appearance */
+border: none;
+padding: 0vh;
+background-color: black;
+resize: none;
+border-radius: 0;
+}
+
+.centreLabel:focus{
+/* Appearance */
+background-color: black;
+border-color: hotpink;
+color: lime;
+outline: none;
+border-radius: 0;
+}
+
+.centreText {
+
+/* Position */
+min-height: 2vh;
+width: 32vw;
+margin: 1vh;
+
+/* Text */
+font-size: 2vh;
+color: whitesmoke;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+line-height: 1.5;
+
+/* Appearance */
+border: none;
+background-color: black;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+
+.centreStat {
+
+/* Position */
+min-height: 2vh;
+width: 2vw;
+margin: 1vh;
+
+/* Text */
+font-size: 3vh;
+color: gold;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+line-height: 1.5;
+text-align: center;
+font-weight: bold;
+
+/* Appearance */
+border: none;
+background-color: black;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+}
+    
+
+.centreText,
+.centreStat:focus{
+/* Appearance */
+background-color: black;
+border-color: hotpink;
+color: lime;
+outline: none;
+border-radius: 0;
+}
+
+
+
+
+
 

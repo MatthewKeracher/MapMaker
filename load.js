@@ -22,6 +22,7 @@ console.error('Error fetching data:', error);
 
 
 
+
 }
 
 export default load;

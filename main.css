@@ -20,19 +20,27 @@ margin: 0 auto; /* Horizontally center the image */
 }
 
 .floating-box {
-background-color: #0e0d0d; /* Background color */
-border: 1px solid #ccc; /* Border color */
+background-color: #0e0d0d21; /* Background color */
+border: 2px solid teal; /* Border color */
 padding: 10px; /* Padding inside the box */
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle lift effect */
 max-width: 30vw; /* Maximum width of the box */
 z-index: 1000; /* Ensure it appears above other elements */
-
 color: bisque;
 line-height: 1.5; 
 font-family: monospace, 'Trebuchet MS', sans-serif;
 font-size: 1.9vh; 
 
 }
+
+.floating-box h3,
+.Centre h3,
+.Left h3 {
+    margin-top: 0;
+    margin-bottom: 0; /* Set margin-bottom to 0 or adjust as needed */
+}
+
+
 
 
 
