@@ -16,7 +16,10 @@ if (key === 'escape') {
 toolbar.escButton();
 }
 
-if (!Ref.Centre.contains(document.activeElement) && !Ref.Right.contains(document.activeElement)) {
+if (
+    !Ref.Centre.contains(document.activeElement) && !Ref.Right.contains(document.activeElement) &&
+    !Ref.Left.contains(document.activeElement) 
+    ) {
 
 if (!editMode){
 switch (key) {

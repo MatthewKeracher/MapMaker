@@ -260,8 +260,7 @@ this.showHide(div);
 //1. showEntry
 div.addEventListener('click', () => {
 const form = editor.createForm(entry)
-Ref.Centre.style.display = 'block';
-Ref.Centre.appendChild(form);
+Ref.Left.appendChild(form);
 
 });
 
@@ -366,12 +365,29 @@ createForm: function (obj){
     });
 
 Ref.Centre.innerHTML = '';
+Ref.Centre.style.display = 'block';
+Ref.Left.innerHTML = '';
+Ref.Left.style.display = 'block';
+Ref.centreToolbar.style.display = 'flex';
     
 const form = document.createElement('form');
 form.id = 'editForm';
 form.classList.add('form');
 
-const excludedKeys = ['id', 'name', 'type', 'subType']; // Define keys to exclude
+const excludedKeys = ['id', 'name', 'type', 'subType', 'description']; // Define keys to exclude
+
+//0. Make Description Manually
+
+const descArea = document.createElement('textarea');
+descArea.id = 'nameArea';
+descArea.classList.add('centreText'); 
+descArea.value = obj.description || 'insert name here';
+
+Ref.Centre.appendChild(descArea);
+
+setTimeout(function() {
+descArea.style.height = descArea.scrollHeight + 'px';
+}, 0);
 
 //1. Make Type Manually
 
@@ -380,7 +396,7 @@ typeArea.id = 'typeArea';
 typeArea.classList.add('centreType'); 
 typeArea.value = obj.type || 'none';
 
-Ref.Centre.appendChild(typeArea);
+Ref.Left.appendChild(typeArea);
 
 //2. Make subType Manually
 
@@ -389,7 +405,7 @@ subTypeArea.id = 'subTypeArea';
 subTypeArea.classList.add('centreSubType'); 
 subTypeArea.value = obj.subType || 'none';
 
-Ref.Centre.appendChild(subTypeArea);
+Ref.Left.appendChild(subTypeArea);
 
 //3. Make Name Manually
 
@@ -398,7 +414,7 @@ nameArea.id = 'nameArea';
 nameArea.classList.add('centreName'); 
 nameArea.value = obj.name || 'insert name here';
 
-Ref.Centre.appendChild(nameArea);
+Ref.Left.appendChild(nameArea);
 
 setTimeout(function() {
 nameArea.style.height = nameArea.scrollHeight + 'px';
@@ -407,7 +423,7 @@ nameArea.style.height = nameArea.scrollHeight + 'px';
 
 const breaker = document.createElement('hr')
 breaker.id = 'breaker';
-Ref.Centre.appendChild(breaker);
+Ref.Left.appendChild(breaker);
 
 //4. Generate Fields Dynamically
 
@@ -420,12 +436,13 @@ container.classList.add('input-container');
 // Create label element
 const label = document.createElement('input');
 label.value = this.proper(key);
-label.classList.add('centreLabel'); // Add a CSS class to the label
+label.classList.add('leftLabel'); // Add a CSS class to the label
 
 // Create textarea element
 const textarea = document.createElement('textarea');
 textarea.name = key;
-textarea.classList.add('centreText'); // Add a CSS class to the textarea
+textarea.classList.add('leftText'); 
+textarea.classList.add('white'); 
 textarea.value = obj[key] || 'none';
 
 textarea.addEventListener('input', function() {
@@ -440,6 +457,7 @@ textarea.addEventListener('blur', function() {
 this.value = this.value.trim();
 
 });
+
 
 // Append label and textarea to the container
 container.appendChild(label);

@@ -3,6 +3,7 @@ import NPCs from "./npcs.js";
 import Array from "./array.js";
 import Items from "./items.js";
 import editor from "./editor.js";
+import load from "./load.js";
 
 const Spells = {
 
@@ -17,14 +18,14 @@ async loadSpellsArray() {
         // Store the raw data if needed
         this.rawSpellsArray = rawData;
 
-        // Extract values and assign to this.spellsArray
+        // Extract values and assign to load.Data.spells
         const noKeys = Array.extractValues(rawData);
-        this.spellsArray = noKeys;
+        load.Data.spells = noKeys;
 
         // Uncomment the following line if you want to log the extracted spellsArray
-        // console.log(this.spellsArray);
+        // console.log(load.Data.spells);
 
-        return this.spellsArray;
+        return load.Data.spells;
     } catch (error) {
         console.error('Error loading spells array:', error);
         return [];
@@ -39,7 +40,7 @@ getSpells(locationText) {
 const tildeBrackets = /~([^~]+)~/g;
 
 return locationText.replace(tildeBrackets, (match, targetText) => {
-const spell = Object.values(this.spellsArray).find(spell => spell.name.toLowerCase() === targetText.toLowerCase());
+const spell = Object.values(load.Data.spells).find(spell => spell.name.toLowerCase() === targetText.toLowerCase());
 if (spell) {
 return `<span class="expandable spell" data-content-type="spell" divId="${spell.name}">${spell.name}</span>`;
 } else {
@@ -53,7 +54,7 @@ extraSpell(contentId) {
 const tildeBrackets = /~([^~]+)~/g;
 
 return contentId.replace(tildeBrackets, (match, targetText) => {
-const spell = Object.values(this.spellsArray).find(spell => spell.name.toLowerCase() === targetText.toLowerCase());
+const spell = Object.values(load.Data.spells).find(spell => spell.name.toLowerCase() === targetText.toLowerCase());
 if (spell) {
 console.log(spell.name);
 return editor.createForm(spell);
@@ -69,7 +70,7 @@ return match;
 
 saveSpell: function() {
 
-const existingItemIndex = this.spellsArray.findIndex(spell => spell.name === Ref.spellName.value);
+const existingItemIndex = load.Data.spells.findIndex(spell => spell.name === Ref.spellName.value);
 console.log(Ref.spellName.value)
 
 const item = {
@@ -88,10 +89,10 @@ duration: Ref.spellDuration.value
 
 if (existingItemIndex !== -1) {
 // Update the existing Spell entry
-this.spellsArray[existingItemIndex] = item;
+load.Data.spells[existingItemIndex] = item;
 console.log('Item updated:', item);
 } else {
-this.spellsArray.push(item);
+load.Data.spells.push(item);
 }
 
 },
@@ -111,7 +112,7 @@ searchSpell: function(searchText){
 
 this.searchArray = [];
 
-this.searchArray = this.spellsArray.filter((entry) => {
+this.searchArray = load.Data.spells.filter((entry) => {
 const entryName = entry.name.toLowerCase();
 const entryType = entry.type.toLowerCase();
 const entrySubType = entry.subType.toLowerCase();

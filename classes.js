@@ -566,8 +566,8 @@ if (classTable) {
 // Find spellSlots for NPC's Level
 const levelEntry = classTable.find(entry => entry.level === level);
 const spellBook = Spells.spellsArray.filter(spell => spell.Class === npc.class);
-npc.magic =  `${npc.class === 'Cleric' ? `<span class="expandable cyan" data-content-type="rule" divId="Orsons">Orsons:</span>`:
-`<span class="expandable cyan" data-content-type="rule" divId="Spellcasting">Spells:</span>`}<br><br>`
+npc.magic =  `${npc.class === 'Cleric' ? `<span class="expandable teal" data-content-type="rule" divId="Orsons">Orsons:</span>`:
+`<span class="expandable cyan" data-content-type="rule" divId="Spellcasting">Spells:</span>`}<br>`
 
 // Start at Level 1
 let levelCheck = 0;

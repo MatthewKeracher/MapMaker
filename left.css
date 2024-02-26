@@ -5,8 +5,8 @@
 /* Position */
 position: fixed;
 top:1vh;  
-right: 70vw; 
-width: 27vw;
+right: 68vw; 
+width: 30vw;
 height: 96vh;
 z-index:10;
 
@@ -25,7 +25,7 @@ padding: 1vh;
 overflow: auto;
 scrollbar-color: black;
 flex-direction: column;
-outline: 0.2vh solid rgb(195, 201, 11);
+outline: 0.4vh solid teal;
 } 
 
 #Left::-webkit-scrollbar {
@@ -38,31 +38,65 @@ background-color: rgba(245, 245, 245, 0.474);
 cursor: pointer;
 }
 
-.leftText {
+.Left hr {
+border: none;
+width: 30vw;
+height: 0.05vh; /* Adjust the height of the line */
+background-color: rgb(11, 201, 201); /* Color of the line */
+box-shadow: 0 0 0 0.1vh rgb(11, 201, 201); /* Creates a solid outline effect */
+margin-top: 1;
+}
+
+.leftLabel{
 
 /* Position */
 min-height: 2vh;
-width: 27vw;
+width: 17vh;
 margin: 0vh;
-height: 77vh;
 
 /* Text */
-font-size: 2vh;
-color: whitesmoke;
+font-size: 2.2vh;
+color: hotpink;
 font-family: monospace, 'Trebuchet MS', sans-serif;
+font-weight: bold;
+text-align: left;
 line-height: 1.5;
 
 /* Appearance */
 border: none;
-background-color: black;
-vertical-align: middle;
+padding: 0vh;
+background-color: transparent;
 resize: none;
 border-radius: 0;
 }
 
+.leftText {
+
+/* Position */
+min-height: 2vh;
+width: 20vw;
+margin: 0vh;
+
+/* Text */
+font-size: 2.2vh;
+font-family: monospace, 'Trebuchet MS', sans-serif;
+line-height: 1.5;
+text-align: left;
+font-weight: bold;
+
+/* Appearance */
+border: none;
+background-color: transparent;
+vertical-align: middle;
+resize: none;
+border-radius: 0;
+margin-bottom: 0;
+margin-top: 0;
+}
+
 .leftText:focus{
 /* Appearance */
-background-color: black;
+background-color: transparent;
 border-color: hotpink;
 color: lime;
 outline: none;

@@ -23,35 +23,35 @@ uniqueNames: [],
 
 
 loadAndBuild: async function(fileContent) {
-  try {
-      // Wait for the handleFileLoad to complete
-      await Array.handleFileLoad(fileContent);
+try {
+// Wait for the handleFileLoad to complete
+await Array.handleFileLoad(fileContent);
 
-      // Now you can call buildNPC safely
-      await this.buildNPC();
-  } catch (error) {
-      console.error('Error loading file and building NPC:', error);
-  }
+// Now you can call buildNPC safely
+await this.buildNPC();
+} catch (error) {
+console.error('Error loading file and building NPC:', error);
+}
 },
 
 buildNPC: function() {
 
-  //console.log('calling buildNPC()')
+//console.log('calling buildNPC()')
 
-  const npcInstances = NPCs.npcArray.map(npcData => new NPCbuild(npcData));
-          
-  // Now npcInstances is an array of NPC objects with the data from npcArray
-  // You can store or use these instances as needed.
-  NPCs.npcArray = npcInstances;
-  
-  // For example, you can log the properties of each NPC instance
-  //npcInstances.forEach(npc => console.log(npc));
+const npcInstances = NPCs.npcArray.map(npcData => new NPCbuild(npcData));
+
+// Now npcInstances is an array of NPC objects with the data from npcArray
+// You can store or use these instances as needed.
+NPCs.npcArray = npcInstances;
+
+// For example, you can log the properties of each NPC instance
+//npcInstances.forEach(npc => console.log(npc));
 
 },
 
 loadNPC: function(NPCArray) {
 
-  Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
+Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
 
 // Ref.Centre.style.display = 'block';
 
@@ -220,8 +220,8 @@ this.bulkAdd(Ref.npcTags.value, 'tags')
 } 
 
 else if (Ref.npcName.value === '' && Ref.npcTags.value === '' && Ref.monsterTemplate.value !== ''){
-  console.log('Add ' + Ref.monsterTemplate.value + ' to all Selected NPCs')
-  this.bulkAdd(Ref.monsterTemplate.value, 'monsterTemplate')
+console.log('Add ' + Ref.monsterTemplate.value + ' to all Selected NPCs')
+this.bulkAdd(Ref.monsterTemplate.value, 'monsterTemplate')
 } 
 
 else {
@@ -320,59 +320,59 @@ let story = ``;
 //Search active events to see if any apply based on the location, or the individual. 
 
 const presentNPCEvents = npcEvents.filter(event => {
-  const eventNpcList = event.npc.split(',').map(item => item.trim());
-  const npctagsList = npc.tags.split(',').map(item => item.trim());
+const eventNpcList = event.npc.split(',').map(item => item.trim());
+const npctagsList = npc.tags.split(',').map(item => item.trim());
 
-  const npcNameMatches = npc.name === event.npc;
-  const npcInEventList = eventNpcList.includes(npc.name);
-  const eventIntagsList = npctagsList.includes(event.npc);
-  const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => npctagsList.includes(tag));
+const npcNameMatches = npc.name === event.npc;
+const npcInEventList = eventNpcList.includes(npc.name);
+const eventIntagsList = npctagsList.includes(event.npc);
+const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => npctagsList.includes(tag));
 
-  return (
-    (npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
-    event.target === 'NPC' &&
-    event.active === 1 &&
-    npc.tags !== '' &&
-    (event.location === subLocation || event.location === 'All')
-  );
+return (
+(npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
+event.target === 'NPC' &&
+event.active === 1 &&
+npc.tags !== '' &&
+(event.location === subLocation || event.location === 'All')
+);
 });
 
 let relevantTag = ''; // Variable to store the relevant part of npc.tags
 
 if (presentNPCEvents.length > 0) {
-  // Find the first matching item.trim() in npc.tags
-  const matchingItem = npc.tags.split(',').map(item => item.trim()).find(item => presentNPCEvents.some(event => event.npc === item));
+// Find the first matching item.trim() in npc.tags
+const matchingItem = npc.tags.split(',').map(item => item.trim()).find(item => presentNPCEvents.some(event => event.npc === item));
 
-  if (matchingItem) {
-    relevantTag = matchingItem;
-  } else {relevantTag = npc.class} 
+if (matchingItem) {
+relevantTag = matchingItem;
+} else {relevantTag = npc.class} 
 }
 
 story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
 
 for (const event of presentNPCEvents) {
-  // Define eventNpcList and npctagsList within the loop
-  const eventNpcList = event.npc.split(',').map(item => item.trim());
-  const npctagsList = npc.tags.split(',').map(item => item.trim());
+// Define eventNpcList and npctagsList within the loop
+const eventNpcList = event.npc.split(',').map(item => item.trim());
+const npctagsList = npc.tags.split(',').map(item => item.trim());
 
-  const sharedTag = event.npc && eventNpcList.find(tag => npctagsList.includes(tag));
+const sharedTag = event.npc && eventNpcList.find(tag => npctagsList.includes(tag));
 
-  if (sharedTag) {
-    story += `<span class="hotpink">${sharedTag}. </span>`;
-  } else {
-    story += `<span class="hotpink">${event.group}. </span>`;
-  }
+if (sharedTag) {
+story += `<span class="hotpink">${sharedTag}. </span>`;
+} else {
+story += `<span class="hotpink">${event.group}. </span>`;
+}
 
-  const options = event.description.split('??').filter(Boolean);
+const options = event.description.split('??').filter(Boolean);
 
-  if (options.length > 0) {
-    const randomIndex = Math.floor(Math.random() * options.length);
-    const selectedOption = options[randomIndex].trim();
+if (options.length > 0) {
+const randomIndex = Math.floor(Math.random() * options.length);
+const selectedOption = options[randomIndex].trim();
 
-    story += `${selectedOption}<br>`;
-  } else {
-    story += `${event.description}<br>`;
-  }
+story += `${selectedOption}<br>`;
+} else {
+story += `${event.description}<br>`;
+}
 }
 
 return story;
@@ -386,74 +386,164 @@ const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
 if (foundNPC) {
 
 let npcContent = ``;
+Ref.Centre.innerHTML = '';
 Ref.Left.innerHTML = '';
 
-//BACKSTORY, NAME and TAGS in Left
+
+Ref.centreToolbar.style.display = 'flex';
+Ref.Centre.style.display = 'block';
+Ref.Left.style.display = 'block';
 
 
+// 1. NAME
+const nameContainer = document.createElement('div');
 
-Ref.Left.innerHTML = 
-`<h2><span class="lime">${foundNPC.name}</span><br></h2>`;
+let nameContent =  
+`<h2><input 
+class="centreName orange" 
+type="text" 
+divId="npcName"
+value="${foundNPC.name}"></h2><hr>`;
 
-if (foundNPC.tags && foundNPC.tags !== "undefined") {
-Ref.Left.innerHTML += 
-`<h3>
-<span>
-${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} </br>` : ''}
-</span>
+nameContainer.innerHTML = nameContent;
+Ref.Centre.appendChild(nameContainer);
 
-<span>
-${foundNPC.tags}.
-</span>
+nameContainer.addEventListener('click', function() {
+nameContainer.querySelector('.leftText').focus();
+nameContainer.querySelector('.leftText').select();
+});
 
-</h3><hr>`;
-}
+// 2. TAGS
+const tagsContainer = document.createElement('div');
 
-//Design and Fill
-Ref.Left.innerHTML += `<h3><span class="lime">Backstory:</span></h3>`;
+let tagsContent =  
+`<h3><input 
+class="centreTag" 
+type="text" 
+divId= "npcTags"
+value="${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} <br>` : ''}${foundNPC.tags}"></h3><hr>`;
 
+tagsContainer.innerHTML = tagsContent;
+Ref.Centre.appendChild(tagsContainer);
+
+tagsContainer.addEventListener('click', function() {
+tagsContainer.querySelector('.centreTag').focus();
+tagsContainer.querySelector('.centreTag').select();
+});
+
+//3. BIO
 const backStoryText = document.createElement('textarea');
 backStoryText.id = 'backStoryText';
-backStoryText.classList.add('leftText'); 
-backStoryText.textContent = foundNPC.Backstory || 'none';
+backStoryText.classList.add('centreText'); 
+backStoryText.textContent = foundNPC.Backstory || 'Insert information about ' + foundNPC.name + ' here.';
 
 //Attach and display.
-Ref.Left.appendChild(backStoryText);
-Ref.Left.style.display = 'block';
+Ref.Centre.appendChild(backStoryText);
+Ref.Centre.style.display = 'block';
 
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
 
-target.innerHTML += `<h2>
+const classContainer = document.createElement('div');
 
-<span class="expandable cyan"
-data-content-type="rule"
-divId="${foundNPC.class}">
-Level ${foundNPC.level} ${foundNPC.class.toUpperCase()}
-</span>
-</h2>
+let classContent =  
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelClass">
+Class
+</label>
+<input 
+class="leftText white" 
+type="text" 
+divId= "npcClass"
+value="${foundNPC.class}">
+</h3>`;
 
-<hr>`
+classContainer.innerHTML = classContent;
+Ref.Left.appendChild(classContainer);
 
-npcContent += `<h3>
-<span class="expandable teal"
-data-content-type="rule"
-divId="Hit Points">
-HIT POINTS:
-</span>
-${foundNPC.hitPoints}
-<br>
+classContainer.addEventListener('click', function() {
+classContainer.querySelector('.leftText').focus();
+classContainer.querySelector('.leftText').select();
+});
 
-<span class="expandable teal"
-data-content-type="rule"
-divId="Attack Bonus">
-ATTACK BONUS:
-</span>
-+${foundNPC.attackBonus}
+const levelContainer = document.createElement('div');
 
-</h3>
+let levelContent =  
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelLevel">
+Level
+</label>
+<input 
+maxlength="2"
+class="centreNumber white" 
+type="text" 
+divId= "npcLevel"
+value="${foundNPC.level}">
+</h3><hr>`;
 
-<hr>`;
+levelContainer.innerHTML = levelContent;
+Ref.Left.appendChild(levelContainer);
+
+levelContainer.addEventListener('click', function() {
+levelContainer.querySelector('.centreNumber').focus();
+levelContainer.querySelector('.centreNumber').select();
+});
+
+const hitPointsCont = document.createElement('div');
+
+let hitPoints = 
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelHitPoints">
+Hit Points
+</label>
+<input 
+maxlength="3"
+class="centreNumber white" 
+type="text" 
+divId= "npcHitPoints"
+value="${foundNPC.hitPoints}">
+</h3>`;
+
+hitPointsCont.innerHTML = hitPoints;
+Ref.Left.appendChild(hitPointsCont);
+
+hitPointsCont.addEventListener('click', function() {
+hitPointsCont.querySelector('.centreNumber').focus();
+hitPointsCont.querySelector('.centreNumber').select();
+});
+
+const attackBonusCont = document.createElement('div');
+
+let attackBonus = 
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelAttackBonus">
+Attack Bonus 
+</label>
+<input 
+maxlength="3"
+class="centreNumber white" 
+type="text" 
+divId= "npcAttackBonus"
+value="${foundNPC.attackBonus}">
+</h3>`;
+
+attackBonus += `<hr>`;
+
+attackBonusCont.innerHTML = attackBonus;
+Ref.Left.appendChild(attackBonusCont);
+
+attackBonusCont.addEventListener('click', function() {
+attackBonusCont.querySelector('.centreNumber').focus();
+attackBonusCont.querySelector('.centreNumber').select();
+});
 
 }
 
@@ -464,250 +554,343 @@ container.id = 'npcInfo'
 
 if (foundNPC.monsterTemplate){
 
-  npcContent += `<h3>
+npcContent += `<h3>
 
-  <span 
-  class="expandable hotpink"  
-  data-content-type="rule" 
-  divId="Monster Damage">
-  ATTACKS:
-  </span>
-  ${foundNPC.attacks}
-  <br>
+<span 
+class="expandable hotpink"  
+data-content-type="rule" 
+divId="Monster Damage">
+ATTACKS:
+</span>
+${foundNPC.attacks}
+<br>
 
-  <span
-  class="expandable hotpink"
-  data-content-type="rule"
-  divId="Monster Damage">
-  DAMAGE:
-  </span>
-  ${foundNPC.damage}
-  <br>
+<span
+class="expandable hotpink"
+data-content-type="rule"
+divId="Monster Damage">
+DAMAGE:
+</span>
+${foundNPC.damage}
+<br>
 
-  <span class="expandable hotpink"
-  data-content-type="rule"
-  divId="Monster Armour Class">
-  ARMOUR CLASS:
-  </span>
-  ${foundNPC.AC}
-  <br>
+<span class="expandable hotpink"
+data-content-type="rule"
+divId="Monster Armour Class">
+ARMOUR CLASS:
+</span>
+${foundNPC.AC}
+<br>
 
-  <span class="expandable hotpink"
-  data-content-type="rule"
-  divId="Monster Movement">
-  MOVEMENT:
-  </span>
-  ${foundNPC.movement}
-  <br>
-  
-  <span class="expandable hotpink"
-  data-content-type="rule" 
-  divId="Monster XP">
-  XP:
-  </span>
-  ${foundNPC.XP}
-  <br>
-    
-  </h3>`;
+<span class="expandable hotpink"
+data-content-type="rule"
+divId="Monster Movement">
+MOVEMENT:
+</span>
+${foundNPC.movement}
+<br>
+
+<span class="expandable hotpink"
+data-content-type="rule" 
+divId="Monster XP">
+XP:
+</span>
+${foundNPC.XP}
+<br>
+
+</h3>`;
 
 }
 
+const statNames = {
+"STR": "Strength",
+"DEX": "Dexterity",
+"INT": "Intelligence",
+"WIS": "Wisdom",
+"CON": "Constitution",
+"CHA": "Charisma"
+};
 
-
-if (foundNPC.str) {
-
+["STR", "DEX", "INT", "WIS", "CON", "CHA"].forEach(stat => {
+if (foundNPC[stat.toLowerCase()]) {
 const statContainer = document.createElement('div');
 statContainer.classList.add('input-container');
 
-const statNames = {
-  "STR": "Strength",
-  "DEX": "Dexterity",
-  "INT": "Intelligence",
-  "WIS": "Wisdom",
-  "CON": "Constitution",
-  "CHA": "Charisma"
-};
-
 let statBlock = `<h2>`;
-["STR", "DEX", "INT", "WIS", "CON", "CHA"].forEach(stat => {
-  
-  statBlock += 
 
-  `<label class="expandable teal" data-content-type="rule" divId="${statNames[stat]}">
-  ${stat}: 
-  </label>
-
-  <input class="centreStat" type="text" value="${foundNPC[stat.toLowerCase()]}">
-  
-  (${foundNPC[`${stat.toLowerCase()}Mod`]})
-  
-  <br>`;
-
-});
+statBlock +=
+`<label class="expandable teal" data-content-type="rule" divId="${statNames[stat]}">
+${stat}: 
+</label>
+<input 
+maxlength="2"
+class="centreStat white" 
+type="text" 
+divId= "npc${stat}"
+value="${foundNPC[stat.toLowerCase()]}">
+(${foundNPC[`${stat.toLowerCase()}Mod`]})
+<br>`;
 
 statBlock += `</h2>`;
 
 statContainer.innerHTML = statBlock;
-target.appendChild(statContainer);
+Ref.Left.appendChild(statContainer);
+
+statContainer.addEventListener('click', function() {
+statContainer.querySelector('.centreStat').focus();
+statContainer.querySelector('.centreStat').select();
+});
+
 
 }
+});
 
 if (foundNPC.Skills){
 
-  npcContent +=
-  `<hr><h3>
-  <span class="expandable cyan" 
-   data-content-type="rule"
+const skillTypeContainer = document.createElement('div');
+skillTypeContainer.classList.add('no-hover');
 
-   divId="${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}">
-          ${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}:</span> <br>` +
+let skillsType = 
+`<hr><h3><span class="expandable cyan" data-content-type="rule"
+divId="${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}">
+${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}:</span> <br></h3>`
 
-  // Skills common to multiple classes
-  `${foundNPC.Skills.removeTraps ? `<span class="orange">Remove Traps</span> ${foundNPC.Skills.removeTraps}<br>` : ''}` +
-  `${foundNPC.Skills.pickPockets ? `<span class="orange">Pick Pockets</span> ${foundNPC.Skills.pickPockets}<br>` : ''}` +
-  `${foundNPC.Skills.moveSilently ? `<span class="orange">Move Silently</span> ${foundNPC.Skills.moveSilently}<br>` : ''}` +
-  `${foundNPC.Skills.climbWalls ? `<span class="orange">Climb Walls</span> ${foundNPC.Skills.climbWalls}<br>` : ''}` +
-  `${foundNPC.Skills.hide ? `<span class="orange">Hide</span> ${foundNPC.Skills.hide}<br>` : ''}` +
-  `${foundNPC.Skills.listen ? `<span class="orange">Listen</span> ${foundNPC.Skills.listen}<br>` : ''}` +
-  `${foundNPC.Skills.poison ? `<span class="orange">Poison</span> ${foundNPC.Skills.poison}<br>` : ''}` +
-  `${foundNPC.Skills.tracking ? `<span class="orange">Tracking</span> ${foundNPC.Skills.tracking}<br>` : ''}`
+skillTypeContainer.innerHTML = skillsType;
+Ref.Left.appendChild(skillTypeContainer);
+
+const skillNames = {
+  "removeTraps": "Remove Traps",
+  "pickPockets": "Pick Pockets",
+  "moveSilently": "Move Silently",
+  "climbWalls": "Climb Walls",
+  "hide": "Hide",
+  "listen": "Listen",
+  "poison": "Poison",
+  "tracking": "Tracking"
+  };
+  
+["removeTraps", "pickPockets", "moveSilently", "climbWalls", "hide", "listen", "poison", "tracking"].forEach(skill => {
+if (foundNPC.Skills[skill]) {
+const skillContainer = document.createElement('div');
+skillContainer.classList.add('input-container');
+
+let skillBlock = `<h3>`;
+
+skillBlock +=
+`<label class="expandable orange" data-content-type="rule" divId="${skillNames[skill]}">
+${skillNames[skill]}
+</label>
+<input 
+maxlength="2"
+class="centreNumber white" 
+type="text" 
+divId= "npc${skill}"
+value="${foundNPC.Skills[skill]}">
+<br>`;
+
+skillBlock += `</h3>`;
+
+skillContainer.innerHTML = skillBlock;
+Ref.Left.appendChild(skillContainer);
+
+skillContainer.addEventListener('click', function() {
+skillContainer.querySelector('.centreNumber').focus();
+skillContainer.querySelector('.centreNumber').select();
+});
+}
+});
 
 // Cleric-specific skills
 if(foundNPC.class === 'Cleric'){
 
-npcContent+= 
-
-`${foundNPC.Skills.Skeleton && foundNPC.Skills.Skeleton === 'Damaged'? `<span class="orange">Skeleton</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Skeleton && foundNPC.Skills.Skeleton !== 'Damaged' && foundNPC.Skills.Skeleton !== 'No' ? `<span class="orange">Skeleton</span> ${foundNPC.Skills.Skeleton}<br>` :
-''}` +
-
-`${foundNPC.Skills.Zombie && foundNPC.Skills.Zombie === 'Damaged'? `<span class="orange">Zombie</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Zombie && foundNPC.Skills.Zombie !== 'Damaged' && foundNPC.Skills.Zombie !== 'No' ? `<span class="orange">Zombie</span> ${foundNPC.Skills.Zombie}<br>` :
-''}` +
-
-`${foundNPC.Skills.Ghoul && foundNPC.Skills.Ghoul === 'Damaged'? `<span class="orange">Ghoul</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Ghoul && foundNPC.Skills.Ghoul !== 'Damaged' && foundNPC.Skills.Ghoul !== 'No' ? `<span class="orange">Ghoul</span> ${foundNPC.Skills.Ghoul}<br>` :
-''}` +
-
-`${foundNPC.Skills.Wight && foundNPC.Skills.Wight === 'Damaged'? `<span class="orange">Wight</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Wight && foundNPC.Skills.Wight !== 'Damaged' && foundNPC.Skills.Wight !== 'No' ? `<span class="orange">Wight</span> ${foundNPC.Skills.Wight}<br>` :
-''}` +
-
-`${foundNPC.Skills.Wraith && foundNPC.Skills.Wraith === 'Damaged'? `<span class="orange">Wraith</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Wraith && foundNPC.Skills.Wraith !== 'Damaged' && foundNPC.Skills.Wraith !== 'No' ? `<span class="orange">Wraith</span> ${foundNPC.Skills.Wraith}<br>` :
-''}` +
-
-`${foundNPC.Skills.Mummy && foundNPC.Skills.Mummy === 'Damaged'? `<span class="orange">Mummy</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Mummy && foundNPC.Skills.Mummy !== 'Damaged' && foundNPC.Skills.Mummy !== 'No' ? `<span class="orange">Mummy</span> ${foundNPC.Skills.Mummy}<br>` :
-''}` +
-
-`${foundNPC.Skills.Spectre && foundNPC.Skills.Spectre === 'Damaged'? `<span class="orange">Spectre</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Spectre && foundNPC.Skills.Spectre !== 'Damaged' && foundNPC.Skills.Spectre !== 'No' ? `<span class="orange">Spectre</span> ${foundNPC.Skills.Spectre}<br>` :
-''}` +
-
-`${foundNPC.Skills.Vampire && foundNPC.Skills.Vampire === 'Damaged'? `<span class="orange">Vampire</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Vampire && foundNPC.Skills.Vampire !== 'Damaged' && foundNPC.Skills.Vampire !== 'No' ? `<span class="orange">Vampire</span> ${foundNPC.Skills.Vampire}<br>` :
-''}` +
-
-`${foundNPC.Skills.Ghost && foundNPC.Skills.Ghost === 'Damaged'? `<span class="orange">Ghost</span> Takes ${foundNPC.level}d8 Damage </span><br>` : 
-foundNPC.Skills.Ghost && foundNPC.Skills.Ghost !== 'Damaged' && foundNPC.Skills.Ghost !== 'No' ? `<span class="orange">Ghost</span> ${foundNPC.Skills.Ghost}<br>` :
-''}` 
-
-} 
-
-npcContent+= `</h3>`;
-
+  ["Skeleton", "Zombie", "Ghoul", "Wight", "Wraith", "Mummy", "Spectre", "Vampire", "Ghost"].forEach(creature => {
+    
+    if (foundNPC.Skills[creature] !== 'No') {
+    
+    const turnContainer = document.createElement('div');
+    turnContainer.classList.add('input-container');
+    
+    const turnValue = 
+    foundNPC.Skills[creature] && foundNPC.Skills[creature] === 'Damaged'? 
+    `Takes ${foundNPC.level}d8 Damage`: 
+    foundNPC.Skills[creature] && foundNPC.Skills[creature] !== 'Damaged' && foundNPC.Skills[creature] !== 'No' ? 
+    `${foundNPC.Skills[creature]}` :'';
+    
+    let turnBlock =
+    `<h3>
+    <label class="expandable orange" data-content-type="rule" divId="${creature}Label">
+    ${creature}
+    </label>
+    <input 
+    class="leftText white" 
+    type="text" 
+    divId= "npc${creature}"
+    value="${turnValue}">
+    <br>
+    </h3>`;
+    
+    turnContainer.innerHTML = turnBlock;
+    Ref.Left.appendChild(turnContainer);
+    
+    turnContainer.addEventListener('click', function() {
+    turnContainer.querySelector('.leftText').focus();
+    turnContainer.querySelector('.leftText').select();
+  });
 }
+});
+      
+}}
 
 if (foundNPC.magic){
-npcContent += `<hr><h3><span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(foundNPC.magic)))}</span></h3>`;
+
+const magicContainer = document.createElement('div');
+
+let magicContent = `<hr><h3><span class="withbreak">${Spells.getSpells(foundNPC.magic)}</span></h3>`;
+
+magicContainer.innerHTML = magicContent;
+Ref.Left.appendChild(magicContainer);
+
+magicContainer.addEventListener('click', function() {
+magicContainer.querySelector('.centreNumber').focus();
+magicContainer.querySelector('.centreNumber').select();
+});
 }
 
-if (foundNPC.savingThrows){
+const saveNamesHeaderContainer = document.createElement('div');
+saveNamesHeaderContainer.classList.add('no-hover');
 
-  npcContent +=
-  `<hr><h3>
-  <span class="expandable cyan" 
-   data-content-type="rule"
+let saveNamesHeader = 
+`<hr><h3><span class="expandable cyan" data-content-type="rule"
+divId="savingThrowsHeader">
+Saving Throws:</span><br></h3>`
 
-   divId="Saving Throws">
-          Saving Throws:</span> <br>` +
+saveNamesHeaderContainer.innerHTML = saveNamesHeader;
+Ref.Left.appendChild(saveNamesHeaderContainer);
 
-  // savingThrows common to multiple classes
-  `${foundNPC.savingThrows.deathRay ? `<span class="orange">Death Ray</span> ${foundNPC.savingThrows.deathRay}<br>` : ''}` +
-  `${foundNPC.savingThrows.magicWands ? `<span class="orange">Magic Wands</span> ${foundNPC.savingThrows.magicWands}<br>` : ''}` +
-  `${foundNPC.savingThrows.paralysisPetrify ? `<span class="orange">Paralysis & Petrify</span> ${foundNPC.savingThrows.paralysisPetrify}<br>` : ''}` +
-  `${foundNPC.savingThrows.dragonBreath ? `<span class="orange">Dragon Breath</span> ${foundNPC.savingThrows.dragonBreath}<br>` : ''}` +
-  `${foundNPC.savingThrows.spells ? `<span class="orange">Spells</span> ${foundNPC.savingThrows.spells}<br>` : ''}` 
 
-}
+const saveNames = {
+  "deathRay": "Death Ray or Poison",
+  "magicWands": "Magic Wands",
+  "paralysisPetrify": "Paralysis or Petrify",
+  "dragonBreath": "Dragon Breath",
+  "spells": "Spells",
+  };
+  
+  ["deathRay", "magicWands", "paralysisPetrify", "dragonBreath", "spells"].forEach(save => {
+  if (foundNPC.savingThrows[save]) {
+  const saveContainer = document.createElement('div');
+  
+  let saveBlock =
+  `<h3><label class="expandable orange" data-content-type="rule" divId="${saveNames[save]}">
+  ${saveNames[save]}: 
+  </label>
+  <input 
+  maxlength="2"
+  class="centreNumber white" 
+  type="text" 
+  divId= "npc${save}"
+  value="${foundNPC.savingThrows[save]}">
+  <br></h3>`;
+  
+  saveContainer.innerHTML = saveBlock;
+  Ref.Left.appendChild(saveContainer);
+  
+  saveContainer.addEventListener('click', function() {
+  saveContainer.querySelector('.centreNumber').focus();
+  saveContainer.querySelector('.centreNumber').select();
+  });
+  }});
 
 if(foundNPC.inventory){
 
-  let previousTag = '';
+//Add INVENTORY Header
+const inventoryHeader = document.createElement('div');
+inventoryHeader.classList.add('no-hover');
 
-  const inventoryItems = foundNPC.inventory.map(item => {
-    const tagToDisplay = item.Tag !== previousTag ? `<br><span class = "hotpink">${item.Tag}:</span> <br>` : '';
-    previousTag = item.Tag;
-    return `${tagToDisplay}#${item.Name}# <br>`;
-  });
+let headerContent = 
+`<hr><h3><span class="expandable cyan" data-content-type="rule"
+divId="inventoryHeader">
+Inventory:</span><br></h3>`
 
-  const formattedInventory = inventoryItems.join('');
+inventoryHeader.innerHTML = headerContent;
+Ref.Left.appendChild(inventoryHeader);
 
-  npcContent += 
-  
-  `${foundNPC.inventory.length > 0 ?`<hr><h3><span class ="cyan">Inventory:</span>` : '' }`  +
-  `<span class="withbreak">${Spells.getSpells(Monsters.getMonsters(Items.getItems(formattedInventory)))}</span>`
+//Map through Inventory.
+
+foundNPC.inventory.map(item => {
+
+const itemContainer = document.createElement('div'); 
+
+let itemContent =
+`<h3>
+<span class="centreText">
+${Items.getItems(item.Name)}
+</span>
+</h3>`
+
+itemContainer.innerHTML = itemContent;
+Ref.Left.appendChild(itemContainer);
+
+itemContainer.addEventListener('click', function() {
+//showItem
+});
+
+});
 
 }
 
 if (foundNPC.treasure) {
 
-  let treasure = foundNPC.treasure[0]
+const treasureContainer = document.createElement('div');
 
-  console.log(foundNPC.name, treasure)
-  const allEmptyOrZero = Object.values(treasure).every(value => value.length === 0 || value === 0);
+let treasure = foundNPC.treasure[0]
 
-  npcContent += 
-  
-  `${!allEmptyOrZero ? `<br><hr><span class= "hotpink"> Treasure:</span> <br>` : '' }`  +
-  
-  `${treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
-  `${treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
-  `${treasure.Electrum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
-  `${treasure.Gold ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
-  `${treasure.Platinum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
-  
-  //Loop through Gems
-  `${treasure.Gems.length > 0 ? `<span class="orange">
-  ${treasure.Gems.map(gem => `
-  ${gem.numberFound} ${gem.gemType} (${gem.type}; ${gem.baseValue} gp each)
-  `).join('<br>')}
-  </span><br>` : ''} ` +
+console.log(foundNPC.name, treasure)
+const allEmptyOrZero = Object.values(treasure).every(value => value.length === 0 || value === 0);
 
-  //Loop through Jewelry
-  `${treasure.Jewelry.length > 0 ? `<span class="teal">
-  ${treasure.Jewelry.map(Jewelry => `
-  ${Jewelry.type} ${Jewelry.jewelryType} (${Jewelry.baseValue} gp)
-  `).join('<br>')}
-  </span><br>` : ''} ` +
+let treasureContent = 
 
-  //Loop through magicItems
-  `${treasure.magicItems.length > 0 ? `<span class="expandable lime">
-  ${treasure.magicItems.map(item => `
-  ${item.name} ${item.bonus}
-  `).join('<br>')}
-  </span><br>` : ''} ` +
+`${!allEmptyOrZero ? `<br><hr><span class= "hotpink"> Treasure:</span> <br>` : '' }`  +
 
-  `</h3>`;
-  
-}
+`${treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
+`${treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
+`${treasure.Electrum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Electrum} Electrum Pieces </span> <br>` : '' }`  +
+`${treasure.Gold ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Gold} Gold Pieces </span> <br>` : '' }`  +
+`${treasure.Platinum ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Platinum} Platinum Pieces </span> <br>` : '' }`  +
 
-container.innerHTML += npcContent;
-target.appendChild(container);
+//Loop through Gems
+`${treasure.Gems.length > 0 ? `<span class="orange">
+${treasure.Gems.map(gem => `
+${gem.numberFound} ${gem.gemType} (${gem.type}; ${gem.baseValue} gp each)
+`).join('<br>')}
+</span><br>` : ''} ` +
 
-Ref.centreToolbar.style.display = 'flex';
+//Loop through Jewelry
+`${treasure.Jewelry.length > 0 ? `<span class="teal">
+${treasure.Jewelry.map(Jewelry => `
+${Jewelry.type} ${Jewelry.jewelryType} (${Jewelry.baseValue} gp)
+`).join('<br>')}
+</span><br>` : ''} ` +
 
+//Loop through magicItems
+`${treasure.magicItems.length > 0 ? `<span class="expandable lime">
+${treasure.magicItems.map(item => `
+${item.name} ${item.bonus}
+`).join('<br>')}
+</span><br>` : ''} ` ;
+
+
+treasureContent += `</h3>`;
+
+treasureContainer.innerHTML = treasureContent;
+Ref.Left.appendChild(treasureContainer);
+
+treasureContainer.addEventListener('click', function() {
+treasureContainer.querySelector('.centreNumber').focus();
+treasureContainer.querySelector('.centreNumber').select();
+});
+
+};
 
 } else {
 target.innerHTML += `NPC not found`;
@@ -718,7 +901,7 @@ addNPCSearch: function(){
 
 // Ref.npcSearch.addEventListener('input', (event) => {
 // // let searchText = event.target.value.toLowerCase();
-  
+
 // // // Call the searchAmbience function
 // // Events.searchEvents(searchText);
 // })
@@ -727,7 +910,7 @@ addNPCSearch: function(){
 // // this.searchNPC(Ref.npcSearch.value.toLowerCase());
 // // this.loadNPC(this.npcSearchArray);
 // let searchText = event.target.value.toLowerCase();
-  
+
 // // Call the searchAmbience function
 // Events.searchEvents(searchText);
 // });
@@ -737,7 +920,7 @@ addNPCSearch: function(){
 // });
 
 // Ref.monsterTemplate.addEventListener('input', (event) => {
- 
+
 // let searchText = event.target.value.toLowerCase();
 
 // // Call the searchMonster function
@@ -748,19 +931,19 @@ addNPCSearch: function(){
 },
 
 searchNPC: function(searchText) {
-  this.npcSearchArray = [];
-  
-  this.npcSearchArray = this.npcArray.filter((npc) => {
-    const npcName = npc.name.toLowerCase();
-    const npctags = npc.tags.toLowerCase();
-    const npcClass = npc.class.toLowerCase();
-    const tagsWords = npctags.split(',').map(word => word.trim());
-    
+this.npcSearchArray = [];
 
-    return npcClass.includes(searchText) || 
-           npcName.includes(searchText)  || 
-           tagsWords.some(word => word.includes(searchText))
-  });
+this.npcSearchArray = this.npcArray.filter((npc) => {
+const npcName = npc.name.toLowerCase();
+const npctags = npc.tags.toLowerCase();
+const npcClass = npc.class.toLowerCase();
+const tagsWords = npctags.split(',').map(word => word.trim());
+
+
+return npcClass.includes(searchText) || 
+npcName.includes(searchText)  || 
+tagsWords.some(word => word.includes(searchText))
+});
 
 },
 
