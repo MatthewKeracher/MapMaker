@@ -1,6 +1,6 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
-import Array from "./array.js";
+
 import Spells from "./spells.js";
 import load from "./load.js";
 

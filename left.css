@@ -11,7 +11,7 @@ height: 96vh;
 z-index:10;
 
 /* Text */  
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 color: whitesmoke;
 font-size: 1.9vh;
 line-height: 1.5; 
@@ -57,7 +57,7 @@ margin: 0vh;
 /* Text */
 font-size: 2.2vh;
 color: hotpink;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 font-weight: bold;
 text-align: left;
 line-height: 1.5;
@@ -79,7 +79,7 @@ margin: 0vh;
 
 /* Text */
 font-size: 2.2vh;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 line-height: 1.5;
 text-align: left;
 font-weight: bold;

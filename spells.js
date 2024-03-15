@@ -1,36 +1,13 @@
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
-import Array from "./array.js";
+
 import Items from "./items.js";
 import editor from "./editor.js";
 import load from "./load.js";
 
 const Spells = {
 
-spellsArray: [],
 searchArray: [],
-
-async loadSpellsArray() {
-    try {
-        const response = await fetch('spells.json'); // Adjust the path if needed
-        const rawData = await response.json();
-
-        // Store the raw data if needed
-        this.rawSpellsArray = rawData;
-
-        // Extract values and assign to load.Data.spells
-        const noKeys = Array.extractValues(rawData);
-        load.Data.spells = noKeys;
-
-        // Uncomment the following line if you want to log the extracted spellsArray
-        // console.log(load.Data.spells);
-
-        return load.Data.spells;
-    } catch (error) {
-        console.error('Error loading spells array:', error);
-        return [];
-    }
-}, 
 
 //Add to Storyteller
 

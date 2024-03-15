@@ -1,6 +1,6 @@
 // Import the necessary module
 import editor from "./editor.js";
-import Array from "./array.js";
+
 import Ref from "./ref.js";
 import Items from "./items.js";
 import Monsters from "./monsters.js";
@@ -8,6 +8,7 @@ import Spells from "./spells.js";
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 import NPCbuild from "./classes.js";
+import load from "./load.js";
 
 
 
@@ -25,7 +26,7 @@ uniqueNames: [],
 loadAndBuild: async function(fileContent) {
 try {
 // Wait for the handleFileLoad to complete
-await Array.handleFileLoad(fileContent);
+await load.handleFileLoad(fileContent);
 
 // Now you can call buildNPC safely
 await this.buildNPC();
@@ -38,11 +39,11 @@ buildNPC: function() {
 
 //console.log('calling buildNPC()')
 
-const npcInstances = NPCs.npcArray.map(npcData => new NPCbuild(npcData));
+const npcInstances = load.Data.npcs.map(npcData => new NPCbuild(npcData));
 
 // Now npcInstances is an array of NPC objects with the data from npcArray
 // You can store or use these instances as needed.
-NPCs.npcArray = npcInstances;
+load.Data.npcs = npcInstances;
 
 // For example, you can log the properties of each NPC instance
 //npcInstances.forEach(npc => console.log(npc));
@@ -51,7 +52,7 @@ NPCs.npcArray = npcInstances;
 
 loadNPC: function(NPCArray) {
 
-Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
+Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 // Ref.Centre.style.display = 'block';
 
@@ -62,10 +63,10 @@ Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
 // this.uniqueNames = [];
 
 // const currentLocation = Ref.locationLabel.textContent;
-// const subLocations = Events.eventsArray.filter(event => event.target === "Location" && event.location === currentLocation)
+// const subLocations = load.Data.events.filter(event => event.target === "Location" && event.location === currentLocation)
 
 // // Filter eventsArray based on currentLocation
-// const sortEvents = Events.eventsArray.filter(event => {
+// const sortEvents = load.Data.events.filter(event => {
 // if (event.target === 'NPC' && event.active === 1) {
 // const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
 // return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.name));
@@ -286,7 +287,7 @@ clearForm: function(form){
 getNPCs(subLocation, npcEvents) {
 const presentNPCsSet = new Set();
 
-for (const npc of NPCs.npcArray) {
+for (const npc of load.Data.npcs) {
 for (const event of npcEvents) {
 
 const eventNpcList = event.npc.split(',').map(item => item.trim());
@@ -381,7 +382,7 @@ return story;
 addNPCInfo(npcName, target) {
 
 const findNPC = npcName.replace(/-/g, ' ');
-const foundNPC = NPCs.npcArray.find(npc => npc.name === findNPC);
+const foundNPC = load.Data.npcs.find(npc => npc.name === findNPC);
 
 if (foundNPC) {
 
@@ -401,6 +402,7 @@ const nameContainer = document.createElement('div');
 let nameContent =  
 `<h2><input 
 class="centreName orange" 
+style="font-family:'SoutaneBlack'"
 type="text" 
 divId="npcName"
 value="${foundNPC.name}"></h2><hr>`;
@@ -625,6 +627,7 @@ ${stat}:
 <input 
 maxlength="2"
 class="centreStat white" 
+style="font-family:'SoutaneBlack'"
 type="text" 
 divId= "npc${stat}"
 value="${foundNPC[stat.toLowerCase()]}">
@@ -743,17 +746,37 @@ if(foundNPC.class === 'Cleric'){
 
 if (foundNPC.magic){
 
-const magicContainer = document.createElement('div');
+const magicHeaderContainer = document.createElement('div');
+magicHeaderContainer.classList.add('no-hover');
 
-let magicContent = `<hr><h3><span class="withbreak">${Spells.getSpells(foundNPC.magic)}</span></h3>`;
+let magicHeader = `<hr><h3>`;
 
-magicContainer.innerHTML = magicContent;
-Ref.Left.appendChild(magicContainer);
+magicHeader += `${foundNPC.class === 'Cleric' ? `<span class="expandable cyan" data-content-type="rule" divId="Orsons">Orsons:</span>`:
+`<span class="expandable cyan" data-content-type="rule" divId="Spellcasting">Spells:</span>`}<br>`;
 
-magicContainer.addEventListener('click', function() {
-magicContainer.querySelector('.centreNumber').focus();
-magicContainer.querySelector('.centreNumber').select();
-});
+magicHeader += `</h3>`;
+
+magicHeaderContainer.innerHTML = magicHeader;
+Ref.Left.appendChild(magicHeaderContainer);
+
+foundNPC.magic.forEach(spell => {
+  const spellContainer = document.createElement('div');
+  console.log(spell)
+  
+  let spellBlock =
+  `<h3><label class="expandable orange" data-content-type="rule" divId="${spell}">
+  ${spell} 
+  </label>
+  <br></h3>`;
+  
+  spellContainer.innerHTML = spellBlock;
+  Ref.Left.appendChild(spellContainer);
+  
+  spellContainer.addEventListener('click', function() {
+  //something happens when you click on spell, showSpell?
+  });
+  });
+
 }
 
 const saveNamesHeaderContainer = document.createElement('div');
@@ -891,6 +914,8 @@ treasureContainer.querySelector('.centreNumber').select();
 });
 
 };
+
+Storyteller.showFloatingExpandable()
 
 } else {
 target.innerHTML += `NPC not found`;

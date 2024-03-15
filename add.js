@@ -1,4 +1,5 @@
-import Array from "./array.js";
+import load from "./load.js";
+import map from "./map.js";
 
 const Add = {
 
@@ -85,13 +86,13 @@ location.style.width = width + 'px';
 location.style.height = height + 'px';
 
     // Prompt the user for input to set the div ID
-    const divId = prompt('What is the *unique* name of this location?');
-    location.id = divId; // Set the ID based on user input 
+    const name = prompt('What is the *unique* name of this location?');
+    location.name = name; // Set the ID based on user input 
 
     // Create a label element for the div ID
     var labelElement = document.createElement('div');
     labelElement.className = 'div-id-label';
-    labelElement.textContent = divId;
+    labelElement.textContent = name;
        
 
     // Append the label to the location -switch around?
@@ -102,14 +103,13 @@ const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(location,firstChild);
 
 //Add Events to Divs
-Array.addLocationEvents();
+load.addLocationEvents();
 
 // Create an object with the location information
-const locationInfo = Array.addNewLocation(location);
+const locationInfo = map.addNewLocation(location);
 
-// Add the locationInfo to the locationArray
-Array.locationArray.push(locationInfo);
-//console.log("Adding new entry: " + JSON.stringify(Array.locationArray, null, 2));
+// Add the locationInfo to the Data.locations
+load.Data.locations.push(locationInfo);
 
 this.isDragging = false;
 this.previewDiv.remove();

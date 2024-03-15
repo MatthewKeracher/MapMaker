@@ -79,6 +79,45 @@ decreaseOpacity() {
 },
 
 
+//for removing keys from .json objects
+
+extractValues(inputObject) {
+const valuesArray = [];
+
+for (const key in inputObject) {
+if (Object.hasOwnProperty.call(inputObject, key)) {
+const value = inputObject[key];
+valuesArray.push(value);
+}
+}
+
+return valuesArray;
+},
+
+//For Saving...
+
+addNewLocation(location) {
+const rect = location.getBoundingClientRect();
+const left = parseFloat(location.style.left);
+const top = parseFloat(location.style.top);
+const width = parseFloat(location.style.width);
+const height = parseFloat(location.style.height);
+const name = location.id;
+const description = "";
+const tags = ""
+
+return {
+left,
+top,
+width,
+height,
+name,
+tags,
+description,
+};
+},
+
+
 
 };
 

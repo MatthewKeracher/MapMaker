@@ -11,7 +11,7 @@ height: 96vh;
 z-index:10;
 
 /* Text */  
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: 'Century Gothic';
 color: whitesmoke;
 font-size: 1.9vh;
 line-height: 1.5; 
@@ -62,7 +62,7 @@ margin: 1vh;
 /* Text */
 font-size: 2vh;
 color: rgba(15, 158, 15, 0.598);
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 font-weight: bold;
 
 /* Appearance */
@@ -83,7 +83,7 @@ margin: 0vh;
 /* Text */
 font-size: 3vh;
 color: cyan;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: 'SoutaneBlack';
 font-weight: bold;
 
 /* Appearance */
@@ -113,7 +113,7 @@ margin: 0vh;
 /* Text */
 font-size: 2.2vh;
 color: rgb(11, 201, 201);
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 font-weight: bold;
 
 /* Appearance */
@@ -144,7 +144,7 @@ margin: 1vh;
 /* Text */
 font-size: 2.2vh;
 color: rgb(11, 201, 201);
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 font-weight: bold;
 text-align: right;
 
@@ -181,7 +181,7 @@ margin: 0vh;
 /* Text */
 font-size: 2.2vh;
 color: hotpink;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 font-weight: bold;
 text-align: left;
 line-height: 1.5;
@@ -212,7 +212,7 @@ margin: 0vh;
 /* Text */
 font-size: 2.2vh;
 color: whitesmoke;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 font-weight: bold;
 text-align: left;
 line-height: 1.5;
@@ -229,14 +229,14 @@ border-radius: 0;
 .centreText {
 
 /* Position */
-height: 77vh;
+height: 84vh;
 width: 31vw;
 margin: 0vh;
 
 /* Text */
-font-size: 2vh;
+font-size: 2.2vh;
 color: whitesmoke;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 line-height: 1.5;
 
 /* Appearance */
@@ -256,7 +256,7 @@ margin: 0vh;
 
 /* Text */
 font-size: 2.2vh;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 line-height: 1.5;
 text-align: left;
 font-weight: bold;
@@ -280,7 +280,7 @@ margin: 1vh;
 
 /* Text */
 font-size: 3vh;
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 line-height: 1.5;
 text-align: center;
 font-weight: bold;

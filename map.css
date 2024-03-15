@@ -47,6 +47,7 @@
                     }      
                         .div-id-label{
                         position: absolute;
+                        font-family: 'SoutaneBlack';
                         color: black;
                         font-weight: bolder;
                         left: 50%;

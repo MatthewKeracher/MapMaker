@@ -1,6 +1,7 @@
-import Array from "./array.js";
+
 import Events from "./events.js";
 import Monsters from "./monsters.js";
+import load from "./load.js";
 import NPCs from "./npcs.js";
 import Items from "./items.js";
 import Spells from "./spells.js";
@@ -17,8 +18,8 @@ async changeContent(locationDiv) {
 let Story = ``
 
 const locName = locationDiv.id;
-const locObj = Array.locationArray.find(entry => entry.divId === locName);
 
+const locObj = load.Data.locations.find(entry => entry.name === locName);
 Ref.locationLabel.textContent = locName;
 //Ref.editLocationName.value   = locName;
 
@@ -37,6 +38,7 @@ const withItems = await Items.getItems(withSpells);
 
 const finalStory = withItems;
 
+
 Story += `
 <span class="withbreak">${finalStory}</span>
 `;
@@ -51,9 +53,9 @@ Ref.Storyteller.innerHTML = Story;
 //Ref.editLocationTags.value = locObj.tags;
 
   if(editor.editPage === 2){
-    Events.loadEventsList(Events.eventsArray, Ref.Centre);
+    Events.loadEventsList(load.Data.events, Ref.Centre);
   }else if (editor.editPage === 3){
-    NPCs.loadNPC(NPCs.npcArray)
+    NPCs.loadNPC(load.Data.npcs)
   }
 
 //Tell expandable Divs what to show.
@@ -113,7 +115,7 @@ addLocationItems(locationObject){
   let locationItems = '';
 
     // Filter itemsArray based on location Name and Tags
-    const filteredItems = Items.itemsArray.filter(item => {
+    const filteredItems = load.Data.items.filter(item => {
       const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
   
       // Check if the item matches the criteria
@@ -196,13 +198,13 @@ switch (contentType) {
     NPCs.addNPCInfo(contentId, target); // Handle NPCs
     break;
     case 'monster':
-    Monsters.addMonsterInfo(contentId, target); // Handle monsters
+    editor.addInfo(contentId, target);
     break;
     case 'item':
-    Items.addIteminfo(contentId, target); // Handle items
+    editor.addInfo(contentId, target);
     break;
     case 'spell':
-    editor.addInfo(contentId, target); // Handle spells
+    editor.addInfo(contentId, target);
     break;
     case 'misc':
     this.addMiscInfo(contentId, target);
@@ -291,8 +293,8 @@ const expandableElements = [...expandableElementsLeft, ...expandableElementsCent
       const rect = event.target.getBoundingClientRect();
       floatingBox.style.position = 'absolute';
       floatingBox.style.zIndex = 100;
-      floatingBox.style.top = rect.bottom + 'px'; // Adjust the top position as needed
-      floatingBox.style.left = rect.left + 'px';
+      floatingBox.style.top = 10 + 'px'; // Adjust the top position as needed
+      floatingBox.style.right = rect.left + 'px';
 
       // Append the floating box to the document body
       document.body.appendChild(floatingBox);
@@ -320,6 +322,7 @@ const expandableElements = [...expandableElementsLeft, ...expandableElementsCent
         break;
         case 'rule':
         this.addRulesInfo(contentId, floatingBox); //Handle Rule
+        console.lpg('rule')
         break;
         default:
         console.log('Unknown content type');

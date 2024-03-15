@@ -36,7 +36,7 @@ font-size: 2vh;
 padding: 1vh 1vw; 
 margin: 0.5vh 0; /* Add margin to control spacing */
 border: 0.1vh solid black; 
-font-family: monospace, 'Trebuchet MS', sans-serif;
+font-family: monospace;
 transition: background-color 0.3s; 
 }
 

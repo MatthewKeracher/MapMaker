@@ -1,10 +1,23 @@
 /* Everything to do with text classes. */
+
+@font-face {
+    font-family: "CenturyGothic";
+    src: url("CenturyGothic.ttf");
+}
+
+@font-face {
+    font-family: "SoutaneBlack";
+    src: url("SoutaneBlack.ttf");
+}
+
 h2 {
+    font-family: 'SoutaneBlack';
     margin-bottom: 0;
     margin-top: 0;
     }    
 
 h3 {
+    font-family: 'SoutaneBlack';
     margin-bottom: 0; /* Set margin-bottom to 0 or adjust as needed */
     }
     

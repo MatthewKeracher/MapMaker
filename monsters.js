@@ -1,7 +1,7 @@
 // Import the necessary module
 import editor from "./editor.js";
 import load from "./load.js";
-import Array from "./array.js";
+
 import Ref from "./ref.js";
 import Items from "./items.js";
 import Spells from "./spells.js";
@@ -11,13 +11,12 @@ import NPCs from "./npcs.js";
 
 const Monsters = {
 
-monstersArray: load.Data.monsters,  
-
+ 
 searchMonster: function(searchText) {
   this.searchArray = [];
   //console.log('Searching for Events including: ' + searchText)
   
-  this.searchArray = Monsters.monstersArray.filter((e) => {
+  this.searchArray = load.Data.monsters.filter((e) => {
   const type = e.type.toLowerCase();
   const name = e.name.toLowerCase();
   
@@ -32,7 +31,7 @@ searchMonster: function(searchText) {
 getMonsters(locationText) {
 const asteriskBrackets = /\*([^*]+)\*/g;
 return locationText.replace(asteriskBrackets, (match, targetText) => {
-const monster = this.monstersArray.find(monster => monster.name.toLowerCase() === targetText.toLowerCase());
+const monster = load.Data.monsters.find(monster => monster.name.toLowerCase() === targetText.toLowerCase());
 if (monster) {
 return `<span class="expandable monster" data-content-type="monster" divId="${targetText}">${targetText}</span>`;
 } else {
@@ -55,7 +54,7 @@ addMonsterFormEvents: function(){
 // //Add MonsterList show on Click
 // Ref.monsterSearch.addEventListener('click', () => {
 // //Ref.Centre.style.display = 'block';
-// editor.loadList(this.monstersArray, "All Monsters")
+// editor.loadList(load.Data.monsters, "All Monsters")
 // });
 
 },
@@ -64,7 +63,7 @@ extraMonsters(contentId) {
 const asteriskBrackets = /\*([^*]+)\*/g;
 
 return contentId.replace(asteriskBrackets, (match, targetText) => {
-const monster = this.monstersArray.find(monster => monster.name.toLowerCase() === targetText.toLowerCase());
+const monster = load.Data.monsters.find(monster => monster.name.toLowerCase() === targetText.toLowerCase());
 if (monster) {
 return this.addMonsterInfo(targetText);
 } else {
@@ -74,53 +73,11 @@ return match;
 });
 },
 
-addMonsterInfo(monsterName, target) {
-
-const monster = this.monstersArray.find(monster => monster.name === monsterName)
-
-const monsterStats = [
-
-`<h1><span class="monster">${monster.name}</span></h1>`,
-`<h3><span class = "cyan">${monster.type}.</span><hr>`,
-
-`${monster.noApp ?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Number Appearing"># App:</span>        ${monster.noApp}          <br>` : ''}`,
-`${monster.subType?        `<span class="expandable hotpink" data-content-type="rule" divId="Monster Save As">Save As:</span>     ${monster.subType}         <br>` : ''}`,
-`${monster.morale ?       `<span class="expandable hotpink" data-content-type="rule" divId="Monster Morale">Morale:</span>      ${monster.morale}         <br>` : ''}`,
-`${monster.movement ?     `<span class="expandable hotpink" data-content-type="rule" divId="Monster Movement">Movement:</span>  ${monster.movement}       <br>` : ''} <hr>`,
-
-`${monster.ac ?           `<span class="expandable orange"  data-content-type="rule" divId="Monster Armour Class">Armour Class:</span>    ${monster.ac}              <br>` : ''}`,
-`${monster.hd ?           `<span class="expandable orange"  data-content-type="rule" divId="Monster Hit Dice">Hit Dice:</span>        ${monster.hd}              <br>` : ''}<hr>`,
-
-`${monster.attacks ?      `<span class="expandable lime"    data-content-type="rule" divId="Monster Attacks">Attacks:</span>    ${monster.attacks}        <br>` : ''}`,
-`${monster.damage ?       `<span class="expandable lime"    data-content-type="rule" divId="Monster Damage">Damage:</span>      ${monster.damage}             ` : ''} <hr>`,
-
-`${monster.treasure ?     `<span class="expandable spell"    data-content-type="rule" divId="Monster Treasure">Treasure:</span>    ${monster.treasure}       <br>` : ''}`,
-`${monster.xp ?           `<span class="expandable spell"    data-content-type="rule" divId="Monster XP">Experience Points:</span> ${monster.xp}                 ` : ''} <hr>`,
-
-`${monster.special ?      `<span class="expandable monster" data-content-type="rule" divId="Monster Special">Special:</span>        ${monster.special}        <hr>` : ''} `,
-
-`${monster.description ?  `</h3><span class = "withbreak">${Spells.getSpells(this.getMonsters(Items.getItems(monster.description)))}<span>`: ''}`,
-
-];
-
-const formattedMonster = monsterStats
-.filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
-.join(" ");
-
-// Set the formatted content in the target element
-target.innerHTML = formattedMonster;
-
-//return formattedMonster;
-
-},
-
-
-
 
 saveMonster: function() {
 
 // Check if an NPC with the same name already exists
-const index = this.monstersArray.findIndex(monster => monster.id === parseInt(Ref.monsterId.value) && monster.name === Ref.monsterName.value);
+const index = load.Data.monsters.findIndex(monster => monster.id === parseInt(Ref.monsterId.value) && monster.name === Ref.monsterName.value);
 
 // Get the monster name from the form
 const monsterName = Ref.monsterName.value;
@@ -145,13 +102,13 @@ description: Ref.monsterDescription.value
 
 if (index !== -1) {
 // Update the existing Monster entry
-this.monstersArray[index] = monster;
+load.Data.monsters[index] = monster;
 
 } else {
 // Add the created NPC to the npcArray
-monster.id = Array.generateUniqueId(this.monstersArray, 'entry');
+monster.id = Array.generateUniqueId(load.Data.monsters, 'entry');
 Ref.monsterId.value = monster.id
-this.monstersArray.push(monster);
+load.Data.monsters.push(monster);
 console.log('New Monster added:', monster);
 }
 

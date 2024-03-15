@@ -1,11 +1,12 @@
 import Ref from "./ref.js";
-import Array from "./array.js";
+import load from "./load.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import Monsters from "./monsters.js";
 import Items from "./items.js";
 import Events from "./events.js";
 import Spells from "./spells.js";
+import Map from "./map.js";
 
 const editor = {
 
@@ -30,17 +31,17 @@ let filteredItems;
 
 if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
 searchText = text.substring(openBraceIndex + 1, cursorPosition);
-filteredItems = Items.itemsArray.filter(item =>
+filteredItems = load.Data.items.filter(item =>
 item.Name.toLowerCase().includes(searchText.toLowerCase())
 );
 } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
 searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-filteredItems = Monsters.monstersArray.filter(monster =>
+filteredItems = load.Data.monsters.filter(monster =>
 monster.name.toLowerCase().includes(searchText.toLowerCase())
 );
 } else {
 searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
-filteredItems = Spells.spellsArray.filter(spell =>
+filteredItems = load.Data.spells.filter(spell =>
 spell.Name.toLowerCase().includes(searchText.toLowerCase())
 );
 }
@@ -98,18 +99,22 @@ target.style.display = 'block';
 
 // 0. Iterate over each property in the data object
 for (const key in data) {
-let obj = data[key];
+let obj = data[key]
+
+//Set type and subType
+const type = obj[0].type;
+const subType = obj[0].subType;
 
 // 1. Sort the items by item type alphabetically and then by Level numerically.
 obj.sort((a, b) => {
-const typeComparison = a.type.localeCompare(b.type);
+const typeComparison = a[type].localeCompare(b[type]);
 
 if (typeComparison !== 0) {
 // If classes are different, return the result of class comparison
 return typeComparison;
 } else {
 // If classes are the same, sort by Level numerically
-return a.subType - b.subType || a.name.localeCompare(b.name);
+return a[subType] - b[subType] || a.name.localeCompare(b.name);
 }
 });
 
@@ -118,19 +123,19 @@ return a.subType - b.subType || a.name.localeCompare(b.name);
 obj = obj.reduce((result, currentEntry, index, array) => {
 
 const reversedArray = array.slice(0, index).reverse();
-const lastEntryIndex = reversedArray.findIndex(entry => entry.type === currentEntry.type);
+const lastEntryIndex = reversedArray.findIndex(entry => entry[type] === currentEntry[type]);
 
-if (lastEntryIndex === -1 || currentEntry.type !== reversedArray[lastEntryIndex].type) {
+if (lastEntryIndex === -1 || currentEntry[type] !== reversedArray[lastEntryIndex][type]) {
 
-result.push({sectionHead: true, key: key, type: currentEntry.type, subType: currentEntry.subType});
+result.push({sectionHead: true, key: key, [type]: currentEntry[type], [subType]: currentEntry[subType]});
 
-if(currentEntry.subType){
+if(currentEntry[subType]){
 
-result.push({subSectionHead: true, type: currentEntry.type, subType: currentEntry.subType})};
+result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: currentEntry[subType]})};
 
-} else if (currentEntry.subType !== reversedArray[lastEntryIndex].subType) {
+} else if (currentEntry[subType] !== reversedArray[lastEntryIndex][subType]) {
 
-result.push({subSectionHead: true, type: currentEntry.type, subType: currentEntry.subType});
+result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: currentEntry[subType]});
 
 }
 
@@ -170,30 +175,31 @@ currentSubSection = 0;
 
 nameDiv.setAttribute("scope", 'section');
 nameDiv.setAttribute("id", currentSection);
+nameDiv.setAttribute('style', "display: none");
 
-let entryName = entry.type === ''? 'Misc' : entry.type;
+let entryName = entry[type] === ''? 'Misc' : entry[type];
 
 nameDiv.innerHTML = 
-`<span id = "${entryName}" class = "cyan"> 
+`<span id = "${entryName}" class = "cyan" style="font-family:'SoutaneBlack'"> 
 <hr>&nbsp;${entryName}
 </span>`;
 
-//3.2 subSection Heads --- subType 
+//3.2 subSection Heads --- subType values.
 } else if (entry.subSectionHead){
 currentSubSection++
 
 nameDiv.setAttribute("scope", 'subsection');
 nameDiv.setAttribute("id", currentSubSection);
-nameDiv.setAttribute('style', "display: none")
+nameDiv.setAttribute('style', "display: none");
 
-let entryName = entry.type === ''? 'Misc' : entry.subType;
+let entryName = entry[type] === ''? 'Misc' : entry[subType];
 
 nameDiv.innerHTML= 
-`<span id = "${entryName}" class ="hotpink">
-<hr>&nbsp; Level ${entryName}</span>`;
+`<span id = "${entryName}" class ="hotpink" style="font-family:'SoutaneBlack'">
+<hr>&nbsp; ${this.proper(subType)} ${entryName}</span>`;
 
 //3.3 subSection Entries   
-}else if (entry.type && entry.subType){
+}else if (entry[type] && entry[subType]){
 
 nameDiv.setAttribute('style', "display: none")
 
@@ -203,7 +209,7 @@ nameDiv.innerHTML =
 </span>`;
 
 //3.4 no subSection
-}else if (entry.type){
+}else if (entry[type]){
 
 nameDiv.setAttribute('style', "display: none")
 
@@ -226,20 +232,20 @@ nameDiv.innerHTML =
 
 
 nameDiv.setAttribute('key', key)
-nameDiv.setAttribute('keyShow', "true")
+nameDiv.setAttribute('keyShow', "false")
 nameDiv.setAttribute('section', currentSection)
 nameDiv.setAttribute('sectionShow', "false")
 nameDiv.setAttribute('subsection', currentSubSection)
 nameDiv.setAttribute('subsectionShow', "false")
 
 target.appendChild(nameDiv);
-this.listEvents(entry, nameDiv);
+this.listEvents(entry, nameDiv, key);
 
 }}
 
 },
 
-listEvents: function(entry, div){
+listEvents: function(entry, div, key){
 
 div.addEventListener('mouseover', function() {
 this.classList.add('highlight');
@@ -259,9 +265,13 @@ this.showHide(div);
 
 //1. showEntry
 div.addEventListener('click', () => {
+
+if(key === 'npcs'){
+NPCs.addNPCInfo(entry.name, Ref.Left);
+}else{
 const form = editor.createForm(entry)
 Ref.Left.appendChild(form);
-
+}
 });
 
 
@@ -357,53 +367,78 @@ item.setAttribute('sectionShow', "true")
 
 createForm: function (obj){
 
-    ['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker'].forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.remove();
-        }
-    });
+console.log(obj);
+
+['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker'].forEach(id => {
+const element = document.getElementById(id);
+if (element) {
+element.remove();
+}
+});
 
 Ref.Centre.innerHTML = '';
 Ref.Centre.style.display = 'block';
 Ref.Left.innerHTML = '';
 Ref.Left.style.display = 'block';
 Ref.centreToolbar.style.display = 'flex';
-    
+
 const form = document.createElement('form');
 form.id = 'editForm';
 form.classList.add('form');
 
 const excludedKeys = ['id', 'name', 'type', 'subType', 'description']; // Define keys to exclude
 
+//0. Make ID Manually
+
+const existingId = document.getElementById('centreId');
+if (existingId) {
+existingId.remove(); // Remove the existing form
+}
+
+const idArea = document.createElement('textarea');
+idArea.id = 'centreId';
+idArea.classList.add('centreId'); 
+idArea.classList.add('entry-input');
+idArea.value = obj.id || 'N/A';
+
+Ref.Centre.appendChild(idArea);
+
 //0. Make Description Manually
 
-const descArea = document.createElement('textarea');
-descArea.id = 'nameArea';
-descArea.classList.add('centreText'); 
-descArea.value = obj.description || 'insert name here';
+const descriptionText = document.createElement('textarea');
+descriptionText.id = 'backStoryText';
+descriptionText.classList.add('centreText'); 
+descriptionText.classList.add('entry-input');
+descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
 
-Ref.Centre.appendChild(descArea);
+//Attach and display.
+Ref.Centre.appendChild(descriptionText);
+Ref.Centre.style.display = 'block';
 
-setTimeout(function() {
-descArea.style.height = descArea.scrollHeight + 'px';
-}, 0);
 
 //1. Make Type Manually
+const type = obj.type
 
 const typeArea = document.createElement('textarea');
 typeArea.id = 'typeArea';
+typeArea.setAttribute('pair', type);
 typeArea.classList.add('centreType'); 
-typeArea.value = obj.type || 'none';
+typeArea.classList.add('entry-input');
+typeArea.style.fontFamily = 'SoutaneBlack';
+typeArea.value = obj[type] || 'none';
 
 Ref.Left.appendChild(typeArea);
 
 //2. Make subType Manually
+const subType = obj.subType
 
 const subTypeArea = document.createElement('textarea');
 subTypeArea.id = 'subTypeArea';
+subTypeArea.setAttribute('pair', subType);
 subTypeArea.classList.add('centreSubType'); 
-subTypeArea.value = obj.subType || 'none';
+subTypeArea.classList.add('entry-input');
+subTypeArea.style.fontFamily = 'SoutaneBlack';
+subTypeArea.value = obj[subType] || 'none';
 
 Ref.Left.appendChild(subTypeArea);
 
@@ -411,7 +446,9 @@ Ref.Left.appendChild(subTypeArea);
 
 const nameArea = document.createElement('textarea');
 nameArea.id = 'nameArea';
-nameArea.classList.add('centreName'); 
+nameArea.classList.add('centreName');
+nameArea.classList.add('entry-input');
+nameArea.style.fontFamily = 'SoutaneBlack';
 nameArea.value = obj.name || 'insert name here';
 
 Ref.Left.appendChild(nameArea);
@@ -429,69 +466,106 @@ Ref.Left.appendChild(breaker);
 
 for (const key in obj) {
 if (obj.hasOwnProperty(key) && !excludedKeys.includes(key)) { // Check if key is not excluded
-// Create a container div for each label and textarea pair
-const container = document.createElement('div');
-container.classList.add('input-container');
 
-// Create label element
-const label = document.createElement('input');
-label.value = this.proper(key);
-label.classList.add('leftLabel'); // Add a CSS class to the label
+const elementContainer = document.createElement('div');
 
-// Create textarea element
-const textarea = document.createElement('textarea');
-textarea.name = key;
-textarea.classList.add('leftText'); 
-textarea.classList.add('white'); 
-textarea.value = obj[key] || 'none';
+let elementContent =  
+`<h3>
+<label class="expandable orange entry-label" 
+data-content-type="rule" 
+divId="${[key]}">
+${this.proper(key)}
+</label>
+<input 
+class="leftText white entry-input" 
+type="text" 
+divId= "edit${obj[key]}"
+value="${obj[key]}"></h3>`;
 
-textarea.addEventListener('input', function() {
-// Calculate the height based on the scroll height of the textarea
-this.style.height = 'auto'; 
-this.style.height = this.scrollHeight + 'px';
+elementContainer.innerHTML = elementContent;
+Ref.Left.appendChild(elementContainer);
 
+elementContainer.addEventListener('click', function() {
+elementContainer.querySelector('.leftText').focus();
+elementContainer.querySelector('.leftText').select();
 });
 
-textarea.addEventListener('blur', function() {
-// Remove empty space at the end of the textarea value
-this.value = this.value.trim();
+const inputElement = elementContainer.querySelector('.entry-input');
 
-});
+// inputElement.addEventListener('blur', function() {
+//     console.log('saving...');
+//     this.saveDataEntry();
+// }.bind(this)); // Ensure `this` refers to the correct context inside the event listener
 
+// elementContainer.addEventListener('input', function() {
+// // Calculate the height based on the scroll height of the textarea
+// this.style.height = 'auto'; 
+// this.style.height = this.scrollHeight + 'px';
 
-// Append label and textarea to the container
-container.appendChild(label);
-container.appendChild(textarea);
+// });
 
-// Append container to the form
-form.appendChild(container);
+// elementContainer.addEventListener('blur', function() {
+// // Remove empty space at the end of the textarea value
+// this.value = this.value.trim();
+
+// });
 
 setTimeout(function() {
-textarea.style.height = textarea.scrollHeight + 'px';
+elementContainer.style.height = elementContainer.scrollHeight + 'px';
 }, 0);
 }
 }
-
-//0. Make ID Manually
-
-const existingId = document.getElementById('centreId');
-if (existingId) {
-existingId.remove(); // Remove the existing form
-}
-
-const idArea = document.createElement('textarea');
-idArea.id = 'centreId';
-idArea.classList.add('centreId'); 
-idArea.value = obj.id || 'N/A';
-
-Ref.Centre.appendChild(idArea);
-
 
 return form;
 
 },
 
+saveDataEntry: function() {
 
+const saveEntry = {};
+
+// get array of label divIds.
+const labelElements = document.querySelectorAll('.entry-label');
+const labels = ['id','description', 'type', 'subType', 'name'];
+
+labelElements.forEach(label => {
+    const divId = label.getAttribute('divId');
+    labels.push(divId);
+});
+
+//get array of input divIds
+const inputElements = document.querySelectorAll('.entry-input');
+const inputs = [];
+
+inputElements.forEach(input => {
+    const value = input.value;
+    inputs.push(value);
+});
+
+// Pair the contents of the labels and inputs arrays to create the saveEntry object
+for (let i = 0; i < labels.length; i++) {
+    saveEntry[labels[i]] = inputs[i];
+}
+
+//Edit saveEntry object for type and subType -- will need to change if to be user-access'
+saveEntry['type'] = document.getElementById('typeArea').getAttribute('pair');
+saveEntry['subType']= document.getElementById('subTypeArea').getAttribute('pair');
+saveEntry['id'] = parseInt(saveEntry['id']);
+
+const key = saveEntry && saveEntry['key'];
+const id = saveEntry && saveEntry['id'];
+const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
+console.log(key, id, index);
+console.log(saveEntry);
+console.log('Existing saveEntry:' + load.Data[key][index].class)
+
+load.Data[key][index] = saveEntry;
+editor.loadList(load.Data);
+load.displayLocations(load.Data.locations);
+// console.log('Updated saveEntry:');
+// console.log(load.Data[key][index]);
+
+},
 
 deleteLocation() {
 let array;
@@ -502,7 +576,7 @@ switch (this.editPage) {
 
 case 2:
 
-array = Events.eventsArray;
+array = load.Data.events;
 id = Ref.eventId.value;
 index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
@@ -520,7 +594,7 @@ break;
 
 case 3:
 
-array = NPCs.npcArray;
+array = load.Data.npcs;
 id = Ref.npcId.value;
 index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
@@ -538,7 +612,7 @@ break;
 
 case 4:
 
-array = Monsters.monstersArray;
+array = load.Data.monsters;
 id = Ref.monsterId.value;
 index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
@@ -556,7 +630,7 @@ break;
 
 case 5:
 
-array = Items.itemsArray;
+array = load.Data.items;
 id = Ref.itemId.value;
 index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
@@ -574,7 +648,7 @@ break;
 
 case 6:
 
-array = Spells.spellsArray;
+array = load.Data.spells;
 id = Ref.spellId.value;
 index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
 
@@ -593,14 +667,14 @@ break;
 default:
 // For locations.
 const divId = Ref.locationLabel.textContent;
-array = Array.locationArray;
+array = load.Data.locations;
 index = array.findIndex(entry => entry.divId === divId);
 
 if (index !== -1) {
 const confirmation = window.confirm("Are you sure you want to delete " + array[index].divId + "?");
 
 if (confirmation) {
-// Remove the entry from locationArray
+// Remove the entry from Data.locations
 array.splice(index, 1);
 
 // Remove the corresponding <div> element from the DOM
@@ -619,10 +693,10 @@ saveLocation() {
 const divId = Ref.locationLabel.textContent; // Get the divId for the location you're saving
 
 //Find correct place to save...
-const matchingEntry = Array.locationArray.find(entry => entry.divId === divId);
+const matchingEntry = load.Data.locations.find(entry => entry.divId === divId);
 
 if (matchingEntry) {
-// Update the corresponding entry in locationArray
+// Update the corresponding entry in Data.locations
 console.log(matchingEntry)
 matchingEntry.description = Ref.textLocation.value;
 matchingEntry.divId = Ref.editLocationName.value;
@@ -643,7 +717,7 @@ Storyteller.changeContent(savedLocation);
 
 // Update the new location name in npcArray!
 
-for (const npc of NPCs.npcArray) {
+for (const npc of load.Data.npcs) {
 if (npc.MorningLocation === divId) {
 npc.MorningLocation = Ref.editLocationName.value;
 }

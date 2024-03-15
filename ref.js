@@ -29,25 +29,13 @@ editLocationTags: document.getElementById('editLocationTags'),
 
 textLocation: document.getElementById('textLocation'),
 
+//Screensections...
+
 //Centre: document.getElementById('Centre'),
 expandableElements: document.querySelectorAll('.expandable'),
 Right: document.getElementById('Right'),
 Centre: document.querySelector('.Centre'),
 Left: document.querySelector('.Left'),
-
-
-//spellsForm
-// form: document.getElementById('form'),
-// search: document.getElementById('search'),
-// Id: document.getElementById('Id'),
-// name: document.getElementById('name'),
-// type: document.getElementById('type'),
-// subType: document.getElementById('subType'),
-// description: document.getElementById('description'),
-// reverse: document.getElementById('reverse'),
-// note: document.getElementById('note'),
-// range: document.getElementById('range'),
-// duration: document.getElementById('duration'),
 
 
 //eventForm:
@@ -66,42 +54,6 @@ npcCheckbox: document.getElementById('npcCheckbox'),
 eventDescription: document.getElementById('ambienceDescription'),
 
 
-//objectForm
-itemForm: document.querySelector('.itemForm'),
-itemId: document.getElementById('itemId'),
-itemSearch: document.getElementById('itemSearch'),
-itemName: document.getElementById('itemName'),
-itemType: document.getElementById('itemType'),
-itemTags: document.getElementById('itemTags'),
-itemSize: document.getElementById('itemSize'),
-itemWeight: document.getElementById('itemWeight'),
-itemCost: document.getElementById('itemCost'),
-itemDamage: document.getElementById('itemDamage'),
-itemRange: document.getElementById('itemRange'),
-itemAC: document.getElementById('itemAC'),
-itemDescription: document.getElementById('itemDescription'),
-
-//monsterForm
-monsterForm: document.querySelector('.monsterForm'),
-
-monsterId: document.getElementById('monsterId'),
-monsterSearch: document.getElementById('monsterSearch'),
-
-monsterName: document.getElementById('monsterName'),
-monsterType: document.getElementById('monsterType'),
-monsterAppearing: document.getElementById('monsterAppearing'),
-monsterMorale: document.getElementById('monsterMorale'),
-monsterMovement: document.getElementById('monsterMovement'),
-monsterAC: document.getElementById('monsterAC'),
-monsterHD: document.getElementById('monsterHD'),
-monsterHDRange: document.getElementById('monsterHDRange'),
-monsterAttacks: document.getElementById('monsterAttacks'),
-monsterDamage: document.getElementById('monsterDamage'),
-monsterSpecial: document.getElementById('monsterSpecial'),
-monsterSaveAs: document.getElementById('monsterSaveAs'),
-monsterTreasure: document.getElementById('monsterTreasure'),
-monsterXP: document.getElementById('monsterXP'),
-monsterDescription: document.getElementById('monsterDescription'),
 
 //npcForm
 npcForm: document.querySelector('.npcForm'),
@@ -142,6 +94,7 @@ saveButton: document.getElementById('saveButton'),
 fileInput: document.getElementById('fileInput'),
 
 centreToolbar: document.getElementById('centreToolbar'),
+centreSaveButton: document.getElementById('centreSaveButton'),
 
 //Export .csv
 exportData: document.getElementById('exportData'),

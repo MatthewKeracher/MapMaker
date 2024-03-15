@@ -2,7 +2,8 @@ import editor from "./editor.js";
 import Ref from "./ref.js";
 import NPCs from "./npcs.js";
 import Storyteller from "./storyteller.js";
-import Array from "./array.js";
+import load from "./load.js";
+
 import Items from "./items.js";
 
 const Events = {
@@ -22,11 +23,12 @@ loadEventListeners(){
 // -- EVENT MANAGER LISTENERS
 
 Ref.eventManager.addEventListener('input', (event) => {
+console.log('*input*')
 let searchText = event.target.value.toLowerCase();
 Ref.Centre.classList.add('showCentre');
 Ref.Left.style.display = 'none';
 this.searchEvents(searchText);
-this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
+this.loadEventsList(this.searchArray, Ref.Storyteller, 'eventsManager');
 
 //this.getEvent();
 //this.addEventInfo();
@@ -34,118 +36,121 @@ this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
 })
 
 Ref.eventManager.addEventListener('click', () => {
+console.log('*click*')
 Ref.Centre.classList.add('showCentre');
 Ref.Left.style.display = 'none';
-this.loadEventsList(this.eventsArray, Ref.Centre, 'eventsManager');
+this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
 
 })
 
-// NPC TAGS LISTENERS
+// // NPC TAGS LISTENERS
 
-Ref.npcTags.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
-Ref.Centre.classList.add('showCentre');
+// Ref.npcTags.addEventListener('input', (event) => {
+// let searchText = event.target.value.toLowerCase();
+// Ref.Centre.classList.add('showCentre');
+// // Ref.Left.style.display = 'none';
+// // Ref.Centre.style.display = 'none';
+// this.searchTags(searchText); 
+// this.showTags(this.searchArray);
+
+// })
+
+// Ref.npcTags.addEventListener('click', () => {
+// Ref.Centre.classList.add('showCentre');
 // Ref.Left.style.display = 'none';
 // Ref.Centre.style.display = 'none';
-this.searchTags(searchText); 
-this.showTags(this.searchArray);
-
-})
-
-Ref.npcTags.addEventListener('click', () => {
-Ref.Centre.classList.add('showCentre');
-Ref.Left.style.display = 'none';
-Ref.Centre.style.display = 'none';
-this.fillTagsArray();
-this.showTags(this.tagsArray);
-})
+// this.fillTagsArray();
+// this.showTags(this.tagsArray);
+// })
 
 // LOCATION TAGS LISTENERS
 
-Ref.editLocationTags.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
-Ref.Centre.classList.add('showCentre');
-Ref.Left.style.display = 'none';
-// Call the searchAmbience function
-console.log(searchText)
-this.searchTags(searchText); 
-this.showTags(this.searchArray);
+// Ref.editLocationTags.addEventListener('input', (event) => {
+// let searchText = event.target.value.toLowerCase();
+// Ref.Centre.classList.add('showCentre');
+// Ref.Left.style.display = 'none';
+// // Call the searchAmbience function
+// console.log(searchText)
+// this.searchTags(searchText); 
+// this.showTags(this.searchArray);
 
-})
+// })
 
-Ref.editLocationTags.addEventListener('click', () => {
-Ref.Centre.classList.add('showCentre');
-Ref.Left.style.display = 'none';
-this.fillTagsArray();
-this.showTags(this.tagsArray);
-})
+// Ref.editLocationTags.addEventListener('click', () => {
+// Ref.Centre.classList.add('showCentre');
+// Ref.Left.style.display = 'none';
+// this.fillTagsArray();
+// this.showTags(this.tagsArray);
+// })
 
-// EVENT TAGS LISTENERS
+// // EVENT TAGS LISTENERS
 
-Ref.eventTags.addEventListener('input', (event) => {
-  let searchText = event.target.value.toLowerCase();
-  Ref.Centre.classList.add('showCentre');
-  Ref.Left.style.display = 'none';
-  // Call the searchAmbience function
-  console.log(searchText)
-  this.searchTags(searchText); 
-  this.showTags(this.searchArray);
+// Ref.eventTags.addEventListener('input', (event) => {
+//   let searchText = event.target.value.toLowerCase();
+//   Ref.Centre.classList.add('showCentre');
+//   Ref.Left.style.display = 'none';
+//   // Call the searchAmbience function
+//   console.log(searchText)
+//   this.searchTags(searchText); 
+//   this.showTags(this.searchArray);
   
-  })
+//   })
   
-  Ref.eventTags.addEventListener('click', () => {
-  Ref.Centre.classList.add('showCentre');
-  Ref.Left.style.display = 'none';
-  this.fillTagsArray();
-  this.showTags(this.tagsArray);
-  })
+//   Ref.eventTags.addEventListener('click', () => {
+//   Ref.Centre.classList.add('showCentre');
+//   Ref.Left.style.display = 'none';
+//   this.fillTagsArray();
+//   this.showTags(this.tagsArray);
+//   })
 
-// -- EVENTFORM LISTENERS
+// // -- EVENTFORM LISTENERS
 
-Ref.eventSearch.addEventListener('click', () => {
-this.loadEventsList(this.eventsArray, Ref.Centre)
-})
+// Ref.eventSearch.addEventListener('click', () => {
+// this.loadEventsList(load.Data.events, Ref.Centre)
+// })
 
-Ref.eventLocation.addEventListener('click', () => {
-const subLocations = this.eventsArray.filter(Event => Event.target === "Location");
-const allLocations = [...Array.locationArray, ...subLocations]
+// Ref.eventLocation.addEventListener('click', () => {
+// const subLocations = load.Data.events.filter(Event => Event.target === "Location");
+// const allLocations = [...load.Data.locations, ...subLocations]
 
-this.loadLocationsList(allLocations);
-})
+// this.loadLocationsList(allLocations);
+// })
 
-Ref.eventLocation.addEventListener('input', (event) => {
-const subLocations = this.eventsArray.filter(Event => Event.target === "Location");
-const allLocations = [...Array.locationArray, ...subLocations]
+// Ref.eventLocation.addEventListener('input', (event) => {
+// const subLocations = load.Data.events.filter(Event => Event.target === "Location");
+// const allLocations = [...load.Data.locations, ...subLocations]
 
-let searchText = event.target.value.toLowerCase();
+// let searchText = event.target.value.toLowerCase();
 
-if (searchText.trim() === '') {
+// if (searchText.trim() === '') {
 
-this.loadLocationsList(allLocations);
+// this.loadLocationsList(allLocations);
 
-} else if (!/^[a-zA-Z]+$/.test(searchText)) {
-// Turn into lower case for search.
-let searchText = event.target.value.toLowerCase();
+// } else if (!/^[a-zA-Z]+$/.test(searchText)) {
+// // Turn into lower case for search.
+// let searchText = event.target.value.toLowerCase();
 
-this.searchLocations(searchText);
-this.loadLocationsList(this.searchArray);
+// this.searchLocations(searchText);
+// this.loadLocationsList(this.searchArray);
 
-} else {
-// Input box has valid content, proceed with the search.
-this.searchLocations(searchText);
-this.loadLocationsList(this.searchArray);
-}
+// } else {
+// // Input box has valid content, proceed with the search.
+// this.searchLocations(searchText);
+// this.loadLocationsList(this.searchArray);
+// }
 
-});
+// });
 
-Ref.eventNPC.addEventListener('click', () => {
-// NPCs.loadNPC(NPCs.npcArray)
-})
+// Ref.eventNPC.addEventListener('click', () => {
+// // NPCs.loadNPC(load.Data.npcs)
+// })
 
-Ref.eventNPC.addEventListener('input', (event) => {
-let searchText = event.target.value.toLowerCase();
-NPCs.searchNPC(searchText);
-})},
+// Ref.eventNPC.addEventListener('input', (event) => {
+// let searchText = event.target.value.toLowerCase();
+// NPCs.searchNPC(searchText);
+// })
+
+},
 
 addEventsSearch: function() {
   // Ref.eventSearch.addEventListener('input', (event) => {
@@ -165,7 +170,7 @@ searchEvents: function(searchText) {
   NPCs.searchNPC(searchText);
   
   for (const npc of NPCs.npcSearchArray) {
-    const filteredEvents = this.eventsArray.filter((e) => {
+    const filteredEvents = load.Data.events.filter((e) => {
       const eventNPC = e.npc.toLowerCase();
       const npcName = npc.name.toLowerCase();
       const npcTags = npc.tags.toLowerCase().split(',').map(tag => tag.trim());
@@ -175,7 +180,7 @@ searchEvents: function(searchText) {
     }
 
   // 2. Search for Events with searchText.
-  const filteredEvents = this.eventsArray.filter((e) => {
+  const filteredEvents = load.Data.events.filter((e) => {
     const group = e.group.toLowerCase();
     const name = e.name.toLowerCase();
     const npc = e.npc.toLowerCase();
@@ -198,7 +203,7 @@ searchLocations: function(searchText) {
   this.searchArray = [];
   //console.log('Searching for Locations including: ' + searchText);
 
-  const searchArray1 = Array.locationArray.filter((location) => {
+  const searchArray1 = load.Data.locations.filter((location) => {
     
     const name = location.divId.toLowerCase();
     const tags = location.tags.toLowerCase(); // Assuming tags is a comma-separated list
@@ -210,7 +215,7 @@ searchLocations: function(searchText) {
     return name.includes(lastTerm) || tags.includes(lastTerm) || tags.split(',').map(tag => tag.trim()).includes(lastTerm);
   });
 
-  const searchArray2 = Events.eventsArray.filter((event) => {
+  const searchArray2 = load.Data.events.filter((event) => {
     
     const name = event.name.toLowerCase();
     const location = event.location.toLowerCase(); // Assuming tags is a comma-separated list
@@ -251,7 +256,7 @@ searchTags: function(searchText) {
 fillTagsArray() {
 this.tagsArray = [];
 
-for (const NPC of NPCs.npcArray) {
+for (const NPC of load.Data.npcs) {
 let tags = NPC.tags || [];
 
 try{
@@ -261,7 +266,7 @@ this.tagsArray.push(...tags);
 
 } // ----
 
-for (const location of Array.locationArray) {
+for (const location of load.Data.locations) {
 let tags = location.tags || [];
 
 try{
@@ -325,30 +330,137 @@ showTags(data) {
 addEventInfo(data){
 
 //Search for Event in the Array   
-const event = this.eventsArray.find(event => event.name === data.name && event.target === data.target);
+const event = load.Data.events.find(event => event.name === data.name && event.target === data.target);
 
 if (event) {
 
-//console.log(event)
+Ref.Left.innerHTML = ''; //Clear existing content.
+Ref.Centre.innerHTML = ''; //Clear existing content.
 
-const eventInfo = [
+// 1. NAME
+const nameContainer = document.createElement('div');
 
-`<h2><span class="${event.active === 1 ? 'lime' : 'gray'}">${event.name || "None"}</h2><hr>`,
-`<h3><span class="cyan">Location: </span>${event.location || "None"} <br>`,
-`<span class="hotpink">NPC: </span>${event.npc || "None"} <br>`,
-`<span class="orange">Group: </span>${event.group || "None"} <br></h3>`,
-`<hr> ${event.description || "None"}`,
+let nameContent =  
+`<h2><input 
+class="centreName orange" 
+type="text" 
+divId="npcName"
+value="${event.name}"></h2>`;
 
-];
+nameContainer.innerHTML = nameContent;
+Ref.Centre.appendChild(nameContainer);
 
-const formattedItem = eventInfo
-.filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
-.join(" ");
+nameContainer.addEventListener('click', function() {
+nameContainer.querySelector('.leftText').focus();
+nameContainer.querySelector('.leftText').select();
+});
+
+// 2. Event Group
+const tagsContainer = document.createElement('div');
+
+let tagsContent =  
+`<h3><input 
+class="centreTag" 
+type="text" 
+divId= "npcTags"
+value="${event.group}"></h3><hr>`;
+
+tagsContainer.innerHTML = tagsContent;
+Ref.Centre.appendChild(tagsContainer);
+
+tagsContainer.addEventListener('click', function() {
+tagsContainer.querySelector('.centreTag').focus();
+tagsContainer.querySelector('.centreTag').select();
+});
+
+//3. Event Description
+const backStoryText = document.createElement('textarea');
+backStoryText.id = 'backStoryText';
+backStoryText.classList.add('centreText'); 
+backStoryText.textContent = event.description || 'Insert information about ' + event.name + ' here.';
+
+//Attach and display.
+Ref.Centre.appendChild(backStoryText);
+Ref.Centre.style.display = 'block';
+
+// 4. Event Target
+const targetContainer = document.createElement('div');
+
+let targetContent =  
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelTarget">
+Target
+</label>
+<input 
+class="leftText white" 
+type="text" 
+divId= "eventTarget"
+value="${event.target}"></h3>`;
+
+targetContainer.innerHTML = targetContent;
+Ref.Left.appendChild(targetContainer);
+
+targetContainer.addEventListener('click', function() {
+targetContainer.querySelector('.leftText').focus();
+targetContainer.querySelector('.leftText').select();
+});
+
+// 4. Event Location
+const locationContainer = document.createElement('div');
+
+let locationContent =  
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelLocation">
+Location
+</label>
+<input 
+class="leftText white" 
+type="text" 
+divId= "eventLocation"
+value="${event.location}"></h3>`;
+
+locationContainer.innerHTML = locationContent;
+Ref.Left.appendChild(locationContainer);
+
+locationContainer.addEventListener('click', function() {
+locationContainer.querySelector('.leftText').focus();
+locationContainer.querySelector('.leftText').select();
+});
+
+// 4. Event NPCs
+const npcContainer = document.createElement('div');
+
+let npcContent =  
+`<h3>
+<label class="expandable orange" 
+data-content-type="rule" 
+divId="labelNPCs">
+NPCs
+</label>
+<input 
+class="leftText white" 
+type="text" 
+divId= "eventNPCs"
+value="${event.npc}"></h3>`;
+
+npcContainer.innerHTML = npcContent;
+Ref.Left.appendChild(npcContainer);
+
+npcContainer.addEventListener('click', function() {
+npcContainer.querySelector('.leftText').focus();
+npcContainer.querySelector('.leftText').select();
+});
+
+
+// const formattedItem = eventInfo
+// .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
+// .join(" ");
 
 // Set the formatted content in the Centre element
-Ref.Left.innerHTML = formattedItem;
-
-return formattedItem;
 
 } else {
 console.log(`Event not found: ${data.event}`);
@@ -400,7 +512,7 @@ loadEventsList: function(data, target, origin) {
 
 // Move NPC Events after Location Events
 const tempArray = [];
-const locationsList = Array.locationArray.map(location => location.divId);
+const locationsList = load.Data.locations.map(location => location.divId);
 
 for (const event of data) {
 if (event.target === 'Location' && (locationsList.includes(event.location) || event.location === 'All')) {
@@ -520,7 +632,7 @@ let subLocationActive = true;
         if(event.locationSeparator === true){
         
         //Make an array of taggedEvents
-        // const tagLocations = this.eventsArray.filter(event => !locationsList.includes(event.location) && event.target === 'Location');
+        // const tagLocations = load.Data.events.filter(event => !locationsList.includes(event.location) && event.target === 'Location');
         // console.log(tagLocations);
 
         //Add locationSeparator
@@ -573,7 +685,7 @@ let subLocationActive = true;
 
           NPCs.searchNPC(event.npc.toLowerCase());
 
-          if(NPCs.npcSearchArray.length === NPCs.npcArray.length){
+          if(NPCs.npcSearchArray.length === load.Data.npcs.length){
 
           const npcNameDiv = document.createElement('div');
           npcNameDiv.className = npcColour;
@@ -606,7 +718,7 @@ let subLocationActive = true;
           //Add div elements for 'All' Events affecting this NPC.
           const npcTags = npc.tags.split(',').map(word => word.trim());
 
-          const allEvents = this.eventsArray.filter(event => {
+          const allEvents = load.Data.events.filter(event => {
           const eventTags = event.npc.split(',').map(word => word.trim());
           return (
           event.location === 'All' &&
@@ -681,7 +793,7 @@ unassignedDiv.classList.add('no-hover');
 unassignedDiv.innerHTML = `<hr><span class="orange">Unassigned NPCs</span>`;
 target.appendChild(unassignedDiv);
 
-for (const npc of NPCs.npcArray) {
+for (const npc of load.Data.npcs) {
   const npcNameDiv = document.getElementById(npc.name);
   const divExists = npcNameDiv !== null;
 
@@ -768,11 +880,14 @@ divArray.forEach(div => {
 
 async getEvent(currentLocation, locObj) {
 const activeEvents = [];
-const subLocations = this.eventsArray.filter(entry => entry.location === currentLocation)
+const subLocations = load.Data.events.filter(entry => entry.location === currentLocation)
 const tags = locObj.tags
 
+//console.log(currentLocation,locObj)
+//console.log(load.Data.events)
+
 //Search for events active by 'All', Location Name, or by Tag
-for (const entry of this.eventsArray) {
+for (const entry of load.Data.events) {
 if (
     entry.active === 1 && 
   (
@@ -871,13 +986,13 @@ let eventItemsFormatted = '';
 
 const eventItemsTagged = eventItems.map(item => {
 
-  const tagToDisplay = item.Tag !== previousTag ? `` : '';
-  previousTag = item.Tag;
+  const tagToDisplay = item.tag !== previousTag ? `` : '';
+  previousTag = item.tag;
 
-  const typetoDisplay = item.Type !== previousType ? `<br><span class = 'underline'>${item.Type}</span><br>` : '';
-  previousType = item.Type;
+  const typetoDisplay = item.Type !== previousType ? `<br><span class = 'underline'>${item.type}</span><br>` : '';
+  previousType = item.type;
 
-  return `${tagToDisplay}${typetoDisplay}#${item.Name}#`;
+  return `${tagToDisplay}${typetoDisplay}#${item.name}#`;
   });
 
 if(eventItemsTagged.length > 0){
@@ -921,7 +1036,6 @@ locDesc =
 `<hr>`;
         
 }
-
   return locDesc;
 }).join('');
 },
@@ -943,7 +1057,7 @@ addEventItems(event){
   let locationItems = '';
 
     // Filter itemsArray based on location Name and Tags
-    const filteredItems = Items.itemsArray.filter(item => {
+    const filteredItems = load.Data.items.filter(item => {
       const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
       
       // Check if the item matches the criteria
@@ -959,21 +1073,21 @@ addEventItems(event){
      Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
         tag === event) : ''}));
 
-  // Sort the inventory alphabetically by item.Tag and then by item.Name
+  // Sort the inventory alphabetically by item.tag and then by item.Name
   locationItems.sort((a, b) => {
-    // Compare item.Tag first
-    if (a.Tag > b.Tag) return 1;
-    if (a.Tag < b.Tag) return -1;
+    // Compare item.tag first
+    if (a.tag > b.tag) return 1;
+    if (a.tag < b.tag) return -1;
 
     // If item.Tags are the same, compare item.Type
-    if (a.Type > b.Type) return 1;
-    if (a.Type < b.Type) return -1;
+    if (a.type > b.type) return 1;
+    if (a.type < b.type) return -1;
 
     // If item.Type are the same, compare item.Name
-    if (a.Name > b.Name) return 1;
-    if (a.Name < b.Name) return -1;
+    if (a.name > b.name) return 1;
+    if (a.name < b.name) return -1;
 
-    return 0; // Both item.Tag and item.Name are equal
+    return 0; // Both item.tag and item.Name are equal
 
 });
 
@@ -1013,7 +1127,7 @@ Ref.locationCheck.click();
 
 saveEvent: function() {
   
-  const index = this.eventsArray.findIndex(event => event.id === parseInt(Ref.eventId.value) && event.name === Ref.eventName.value);
+  const index = load.Data.events.findIndex(event => event.id === parseInt(Ref.eventId.value) && event.name === Ref.eventName.value);
 
   let target;
   if (Ref.eventTarget.checked) {
@@ -1035,13 +1149,13 @@ saveEvent: function() {
 
   if (index !== -1) {
       // Update the existing event entry
-      this.eventsArray[index] = event;
+      load.Data.events[index] = event;
       console.log('Event updated:', event);
   } else {
       // Make a new event entry
-      event.id = Array.generateUniqueId(this.eventsArray, 'entry');
+      event.id = Array.generateUniqueId(load.Data.events, 'entry');
       Ref.eventId.value = event.id
-      this.eventsArray.push(event);
+      load.Data.events.push(event);
       console.log('Event added:', event);
   }
 

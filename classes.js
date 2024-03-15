@@ -1,7 +1,8 @@
 // Import the necessary module
 import editor from "./editor.js";
-import Array from "./array.js";
+
 import Ref from "./ref.js";
+import load from "./load.js";
 import Items from "./items.js";
 import Monsters from "./monsters.js";
 import Spells from "./spells.js";
@@ -15,6 +16,10 @@ class NPCbuild {
 
 constructor(data) {
 
+//metadata
+//metadata
+this.type = 'class', 
+this.subType = 'level',
 
 //Character Sheet
 this.id = data.id;
@@ -48,12 +53,12 @@ static getMonster(npc){
 
   //console.log(npc.name, npc.monsterTemplate)
   // Find Monster
-  const stats = Monsters.monstersArray.filter(monster => monster.name === npc.monsterTemplate);
+  const stats = load.Data.monsters.filter(monster => monster.name === npc.monsterTemplate);
 
   if(stats.length !== 0){
   
   //Saving Throws
-  const saveAs = stats[0].saveAs;
+  const saveAs = stats[0].level;
   const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
   let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
   
@@ -565,9 +570,8 @@ classTable = NPCbuild.clericTable;
 if (classTable) {
 // Find spellSlots for NPC's Level
 const levelEntry = classTable.find(entry => entry.level === level);
-const spellBook = Spells.spellsArray.filter(spell => spell.Class === npc.class);
-npc.magic =  `${npc.class === 'Cleric' ? `<span class="expandable teal" data-content-type="rule" divId="Orsons">Orsons:</span>`:
-`<span class="expandable cyan" data-content-type="rule" divId="Spellcasting">Spells:</span>`}<br>`
+const spellBook = load.Data.spells.filter(spell => spell.class === npc.class);
+npc.magic =  [];
 
 // Start at Level 1
 let levelCheck = 0;
@@ -575,7 +579,7 @@ let levelCheck = 0;
 // Loop through spellSlots, assigning spells.
 for (let levelIndex = 0; levelIndex < level; levelIndex++) {
 const spellCount = levelEntry.spells[levelIndex];
-const levelSpells = spellBook.filter(spell => spell.Level === (levelIndex + 1).toString());
+const levelSpells = spellBook.filter(spell => spell.level === (levelIndex + 1).toString());
 
 // Loop through spellCount, choose random spells.
 for (let spellSlot = 0; spellSlot < spellCount; spellSlot++) {
@@ -584,13 +588,13 @@ const chosenSpell = levelSpells[randomIndex];
 levelSpells.splice(randomIndex, 1);
 
 // Check for End of Loop
-if (levelCheck < chosenSpell.Level) {
-npc.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
+if (levelCheck < chosenSpell.level) {
+//npc.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
 //Bug here if Character is over level 15?
-levelCheck = chosenSpell.Level;
+levelCheck = chosenSpell.level;
 }
 
-npc.magic += `~${chosenSpell.Name}~<br>`;
+npc.magic.push(chosenSpell.name);
 
 }
 }
@@ -630,7 +634,7 @@ npc.hitPoints = NPCbuild.rollHitDice(hitDice);
 
 static getInventory(npc) {
 // Filter itemsArray based on characterClass and tags
-const filteredItems = Items.itemsArray.filter(item => {
+const filteredItems = load.Data.items.filter(item => {
 const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
 
 // Check if the item matches the criteria

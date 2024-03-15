@@ -2,7 +2,7 @@
 import Ref from "./ref.js";
 import Map   from "./map.js";
 import Add   from "./add.js";
-import Array from "./array.js";
+
 import editor from "./editor.js";
 import Events from "./events.js";
 import NPCs from "./npcs.js";
@@ -17,13 +17,12 @@ init() {
 
 load.loadDefault();
 
-Ref.locationLabel.textContent = 'Load Map and Data.';
-
 //editor.addPredictiveContent();
 editor.init();
 
 Monsters.addMonsterFormEvents();
 Events.addEventsSearch();
+Events.loadEventListeners();
 NPCs.addNPCSearch();
 Spells.addSearch();
 Items.addItemSearch();
@@ -36,7 +35,7 @@ Ref.dataButton.addEventListener('click', this.dataButton);
 Ref.addButton.addEventListener('click', this.addButon); 
 Ref.editButton.addEventListener('click', this.editButton);
 Ref.saveButton.addEventListener('click', this.saveButton);  
-Ref.fileInput.addEventListener('change', Array.loadSaveFile); 
+Ref.fileInput.addEventListener('change', load.loadSaveFile); 
 
 //eventManager -- change to a doubleClick.
 // Ref.enableEventButton.addEventListener('click', () => this.changEventStatus(1, "one"));
@@ -48,25 +47,27 @@ Ref.editSaveButton.addEventListener('click', this.saveFormButton);
 Ref.editClearButton.addEventListener('click', this.clearFormButton); 
 Ref.editDeleteButton.addEventListener('click', this.deleteFormButton);
 
-}
+//centreToolbar
+Ref.centreSaveButton.addEventListener('click', this.saveFormButton);
+};
 
 changEventStatus(y, scope) {
 
 if (scope === 'one') {
 
 const eventName = Ref.eventManager.value;
-const eventEntry = Events.eventsArray.find(event => event.name === eventName);
+const eventEntry = load.Data.events.find(event => event.name === eventName);
 
 if (eventEntry) {eventEntry.active = y} else {console.log('Event not found:', eventName)};
 
 } else if(scope === 'many') {
 
-const eventsToEnable = Events.eventsArray.filter(event => Events.searchArray.some(searchEvent => searchEvent.name === event.name));
+const eventsToEnable = load.Data.events.filter(event => Events.searchArray.some(searchEvent => searchEvent.name === event.name));
 
 if (eventsToEnable.length > 0) {eventsToEnable.forEach(event => {event.active = y})} else {console.log('No matching events found to Enable')}}
 
 //console.log(Events.searchArray.length);
-Events.loadEventsList(Events.eventsArray, Ref.Centre, 'eventsManager');
+Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 };
 
@@ -77,6 +78,7 @@ Ref.Left.style.display = "none";
 Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
 Ref.eventManager.value = '';
+Ref.locationLabel.textContent = load.fileName;
 
 
 };
@@ -84,6 +86,8 @@ Ref.eventManager.value = '';
 mapButton() {  
 Map.fetchAndProcessImage()
 document.getElementById('Banner').style.display = "none";
+Ref.Right.style.display = 'block';
+Ref.Storyteller.display = 'block';
 };
 
 dataButton() {
@@ -130,10 +134,12 @@ if (!editor.editMode) {
 editor.editMode = true; // Now editing.
 
 editEditButton.classList.add('click-button');
+Ref.locationLabel.textContent = load.fileName;
+
 
 //Hide Storyteller
 //Ref.eventManager.style.display = 'none';
-Ref.locationLabel.style.display = 'none';
+//Ref.locationLabel.style.display = 'none';
 Ref.Storyteller.style.display = 'none';
 
 //Show Editor loadLists()
@@ -158,6 +164,10 @@ div.addEventListener('mouseleave', editor.handleMouseHover);
 editor.editMode = false; // Now Storytelling.
 
 editEditButton.classList.remove('click-button');
+Ref.centreToolbar.style.display = "none";
+
+//document.getElementById('miniBanner').style.display = "none";
+//Ref.locationLabel.textContent = load.fileName;
 
 //Show Storyteller
 Ref.eventManager.style.display = 'block';
@@ -182,62 +192,20 @@ div.removeEventListener('mouseleave', editor.handleMouseHover);
 
 saveButton(){
 Array.exportArray();
-};  
+}; 
 
 saveFormButton(){
-
-const Page = editor.editPage
 
 editSaveButton.classList.add('click-button');
 setTimeout(() => {
 editSaveButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
-switch (Page) {
-case 1:
-editor.saveLocation();
-break;
-
-case 2:
-Events.saveEvent();
-Events.loadEventsList(Events.eventsArray, Ref.Centre);
-//Events.getEvent();
-break;
-
-case 3:
-NPCs.saveNPC();
-Events.saveEvent();
-Events.loadEventsList(Events.eventsArray, Ref.Centre);
-// NPCs.searchNPC(Ref.npcSearch.value.toLowerCase())
-// NPCs.loadNPC(NPCs.npcSearchArray);
-break;
-
-case 4:
-Monsters.saveMonster();
-Spells.loadSpellsList(Monsters.monstersArray);
-break;
-
-case 5:
-Items.saveItem();
-Items.searchItem(itemSearch.value.toLowerCase());
-break;
-
-case 6:
-Spells.saveSpell();
-Spells.loadSpellsList(Spells.spellsArray);
-break;
-
-
-
-default:
-
-break;
-
-}
-
+console.log('saving...')
+editor.saveDataEntry();
 NPCs.buildNPC();
 
-};
+}
 
 clearFormButton(){
 
@@ -255,12 +223,12 @@ break;
 
 case 2:
 NPCs.clearForm(Ref.eventForm);
-Events.loadEventsList(Events.eventsArray, Ref.Centre);
+Events.loadEventsList(load.Data.events, Ref.Centre);
 break;
 
 case 3:
 NPCs.clearForm(Ref.npcForm);
-Events.loadEventsList(Events.eventsArray, Ref.Centre);
+Events.loadEventsList(load.Data.events, Ref.Centre);
 break;
 
 case 4:
