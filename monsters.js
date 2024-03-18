@@ -33,7 +33,7 @@ const asteriskBrackets = /\*([^*]+)\*/g;
 return locationText.replace(asteriskBrackets, (match, targetText) => {
 const monster = load.Data.monsters.find(monster => monster.name.toLowerCase() === targetText.toLowerCase());
 if (monster) {
-return `<span class="expandable monster" data-content-type="monster" divId="${targetText}">${targetText}</span>`;
+return `<span class="expandable monster" data-content-type="monsters" divId="${targetText}">${targetText}</span>`;
 } else {
 console.log(`Monster not found: ${targetText}`);
 return match;

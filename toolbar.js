@@ -10,6 +10,7 @@ import Monsters from "./monsters.js";
 import Items  from "./items.js";
 import Spells  from "./spells.js";
 import load from "./load.js";
+import save   from "./save.js";
 
 class Toolbar{
 
@@ -47,8 +48,8 @@ Ref.editSaveButton.addEventListener('click', this.saveFormButton);
 Ref.editClearButton.addEventListener('click', this.clearFormButton); 
 Ref.editDeleteButton.addEventListener('click', this.deleteFormButton);
 
-//centreToolbar
-Ref.centreSaveButton.addEventListener('click', this.saveFormButton);
+// //centreToolbar
+// Ref.centreSaveButton.addEventListener('click', this.saveFormButton);
 };
 
 changEventStatus(y, scope) {
@@ -75,7 +76,7 @@ escButton(){
 
 Ref.Centre.style.display = "none";
 Ref.Left.style.display = "none";
-Ref.centreToolbar.style.display = "none";
+// Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
 Ref.eventManager.value = '';
 Ref.locationLabel.textContent = load.fileName;
@@ -134,6 +135,17 @@ if (!editor.editMode) {
 editor.editMode = true; // Now editing.
 
 editEditButton.classList.add('click-button');
+
+//By default, load Location in Form
+
+const obj = load.Data.locations.find(obj => obj.name === Ref.locationLabel.textContent);
+
+if(obj){
+const form = editor.createForm(obj);
+Ref.Left.appendChild(form);}
+
+
+//Change Location Label Contents
 Ref.locationLabel.textContent = load.fileName;
 
 
@@ -164,7 +176,7 @@ div.addEventListener('mouseleave', editor.handleMouseHover);
 editor.editMode = false; // Now Storytelling.
 
 editEditButton.classList.remove('click-button');
-Ref.centreToolbar.style.display = "none";
+// Ref.centreToolbar.style.display = "none";
 
 //document.getElementById('miniBanner').style.display = "none";
 //Ref.locationLabel.textContent = load.fileName;
@@ -191,7 +203,7 @@ div.removeEventListener('mouseleave', editor.handleMouseHover);
 }}};
 
 saveButton(){
-Array.exportArray();
+save.exportArray();
 }; 
 
 saveFormButton(){

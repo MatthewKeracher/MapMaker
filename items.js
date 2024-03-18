@@ -17,7 +17,7 @@ const hashBrackets = /#([^#]+)#/g;
 return locationText.replace(hashBrackets, (match, targetText) => {
 const item = Object.values(load.Data.items).find(item => item.name.toLowerCase() === targetText.toLowerCase());
 if (item) {
-return `<span class="expandable item" data-content-type="item" divId="${item.name}">${item.name}</span>`;
+return `<span class="expandable item" data-content-type="items" divId="${item.name}">${item.name}</span>`;
 } else {
 console.log(`Item not found: ${targetText}`);
 return match;

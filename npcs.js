@@ -391,7 +391,7 @@ Ref.Centre.innerHTML = '';
 Ref.Left.innerHTML = '';
 
 
-Ref.centreToolbar.style.display = 'flex';
+// Ref.centreToolbar.style.display = 'flex';
 Ref.Centre.style.display = 'block';
 Ref.Left.style.display = 'block';
 
@@ -400,8 +400,12 @@ Ref.Left.style.display = 'block';
 const nameContainer = document.createElement('div');
 
 let nameContent =  
-`<h2><input 
-class="centreName orange" 
+`<label class="entry-label" 
+style="display: none"
+divId="name">
+</label>
+<h2><input 
+class="entry-input centreName orange" 
 style="font-family:'SoutaneBlack'"
 type="text" 
 divId="npcName"
@@ -419,7 +423,11 @@ nameContainer.querySelector('.leftText').select();
 const tagsContainer = document.createElement('div');
 
 let tagsContent =  
-`<h3><input 
+`<label class="entry-label" 
+style="display: none"
+divId="tags">
+</label>
+<h3><input 
 class="centreTag" 
 type="text" 
 divId= "npcTags"
@@ -430,18 +438,31 @@ Ref.Centre.appendChild(tagsContainer);
 
 tagsContainer.addEventListener('click', function() {
 tagsContainer.querySelector('.centreTag').focus();
-tagsContainer.querySelector('.centreTag').select();
+//tagsContainer.querySelector('.centreTag').select();
 });
 
 //3. BIO
 const backStoryText = document.createElement('textarea');
 backStoryText.id = 'backStoryText';
+backStoryText.classList.add('entry-input');
 backStoryText.classList.add('centreText'); 
 backStoryText.textContent = foundNPC.Backstory || 'Insert information about ' + foundNPC.name + ' here.';
 
 //Attach and display.
+const extraSpace = 125
+console.log(extraSpace)
 Ref.Centre.appendChild(backStoryText);
 Ref.Centre.style.display = 'block';
+
+backStoryText.style.height = backStoryText.scrollHeight + 'px';
+
+// Add event listener for input event
+backStoryText.addEventListener('input', function() {
+    // Set the height based on the scroll height of the content
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+});
+
 
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
@@ -450,15 +471,16 @@ const classContainer = document.createElement('div');
 
 let classContent =  
 `<h3>
-<label class="expandable orange" 
+<label class="entry-label expandable orange" 
 data-content-type="rule" 
-divId="labelClass">
+divId="class">
 Class
 </label>
 <input 
-class="leftText white" 
+pair="class"
+class="entry-input leftText white" 
 type="text" 
-divId= "npcClass"
+id= "typeEntry"
 value="${foundNPC.class}">
 </h3>`;
 
@@ -474,16 +496,17 @@ const levelContainer = document.createElement('div');
 
 let levelContent =  
 `<h3>
-<label class="expandable orange" 
+<label class="entry-label expandable orange" 
 data-content-type="rule" 
-divId="labelLevel">
+divId="level">
 Level
 </label>
 <input 
 maxlength="2"
-class="centreNumber white" 
+pair="level"
+class="entry-input centreNumber white" 
 type="text" 
-divId= "npcLevel"
+id= "subTypeEntry"
 value="${foundNPC.level}">
 </h3><hr>`;
 
@@ -501,7 +524,7 @@ let hitPoints =
 `<h3>
 <label class="expandable orange" 
 data-content-type="rule" 
-divId="labelHitPoints">
+divId="hitPoints">
 Hit Points
 </label>
 <input 
@@ -526,7 +549,7 @@ let attackBonus =
 `<h3>
 <label class="expandable orange" 
 data-content-type="rule" 
-divId="labelAttackBonus">
+divId="attackBonus">
 Attack Bonus 
 </label>
 <input 
@@ -621,12 +644,12 @@ statContainer.classList.add('input-container');
 let statBlock = `<h2>`;
 
 statBlock +=
-`<label class="expandable teal" data-content-type="rule" divId="${statNames[stat]}">
+`<label class="entry-label expandable teal" data-content-type="rule" divId="${stat.toLowerCase()}">
 ${stat}: 
 </label>
 <input 
 maxlength="2"
-class="centreStat white" 
+class="entry-input centreStat white" 
 style="font-family:'SoutaneBlack'"
 type="text" 
 divId= "npc${stat}"
@@ -680,7 +703,7 @@ skillContainer.classList.add('input-container');
 let skillBlock = `<h3>`;
 
 skillBlock +=
-`<label class="expandable orange" data-content-type="rule" divId="${skillNames[skill]}">
+`<label class="expandable orange" data-content-type="rule" divId="${skill}">
 ${skillNames[skill]}
 </label>
 <input 
@@ -721,7 +744,7 @@ if(foundNPC.class === 'Cleric'){
     
     let turnBlock =
     `<h3>
-    <label class="expandable orange" data-content-type="rule" divId="${creature}Label">
+    <label class="expandable orange" data-content-type="rule" divId="${creature}">
     ${creature}
     </label>
     <input 
@@ -804,7 +827,7 @@ const saveNames = {
   const saveContainer = document.createElement('div');
   
   let saveBlock =
-  `<h3><label class="expandable orange" data-content-type="rule" divId="${saveNames[save]}">
+  `<h3><label class="expandable orange" data-content-type="rule" divId="${save}">
   ${saveNames[save]}: 
   </label>
   <input 
@@ -914,6 +937,41 @@ treasureContainer.querySelector('.centreNumber').select();
 });
 
 };
+
+//0. Make ID Manually
+const keyArea = document.createElement('div');
+keyArea.id = 'keyArea';
+
+let keyContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="key">
+</label>
+<input
+class="entry-input" 
+style="font-family:'SoutaneBlack'"
+divId="key"
+value="npcs">`;
+
+keyArea.innerHTML += keyContent;
+Ref.Left.appendChild(keyArea);
+
+const idArea = document.createElement('div');
+idArea.id = 'centreId';
+
+let idContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="id">
+</label>
+<input
+class="entry-input centreId" 
+style="font-family:'SoutaneBlack'"
+divId="id"
+value="${foundNPC.id || 'N/A'} ">`;
+
+idArea.innerHTML += idContent;
+Ref.Left.appendChild(idArea);
 
 Storyteller.showFloatingExpandable()
 

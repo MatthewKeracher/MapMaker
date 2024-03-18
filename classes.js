@@ -17,7 +17,6 @@ class NPCbuild {
 constructor(data) {
 
 //metadata
-//metadata
 this.type = 'class', 
 this.subType = 'level',
 

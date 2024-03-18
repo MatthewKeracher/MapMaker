@@ -98,12 +98,18 @@ const MiscItem = this.miscArray.find(item => item.square === contentId);
     const withMonsters = Monsters.getMonsters(MiscItem.curly);
     const withItems = Items.getItems(withMonsters);
     const withSpells = Spells.getSpells(withItems); 
-    const miscInfo = [ 
-      
-    `<br><h3><span class="misc">${MiscItem.square}</span></h3>
-    <span class="withbreak">${withSpells}</span>`]
+    const miscInfo = [`
+    <h3>
+    <span class="misc">
+    ${MiscItem.square}
+    </span>
+    </h3>
+    <span class="withbreak">
+    ${withSpells}
+    </span>`]
 
     target.innerHTML = miscInfo;
+    Ref.Left.style.display = 'none';
 
   } else {
     console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
@@ -197,15 +203,6 @@ switch (contentType) {
     case 'npc':
     NPCs.addNPCInfo(contentId, target); // Handle NPCs
     break;
-    case 'monster':
-    editor.addInfo(contentId, target);
-    break;
-    case 'item':
-    editor.addInfo(contentId, target);
-    break;
-    case 'spell':
-    editor.addInfo(contentId, target);
-    break;
     case 'misc':
     this.addMiscInfo(contentId, target);
     break;
@@ -213,7 +210,12 @@ switch (contentType) {
     this.addRulesInfo(contentId, target);
     break;
     default:
-    console.log('Unknown content type');
+      //for monsters, spells, items, etc.
+      //1. Find the Obj.
+      const contentIdLowercase = contentId.toLowerCase();
+      const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
+      //2.
+      editor.createForm(obj);
 }          
 
 target.style.display = "block";
@@ -322,7 +324,7 @@ const expandableElements = [...expandableElementsLeft, ...expandableElementsCent
         break;
         case 'rule':
         this.addRulesInfo(contentId, floatingBox); //Handle Rule
-        console.lpg('rule')
+        console.log('rule')
         break;
         default:
         console.log('Unknown content type');

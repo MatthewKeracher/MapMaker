@@ -93,8 +93,8 @@ editButton: document.getElementById('editButton'),
 saveButton: document.getElementById('saveButton'),
 fileInput: document.getElementById('fileInput'),
 
-centreToolbar: document.getElementById('centreToolbar'),
-centreSaveButton: document.getElementById('centreSaveButton'),
+// centreToolbar: document.getElementById('centreToolbar'),
+// centreSaveButton: document.getElementById('centreSaveButton'),
 
 //Export .csv
 exportData: document.getElementById('exportData'),

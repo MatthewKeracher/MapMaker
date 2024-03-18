@@ -7,11 +7,11 @@ position: fixed;
 top:1vh;  
 right: 35vw; 
 width: 31vw;
-height: 96vh;
+height: auto;
 z-index:10;
 
 /* Text */  
-font-family: 'Century Gothic';
+font-family: monospace;
 color: whitesmoke;
 font-size: 1.9vh;
 line-height: 1.5; 
@@ -52,18 +52,18 @@ width: 0.1px; /* Set the width of the scrollbar */
 
 .centreId{
 /* Position */
-position: fixed;
-bottom: 9vh; 
-right: 50vw; 
+position: relative;
 height: 2vh;
 width: 3vw;
-margin: 1vh;
+margin: 0vh;
+
 
 /* Text */
 font-size: 2vh;
-color: rgba(15, 158, 15, 0.598);
+color: lime;
 font-family: monospace;
 font-weight: bold;
+text-align: left; 
 
 /* Appearance */
 border: none;
@@ -107,7 +107,7 @@ border-radius: 0;
 .centreType{
 /* Position */
 height: 2.5vh;
-width: 14vw;
+width: 13vw;
 margin: 0vh;
 
 /* Text */
@@ -227,11 +227,10 @@ border-radius: 0;
 
 
 .centreText {
-
 /* Position */
-height: 84vh;
 width: 31vw;
 margin: 0vh;
+max-height: 96vh;
 
 /* Text */
 font-size: 2.2vh;
@@ -245,6 +244,7 @@ background-color: transparent;
 vertical-align: middle;
 resize: none;
 border-radius: 0;
+overflow-y: scroll;
 }
 
 .centreNumber {

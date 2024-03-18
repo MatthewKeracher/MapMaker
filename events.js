@@ -383,6 +383,16 @@ backStoryText.textContent = event.description || 'Insert information about ' + e
 Ref.Centre.appendChild(backStoryText);
 Ref.Centre.style.display = 'block';
 
+backStoryText.style.height = backStoryText.scrollHeight + 'px';
+
+// Add event listener for input event
+backStoryText.addEventListener('input', function() {
+    // Set the height based on the scroll height of the content
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+    
+});
+
 // 4. Event Target
 const targetContainer = document.createElement('div');
 

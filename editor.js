@@ -150,12 +150,12 @@ titleDiv.setAttribute("scope", 'key');
 titleDiv.setAttribute("id", key);
 
 titleDiv.innerHTML = 
-`<h3>
+`<h2>
 <span
-class ="hotpink"
-style="display: block;">
+class ="misc"
+style="display: block; letter-spacing: 0.18vw;">
 ${this.proper(key)}
-</span></h3>`;
+</span></h2>`;
 
 target.appendChild(titleDiv)
 this.listEvents(null, titleDiv);
@@ -380,7 +380,7 @@ Ref.Centre.innerHTML = '';
 Ref.Centre.style.display = 'block';
 Ref.Left.innerHTML = '';
 Ref.Left.style.display = 'block';
-Ref.centreToolbar.style.display = 'flex';
+//Ref.centreToolbar.style.display = 'flex';
 
 const form = document.createElement('form');
 form.id = 'editForm';
@@ -388,69 +388,99 @@ form.classList.add('form');
 
 const excludedKeys = ['id', 'name', 'type', 'subType', 'description']; // Define keys to exclude
 
-//0. Make ID Manually
-
-const existingId = document.getElementById('centreId');
-if (existingId) {
-existingId.remove(); // Remove the existing form
-}
-
-const idArea = document.createElement('textarea');
-idArea.id = 'centreId';
-idArea.classList.add('centreId'); 
-idArea.classList.add('entry-input');
-idArea.value = obj.id || 'N/A';
-
-Ref.Centre.appendChild(idArea);
-
 //0. Make Description Manually
 
-const descriptionText = document.createElement('textarea');
-descriptionText.id = 'backStoryText';
-descriptionText.classList.add('centreText'); 
-descriptionText.classList.add('entry-input');
-descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
+const description = document.createElement('div');
 
-//Attach and display.
-Ref.Centre.appendChild(descriptionText);
+let centreContent =  
+`<label class="entry-label"
+style="display: none"
+divId="description">
+</label>
+<textarea
+id="descriptionText"
+class="entry-input centreText" 
+>`;
+
+description.innerHTML = centreContent;
+Ref.Centre.appendChild(description);
 Ref.Centre.style.display = 'block';
 
+const descriptionText = document.getElementById('descriptionText');
+descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
+
+    // Set the initial height based on the scroll height of the content
+    descriptionText.style.height = 'auto';
+    descriptionText.style.height = descriptionText.scrollHeight + 'px';
+
+//Ref.Centre.style.height = descriptionText.scrollHeight + 'px';
+
+descriptionText.addEventListener('input', function() {
+    // Set the height based on the scroll height of the content
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+    //Ref.Centre.style.height = this.scrollHeight + 'px';
+});
 
 //1. Make Type Manually
 const type = obj.type
 
-const typeArea = document.createElement('textarea');
-typeArea.id = 'typeArea';
-typeArea.setAttribute('pair', type);
-typeArea.classList.add('centreType'); 
-typeArea.classList.add('entry-input');
-typeArea.style.fontFamily = 'SoutaneBlack';
-typeArea.value = obj[type] || 'none';
+const topArea = document.createElement('div');
+topArea.id = 'typeArea';
 
-Ref.Left.appendChild(typeArea);
+let typeContent =  
+`<label 
+style="display: none"
+divId="type">
+</label>
+<input
+pair="${type}" 
+class="centreType teal" 
+style="font-family:'SoutaneBlack'"
+id="typeEntry"
+value="${obj[type] || 'none'} ">`;
+
+topArea.innerHTML = typeContent;
+Ref.Left.appendChild(topArea);
 
 //2. Make subType Manually
 const subType = obj.subType
 
-const subTypeArea = document.createElement('textarea');
+const subTypeArea = document.createElement('div');
 subTypeArea.id = 'subTypeArea';
-subTypeArea.setAttribute('pair', subType);
-subTypeArea.classList.add('centreSubType'); 
-subTypeArea.classList.add('entry-input');
-subTypeArea.style.fontFamily = 'SoutaneBlack';
-subTypeArea.value = obj[subType] || 'none';
 
-Ref.Left.appendChild(subTypeArea);
+let subTypeContent =  
+`<label
+style="display: none"
+divId="subType">
+</label>
+<input
+pair="${subType}" 
+class="centreSubType teal" 
+style="font-family:'SoutaneBlack'"
+id="subTypeEntry"
+value="${obj[subType] || 'none'} ">`;
+
+topArea.innerHTML += subTypeContent;
 
 //3. Make Name Manually
 
-const nameArea = document.createElement('textarea');
+const nameArea = document.createElement('div');
 nameArea.id = 'nameArea';
-nameArea.classList.add('centreName');
-nameArea.classList.add('entry-input');
-nameArea.style.fontFamily = 'SoutaneBlack';
-nameArea.value = obj.name || 'insert name here';
 
+let nameContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="name">
+</label>
+<input 
+class="entry-input centreName cyan" 
+style="font-family:'SoutaneBlack'"
+type="text" 
+divId="name"
+value="${obj.name || 'insert name here'} ">`;
+
+nameArea.innerHTML = nameContent;
 Ref.Left.appendChild(nameArea);
 
 setTimeout(function() {
@@ -516,6 +546,30 @@ elementContainer.style.height = elementContainer.scrollHeight + 'px';
 }
 }
 
+//0. Make ID Manually
+
+const existingId = document.getElementById('centreId');
+if (existingId) {
+existingId.remove(); // Remove the existing form
+}
+
+const idArea = document.createElement('div');
+idArea.id = 'centreId';
+
+let idContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="id">
+</label>
+<input
+class="entry-input centreId" 
+style="font-family:'SoutaneBlack'"
+divId="id"
+value="${obj.id || 'N/A'} ">`;
+
+idArea.innerHTML += idContent;
+Ref.Left.appendChild(idArea);
+
 return form;
 
 },
@@ -526,7 +580,7 @@ const saveEntry = {};
 
 // get array of label divIds.
 const labelElements = document.querySelectorAll('.entry-label');
-const labels = ['id','description', 'type', 'subType', 'name'];
+const labels = [];
 
 labelElements.forEach(label => {
     const divId = label.getAttribute('divId');
@@ -548,8 +602,12 @@ for (let i = 0; i < labels.length; i++) {
 }
 
 //Edit saveEntry object for type and subType -- will need to change if to be user-access'
-saveEntry['type'] = document.getElementById('typeArea').getAttribute('pair');
-saveEntry['subType']= document.getElementById('subTypeArea').getAttribute('pair');
+
+console.log(document.getElementById('subTypeEntry').getAttribute('pair'))
+
+saveEntry['type'] = document.getElementById('typeEntry').getAttribute('pair');
+saveEntry['subType']= document.getElementById('subTypeEntry').getAttribute('pair');
+
 saveEntry['id'] = parseInt(saveEntry['id']);
 
 const key = saveEntry && saveEntry['key'];
@@ -557,7 +615,7 @@ const id = saveEntry && saveEntry['id'];
 const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
 console.log(key, id, index);
 console.log(saveEntry);
-console.log('Existing saveEntry:' + load.Data[key][index].class)
+//console.log('Existing saveEntry:' + load.Data[key][index].class)
 
 load.Data[key][index] = saveEntry;
 editor.loadList(load.Data);

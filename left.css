@@ -7,7 +7,8 @@ position: fixed;
 top:1vh;  
 right: 68vw; 
 width: 30vw;
-height: 96vh;
+height: auto;
+max-height: 96vh;
 z-index:10;
 
 /* Text */  
@@ -74,7 +75,7 @@ border-radius: 0;
 
 /* Position */
 min-height: 2vh;
-width: 20vw;
+width: auto;
 margin: 0vh;
 
 /* Text */
@@ -102,4 +103,6 @@ color: lime;
 outline: none;
 border-radius: 0;
 }
+
+
 

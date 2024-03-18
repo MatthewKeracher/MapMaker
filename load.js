@@ -33,7 +33,7 @@ console.error('Error fetching data:', error);
 generateUniqueId(array, scope) {
 
 if(scope === 'array'){
-    
+
 const largestId = array.reduce((maxId, entry) => (entry.id && entry.id > maxId) ? entry.id : maxId, 0);
 //console.log(largestId);
 let newId = largestId + 1;
@@ -54,48 +54,46 @@ return largestId + 1;
 }},
 
 loadSaveFile: async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
 
-        // Wrap the file reading logic in a Promise
-        const readFile = () => {
-            return new Promise((resolve, reject) => {
-                reader.onload = (e) => {
-                    const fileContent = e.target.result;
-                    if (fileContent) {
-                        resolve({ content: fileContent, name: file.name });
-                    } else {
-                        reject(new Error('Error: File content is empty.'));
-                    }
-                };
-                reader.onerror = (error) => reject(error);
-                reader.readAsText(file);
-            });
-        };
+// Wrap the file reading logic in a Promise
+const readFile = () => {
+return new Promise((resolve, reject) => {
+reader.onload = (e) => {
+const fileContent = e.target.result;
+if (fileContent) {
+    resolve({ content: fileContent, name: file.name });
+} else {
+    reject(new Error('Error: File content is empty.'));
+}
+};
+reader.onerror = (error) => reject(error);
+reader.readAsText(file);
+});
+};
 
-        try {
-            // Wait for the file reading process to complete
-            const { content, name } = await readFile();
+try {
+// Wait for the file reading process to complete
+const { content, name } = await readFile();
 
-            // Remove the file extension from the name
-            const fileNameWithoutExtension = name.replace(/\.[^/.]+$/, "")
+// Remove the file extension from the name
+const fileNameWithoutExtension = name.replace(/\.[^/.]+$/, "")
 
-            // Now you can call loadAndBuild safely
-            await NPCs.loadAndBuild(content);
+// Now you can call loadAndBuild safely
+await NPCs.loadAndBuild(content);
 
-            // Return the file name
-            load.fileName = fileNameWithoutExtension;
-            Ref.locationLabel.textContent = load.fileName;
-            
-        } catch (error) {
-            console.error('Error reading file:', error);
-            // Handle the error appropriately, e.g., display an error message to the user
-        }
-    }
+// Return the file name
+load.fileName = fileNameWithoutExtension;
+Ref.locationLabel.textContent = load.fileName;
+
+} catch (error) {
+console.error('Error reading file:', error);
+// Handle the error appropriately, e.g., display an error message to the user
+}
+}
 },
-
-
 
 handleFileLoad(fileContent) {
 return new Promise((resolve, reject) => {
@@ -104,8 +102,8 @@ try {
 if (fileContent) {
 
 load.Data = JSON.parse(fileContent);
-//this.generateTags(load.Data);
-this.sortData(load.Data);
+this.generateTags(load.Data);
+//this.sortData(load.Data);
 console.log(load.Data)
 
 try {
@@ -128,7 +126,7 @@ reject(error);
 },
 
 generateTags(data) {
-const tagsArray = [];
+let tagsArray = [];
 
 for (const key in data) {
 let obj = data[key];
@@ -142,7 +140,24 @@ tagsArray.push(...tags);
 // Convert to a set to remove duplicates, then back to an array
 const uniqueTagsArray = [...new Set(tagsArray)];
 
-load.Data.tags = uniqueTagsArray;
+tagsArray = uniqueTagsArray.map((tag, index) => {
+return {
+//metadata
+key: 'tags',
+type: 'parent', 
+subType: 'child',
+
+//stay same
+id: index,
+name: tag, 
+parent: 'type',
+child: 'subType',
+description: '',
+}
+});
+
+
+load.Data.tags = tagsArray;
 
 //console.log(load.Data);
 },
@@ -178,7 +193,7 @@ note: spell.note,
 }
 
 if( key === 'monsters'){
-    obj = obj.map(monster => ({
+obj = obj.map(monster => ({
 
 //metadata
 key: key,
@@ -209,7 +224,7 @@ special: monster.special,
 }
 
 if( key === 'items'){
-    obj = obj.map(item => ({
+obj = obj.map(item => ({
 
 //metadata
 key: key,
@@ -237,7 +252,7 @@ description: item.description
 }
 
 if( key === 'events'){
-    obj = obj.map(event => ({
+obj = obj.map(event => ({
 
 //metadata
 key: key,
@@ -260,7 +275,7 @@ npc: event.npc,
 }
 
 if( key === 'npcs'){
-    obj = obj.map(npc => ({
+obj = obj.map(npc => ({
 
 //metadata
 key: key,
@@ -303,7 +318,7 @@ subType: 'level',
 }
 
 if( key === 'locations'){
-    obj = obj.map(location => ({
+obj = obj.map(location => ({
 
 //metadata
 key: key,
@@ -316,7 +331,7 @@ color: 'hotpink', //location.faction,
 
 //stay same
 id: null,//location.id,
-name: location.divId, 
+name: location.name, 
 tags: location.tags, 
 description: location.description,
 
@@ -328,7 +343,6 @@ height: location.height,
 
 }));
 
-console.log('hi!')
 }
 
 //Sort Ids
@@ -405,40 +419,38 @@ return newLoc;
 
 addLocationToArray(locationData) {
 const { 
-    left, 
-    top, 
-    width, 
-    height, 
-    id,
-    name, 
-    tags, 
-    description,
-    group,
-    faction,
-    type,
-    subType } = locationData;
+left, 
+top, 
+width, 
+height, 
+id,
+name, 
+tags, 
+description,
+group,
+faction,
+type,
+subType } = locationData;
 
 // Create a new location object with the specified properties
 const newLocation = {
-    left, 
-    top, 
-    width, 
-    height, 
-    id,
-    name, 
-    tags, 
-    description,
-    group,
-    faction,
-    type,
-    subType 
+left, 
+top, 
+width, 
+height, 
+id,
+name, 
+tags, 
+description,
+group,
+faction,
+type,
+subType 
 };
 
 load.Data.locations.push(newLocation);
 //console.log("Adding to Array: " + JSON.stringify(newLocation, null, 2));
 },
-
-//Add Events to Divs when created or loaded. 
 
 addLocationEvents() {
 const locations = document.querySelectorAll('.selection');

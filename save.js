@@ -29,11 +29,11 @@ saveFile(content, filename, mimeType) {
     spells: load.Data.spells,
     };
     
-    const json = JSON.stringify(exportData, null, 2);
+    const json = JSON.stringify(load.Data, null, 2);
     const mimeType = 'application/json';
     
     // Prompt the user to enter a filename
-    const filename = prompt('Enter the filename for the JSON file:', 'default.json');
+    const filename = prompt('Enter the filename for the JSON file:', load.fileName + '.json');
     
     if (filename) {
     // Call the function to save the JSON string as a file
