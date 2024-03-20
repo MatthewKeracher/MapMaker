@@ -103,7 +103,7 @@ if (fileContent) {
 
 load.Data = JSON.parse(fileContent);
 this.generateTags(load.Data);
-//this.sortData(load.Data);
+this.sortData(load.Data);
 console.log(load.Data)
 
 try {
@@ -168,182 +168,182 @@ for (const key in data) {
 
 let obj = data[key]
 
-if (key === 'spells') {
-obj = obj.map(spell => ({
+// if (key === 'spells') {
+// obj = obj.map(spell => ({
 
-//metadata
-key: key,
-type: 'class', 
-subType: 'level',
+// //metadata
+// key: key,
+// type: 'class', 
+// subType: 'level',
 
-//change
-class: spell.type, 
-level: spell.subType, 
+// //change
+// class: spell.type, 
+// level: spell.subType, 
 
-//stay same
-id: spell.id,
-name: spell.name, 
-range: spell.range, 
-duration: spell.duration, 
-description: spell.description, 
-reverse: spell.reverse, 
-note: spell.note, 
+// //stay same
+// id: spell.id,
+// name: spell.name, 
+// range: spell.range, 
+// duration: spell.duration, 
+// description: spell.description, 
+// reverse: spell.reverse, 
+// note: spell.note, 
 
-}));
-}
+// }));
+// }
 
-if( key === 'monsters'){
-obj = obj.map(monster => ({
+// if( key === 'monsters'){
+// obj = obj.map(monster => ({
 
-//metadata
-key: key,
-type: 'class', 
-subType: 'level',
+// //metadata
+// key: key,
+// type: 'class', 
+// subType: 'level',
 
-//change
-class: monster.type, 
-level: monster.subType, 
+// //change
+// class: monster.class, 
+// level: monster.level, 
 
-//stay same
-id: monster.id,
-name: monster.name,
-hd: monster.hd,
-attacks: monster.attacks,
-damage: monster.damage,
-movement: monster.movement,
-noApp: monster.noApp,
-ac: monster.ac,
-morale: monster.morale,
-treasure: monster.treasure,
-lairTreasure: monster.lairTreasure,
-xp: monster.xp,
-description: monster.description,
-special: monster.special,
+// //stay same
+// id: monster.id,
+// name: monster.name,
+// hd: monster.hd,
+// attacks: monster.attacks,
+// damage: monster.damage,
+// movement: monster.movement,
+// noApp: monster.noApp,
+// ac: monster.ac,
+// morale: monster.morale,
+// treasure: monster.treasure,
+// lairTreasure: monster.lairTreasure,
+// xp: monster.xp,
+// description: monster.description,
+// special: monster.special,
 
-}));
-}
+// }));
+// }
 
-if( key === 'items'){
-obj = obj.map(item => ({
+// if( key === 'items'){
+// obj = obj.map(item => ({
 
-//metadata
-key: key,
-type: 'group', 
-subType: 'size',
+// //metadata
+// key: key,
+// type: 'group', 
+// subType: 'size',
 
-//change
-group: item.type,
+// //change
+// group: item.type,
 
-//stay same
-id: item.id,
-name: item.name,
-size: item.size,
-weight: item.weight,
-volCubFt: item.volCubFt,
-volGal: item.volGal,
-volLbs: item.volLbs,
-cost: item.cost,
-damage: item.damage,
-range: item.range,
-ac: item.ac,
-description: item.description
+// //stay same
+// id: item.id,
+// name: item.name,
+// size: item.size,
+// weight: item.weight,
+// volCubFt: item.volCubFt,
+// volGal: item.volGal,
+// volLbs: item.volLbs,
+// cost: item.cost,
+// damage: item.damage,
+// range: item.range,
+// ac: item.ac,
+// description: item.description
 
-}));
-}
+// }));
+// }
 
-if( key === 'events'){
-obj = obj.map(event => ({
+// if( key === 'events'){
+// obj = obj.map(event => ({
 
-//metadata
-key: key,
-type: 'group', 
-subType: 'target',
+// //metadata
+// key: key,
+// type: 'group', 
+// subType: 'target',
 
-//change
-target: event.subType, 
-group: event.type, 
+// //change
+// target: event.subType, 
+// group: event.type, 
 
-//stay same
-id: event.id,
-active: event.active,
-name: event.name, 
-description: event.description, 
-location: event.location, 
-npc: event.npc, 
+// //stay same
+// id: event.id,
+// active: event.active,
+// name: event.name, 
+// description: event.description, 
+// location: event.location, 
+// npc: event.npc, 
 
-}));
-}
+// }));
+// }
 
-if( key === 'npcs'){
-obj = obj.map(npc => ({
+// if( key === 'npcs'){
+// obj = obj.map(npc => ({
 
-//metadata
-key: key,
-type: 'class', 
-subType: 'level',
+// //metadata
+// key: key,
+// type: 'class', 
+// subType: 'level',
 
-//same
-"id": npc.id,
-"name": npc.name,
-"tags": npc.tags,
-"level": npc.level,
-"class": npc.class,
-"monsterTemplate": npc.monsterTemplate,
-"str": npc.str,
-"dex": npc.dex,
-"int": npc.int,
-"wis": npc.wis,
-"con": npc.con,
-"cha": npc.cha,
-"Backstory": npc.Backstory,
-"strMod": npc.strMod,
-"dexMod": npc.dexMod,
-"intMod": npc.intMod,
-"wisMod": npc.wisMod,
-"conMod": npc.conMod,
-"chaMod": npc.chaMod,
-"Modifiers": npc.Modifiers,
-"hitPoints": npc.hitPoints,
-"inventory": npc.inventory,
-"savingThrows": npc.savingThrows,
-"attackBonus": npc.attackBonus,
-"AC": npc.AC,
-"attacks": npc.attacks,
-"damage": npc.damage,
-"XP": npc.xp,
-"movement": npc.movement,
-"treasure": npc.treasure,
+// //same
+// "id": npc.id,
+// "name": npc.name,
+// "tags": npc.tags,
+// "level": npc.level,
+// "class": npc.class,
+// "monsterTemplate": npc.monsterTemplate,
+// "str": npc.str,
+// "dex": npc.dex,
+// "int": npc.int,
+// "wis": npc.wis,
+// "con": npc.con,
+// "cha": npc.cha,
+// "description": npc.Backstory,
+// // "strMod": npc.strMod,
+// // "dexMod": npc.dexMod,
+// // "intMod": npc.intMod,
+// // "wisMod": npc.wisMod,
+// // "conMod": npc.conMod,
+// // "chaMod": npc.chaMod,
+// // "Modifiers": npc.Modifiers,
+// // "hitPoints": npc.hitPoints,
+// "inventory": npc.inventory,
+// // "savingThrows": npc.savingThrows,
+// // "attackBonus": npc.attackBonus,
+// // "AC": npc.AC,
+// // "attacks": npc.attacks,
+// // "damage": npc.damage,
+// // "XP": npc.xp,
+// // "movement": npc.movement,
+// // "treasure": npc.treasure,
 
-}));
-}
+// }));
+// }
 
-if( key === 'locations'){
-obj = obj.map(location => ({
+// if( key === 'locations'){
+// obj = obj.map(location => ({
 
-//metadata
-key: key,
-type: 'group', 
-subType: 'color',
+// //metadata
+// key: key,
+// type: 'group', 
+// subType: 'color',
 
-//add
-group: 'Test', //location.group, 
-color: 'hotpink', //location.faction, 
+// //add
+// group: 'Test', //location.group, 
+// color: 'hotpink', //location.faction, 
 
-//stay same
-id: null,//location.id,
-name: location.name, 
-tags: location.tags, 
-description: location.description,
+// //stay same
+// id: null,//location.id,
+// name: location.name, 
+// tags: location.tags, 
+// description: location.description,
 
-left: location.left, 
-top: location.top, 
-width: location.width, 
-height: location.height, 
+// left: location.left, 
+// top: location.top, 
+// width: location.width, 
+// height: location.height, 
 
 
-}));
+// }));
 
-}
+// }
 
 //Sort Ids
 //doesn't work with generateTags

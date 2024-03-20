@@ -91,7 +91,7 @@ return string.charAt(0).toUpperCase() + string.slice(1);
 },
 
 loadList: function(data) {
-
+console.log('loading List')
 //Where to put list...
 let target = Ref.Editor
 target.innerHTML = '';
@@ -278,6 +278,38 @@ Ref.Left.appendChild(form);
 
 }},
 
+searchAllData: function (searchText) {
+const resultsByKeys = {}; // Object to store results grouped by keys
+
+// Iterate over each key in load.Data
+for (const key in load.Data) {
+if (load.Data.hasOwnProperty(key)) {
+// Get the array corresponding to the key
+const dataArray = load.Data[key];
+
+// Iterate over each object in the array
+dataArray.forEach(obj => {
+// Check if any property of the object contains the search string
+for (const prop in obj) {
+if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+const propValue = obj[prop];
+// If the property value is a string and contains the search text
+if (typeof propValue === 'string' && propValue.toLowerCase().includes(searchText.toLowerCase())) {
+// Group the result by obj.key
+if (!resultsByKeys[obj.key]) {
+resultsByKeys[obj.key] = []; // Initialize array if not exist
+}
+resultsByKeys[obj.key].push(obj);
+// Break out of the loop to avoid duplicate results
+break;
+}}}});
+}}
+
+console.log(resultsByKeys);
+
+this.loadList(resultsByKeys);
+},
+
 showHide: function (div) {
 const scope = div.getAttribute("scope");
 let items
@@ -369,7 +401,7 @@ createForm: function (obj){
 
 console.log(obj);
 
-['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker'].forEach(id => {
+['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker', 'newArea'].forEach(id => {
 const element = document.getElementById(id);
 if (element) {
 element.remove();
@@ -380,15 +412,17 @@ Ref.Centre.innerHTML = '';
 Ref.Centre.style.display = 'block';
 Ref.Left.innerHTML = '';
 Ref.Left.style.display = 'block';
-//Ref.centreToolbar.style.display = 'flex';
 
 const form = document.createElement('form');
 form.id = 'editForm';
 form.classList.add('form');
 
-const excludedKeys = ['id', 'name', 'type', 'subType', 'description']; // Define keys to exclude
+if(obj){
 
-//0. Make Description Manually
+const excludedKeys = ['id', 'name', 'type', 'subType', 'tags', 'description', 'key']; // Define keys to exclude
+
+//1. Make Description Manually
+if(obj.description){
 
 const description = document.createElement('div');
 
@@ -409,9 +443,9 @@ Ref.Centre.style.display = 'block';
 const descriptionText = document.getElementById('descriptionText');
 descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
 
-    // Set the initial height based on the scroll height of the content
-    descriptionText.style.height = 'auto';
-    descriptionText.style.height = descriptionText.scrollHeight + 'px';
+// Set the initial height based on the scroll height of the content
+descriptionText.style.height = 'auto';
+descriptionText.style.height = descriptionText.scrollHeight + 'px';
 
 //Ref.Centre.style.height = descriptionText.scrollHeight + 'px';
 
@@ -421,11 +455,15 @@ descriptionText.addEventListener('input', function() {
     this.style.height = this.scrollHeight + 'px';
     //Ref.Centre.style.height = this.scrollHeight + 'px';
 });
+}
 
-//1. Make Type Manually
+//2. Make Type Manually
+const topArea = document.createElement('div');
+
+if(obj.type){
 const type = obj.type
 
-const topArea = document.createElement('div');
+
 topArea.id = 'typeArea';
 
 let typeContent =  
@@ -442,8 +480,10 @@ value="${obj[type] || 'none'} ">`;
 
 topArea.innerHTML = typeContent;
 Ref.Left.appendChild(topArea);
+}
 
-//2. Make subType Manually
+//3. Make subType Manually
+if(obj.subType){
 const subType = obj.subType
 
 const subTypeArea = document.createElement('div');
@@ -462,9 +502,10 @@ id="subTypeEntry"
 value="${obj[subType] || 'none'} ">`;
 
 topArea.innerHTML += subTypeContent;
+}
 
-//3. Make Name Manually
-
+//4. Make Name Manually
+if(obj.name){
 const nameArea = document.createElement('div');
 nameArea.id = 'nameArea';
 
@@ -486,14 +527,33 @@ Ref.Left.appendChild(nameArea);
 setTimeout(function() {
 nameArea.style.height = nameArea.scrollHeight + 'px';
 }, 0);
+}
 
-
+//5. Add Breaker
 const breaker = document.createElement('hr')
 breaker.id = 'breaker';
 Ref.Left.appendChild(breaker);
 
-//4. Generate Fields Dynamically
+//6. Make Key and Make Invisible
+if(obj.key){
+const keyArea = document.createElement('div');
 
+let keyContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="key">
+</label>
+<input 
+class="leftText white entry-input"
+style="display:none" 
+divId= "edit${obj.key}"
+value="${obj.key}"></h3>`;
+
+keyArea.innerHTML = keyContent;
+Ref.Left.appendChild(keyArea);
+}
+
+//7. Generate Unique Fields Dynamically
 for (const key in obj) {
 if (obj.hasOwnProperty(key) && !excludedKeys.includes(key)) { // Check if key is not excluded
 
@@ -506,48 +566,58 @@ data-content-type="rule"
 divId="${[key]}">
 ${this.proper(key)}
 </label>
-<input 
+<textarea 
 class="leftText white entry-input" 
-type="text" 
-divId= "edit${obj[key]}"
-value="${obj[key]}"></h3>`;
+id= "edit${[key]}">
+</textarea>
+</h3>`;
 
 elementContainer.innerHTML = elementContent;
 Ref.Left.appendChild(elementContainer);
+
+const elementText = document.getElementById('edit' + key);
+elementText.textContent = obj[key] || '';
+
+elementText.style.height = 'auto';
+const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
+elementText.style.height = Math.max(elementText.scrollHeight - lineHeight, lineHeight) + 'px';
+  
+elementText.addEventListener('input', function() {
+    // Set the height based on the scroll height of the content
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+    elementContainer.style.height = this.scrollHeight + 'px';
+});
 
 elementContainer.addEventListener('click', function() {
 elementContainer.querySelector('.leftText').focus();
 elementContainer.querySelector('.leftText').select();
 });
 
-const inputElement = elementContainer.querySelector('.entry-input');
-
-// inputElement.addEventListener('blur', function() {
-//     console.log('saving...');
-//     this.saveDataEntry();
-// }.bind(this)); // Ensure `this` refers to the correct context inside the event listener
-
-// elementContainer.addEventListener('input', function() {
-// // Calculate the height based on the scroll height of the textarea
-// this.style.height = 'auto'; 
-// this.style.height = this.scrollHeight + 'px';
-
-// });
-
-// elementContainer.addEventListener('blur', function() {
-// // Remove empty space at the end of the textarea value
-// this.value = this.value.trim();
-
-// });
-
-setTimeout(function() {
-elementContainer.style.height = elementContainer.scrollHeight + 'px';
-}, 0);
 }
 }
 
-//0. Make ID Manually
+//8. Add field for New
+const newArea = document.createElement('div');
 
+let newContent =  
+`<hr><h3>
+<input class="leftText hotpink entry-label" 
+style="font-family:'SoutaneBlack'; width: auto;"
+data-content-type="rule" 
+divId="newField"
+value="New Field">
+<input 
+class="leftText white entry-input" 
+type="text" 
+divId= "newContent"
+value="Insert New Value"></h3>`;
+
+newArea.innerHTML = newContent;
+Ref.Left.appendChild(newArea);
+
+//9. Make ID Manually
+if(obj.id){
 const existingId = document.getElementById('centreId');
 if (existingId) {
 existingId.remove(); // Remove the existing form
@@ -563,12 +633,14 @@ divId="id">
 </label>
 <input
 class="entry-input centreId" 
-style="font-family:'SoutaneBlack'"
+style="display:none"
 divId="id"
 value="${obj.id || 'N/A'} ">`;
 
 idArea.innerHTML += idContent;
 Ref.Left.appendChild(idArea);
+}
+}
 
 return form;
 
@@ -583,9 +655,24 @@ const labelElements = document.querySelectorAll('.entry-label');
 const labels = [];
 
 labelElements.forEach(label => {
+    
     const divId = label.getAttribute('divId');
+    
+    if(divId === 'newField' ){
+    
+        if(label.value !== "New Field"){
+            const newField = label.value 
+            console.log('Saving newField...', newField)
+            labels.push(newField)   
+        }else{//Do Nothing
+        }
+    
+    }else{
     labels.push(divId);
+    }
 });
+
+console.log(labels);
 
 //get array of input divIds
 const inputElements = document.querySelectorAll('.entry-input');
@@ -593,7 +680,19 @@ const inputs = [];
 
 inputElements.forEach(input => {
     const value = input.value;
+    const divId = input.getAttribute('divId');
+
+    if(divId === 'newContent'){
+    if(value !== 'Insert New Value'){
+        const newValue = value 
+        console.log('Saving newContent...', newValue)
+        inputs.push(newValue)   
+        }else{//Do Nothing
+        }
+        
+    }else{
     inputs.push(value);
+    }
 });
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
@@ -603,7 +702,7 @@ for (let i = 0; i < labels.length; i++) {
 
 //Edit saveEntry object for type and subType -- will need to change if to be user-access'
 
-console.log(document.getElementById('subTypeEntry').getAttribute('pair'))
+//console.log(document.getElementById('subTypeEntry').getAttribute('pair'))
 
 saveEntry['type'] = document.getElementById('typeEntry').getAttribute('pair');
 saveEntry['subType']= document.getElementById('subTypeEntry').getAttribute('pair');

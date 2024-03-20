@@ -428,7 +428,7 @@ style="display: none"
 divId="tags">
 </label>
 <h3><input 
-class="centreTag" 
+class="centreTag entry-input" 
 type="text" 
 divId= "npcTags"
 value="${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} <br>` : ''}${foundNPC.tags}"></h3><hr>`;
@@ -442,28 +442,40 @@ tagsContainer.querySelector('.centreTag').focus();
 });
 
 //3. BIO
-const backStoryText = document.createElement('textarea');
-backStoryText.id = 'backStoryText';
-backStoryText.classList.add('entry-input');
-backStoryText.classList.add('centreText'); 
-backStoryText.textContent = foundNPC.Backstory || 'Insert information about ' + foundNPC.name + ' here.';
+const backStoryText = document.createElement('div');
+
+let backStoryContent =  
+`<label class="entry-label"
+style="display: none"
+divId="description">
+</label>
+<textarea
+id="descriptionText"
+class="entry-input centreText" 
+>`;
+
+backStoryText.innerHTML = backStoryContent;
+Ref.Centre.appendChild(backStoryText);
+Ref.Centre.style.display = 'block';
 
 //Attach and display.
 const extraSpace = 125
 console.log(extraSpace)
-Ref.Centre.appendChild(backStoryText);
-Ref.Centre.style.display = 'block';
 
-backStoryText.style.height = backStoryText.scrollHeight + 'px';
+const descriptionText = document.getElementById('descriptionText');
+descriptionText.textContent = foundNPC.description || 'Insert information about ' + foundNPC.name + ' here.';
+
+// Set the initial height based on the scroll height of the content
+descriptionText.style.height = 'auto';
+descriptionText.style.height = descriptionText.scrollHeight + 'px';
+
 
 // Add event listener for input event
-backStoryText.addEventListener('input', function() {
+descriptionText.addEventListener('input', function() {
     // Set the height based on the scroll height of the content
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
 });
-
-
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
 
@@ -949,7 +961,7 @@ divId="key">
 </label>
 <input
 class="entry-input" 
-style="font-family:'SoutaneBlack'"
+style="display:none"
 divId="key"
 value="npcs">`;
 
@@ -966,7 +978,7 @@ divId="id">
 </label>
 <input
 class="entry-input centreId" 
-style="font-family:'SoutaneBlack'"
+style="display:none"
 divId="id"
 value="${foundNPC.id || 'N/A'} ">`;
 

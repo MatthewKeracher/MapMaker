@@ -23,143 +23,34 @@ loadEventListeners(){
 // -- EVENT MANAGER LISTENERS
 
 Ref.eventManager.addEventListener('input', (event) => {
-console.log('*input*')
+//console.log('*input*')
 let searchText = event.target.value.toLowerCase();
-Ref.Centre.classList.add('showCentre');
-Ref.Left.style.display = 'none';
-this.searchEvents(searchText);
-this.loadEventsList(this.searchArray, Ref.Storyteller, 'eventsManager');
 
-//this.getEvent();
-//this.addEventInfo();
+editor.searchAllData(searchText);
+
+// Ref.Centre.classList.add('showCentre');
+// Ref.Left.style.display = 'none';
+// this.searchEvents(searchText);
+// this.loadEventsList(this.searchArray, Ref.Storyteller, 'eventsManager');
 
 })
 
 Ref.eventManager.addEventListener('click', () => {
 console.log('*click*')
-Ref.Centre.classList.add('showCentre');
+Ref.Centre.style.display = 'none';
 Ref.Left.style.display = 'none';
-this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
+//this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
 
 })
 
-// // NPC TAGS LISTENERS
-
-// Ref.npcTags.addEventListener('input', (event) => {
-// let searchText = event.target.value.toLowerCase();
-// Ref.Centre.classList.add('showCentre');
-// // Ref.Left.style.display = 'none';
-// // Ref.Centre.style.display = 'none';
-// this.searchTags(searchText); 
-// this.showTags(this.searchArray);
-
-// })
-
-// Ref.npcTags.addEventListener('click', () => {
-// Ref.Centre.classList.add('showCentre');
-// Ref.Left.style.display = 'none';
-// Ref.Centre.style.display = 'none';
-// this.fillTagsArray();
-// this.showTags(this.tagsArray);
-// })
-
-// LOCATION TAGS LISTENERS
-
-// Ref.editLocationTags.addEventListener('input', (event) => {
-// let searchText = event.target.value.toLowerCase();
-// Ref.Centre.classList.add('showCentre');
-// Ref.Left.style.display = 'none';
-// // Call the searchAmbience function
-// console.log(searchText)
-// this.searchTags(searchText); 
-// this.showTags(this.searchArray);
-
-// })
-
-// Ref.editLocationTags.addEventListener('click', () => {
-// Ref.Centre.classList.add('showCentre');
-// Ref.Left.style.display = 'none';
-// this.fillTagsArray();
-// this.showTags(this.tagsArray);
-// })
-
-// // EVENT TAGS LISTENERS
-
-// Ref.eventTags.addEventListener('input', (event) => {
-//   let searchText = event.target.value.toLowerCase();
-//   Ref.Centre.classList.add('showCentre');
-//   Ref.Left.style.display = 'none';
-//   // Call the searchAmbience function
-//   console.log(searchText)
-//   this.searchTags(searchText); 
-//   this.showTags(this.searchArray);
+Ref.eventManager.addEventListener('blur', () => {
+  console.log('*blur*')
+  Ref.Centre.style.display = 'block';
+  Ref.Left.style.display = 'block';
+  //this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
   
-//   })
-  
-//   Ref.eventTags.addEventListener('click', () => {
-//   Ref.Centre.classList.add('showCentre');
-//   Ref.Left.style.display = 'none';
-//   this.fillTagsArray();
-//   this.showTags(this.tagsArray);
-//   })
+  })
 
-// // -- EVENTFORM LISTENERS
-
-// Ref.eventSearch.addEventListener('click', () => {
-// this.loadEventsList(load.Data.events, Ref.Centre)
-// })
-
-// Ref.eventLocation.addEventListener('click', () => {
-// const subLocations = load.Data.events.filter(Event => Event.target === "Location");
-// const allLocations = [...load.Data.locations, ...subLocations]
-
-// this.loadLocationsList(allLocations);
-// })
-
-// Ref.eventLocation.addEventListener('input', (event) => {
-// const subLocations = load.Data.events.filter(Event => Event.target === "Location");
-// const allLocations = [...load.Data.locations, ...subLocations]
-
-// let searchText = event.target.value.toLowerCase();
-
-// if (searchText.trim() === '') {
-
-// this.loadLocationsList(allLocations);
-
-// } else if (!/^[a-zA-Z]+$/.test(searchText)) {
-// // Turn into lower case for search.
-// let searchText = event.target.value.toLowerCase();
-
-// this.searchLocations(searchText);
-// this.loadLocationsList(this.searchArray);
-
-// } else {
-// // Input box has valid content, proceed with the search.
-// this.searchLocations(searchText);
-// this.loadLocationsList(this.searchArray);
-// }
-
-// });
-
-// Ref.eventNPC.addEventListener('click', () => {
-// // NPCs.loadNPC(load.Data.npcs)
-// })
-
-// Ref.eventNPC.addEventListener('input', (event) => {
-// let searchText = event.target.value.toLowerCase();
-// NPCs.searchNPC(searchText);
-// })
-
-},
-
-addEventsSearch: function() {
-  // Ref.eventSearch.addEventListener('input', (event) => {
-  // let searchText = event.target.value.toLowerCase();
-  
-  // // Call the searchAmbience function
-  // this.searchEvents(searchText);
-  // });
-  
 },
 
 searchEvents: function(searchText) {
@@ -193,7 +84,7 @@ searchEvents: function(searchText) {
   this.searchArray = [...uniqueSearchArray];
 
   //Return search results to list.
-  this.loadEventsList(this.searchArray, Ref.Centre);
+  //this.loadEventsList(this.searchArray, Ref.Centre);
 
 },
 
@@ -482,7 +373,7 @@ console.log(`Event not found: ${data.event}`);
 loadEventsList: function(data, target, origin) {
 
   target.innerHTML = '';
-  Ref.Centre.style.display = 'block'; // Display the container
+  target.style.display = 'block'; // Display the container
 
     data = data.sort((a, b) => {
     const locationA = a.location.toLowerCase();

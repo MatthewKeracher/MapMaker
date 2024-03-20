@@ -19,6 +19,7 @@ constructor(data) {
 //metadata
 this.type = 'class', 
 this.subType = 'level',
+this.key = 'npcs',
 
 //Character Sheet
 this.id = data.id;
@@ -35,7 +36,7 @@ for (const attribute of attributes) {
   this[attribute] = data[attribute] === ''? NPCbuild.rollScore(this, attribute) : data[attribute];
 }
 
-this.Backstory = data.Backstory;
+this.description = data.description;
 
 NPCbuild.getModifiers(this);
 NPCbuild.getCharacterSkills(this);

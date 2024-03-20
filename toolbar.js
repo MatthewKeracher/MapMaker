@@ -22,7 +22,6 @@ load.loadDefault();
 editor.init();
 
 Monsters.addMonsterFormEvents();
-Events.addEventsSearch();
 Events.loadEventListeners();
 NPCs.addNPCSearch();
 Spells.addSearch();

@@ -48,8 +48,7 @@ font-size: 1.9vh;
 }
 
 .floating-box h3,
-.Centre h3,
-.Left h3 {
+.Centre h3 {
     margin-top: 0;
     margin-bottom: 0; /* Set margin-bottom to 0 or adjust as needed */
 }

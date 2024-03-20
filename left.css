@@ -48,17 +48,23 @@ box-shadow: 0 0 0 0.1vh rgb(11, 201, 201); /* Creates a solid outline effect */
 margin-top: 1;
 }
 
-.leftLabel{
+
+.Left h3 {
+margin-top: 0;
+margin-bottom: 0; /* Set margin-bottom to 0 or adjust as needed */
+}
+
+/* .Left div{
+height:10vh
+} */
+
+.Left label{
 
 /* Position */
-min-height: 2vh;
-width: 17vh;
 margin: 0vh;
 
 /* Text */
 font-size: 2.2vh;
-color: hotpink;
-font-family: monospace;
 font-weight: bold;
 text-align: left;
 line-height: 1.5;
@@ -74,9 +80,8 @@ border-radius: 0;
 .leftText {
 
 /* Position */
-min-height: 2vh;
-width: auto;
 margin: 0vh;
+width: 20vw;
 
 /* Text */
 font-size: 2.2vh;
@@ -88,7 +93,7 @@ font-weight: bold;
 /* Appearance */
 border: none;
 background-color: transparent;
-vertical-align: middle;
+vertical-align: top;
 resize: none;
 border-radius: 0;
 margin-bottom: 0;
