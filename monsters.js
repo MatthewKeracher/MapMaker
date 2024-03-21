@@ -74,46 +74,6 @@ return match;
 },
 
 
-saveMonster: function() {
-
-// Check if an NPC with the same name already exists
-const index = load.Data.monsters.findIndex(monster => monster.id === parseInt(Ref.monsterId.value) && monster.name === Ref.monsterName.value);
-
-// Get the monster name from the form
-const monsterName = Ref.monsterName.value;
-
-const monster = {
-id: parseInt(Ref.monsterId.value),
-name: monsterName,
-type: Ref.monsterType.value,
-subType: Ref.monsterSaveAs.value,
-noApp: Ref.monsterAppearing.value,
-morale: Ref.monsterMorale.value,
-movement: Ref.monsterMovement.value,
-ac: Ref.monsterAC.value,
-hd: Ref.monsterHD.value,
-attacks: Ref.monsterAttacks.value,
-damage: Ref.monsterDamage.value,
-special: Ref.monsterSpecial.value,
-treasure: Ref.monsterTreasure.value,
-xp: Ref.monsterXP.value,
-description: Ref.monsterDescription.value
-};
-
-if (index !== -1) {
-// Update the existing Monster entry
-load.Data.monsters[index] = monster;
-
-} else {
-// Add the created NPC to the npcArray
-monster.id = Array.generateUniqueId(load.Data.monsters, 'entry');
-Ref.monsterId.value = monster.id
-load.Data.monsters.push(monster);
-console.log('New Monster added:', monster);
-}
-
-},
-
 
 
 

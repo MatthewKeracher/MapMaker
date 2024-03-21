@@ -43,37 +43,6 @@ return match;
 },
 
 
-
-
-saveSpell: function() {
-
-const existingItemIndex = load.Data.spells.findIndex(spell => spell.name === Ref.spellName.value);
-console.log(Ref.spellName.value)
-
-const item = {
-
-id: Ref.spellId.value,
-name: Ref.spellName.value,
-type: Ref.spellClass.value,
-subType: Ref.spellLevel.value,
-description: Ref.spellDescription.value,
-reverse: Ref.spellReverse.value,
-note: Ref.spellNote.value,
-range: Ref.spellRange.value,
-duration: Ref.spellDuration.value       
-
-};
-
-if (existingItemIndex !== -1) {
-// Update the existing Spell entry
-load.Data.spells[existingItemIndex] = item;
-console.log('Item updated:', item);
-} else {
-load.Data.spells.push(item);
-}
-
-},
-
 addSearch: function(){
 
 // Ref.search.addEventListener('input', (event) => {

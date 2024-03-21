@@ -107,7 +107,7 @@ border-radius: 0;
 .centreType{
 /* Position */
 height: 2.5vh;
-width: 13vw;
+width: 15vw;
 margin: 0vh;
 
 /* Text */
@@ -118,7 +118,7 @@ font-weight: bold;
 
 /* Appearance */
 border: none;
-padding: 0.1vh;
+padding: 0vh;
 background-color: transparent;
 vertical-align: middle;
 resize: none;
@@ -138,8 +138,8 @@ border-radius: 0;
 
 /* Position */
 height: 2.5vh;
-width: 14vw;
-margin: 1vh;
+width: 15vw;
+margin: 0vh;
 
 /* Text */
 font-size: 2.2vh;
@@ -150,9 +150,9 @@ text-align: right;
 
 /* Appearance */
 border: none;
-padding: 0.1vh;
+padding: 0vh;
 background-color: transparent;
-vertical-align: middle;
+vertical-align: top;
 resize: none;
 border-radius: 0;
 }
@@ -168,7 +168,7 @@ border-radius: 0;
 .input-container {
 display: flex; 
 align-items: flex-start;
-margin-bottom: 0; 
+margin-bottom: 2.2vh; 
 }
 
 .centreLabel{

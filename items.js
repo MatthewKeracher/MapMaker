@@ -178,40 +178,6 @@ Ref.itemForm.style.display = 'flex'; // Display the itemForm
 
 },
 
-saveItem: function() {
-
-const existingItemIndex = this.itemsArray.findIndex(item => item.name === Ref.itemName.value);
-
-const item = {
-
-id: Ref.itemId.value,
-name: Ref.itemName.value,
-type: Ref.itemType.value,
-tags: Ref.itemTags.value,
-size: Ref.itemSize.value,
-weight: Ref.itemWeight.value,
-cost: Ref.itemCost.value,
-damage: Ref.itemDamage.value,
-range: Ref.itemRange.value,
-ac: Ref.itemAC.value,
-description: Ref.itemDescription.value
-
-};
-
-if (existingItemIndex !== -1) {
-// Update the existing NPC entry
-this.itemsArray[existingItemIndex] = item;
-//this.itemsSearchArray[existingItemIndex] = item;
-//console.log('Item updated:', item);
-} else if (existingItemIndex === -1 && Ref.itemName.value === '' && Ref.itemTags !== ''){
-console.log('Change all Selected Items Tags')
-this.bulkAddTag(Ref.itemTags.value)
-} else {
-this.itemsArray.push(item);
-//this.itemsSearchArray.push(item);
-}
-
-},
 
 bulkAddTag(itemTags){
 

@@ -135,6 +135,10 @@ editor.editMode = true; // Now editing.
 
 editEditButton.classList.add('click-button');
 
+//Switch Toolbars
+Ref.mainToolbar.style.display = 'none';
+Ref.editToolbar.style.display = 'flex';
+
 //By default, load Location in Form
 
 const obj = load.Data.locations.find(obj => obj.name === Ref.locationLabel.textContent);
@@ -160,9 +164,7 @@ Ref.Editor.style.display = 'block';
 
 editor.loadList(load.Data);
 
-//Switch Toolbars
-Ref.mainToolbar.style.display = 'none';
-Ref.editToolbar.style.display = 'flex';
+
 
 // Add the event listeners to each .selection element
 Ref.locationDivs.forEach((div) => {
@@ -184,6 +186,7 @@ editEditButton.classList.remove('click-button');
 Ref.eventManager.style.display = 'block';
 Ref.locationLabel.style.display = 'block';
 Ref.Storyteller.style.display = 'block';
+Ref.Storyteller.innerHTML = '';
 
 //Hide Editor, Centre, Left
 Ref.Editor.style.display = 'none';
@@ -214,8 +217,9 @@ editSaveButton.classList.remove('click-button');
 
 console.log('saving...')
 editor.saveDataEntry();
+if(load.Data.npcs){
 NPCs.buildNPC();
-
+}
 }
 
 clearFormButton(){
@@ -262,7 +266,7 @@ break;
 }}
 
 deleteFormButton(){
-editor.deleteLocation();
+editor.deleteDataEntry();
 };
 
 

@@ -91,7 +91,7 @@ location.style.height = height + 'px';
 
     // Create a label element for the div ID
     var labelElement = document.createElement('div');
-    labelElement.className = 'div-id-label';
+    labelElement.className = 'div-name-label';
     labelElement.textContent = name;
        
 
@@ -108,8 +108,16 @@ load.addLocationEvents();
 // Create an object with the location information
 const locationInfo = map.addNewLocation(location);
 
+// // Check if Data.locations is undefined
+// if (typeof load.Data.locations === 'undefined') {
+//     // Initialize Data.locations as an empty array
+//     load.Data.locations = [];
+// }
+
 // Add the locationInfo to the Data.locations
 load.Data.locations.push(locationInfo);
+load.displayLocations(load.Data.locations);
+//console.log(locationInfo, load.Data.locations)
 
 this.isDragging = false;
 this.previewDiv.remove();

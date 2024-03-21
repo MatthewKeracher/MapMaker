@@ -22,6 +22,7 @@ fetch(url)
 .then(data => {
 // Here, 'data' will be your JSON array
 this.Data = data
+Ref.Storyteller.style.display = 'block';
 //console.log(this.Data);
 })
 .catch(error => {
@@ -47,9 +48,16 @@ newId++;
 
 else if(scope === 'entry'){
 
+try{
 const largestId = array.reduce((maxId, entry) => (entry.id && entry.id > maxId) ? entry.id : maxId, 0);
 
 return largestId + 1;
+}
+
+catch{
+//if Array is empty, this is first entry!
+return 1
+}
 
 }},
 
@@ -396,7 +404,7 @@ this.addLocationEvents()
 },
 
 addLocationtoData(locationData) {
-const { left, top, width, height, name} = locationData;
+const {left, top, width, height, name, id} = locationData;
 
 // Create a new location element with the specified properties
 const newLoc = document.createElement('div');
@@ -405,12 +413,14 @@ newLoc.style.left = left + 'px';
 newLoc.style.top = top + 'px';
 newLoc.style.width = width + 'px';
 newLoc.style.height = height + 'px';
-newLoc.id = name;
+//newLoc.setAttribute("name", name);
+newLoc.name = name;
+newLoc.id = id;
 
-// Create a label element for the div ID
+// Create a label element for the location name
 const imageContainer = document.querySelector('.image-container');
 const labelElement = document.createElement('div');
-labelElement.className = 'div-id-label';
+labelElement.className = 'div-name-label';
 labelElement.textContent = name;
 newLoc.appendChild(labelElement);
 
@@ -468,7 +478,8 @@ NPCs.clearForm(Ref.npcForm);
 location.addEventListener('click', () => {
 
 if (editor.editMode){
-const obj = load.Data.locations.find(obj => location.id === obj.name);
+console.log(location)
+const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));
 const form = editor.createForm(obj);
 Ref.Left.appendChild(form);
 }

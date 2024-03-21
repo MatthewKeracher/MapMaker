@@ -45,8 +45,8 @@ Ref.Left.style.display = 'none';
 
 Ref.eventManager.addEventListener('blur', () => {
   console.log('*blur*')
-  Ref.Centre.style.display = 'block';
-  Ref.Left.style.display = 'block';
+  //Ref.Centre.style.display = 'block';
+  //Ref.Left.style.display = 'block';
   //this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
   
   })
@@ -87,8 +87,6 @@ searchEvents: function(searchText) {
   //this.loadEventsList(this.searchArray, Ref.Centre);
 
 },
-
-
 
 searchLocations: function(searchText) {
   this.searchArray = [];
@@ -781,6 +779,13 @@ divArray.forEach(div => {
 
 async getEvent(currentLocation, locObj) {
 const activeEvents = [];
+
+// // Check if Data.events is undefined
+// if (typeof load.Data.events === 'undefined') {
+//   // Initialize Data.events as an empty array
+//   load.Data.events = [];
+// }
+
 const subLocations = load.Data.events.filter(entry => entry.location === currentLocation)
 const tags = locObj.tags
 
@@ -847,7 +852,6 @@ npcEvents.push(newEvent)
 
 }
 
-
 locationEvents.sort((a, b) => {
   // If a's location is 'All', it should come first
   if (a.location === 'All') return -1;
@@ -863,7 +867,6 @@ locationEvents.sort((a, b) => {
 
 const allCount = locationEvents.filter(entry => entry.location === 'All').length;
 
-
 // Create an array of matching NPC events for each Location event
 const matchedEvents = locationEvents.map(locEvent => {
   const matchedNPCs = npcEvents.filter(npcEvent => npcEvent.location === locEvent.name);
@@ -872,6 +875,8 @@ const matchedEvents = locationEvents.map(locEvent => {
     npc: matchedNPCs,
   };
 });
+
+if(matchedEvents.length > 0){
 
 // Concatenate location description and NPC event descriptions
 this.eventDesc = matchedEvents.map((entry, index) => {
@@ -939,6 +944,11 @@ locDesc =
 }
   return locDesc;
 }).join('');
+}else{
+
+this.eventDesc = locObj.description;
+
+}
 },
 
 addCurrentEventNames(event, eventNameDiv){
@@ -1062,8 +1072,6 @@ saveEvent: function() {
 
   this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
 },
-
-
 
 populateDropdown(dropdown, options, replace) {
 

@@ -91,7 +91,8 @@ return string.charAt(0).toUpperCase() + string.slice(1);
 },
 
 loadList: function(data) {
-console.log('loading List')
+//console.log('loading List')
+console.log(data)
 //Where to put list...
 let target = Ref.Editor
 target.innerHTML = '';
@@ -101,9 +102,17 @@ target.style.display = 'block';
 for (const key in data) {
 let obj = data[key]
 
-//Set type and subType
+if(obj[0]){
+// Set type and subType
 const type = obj[0].type;
 const subType = obj[0].subType;
+
+
+if(obj.length < 2){
+
+//Not enough entries to run comparison. No need to either.
+    
+}else{
 
 // 1. Sort the items by item type alphabetically and then by Level numerically.
 obj.sort((a, b) => {
@@ -118,6 +127,7 @@ return a[subType] - b[subType] || a.name.localeCompare(b.name);
 }
 });
 
+};
 
 // 2. Attach Key, Section and subSection Heads.
 obj = obj.reduce((result, currentEntry, index, array) => {
@@ -142,6 +152,8 @@ result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: curren
 result.push(currentEntry);
 return result;
 }, []);
+
+
 
 //list Title
 const titleDiv = document.createElement(key);
@@ -242,7 +254,7 @@ target.appendChild(nameDiv);
 this.listEvents(entry, nameDiv, key);
 
 }}
-
+}
 },
 
 listEvents: function(entry, div, key){
@@ -305,9 +317,12 @@ break;
 }}}});
 }}
 
-console.log(resultsByKeys);
-
+if(searchText === ''){
+this.loadList(load.Data)
+}else{
 this.loadList(resultsByKeys);
+}
+
 },
 
 showHide: function (div) {
@@ -459,6 +474,7 @@ descriptionText.addEventListener('input', function() {
 
 //2. Make Type Manually
 const topArea = document.createElement('div');
+topArea.style.display = 'flex'; // Set the display property to flex
 
 if(obj.type){
 const type = obj.type
@@ -546,6 +562,7 @@ divId="key">
 <input 
 class="leftText white entry-input"
 style="display:none" 
+id="dataEntryKey"
 divId= "edit${obj.key}"
 value="${obj.key}"></h3>`;
 
@@ -565,7 +582,7 @@ let elementContent =
 data-content-type="rule" 
 divId="${[key]}">
 ${this.proper(key)}
-</label>
+</label><br>
 <textarea 
 class="leftText white entry-input" 
 id= "edit${[key]}">
@@ -576,17 +593,23 @@ elementContainer.innerHTML = elementContent;
 Ref.Left.appendChild(elementContainer);
 
 const elementText = document.getElementById('edit' + key);
+const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
+const numLines = Math.floor(elementText.scrollHeight / lineHeight);
+
+
 elementText.textContent = obj[key] || '';
 
-elementText.style.height = 'auto';
-const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
+if(numLines === 2){
 elementText.style.height = Math.max(elementText.scrollHeight - lineHeight, lineHeight) + 'px';
+} else {
+elementText.style.height = elementText.scrollHeight + 'px';
+}
   
 elementText.addEventListener('input', function() {
     // Set the height based on the scroll height of the content
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
-    elementContainer.style.height = this.scrollHeight + 'px';
+    elementContainer.style.height = this.scrollHeight + lineHeight + 'px';
 });
 
 elementContainer.addEventListener('click', function() {
@@ -601,7 +624,7 @@ elementContainer.querySelector('.leftText').select();
 const newArea = document.createElement('div');
 
 let newContent =  
-`<hr><h3>
+`<br><hr><h3>
 <input class="leftText hotpink entry-label" 
 style="font-family:'SoutaneBlack'; width: auto;"
 data-content-type="rule" 
@@ -635,6 +658,7 @@ divId="id">
 class="entry-input centreId" 
 style="display:none"
 divId="id"
+id="dataEntryId"
 value="${obj.id || 'N/A'} ">`;
 
 idArea.innerHTML += idContent;
@@ -672,8 +696,6 @@ labelElements.forEach(label => {
     }
 });
 
-console.log(labels);
-
 //get array of input divIds
 const inputElements = document.querySelectorAll('.entry-input');
 const inputs = [];
@@ -694,6 +716,8 @@ inputElements.forEach(input => {
     inputs.push(value);
     }
 });
+
+//console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {
@@ -719,176 +743,47 @@ console.log(saveEntry);
 load.Data[key][index] = saveEntry;
 editor.loadList(load.Data);
 load.displayLocations(load.Data.locations);
+
 // console.log('Updated saveEntry:');
 // console.log(load.Data[key][index]);
 
 },
 
-deleteLocation() {
-let array;
-let id;
-let index;
+deleteDataEntry: function(){
 
-switch (this.editPage) {
+//Retrieve key and id of entry for deletion.
+const key = document.getElementById('dataEntryKey').getAttribute('value');
+const id = document.getElementById('dataEntryId').getAttribute('value');
+//console.log(key, id);
 
-case 2:
+//Use key and id to find index.
+const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
+//console.log(index)
 
-array = load.Data.events;
-id = Ref.eventId.value;
-index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
+//Delete index and refresh.
+if (index !== -1) { // Check if index was found
+    // Confirm deletion
+    const confirmation = confirm('Are you sure you want to delete this entry?');
+    if (confirmation) {
+        // Remove entry at index
+        load.Data[key].splice(index, 1);
+        editor.loadList(load.Data);
+        Ref.Left.style.display = 'none';
+        Ref.Centre.style.display = 'none';
 
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
+        //if Location then delete locationDiv
+        if(key === 'locations'){
+            load.displayLocations(load.Data.locations);
+       }
 
-if (confirmation) {
-array.splice(index, 1); 
-Events.loadEventsList(array, Ref.Centre);
-Ref.eventForm.reset();
-}
-}
+        // Refresh or update UI as needed
+    } else {
+        console.log('Deletion canceled.');
+    }
+} else {
+    console.log('Entry not found or invalid key/id.');
+}},
 
-break;
-
-case 3:
-
-array = load.Data.npcs;
-id = Ref.npcId.value;
-index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
-
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
-
-if (confirmation) {
-array.splice(index, 1); 
-NPCs.loadNPC(array, Ref.Centre);
-Ref.npcForm.reset();
-}
-}
-
-break;
-
-case 4:
-
-array = load.Data.monsters;
-id = Ref.monsterId.value;
-index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
-
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
-
-if (confirmation) {
-array.splice(index, 1); 
-editor.loadList(array, "All Monsters");
-Ref.monsterForm.reset();
-}
-}
-
-break;
-
-case 5:
-
-array = load.Data.items;
-id = Ref.itemId.value;
-index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
-
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
-
-if (confirmation) {
-array.splice(index, 1); 
-editor.loadList(array, "All Items");
-Ref.itemForm.reset();
-}
-}
-
-break;
-
-case 6:
-
-array = load.Data.spells;
-id = Ref.spellId.value;
-index = array.findIndex(entry => parseInt(entry.id) === parseInt(id));
-
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + array[index].name + "?");
-
-if (confirmation) {
-array.splice(index, 1); 
-editor.loadList(array, "All Spells");
-Ref.form.reset();
-}
-}
-
-break;
-
-default:
-// For locations.
-const divId = Ref.locationLabel.textContent;
-array = load.Data.locations;
-index = array.findIndex(entry => entry.divId === divId);
-
-if (index !== -1) {
-const confirmation = window.confirm("Are you sure you want to delete " + array[index].divId + "?");
-
-if (confirmation) {
-// Remove the entry from Data.locations
-array.splice(index, 1);
-
-// Remove the corresponding <div> element from the DOM
-const divToRemove = document.getElementById(divId);
-if (divToRemove) {
-divToRemove.remove();
-}
-}
-}
-break;
-}
-},
-
-// Save a Location
-saveLocation() {
-const divId = Ref.locationLabel.textContent; // Get the divId for the location you're saving
-
-//Find correct place to save...
-const matchingEntry = load.Data.locations.find(entry => entry.divId === divId);
-
-if (matchingEntry) {
-// Update the corresponding entry in Data.locations
-console.log(matchingEntry)
-matchingEntry.description = Ref.textLocation.value;
-matchingEntry.divId = Ref.editLocationName.value;
-matchingEntry.tags = Ref.editLocationTags.value;
-
-//Update the Existing Divs
-const locationDiv = document.getElementById(divId);
-locationDiv.setAttribute('id',Ref.editLocationName.value);
-locationDiv.querySelector('.div-id-label').textContent = Ref.editLocationName.value;
-
-//console.log("Updated Entry: " + JSON.stringify(matchingEntry, null, 2));
-
-//Refresh
-const savedLocation = document.getElementById(Ref.editLocationName.value);
-Storyteller.changeContent(savedLocation);
-
-}
-
-// Update the new location name in npcArray!
-
-for (const npc of load.Data.npcs) {
-if (npc.MorningLocation === divId) {
-npc.MorningLocation = Ref.editLocationName.value;
-}
-if (npc.AfternoonLocation === divId) {
-npc.AfternoonLocation = Ref.editLocationName.value;
-}
-if (npc.NightLocation === divId) {
-npc.NightLocation = Ref.editLocationName.value;
-}
-}
-
-
-
-}, 
 
 };
 

@@ -1,5 +1,6 @@
 import Events from "./events.js";
 import Ref from "./ref.js";
+import load from "./load.js";
 
 const Map = {
 
@@ -98,30 +99,39 @@ return valuesArray;
 
 addNewLocation(location) {
 const rect = location.getBoundingClientRect();
+
+//Ingredients for a Location
+const key = "locations";
+const type = "group";
+const subType = "color";
+const group = "Default"; 
+const color = "gold";
+const id = load.generateUniqueId(load.Data.locations, 'entry'); 
+const name = location.name;
+const tags = "";
+const description = "You should add a description.";
 const left = parseFloat(location.style.left);
 const top = parseFloat(location.style.top);
 const width = parseFloat(location.style.width);
 const height = parseFloat(location.style.height);
-const name = location.id;
-const description = "";
-const tags = ""
 
 return {
+key,
+type,
+subType,
+group,
+color,
+id,
+name,
+tags,
+description,
 left,
 top,
 width,
 height,
-name,
-tags,
-description,
 };
 },
 
-
-
 };
-
-
-
 
 export default Map;

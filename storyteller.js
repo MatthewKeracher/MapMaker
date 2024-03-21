@@ -17,13 +17,15 @@ async changeContent(locationDiv) {
 
 let Story = ``
 
-const locName = locationDiv.id;
+const locId = locationDiv.id;
 
-const locObj = load.Data.locations.find(entry => entry.name === locName);
+const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
+const locName = locObj.name
 Ref.locationLabel.textContent = locName;
 //Ref.editLocationName.value   = locName;
 
 if (locObj) {
+//console.log(locObj)
 Events.getEvent(locName, locObj);
 
 //Feed locationText through filters too generate hypertext elements. 
