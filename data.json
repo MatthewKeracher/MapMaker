@@ -15852,11 +15852,24 @@
         "description": "A vial of writing ink is a small glass bottle with a cork stopper. The ink inside is a deep black color, and has a slightly oily texture. It has a faint smell of sulfur and a slight metallic taste. The ink is thick enough to be used with a quill or brush, and is perfect for writing magical runes or inscribing scrolls."
       }
     ], 
+    "events": [
+      {
+        "key": "events",
+        "type": "group",
+        "subType": "target",
+        "target": "Location",
+        "group": "Weather",
+        "tags": "Weather, Summer, Morning",
+        "id": 138,
+        "active": 1,
+        "name": "Summer Morning",
+        "description": "It is a summer morning. The air is still cold from the night as the sun rises into a cloudless, blue sky. \n\nThe shadows are long, and birdsong fills the air. Bees bumble on their way, with the world in full bloom.",
+        "location": "All",
+        "npc": ""
+      } 
+    ],
     "locations": [
       
-    ],
-    "events": [
-
     ],
     "npcs": [
         
@@ -15864,4 +15877,5 @@
     "tags": [
       
     ]
+    
   }

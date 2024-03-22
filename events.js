@@ -26,7 +26,9 @@ Ref.eventManager.addEventListener('input', (event) => {
 //console.log('*input*')
 let searchText = event.target.value.toLowerCase();
 
+if(editor.editMode === true){
 editor.searchAllData(searchText);
+};
 
 // Ref.Centre.classList.add('showCentre');
 // Ref.Left.style.display = 'none';
@@ -271,6 +273,7 @@ backStoryText.textContent = event.description || 'Insert information about ' + e
 //Attach and display.
 Ref.Centre.appendChild(backStoryText);
 Ref.Centre.style.display = 'block';
+Ref.Left.style.display = 'block';
 
 backStoryText.style.height = backStoryText.scrollHeight + 'px';
 
@@ -780,11 +783,7 @@ divArray.forEach(div => {
 async getEvent(currentLocation, locObj) {
 const activeEvents = [];
 
-// // Check if Data.events is undefined
-// if (typeof load.Data.events === 'undefined') {
-//   // Initialize Data.events as an empty array
-//   load.Data.events = [];
-// }
+console.log('finding events...')
 
 const subLocations = load.Data.events.filter(entry => entry.location === currentLocation)
 const tags = locObj.tags
@@ -795,7 +794,7 @@ const tags = locObj.tags
 //Search for events active by 'All', Location Name, or by Tag
 for (const entry of load.Data.events) {
 if (
-    entry.active === 1 && 
+    parseInt(entry.active) === 1 && 
   (
     (entry.location === "All") || 
     (entry.location.split(',').map(locItem => locItem.trim()).some(locItem => locItem === currentLocation)) ||

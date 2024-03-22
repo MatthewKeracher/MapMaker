@@ -11,12 +11,30 @@ import Items  from "./items.js";
 import Spells  from "./spells.js";
 import load from "./load.js";
 import save   from "./save.js";
+import Storyteller from "./storyteller.js";
 
 class Toolbar{
 
 init() {   
 
 load.loadDefault();
+Ref.locationLabel.textContent = 'Information';
+Ref.editToolbar.style.display = 'none';
+
+
+//Readme.
+Ref.Storyteller.innerHTML = 
+`<span class="withbreak">
+Welcome to Excel_DM, a hypertextual Game Master worldbuilding and game running tool.
+
+All you need to do to being is select [M]ap button and load an image file. [D]ata is loaded from, and saved to a .json file.
+
+*Link to Library*
+
+Matthew Keracher, 2024.
+keracher@uwm.edu
+</span>
+`;
 
 //editor.addPredictiveContent();
 editor.init();
@@ -44,7 +62,7 @@ Ref.fileInput.addEventListener('change', load.loadSaveFile);
 //editToolbar
 Ref.editEditButton.addEventListener('click', this.editButton);
 Ref.editSaveButton.addEventListener('click', this.saveFormButton);
-Ref.editClearButton.addEventListener('click', this.clearFormButton); 
+Ref.editNewButton.addEventListener('click', this.newButton); 
 Ref.editDeleteButton.addEventListener('click', this.deleteFormButton);
 
 // //centreToolbar
@@ -71,6 +89,8 @@ Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 };
 
+
+
 escButton(){
 
 Ref.Centre.style.display = "none";
@@ -78,7 +98,17 @@ Ref.Left.style.display = "none";
 // Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
 Ref.eventManager.value = '';
+
+if(load.fileName !== ''){
 Ref.locationLabel.textContent = load.fileName;
+Ref.Storyteller.innerHTML = '';
+
+Storyteller.showTownText();
+    
+
+}else{
+Ref.locationLabel.textContent = 'Information';    
+}
 
 
 };
@@ -147,15 +177,12 @@ if(obj){
 const form = editor.createForm(obj);
 Ref.Left.appendChild(form);}
 
-
-//Change Location Label Contents
-Ref.locationLabel.textContent = load.fileName;
-
+Ref.locationLabel.textContent = 'Editing...';
 
 //Hide Storyteller
 //Ref.eventManager.style.display = 'none';
 //Ref.locationLabel.style.display = 'none';
-Ref.Storyteller.style.display = 'none';
+
 
 //Show Editor loadLists()
 Ref.Editor.style.display = 'block';
@@ -184,9 +211,10 @@ editEditButton.classList.remove('click-button');
 
 //Show Storyteller
 Ref.eventManager.style.display = 'block';
-Ref.locationLabel.style.display = 'block';
 Ref.Storyteller.style.display = 'block';
 Ref.Storyteller.innerHTML = '';
+
+toolbar.refreshLocation();
 
 //Hide Editor, Centre, Left
 Ref.Editor.style.display = 'none';
@@ -204,9 +232,48 @@ div.removeEventListener('mouseleave', editor.handleMouseHover);
 });
 }}};
 
+refreshLocation(){
+    
+if(Storyteller.returnLocation !== ''){
+const locDiv = document.getElementById(Storyteller.returnLocation);
+Storyteller.changeContent(locDiv);
+}
+
+else if(load.fileName !== ''){
+Ref.locationLabel.textContent = load.fileName;
+}else{
+Ref.locationLabel.textContent = 'Information';    
+}
+
+
+}
+
 saveButton(){
-save.exportArray();
-}; 
+      
+if(Ref.Left.style.display === 'none'){
+
+    saveButton.classList.add('click-button');
+    setTimeout(() => {
+    saveButton.classList.remove('click-button');
+    }, 1000); // 1000 milliseconds = 1 second
+
+    save.exportArray();
+
+}else{
+
+    editSaveButton.classList.add('click-button');
+    setTimeout(() => {
+    editSaveButton.classList.remove('click-button');
+    }, 1000); // 1000 milliseconds = 1 second
+    
+    console.log('saving...')
+    editor.saveDataEntry();
+    if(load.Data.npcs){
+    NPCs.buildNPC();
+    load.displayLocations(load.Data.locations);
+    toolbar.refreshLocation();
+    }
+}}
 
 saveFormButton(){
 
@@ -219,51 +286,22 @@ console.log('saving...')
 editor.saveDataEntry();
 if(load.Data.npcs){
 NPCs.buildNPC();
+editor.loadList(load.Data);
+load.displayLocations(load.Data.locations);
 }
 }
 
-clearFormButton(){
+newButton(){
 
-const Page = editor.editPage
-
-editClearButton.classList.add('click-button');
+editNewButton.classList.add('click-button');
 setTimeout(() => {
-editClearButton.classList.remove('click-button');
+editNewButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
-switch (Page) {
-case 1:
-document.getElementById('textLocation').value = "";
-break;
+//Select a header type and it will generate a blank version. 
+editor.makeNew = true;
 
-case 2:
-NPCs.clearForm(Ref.eventForm);
-Events.loadEventsList(load.Data.events, Ref.Centre);
-break;
-
-case 3:
-NPCs.clearForm(Ref.npcForm);
-Events.loadEventsList(load.Data.events, Ref.Centre);
-break;
-
-case 4:
-NPCs.clearForm(Ref.monsterForm);
-
-break;
-
-case 5:
-NPCs.clearForm(Ref.itemForm);
-
-break;
-
-case 6:
-NPCs.clearForm(Ref.spellsForm);
-break;
-
-default:
-
-break;
-}}
+}
 
 deleteFormButton(){
 editor.deleteDataEntry();

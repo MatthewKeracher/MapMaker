@@ -53,7 +53,7 @@ static getMonster(npc){
 
   //console.log(npc.name, npc.monsterTemplate)
   // Find Monster
-  const stats = load.Data.monsters.filter(monster => monster.name === npc.monsterTemplate);
+  const stats = load.Data.monsters.filter(monster => monster.name === npc.class);
 
   if(stats.length !== 0){
   

@@ -17,7 +17,9 @@ toolbar.escButton();
 }
 
 if (
-    !Ref.Centre.contains(document.activeElement) && !Ref.Right.contains(document.activeElement) &&
+    !Ref.Centre.contains(document.activeElement) && 
+    !Ref.Right.contains(document.activeElement) &&
+    !Ref.Storyteller.contains(document.activeElement) &&
     !Ref.Left.contains(document.activeElement) 
     ) {
 
@@ -56,8 +58,8 @@ case 'e':
 case 's':
     editSaveButton.click();
     break;
-case 'c':
-    editClearButton.click();
+case 'n':
+    editNewButton.click();
     break;
 case 'd':
     editDeleteButton.click();

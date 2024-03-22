@@ -1,10 +1,12 @@
 .image-container {
     position: relative;
-    width: 70vw; 
-    height: 100vh; 
+    width: 64.7vw;
+    top: 0.6vh; 
+    height: 98vh; 
     overflow: auto;    
-    scrollbar-color: black;
+    scrollbar-color: transparent;
     overflow: auto; 
+    border: 0.4vh solid teal;
     }
 
     
@@ -14,22 +16,22 @@
         z-index: 0;
         }
             .image-container::-webkit-scrollbar {
-            width: 5px; /* Set the width of the scrollbar */
+            width: 0px; /* Set the width of the scrollbar */
             }
     
             .overlay-layer {
                 position: fixed;
-                top: 0;
+                top: 0.6 vh;
                 left: 0;
-                width: 67vw;
-                height: 100vh;
+                width: 64.5vw;
+                height: 98vh;
                 pointer-events: none; /* Allow interactions with elements beneath the overlay */
               }          
     
             .preview {
             position: absolute;
-            z-index: 2;
-            border: 6px solid lime;
+            z-index: 100;
+            border: 0.2vw solid lime;
             pointer-events: none; /* Prevent the preview div from blocking interactions */
             opacity: 1; /* You can adjust the opacity as desired */
             }

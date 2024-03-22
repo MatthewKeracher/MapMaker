@@ -23,6 +23,7 @@ fetch(url)
 // Here, 'data' will be your JSON array
 this.Data = data
 Ref.Storyteller.style.display = 'block';
+
 //console.log(this.Data);
 })
 .catch(error => {
@@ -110,8 +111,10 @@ try {
 if (fileContent) {
 
 load.Data = JSON.parse(fileContent);
-this.generateTags(load.Data);
+//this.generateTags(load.Data);
 this.sortData(load.Data);
+Storyteller.townText = load.Data.townText;
+Storyteller.showTownText();
 console.log(load.Data)
 
 try {
@@ -136,7 +139,13 @@ reject(error);
 generateTags(data) {
 let tagsArray = [];
 
+const excludedKeys = ['townText']
+
+
 for (const key in data) {
+
+if (!excludedKeys.includes(key)) { // Check if key is not excluded
+
 let obj = data[key];
 
 obj.forEach(entry => {
@@ -168,6 +177,7 @@ description: '',
 load.Data.tags = tagsArray;
 
 //console.log(load.Data);
+}
 },
 
 sortData(data){
@@ -263,21 +273,21 @@ let obj = data[key]
 // obj = obj.map(event => ({
 
 // //metadata
-// key: key,
-// type: 'group', 
-// subType: 'target',
-
-// //change
-// target: event.subType, 
-// group: event.type, 
-
-// //stay same
 // id: event.id,
-// active: event.active,
+// key: key,
+// type: 'target', 
+// subType: 'group',
+
 // name: event.name, 
-// description: event.description, 
+// active: event.active,
+// tags: event.tags,
+// target: event.target, 
+// group: event.group, 
 // location: event.location, 
 // npc: event.npc, 
+
+// description: event.description, 
+
 
 // }));
 // }
@@ -355,9 +365,9 @@ let obj = data[key]
 
 //Sort Ids
 //doesn't work with generateTags
-this.generateUniqueId(obj, 'array');
+// this.generateUniqueId(obj, 'array');
 
-data[key]= obj;
+// data[key]= obj;
 
 }},
 
@@ -469,7 +479,7 @@ locations.forEach((location) => {
 if (!location.dataset.hasListener) {
 
 
-location.addEventListener('click', () => {
+location.addEventListener('click', () => {    
 Storyteller.changeContent(location);
 NPCs.clearForm(Ref.npcForm);
 });

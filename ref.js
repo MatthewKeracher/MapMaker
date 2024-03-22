@@ -82,7 +82,7 @@ tableForm: document.getElementById('tableForm'),
 editToolbar: document.getElementById('editToolbar'),
 editEditButton: document.getElementById('editEditButton'),
 editSaveButton: document.getElementById('editSaveButton'),
-editClearButton: document.getElementById('editClearButton'),
+editNewButton: document.getElementById('editNewButton'),
 editDeleteButton: document.getElementById('editDeleteButton'),
 
 mainToolbar: document.getElementById('mainToolbar'),

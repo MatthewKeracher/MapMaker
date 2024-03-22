@@ -4,9 +4,11 @@
 
 /* Position */
 position: fixed;
-top:1vh;  
-right: 35vw; 
-width: 31vw;
+top:1vh; 
+min-height: 10vh; 
+max-height: 96vh;
+right: 35.1vw; 
+width: 32.3vw;
 height: auto;
 z-index:10;
 
@@ -30,7 +32,7 @@ outline: 0.4vh solid teal;
 
 .Centre hr {
 border: none;
-width: 31vw;
+width: 32.5vw;
 height: 0.05vh; /* Adjust the height of the line */
 background-color: teal; /* Color of the line */
 box-shadow: 0 0 0 0.1vh teal; /* Creates a solid outline effect */

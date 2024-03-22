@@ -1,21 +1,16 @@
-.editToolbar{
-position: fixed;
-top: 8vh; 
-right: 0vw; 
-z-index: 5;
-width: 34vw;
-display: none; 
-flex-direction: row; 
-}
 
-.mainToolbar {
-position: fixed;
-top: 8vh; 
+.mainToolbar,
+.editToolbar{
+position: absolute;
+top: 0vh; 
 right: 0vw; 
+height: 6vh;
+width: 34.3vw;
 z-index: 5;
-width: 34vw;
+
 display: flex; 
 flex-direction: row; 
+ 
 }
 
 .centreToolbar{
@@ -32,20 +27,24 @@ flex-direction: row;
 .button {
 width: 100%; /* Make each button fill the width of the toolbar */
 height: 6vh; 
-font-size: 2vh; 
+font-size: 2.2vh; 
 padding: 1vh 1vw; 
-margin: 0.5vh 0; /* Add margin to control spacing */
-border: 0.1vh solid black; 
-font-family: monospace;
+margin: 0.0vh 0; /* Add margin to control spacing */
+border: 0.1vh solid teal; 
+font-family: 'SoutaneBlack';
+color: cyan;
+background-color: rgba(0, 128, 128, 0.663);;
 transition: background-color 0.3s; 
 }
 
 .button:hover {
-background-color: hotpink; /* Change the background color when hovering */
+background-color: cyan; /* Change the background color when hovering */
+color: teal;
 }                       
 
 .click-button {
-background-color: lime;
+background-color: cyan;
+color: teal;
 }
 
 .bottomToolbar{ 

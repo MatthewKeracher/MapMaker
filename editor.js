@@ -11,6 +11,7 @@ import Map from "./map.js";
 const editor = {
 
 editMode : false,
+makeNew: false,
 moveMode: false,
 divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 
@@ -97,10 +98,15 @@ console.log(data)
 let target = Ref.Editor
 target.innerHTML = '';
 target.style.display = 'block'; 
+const excludedKeys = ['townText'];
 
 // 0. Iterate over each property in the data object
 for (const key in data) {
-let obj = data[key]
+
+if (!excludedKeys.includes(key)){
+  
+    let obj = data[key]
+    console.log(key)
 
 if(obj[0]){
 // Set type and subType
@@ -156,15 +162,15 @@ return result;
 
 
 //list Title
-const titleDiv = document.createElement(key);
+const titleDiv = document.createElement('div');
 
 titleDiv.setAttribute("scope", 'key');
 titleDiv.setAttribute("id", key);
+titleDiv.classList.add('misc');
 
 titleDiv.innerHTML = 
 `<h2>
 <span
-class ="misc"
 style="display: block; letter-spacing: 0.18vw;">
 ${this.proper(key)}
 </span></h2>`;
@@ -242,7 +248,6 @@ nameDiv.innerHTML =
 
 }
 
-
 nameDiv.setAttribute('key', key)
 nameDiv.setAttribute('keyShow', "false")
 nameDiv.setAttribute('section', currentSection)
@@ -254,7 +259,7 @@ target.appendChild(nameDiv);
 this.listEvents(entry, nameDiv, key);
 
 }}
-}
+}}
 },
 
 listEvents: function(entry, div, key){
@@ -273,6 +278,24 @@ div.addEventListener('click', () => {
 this.showHide(div);
 });
 
+//2.makeNew Hover
+div.addEventListener('mouseover', function() {
+
+if(editor.makeNew === true){ 
+this.classList.remove('misc');   
+this.classList.add('item');
+}
+});
+
+div.addEventListener('mouseout', function() {
+
+if(editor.makeNew === true){ 
+this.classList.remove('item');   
+this.classList.add('misc');
+}
+
+});
+
 }else{
 
 //1. showEntry
@@ -280,7 +303,11 @@ div.addEventListener('click', () => {
 
 if(key === 'npcs'){
 NPCs.addNPCInfo(entry.name, Ref.Left);
-}else{
+} 
+// else if(key === 'events'){
+// Events.addEventInfo(entry);
+// }
+else{
 const form = editor.createForm(entry)
 Ref.Left.appendChild(form);
 }
@@ -292,10 +319,11 @@ Ref.Left.appendChild(form);
 
 searchAllData: function (searchText) {
 const resultsByKeys = {}; // Object to store results grouped by keys
+const excludedKeys = ['townText'];
 
 // Iterate over each key in load.Data
 for (const key in load.Data) {
-if (load.Data.hasOwnProperty(key)) {
+if (load.Data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
 // Get the array corresponding to the key
 const dataArray = load.Data[key];
 
@@ -333,6 +361,14 @@ if (scope === 'key'){ //has clicked on a keyHeading
 
 let key = div.getAttribute("id")
 
+if(editor.makeNew === true){ // to make new Entries
+editor.createForm(load.Data[key][0])
+editor.makeNew = false;
+div.classList.remove('item');   
+div.classList.add('misc');
+
+}else{
+
 items = document.querySelectorAll(`[key="${key}"]`); 
 
 
@@ -358,7 +394,9 @@ item.style.display = 'none';
 item.setAttribute('sectionShow', "false")
 item.setAttribute('subSectionShow', "false")
 
-})}
+})
+
+}}
 
 else if (scope === 'section'){ //has clicked on a section heading
 
@@ -414,7 +452,7 @@ item.setAttribute('sectionShow', "true")
 
 createForm: function (obj){
 
-console.log(obj);
+//console.log(obj);
 
 ['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker', 'newArea'].forEach(id => {
 const element = document.getElementById(id);
@@ -432,12 +470,38 @@ const form = document.createElement('form');
 form.id = 'editForm';
 form.classList.add('form');
 
-if(obj){
+if (obj) {
+    if (editor.makeNew === true) {
+        const reservedTerms = ['id', 'key', 'type', 'subtype'];
+        
+        // Create a deep copy of the original object
+        const newObj = JSON.parse(JSON.stringify(obj));
 
-const excludedKeys = ['id', 'name', 'type', 'subType', 'tags', 'description', 'key']; // Define keys to exclude
+        // Generate a unique ID for the new object
+        newObj.id = load.generateUniqueId(load.Data[obj.key], 'entry');
+        
+        // Iterate over each property in the new object
+        for (let key in newObj) {
+            // Check if the property is not reserved
+            if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
+                // Update the value of each property to 'Insert Value Here'
+                const properKey = this.proper(obj.key.slice(0, -1));
+                newObj[key] = 'New ' + this.proper(properKey) + ' ' + this.proper(key);
+            }
+        }
+
+        obj = newObj
+        // Print the first spell in load.Data to see if it's modified
+        console.log(load.Data.spells[0]);
+
+        // Now you can use newObj with modified values
+    }
+
+
+const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key']; // Define keys to exclude
 
 //1. Make Description Manually
-if(obj.description){
+if(obj){
 
 const description = document.createElement('div');
 
@@ -472,14 +536,16 @@ descriptionText.addEventListener('input', function() {
 });
 }
 
-//2. Make Type Manually
 const topArea = document.createElement('div');
-topArea.style.display = 'flex'; // Set the display property to flex
+topArea.style.display = 'block'; 
+
+//2. Make Type Manually
+const topAreaTop = document.createElement('div');
+topAreaTop.style.display = 'flex'; // Set the display property to flex
+
 
 if(obj.type){
 const type = obj.type
-
-
 topArea.id = 'typeArea';
 
 let typeContent =  
@@ -494,7 +560,8 @@ style="font-family:'SoutaneBlack'"
 id="typeEntry"
 value="${obj[type] || 'none'} ">`;
 
-topArea.innerHTML = typeContent;
+topAreaTop.innerHTML = typeContent;
+Ref.Left.appendChild(topAreaTop);
 Ref.Left.appendChild(topArea);
 }
 
@@ -517,7 +584,7 @@ style="font-family:'SoutaneBlack'"
 id="subTypeEntry"
 value="${obj[subType] || 'none'} ">`;
 
-topArea.innerHTML += subTypeContent;
+topAreaTop.innerHTML += subTypeContent;
 }
 
 //4. Make Name Manually
@@ -538,7 +605,7 @@ divId="name"
 value="${obj.name || 'insert name here'} ">`;
 
 nameArea.innerHTML = nameContent;
-Ref.Left.appendChild(nameArea);
+topArea.appendChild(nameArea);
 
 setTimeout(function() {
 nameArea.style.height = nameArea.scrollHeight + 'px';
@@ -548,7 +615,7 @@ nameArea.style.height = nameArea.scrollHeight + 'px';
 //5. Add Breaker
 const breaker = document.createElement('hr')
 breaker.id = 'breaker';
-Ref.Left.appendChild(breaker);
+topArea.appendChild(breaker);
 
 //6. Make Key and Make Invisible
 if(obj.key){
@@ -595,7 +662,6 @@ Ref.Left.appendChild(elementContainer);
 const elementText = document.getElementById('edit' + key);
 const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
 const numLines = Math.floor(elementText.scrollHeight / lineHeight);
-
 
 elementText.textContent = obj[key] || '';
 
@@ -661,7 +727,7 @@ divId="id"
 id="dataEntryId"
 value="${obj.id || 'N/A'} ">`;
 
-idArea.innerHTML += idContent;
+idArea.innerHTML = idContent;
 Ref.Left.appendChild(idArea);
 }
 }
@@ -713,11 +779,12 @@ inputElements.forEach(input => {
         }
         
     }else{
-    inputs.push(value);
+    inputs.push(value.trim());
+
     }
 });
 
-//console.log(labels, inputs);
+console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {
@@ -733,16 +800,22 @@ saveEntry['subType']= document.getElementById('subTypeEntry').getAttribute('pair
 
 saveEntry['id'] = parseInt(saveEntry['id']);
 
+console.log(saveEntry);
+
 const key = saveEntry && saveEntry['key'];
 const id = saveEntry && saveEntry['id'];
 const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
 console.log(key, id, index);
-console.log(saveEntry);
+
 //console.log('Existing saveEntry:' + load.Data[key][index].class)
 
+if(index === -1){
+load.Data[key].push(saveEntry)
+}else{
 load.Data[key][index] = saveEntry;
-editor.loadList(load.Data);
-load.displayLocations(load.Data.locations);
+}
+
+
 
 // console.log('Updated saveEntry:');
 // console.log(load.Data[key][index]);

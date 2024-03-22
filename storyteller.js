@@ -12,6 +12,8 @@ const Storyteller = {
 
 miscArray: [],
 monsterArray:[],
+returnLocation: '',
+townText: '',
 
 async changeContent(locationDiv) {
 
@@ -21,8 +23,13 @@ const locId = locationDiv.id;
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 const locName = locObj.name
+
+//Change Location Label Contents
 Ref.locationLabel.textContent = locName;
-//Ref.editLocationName.value   = locName;
+Ref.locationLabel.style.color = locObj.color;
+const returnLocationName = Ref.locationLabel.textContent;
+const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
+Storyteller.returnLocation = returnLocation.id
 
 if (locObj) {
 //console.log(locObj)
@@ -66,6 +73,38 @@ this.showExpandable(Ref.Storyteller, Ref.Centre);
 
 };
 }, 
+
+showTownText(){
+
+  //Show General Information
+  Ref.Storyteller.innerHTML = 
+  `<textarea
+  id="storytellerText"
+  class="rightText" 
+  ></textarea>`;
+  
+  const storytellerText = document.getElementById("storytellerText")
+  
+  
+  if(Storyteller.townText !== ''){
+  storytellerText.textContent = Storyteller.townText
+  } else {
+      storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
+  }
+  
+  storytellerText.addEventListener('focus', () => {
+      // Set the selection range to the end of the text
+      storytellerText.setSelectionRange(storytellerText.value.length, storytellerText.value.length);
+  });
+  
+  storytellerText.addEventListener('focusout', () => {    
+  Storyteller.townText = storytellerText.value
+  load.Data.townText = storytellerText.value
+  console.log(load.Data);
+  console.log(Storyteller.townText);
+  });
+  
+  },
 
 getQuotes(locationText) {
   const quotationMarks = /"([^"]+)"/g;

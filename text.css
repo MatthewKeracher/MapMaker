@@ -10,6 +10,10 @@
     src: url("fonts/SoutaneBlack.ttf");
 }
 
+::placeholder {
+    color: cyan; /* Change to whatever color you want */
+}
+
 h2 {
     font-family: 'SoutaneBlack';
     margin-bottom: 0;
@@ -102,7 +106,7 @@ h3 {
     }
     
     .all{
-    color: rgb(108, 184, 238)
+    color: cyan;
     }
     
     .teal{

@@ -431,7 +431,9 @@ divId="tags">
 class="centreTag entry-input" 
 type="text" 
 divId= "npcTags"
-value="${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} <br>` : ''}${foundNPC.tags}"></h3><hr>`;
+value="${foundNPC.tags}"></h3><hr>`;
+
+//${foundNPC.monsterTemplate? `${Monsters.getMonsters('*' + foundNPC.monsterTemplate + '*')} <br>` : ''}
 
 tagsContainer.innerHTML = tagsContent;
 Ref.Centre.appendChild(tagsContainer);
@@ -490,7 +492,7 @@ Class
 </label>
 <input 
 pair="class"
-class="entry-input leftText white" 
+class="entry-input leftTextshort white" 
 type="text" 
 id= "typeEntry"
 value="${foundNPC.class}">
@@ -500,8 +502,8 @@ classContainer.innerHTML = classContent;
 Ref.Left.appendChild(classContainer);
 
 classContainer.addEventListener('click', function() {
-classContainer.querySelector('.leftText').focus();
-classContainer.querySelector('.leftText').select();
+classContainer.querySelector('.leftTextshort').focus();
+classContainer.querySelector('.leftTextshort').select();
 });
 
 const levelContainer = document.createElement('div');
@@ -651,18 +653,17 @@ const statNames = {
 ["STR", "DEX", "INT", "WIS", "CON", "CHA"].forEach(stat => {
 if (foundNPC[stat.toLowerCase()]) {
 const statContainer = document.createElement('div');
-statContainer.classList.add('input-container');
 
 let statBlock = `<h2>`;
 
 statBlock +=
-`<label class="entry-label expandable teal" data-content-type="rule" divId="${stat.toLowerCase()}">
+`<label class="entry-label expandable teal" data-content-type="rule" divId="${stat.toLowerCase()}" style="letter-spacing: 0.18vw;">
 ${stat}: 
 </label>
 <input 
 maxlength="2"
 class="entry-input centreStat white" 
-style="font-family:'SoutaneBlack'"
+style="left: '15vw'; font-family:'SoutaneBlack'"
 type="text" 
 divId= "npc${stat}"
 value="${foundNPC[stat.toLowerCase()]}">
@@ -710,7 +711,7 @@ const skillNames = {
 ["removeTraps", "pickPockets", "moveSilently", "climbWalls", "hide", "listen", "poison", "tracking"].forEach(skill => {
 if (foundNPC.Skills[skill]) {
 const skillContainer = document.createElement('div');
-skillContainer.classList.add('input-container');
+
 
 let skillBlock = `<h3>`;
 
@@ -746,7 +747,7 @@ if(foundNPC.class === 'Cleric'){
     if (foundNPC.Skills[creature] !== 'No') {
     
     const turnContainer = document.createElement('div');
-    turnContainer.classList.add('input-container');
+   
     
     const turnValue = 
     foundNPC.Skills[creature] && foundNPC.Skills[creature] === 'Damaged'? 
@@ -757,10 +758,10 @@ if(foundNPC.class === 'Cleric'){
     let turnBlock =
     `<h3>
     <label class="expandable orange" data-content-type="rule" divId="${creature}">
-    ${creature}
+    ${creature}:
     </label>
     <input 
-    class="leftText white" 
+    class="centreNumber white" 
     type="text" 
     divId= "npc${creature}"
     value="${turnValue}">
@@ -814,6 +815,7 @@ foundNPC.magic.forEach(spell => {
 
 }
 
+if(foundNPC.savingThrows){
 const saveNamesHeaderContainer = document.createElement('div');
 saveNamesHeaderContainer.classList.add('no-hover');
 
@@ -858,6 +860,7 @@ const saveNames = {
   saveContainer.querySelector('.centreNumber').select();
   });
   }});
+};
 
 if(foundNPC.inventory){
 
@@ -965,7 +968,7 @@ style="display:none"
 divId="key"
 value="npcs">`;
 
-keyArea.innerHTML += keyContent;
+keyArea.innerHTML = keyContent;
 Ref.Left.appendChild(keyArea);
 
 const idArea = document.createElement('div');
@@ -982,7 +985,7 @@ style="display:none"
 divId="id"
 value="${foundNPC.id || 'N/A'} ">`;
 
-idArea.innerHTML += idContent;
+idArea.innerHTML = idContent;
 Ref.Left.appendChild(idArea);
 
 Storyteller.showFloatingExpandable()
