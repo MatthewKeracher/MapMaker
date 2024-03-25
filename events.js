@@ -876,10 +876,19 @@ const matchedEvents = locationEvents.map(locEvent => {
 });
 
 if(matchedEvents.length > 0){
+this.eventDesc = '';
+
+if(allCount === 0){
+this.eventDesc = `<span class="expandable beige" 
+divId="${locObj.name}"
+data-content-type="locations">
+${locObj.description}
+</span>`
+}
 
 // Concatenate location description and NPC event descriptions
-this.eventDesc = matchedEvents.map((entry, index) => {
-let locDesc = '<br>';
+this.eventDesc += matchedEvents.map((entry, index) => {
+let locDesc = '';
 let npcDesc = '';
 let currentAll = index + 1;
 
@@ -905,14 +914,27 @@ eventItemsFormatted = `<span class = "cyan"> | </span> [Items List]{<hr>${eventI
 }
 
 //---
-
 if (entry.location.location === 'All') {
 
-  if (currentAll - allCount === 0 || allCount === 0) {
-    //If last 'All' event or if there are no 'All' events, enter location description.
-    locDesc = `<span class="all">${entry.location.description}</span> <br><br> ${locObj.description} <br><br><hr>`;
+  if (currentAll - allCount === 0) {
+    //If last 'All' event enter location description.
+    locDesc = `<span class="expandable all" 
+    divId="${entry.location.name}"
+    data-content-type="events">
+    ${entry.location.description}
+    </span><span class="expandable beige" 
+    divId="${locObj.name}"
+    data-content-type="locations">
+    ${locObj.description}
+    </span>
+    <hr>`;
   } else {
-    locDesc = `<span class="all">${entry.location.description}</span><br><br>`;
+    locDesc = `<span class="expandable all" 
+    divId="${entry.location.name}"
+    data-content-type="events">
+    ${entry.location.description}
+    </span>
+    `;
   }} 
   
   else if (entry.location !== 'All'){
@@ -931,10 +953,15 @@ npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
 
 //Put together.
 locDesc = 
-`<h3> ${entry.location.name !== currentLocation ? `<span class = "hotpink"> ${entry.location.name} </span>` : ''}` +
+`<h3> ${entry.location.name !== currentLocation ? 
+  `<span class="expandable hotpink" 
+  divId="${entry.location.name}"
+  data-content-type="events"> ${entry.location.name} </span>` : ''}` +
 ` ${eventItemsFormatted} </h3>` +         
   
-`${entry.location.name !== currentLocation ? `<span class = "beige"><br> ${entry.location.description} </span> <br>` : ''}` + 
+`${entry.location.name !== currentLocation ? `<span class="expandable beige" 
+divId="${entry.location.name}"
+data-content-type="events"><br> ${entry.location.description} </span> <br>` : ''}` + 
 
 `<br>${npcDesc}` +
 

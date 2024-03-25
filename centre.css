@@ -8,7 +8,7 @@ top:1vh;
 min-height: 10vh; 
 max-height: 96vh;
 right: 35.1vw; 
-width: 32.3vw;
+width: 32vw;
 height: auto;
 z-index:10;
 
@@ -230,12 +230,12 @@ border-radius: 0;
 
 .centreText {
 /* Position */
-width: 31vw;
+width: 32vw;
 margin: 0vh;
 max-height: 96vh;
 
 /* Text */
-font-size: 2.2vh;
+font-size: 1.9vh;
 color: whitesmoke;
 font-family: monospace;
 line-height: 1.5;

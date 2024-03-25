@@ -21,8 +21,6 @@ groupedNPCs : [],
 absentNPCs: [],
 uniqueNames: [],
 
-
-
 loadAndBuild: async function(fileContent) {
 try {
 // Wait for the handleFileLoad to complete
@@ -53,58 +51,6 @@ load.Data.npcs = npcInstances;
 loadNPC: function(NPCArray) {
 
 Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
-
-// Ref.Centre.style.display = 'block';
-
-// // Clear the existing content
-// Ref.Centre.innerHTML = '';
-// this.groupedNPCs = [];
-// this.absentNPCs = [];
-// this.uniqueNames = [];
-
-// const currentLocation = Ref.locationLabel.textContent;
-// const subLocations = load.Data.events.filter(event => event.target === "Location" && event.location === currentLocation)
-
-// // Filter eventsArray based on currentLocation
-// const sortEvents = load.Data.events.filter(event => {
-// if (event.target === 'NPC' && event.active === 1) {
-// const locations = event.location ? event.location.split(',').map(item => item.trim()) : [];
-// return locations.includes(currentLocation) || subLocations.some(subLoc => locations.includes(subLoc.name));
-// }
-// return false; // If event.target is not 'NPC', filter it out
-// });
-
-// //console.log(sortEvents)
-
-// for (const npc of NPCArray) {
-// const npcNameDiv = document.createElement('div'); 
-// npcNameDiv.id = npc.name; 
-// this.sortNPCs(npc, npcNameDiv, sortEvents);
-// this.fillNPCForm(npc, npcNameDiv);
-// }
-
-// // Add <hr> between namedNPCs and groupedNPCs if arrays are not empty
-// if (this.groupedNPCs.length > 0) {
-//   this.groupedNPCs.push(document.createElement('hr'));
-// }
-
-// // Concatenate arrays in desired order
-// const sortedNPCs = [...this.namedNPCs, ...this.groupedNPCs, ...this.absentNPCs];
-
-// // Append sorted divs to the Centre
-// sortedNPCs.forEach(npcDiv => {
-// Ref.Centre.appendChild(npcDiv);
-
-// //show NPC info in Left when hover over Div
-// npcDiv.addEventListener('mouseover', () => {
-//   //Ref.eventManagerInput.value = event.name;
-//   // console.log(npcDiv.id)
-//   Ref.Left.style.display = 'block';
-//   Ref.Centre.style.display = 'block';
-//   this.addNPCInfo(npcDiv.id, Ref.Left);
-//   });
-
-// });
 
 },
 
@@ -332,7 +278,7 @@ const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => np
 return (
 (npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
 event.target === 'NPC' &&
-event.active === 1 &&
+parseInt(event.active) === 1 &&
 npc.tags !== '' &&
 (event.location === subLocation || event.location === 'All')
 );
@@ -359,9 +305,12 @@ const npctagsList = npc.tags.split(',').map(item => item.trim());
 const sharedTag = event.npc && eventNpcList.find(tag => npctagsList.includes(tag));
 
 if (sharedTag) {
-story += `<span class="hotpink">${sharedTag}. </span>`;
+story += 
+`<span class="expandable hotpink" 
+divId="${event.name}"data-content-type="events">${sharedTag}. </span>`;
 } else {
-story += `<span class="hotpink">${event.group}. </span>`;
+story += `<span class="expandable hotpink" 
+divId="${event.name}"data-content-type="events">${event.group}. </span>`;
 }
 
 const options = event.description.split('??').filter(Boolean);
@@ -379,7 +328,7 @@ story += `${event.description}<br>`;
 return story;
 },
 
-addNPCInfo(npcName, target) {
+addNPCInfo(npcName) {
 
 const findNPC = npcName.replace(/-/g, ' ');
 const foundNPC = load.Data.npcs.find(npc => npc.name === findNPC);
@@ -462,7 +411,7 @@ Ref.Centre.style.display = 'block';
 
 //Attach and display.
 const extraSpace = 125
-console.log(extraSpace)
+//console.log(extraSpace)
 
 const descriptionText = document.getElementById('descriptionText');
 descriptionText.textContent = foundNPC.description || 'Insert information about ' + foundNPC.name + ' here.';
@@ -679,7 +628,6 @@ statContainer.addEventListener('click', function() {
 statContainer.querySelector('.centreStat').focus();
 statContainer.querySelector('.centreStat').select();
 });
-
 
 }
 });
@@ -953,7 +901,59 @@ treasureContainer.querySelector('.centreNumber').select();
 
 };
 
-//0. Make ID Manually
+if (foundNPC.tags){
+// Split the foundNPC tags into an array
+const tags = foundNPC.tags.split(',').map(item => item.trim());
+
+const NPCsByTag = {};
+
+// Iterate over each NPC
+load.Data.npcs.forEach(npc => {
+    // Split the npc tag string into an array of tags
+    const npcTags = npc.tags.split(',').map(item => item.trim());
+    const commonTags = tags.filter(tag => npcTags.includes(tag));
+
+    // Iterate over each common tag associated with the NPC
+    commonTags.forEach(tag => {
+        if (!NPCsByTag[tag]) {
+            NPCsByTag[tag] = [];
+        }
+        
+        NPCsByTag[tag].push(npc);
+    });
+});
+
+console.log(NPCsByTag);
+
+for (const tag in NPCsByTag){
+
+//Add Header
+const subLocationHeader = document.createElement('div');
+let subLocationHeaderContent = 
+`<hr><h3>
+<span 
+class='cyan'>
+${tag}
+</span></h3>`
+
+subLocationHeader.innerHTML = subLocationHeaderContent;
+Ref.Left.appendChild(subLocationHeader);
+
+for (const tagged in NPCsByTag[tag]){
+
+const npcNameArea = document.createElement('div');
+let npcNameContent = `<h3><span>${tagged.name}</span></h3>`;
+
+npcNameArea.innerHTML = npcNameContent;
+Ref.Left.appendChild(npcNameArea);
+  
+}
+}
+};
+
+//0. Make Hidden MetaData
+if(foundNPC){
+
 const keyArea = document.createElement('div');
 keyArea.id = 'keyArea';
 
@@ -987,67 +987,12 @@ value="${foundNPC.id || 'N/A'} ">`;
 
 idArea.innerHTML = idContent;
 Ref.Left.appendChild(idArea);
+};
 
-Storyteller.showFloatingExpandable()
-
-} else {
-target.innerHTML += `NPC not found`;
-}
-},
-
-addNPCSearch: function(){
-
-// Ref.npcSearch.addEventListener('input', (event) => {
-// // let searchText = event.target.value.toLowerCase();
-
-// // // Call the searchAmbience function
-// // Events.searchEvents(searchText);
-// })
-
-// Ref.npcSearch.addEventListener('click', (event) => {
-// // this.searchNPC(Ref.npcSearch.value.toLowerCase());
-// // this.loadNPC(this.npcSearchArray);
-// let searchText = event.target.value.toLowerCase();
-
-// // Call the searchAmbience function
-// Events.searchEvents(searchText);
-// });
-
-// Ref.monsterTemplate.addEventListener('click', (event) => {
-// editor.loadList(Monsters.monstersArray, "All Monsters");
-// });
-
-// Ref.monsterTemplate.addEventListener('input', (event) => {
-
-// let searchText = event.target.value.toLowerCase();
-
-// // Call the searchMonster function
-// Monsters.searchMonster(searchText);
-
-// });
-
-},
-
-searchNPC: function(searchText) {
-this.npcSearchArray = [];
-
-this.npcSearchArray = this.npcArray.filter((npc) => {
-const npcName = npc.name.toLowerCase();
-const npctags = npc.tags.toLowerCase();
-const npcClass = npc.class.toLowerCase();
-const tagsWords = npctags.split(',').map(word => word.trim());
-
-
-return npcClass.includes(searchText) || 
-npcName.includes(searchText)  || 
-tagsWords.some(word => word.includes(searchText))
-});
-
-},
+Storyteller.showFloatingExpandable();
+}},
 
 };
 
 // Export the NPCs module
 export default NPCs;
-
-

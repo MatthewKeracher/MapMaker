@@ -84,6 +84,7 @@ showTownText(){
   ></textarea>`;
   
   const storytellerText = document.getElementById("storytellerText")
+  Ref.locationLabel.style.color = 'teal';
   
   
   if(Storyteller.townText !== ''){
@@ -100,8 +101,8 @@ showTownText(){
   storytellerText.addEventListener('focusout', () => {    
   Storyteller.townText = storytellerText.value
   load.Data.townText = storytellerText.value
-  console.log(load.Data);
-  console.log(Storyteller.townText);
+  //console.log(load.Data);
+  //console.log(Storyteller.townText);
   });
   
   },
@@ -235,8 +236,8 @@ const expandableElements = source.querySelectorAll('.expandable');
 
 expandableElements.forEach(element => {
 
-element.addEventListener('mouseenter', (event) => {
-console.log('mouseenter')
+element.addEventListener('click', (event) => {
+//console.log('mouseenter')
 const contentType = event.target.getAttribute('data-content-type');
 const contentId = event.target.getAttribute('divId');
 
@@ -255,6 +256,7 @@ switch (contentType) {
       //1. Find the Obj.
       const contentIdLowercase = contentId.toLowerCase();
       const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
+      //console.log(obj)
       //2.
       editor.createForm(obj);
 }          

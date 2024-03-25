@@ -41,7 +41,6 @@ editor.init();
 
 Monsters.addMonsterFormEvents();
 Events.loadEventListeners();
-NPCs.addNPCSearch();
 Spells.addSearch();
 Items.addItemSearch();
 
@@ -93,11 +92,19 @@ Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 escButton(){
 
-Ref.Centre.style.display = "none";
-Ref.Left.style.display = "none";
+if(Ref.Left.style.display === "none" && Ref.Centre.style.display === "none"){
+
 // Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
 Ref.eventManager.value = '';
+
+// if(editor.editMode === true){
+// Ref.mainToolbar.style.display = "none";
+// Ref.editToolbar.style.display = "flex";
+// } else if (editor.editMode === false){
+// Ref.mainToolbar.style.display = "flex";
+// Ref.editToolbar.style.display = "none";
+// }
 
 if(load.fileName !== ''){
 Ref.locationLabel.textContent = load.fileName;
@@ -110,6 +117,11 @@ Storyteller.showTownText();
 Ref.locationLabel.textContent = 'Information';    
 }
 
+}else{
+Ref.Centre.style.display = "none";
+Ref.Left.style.display = "none";
+
+}
 
 };
 

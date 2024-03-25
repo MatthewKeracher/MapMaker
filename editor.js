@@ -106,7 +106,7 @@ for (const key in data) {
 if (!excludedKeys.includes(key)){
   
     let obj = data[key]
-    console.log(key)
+    //console.log(key)
 
 if(obj[0]){
 // Set type and subType
@@ -506,10 +506,13 @@ if(obj){
 const description = document.createElement('div');
 
 let centreContent =  
-`<label class="entry-label"
-style="display: none"
+`<h3>
+<label class="orange entry-label"
+style="font-family:'SoutaneBlack'; width: auto;"
 divId="description">
+Description
 </label>
+<hr></h3>
 <textarea
 id="descriptionText"
 class="entry-input centreText" 
@@ -687,11 +690,12 @@ elementContainer.querySelector('.leftText').select();
 }
 
 //8. Add field for New
+if(obj){
 const newArea = document.createElement('div');
 
 let newContent =  
-`<br><hr><h3>
-<input class="leftText hotpink entry-label" 
+`<hr><h3>
+<input class="leftText orange entry-label" 
 style="font-family:'SoutaneBlack'; width: auto;"
 data-content-type="rule" 
 divId="newField"
@@ -704,8 +708,228 @@ value="Insert New Value"></h3>`;
 
 newArea.innerHTML = newContent;
 Ref.Left.appendChild(newArea);
+}
 
-//9. Make ID Manually
+//10. Add Events
+if(obj){
+    //get data
+    let locEvents
+    let parentLocation
+    if(obj.key === 'locations'){
+     locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
+     parentLocation = obj.name
+    }
+    
+    else if (obj.key === 'events' && obj.target === 'Location'){
+    locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
+    parentLocation = obj.name;
+    } 
+    
+    else if (obj.key === 'events' && obj.target === 'NPC'){
+    locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.location);
+    parentLocation = obj.location;
+    }
+    
+    //Add Header
+    const locEventsHeader = document.createElement('div');
+    let locEventsHeaderContent = 
+    `<hr><h3>
+    <span 
+    class='orange'>
+    Events:
+    </span></h3>`
+    
+    locEventsHeader.innerHTML = locEventsHeaderContent;
+    Ref.Left.appendChild(locEventsHeader);
+
+//Make New Event.
+const locEventArea = document.createElement('div');
+let locEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
+
+locEventArea.innerHTML = locEventContent;
+Ref.Left.appendChild(locEventArea);
+
+locEventArea.style.color = 'lightgray'
+
+locEventArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+locEventArea.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+locEventArea.addEventListener('click', function(){
+
+const newsubLoc = {
+
+//metadata
+id: load.generateUniqueId(load.Data.events, 'entry'),
+key: 'events',
+type: 'target', 
+subType: 'group',
+
+name: 'New Event', 
+active: 1,
+tags: '',
+target: 'NPC',
+group: '',
+location: parentLocation,
+npc: 'All', 
+
+description: 'They are smiling.',
+
+}
+editor.createForm(newsubLoc)  
+})
+    
+    //Add locEvents
+    locEvents.forEach(locEv => {
+    
+        const subLocArea = document.createElement('div');
+        let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
+        
+        subLocArea.innerHTML = subLocContent;
+        Ref.Left.appendChild(subLocArea);
+        
+        if(parseInt(locEv.active) === 1){
+        subLocArea.style.color = 'lightgray'
+        }else{
+        subLocArea.style.color = 'gray'
+        }
+        
+        subLocArea.addEventListener('mouseenter', function(){
+        this.style.color = 'lime';
+        })
+        
+        subLocArea.addEventListener('mouseleave', function(){
+        if(parseInt(locEv.active) === 1){
+        subLocArea.style.color = 'lightgray'
+        }else{
+        subLocArea.style.color = 'gray'
+        }
+        })
+        
+        subLocArea.addEventListener('click', function(){
+        editor.createForm(locEv);
+        })
+    
+    
+    });
+    
+    }
+
+//10. Add Sub-Locations
+if(obj){
+//get data
+let subLocations
+let parentLocation
+if(obj.key === 'locations'){
+ subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.name);
+ parentLocation = obj.name
+}
+
+else if (obj.key === 'events' && obj.target === 'Location'){
+subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.location);
+parentLocation = obj.location;
+}
+
+else if (obj.key === 'events' && obj.target === 'NPC'){
+let helper1 = load.Data.events.find(event => event.name === obj.location);
+let helper2 = helper1.location
+subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === helper2);
+parentLocation = helper2;
+}
+
+//Add Header
+const subLocationHeader = document.createElement('div');
+let subLocationHeaderContent = 
+`<hr><h3>
+<span 
+class='orange'>
+Also in ${parentLocation}:
+</span></h3>`
+
+subLocationHeader.innerHTML = subLocationHeaderContent;
+Ref.Left.appendChild(subLocationHeader);
+
+
+//Make New Sublocation.
+const subLocArea = document.createElement('div');
+let subLocContent = `<h3><span class = 'leftText'>[Add New Sub-Location]</span></h3>`;
+
+subLocArea.innerHTML = subLocContent;
+Ref.Left.appendChild(subLocArea);
+
+subLocArea.style.color = 'lightgray'
+
+subLocArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+subLocArea.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+subLocArea.addEventListener('click', function(){
+
+const newsubLoc = {
+
+//metadata
+id: load.generateUniqueId(load.Data.events, 'entry'),
+key: 'events',
+type: 'target', 
+subType: 'group',
+
+name: 'New subLocation', 
+active: 1,
+tags: '',
+target: 'Location',
+group: '',
+location: parentLocation,
+npc: '', 
+
+description: 'Add Description Here.',
+
+}
+editor.createForm(newsubLoc)  
+})
+
+//Add subLocations
+subLocations.forEach(subLoc => {
+
+const subLocArea = document.createElement('div');
+let subLocContent = `<h3><span>${subLoc.name}</span></h3>`;
+
+subLocArea.innerHTML = subLocContent;
+Ref.Left.appendChild(subLocArea);
+
+if(parseInt(subLoc.active) === 1){
+subLocArea.style.color = 'lightgray'
+}else{
+subLocArea.style.color = 'gray'
+}
+
+subLocArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+subLocArea.addEventListener('mouseleave', function(){
+if(parseInt(subLoc.active) === 1){
+subLocArea.style.color = 'lightgray'
+}else{
+subLocArea.style.color = 'gray'
+}
+})
+
+subLocArea.addEventListener('click', function(){
+editor.createForm(subLoc);
+})
+
+});
+}
+
+//12. Make ID Manually
 if(obj.id){
 const existingId = document.getElementById('centreId');
 if (existingId) {
