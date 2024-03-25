@@ -710,7 +710,7 @@ newArea.innerHTML = newContent;
 Ref.Left.appendChild(newArea);
 }
 
-//10. Add Events
+//10. Add Events in Same Location
 if(obj){
     //get data
     let locEvents
@@ -736,7 +736,7 @@ if(obj){
     `<hr><h3>
     <span 
     class='orange'>
-    Events:
+    ${parentLocation} Events:
     </span></h3>`
     
     locEventsHeader.innerHTML = locEventsHeaderContent;
@@ -819,7 +819,116 @@ editor.createForm(newsubLoc)
     
     }
 
-//10. Add Sub-Locations
+//11. Add Events in Same Group
+if(obj){
+    //get data
+    let groupEvents
+    let group
+    if(obj.key === 'locations'){
+     groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
+     group = obj.group;
+    }
+    
+    else if (obj.key === 'events' && obj.target === 'Location'){
+    groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group || event.npc === obj.npc);
+    group = obj.group;
+    } 
+    
+    else if (obj.key === 'events' && obj.target === 'NPC'){
+    groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group || event.npc === obj.npc);
+    group = obj.group;
+    }
+    
+    //Add Header
+    const groupEventsHeader = document.createElement('div');
+    let groupEventsHeaderContent = 
+    `<hr><h3>
+    <span 
+    class='orange'>
+    ${group} Events:
+    </span></h3>`
+    
+    groupEventsHeader.innerHTML = groupEventsHeaderContent;
+    Ref.Left.appendChild(groupEventsHeader);
+
+//Make New Event.
+const groupEventArea = document.createElement('div');
+let groupEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
+
+groupEventArea.innerHTML = groupEventContent;
+Ref.Left.appendChild(groupEventArea);
+
+groupEventArea.style.color = 'lightgray'
+
+groupEventArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+groupEventArea.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+groupEventArea.addEventListener('click', function(){
+
+const newGroupEv = {
+
+//metadata
+id: load.generateUniqueId(load.Data.events, 'entry'),
+key: 'events',
+type: 'target', 
+subType: 'group',
+
+name: 'New Event', 
+active: 1,
+tags: '',
+target: 'NPC',
+group: group,
+location: obj.location,
+npc: group, 
+
+description: 'They are smiling.',
+
+}
+editor.createForm(newGroupEv)  
+})
+    
+    //Add locEvents
+    groupEvents.forEach(locEv => {
+    
+        const subLocArea = document.createElement('div');
+        let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
+        
+        subLocArea.innerHTML = subLocContent;
+        Ref.Left.appendChild(subLocArea);
+        
+        if(parseInt(locEv.active) === 1){
+        subLocArea.style.color = 'lightgray'
+        }else{
+        subLocArea.style.color = 'gray'
+        }
+        
+        subLocArea.addEventListener('mouseenter', function(){
+        this.style.color = 'lime';
+        })
+        
+        subLocArea.addEventListener('mouseleave', function(){
+        if(parseInt(locEv.active) === 1){
+        subLocArea.style.color = 'lightgray'
+        }else{
+        subLocArea.style.color = 'gray'
+        }
+        })
+        
+        subLocArea.addEventListener('click', function(){
+        editor.createForm(locEv);
+        })
+    
+    
+    });
+    
+    }
+
+//12. Add Sub-Locations
 if(obj){
 //get data
 let subLocations
@@ -1039,6 +1148,12 @@ load.Data[key].push(saveEntry)
 load.Data[key][index] = saveEntry;
 }
 
+if(key === 'npcs'){
+    NPCs.buildNPC();
+    NPCs.addNPCInfo(saveEntry.name)
+    }else{
+    editor.createForm(saveEntry);
+    }
 
 
 // console.log('Updated saveEntry:');

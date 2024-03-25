@@ -280,11 +280,9 @@ if(Ref.Left.style.display === 'none'){
     
     console.log('saving...')
     editor.saveDataEntry();
-    if(load.Data.npcs){
-    NPCs.buildNPC();
+    
     load.displayLocations(load.Data.locations);
     toolbar.refreshLocation();
-    }
 }}
 
 saveFormButton(){

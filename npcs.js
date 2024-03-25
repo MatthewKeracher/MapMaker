@@ -632,6 +632,99 @@ statContainer.querySelector('.centreStat').select();
 }
 });
 
+if (foundNPC.tags){
+  // Split the foundNPC tags into an array
+  const tags = foundNPC.tags.split(',').map(item => item.trim());
+  
+  const taggedNPCs = {};
+  
+  // Iterate over each NPC
+  load.Data.npcs.forEach(npc => {
+      // Split the npc tag string into an array of tags
+      const npcTags = npc.tags.split(',').map(item => item.trim());
+      const commonTags = tags.filter(tag => npcTags.includes(tag));
+  
+      // Iterate over each common tag associated with the NPC
+      commonTags.forEach(tag => {
+          if (!taggedNPCs[tag]) {
+              taggedNPCs[tag] = [];
+          }
+          
+          if(foundNPC.id !== npc.id){
+          taggedNPCs[tag].push(npc.id);
+          };
+      });
+  });
+  
+    // Add Header
+    const relationshipsHeader = document.createElement('div');
+    let relationshipsHeaderContent = 
+        `<hr><h3>
+        <span class='cyan'>
+        Relationships:
+        </span></h3>`;
+    
+      relationshipsHeader.innerHTML = relationshipsHeaderContent;
+  
+    
+    Ref.Left.appendChild(relationshipsHeader);
+  
+  for (const tag in taggedNPCs) {
+    if (taggedNPCs.hasOwnProperty(tag)) {
+        // Add Header
+
+        const evObj = load.Data.events.find(event => event.group === tag && event.target === 'NPC');
+        console.log(tag, evObj)
+
+        const relationshipHeader = document.createElement('div');
+        let relationshipContent = 
+            `<h3>
+            <span class='orange'>
+            ${tag}
+            </span></h3>`;
+        
+        relationshipHeader.innerHTML = relationshipContent;
+  
+        if(taggedNPCs[tag].length > 0){
+        Ref.Left.appendChild(relationshipHeader);
+
+        relationshipHeader.addEventListener('click', function(){
+        editor.createForm(evObj);
+        })
+        };
+  
+        // Add Names
+        const npcIds = taggedNPCs[tag];
+        npcIds.forEach(npcId => {
+            const npcObj = load.Data.npcs.find(npc => parseInt(npc.id) === npcId);
+  
+            const npcNameArea = document.createElement('div');
+            let npcNameContent = `<h3><span>${npcObj.name}</span></h3>`;
+  
+            npcNameArea.innerHTML = npcNameContent;
+            Ref.Left.appendChild(npcNameArea);
+
+            npcNameArea.style.color = 'lightgray';
+  
+            npcNameArea.addEventListener('mouseenter', function(){
+              this.style.color = 'white';
+              })
+              
+              npcNameArea.addEventListener('mouseleave', function(){
+                npcNameArea.style.color = 'lightgray'
+              })
+              
+              npcNameArea.addEventListener('click', function(){
+              NPCs.addNPCInfo(npcObj.name);
+              })
+  
+  
+        });
+    }
+  }
+  
+  };
+
 if (foundNPC.Skills){
 
 const skillTypeContainer = document.createElement('div');
@@ -899,56 +992,6 @@ treasureContainer.querySelector('.centreNumber').focus();
 treasureContainer.querySelector('.centreNumber').select();
 });
 
-};
-
-if (foundNPC.tags){
-// Split the foundNPC tags into an array
-const tags = foundNPC.tags.split(',').map(item => item.trim());
-
-const NPCsByTag = {};
-
-// Iterate over each NPC
-load.Data.npcs.forEach(npc => {
-    // Split the npc tag string into an array of tags
-    const npcTags = npc.tags.split(',').map(item => item.trim());
-    const commonTags = tags.filter(tag => npcTags.includes(tag));
-
-    // Iterate over each common tag associated with the NPC
-    commonTags.forEach(tag => {
-        if (!NPCsByTag[tag]) {
-            NPCsByTag[tag] = [];
-        }
-        
-        NPCsByTag[tag].push(npc);
-    });
-});
-
-console.log(NPCsByTag);
-
-for (const tag in NPCsByTag){
-
-//Add Header
-const subLocationHeader = document.createElement('div');
-let subLocationHeaderContent = 
-`<hr><h3>
-<span 
-class='cyan'>
-${tag}
-</span></h3>`
-
-subLocationHeader.innerHTML = subLocationHeaderContent;
-Ref.Left.appendChild(subLocationHeader);
-
-for (const tagged in NPCsByTag[tag]){
-
-const npcNameArea = document.createElement('div');
-let npcNameContent = `<h3><span>${tagged.name}</span></h3>`;
-
-npcNameArea.innerHTML = npcNameContent;
-Ref.Left.appendChild(npcNameArea);
-  
-}
-}
 };
 
 //0. Make Hidden MetaData
