@@ -247,20 +247,20 @@ let obj = data[key]
 // //metadata
 // key: key,
 // type: 'group', 
-// subType: 'size',
+// subType: 'rarity',
+// tags: '',
 
 // //change
-// group: item.type,
+// group: item.group,
+// rarity: 'Common',
 
-// //stay same
+// //For All
 // id: item.id,
 // name: item.name,
-// size: item.size,
 // weight: item.weight,
-// volCubFt: item.volCubFt,
-// volGal: item.volGal,
-// volLbs: item.volLbs,
 // cost: item.cost,
+
+// //Weapons and Armour
 // damage: item.damage,
 // range: item.range,
 // ac: item.ac,
@@ -269,15 +269,16 @@ let obj = data[key]
 // }));
 // }
 
-// if( key === 'events'){
+// if(key === 'events'){
+
 // obj = obj.map(event => ({
 
-// //metadata
+
 // id: event.id,
 // key: key,
 // type: 'target', 
 // subType: 'group',
-
+// order: 1,
 // name: event.name, 
 // active: event.active,
 // tags: event.tags,
@@ -285,7 +286,6 @@ let obj = data[key]
 // group: event.group, 
 // location: event.location, 
 // npc: event.npc, 
-
 // description: event.description, 
 
 
@@ -367,7 +367,7 @@ let obj = data[key]
 //doesn't work with generateTags
 // this.generateUniqueId(obj, 'array');
 
-// data[key]= obj;
+data[key]= obj;
 
 }},
 

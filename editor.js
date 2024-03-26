@@ -13,6 +13,7 @@ const editor = {
 editMode : false,
 makeNew: false,
 moveMode: false,
+addItem: false,
 divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 
 init: function () {
@@ -93,20 +94,24 @@ return string.charAt(0).toUpperCase() + string.slice(1);
 
 loadList: function(data) {
 //console.log('loading List')
-console.log(data)
+//console.log(data)
 //Where to put list...
 let target = Ref.Editor
 target.innerHTML = '';
 target.style.display = 'block'; 
 const excludedKeys = ['townText'];
+const numKeys = Object.keys(data).length;
+let startVisible = "false";
 
 // 0. Iterate over each property in the data object
 for (const key in data) {
 
 if (!excludedKeys.includes(key)){
-  
-    let obj = data[key]
-    //console.log(key)
+
+if(numKeys === 1){startVisible = "true"};
+
+let obj = data[key]
+//console.log(key)
 
 if(obj[0]){
 // Set type and subType
@@ -117,7 +122,7 @@ const subType = obj[0].subType;
 if(obj.length < 2){
 
 //Not enough entries to run comparison. No need to either.
-    
+
 }else{
 
 // 1. Sort the items by item type alphabetically and then by Level numerically.
@@ -158,8 +163,6 @@ result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: curren
 result.push(currentEntry);
 return result;
 }, []);
-
-
 
 //list Title
 const titleDiv = document.createElement('div');
@@ -218,31 +221,31 @@ nameDiv.innerHTML=
 
 //3.3 subSection Entries   
 }else if (entry[type] && entry[subType]){
-
+nameDiv.setAttribute('id', entry.id)
 nameDiv.setAttribute('style', "display: none")
 
 nameDiv.innerHTML = 
-`<span id = "${entry.name}" class ="white">
+`<span id = "${entry.id}" class ="white">
 &nbsp;&nbsp;&nbsp;&nbsp;${entry.name}
 </span>`;
 
 //3.4 no subSection
 }else if (entry[type]){
-
+nameDiv.setAttribute('id', entry.id)
 nameDiv.setAttribute('style', "display: none")
 
 nameDiv.innerHTML = 
-`<span id = "${entry.name}" class ="white">
+`<span id = "${entry.id}" class ="white">
 &nbsp;&nbsp;${entry.name}
 </span>`;
 
 //3.5 Other Entries
 }else {
-
+nameDiv.setAttribute('id', entry.id)
 nameDiv.setAttribute('style', "display: none")
 
 nameDiv.innerHTML = 
-`<span id = "${entry.name}" class = "gray"> 
+`<span id = "${entry.id}" class = "gray"> 
 &nbsp;&nbsp;${entry.name}
 </span>`;
 
@@ -304,18 +307,32 @@ div.addEventListener('click', () => {
 if(key === 'npcs'){
 NPCs.addNPCInfo(entry.name, Ref.Left);
 } 
-// else if(key === 'events'){
-// Events.addEventInfo(entry);
-// }
+else if(key === 'items' && editor.addItem === true){
+console.log(div)
+const itemId = div.getAttribute('id')
+editor.addItemtoNPC(itemId);
+}
 else{
 const form = editor.createForm(entry)
 Ref.Left.appendChild(form);
 }
 });
 
-
-
 }},
+
+addItemtoNPC(itemId){
+
+const currentId = document.getElementById('currentId').value;
+const npc = load.Data.npcs.find(npc => parseInt(npc.id) === parseInt(currentId));
+const npcName = npc.name
+const itemIndex = load.Data.items.findIndex(item => parseInt(item.id) === parseInt(itemId));
+load.Data.items[itemIndex].tags = npcName;
+console.log(load.Data.items[itemIndex])
+NPCs.buildNPC();
+NPCs.addNPCInfo(npcName)
+
+    
+},
 
 searchAllData: function (searchText) {
 const resultsByKeys = {}; // Object to store results grouped by keys
@@ -452,7 +469,7 @@ item.setAttribute('sectionShow', "true")
 
 createForm: function (obj){
 
-//console.log(obj);
+console.log(obj);
 
 ['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker', 'newArea'].forEach(id => {
 const element = document.getElementById(id);
@@ -471,34 +488,59 @@ form.id = 'editForm';
 form.classList.add('form');
 
 if (obj) {
-    if (editor.makeNew === true) {
-        const reservedTerms = ['id', 'key', 'type', 'subtype'];
-        
-        // Create a deep copy of the original object
-        const newObj = JSON.parse(JSON.stringify(obj));
+if (editor.makeNew === true) {
+const reservedTerms = ['id', 'key', 'type', 'subtype'];
 
-        // Generate a unique ID for the new object
-        newObj.id = load.generateUniqueId(load.Data[obj.key], 'entry');
-        
-        // Iterate over each property in the new object
-        for (let key in newObj) {
-            // Check if the property is not reserved
-            if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
-                // Update the value of each property to 'Insert Value Here'
-                const properKey = this.proper(obj.key.slice(0, -1));
-                newObj[key] = 'New ' + this.proper(properKey) + ' ' + this.proper(key);
-            }
-        }
+// Create a deep copy of the original object
+const newObj = JSON.parse(JSON.stringify(obj));
 
-        obj = newObj
-        // Print the first spell in load.Data to see if it's modified
-        console.log(load.Data.spells[0]);
+// Generate a unique ID for the new object
+newObj.id = load.generateUniqueId(load.Data[obj.key], 'entry');
 
-        // Now you can use newObj with modified values
-    }
+// Iterate over each property in the new object
+for (let key in newObj) {
+// Check if the property is not reserved
+if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
+// Update the value of each property to 'Insert Value Here'
+const properKey = this.proper(obj.key.slice(0, -1));
+newObj[key] = 'New ' + this.proper(properKey) + ' ' + this.proper(key);
+}
+}
 
+obj = newObj
+// Print the first spell in load.Data to see if it's modified
+console.log(load.Data.spells[0]);
+
+// Now you can use newObj with modified values
+}
 
 const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key']; // Define keys to exclude
+
+//12. Make ID Manually
+if(obj.id){
+const existingId = document.getElementById('centreId');
+if (existingId) {
+existingId.remove(); // Remove the existing form
+}
+
+const idArea = document.createElement('div');
+idArea.id = 'centreId';
+
+let idContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="id">
+</label>
+<input
+class="entry-input centreId" 
+style="display:none"
+divId="id"
+id="dataEntryId"
+value="${obj.id || 'N/A'} ">`;
+
+idArea.innerHTML = idContent;
+Ref.Left.appendChild(idArea);
+}
 
 //1. Make Description Manually
 if(obj){
@@ -532,10 +574,10 @@ descriptionText.style.height = descriptionText.scrollHeight + 'px';
 //Ref.Centre.style.height = descriptionText.scrollHeight + 'px';
 
 descriptionText.addEventListener('input', function() {
-    // Set the height based on the scroll height of the content
-    this.style.height = 'auto';
-    this.style.height = this.scrollHeight + 'px';
-    //Ref.Centre.style.height = this.scrollHeight + 'px';
+// Set the height based on the scroll height of the content
+this.style.height = 'auto';
+this.style.height = this.scrollHeight + 'px';
+//Ref.Centre.style.height = this.scrollHeight + 'px';
 });
 }
 
@@ -673,12 +715,12 @@ elementText.style.height = Math.max(elementText.scrollHeight - lineHeight, lineH
 } else {
 elementText.style.height = elementText.scrollHeight + 'px';
 }
-  
+
 elementText.addEventListener('input', function() {
-    // Set the height based on the scroll height of the content
-    this.style.height = 'auto';
-    this.style.height = this.scrollHeight + 'px';
-    elementContainer.style.height = this.scrollHeight + lineHeight + 'px';
+// Set the height based on the scroll height of the content
+this.style.height = 'auto';
+this.style.height = this.scrollHeight + 'px';
+elementContainer.style.height = this.scrollHeight + lineHeight + 'px';
 });
 
 elementContainer.addEventListener('click', function() {
@@ -690,76 +732,76 @@ elementContainer.querySelector('.leftText').select();
 }
 
 //8. Add field for New
-if(obj){
-const newArea = document.createElement('div');
+// if(obj){
+// const newArea = document.createElement('div');
 
-let newContent =  
-`<hr><h3>
-<input class="leftText orange entry-label" 
-style="font-family:'SoutaneBlack'; width: auto;"
-data-content-type="rule" 
-divId="newField"
-value="New Field">
-<input 
-class="leftText white entry-input" 
-type="text" 
-divId= "newContent"
-value="Insert New Value"></h3>`;
+// let newContent =  
+// `<hr><h3>
+// <input class="leftText orange entry-label" 
+// style="font-family:'SoutaneBlack'; width: auto;"
+// data-content-type="rule" 
+// divId="newField"
+// value="New Field">
+// <input 
+// class="leftText white entry-input" 
+// type="text" 
+// divId= "newContent"
+// value="Insert New Value"></h3>`;
 
-newArea.innerHTML = newContent;
-Ref.Left.appendChild(newArea);
-}
+// newArea.innerHTML = newContent;
+// Ref.Left.appendChild(newArea);
+// }
 
 //10. Add Events in Same Location
-if(obj){
-    //get data
-    let locEvents
-    let parentLocation
-    if(obj.key === 'locations'){
-     locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
-     parentLocation = obj.name
-    }
-    
-    else if (obj.key === 'events' && obj.target === 'Location'){
-    locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
-    parentLocation = obj.name;
-    } 
-    
-    else if (obj.key === 'events' && obj.target === 'NPC'){
-    locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.location);
-    parentLocation = obj.location;
-    }
-    
-    //Add Header
-    const locEventsHeader = document.createElement('div');
-    let locEventsHeaderContent = 
-    `<hr><h3>
-    <span 
-    class='orange'>
-    ${parentLocation} Events:
-    </span></h3>`
-    
-    locEventsHeader.innerHTML = locEventsHeaderContent;
-    Ref.Left.appendChild(locEventsHeader);
+if(obj.key === 'locations' || obj.key === 'events'){
+//get data
+let locEvents
+let parentLocation
+if(obj.key === 'locations'){
+locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
+parentLocation = obj.name
+}
+
+else if (obj.key === 'events' && obj.target === 'Location'){
+locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
+parentLocation = obj.name;
+} 
+
+else if (obj.key === 'events' && obj.target === 'NPC'){
+locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.location);
+parentLocation = obj.location;
+}
+
+//Add Header
+const locEventsHeader = document.createElement('div');
+let locEventsHeaderContent = 
+`<hr><h3>
+<span 
+class='orange'>
+${parentLocation} Events:
+</span></h3>`
+
+locEventsHeader.innerHTML = locEventsHeaderContent;
+Ref.Left.appendChild(locEventsHeader);
 
 //Make New Event.
-const locEventArea = document.createElement('div');
-let locEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
+const newEventArea = document.createElement('div');
+let newEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
 
-locEventArea.innerHTML = locEventContent;
-Ref.Left.appendChild(locEventArea);
+newEventArea.innerHTML = newEventContent;
+Ref.Left.appendChild(newEventArea);
 
-locEventArea.style.color = 'lightgray'
+newEventArea.style.color = 'lightgray'
 
-locEventArea.addEventListener('mouseenter', function(){
+newEventArea.addEventListener('mouseenter', function(){
 this.style.color = 'lime';
 })
 
-locEventArea.addEventListener('mouseleave', function(){
+newEventArea.addEventListener('mouseleave', function(){
 this.style.color = 'lightgray';
 })
 
-locEventArea.addEventListener('click', function(){
+newEventArea.addEventListener('click', function(){
 
 const newsubLoc = {
 
@@ -782,74 +824,72 @@ description: 'They are smiling.',
 }
 editor.createForm(newsubLoc)  
 })
-    
-    //Add locEvents
-    locEvents.forEach(locEv => {
-    
-        const subLocArea = document.createElement('div');
-        let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
-        
-        subLocArea.innerHTML = subLocContent;
-        Ref.Left.appendChild(subLocArea);
-        
-        if(parseInt(locEv.active) === 1){
-        subLocArea.style.color = 'lightgray'
-        }else{
-        subLocArea.style.color = 'gray'
-        }
-        
-        subLocArea.addEventListener('mouseenter', function(){
-        this.style.color = 'lime';
-        })
-        
-        subLocArea.addEventListener('mouseleave', function(){
-        if(parseInt(locEv.active) === 1){
-        subLocArea.style.color = 'lightgray'
-        }else{
-        subLocArea.style.color = 'gray'
-        }
-        })
-        
-        subLocArea.addEventListener('click', function(){
-        editor.createForm(locEv);
-        })
-    
-    
-    });
-    
-    }
+
+//Add locEvents
+if(locEvents){
+locEvents.forEach(locEv => {
+
+const subLocArea = document.createElement('div');
+let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
+
+subLocArea.innerHTML = subLocContent;
+Ref.Left.appendChild(subLocArea);
+
+if(parseInt(locEv.active) === 1){
+subLocArea.style.color = 'lightgray'
+}else{
+subLocArea.style.color = 'gray'
+}
+subLocArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+subLocArea.addEventListener('mouseleave', function(){
+if(parseInt(locEv.active) === 1){
+subLocArea.style.color = 'lightgray'
+}else{
+subLocArea.style.color = 'gray'
+}
+})
+subLocArea.addEventListener('click', function(){
+editor.createForm(locEv);
+})
+});
+}
+
+}
 
 //11. Add Events in Same Group
-if(obj){
-    //get data
-    let groupEvents
-    let group
-    if(obj.key === 'locations'){
-     groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
-     group = obj.group;
-    }
-    
-    else if (obj.key === 'events' && obj.target === 'Location'){
-    groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group || event.npc === obj.npc);
-    group = obj.group;
-    } 
-    
-    else if (obj.key === 'events' && obj.target === 'NPC'){
-    groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group || event.npc === obj.npc);
-    group = obj.group;
-    }
-    
-    //Add Header
-    const groupEventsHeader = document.createElement('div');
-    let groupEventsHeaderContent = 
-    `<hr><h3>
-    <span 
-    class='orange'>
-    ${group} Events:
-    </span></h3>`
-    
-    groupEventsHeader.innerHTML = groupEventsHeaderContent;
-    Ref.Left.appendChild(groupEventsHeader);
+if(obj.key === 'locations' || obj.key === 'events'){
+//get data
+let groupEvents
+let group
+if(obj.key === 'locations'){
+groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
+group = obj.group;
+}
+
+else if (obj.key === 'events' && obj.target === 'Location'){
+groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
+group = obj.group;
+} 
+
+else if (obj.key === 'events' && obj.target === 'NPC'){
+//Events affecting same NPC. 
+groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
+group = obj.group;
+}
+
+//Add Header
+const groupEventsHeader = document.createElement('div');
+let groupEventsHeaderContent = 
+`<hr><h3>
+<span 
+class='orange'>
+${group} Group Events:
+</span></h3>`
+
+groupEventsHeader.innerHTML = groupEventsHeaderContent;
+Ref.Left.appendChild(groupEventsHeader);
 
 //Make New Event.
 const groupEventArea = document.createElement('div');
@@ -891,64 +931,149 @@ description: 'They are smiling.',
 }
 editor.createForm(newGroupEv)  
 })
-    
-    //Add locEvents
-    groupEvents.forEach(locEv => {
-    
-        const subLocArea = document.createElement('div');
-        let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
-        
-        subLocArea.innerHTML = subLocContent;
-        Ref.Left.appendChild(subLocArea);
-        
-        if(parseInt(locEv.active) === 1){
-        subLocArea.style.color = 'lightgray'
-        }else{
-        subLocArea.style.color = 'gray'
-        }
-        
-        subLocArea.addEventListener('mouseenter', function(){
-        this.style.color = 'lime';
-        })
-        
-        subLocArea.addEventListener('mouseleave', function(){
-        if(parseInt(locEv.active) === 1){
-        subLocArea.style.color = 'lightgray'
-        }else{
-        subLocArea.style.color = 'gray'
-        }
-        })
-        
-        subLocArea.addEventListener('click', function(){
-        editor.createForm(locEv);
-        })
-    
-    
-    });
-    
-    }
+
+//Add locEvents
+groupEvents.forEach(locEv => {
+
+const subLocArea = document.createElement('div');
+let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
+
+subLocArea.innerHTML = subLocContent;
+Ref.Left.appendChild(subLocArea);
+
+if(parseInt(locEv.active) === 1){
+subLocArea.style.color = 'lightgray'
+}else{
+subLocArea.style.color = 'gray'
+}
+
+subLocArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+subLocArea.addEventListener('mouseleave', function(){
+if(parseInt(locEv.active) === 1){
+subLocArea.style.color = 'lightgray'
+}else{
+subLocArea.style.color = 'gray'
+}
+})
+
+subLocArea.addEventListener('click', function(){
+editor.createForm(locEv);
+})
+
+
+});
+
+}
+
+//12. Add Events affecting same NPCs
+if(obj.key === 'events'){
+if(obj.target === 'NPC'){
+// Split the obj.tags into an array
+const tags = obj.npc.split(',').map(item => item.trim());
+const matchedEvents = {};
+
+// Iterate over each event
+load.Data.events.forEach(event => {
+// Split the event tag string into an array of tags
+const eventTags = event.npc.split(',').map(item => item.trim());
+const commonTags = tags.filter(tag => eventTags.includes(tag));
+
+// Iterate over each common tag associated with the NPC
+commonTags.forEach(tag => {
+if (!matchedEvents[tag]) {
+matchedEvents[tag] = [];
+}
+
+if(obj.id !== event.id){
+matchedEvents[tag].push(event.id);
+};
+});
+});
+
+for (const tag in matchedEvents) {
+if (matchedEvents.hasOwnProperty(tag)) {
+
+// Add Header
+const evHeaderObj = load.Data.events.find(event => event.npc === tag && event.target === 'NPC');
+//console.log(tag, evHeaderObj)
+
+const relationshipHeader = document.createElement('div');
+let relationshipContent = 
+`<hr><h3>
+<span class='orange'>
+${tag} Events:
+</span></h3>`;
+
+relationshipHeader.innerHTML = relationshipContent;
+
+if(matchedEvents[tag].length > 0){
+Ref.Left.appendChild(relationshipHeader);
+
+relationshipHeader.addEventListener('click', function(){
+editor.createForm(evHeaderObj);
+})
+};
+
+// Add Names
+const evIds = matchedEvents[tag];
+evIds.forEach(evId => {
+const evObj = load.Data.events.find(event => parseInt(event.id) === evId);
+
+const evNameArea = document.createElement('div');
+let evNameContent = `<h3><span>${evObj.name}</span></h3>`;
+
+evNameArea.innerHTML = evNameContent;
+Ref.Left.appendChild(evNameArea);
+
+evNameArea.style.color = 'lightgray';
+
+evNameArea.addEventListener('mouseenter', function(){
+this.style.color = 'white';
+})
+
+evNameArea.addEventListener('mouseleave', function(){
+evNameArea.style.color = 'lightgray'
+})
+
+evNameArea.addEventListener('click', function(){
+editor.createForm(evObj)
+})
+
+
+});
+}}}
+}
 
 //12. Add Sub-Locations
-if(obj){
+if(obj.key === 'locations' || obj.key === 'events' && obj.target === 'Location'){
 //get data
 let subLocations
 let parentLocation
 if(obj.key === 'locations'){
- subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.name);
- parentLocation = obj.name
+subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.name);
+parentLocation = obj.name
 }
 
 else if (obj.key === 'events' && obj.target === 'Location'){
+
 subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.location);
 parentLocation = obj.location;
 }
 
-else if (obj.key === 'events' && obj.target === 'NPC'){
-let helper1 = load.Data.events.find(event => event.name === obj.location);
-let helper2 = helper1.location
-subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === helper2);
-parentLocation = helper2;
-}
+// else if (obj.key === 'events' && obj.target === 'NPC'){
+// try{
+// let helper1 = load.Data.events.find(event => event.name === obj.location);
+// let helper2 = helper1.location
+// subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === helper2);
+// parentLocation = helper2;
+// }catch{
+// subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.location);
+// parentLocation = obj.location;
+// }
+// }
 
 //Add Header
 const subLocationHeader = document.createElement('div');
@@ -956,7 +1081,7 @@ let subLocationHeaderContent =
 `<hr><h3>
 <span 
 class='orange'>
-Also in ${parentLocation}:
+In ${parentLocation}:
 </span></h3>`
 
 subLocationHeader.innerHTML = subLocationHeaderContent;
@@ -1038,31 +1163,6 @@ editor.createForm(subLoc);
 });
 }
 
-//12. Make ID Manually
-if(obj.id){
-const existingId = document.getElementById('centreId');
-if (existingId) {
-existingId.remove(); // Remove the existing form
-}
-
-const idArea = document.createElement('div');
-idArea.id = 'centreId';
-
-let idContent =  
-`<label class="entry-label" 
-style="display: none"
-divId="id">
-</label>
-<input
-class="entry-input centreId" 
-style="display:none"
-divId="id"
-id="dataEntryId"
-value="${obj.id || 'N/A'} ">`;
-
-idArea.innerHTML = idContent;
-Ref.Left.appendChild(idArea);
-}
 }
 
 return form;
@@ -1078,21 +1178,21 @@ const labelElements = document.querySelectorAll('.entry-label');
 const labels = [];
 
 labelElements.forEach(label => {
-    
-    const divId = label.getAttribute('divId');
-    
-    if(divId === 'newField' ){
-    
-        if(label.value !== "New Field"){
-            const newField = label.value 
-            console.log('Saving newField...', newField)
-            labels.push(newField)   
-        }else{//Do Nothing
-        }
-    
-    }else{
-    labels.push(divId);
-    }
+
+const divId = label.getAttribute('divId');
+
+if(divId === 'newField' ){
+
+if(label.value !== "New Field"){
+const newField = label.value 
+console.log('Saving newField...', newField)
+labels.push(newField)   
+}else{//Do Nothing
+}
+
+}else{
+labels.push(divId);
+}
 });
 
 //get array of input divIds
@@ -1100,28 +1200,28 @@ const inputElements = document.querySelectorAll('.entry-input');
 const inputs = [];
 
 inputElements.forEach(input => {
-    const value = input.value;
-    const divId = input.getAttribute('divId');
+const value = input.value;
+const divId = input.getAttribute('divId');
 
-    if(divId === 'newContent'){
-    if(value !== 'Insert New Value'){
-        const newValue = value 
-        console.log('Saving newContent...', newValue)
-        inputs.push(newValue)   
-        }else{//Do Nothing
-        }
-        
-    }else{
-    inputs.push(value.trim());
+if(divId === 'newContent'){
+if(value !== 'Insert New Value'){
+const newValue = value 
+console.log('Saving newContent...', newValue)
+inputs.push(newValue)   
+}else{//Do Nothing
+}
 
-    }
+}else{
+inputs.push(value.trim());
+
+}
 });
 
 console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {
-    saveEntry[labels[i]] = inputs[i];
+saveEntry[labels[i]] = inputs[i];
 }
 
 //Edit saveEntry object for type and subType -- will need to change if to be user-access'
@@ -1149,11 +1249,11 @@ load.Data[key][index] = saveEntry;
 }
 
 if(key === 'npcs'){
-    NPCs.buildNPC();
-    NPCs.addNPCInfo(saveEntry.name)
-    }else{
-    editor.createForm(saveEntry);
-    }
+NPCs.buildNPC();
+NPCs.addNPCInfo(saveEntry.name)
+}else{
+editor.createForm(saveEntry);
+}
 
 
 // console.log('Updated saveEntry:');
@@ -1174,26 +1274,26 @@ const index = key && id && load.Data[key].findIndex(entry => entry.id === parseI
 
 //Delete index and refresh.
 if (index !== -1) { // Check if index was found
-    // Confirm deletion
-    const confirmation = confirm('Are you sure you want to delete this entry?');
-    if (confirmation) {
-        // Remove entry at index
-        load.Data[key].splice(index, 1);
-        editor.loadList(load.Data);
-        Ref.Left.style.display = 'none';
-        Ref.Centre.style.display = 'none';
+// Confirm deletion
+const confirmation = confirm('Are you sure you want to delete this entry?');
+if (confirmation) {
+// Remove entry at index
+load.Data[key].splice(index, 1);
+editor.loadList(load.Data);
+Ref.Left.style.display = 'none';
+Ref.Centre.style.display = 'none';
 
-        //if Location then delete locationDiv
-        if(key === 'locations'){
-            load.displayLocations(load.Data.locations);
-       }
+//if Location then delete locationDiv
+if(key === 'locations'){
+load.displayLocations(load.Data.locations);
+}
 
-        // Refresh or update UI as needed
-    } else {
-        console.log('Deletion canceled.');
-    }
+// Refresh or update UI as needed
 } else {
-    console.log('Entry not found or invalid key/id.');
+console.log('Deletion canceled.');
+}
+} else {
+console.log('Entry not found or invalid key/id.');
 }},
 
 

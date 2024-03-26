@@ -273,16 +273,18 @@ if(Ref.Left.style.display === 'none'){
 
 }else{
 
-    editSaveButton.classList.add('click-button');
-    setTimeout(() => {
-    editSaveButton.classList.remove('click-button');
-    }, 1000); // 1000 milliseconds = 1 second
-    
-    console.log('saving...')
-    editor.saveDataEntry();
-    
-    load.displayLocations(load.Data.locations);
-    toolbar.refreshLocation();
+editSaveButton.classList.add('click-button');
+setTimeout(() => {
+editSaveButton.classList.remove('click-button');
+}, 1000); // 1000 milliseconds = 1 second
+
+console.log('saving...')
+editor.saveDataEntry();
+if(load.Data.npcs){
+NPCs.buildNPC();
+}
+editor.loadList(load.Data);
+load.displayLocations(load.Data.locations);
 }}
 
 saveFormButton(){
@@ -296,9 +298,9 @@ console.log('saving...')
 editor.saveDataEntry();
 if(load.Data.npcs){
 NPCs.buildNPC();
+}
 editor.loadList(load.Data);
 load.displayLocations(load.Data.locations);
-}
 }
 
 newButton(){

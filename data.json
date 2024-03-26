@@ -15872,7 +15872,56 @@
       
     ],
     "npcs": [
-        
+      {
+        "type": "class",
+        "subType": "level",
+        "key": "npcs",
+        "id": 16,
+        "name": "Gremag",
+        "tags": "Trader, Evil, Meticulous",
+        "level": "7",
+        "class": "Assassin",
+        "str": "9",
+        "dex": "14",
+        "int": "12",
+        "wis": "13",
+        "con": "11",
+        "cha": "13",
+        "description": "A tall and thin individual with sharp features and protruding eyes. \n\nHe is meticulous and prone to fussing over his business partner Rannos Dovi and customers alike.",
+        "strMod": 0,
+        "dexMod": 1,
+        "intMod": 0,
+        "wisMod": 1,
+        "conMod": 0,
+        "chaMod": 1,
+        "Modifiers": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "Skills": {
+          "openLocks": 39,
+          "pickPockets": 50,
+          "moveSilently": 50,
+          "climbWalls": 82,
+          "hide": 35,
+          "listen": 49,
+          "poison": 55
+        },
+        "hitPoints": 16,
+        "inventory": [],
+        "savingThrows": {
+          "deathRay": 10,
+          "magicWands": 12,
+          "paralysisPetrify": 11,
+          "dragonBreath": 12,
+          "spells": 12
+        },
+        "attackBonus": 4
+      }
     ],
     "tags": [
       

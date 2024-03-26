@@ -783,7 +783,7 @@ divArray.forEach(div => {
 async getEvent(currentLocation, locObj) {
 const activeEvents = [];
 
-console.log('finding events...')
+//console.log('finding events...')
 
 const subLocations = load.Data.events.filter(entry => entry.location === currentLocation)
 const tags = locObj.tags
@@ -858,8 +858,8 @@ locationEvents.sort((a, b) => {
   if (b.location === 'All') return 1;
   
   // For other cases, compare based on the name property
-  if (a.name > b.name) return 1;
-  if (a.name < b.name) return -1;
+  if (a.order > b.order) return 1;
+  if (a.order < b.order) return -1;
 
   return 0;
 });

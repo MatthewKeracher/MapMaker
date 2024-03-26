@@ -635,7 +635,7 @@ npc.hitPoints = NPCbuild.rollHitDice(hitDice);
 static getInventory(npc) {
 // Filter itemsArray based on characterClass and tags
 const filteredItems = load.Data.items.filter(item => {
-const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
+const itemTags = item.tags ? item.tags.split(',').map(tag => tag.trim()) : [];
 
 // Check if the item matches the criteria
 return (
@@ -647,17 +647,18 @@ return (
 //If the tag is preceded by '?' there is only a chance they have the item, or only one of that type.
 
 // Format each item and add to npc.inventory
-npc.inventory = filteredItems.map(item => ({
-Name: item.Name,
-Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
-tag === npc.class || 
-tag === npc.name  ||
-(npc.tags && npc.tags.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
-) : ''
-}));
+npc.inventory = filteredItems;
+// npc.inventory = filteredItems.map(item => ({
+// name: item.name,
+// tag: item.tags ? item.tags.split(',').map(tag => tag.trim()).find(tag => 
+// tag === npc.class || 
+// tag === npc.name  ||
+// (npc.tags && npc.tags.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
+// ) : ''
+// }));
 
-// Sort the inventory alphabetically by item.Tag
-npc.inventory.sort((a, b) => (a.Tag > b.Tag) ? 1 : -1);
+// Sort the inventory alphabetically by item.tag
+npc.inventory.sort((a, b) => (a.tag > b.tag) ? 1 : -1);
 
 }
 

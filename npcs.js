@@ -246,7 +246,7 @@ const commonElementExists = npc.tags && event.npc && eventNpcList.some(tag => np
 const isHere = event.location === subLocation;
 
 if ((npcNameMatches || npcInEventList || eventIntagsList || commonElementExists) &&
-event.active === 1 &&
+parseInt(event.active) === 1 &&
 event.target === 'NPC' &&
 isHere) {
 const npcStory = this.generateNPCStory(npc, subLocation, npcEvents);
@@ -283,6 +283,7 @@ npc.tags !== '' &&
 (event.location === subLocation || event.location === 'All')
 );
 });
+
 
 let relevantTag = ''; // Variable to store the relevant part of npc.tags
 
@@ -344,8 +345,47 @@ Ref.Left.innerHTML = '';
 Ref.Centre.style.display = 'block';
 Ref.Left.style.display = 'block';
 
+//0. Make Hidden MetaData
+if(foundNPC){
+
+  const keyArea = document.createElement('div');
+  keyArea.id = 'keyArea';
+  
+  let keyContent =  
+  `<label class="entry-label" 
+  style="display: none"
+  divId="key">
+  </label>
+  <input
+  class="entry-input" 
+  style="display:none"
+  divId="key"
+  value="npcs">`;
+  
+  keyArea.innerHTML = keyContent;
+  Ref.Left.appendChild(keyArea);
+  
+  const idArea = document.createElement('div');
+  idArea.id = 'centreId';
+  
+  let idContent =  
+  `<label class="entry-label" 
+  style="display: none"
+  divId="id">
+  </label>
+  <input
+  class="entry-input centreId" 
+  style="display:none"
+  divId="id"
+  id="currentId"
+  value="${foundNPC.id || 'N/A'} ">`;
+  
+  idArea.innerHTML = idContent;
+  Ref.Left.appendChild(idArea);
+  };
 
 // 1. NAME
+if(foundNPC){
 const nameContainer = document.createElement('div');
 
 let nameContent =  
@@ -367,8 +407,10 @@ nameContainer.addEventListener('click', function() {
 nameContainer.querySelector('.leftText').focus();
 nameContainer.querySelector('.leftText').select();
 });
+}
 
 // 2. TAGS
+if(foundNPC){
 const tagsContainer = document.createElement('div');
 
 let tagsContent =  
@@ -391,8 +433,11 @@ tagsContainer.addEventListener('click', function() {
 tagsContainer.querySelector('.centreTag').focus();
 //tagsContainer.querySelector('.centreTag').select();
 });
+}
 
 //3. BIO
+if(foundNPC){
+
 const backStoryText = document.createElement('div');
 
 let backStoryContent =  
@@ -427,6 +472,8 @@ descriptionText.addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
 });
+}
+
 
 if (foundNPC.class && foundNPC.class !== "N/A") {
 
@@ -633,97 +680,199 @@ statContainer.querySelector('.centreStat').select();
 });
 
 if (foundNPC.tags){
-  // Split the foundNPC tags into an array
-  const tags = foundNPC.tags.split(',').map(item => item.trim());
-  
-  const taggedNPCs = {};
-  
-  // Iterate over each NPC
-  load.Data.npcs.forEach(npc => {
-      // Split the npc tag string into an array of tags
-      const npcTags = npc.tags.split(',').map(item => item.trim());
-      const commonTags = tags.filter(tag => npcTags.includes(tag));
-  
-      // Iterate over each common tag associated with the NPC
-      commonTags.forEach(tag => {
-          if (!taggedNPCs[tag]) {
-              taggedNPCs[tag] = [];
-          }
-          
-          if(foundNPC.id !== npc.id){
-          taggedNPCs[tag].push(npc.id);
-          };
-      });
-  });
-  
-    // Add Header
-    const relationshipsHeader = document.createElement('div');
-    let relationshipsHeaderContent = 
-        `<hr><h3>
-        <span class='cyan'>
-        Relationships:
-        </span></h3>`;
-    
-      relationshipsHeader.innerHTML = relationshipsHeaderContent;
-  
-    
-    Ref.Left.appendChild(relationshipsHeader);
-  
-  for (const tag in taggedNPCs) {
-    if (taggedNPCs.hasOwnProperty(tag)) {
-        // Add Header
 
-        const evObj = load.Data.events.find(event => event.group === tag && event.target === 'NPC');
-        console.log(tag, evObj)
+//Add Relationships
+if(foundNPC.tags){  
+// Split the foundNPC tags into an array
+const tags = foundNPC.tags.split(',').map(item => item.trim());
 
-        const relationshipHeader = document.createElement('div');
-        let relationshipContent = 
-            `<h3>
-            <span class='orange'>
-            ${tag}
-            </span></h3>`;
-        
-        relationshipHeader.innerHTML = relationshipContent;
-  
-        if(taggedNPCs[tag].length > 0){
-        Ref.Left.appendChild(relationshipHeader);
+const taggedNPCs = {};
 
-        relationshipHeader.addEventListener('click', function(){
-        editor.createForm(evObj);
-        })
-        };
-  
-        // Add Names
-        const npcIds = taggedNPCs[tag];
-        npcIds.forEach(npcId => {
-            const npcObj = load.Data.npcs.find(npc => parseInt(npc.id) === npcId);
-  
-            const npcNameArea = document.createElement('div');
-            let npcNameContent = `<h3><span>${npcObj.name}</span></h3>`;
-  
-            npcNameArea.innerHTML = npcNameContent;
-            Ref.Left.appendChild(npcNameArea);
+// Iterate over each NPC
+load.Data.npcs.forEach(npc => {
+// Split the npc tag string into an array of tags
+const npcTags = npc.tags.split(',').map(item => item.trim());
+const commonTags = tags.filter(tag => npcTags.includes(tag));
 
-            npcNameArea.style.color = 'lightgray';
-  
-            npcNameArea.addEventListener('mouseenter', function(){
-              this.style.color = 'white';
-              })
-              
-              npcNameArea.addEventListener('mouseleave', function(){
-                npcNameArea.style.color = 'lightgray'
-              })
-              
-              npcNameArea.addEventListener('click', function(){
-              NPCs.addNPCInfo(npcObj.name);
-              })
-  
-  
-        });
-    }
+// Iterate over each common tag associated with the NPC
+commonTags.forEach(tag => {
+if (!taggedNPCs[tag]) {
+taggedNPCs[tag] = [];
+}
+
+if(foundNPC.id !== npc.id){
+taggedNPCs[tag].push(npc.id);
+};
+});
+});
+
+let totalLength = 0;
+
+for (const key in taggedNPCs) {
+  if (Object.prototype.hasOwnProperty.call(taggedNPCs, key)) {
+    totalLength += taggedNPCs[key].length;
   }
+}
+
+if(totalLength !== 0){
+// Add Header
+const relationshipsHeader = document.createElement('div');
+let relationshipsHeaderContent = 
+`<hr><h3>
+<span class='cyan'>
+Relationships:
+</span></h3>`;
+
+relationshipsHeader.innerHTML = relationshipsHeaderContent;
+
+Ref.Left.appendChild(relationshipsHeader);
+}
+
+for (const tag in taggedNPCs) {
+
+if (taggedNPCs.hasOwnProperty(tag)) {
+// Add Header
+
+const evObj = load.Data.events.find(event => event.group === tag && event.target === 'NPC');
+//console.log(tag, evObj)
+
+const relationshipHeader = document.createElement('div');
+let relationshipContent = 
+`<h3>
+<span class='orange'>
+${tag}
+</span></h3>`;
+
+relationshipHeader.innerHTML = relationshipContent;
+
+if(taggedNPCs[tag].length > 0){
+Ref.Left.appendChild(relationshipHeader);
+
+relationshipHeader.addEventListener('click', function(){
+editor.createForm(evObj);
+})
+};
+
+// Add Names
+const npcIds = taggedNPCs[tag];
+npcIds.forEach(npcId => {
+const npcObj = load.Data.npcs.find(npc => parseInt(npc.id) === npcId);
+
+const npcNameArea = document.createElement('div');
+let npcNameContent = `<h3><span>${npcObj.name}</span></h3>`;
+
+npcNameArea.innerHTML = npcNameContent;
+Ref.Left.appendChild(npcNameArea);
+
+npcNameArea.style.color = 'lightgray';
+
+npcNameArea.addEventListener('mouseenter', function(){
+this.style.color = 'white';
+})
+
+npcNameArea.addEventListener('mouseleave', function(){
+npcNameArea.style.color = 'lightgray'
+})
+
+npcNameArea.addEventListener('click', function(){
+NPCs.addNPCInfo(npcObj.name);
+})
+
+
+});
+}
+}
+}
+
+//Add Current Whereabouts
+if(foundNPC.tags){
+
+ // Split the foundNPC tags into an array
+const tags = foundNPC.tags.split(',').map(item => item.trim());
+tags.push(foundNPC.name);
+const taggedLocations = {};
+
+//subLocations to search
+const subLocations = load.Data.events.filter(subLoc => subLoc.target === 'NPC');
+
+// Iterate over each NPC
+subLocations.forEach(event => {
+
+// Split the npc tag string into an array of tags
+const locEvTags = event.npc.split(',').map(item => item.trim());
+const commonTags = tags.filter(tag => locEvTags.includes(tag));
+
+// Iterate over each common tag associated with the subLocation.
+commonTags.forEach(tag => {
+if (!taggedLocations[tag]) {
+taggedLocations[tag] = [];
+}
+
+taggedLocations[tag].push(event.id);
+
+});
+}); 
+
+let totalLength = 0;
+
+for (const key in taggedLocations) {
+  if (Object.prototype.hasOwnProperty.call(taggedLocations, key)) {
+    totalLength += taggedLocations[key].length;
+  }
+}
+
+if(totalLength !== 0){
+// Add Header
+const relationshipsHeader = document.createElement('div');
+let relationshipsHeaderContent = 
+`<hr><h3>
+<span class='cyan'>
+Whereabouts:
+</span></h3>`;
+
+relationshipsHeader.innerHTML = relationshipsHeaderContent;
+Ref.Left.appendChild(relationshipsHeader);
+}
+
+console.log(taggedLocations)
+for (const tag in taggedLocations) {
+
+  if (taggedLocations.hasOwnProperty(tag)) {
+    const locIds = taggedLocations[tag];
+    locIds.forEach(locId => {
+    const taggedEvent = load.Data.events.find(obj => parseInt(obj.id) === locId);
+    let header = taggedEvent.location;
+
+    if(taggedEvent.location !== 'All'){
+    
+    let subLocObj = load.Data.events.find(obj => obj.name === taggedEvent.location && obj.target === 'Location');
+    
+    //console.log(taggedEvent, subLocObj)
+
+    if(subLocObj){header = subLocObj.name}else{subLocObj= load.Data.locations.find(loc => loc.name = taggedEvent.location)};
+
+  const whereaboutsHeader = document.createElement('div');
+  let whereaboutsContent = 
+  `<h3>
+  <span class='orange'>
+  ${header}
+  </span></h3>`;
   
-  };
+  whereaboutsHeader.innerHTML = whereaboutsContent;
+  
+  if(taggedLocations[tag].length > 0){
+  Ref.Left.appendChild(whereaboutsHeader);
+  
+  whereaboutsHeader.addEventListener('click', function(){
+  console.log(subLocObj)
+  editor.createForm(subLocObj);
+  })
+  }};
+
+  })
+}
+}}
+};
 
 if (foundNPC.Skills){
 
@@ -838,7 +987,7 @@ Ref.Left.appendChild(magicHeaderContainer);
 
 foundNPC.magic.forEach(spell => {
   const spellContainer = document.createElement('div');
-  console.log(spell)
+  //console.log(spell)
   
   let spellBlock =
   `<h3><label class="expandable orange" data-content-type="rule" divId="${spell}">
@@ -850,7 +999,8 @@ foundNPC.magic.forEach(spell => {
   Ref.Left.appendChild(spellContainer);
   
   spellContainer.addEventListener('click', function() {
-  //something happens when you click on spell, showSpell?
+  let spellObj = load.Data.spells.find(spellObj => spellObj.name === spell)
+  editor.createForm(spellObj);
   });
   });
 
@@ -917,6 +1067,34 @@ Inventory:</span><br></h3>`
 inventoryHeader.innerHTML = headerContent;
 Ref.Left.appendChild(inventoryHeader);
 
+//Add New Inventory Item.
+if(foundNPC.inventory){
+
+  const addInvArea = document.createElement('div');
+  let addInvContent = `<h3><span class = 'leftText'>[Add New Inventory Item]</span></h3>`;
+  
+  addInvArea.innerHTML = addInvContent;
+  Ref.Left.appendChild(addInvArea);
+  
+  addInvArea.style.color = 'lightgray'
+  
+  addInvArea.addEventListener('mouseenter', function(){
+  this.style.color = 'lime';
+  })
+  
+  addInvArea.addEventListener('mouseleave', function(){
+  this.style.color = 'lightgray';
+  })
+  
+  addInvArea.addEventListener('click', function(){
+  
+    editor.addItem = true;
+    editor.loadList({ items: load.Data.items });
+    
+
+  })
+  }
+
 //Map through Inventory.
 
 foundNPC.inventory.map(item => {
@@ -926,7 +1104,7 @@ const itemContainer = document.createElement('div');
 let itemContent =
 `<h3>
 <span class="centreText">
-${Items.getItems(item.Name)}
+${Items.getItems(item.name)}
 </span>
 </h3>`
 
@@ -934,7 +1112,7 @@ itemContainer.innerHTML = itemContent;
 Ref.Left.appendChild(itemContainer);
 
 itemContainer.addEventListener('click', function() {
-//showItem
+editor.createForm(item);
 });
 
 });
@@ -994,43 +1172,6 @@ treasureContainer.querySelector('.centreNumber').select();
 
 };
 
-//0. Make Hidden MetaData
-if(foundNPC){
-
-const keyArea = document.createElement('div');
-keyArea.id = 'keyArea';
-
-let keyContent =  
-`<label class="entry-label" 
-style="display: none"
-divId="key">
-</label>
-<input
-class="entry-input" 
-style="display:none"
-divId="key"
-value="npcs">`;
-
-keyArea.innerHTML = keyContent;
-Ref.Left.appendChild(keyArea);
-
-const idArea = document.createElement('div');
-idArea.id = 'centreId';
-
-let idContent =  
-`<label class="entry-label" 
-style="display: none"
-divId="id">
-</label>
-<input
-class="entry-input centreId" 
-style="display:none"
-divId="id"
-value="${foundNPC.id || 'N/A'} ">`;
-
-idArea.innerHTML = idContent;
-Ref.Left.appendChild(idArea);
-};
 
 Storyteller.showFloatingExpandable();
 }},
