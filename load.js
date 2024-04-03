@@ -96,12 +96,22 @@ await NPCs.loadAndBuild(content);
 // Return the file name
 load.fileName = fileNameWithoutExtension;
 Ref.locationLabel.textContent = load.fileName;
+//load.locationLabelEvents();
 
 } catch (error) {
 console.error('Error reading file:', error);
 // Handle the error appropriately, e.g., display an error message to the user
 }
 }
+},
+
+locationLabelEvents(){
+
+Ref.locationLabel.addEventListener('click', function() {
+editor.createForm()
+
+});
+
 },
 
 handleFileLoad(fileContent) {
@@ -184,7 +194,21 @@ sortData(data){
 
 for (const key in data) {
 
-let obj = data[key]
+let obj = data[key];
+// console.log(obj)
+
+// if(key === 'townText'){
+
+// }else{
+// // Modify each object in the array
+// obj = obj.map(item => ({
+//     // Existing properties
+//     ...item,
+
+//     // New property
+//     color: 'gold'
+// }));
+// }
 
 // if (key === 'spells') {
 // obj = obj.map(spell => ({
@@ -210,36 +234,38 @@ let obj = data[key]
 // }));
 // }
 
-// if( key === 'monsters'){
-// obj = obj.map(monster => ({
+if( key === 'monsters'){
+obj = obj.map(monster => ({
 
-// //metadata
-// key: key,
-// type: 'class', 
-// subType: 'level',
+//metadata
+key: key,
+type: 'class', 
+subType: 'level',
 
-// //change
-// class: monster.class, 
-// level: monster.level, 
+//change
+class: monster.class, 
+level: monster.level, 
 
-// //stay same
-// id: monster.id,
-// name: monster.name,
-// hd: monster.hd,
-// attacks: monster.attacks,
-// damage: monster.damage,
-// movement: monster.movement,
-// noApp: monster.noApp,
-// ac: monster.ac,
-// morale: monster.morale,
-// treasure: monster.treasure,
-// lairTreasure: monster.lairTreasure,
-// xp: monster.xp,
-// description: monster.description,
-// special: monster.special,
+//stay same
+id: monster.id,
+name: monster.name,
+color: 'hotpink',
+hd: monster.hd,
+attacks: monster.attacks,
+damage: monster.damage,
+movement: monster.movement,
+noApp: monster.noApp,
+ac: monster.ac,
+morale: monster.morale,
+treasure: monster.treasure,
+lairTreasure: monster.lairTreasure,
+xp: monster.xp,
+description: monster.description,
+special: monster.special,
 
-// }));
-// }
+
+}));
+}
 
 // if( key === 'items'){
 // obj = obj.map(item => ({
@@ -482,7 +508,7 @@ if (!location.dataset.hasListener) {
 location.addEventListener('click', () => {    
 Storyteller.changeContent(location);
 NPCs.clearForm(Ref.npcForm);
-});
+}); 
 
 //Show Form when Editing
 location.addEventListener('click', () => {

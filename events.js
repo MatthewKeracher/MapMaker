@@ -788,6 +788,30 @@ const activeEvents = [];
 const subLocations = load.Data.events.filter(entry => entry.location === currentLocation)
 const tags = locObj.tags
 
+//If no subLocations then add one.
+if(subLocations.length === 0){
+
+  const newsubLocation = 
+  
+  {
+  id: load.generateUniqueId(load.Data.events, 'entry'),
+  key: 'events',
+  type: 'target', 
+  subType: 'group',
+  order: 1,
+  name: 'New SubLocation', 
+  active: 1,
+  tags: '',
+  target: 'Location', 
+  group: '', 
+  location: locObj.name, 
+  npc: '', 
+  description: '*Click* to add information about this SubLocation here.'
+  }
+  
+  load.Data.events.push(newsubLocation);
+  }
+
 //console.log(currentLocation,locObj)
 //console.log(load.Data.events)
 
@@ -820,15 +844,14 @@ const possibleLocations = locationEvents.filter(loc => loc.location !== 'All');
 
 if(possibleLocations.length === 0){
 
-const newsubLocation = {
-  name: currentLocation,
+const newsubLocation = 
+  {name: currentLocation,
   description: "",
   group: event.group,
   active: 1, 
   npc: event.npc, 
   target: "Location", 
-  location: currentLocation
-}
+  location: currentLocation}
 
 console.log(newsubLocation);
 locationEvents.push(newsubLocation)
@@ -918,7 +941,7 @@ if (entry.location.location === 'All') {
 
   if (currentAll - allCount === 0) {
     //If last 'All' event enter location description.
-    locDesc = `<span class="expandable all" 
+    locDesc = `<span class="expandable" style="color:${entry.location.color}" 
     divId="${entry.location.name}"
     data-content-type="events">
     ${entry.location.description}
@@ -943,7 +966,7 @@ if (entry.location.location === 'All') {
 const presentNPCs = NPCs.getNPCs(entry.location.name, npcEvents);
 
 if (entry.npc.length === 0) {
-npcDesc += `<br> <span class = "cyan">There is nobody around. </span><br><br>`;
+npcDesc += `<br> <span style="color:${entry.location.color}">There is nobody around. </span><br><br>`;
 } else {
 for (const npcWithStory of presentNPCs) {
 const npcStory = npcWithStory.story;
@@ -954,7 +977,8 @@ npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
 //Put together.
 locDesc = 
 `<h3> ${entry.location.name !== currentLocation ? 
-  `<span class="expandable hotpink" 
+  `<span class="expandable"
+  style="color:${entry.location.color}"
   divId="${entry.location.name}"
   data-content-type="events"> ${entry.location.name} </span>` : ''}` +
 ` ${eventItemsFormatted} </h3>` +         

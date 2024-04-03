@@ -474,7 +474,7 @@ descriptionText.addEventListener('input', function() {
 });
 }
 
-
+//4. CLASS & LEVEL
 if (foundNPC.class && foundNPC.class !== "N/A") {
 
 const classContainer = document.createElement('div');
@@ -586,7 +586,7 @@ const container = document.createElement('div');
 container.classList.add('form');
 container.id = 'npcInfo'
 
-
+//MONSTER STUFF
 if (foundNPC.monsterTemplate){
 
 npcContent += `<h3>
@@ -679,6 +679,7 @@ statContainer.querySelector('.centreStat').select();
 }
 });
 
+
 if (foundNPC.tags){
 
 //Add Relationships
@@ -719,14 +720,36 @@ if(totalLength !== 0){
 const relationshipsHeader = document.createElement('div');
 let relationshipsHeaderContent = 
 `<hr><h3>
-<span class='cyan'>
-Relationships:
+<span class='cyan' id="relationshipsHeaderContent">
+Relationships [...]
 </span></h3>`;
 
 relationshipsHeader.innerHTML = relationshipsHeaderContent;
-
 Ref.Left.appendChild(relationshipsHeader);
+
+//Add Show/Hide on Header for Section
+relationshipsHeader.addEventListener('click', function() {
+const headerContent = document.getElementById('relationshipsHeaderContent')
+
+if(relationshipsContainer.style.display === "none"){
+relationshipsContainer.style.display = "block"
+headerContent.textContent = 'Relationships:';
+
+}else{
+relationshipsContainer.style.display = "none"
+headerContent.textContent = 'Relationships [...]';
 }
+
+});
+}
+
+//Add Container
+const container = document.createElement('div');
+container.setAttribute('id', 'relationshipsContainer');
+container.classList.add('no-hover');
+Ref.Left.appendChild(container);
+const relationshipsContainer = document.getElementById('relationshipsContainer');
+relationshipsContainer.style.display = "none";
 
 for (const tag in taggedNPCs) {
 
@@ -746,7 +769,7 @@ ${tag}
 relationshipHeader.innerHTML = relationshipContent;
 
 if(taggedNPCs[tag].length > 0){
-Ref.Left.appendChild(relationshipHeader);
+relationshipsContainer.appendChild(relationshipHeader);
 
 relationshipHeader.addEventListener('click', function(){
 editor.createForm(evObj);
@@ -762,7 +785,7 @@ const npcNameArea = document.createElement('div');
 let npcNameContent = `<h3><span>${npcObj.name}</span></h3>`;
 
 npcNameArea.innerHTML = npcNameContent;
-Ref.Left.appendChild(npcNameArea);
+relationshipsContainer.appendChild(npcNameArea);
 
 npcNameArea.style.color = 'lightgray';
 
@@ -777,7 +800,6 @@ npcNameArea.style.color = 'lightgray'
 npcNameArea.addEventListener('click', function(){
 NPCs.addNPCInfo(npcObj.name);
 })
-
 
 });
 }
@@ -823,18 +845,41 @@ for (const key in taggedLocations) {
 
 if(totalLength !== 0){
 // Add Header
-const relationshipsHeader = document.createElement('div');
-let relationshipsHeaderContent = 
+const whereaboutsHeader = document.createElement('div');
+let whereaboutsHeaderContent = 
 `<hr><h3>
-<span class='cyan'>
-Whereabouts:
+<span class='cyan' id="whereaboutsHeaderContent">
+Whereabouts [...]
 </span></h3>`;
 
-relationshipsHeader.innerHTML = relationshipsHeaderContent;
-Ref.Left.appendChild(relationshipsHeader);
+whereaboutsHeader.innerHTML = whereaboutsHeaderContent;
+Ref.Left.appendChild(whereaboutsHeader);
+
+//Add Show/Hide on Header for Section
+whereaboutsHeader.addEventListener('click', function() {
+  const headerContent = document.getElementById('whereaboutsHeaderContent')
+  
+  if(whereaboutsContainer.style.display === "none"){
+  whereaboutsContainer.style.display = "block"
+  headerContent.textContent = 'Whereabouts:';
+  
+  }else{
+  whereaboutsContainer.style.display = "none"
+  headerContent.textContent = 'Whereabouts [...]';
+  }
+  
+  });
+  
 }
 
-console.log(taggedLocations)
+//Add Container
+const container = document.createElement('div');
+container.setAttribute('id', 'whereaboutsContainer');
+container.classList.add('no-hover');
+Ref.Left.appendChild(container);
+const whereaboutsContainer = document.getElementById('whereaboutsContainer');
+whereaboutsContainer.style.display = "none";
+
 for (const tag in taggedLocations) {
 
   if (taggedLocations.hasOwnProperty(tag)) {
@@ -861,7 +906,7 @@ for (const tag in taggedLocations) {
   whereaboutsHeader.innerHTML = whereaboutsContent;
   
   if(taggedLocations[tag].length > 0){
-  Ref.Left.appendChild(whereaboutsHeader);
+  whereaboutsContainer.appendChild(whereaboutsHeader);
   
   whereaboutsHeader.addEventListener('click', function(){
   console.log(subLocObj)
@@ -877,15 +922,39 @@ for (const tag in taggedLocations) {
 if (foundNPC.Skills){
 
 const skillTypeContainer = document.createElement('div');
-skillTypeContainer.classList.add('no-hover');
+
+let textContent = foundNPC.class === 'Cleric'? 'Turn Undead' : foundNPC.class + ' Skills';
 
 let skillsType = 
 `<hr><h3><span class="expandable cyan" data-content-type="rule"
-divId="${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}">
-${foundNPC.class === 'Cleric'? `Turn Undead` : `${foundNPC.class} Skills`}:</span> <br></h3>`
+id="skillsHeader">
+${textContent} [...]</span> <br></h3>`
 
 skillTypeContainer.innerHTML = skillsType;
 Ref.Left.appendChild(skillTypeContainer);
+
+//Add Show/Hide on Header for Section
+skillTypeContainer.addEventListener('click', function() {
+  const headerContent = document.getElementById('skillsHeader')
+  
+  if(skillsContainer.style.display === "none"){
+  skillsContainer.style.display = "block"
+  headerContent.textContent = textContent + ':';
+  
+  }else{
+  skillsContainer.style.display = "none"
+  headerContent.textContent = textContent + ' [...]';
+  }
+  
+  });
+
+//Add Container
+const container = document.createElement('div');
+container.setAttribute('id', 'skillsContainer');
+container.classList.add('no-hover');
+Ref.Left.appendChild(container);
+const skillsContainer = document.getElementById('skillsContainer');
+skillsContainer.style.display = "none";
 
 const skillNames = {
   "removeTraps": "Remove Traps",
@@ -920,7 +989,7 @@ value="${foundNPC.Skills[skill]}">
 skillBlock += `</h3>`;
 
 skillContainer.innerHTML = skillBlock;
-Ref.Left.appendChild(skillContainer);
+skillsContainer.appendChild(skillContainer);
 
 skillContainer.addEventListener('click', function() {
 skillContainer.querySelector('.centreNumber').focus();
@@ -959,7 +1028,7 @@ if(foundNPC.class === 'Cleric'){
     </h3>`;
     
     turnContainer.innerHTML = turnBlock;
-    Ref.Left.appendChild(turnContainer);
+    skillsContainer.appendChild(turnContainer);
     
     turnContainer.addEventListener('click', function() {
     turnContainer.querySelector('.leftText').focus();
@@ -973,17 +1042,43 @@ if(foundNPC.class === 'Cleric'){
 if (foundNPC.magic){
 
 const magicHeaderContainer = document.createElement('div');
-magicHeaderContainer.classList.add('no-hover');
 
 let magicHeader = `<hr><h3>`;
+let textContent = foundNPC.class === 'Cleric' ? 'Orsons' : 'Spells';
 
-magicHeader += `${foundNPC.class === 'Cleric' ? `<span class="expandable cyan" data-content-type="rule" divId="Orsons">Orsons:</span>`:
-`<span class="expandable cyan" data-content-type="rule" divId="Spellcasting">Spells:</span>`}<br>`;
+magicHeader += 
+`<span class="expandable cyan"
+data-content-type="rule"
+id="magicHeader">${textContent} [...] </span>
+<br>`;
 
 magicHeader += `</h3>`;
 
 magicHeaderContainer.innerHTML = magicHeader;
 Ref.Left.appendChild(magicHeaderContainer);
+
+//Add Show/Hide on Header for Section
+magicHeaderContainer.addEventListener('click', function() {
+  const headerContent = document.getElementById('magicHeader')
+  
+  if(spellsContainer.style.display === "none"){
+    spellsContainer.style.display = "block"
+  headerContent.textContent = textContent + ':';
+  
+  }else{
+    spellsContainer.style.display = "none"
+  headerContent.textContent = textContent + ' [...]';
+  }
+  
+  });
+
+//Add Container
+const container = document.createElement('div');
+container.setAttribute('id', 'spellsContainer');
+container.classList.add('no-hover');
+Ref.Left.appendChild(container);
+const spellsContainer = document.getElementById('spellsContainer');
+spellsContainer.style.display = "none";
 
 foundNPC.magic.forEach(spell => {
   const spellContainer = document.createElement('div');
@@ -996,7 +1091,7 @@ foundNPC.magic.forEach(spell => {
   <br></h3>`;
   
   spellContainer.innerHTML = spellBlock;
-  Ref.Left.appendChild(spellContainer);
+  spellsContainer.appendChild(spellContainer);
   
   spellContainer.addEventListener('click', function() {
   let spellObj = load.Data.spells.find(spellObj => spellObj.name === spell)
@@ -1008,15 +1103,37 @@ foundNPC.magic.forEach(spell => {
 
 if(foundNPC.savingThrows){
 const saveNamesHeaderContainer = document.createElement('div');
-saveNamesHeaderContainer.classList.add('no-hover');
 
 let saveNamesHeader = 
 `<hr><h3><span class="expandable cyan" data-content-type="rule"
-divId="savingThrowsHeader">
-Saving Throws:</span><br></h3>`
+id="savingThrowsHeader">
+Saving Throws [...]</span><br></h3>`
 
 saveNamesHeaderContainer.innerHTML = saveNamesHeader;
 Ref.Left.appendChild(saveNamesHeaderContainer);
+
+//Add Show/Hide on Header for Section
+saveNamesHeaderContainer.addEventListener('click', function() {
+  const headerContent = document.getElementById('savingThrowsHeader')
+  
+  if(savingThrowsContainer.style.display === "none"){
+  savingThrowsContainer.style.display = "block"
+  headerContent.textContent = 'Saving Throws:';
+  
+  }else{
+  savingThrowsContainer.style.display = "none"
+  headerContent.textContent = 'Saving Throws [...]';
+  }
+  
+  });
+
+//Add Container
+const container = document.createElement('div');
+container.setAttribute('id', 'savingThrowsContainer');
+container.classList.add('no-hover');
+Ref.Left.appendChild(container);
+const savingThrowsContainer = document.getElementById('savingThrowsContainer');
+savingThrowsContainer.style.display = "none";
 
 
 const saveNames = {
@@ -1044,7 +1161,7 @@ const saveNames = {
   <br></h3>`;
   
   saveContainer.innerHTML = saveBlock;
-  Ref.Left.appendChild(saveContainer);
+  savingThrowsContainer.appendChild(saveContainer);
   
   saveContainer.addEventListener('click', function() {
   saveContainer.querySelector('.centreNumber').focus();
@@ -1057,24 +1174,46 @@ if(foundNPC.inventory){
 
 //Add INVENTORY Header
 const inventoryHeader = document.createElement('div');
-inventoryHeader.classList.add('no-hover');
 
 let headerContent = 
 `<hr><h3><span class="expandable cyan" data-content-type="rule"
-divId="inventoryHeader">
-Inventory:</span><br></h3>`
+id="inventoryHeader">
+Inventory [...]</span><br></h3>`
 
 inventoryHeader.innerHTML = headerContent;
 Ref.Left.appendChild(inventoryHeader);
 
-//Add New Inventory Item.
+//Add Show/Hide on Header for Section
+inventoryHeader.addEventListener('click', function() {
+const headerContent = document.getElementById('inventoryHeader')
+  
+  if(inventoryContainer.style.display === "none"){
+    inventoryContainer.style.display = "block"
+  headerContent.textContent = 'Inventory:';
+  
+  }else{
+    inventoryContainer.style.display = "none"
+  headerContent.textContent = 'Inventory [...]';
+  }
+  
+  });
+
+//Add Container
+const container = document.createElement('div');
+container.setAttribute('id', 'inventoryContainer');
+container.classList.add('no-hover');
+Ref.Left.appendChild(container);
+const inventoryContainer = document.getElementById('inventoryContainer');
+inventoryContainer.style.display = "none";
+
+//Add, Remove New Inventory Item.
 if(foundNPC.inventory){
 
   const addInvArea = document.createElement('div');
-  let addInvContent = `<h3><span class = 'leftText'>[Add New Inventory Item]</span></h3>`;
+  let addInvContent = `<span class = 'leftText'>[Add New Inventory Item]</span>`;
   
   addInvArea.innerHTML = addInvContent;
-  Ref.Left.appendChild(addInvArea);
+  inventoryContainer.appendChild(addInvArea);
   
   addInvArea.style.color = 'lightgray'
   
@@ -1092,7 +1231,30 @@ if(foundNPC.inventory){
     editor.loadList({ items: load.Data.items });
     
 
+  });
+
+  const delInvArea = document.createElement('div');
+  let delInvContent = `<span class = 'leftText'>[Remove Inventory Item]</span>`;
+  
+  delInvArea.innerHTML = delInvContent;
+  inventoryContainer.appendChild(delInvArea);
+  
+  delInvArea.style.color = 'lightgray'
+  
+  delInvArea.addEventListener('mouseenter', function(){
+  this.style.color = 'hotpink';
   })
+  
+  delInvArea.addEventListener('mouseleave', function(){
+  this.style.color = 'lightgray';
+  })
+  
+  delInvArea.addEventListener('click', function(){
+  
+    editor.delItem = true;
+     
+  });
+
   }
 
 //Map through Inventory.
@@ -1103,16 +1265,36 @@ const itemContainer = document.createElement('div');
 
 let itemContent =
 `<h3>
-<span class="centreText">
+<span class="centreText"
+id = ${item.id}>
 ${Items.getItems(item.name)}
 </span>
 </h3>`
 
 itemContainer.innerHTML = itemContent;
-Ref.Left.appendChild(itemContainer);
+inventoryContainer.appendChild(itemContainer);
 
 itemContainer.addEventListener('click', function() {
+
+if(editor.delItem === true){
+//Reset Trigger
+editor.delItem = false;
+//Remove NPC name from item.tags
+const delId = item.id;
+let itemObj = load.Data.items.find(item => item.id === delId);
+let tags = itemObj.tags
+let tagsArray = tags.split(',').map(item => item.trim());
+tagsArray = tagsArray.filter(item => item !== foundNPC.name);
+tags = tagsArray.join(', ');
+itemObj.tags = tags;
+//reLoad NPC.
+NPCs.buildNPC();
+NPCs.addNPCInfo(foundNPC.name);
+
+}else{
 editor.createForm(item);
+}
+
 });
 
 });
@@ -1163,7 +1345,7 @@ ${item.name} ${item.bonus}
 treasureContent += `</h3>`;
 
 treasureContainer.innerHTML = treasureContent;
-Ref.Left.appendChild(treasureContainer);
+inventoryContainer.appendChild(treasureContainer);
 
 treasureContainer.addEventListener('click', function() {
 treasureContainer.querySelector('.centreNumber').focus();

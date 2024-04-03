@@ -88,8 +88,6 @@ Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 };
 
-
-
 escButton(){
 
 if(Ref.Left.style.display === "none" && Ref.Centre.style.display === "none"){
@@ -189,7 +187,7 @@ if(obj){
 const form = editor.createForm(obj);
 Ref.Left.appendChild(form);}
 
-Ref.locationLabel.textContent = 'Editing...';
+//Ref.locationLabel.textContent = load.fileName;
 
 //Hide Storyteller
 //Ref.eventManager.style.display = 'none';
@@ -228,6 +226,10 @@ Ref.Storyteller.innerHTML = '';
 
 toolbar.refreshLocation();
 
+if(Ref.Storyteller.innerHTML === ''){
+Storyteller.showTownText();
+}
+
 //Hide Editor, Centre, Left
 Ref.Editor.style.display = 'none';
 Ref.Centre.style.display = 'none';
@@ -247,8 +249,8 @@ div.removeEventListener('mouseleave', editor.handleMouseHover);
 refreshLocation(){
     
 if(Storyteller.returnLocation !== ''){
-const locDiv = document.getElementById(Storyteller.returnLocation);
-Storyteller.changeContent(locDiv);
+const returnLocation = Storyteller.returnLocation;
+Storyteller.changeContent(returnLocation);
 }
 
 else if(load.fileName !== ''){
@@ -283,9 +285,16 @@ editor.saveDataEntry();
 if(load.Data.npcs){
 NPCs.buildNPC();
 }
+
+if(Ref.Storyteller.style.display === 'none'){
 editor.loadList(load.Data);
+} else {
+toolbar.refreshLocation();
+}
 load.displayLocations(load.Data.locations);
-}}
+}
+
+}
 
 saveFormButton(){
 

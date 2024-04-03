@@ -16,9 +16,7 @@ returnLocation: '',
 townText: '',
 
 async changeContent(locationDiv) {
-
 let Story = ``
-
 const locId = locationDiv.id;
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
@@ -29,7 +27,7 @@ Ref.locationLabel.textContent = locName;
 Ref.locationLabel.style.color = locObj.color;
 const returnLocationName = Ref.locationLabel.textContent;
 const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
-Storyteller.returnLocation = returnLocation.id
+Storyteller.returnLocation = returnLocation;
 
 if (locObj) {
 //console.log(locObj)
@@ -39,7 +37,7 @@ Events.getEvent(locName, locObj);
 this.miscArray = [];
 this.monsterArray = [];
 //console.log(Events.eventDesc)
-const squareCurly = this.getMisc(Events.eventDesc, this.miscArray);
+const squareCurly = this.getMisc(Events.eventDesc, this.miscArray, locObj.color);
 //console.log(squareCurly)
 const withMonsters = await Monsters.getMonsters(squareCurly);
 const withSpells = await Spells.getSpells(withMonsters);
@@ -69,6 +67,7 @@ Ref.Storyteller.innerHTML = Story;
 
 //Tell expandable Divs what to show.
 this.showExpandable(Ref.Storyteller, Ref.Centre);
+this.showFloatingExpandable();
 //---
 
 };
@@ -133,25 +132,30 @@ addRulesInfo(contentId, target) {
   },
 
 addMiscInfo(contentId, target) {
-
+// console.log('adding...')
 const MiscItem = this.miscArray.find(item => item.square === contentId);
-  
+const miscDiv = document.createElement('div');
+
   if (MiscItem) {
     const withMonsters = Monsters.getMonsters(MiscItem.curly);
     const withItems = Items.getItems(withMonsters);
-    const withSpells = Spells.getSpells(withItems); 
-    const miscInfo = [`
+    const withSpells = Spells.getSpells(withItems);
+    const title = editor.proper(MiscItem.square); 
+    const miscInfo = `
     <h3>
     <span class="misc">
-    ${MiscItem.square}
+    ${title}
+    <hr>
     </span>
     </h3>
     <span class="withbreak">
     ${withSpells}
-    </span>`]
+    <br>
+    </span>`;
 
-    target.innerHTML = miscInfo;
-    Ref.Left.style.display = 'none';
+    miscDiv.innerHTML = miscInfo;
+    target.appendChild(miscDiv);
+    //Ref.Left.style.display = 'none';
 
   } else {
     console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
@@ -208,7 +212,7 @@ addLocationItems(locationObject){
     return locationItems;
 },
 
-getMisc(locationText, comboArray) {
+getMisc(locationText, comboArray, color) {
   const squareBrackets = /\[([^\]]+)\]\{([^}]+)\}/g;
 
   const matches = [...locationText.matchAll(squareBrackets)];
@@ -218,7 +222,7 @@ getMisc(locationText, comboArray) {
     const square = match[1];
     const curly = match[2];
 
-    const replacement = `<span class="expandable misc" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
+    const replacement = `<span class="float" style="color:${color}" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
 
     updatedText = updatedText.replace(match[0], replacement);
 
@@ -245,9 +249,9 @@ switch (contentType) {
     case 'npc':
     NPCs.addNPCInfo(contentId, target); // Handle NPCs
     break;
-    case 'misc':
-    this.addMiscInfo(contentId, target);
-    break;
+    // case 'misc':
+    // this.addMiscInfo(contentId, target);
+    // break;
     case 'rules':
     this.addRulesInfo(contentId, target);
     break;
@@ -258,10 +262,15 @@ switch (contentType) {
       const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
       //console.log(obj)
       //2.
+      if(Ref.Left.style.display === 'none'){
       editor.createForm(obj);
+      } else {
+        Ref.Left.style.display = 'none';
+        Ref.Centre.style.display = 'none';
+      }
 }          
 
-target.style.display = "block";
+//target.style.display = "block";
 this.showExtraExpandable(Ref.Left); 
 
 });
@@ -297,9 +306,9 @@ showExtraExpandable(target) {
         case 'spell':
         editor.addInfo(contentId, target); // Handle Spells
         break;
-        case 'misc':
-        this.addMiscInfo(contentId, target); //Handle Misc
-        break;
+        // case 'misc':
+        // this.addMiscInfo(contentId, target); //Handle Misc
+        // break;
         // case 'rule':
         // this.addRulesInfo(contentId, target); //Handle Rule
         // break;
@@ -317,36 +326,41 @@ showExtraExpandable(target) {
 },
 
 showFloatingExpandable() {
-const expandableElementsLeft = Ref.Left.querySelectorAll('.expandable');
-const expandableElementsCentre = Ref.Centre.querySelectorAll('.expandable');
-const expandableElements = [...expandableElementsLeft, ...expandableElementsCentre];
+const expandableElements = document.querySelectorAll('.float');
+const expandableElementsCentre = Ref.Centre.querySelectorAll('.float');
+// const expandableElements = [...expandableElementsLeft, ...expandableElementsCentre];
 
-  
+
   expandableElements.forEach(element => {
     
-    element.addEventListener('mouseenter', (event) => {
+    element.addEventListener('click', (event) => {
       
       const contentType = event.target.getAttribute('data-content-type');
       const contentId = event.target.getAttribute('divId');
 
       // Create a floating box div
-      const floatingBox = document.createElement('div');
+      let floatingBox = document.createElement('div');
       floatingBox.classList.add('floating-box');
-      floatingBox.divId = "floatingBox"
-      
-      // Position the floating box next to the target element
-      const rect = event.target.getBoundingClientRect();
-      floatingBox.style.position = 'absolute';
-      floatingBox.style.zIndex = 100;
-      floatingBox.style.top = 10 + 'px'; // Adjust the top position as needed
-      floatingBox.style.right = rect.left + 'px';
+      const divId = "floatingBox";
+      floatingBox.setAttribute('id', divId);
 
       // Append the floating box to the document body
+      const dupCheck = document.getElementById(divId);
+      if(dupCheck){
+      floatingBox = document.getElementById(divId);
+      }else{
       document.body.appendChild(floatingBox);
+      }
 
       // Remove the floating box when leaving the element
-      element.addEventListener('mouseleave', () => {
-        document.body.removeChild(floatingBox);
+      floatingBox.addEventListener('click', () => {
+      
+      try{
+      document.body.removeChild(floatingBox);
+      }catch{
+
+      }
+
       });
      
       switch (contentType) {
@@ -373,7 +387,7 @@ const expandableElements = [...expandableElementsLeft, ...expandableElementsCent
         console.log('Unknown content type');
       }  
 
-      //floatingBox.innerHTML = content; // Set the content of the box
+      
 
     });
   });

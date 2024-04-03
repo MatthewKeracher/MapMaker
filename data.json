@@ -15858,12 +15858,12 @@
         "type": "group",
         "subType": "target",
         "target": "Location",
-        "group": "Weather",
-        "tags": "Weather, Summer, Morning",
+        "group": "Ambience",
+        "tags": "Default",
         "id": 138,
         "active": 1,
-        "name": "Summer Morning",
-        "description": "It is a summer morning. The air is still cold from the night as the sun rises into a cloudless, blue sky. \n\nThe shadows are long, and birdsong fills the air. Bees bumble on their way, with the world in full bloom.",
+        "name": "Default",
+        "description": "Click to add ambient description, across all locations. For example: It is a summer morning, the air is still cool.",
         "location": "All",
         "npc": ""
       } 
