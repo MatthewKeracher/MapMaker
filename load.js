@@ -504,23 +504,14 @@ const locations = document.querySelectorAll('.selection');
 locations.forEach((location) => {
 if (!location.dataset.hasListener) {
 
-
-location.addEventListener('click', () => {    
-Storyteller.changeContent(location);
-NPCs.clearForm(Ref.npcForm);
-}); 
-
-//Show Form when Editing
 location.addEventListener('click', () => {
-
-if (editor.editMode){
+Storyteller.changeContent(location);
+if (Ref.Centre.style.display !== "none" || editor.editMode === true){
 console.log(location)
 const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));
-const form = editor.createForm(obj);
-Ref.Left.appendChild(form);
+editor.createForm(obj);
 }
 });
-
 
 location.dataset.hasListener = true;
 }

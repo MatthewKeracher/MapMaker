@@ -307,10 +307,10 @@ const sharedTag = event.npc && eventNpcList.find(tag => npctagsList.includes(tag
 
 if (sharedTag) {
 story += 
-`<span class="expandable hotpink" 
+`<span class="expandable" style="color:${event.color}" 
 divId="${event.name}"data-content-type="events">${sharedTag}. </span>`;
 } else {
-story += `<span class="expandable hotpink" 
+story += `<span class="expandable" style="color:${event.color}"
 divId="${event.name}"data-content-type="events">${event.group}. </span>`;
 }
 
@@ -715,46 +715,11 @@ for (const key in taggedNPCs) {
   }
 }
 
-if(totalLength !== 0){
-// Add Header
-const relationshipsHeader = document.createElement('div');
-let relationshipsHeaderContent = 
-`<hr><h3>
-<span class='cyan' id="relationshipsHeaderContent">
-Relationships [...]
-</span></h3>`;
-
-relationshipsHeader.innerHTML = relationshipsHeaderContent;
-Ref.Left.appendChild(relationshipsHeader);
-
-//Add Show/Hide on Header for Section
-relationshipsHeader.addEventListener('click', function() {
-const headerContent = document.getElementById('relationshipsHeaderContent')
-
-if(relationshipsContainer.style.display === "none"){
-relationshipsContainer.style.display = "block"
-headerContent.textContent = 'Relationships:';
-
-}else{
-relationshipsContainer.style.display = "none"
-headerContent.textContent = 'Relationships [...]';
-}
-
-});
-}
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'relationshipsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const relationshipsContainer = document.getElementById('relationshipsContainer');
-relationshipsContainer.style.display = "none";
+const container = document.getElementById(editor.buildSection('Relationships', foundNPC));
 
 for (const tag in taggedNPCs) {
 
 if (taggedNPCs.hasOwnProperty(tag)) {
-// Add Header
 
 const evObj = load.Data.events.find(event => event.group === tag && event.target === 'NPC');
 //console.log(tag, evObj)
@@ -769,7 +734,7 @@ ${tag}
 relationshipHeader.innerHTML = relationshipContent;
 
 if(taggedNPCs[tag].length > 0){
-relationshipsContainer.appendChild(relationshipHeader);
+container.appendChild(relationshipHeader);
 
 relationshipHeader.addEventListener('click', function(){
 editor.createForm(evObj);
@@ -785,7 +750,7 @@ const npcNameArea = document.createElement('div');
 let npcNameContent = `<h3><span>${npcObj.name}</span></h3>`;
 
 npcNameArea.innerHTML = npcNameContent;
-relationshipsContainer.appendChild(npcNameArea);
+container.appendChild(npcNameArea);
 
 npcNameArea.style.color = 'lightgray';
 
@@ -843,42 +808,7 @@ for (const key in taggedLocations) {
   }
 }
 
-if(totalLength !== 0){
-// Add Header
-const whereaboutsHeader = document.createElement('div');
-let whereaboutsHeaderContent = 
-`<hr><h3>
-<span class='cyan' id="whereaboutsHeaderContent">
-Whereabouts [...]
-</span></h3>`;
-
-whereaboutsHeader.innerHTML = whereaboutsHeaderContent;
-Ref.Left.appendChild(whereaboutsHeader);
-
-//Add Show/Hide on Header for Section
-whereaboutsHeader.addEventListener('click', function() {
-  const headerContent = document.getElementById('whereaboutsHeaderContent')
-  
-  if(whereaboutsContainer.style.display === "none"){
-  whereaboutsContainer.style.display = "block"
-  headerContent.textContent = 'Whereabouts:';
-  
-  }else{
-  whereaboutsContainer.style.display = "none"
-  headerContent.textContent = 'Whereabouts [...]';
-  }
-  
-  });
-  
-}
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'whereaboutsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const whereaboutsContainer = document.getElementById('whereaboutsContainer');
-whereaboutsContainer.style.display = "none";
+const container = document.getElementById(editor.buildSection('Whereabouts', foundNPC));
 
 for (const tag in taggedLocations) {
 
@@ -906,7 +836,7 @@ for (const tag in taggedLocations) {
   whereaboutsHeader.innerHTML = whereaboutsContent;
   
   if(taggedLocations[tag].length > 0){
-  whereaboutsContainer.appendChild(whereaboutsHeader);
+  container.appendChild(whereaboutsHeader);
   
   whereaboutsHeader.addEventListener('click', function(){
   console.log(subLocObj)
@@ -921,40 +851,9 @@ for (const tag in taggedLocations) {
 
 if (foundNPC.Skills){
 
-const skillTypeContainer = document.createElement('div');
-
-let textContent = foundNPC.class === 'Cleric'? 'Turn Undead' : foundNPC.class + ' Skills';
-
-let skillsType = 
-`<hr><h3><span class="expandable cyan" data-content-type="rule"
-id="skillsHeader">
-${textContent} [...]</span> <br></h3>`
-
-skillTypeContainer.innerHTML = skillsType;
-Ref.Left.appendChild(skillTypeContainer);
-
-//Add Show/Hide on Header for Section
-skillTypeContainer.addEventListener('click', function() {
-  const headerContent = document.getElementById('skillsHeader')
+  let textContent = foundNPC.class === 'Cleric'? 'Turn Undead' : foundNPC.class + ' Skills';
   
-  if(skillsContainer.style.display === "none"){
-  skillsContainer.style.display = "block"
-  headerContent.textContent = textContent + ':';
-  
-  }else{
-  skillsContainer.style.display = "none"
-  headerContent.textContent = textContent + ' [...]';
-  }
-  
-  });
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'skillsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const skillsContainer = document.getElementById('skillsContainer');
-skillsContainer.style.display = "none";
+  const container = document.getElementById(editor.buildSection(textContent, foundNPC));  
 
 const skillNames = {
   "removeTraps": "Remove Traps",
@@ -989,7 +888,7 @@ value="${foundNPC.Skills[skill]}">
 skillBlock += `</h3>`;
 
 skillContainer.innerHTML = skillBlock;
-skillsContainer.appendChild(skillContainer);
+container.appendChild(skillContainer);
 
 skillContainer.addEventListener('click', function() {
 skillContainer.querySelector('.centreNumber').focus();
@@ -1028,7 +927,7 @@ if(foundNPC.class === 'Cleric'){
     </h3>`;
     
     turnContainer.innerHTML = turnBlock;
-    skillsContainer.appendChild(turnContainer);
+    container.appendChild(turnContainer);
     
     turnContainer.addEventListener('click', function() {
     turnContainer.querySelector('.leftText').focus();
@@ -1041,44 +940,9 @@ if(foundNPC.class === 'Cleric'){
 
 if (foundNPC.magic){
 
-const magicHeaderContainer = document.createElement('div');
-
-let magicHeader = `<hr><h3>`;
 let textContent = foundNPC.class === 'Cleric' ? 'Orsons' : 'Spells';
 
-magicHeader += 
-`<span class="expandable cyan"
-data-content-type="rule"
-id="magicHeader">${textContent} [...] </span>
-<br>`;
-
-magicHeader += `</h3>`;
-
-magicHeaderContainer.innerHTML = magicHeader;
-Ref.Left.appendChild(magicHeaderContainer);
-
-//Add Show/Hide on Header for Section
-magicHeaderContainer.addEventListener('click', function() {
-  const headerContent = document.getElementById('magicHeader')
-  
-  if(spellsContainer.style.display === "none"){
-    spellsContainer.style.display = "block"
-  headerContent.textContent = textContent + ':';
-  
-  }else{
-    spellsContainer.style.display = "none"
-  headerContent.textContent = textContent + ' [...]';
-  }
-  
-  });
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'spellsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const spellsContainer = document.getElementById('spellsContainer');
-spellsContainer.style.display = "none";
+const container = document.getElementById(editor.buildSection(textContent, foundNPC)); 
 
 foundNPC.magic.forEach(spell => {
   const spellContainer = document.createElement('div');
@@ -1091,7 +955,7 @@ foundNPC.magic.forEach(spell => {
   <br></h3>`;
   
   spellContainer.innerHTML = spellBlock;
-  spellsContainer.appendChild(spellContainer);
+  container.appendChild(spellContainer);
   
   spellContainer.addEventListener('click', function() {
   let spellObj = load.Data.spells.find(spellObj => spellObj.name === spell)
@@ -1102,39 +966,8 @@ foundNPC.magic.forEach(spell => {
 }
 
 if(foundNPC.savingThrows){
-const saveNamesHeaderContainer = document.createElement('div');
 
-let saveNamesHeader = 
-`<hr><h3><span class="expandable cyan" data-content-type="rule"
-id="savingThrowsHeader">
-Saving Throws [...]</span><br></h3>`
-
-saveNamesHeaderContainer.innerHTML = saveNamesHeader;
-Ref.Left.appendChild(saveNamesHeaderContainer);
-
-//Add Show/Hide on Header for Section
-saveNamesHeaderContainer.addEventListener('click', function() {
-  const headerContent = document.getElementById('savingThrowsHeader')
-  
-  if(savingThrowsContainer.style.display === "none"){
-  savingThrowsContainer.style.display = "block"
-  headerContent.textContent = 'Saving Throws:';
-  
-  }else{
-  savingThrowsContainer.style.display = "none"
-  headerContent.textContent = 'Saving Throws [...]';
-  }
-  
-  });
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'savingThrowsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const savingThrowsContainer = document.getElementById('savingThrowsContainer');
-savingThrowsContainer.style.display = "none";
-
+  const container = document.getElementById(editor.buildSection('Saving Throws', foundNPC)); 
 
 const saveNames = {
   "deathRay": "Death Ray or Poison",
@@ -1161,7 +994,7 @@ const saveNames = {
   <br></h3>`;
   
   saveContainer.innerHTML = saveBlock;
-  savingThrowsContainer.appendChild(saveContainer);
+  container.appendChild(saveContainer);
   
   saveContainer.addEventListener('click', function() {
   saveContainer.querySelector('.centreNumber').focus();
@@ -1172,39 +1005,7 @@ const saveNames = {
 
 if(foundNPC.inventory){
 
-//Add INVENTORY Header
-const inventoryHeader = document.createElement('div');
-
-let headerContent = 
-`<hr><h3><span class="expandable cyan" data-content-type="rule"
-id="inventoryHeader">
-Inventory [...]</span><br></h3>`
-
-inventoryHeader.innerHTML = headerContent;
-Ref.Left.appendChild(inventoryHeader);
-
-//Add Show/Hide on Header for Section
-inventoryHeader.addEventListener('click', function() {
-const headerContent = document.getElementById('inventoryHeader')
-  
-  if(inventoryContainer.style.display === "none"){
-    inventoryContainer.style.display = "block"
-  headerContent.textContent = 'Inventory:';
-  
-  }else{
-    inventoryContainer.style.display = "none"
-  headerContent.textContent = 'Inventory [...]';
-  }
-  
-  });
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'inventoryContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const inventoryContainer = document.getElementById('inventoryContainer');
-inventoryContainer.style.display = "none";
+  const container = document.getElementById(editor.buildSection('Inventory', foundNPC));
 
 //Add, Remove New Inventory Item.
 if(foundNPC.inventory){
@@ -1213,7 +1014,7 @@ if(foundNPC.inventory){
   let addInvContent = `<span class = 'leftText'>[Add New Inventory Item]</span>`;
   
   addInvArea.innerHTML = addInvContent;
-  inventoryContainer.appendChild(addInvArea);
+  container.appendChild(addInvArea);
   
   addInvArea.style.color = 'lightgray'
   
@@ -1237,7 +1038,7 @@ if(foundNPC.inventory){
   let delInvContent = `<span class = 'leftText'>[Remove Inventory Item]</span>`;
   
   delInvArea.innerHTML = delInvContent;
-  inventoryContainer.appendChild(delInvArea);
+  container.appendChild(delInvArea);
   
   delInvArea.style.color = 'lightgray'
   
@@ -1272,7 +1073,7 @@ ${Items.getItems(item.name)}
 </h3>`
 
 itemContainer.innerHTML = itemContent;
-inventoryContainer.appendChild(itemContainer);
+container.appendChild(itemContainer);
 
 itemContainer.addEventListener('click', function() {
 
@@ -1303,6 +1104,7 @@ editor.createForm(item);
 
 if (foundNPC.treasure) {
 
+  const container = document.getElementById(editor.buildSection('Treasure', foundNPC));
 const treasureContainer = document.createElement('div');
 
 let treasure = foundNPC.treasure[0]
@@ -1312,7 +1114,7 @@ const allEmptyOrZero = Object.values(treasure).every(value => value.length === 0
 
 let treasureContent = 
 
-`${!allEmptyOrZero ? `<br><hr><span class= "hotpink"> Treasure:</span> <br>` : '' }`  +
+`${!allEmptyOrZero ? `` : '' }`  +
 
 `${treasure.Copper ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Copper} Copper Pieces </span> <br>` : '' }`  +
 `${treasure.Silver ? `<span class="expandable" data-content-type="rule" divId="Money"> ${treasure.Silver} Silver Pieces </span> <br>` : '' }`  +
@@ -1345,7 +1147,7 @@ ${item.name} ${item.bonus}
 treasureContent += `</h3>`;
 
 treasureContainer.innerHTML = treasureContent;
-inventoryContainer.appendChild(treasureContainer);
+container.appendChild(treasureContainer);
 
 treasureContainer.addEventListener('click', function() {
 treasureContainer.querySelector('.centreNumber').focus();

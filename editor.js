@@ -15,6 +15,7 @@ makeNew: false,
 moveMode: false,
 addItem: false,
 delItem: false,
+fullScreen: false,
 divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 
 init: function () {
@@ -468,6 +469,62 @@ item.setAttribute('sectionShow', "true")
 
 },
 
+buildSection: function (headerValue, obj){
+
+    const sectionHeadDiv = document.createElement('div');
+    let headerHTML = 
+    `<hr> <h3>
+    <span style="font-family:'SoutaneBlack'; color:${obj.color}" id="${headerValue}Header">
+    ${headerValue} [...]
+    </span></h3>`;
+    
+    sectionHeadDiv.innerHTML = headerHTML;
+    Ref.Left.appendChild(sectionHeadDiv);
+    
+    let isFrozen = false;
+
+    // Add Show/Hide on Header for Section
+    sectionHeadDiv.addEventListener('mouseover', function() {
+    if (!isFrozen) {
+    const headerContent = document.getElementById(headerValue + 'Header');
+
+    // Show
+    if (container.style.display === "none") {
+    container.style.display = "block";
+    headerContent.textContent = headerValue + ':';
+    }
+    }
+    });
+
+    // Hide
+    sectionHeadDiv.addEventListener('click', function() {
+    isFrozen = true; // Set the freeze flag
+    const headerContent = document.getElementById(headerValue + 'Header');
+
+    container.style.display = "none";
+    headerContent.textContent = headerValue + ' [...]';
+
+    // Unfreeze after 2 seconds (adjust the delay as needed)
+    setTimeout(() => {
+    isFrozen = false; // Unset the freeze flag
+    }, 1000); // 2000 milliseconds = 2 seconds
+    });
+
+    
+    //Add Container -- Settings
+    const newContainer = document.createElement('div');
+    let containerName = headerValue + 'Container'
+    newContainer.setAttribute('id', containerName);
+    newContainer.classList.add('no-hover');
+    newContainer.classList.add('collapse');
+    Ref.Left.appendChild(newContainer);
+    const container = document.getElementById(containerName);
+    container.style.display = "none";
+
+    return containerName
+
+},
+
 createForm: function (obj){
 
 const color = obj.color? obj.color : 'cyan';
@@ -479,10 +536,20 @@ element.remove();
 }
 });
 
+//Check if fullScreen on Centre
+const fullScreenDivs = document.querySelectorAll('.fullScreen');
+let fullScreen = false
+
+if (fullScreenDivs.length === 0) {
+Ref.Left.style.display = 'block';
+} else{
+fullScreen = true;
+}
+
 Ref.Centre.innerHTML = '';
 Ref.Centre.style.display = 'block';
 Ref.Left.innerHTML = '';
-Ref.Left.style.display = 'block';
+
 
 const form = document.createElement('form');
 form.id = 'editForm';
@@ -547,23 +614,63 @@ Ref.Left.appendChild(idArea);
 if(obj){
 
 const description = document.createElement('div');
+const centreText = fullScreen === true? 'fullScreenText' : 'centreText'
 
 let centreContent =  
-`<h3>
+`<h2>
 <label class="entry-label"
 style="font-family:'SoutaneBlack'; color: ${color}; width: auto;"
 divId="description">
-Description
+${obj.name}
 </label>
-<hr></h3>
+<button id="fullScreenButton" class="singButton">
+[...]
+</button>
+<hr></h2>
 <textarea
 id="descriptionText"
-class="entry-input centreText" 
+class="entry-input ${centreText}" 
 >`;
 
 description.innerHTML = centreContent;
 Ref.Centre.appendChild(description);
 Ref.Centre.style.display = 'block';
+
+const button = document.getElementById('fullScreenButton');
+const textBox = document.getElementById('descriptionText');
+button.addEventListener('click', () => {
+if(editor.fullScreen === true){
+//Make normal.
+Ref.Left.style.display = "block";
+editor.fullScreen = false;
+Ref.Centre.classList.remove("fullScreen");
+Ref.Centre.classList.add("Centre");
+textBox.classList.remove("fullScreenText");
+textBox.classList.add("centreText");
+//Set Height
+const descriptionText = document.getElementById('descriptionText');
+descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
+
+// Set the initial height based on the scroll height of the content
+descriptionText.style.height = 'auto';
+descriptionText.style.height = descriptionText.scrollHeight + 'px';
+}else if (editor.fullScreen === false){
+//Make fullScreen.
+Ref.Left.style.display = "none";
+Ref.Centre.classList.remove("Centre");
+Ref.Centre.classList.add("fullScreen");
+textBox.classList.remove("centreText");
+textBox.classList.add("fullScreenText");
+editor.fullScreen = true;
+//Set Height
+const descriptionText = document.getElementById('descriptionText');
+descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
+
+// Set the initial height based on the scroll height of the content
+descriptionText.style.height = 'auto';
+descriptionText.style.height = descriptionText.scrollHeight + 'px';
+};
+});
 
 const descriptionText = document.getElementById('descriptionText');
 descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
@@ -658,10 +765,10 @@ nameArea.style.height = nameArea.scrollHeight + 'px';
 }, 0);
 }
 
-//5. Add Breaker
-const breaker = document.createElement('hr')
-breaker.id = 'breaker';
-topArea.appendChild(breaker);
+// //5. Add Breaker
+// const breaker = document.createElement('hr')
+// breaker.id = 'breaker';
+// topArea.appendChild(breaker);
 
 //6. Make Key and Make Invisible
 if(obj.key){
@@ -685,40 +792,10 @@ Ref.Left.appendChild(keyArea);
 
 //7. Generate Settings Fields Dynamically
 
-//Add Settings Header
-const settingsHeader = document.createElement('div');
-let settingsHeadContent = 
-`<h3>
-<span style="font-family:'SoutaneBlack'; color:${color}" id="settingsHeadContent">
-Settings [...]
-</span></h3>`;
+//Add Section Header -- Settings
+if(obj){
 
-settingsHeader.innerHTML = settingsHeadContent;
-Ref.Left.appendChild(settingsHeader);
-
-//Add Show/Hide on Header for Section
-settingsHeader.addEventListener('click', function() {
-const headerContent = document.getElementById('settingsHeadContent')
-
-if(settingsContainer.style.display === "none"){
-settingsContainer.style.display = "block"
-headerContent.textContent = 'Settings:';
-
-}else{
-settingsContainer.style.display = "none"
-headerContent.textContent = 'Settings [...]';
-}
-
-});
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'settingsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const settingsContainer = document.getElementById('settingsContainer');
-settingsContainer.style.display = "none";
-
+const container = document.getElementById(this.buildSection('Settings', obj));
 
 for (const key in obj) {
 if (obj.hasOwnProperty(key) && !excludedKeys.includes(key)) { // Check if key is not excluded
@@ -739,7 +816,7 @@ id= "edit${[key]}">
 </h3>`;
 
 elementContainer.innerHTML = elementContent;
-settingsContainer.appendChild(elementContainer);
+container.appendChild(elementContainer);
 
 const elementText = document.getElementById('edit' + key);
 const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
@@ -765,6 +842,7 @@ elementContainer.querySelector('.leftText').focus();
 elementContainer.querySelector('.leftText').select();
 });
 
+}
 }
 }
 
@@ -809,49 +887,14 @@ locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.loc
 parentLocation = obj.location;
 }
 
-//Add Header
-const locEventsHeader = document.createElement('div');
-let locEventsHeaderContent = 
-`<hr><h3>
-<span 
-id="locEventsHeaderContent"
-style="font-family:'SoutaneBlack'; color:${color}">
-${parentLocation} Events [...]
-</span></h3>`
-
-locEventsHeader.innerHTML = locEventsHeaderContent;
-Ref.Left.appendChild(locEventsHeader);
-
-//Add Show/Hide on Header for Section
-locEventsHeader.addEventListener('click', function() {
-    const headerContent = document.getElementById('locEventsHeaderContent')
-    
-    if(locEventsContainer.style.display === "none"){
-        locEventsContainer.style.display = "block"
-    headerContent.textContent = parentLocation + ' Events:';
-    
-    }else{
-    locEventsContainer.style.display = "none"
-    headerContent.textContent = parentLocation + ' Events [...]';
-    }
-    
-    });
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'locEventsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const locEventsContainer = document.getElementById('locEventsContainer');
-locEventsContainer.style.display = "none";
-
+const container = document.getElementById(this.buildSection(parentLocation + ' Events', obj));
 
 //Make New Event.
 const newEventArea = document.createElement('div');
 let newEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
 
 newEventArea.innerHTML = newEventContent;
-locEventsContainer.appendChild(newEventArea);
+container.appendChild(newEventArea);
 
 newEventArea.style.color = 'lightgray'
 
@@ -895,7 +938,7 @@ const subLocArea = document.createElement('div');
 let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
 
 subLocArea.innerHTML = subLocContent;
-locEventsContainer.appendChild(subLocArea);
+container.appendChild(subLocArea);
 
 if(parseInt(locEv.active) === 1){
 subLocArea.style.color = 'lightgray'
@@ -941,48 +984,14 @@ groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.g
 group = obj.group;
 }
 
-//Add Header
-const groupEventsHeader = document.createElement('div');
-let groupEventsHeaderContent = 
-`<hr><h3>
-<span 
-style="font-family:'SoutaneBlack'; color:${color}"
-id="groupEventsHeaderContent">
-${group} Group Events [...]
-</span></h3>`
-
-groupEventsHeader.innerHTML = groupEventsHeaderContent;
-Ref.Left.appendChild(groupEventsHeader);
-
-//Add Show/Hide on Header for Section
-groupEventsHeader.addEventListener('click', function() {
-const headerContent = document.getElementById('groupEventsHeaderContent')
-
-if(groupEventsContainer.style.display === "none"){
-groupEventsContainer.style.display = "block"
-headerContent.textContent = group + ' Group Events:';
-
-}else{
-groupEventsContainer.style.display = "none"
-headerContent.textContent = group + ' Group Events [...]';
-}
-
-});
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'groupEventsContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const groupEventsContainer = document.getElementById('groupEventsContainer');
-groupEventsContainer.style.display = "none";
+const container = document.getElementById(this.buildSection(group + ' Group Events', obj));
 
 //Make New Event.
 const groupEventArea = document.createElement('div');
 let groupEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
 
 groupEventArea.innerHTML = groupEventContent;
-groupEventsContainer.appendChild(groupEventArea);
+container.appendChild(groupEventArea);
 
 groupEventArea.style.color = 'lightgray'
 
@@ -1025,7 +1034,7 @@ const subLocArea = document.createElement('div');
 let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
 
 subLocArea.innerHTML = subLocContent;
-groupEventsContainer.appendChild(subLocArea);
+container.appendChild(subLocArea);
 
 if(parseInt(locEv.active) === 1){
 subLocArea.style.color = 'lightgray'
@@ -1082,51 +1091,51 @@ matchedEvents[tag].push(event.id);
 for (const tag in matchedEvents) {
 if (matchedEvents.hasOwnProperty(tag)) {
 
-// Add Header
 const evHeaderObj = load.Data.events.find(event => event.npc === tag && event.target === 'NPC');
-//console.log(tag, evHeaderObj)
+console.log(tag, evHeaderObj)
 
-const relationshipHeader = document.createElement('div');
-let relationshipContent = 
-`<hr><h3>
-<span 
-id="tagEventHead"
-style="font-family:'SoutaneBlack'; color:${color}">
-${tag} Events [...]
-</span></h3>`;
+const container = document.getElementById(this.buildSection(tag, obj));
 
-relationshipHeader.innerHTML = relationshipContent;
+//Make New Event.
+const groupEventArea = document.createElement('div');
+let groupEventContent = `<h3><span class = 'leftText'>[Add New ${tag} Event]</span></h3>`;
 
-if(matchedEvents[tag].length > 0){
-Ref.Left.appendChild(relationshipHeader);
+groupEventArea.innerHTML = groupEventContent;
+container.appendChild(groupEventArea);
 
-//Add Show/Hide on Header for Section
-relationshipHeader.addEventListener('click', function() {
-const headerContent = document.getElementById('tagEventHead')
-    
-if(tagContainer.style.display === "none"){
-    tagContainer.style.display = "block"
-headerContent.textContent = tag + 'Events:';
+groupEventArea.style.color = 'lightgray'
 
-}else{
-    tagContainer.style.display = "none"
-headerContent.textContent = tag + 'Events [...]';
-}
-    
-});
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'tagContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const tagContainer = document.getElementById('tagContainer');
-tagContainer.style.display = "none";
-
-relationshipHeader.addEventListener('click', function(){
-editor.createForm(evHeaderObj);
+groupEventArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
 })
-};
+
+groupEventArea.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+groupEventArea.addEventListener('click', function(){
+
+const newTagEvent = {
+
+//metadata
+id: load.generateUniqueId(load.Data.events, 'entry'),
+key: 'events',
+type: 'target', 
+subType: 'group',
+
+name: 'New ' + tag + ' Event', 
+active: 1,
+tags: tag,
+target: 'NPC',
+group: '',
+location: obj.location,
+npc: tag, 
+
+description: 'What are the ' + tag + 's doing?',
+
+}
+editor.createForm(newTagEvent)  
+})
 
 // Add Names
 const evIds = matchedEvents[tag];
@@ -1186,48 +1195,14 @@ parentLocation = obj.location;
 // }
 // }
 
-//Add Header
-const subLocationHeader = document.createElement('div');
-let subLocationHeaderContent = 
-`<hr><h3>
-<span 
-id="subLocationHead"
-style="font-family:'SoutaneBlack'; color:${color}">
-In ${parentLocation} [...]
-</span></h3>`
-
-subLocationHeader.innerHTML = subLocationHeaderContent;
-Ref.Left.appendChild(subLocationHeader);
-
-//Add Show/Hide on Header for Section
-subLocationHeader.addEventListener('click', function() {
-    const headerContent = document.getElementById('subLocationHead')
-    
-    if(subLocationContainer.style.display === "none"){
-    subLocationContainer.style.display = "block"
-    headerContent.textContent = 'In ' + parentLocation + ':';
-    
-    }else{
-    subLocationContainer.style.display = "none"
-    headerContent.textContent = 'In ' + parentLocation + ' [...]';
-    }
-    
-    });
-
-//Add Container
-const container = document.createElement('div');
-container.setAttribute('id', 'subLocationContainer');
-container.classList.add('no-hover');
-Ref.Left.appendChild(container);
-const subLocationContainer = document.getElementById('subLocationContainer');
-subLocationContainer.style.display = "none";
+const container = document.getElementById(this.buildSection(parentLocation, obj));
 
 //Make New Sublocation.
 const subLocArea = document.createElement('div');
 let subLocContent = `<h3><span class = 'leftText'>[Add New Sub-Location]</span></h3>`;
 
 subLocArea.innerHTML = subLocContent;
-subLocationContainer.appendChild(subLocArea);
+container.appendChild(subLocArea);
 
 subLocArea.style.color = 'lightgray'
 
@@ -1270,7 +1245,7 @@ const subLocArea = document.createElement('div');
 let subLocContent = `<h3><span>${subLoc.name}</span></h3>`;
 
 subLocArea.innerHTML = subLocContent;
-subLocationContainer.appendChild(subLocArea);
+container.appendChild(subLocArea);
 
 if(parseInt(subLoc.active) === 1){
 subLocArea.style.color = 'lightgray'

@@ -939,12 +939,25 @@ eventItemsFormatted = `<span class = "cyan"> | </span> [Items List]{<hr>${eventI
 //---
 if (entry.location.location === 'All') {
 
+//enable ??
+const options = entry.location.description.split('??').filter(Boolean);
+let filteredDescription
+
+if (options.length > 0) {
+const randomIndex = Math.floor(Math.random() * options.length);
+const selectedOption = options[randomIndex].trim();
+
+filteredDescription = `${selectedOption}`;
+} else {
+filteredDescription = `${entry.description}`;
+}
+
   if (currentAll - allCount === 0) {
     //If last 'All' event enter location description.
     locDesc = `<span class="expandable" style="color:${entry.location.color}" 
     divId="${entry.location.name}"
     data-content-type="events">
-    ${entry.location.description}
+    ${filteredDescription}
     </span><span class="expandable beige" 
     divId="${locObj.name}"
     data-content-type="locations">
@@ -955,7 +968,7 @@ if (entry.location.location === 'All') {
     locDesc = `<span class="expandable all" 
     divId="${entry.location.name}"
     data-content-type="events">
-    ${entry.location.description}
+    ${filteredDescription}
     </span>
     `;
   }} 
@@ -974,6 +987,20 @@ npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
 }
 }
 
+//enable ??
+const options = entry.location.description.split('??').filter(Boolean);
+let filteredDescription
+
+if (options.length > 0) {
+const randomIndex = Math.floor(Math.random() * options.length);
+const selectedOption = options[randomIndex].trim();
+
+filteredDescription = `${selectedOption}`;
+} else {
+filteredDescription = `${entry.description}`;
+}
+
+
 //Put together.
 locDesc = 
 `<h3> ${entry.location.name !== currentLocation ? 
@@ -985,7 +1012,7 @@ locDesc =
   
 `${entry.location.name !== currentLocation ? `<span class="expandable beige" 
 divId="${entry.location.name}"
-data-content-type="events"><br> ${entry.location.description} </span> <br>` : ''}` + 
+data-content-type="events"><br> ${filteredDescription} </span> <br>` : ''}` + 
 
 `<br>${npcDesc}` +
 

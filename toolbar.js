@@ -90,6 +90,20 @@ Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 escButton(){
 
+const textBox = document.getElementById('descriptionText');
+//Make normal.
+Ref.Left.style.display = "block";
+editor.fullScreen = false;
+Ref.Centre.classList.remove("fullScreen");
+Ref.Centre.classList.add("Centre");
+textBox.classList.remove("fullScreenText");
+textBox.classList.add("centreText");
+//Set Height
+const descriptionText = document.getElementById('descriptionText');
+// Set the initial height based on the scroll height of the content
+descriptionText.style.height = 'auto';
+descriptionText.style.height = descriptionText.scrollHeight + 'px';
+
 if(Ref.Left.style.display === "none" && Ref.Centre.style.display === "none"){
 
 // Ref.centreToolbar.style.display = "none";
@@ -217,7 +231,8 @@ editEditButton.classList.remove('click-button');
 // Ref.centreToolbar.style.display = "none";
 
 //document.getElementById('miniBanner').style.display = "none";
-//Ref.locationLabel.textContent = load.fileName;
+//Ref.locationLabel.style.color = Storyteller.returnLocation.color;
+//console.log(Ref.locationLabel.style.color )
 
 //Show Storyteller
 Ref.eventManager.style.display = 'block';
@@ -264,7 +279,7 @@ Ref.locationLabel.textContent = 'Information';
 
 saveButton(){
       
-if(Ref.Left.style.display === 'none'){
+if(Ref.Centre.style.display === 'none'){
 
     saveButton.classList.add('click-button');
     setTimeout(() => {

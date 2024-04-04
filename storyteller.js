@@ -83,7 +83,7 @@ showTownText(){
   ></textarea>`;
   
   const storytellerText = document.getElementById("storytellerText")
-  Ref.locationLabel.style.color = 'teal';
+  //Ref.locationLabel.style.color = 'teal';
   
   
   if(Storyteller.townText !== ''){
@@ -131,7 +131,7 @@ addRulesInfo(contentId, target) {
     }
   },
 
-addMiscInfo(contentId, target) {
+addMiscInfo(contentId, contentStyle, target) {
 // console.log('adding...')
 const MiscItem = this.miscArray.find(item => item.square === contentId);
 const miscDiv = document.createElement('div');
@@ -142,12 +142,12 @@ const miscDiv = document.createElement('div');
     const withSpells = Spells.getSpells(withItems);
     const title = editor.proper(MiscItem.square); 
     const miscInfo = `
-    <h3>
-    <span class="misc">
+    <h2>
+    <span style=${contentStyle}>
     ${title}
     <hr>
     </span>
-    </h3>
+    </h2>
     <span class="withbreak">
     ${withSpells}
     <br>
@@ -262,12 +262,14 @@ switch (contentType) {
       const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
       //console.log(obj)
       //2.
-      if(Ref.Left.style.display === 'none'){
+      // const currentId = document.getElementById("centreId").value;
+      // console.log
+      //     if(obj.id === currentId){
+      //     Ref.Left.style.display = 'none';
+      //     Ref.Centre.style.display = 'none';
+      //     } else {
       editor.createForm(obj);
-      } else {
-        Ref.Left.style.display = 'none';
-        Ref.Centre.style.display = 'none';
-      }
+      //     }
 }          
 
 //target.style.display = "block";
@@ -337,7 +339,8 @@ const expandableElementsCentre = Ref.Centre.querySelectorAll('.float');
       
       const contentType = event.target.getAttribute('data-content-type');
       const contentId = event.target.getAttribute('divId');
-
+      const contentStyle = element.getAttribute('style');
+      
       // Create a floating box div
       let floatingBox = document.createElement('div');
       floatingBox.classList.add('floating-box');
@@ -365,22 +368,22 @@ const expandableElementsCentre = Ref.Centre.querySelectorAll('.float');
      
       switch (contentType) {
         case 'npc':
-        NPCs.addNPCInfo(contentId, floatingBox); // Handle NPCs
+        NPCs.addNPCInfo(contentId, contentStyle, floatingBox); // Handle NPCs
         break;
         case 'monster':
-        Monsters.addMonsterInfo(contentId, floatingBox); // Handle Monsters
+        Monsters.addMonsterInfo(contentId, contentStyle, floatingBox); // Handle Monsters
         break;
         case 'item':
-        Items.addIteminfo(contentId, floatingBox); // Handle Items
+        Items.addIteminfo(contentId,contentStyle, floatingBox); // Handle Items
         break;
         case 'spell':
-        editor.addInfo(contentId, floatingBox); // Handle Spells
+        editor.addInfo(contentId,contentStyle, floatingBox); // Handle Spells
         break;
         case 'misc':
-        this.addMiscInfo(contentId, floatingBox); //Handle Misc
+        this.addMiscInfo(contentId,contentStyle, floatingBox); //Handle Misc
         break;
         case 'rule':
-        this.addRulesInfo(contentId, floatingBox); //Handle Rule
+        this.addRulesInfo(contentId,contentStyle, floatingBox); //Handle Rule
         console.log('rule')
         break;
         default:
