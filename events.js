@@ -853,7 +853,7 @@ const newsubLocation =
   target: "Location", 
   location: currentLocation}
 
-console.log(newsubLocation);
+//console.log(newsubLocation);
 locationEvents.push(newsubLocation)
 
 }

@@ -25,7 +25,10 @@ const locName = locObj.name
 //Change Location Label Contents
 Ref.locationLabel.textContent = locName;
 Ref.locationLabel.style.color = locObj.color;
+
+//Set new Return Location
 const returnLocationName = Ref.locationLabel.textContent;
+//console.log(returnLocationName)
 const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
 Storyteller.returnLocation = returnLocation;
 
@@ -262,7 +265,7 @@ switch (contentType) {
       const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
       //console.log(obj)
       //2.
-      // const currentId = document.getElementById("centreId").value;
+      // const currentId = document.getElementById("currentId").value;
       // console.log
       //     if(obj.id === currentId){
       //     Ref.Left.style.display = 'none';

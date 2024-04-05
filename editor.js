@@ -17,6 +17,7 @@ addItem: false,
 delItem: false,
 fullScreen: false,
 divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
+sectionShow:[],
 
 init: function () {
 this.divIds.forEach((divId) => {
@@ -306,13 +307,16 @@ this.classList.add('misc');
 //1. showEntry
 div.addEventListener('click', () => {
 
-if(key === 'npcs'){
+if(key === 'npcs' && editor.addItem === false){
 NPCs.addNPCInfo(entry.name, Ref.Left);
 } 
-else if(key === 'items' && editor.addItem === true){
+else if(editor.addItem === true){
 console.log(div)
 const itemId = div.getAttribute('id')
-editor.addItemtoNPC(itemId);
+const key = div.getAttribute('key')
+editor.addItem = false;
+editor.addTagtoItem(itemId, key);
+
 }
 else{
 const form = editor.createForm(entry)
@@ -322,18 +326,20 @@ Ref.Left.appendChild(form);
 
 }},
 
-addItemtoNPC(itemId){
+addTagtoItem(itemId, key){
 
-const currentId = document.getElementById('currentId').value;
-const npc = load.Data.npcs.find(npc => parseInt(npc.id) === parseInt(currentId));
-const npcName = npc.name
+// const currentId = document.getElementById('currentId').value;
+// console.log(currentId)
+
+const obj = load.Data[key].find(obj => parseInt(obj.id) === parseInt(itemId));
+const objName = obj.name
 const itemIndex = load.Data.items.findIndex(item => parseInt(item.id) === parseInt(itemId));
-load.Data.items[itemIndex].tags = npcName;
+load.Data.items[itemIndex].tags = objName;
 console.log(load.Data.items[itemIndex])
-NPCs.buildNPC();
-NPCs.addNPCInfo(npcName)
 
-    
+editor.createForm()
+NPCs.buildNPC();
+NPCs.addNPCInfo(objName);   
 },
 
 searchAllData: function (searchText) {
@@ -481,35 +487,64 @@ buildSection: function (headerValue, obj){
     sectionHeadDiv.innerHTML = headerHTML;
     Ref.Left.appendChild(sectionHeadDiv);
     
-    let isFrozen = false;
+    //let isFrozen = false;
+    let headerDiv = headerValue + 'Header'
+    let headerContent = document.getElementById(headerDiv);
+    let index = editor.sectionShow.findIndex(entry => entry.section === headerDiv);
+    
+    let currentShow
+    if(index === -1){
+    currentShow = 'none';
+    } else {
+    currentShow = editor.sectionShow[index].visible === 1? 'block' : 'none';
+    }
 
     // Add Show/Hide on Header for Section
-    sectionHeadDiv.addEventListener('mouseover', function() {
-    if (!isFrozen) {
-    const headerContent = document.getElementById(headerValue + 'Header');
-
-    // Show
-    if (container.style.display === "none") {
+    sectionHeadDiv.addEventListener('click', function() {
+    
+    //if (!isFrozen) {
+    
+    // 1 --- Show
+    if(container.style.display === "none") {
+    
     container.style.display = "block";
     headerContent.textContent = headerValue + ':';
-    }
-    }
-    });
+    
+    //}
 
-    // Hide
-    sectionHeadDiv.addEventListener('click', function() {
-    isFrozen = true; // Set the freeze flag
-    const headerContent = document.getElementById(headerValue + 'Header');
+    let sectionData = {section: headerDiv, visible: 1};
+
+        //Update sectionShow data.
+        if(index === -1){
+        editor.sectionShow.push(sectionData);
+        }else{
+        editor.sectionShow[index] = sectionData; 
+        }
+        } 
+
+    //2 --- Hide
+    else if(container.style.display === "block") {
+    //isFrozen = true; // Set the freeze flag
 
     container.style.display = "none";
     headerContent.textContent = headerValue + ' [...]';
 
-    // Unfreeze after 2 seconds (adjust the delay as needed)
-    setTimeout(() => {
-    isFrozen = false; // Unset the freeze flag
-    }, 1000); // 2000 milliseconds = 2 seconds
-    });
+    let sectionData = {section: headerDiv, visible: 0};
 
+        //Update sectionShow data.
+        if(index === -1){
+        editor.sectionShow.push(sectionData);
+        }else{
+        editor.sectionShow[index] = sectionData; 
+        }
+        
+    // // Unfreeze after 2 seconds (adjust the delay as needed)
+    // setTimeout(() => {
+    // isFrozen = false; // Unset the freeze flag
+    // }, 1000); // 2000 milliseconds = 2 seconds
+
+    }
+    });
     
     //Add Container -- Settings
     const newContainer = document.createElement('div');
@@ -519,7 +554,7 @@ buildSection: function (headerValue, obj){
     newContainer.classList.add('collapse');
     Ref.Left.appendChild(newContainer);
     const container = document.getElementById(containerName);
-    container.style.display = "none";
+    container.style.display = currentShow;
 
     return containerName
 
@@ -557,13 +592,16 @@ form.classList.add('form');
 
 if (obj) {
 if (editor.makeNew === true) {
-const reservedTerms = ['id', 'key', 'type', 'subtype'];
+const reservedTerms = ['id', 'key', 'type', 'subtype', 'active', 'order','color'];
 
 // Create a deep copy of the original object
 const newObj = JSON.parse(JSON.stringify(obj));
 
 // Generate a unique ID for the new object
 newObj.id = load.generateUniqueId(load.Data[obj.key], 'entry');
+newObj.active = 1;
+newObj.order = 1;
+newObj.color = obj.color
 
 // Iterate over each property in the new object
 for (let key in newObj) {
@@ -571,7 +609,7 @@ for (let key in newObj) {
 if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
 // Update the value of each property to 'Insert Value Here'
 const properKey = this.proper(obj.key.slice(0, -1));
-newObj[key] = 'New ' + this.proper(properKey) + ' ' + this.proper(key);
+newObj[key] = 'Insert ' + key;
 }
 }
 
@@ -579,20 +617,21 @@ obj = newObj
 // Print the first spell in load.Data to see if it's modified
 console.log(load.Data.spells[0]);
 
-// Now you can use newObj with modified values
 }
 
 const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key']; // Define keys to exclude
 
+if(obj.key === 'items'){excludedKeys.push('tags')};
+
 //12. Make ID Manually
 if(obj.id){
-const existingId = document.getElementById('centreId');
+const existingId = document.getElementById('currentId');
 if (existingId) {
 existingId.remove(); // Remove the existing form
 }
 
 const idArea = document.createElement('div');
-idArea.id = 'centreId';
+idArea.id = 'currentId';
 
 let idContent =  
 `<label class="entry-label" 
@@ -600,10 +639,10 @@ style="display: none"
 divId="id">
 </label>
 <input
-class="entry-input centreId" 
+class="entry-input currentId" 
 style="display:none"
 divId="id"
-id="dataEntryId"
+id="currentId"
 value="${obj.id || 'N/A'} ">`;
 
 idArea.innerHTML = idContent;
@@ -867,6 +906,72 @@ elementContainer.querySelector('.leftText').select();
 // Ref.Left.appendChild(newArea);
 // }
 
+if(obj.key === 'items'){
+
+const container = document.getElementById(this.buildSection('Tags', obj));
+
+
+    const buttons = ['Add New Tag', 'Remove Tag']
+
+    buttons.forEach(button =>{
+    //Add New Tag
+    const addButtonDiv = document.createElement('div');
+    let addButtonHTML = `<h3><span class = 'leftText'>[${button}]</span></h3>`;
+    
+    addButtonDiv.innerHTML = addButtonHTML;
+    container.appendChild(addButtonDiv);
+    
+    addButtonDiv.style.color = 'lightgray'
+    
+    addButtonDiv.addEventListener('mouseenter', function(){
+    this.style.color = 'lime';
+    })
+    
+    addButtonDiv.addEventListener('mouseleave', function(){
+    this.style.color = 'lightgray';
+    })
+    
+    addButtonDiv.addEventListener('click', function(){
+        editor.addItem = true;
+        editor.loadList(load.Data);
+        
+    })
+
+    });
+
+const tagsToAdd = obj.tags.split(',').map(tag => tag.trim());
+    
+tagsToAdd.forEach(tag => {
+
+const taggedArea = document.createElement('div');
+let tagHTML = `<h3><span>${tag}</span></h3>`;
+
+taggedArea.innerHTML = tagHTML;
+container.appendChild(taggedArea);
+
+if(parseInt(tag.active) === 1){
+taggedArea.style.color = 'lightgray'
+}else{
+taggedArea.style.color = 'gray'
+}
+taggedArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+taggedArea.addEventListener('mouseleave', function(){
+if(parseInt(tag.active) === 1){
+taggedArea.style.color = 'lightgray'
+}else{
+taggedArea.style.color = 'gray'
+}
+})
+// taggedArea.addEventListener('click', function(){
+// editor.createForm(tag);
+// })
+});
+
+
+}
+
 //10. Add Events in Same Location
 if(obj.key === 'locations' || obj.key === 'events'){
 //get data
@@ -915,16 +1020,17 @@ id: load.generateUniqueId(load.Data.events, 'entry'),
 key: 'events',
 type: 'target', 
 subType: 'group',
+color: obj.color,
 
 name: 'New Event', 
 active: 1,
 tags: '',
 target: 'NPC',
-group: '',
+group: parentLocation,
 location: parentLocation,
 npc: 'All', 
 
-description: 'They are smiling.',
+description: 'They are in the ' + parentLocation,
 
 }
 editor.createForm(newsubLoc)  
@@ -966,7 +1072,7 @@ editor.createForm(locEv);
 //11. Add Events in Same Group
 if(obj.key === 'locations' || obj.key === 'events'){
 //get data
-let groupEvents
+let groupEvents = [];
 let group
 if(obj.key === 'locations'){
 groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
@@ -1007,13 +1113,14 @@ groupEventArea.addEventListener('click', function(){
 
 const newGroupEv = {
 
-//metadata
+//metadata -- New Event in the SAME GROUP
 id: load.generateUniqueId(load.Data.events, 'entry'),
 key: 'events',
 type: 'target', 
 subType: 'group',
+color: obj.color,
 
-name: 'New Event', 
+name: 'New ' + group + ' Event', 
 active: 1,
 tags: '',
 target: 'NPC',
@@ -1021,7 +1128,7 @@ group: group,
 location: obj.location,
 npc: group, 
 
-description: 'They are smiling.',
+description: 'They are a kind of ' + group,
 
 }
 editor.createForm(newGroupEv)  
@@ -1117,11 +1224,12 @@ groupEventArea.addEventListener('click', function(){
 
 const newTagEvent = {
 
-//metadata
+//metadata -- New Event with SAME TAG
 id: load.generateUniqueId(load.Data.events, 'entry'),
 key: 'events',
 type: 'target', 
 subType: 'group',
+color: obj.color,
 
 name: 'New ' + tag + ' Event', 
 active: 1,
@@ -1218,13 +1326,15 @@ subLocArea.addEventListener('click', function(){
 
 const newsubLoc = {
 
-//metadata
+//metadata -- New SUBLOCATION
 id: load.generateUniqueId(load.Data.events, 'entry'),
+order: subLocations.length + 1,
 key: 'events',
 type: 'target', 
 subType: 'group',
+color: obj.color,
 
-name: 'New subLocation', 
+name: parentLocation + ' subLocation', 
 active: 1,
 tags: '',
 target: 'Location',
@@ -1232,7 +1342,7 @@ group: '',
 location: parentLocation,
 npc: '', 
 
-description: 'Add Description Here.',
+description: 'There is a blank space here lacking details. ',
 
 }
 editor.createForm(newsubLoc)  
@@ -1326,7 +1436,7 @@ inputs.push(value.trim());
 }
 });
 
-console.log(labels, inputs);
+//console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {
@@ -1336,25 +1446,24 @@ saveEntry[labels[i]] = inputs[i];
 //Edit saveEntry object for type and subType -- will need to change if to be user-access'
 
 //console.log(document.getElementById('subTypeEntry').getAttribute('pair'))
-
+try{
 saveEntry['type'] = document.getElementById('typeEntry').getAttribute('pair');
 saveEntry['subType']= document.getElementById('subTypeEntry').getAttribute('pair');
-
+}catch{console.error("No type or subType found.")}
 saveEntry['id'] = parseInt(saveEntry['id']);
-
-console.log(saveEntry);
 
 const key = saveEntry && saveEntry['key'];
 const id = saveEntry && saveEntry['id'];
 const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
-console.log(key, id, index);
+//console.log(key, id, index);
 
-//console.log('Existing saveEntry:' + load.Data[key][index].class)
+//console.log(saveEntry)
 
 if(index === -1){
 load.Data[key].push(saveEntry)
 }else{
-load.Data[key][index] = saveEntry;
+load.Data[key][index] = saveEntry
+
 }
 
 if(key === 'npcs'){
@@ -1374,7 +1483,7 @@ deleteDataEntry: function(){
 
 //Retrieve key and id of entry for deletion.
 const key = document.getElementById('dataEntryKey').getAttribute('value');
-const id = document.getElementById('dataEntryId').getAttribute('value');
+const id = document.getElementById('currentId').getAttribute('value');
 //console.log(key, id);
 
 //Use key and id to find index.

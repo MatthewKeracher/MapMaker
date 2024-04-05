@@ -296,7 +296,7 @@ relevantTag = matchingItem;
 } else {relevantTag = npc.class} 
 }
 
-story += `<span class="expandable npc" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
+story += `<span class="expandable" style="font-family:'SoutaneBlack'; color: cyan" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
 
 for (const event of presentNPCEvents) {
 // Define eventNpcList and npctagsList within the loop
@@ -330,7 +330,7 @@ return story;
 },
 
 addNPCInfo(npcName) {
-
+  
 const findNPC = npcName.replace(/-/g, ' ');
 const foundNPC = load.Data.npcs.find(npc => npc.name === findNPC);
 
@@ -366,7 +366,7 @@ if(foundNPC){
   Ref.Left.appendChild(keyArea);
   
   const idArea = document.createElement('div');
-  idArea.id = 'centreId';
+  idArea.id = 'currentId';
   
   let idContent =  
   `<label class="entry-label" 
@@ -374,7 +374,7 @@ if(foundNPC){
   divId="id">
   </label>
   <input
-  class="entry-input centreId" 
+  class="entry-input currentId" 
   style="display:none"
   divId="id"
   id="currentId"
@@ -683,7 +683,9 @@ statContainer.querySelector('.centreStat').select();
 if (foundNPC.tags){
 
 //Add Relationships
-if(foundNPC.tags){  
+if(foundNPC.tags){ 
+
+
 // Split the foundNPC tags into an array
 const tags = foundNPC.tags.split(',').map(item => item.trim());
 
@@ -716,6 +718,53 @@ for (const key in taggedNPCs) {
 }
 
 const container = document.getElementById(editor.buildSection('Relationships', foundNPC));
+
+//Make New NPC.
+const addButtonDiv = document.createElement('div');
+let addButtonHTML = `<h3><span class = 'leftText'>[Add New NPC]</span></h3>`;
+
+addButtonDiv.innerHTML = addButtonHTML;
+container.appendChild(addButtonDiv);
+
+addButtonDiv.style.color = 'lightgray'
+
+addButtonDiv.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+addButtonDiv.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+addButtonDiv.addEventListener('click', function(){
+
+const newObj = {
+
+//Obj Format -- New NPC
+id: load.generateUniqueId(load.Data.npcs, 'entry'),
+key: 'npcs',
+type: 'class', 
+subType: 'level',
+
+name: 'Copy of ' + foundNPC.name, 
+tags: foundNPC.tags,
+level: foundNPC.level,
+class: foundNPC.class,
+monsterTemplate: foundNPC.monsterTemplate,
+str: foundNPC.str,
+dex: foundNPC.dex,
+int: foundNPC.int,
+wis: foundNPC.wis,
+con: foundNPC.con,
+cha: foundNPC.cha,
+description: '(Copy): ' + foundNPC.Backstory,
+inventory: foundNPC.inventory,
+
+}
+load.Data.npcs.push(newObj);
+NPCs.buildNPC();
+NPCs.addNPCInfo(newObj.name); 
+})
 
 for (const tag in taggedNPCs) {
 
@@ -823,9 +872,14 @@ for (const tag in taggedLocations) {
     let subLocObj = load.Data.events.find(obj => obj.name === taggedEvent.location && obj.target === 'Location');
     
     //console.log(taggedEvent, subLocObj)
-
-    if(subLocObj){header = subLocObj.name}else{subLocObj= load.Data.locations.find(loc => loc.name = taggedEvent.location)};
-
+    // FOUND IT! console.log(load.Data.locations[0].name)
+    if(subLocObj){
+      header = subLocObj.name
+    }else{
+      subLocObj= load.Data.locations.find(loc => loc.name === taggedEvent.location)
+      console.log(subLocObj)
+    };
+    
   const whereaboutsHeader = document.createElement('div');
   let whereaboutsContent = 
   `<h3>
@@ -837,7 +891,7 @@ for (const tag in taggedLocations) {
   
   if(taggedLocations[tag].length > 0){
   container.appendChild(whereaboutsHeader);
-  
+ 
   whereaboutsHeader.addEventListener('click', function(){
   console.log(subLocObj)
   editor.createForm(subLocObj);
@@ -1158,6 +1212,7 @@ treasureContainer.querySelector('.centreNumber').select();
 
 
 Storyteller.showFloatingExpandable();
+
 }},
 
 };

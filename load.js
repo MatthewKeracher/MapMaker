@@ -234,38 +234,38 @@ let obj = data[key];
 // }));
 // }
 
-if( key === 'monsters'){
-obj = obj.map(monster => ({
+// if( key === 'monsters'){
+// obj = obj.map(monster => ({
 
-//metadata
-key: key,
-type: 'class', 
-subType: 'level',
+// //metadata
+// key: key,
+// type: 'class', 
+// subType: 'level',
 
-//change
-class: monster.class, 
-level: monster.level, 
+// //change
+// class: monster.class, 
+// level: monster.level, 
 
-//stay same
-id: monster.id,
-name: monster.name,
-color: 'hotpink',
-hd: monster.hd,
-attacks: monster.attacks,
-damage: monster.damage,
-movement: monster.movement,
-noApp: monster.noApp,
-ac: monster.ac,
-morale: monster.morale,
-treasure: monster.treasure,
-lairTreasure: monster.lairTreasure,
-xp: monster.xp,
-description: monster.description,
-special: monster.special,
+// //stay same
+// id: monster.id,
+// name: monster.name,
+// color: 'hotpink',
+// hd: monster.hd,
+// attacks: monster.attacks,
+// damage: monster.damage,
+// movement: monster.movement,
+// noApp: monster.noApp,
+// ac: monster.ac,
+// morale: monster.morale,
+// treasure: monster.treasure,
+// lairTreasure: monster.lairTreasure,
+// xp: monster.xp,
+// description: monster.description,
+// special: monster.special,
 
 
-}));
-}
+// }));
+// }
 
 // if( key === 'items'){
 // obj = obj.map(item => ({
@@ -398,7 +398,6 @@ data[key]= obj;
 }},
 
 displayLocations(data) {
-//Display loaded locations onto the Map.
 
 // 1. Clear the existing content
 var oldData = document.getElementsByClassName('selection');
@@ -407,30 +406,17 @@ while(oldData[0]) {
 oldData[0].parentNode.removeChild(oldData[0]);
 }
 
-//load.Data.locations = [];
-
-// 2. Set Colour
-const colorList = ["lime", "orange", "cyan", "hotpink", "gold"];
-
-// 3.  Add the loaded locations to the map and the array
+// 2. Create Location Object.
 data.forEach((location) => {
-const newLoc = this.addLocationtoData(location);
+const newLoc = this.createLocationObj(location);
 
-// 4. Choose a random color from the colorList
-// const randomColorIndex = Math.floor(Math.random() * colorList.length);
-// const randomColor = colorList[randomColorIndex];
-
-// 5. Set the chosen random color as the background color
+// 3. Set the color.
 newLoc.style.backgroundColor = location.color;
 
+//4. Append Location to Map.
 const imageContainer = document.querySelector('.image-container');
 const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(newLoc,firstChild);
-
-//imageContainer.appendChild(newLoc);
-
-//this.addLocationToArray(locationData);
-//console.log("Adding to Map and Array: " + JSON.stringify(newLoc, null, 2));
 
 //Add Events to Divs
 this.addLocationEvents()
@@ -439,7 +425,7 @@ this.addLocationEvents()
 
 },
 
-addLocationtoData(locationData) {
+createLocationObj(locationData) {
 const {left, top, width, height, name, id} = locationData;
 
 // Create a new location element with the specified properties
@@ -507,7 +493,7 @@ if (!location.dataset.hasListener) {
 location.addEventListener('click', () => {
 Storyteller.changeContent(location);
 if (Ref.Centre.style.display !== "none" || editor.editMode === true){
-console.log(location)
+//console.log(location)
 const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));
 editor.createForm(obj);
 }

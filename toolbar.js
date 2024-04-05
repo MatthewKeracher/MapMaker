@@ -90,6 +90,7 @@ Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 escButton(){
 
+if(Ref.Centre.style.display !== "none"){
 const textBox = document.getElementById('descriptionText');
 //Make normal.
 Ref.Left.style.display = "block";
@@ -103,6 +104,7 @@ const descriptionText = document.getElementById('descriptionText');
 // Set the initial height based on the scroll height of the content
 descriptionText.style.height = 'auto';
 descriptionText.style.height = descriptionText.scrollHeight + 'px';
+}
 
 if(Ref.Left.style.display === "none" && Ref.Centre.style.display === "none"){
 
@@ -129,7 +131,7 @@ Storyteller.showTownText();
 Ref.locationLabel.textContent = 'Information';    
 }
 
-}else{
+}else {
 Ref.Centre.style.display = "none";
 Ref.Left.style.display = "none";
 
@@ -278,7 +280,8 @@ Ref.locationLabel.textContent = 'Information';
 }
 
 saveButton(){
-      
+    
+//Save whole file.
 if(Ref.Centre.style.display === 'none'){
 
     saveButton.classList.add('click-button');
@@ -288,27 +291,41 @@ if(Ref.Centre.style.display === 'none'){
 
     save.exportArray();
 
+//Save this form.
 }else{
 
-editSaveButton.classList.add('click-button');
-setTimeout(() => {
-editSaveButton.classList.remove('click-button');
-}, 1000); // 1000 milliseconds = 1 second
+        editSaveButton.classList.add('click-button');
+        setTimeout(() => {
+        editSaveButton.classList.remove('click-button');
+        }, 1000); // 1000 milliseconds = 1 second
 
-console.log('saving...')
-editor.saveDataEntry();
-if(load.Data.npcs){
-NPCs.buildNPC();
-}
+        console.log('saving...')
+        
+        editor.saveDataEntry();
+        if(load.Data.npcs){
+        NPCs.buildNPC();
+        }
 
-if(Ref.Storyteller.style.display === 'none'){
-editor.loadList(load.Data);
-} else {
-toolbar.refreshLocation();
-}
-load.displayLocations(load.Data.locations);
-}
+        if(Ref.Storyteller.style.display === 'none'){
+        //Check if searching. 
+                console.log(Ref.eventManager.value)
+                if(Ref.eventManager.value === ''){   
+                editor.loadList(load.Data);
+                }else{
+                let searchText = Ref.eventManager.value.toLowerCase();
 
+                if(editor.editMode === true){
+                editor.searchAllData(searchText);
+                };
+                };
+
+        } else {
+                toolbar.refreshLocation();
+        }
+    
+    load.displayLocations(load.Data.locations);
+
+};
 }
 
 saveFormButton(){
@@ -323,7 +340,17 @@ editor.saveDataEntry();
 if(load.Data.npcs){
 NPCs.buildNPC();
 }
+//Check if searching. 
+console.log(Ref.eventManager.value)
+if(Ref.eventManager.value === ''){   
 editor.loadList(load.Data);
+}else{
+let searchText = Ref.eventManager.value.toLowerCase();
+
+if(editor.editMode === true){
+editor.searchAllData(searchText);
+};
+}
 load.displayLocations(load.Data.locations);
 }
 
