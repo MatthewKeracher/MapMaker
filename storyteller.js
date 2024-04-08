@@ -72,9 +72,48 @@ Ref.Storyteller.innerHTML = Story;
 this.showExpandable(Ref.Storyteller, Ref.Centre);
 this.showFloatingExpandable();
 //---
+window.speechSynthesis.cancel();
+this.textToSpeech(Ref.Storyteller.textContent);
 
 };
 }, 
+
+textToSpeech(text){
+// Check if the browser supports the SpeechSynthesis API
+if ('speechSynthesis' in window) {
+  const synth = window.speechSynthesis;
+
+  // Function to speak the provided text
+  function speak(text) {
+      // Create a new SpeechSynthesisUtterance instance
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Speak the text
+      synth.speak(utterance);
+  }
+  speak(text);
+} else {
+  // Browser doesn't support SpeechSynthesis API
+  console.error('Speech synthesis is not supported in this browser.');
+}
+},
+
+
+refreshLocation(){
+    
+  if(Storyteller.returnLocation !== ''){
+  const returnLocation = Storyteller.returnLocation;
+  Storyteller.changeContent(returnLocation);
+  }
+  
+  else if(load.fileName !== ''){
+  Ref.locationLabel.textContent = load.fileName;
+  }else{
+  Ref.locationLabel.textContent = 'Information';    
+  }
+  
+  
+  },
 
 showTownText(){
 
@@ -91,6 +130,7 @@ showTownText(){
   
   if(Storyteller.townText !== ''){
   storytellerText.textContent = Storyteller.townText
+  window.speechSynthesis.cancel(storytellerText.textContent);
   } else {
       storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
   }
@@ -105,6 +145,7 @@ showTownText(){
   load.Data.townText = storytellerText.value
   //console.log(load.Data);
   //console.log(Storyteller.townText);
+
   });
   
   },

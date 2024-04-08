@@ -197,18 +197,32 @@ for (const key in data) {
 let obj = data[key];
 // console.log(obj)
 
-// if(key === 'townText'){
+if(key === 'townText' ){
 
-// }else{
+}else{
 // // Modify each object in the array
 // obj = obj.map(item => ({
 //     // Existing properties
 //     ...item,
 
 //     // New property
-//     color: 'gold'
+//     tags: []
 // }));
 // }
+
+if(key !== 'npcs'){
+
+    // Modify each object in the array
+    obj = obj.map(item => ({
+        // Existing properties
+        ...item,
+    
+        // New property
+        tags: []
+    }));
+    }
+
+};
 
 // if (key === 'spells') {
 // obj = obj.map(spell => ({

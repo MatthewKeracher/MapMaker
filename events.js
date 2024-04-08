@@ -26,21 +26,21 @@ Ref.eventManager.addEventListener('input', (event) => {
 //console.log('*input*')
 let searchText = event.target.value.toLowerCase();
 
-if(editor.editMode === true){
-editor.searchAllData(searchText);
+if(editor.editMode === true && editor.addItem === false){
+editor.searchAllData(searchText, load.Data);
 };
 
-// Ref.Centre.classList.add('showCentre');
-// Ref.Left.style.display = 'none';
-// this.searchEvents(searchText);
-// this.loadEventsList(this.searchArray, Ref.Storyteller, 'eventsManager');
+
+//editor.searchAllData(searchText, { items: load.Data.items });
+editor.searchAllData(searchText,load.Data);
+
 
 })
 
 Ref.eventManager.addEventListener('click', () => {
-console.log('*click*')
-Ref.Centre.style.display = 'none';
-Ref.Left.style.display = 'none';
+// console.log('*click*')
+// Ref.Centre.style.display = 'none';
+// Ref.Left.style.display = 'none';
 //this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
 
 })
@@ -791,15 +791,17 @@ const tags = locObj.tags
 //If no subLocations then add one.
 if(subLocations.length === 0){
 
+  const newId = load.generateUniqueId(load.Data.events, 'entry')
+
   const newsubLocation = 
   
   {
-  id: load.generateUniqueId(load.Data.events, 'entry'),
+  id: newId,
   key: 'events',
   type: 'target', 
   subType: 'group',
   order: 1,
-  name: 'New SubLocation', 
+  name: 'SubLocation ' + newId, 
   active: 1,
   tags: '',
   target: 'Location', 
@@ -822,8 +824,8 @@ if (
   (
     (entry.location === "All") || 
     (entry.location.split(',').map(locItem => locItem.trim()).some(locItem => locItem === currentLocation)) ||
-    (subLocations.some(subLoc => subLoc.name === entry.location)) ||
-    (tags.split(',').map(item => item.trim()).some(tag => entry.location.split(',').map(locItem => locItem.trim()).includes(tag)))
+    (subLocations.some(subLoc => subLoc.name === entry.location)) 
+    // ||(tags.split(',').map(item => item.trim()).some(tag => entry.location.split(',').map(locItem => locItem.trim()).includes(tag)))
   )
   ){activeEvents.push(entry);}
 }

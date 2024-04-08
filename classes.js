@@ -42,7 +42,7 @@ NPCbuild.getModifiers(this);
 NPCbuild.getCharacterSkills(this);
 NPCbuild.getHitPoints(this);
 NPCbuild.getMagic(this);
-NPCbuild.getInventory(this);
+// NPCbuild.getInventory(this);
 NPCbuild.getSavingThrows(this);
 NPCbuild.getAttackBonus(this);
 NPCbuild.getMonster(this);
@@ -633,9 +633,29 @@ npc.hitPoints = NPCbuild.rollHitDice(hitDice);
 }
 
 static getInventory(npc) {
+
+//Filter all keys...
+
+for (const key in load.Data){
+
+const excludedKeys = ['townText',  'npcs'];
+
+if(!excludedKeys.includes(key)){
+
 // Filter itemsArray based on characterClass and tags
-const filteredItems = load.Data.items.filter(item => {
-const itemTags = item.tags ? item.tags.split(',').map(tag => tag.trim()) : [];
+const filteredItems = load.Data[key].filter(item => {
+const addressBook = item.tags? item.tags : [];
+let itemTags = []
+
+//turn addresses into names.
+addressBook.forEach(address => {
+let id = parseInt(address.id);
+let key = address.key;
+let obj = load.Data[key].find(obj => parseInt(obj.id) === id);
+let tag = obj.name
+itemTags.push(tag);
+})
+itemTags.length > 1? itemTags.split(',').map(tag => tag.trim()): '';
 
 // Check if the item matches the criteria
 return (
@@ -659,6 +679,8 @@ npc.inventory = filteredItems;
 
 // Sort the inventory alphabetically by item.tag
 npc.inventory.sort((a, b) => (a.tag > b.tag) ? 1 : -1);
+
+}}
 
 }
 

@@ -345,7 +345,7 @@ Ref.Left.innerHTML = '';
 Ref.Centre.style.display = 'block';
 Ref.Left.style.display = 'block';
 
-//0. Make Hidden MetaData
+//0. Make Hidden MetaData -- KEY, ID
 if(foundNPC){
 
   const keyArea = document.createElement('div');
@@ -359,14 +359,14 @@ if(foundNPC){
   <input
   class="entry-input" 
   style="display:none"
-  divId="key"
+  id="key"
   value="npcs">`;
   
   keyArea.innerHTML = keyContent;
   Ref.Left.appendChild(keyArea);
   
   const idArea = document.createElement('div');
-  idArea.id = 'currentId';
+  idArea.id = 'currentIdArea';
   
   let idContent =  
   `<label class="entry-label" 
@@ -877,7 +877,7 @@ for (const tag in taggedLocations) {
       header = subLocObj.name
     }else{
       subLocObj= load.Data.locations.find(loc => loc.name === taggedEvent.location)
-      console.log(subLocObj)
+      
     };
     
   const whereaboutsHeader = document.createElement('div');
@@ -1057,72 +1057,208 @@ const saveNames = {
   }});
 };
 
-if(foundNPC.inventory){
+// if(foundNPC.inventory){
 
-  const container = document.getElementById(editor.buildSection('Inventory', foundNPC));
+//   const container = document.getElementById(editor.buildSection('Inventory', foundNPC));
 
-//Add, Remove New Inventory Item.
-if(foundNPC.inventory){
+// //Add, Remove New Inventory Item.
+// if(foundNPC.inventory){
+// console.log(foundNPC.inventory)
+//   const addInvArea = document.createElement('div');
+//   let addInvContent = `<span id = 'AddButton' class = 'leftText'>[Add New Inventory Item]</span>`;
+  
+//   addInvArea.innerHTML = addInvContent;
+//   container.appendChild(addInvArea);
+  
+//   addInvArea.style.color = 'lightgray'
+  
+//   addInvArea.addEventListener('mouseenter', function(){
+//   this.style.color = 'lime';
+//   })
+  
+//   addInvArea.addEventListener('mouseleave', function(){
+//   this.style.color = 'lightgray';
+//   })
+  
+//   addInvArea.addEventListener('click', function(){
+//     const AddButton = document.getElementById('AddButton');
+//     editor.addItem = true;
+//     editor.loadList(load.Data);
+//     AddButton.style.color = 'lime'
+//     //editor.loadList({ items: load.Data.items });
+        
+//   });
 
-  const addInvArea = document.createElement('div');
-  let addInvContent = `<span class = 'leftText'>[Add New Inventory Item]</span>`;
+//   const delInvArea = document.createElement('div');
+//   let delInvContent = `<span id = 'RemoveButton' class = 'leftText'>[Remove Inventory Item]</span>`;
   
-  addInvArea.innerHTML = addInvContent;
-  container.appendChild(addInvArea);
+//   delInvArea.innerHTML = delInvContent;
+//   container.appendChild(delInvArea);
   
-  addInvArea.style.color = 'lightgray'
+//   delInvArea.style.color = 'lightgray'
   
-  addInvArea.addEventListener('mouseenter', function(){
-  this.style.color = 'lime';
-  })
+//   delInvArea.addEventListener('mouseenter', function(){
+//   this.style.color = 'hotpink';
+//   })
   
-  addInvArea.addEventListener('mouseleave', function(){
-  this.style.color = 'lightgray';
-  })
+//   delInvArea.addEventListener('mouseleave', function(){
+//   this.style.color = 'lightgray';
+//   })
   
-  addInvArea.addEventListener('click', function(){
-  
-    editor.addItem = true;
-    editor.loadList({ items: load.Data.items });
-    
+//   delInvArea.addEventListener('click', function(){
+//   const RemoveButton = document.getElementById('RemoveButton');
+//     editor.delItem = true;
+//     RemoveButton.style.color = 'hotpink'
 
-  });
-
-  const delInvArea = document.createElement('div');
-  let delInvContent = `<span class = 'leftText'>[Remove Inventory Item]</span>`;
-  
-  delInvArea.innerHTML = delInvContent;
-  container.appendChild(delInvArea);
-  
-  delInvArea.style.color = 'lightgray'
-  
-  delInvArea.addEventListener('mouseenter', function(){
-  this.style.color = 'hotpink';
-  })
-  
-  delInvArea.addEventListener('mouseleave', function(){
-  this.style.color = 'lightgray';
-  })
-  
-  delInvArea.addEventListener('click', function(){
-  
-    editor.delItem = true;
+//     // Reset deleteMode after time.
+//     setTimeout(() => {
+//     editor.delItem = false; 
+//     RemoveButton.style.color = 'lightgray'
+//     }, 2000); // 2000 milliseconds = 2 seconds
+      
      
-  });
+//   });
 
+//   }
+
+// //Map through Inventory.
+
+// foundNPC.inventory.map(item => {
+
+// const itemContainer = document.createElement('div'); 
+
+// let itemContent =
+// `<h3>
+// <span 
+// class="leftText"
+// style="font-family:'SoutaneBlack'; color:${item.color}"
+// id = ${item.id}>
+// ${Items.getItems(item.name)}
+// </span>
+// </h3>`
+
+// itemContainer.innerHTML = itemContent;
+// container.appendChild(itemContainer);
+
+// itemContainer.addEventListener('click', function() {
+
+// if(editor.delItem === true){
+// //Reset Trigger
+// editor.delItem = false;
+
+// //Remove NPC name from item.tags
+// const delId = item.id;
+// let index = load.Data.items.findIndex(item => item.id === delId);
+// let itemObj = load.Data.items[index];
+// let delTags = itemObj.tags
+// console.log(delTags, delId)
+// delTags = delTags.filter(item => parseInt(item.id) !== parseInt(foundNPC.id));
+// console.log(delTags)
+// load.Data.items[index].tags = delTags;
+
+// //reLoad NPC.
+// NPCs.buildNPC();
+// NPCs.addNPCInfo(foundNPC.name);
+
+// }else{
+// editor.createForm(item);
+// }
+
+// });
+
+// });
+
+// }
+
+//Make Inventory
+if(foundNPC){
+let addressBook = [];
+
+const container = document.getElementById(editor.buildSection('Inventory', foundNPC));
+
+//build Section
+if(foundNPC){
+    const buttons = ['Add', 'Remove']
+
+    buttons.forEach(button =>{
+    //Add New Tag
+    const addButtonDiv = document.createElement('div');
+    let addButtonHTML = 
+    `<h3 id = ${button}Button>
+     <span
+      class = 'leftText'>
+      [${button} Tag]
+     </span>
+     </h3>`;
+    
+    addButtonDiv.innerHTML = addButtonHTML;
+    container.appendChild(addButtonDiv);
+    
+    addButtonDiv.style.color = 'lightgray'
+    
+    addButtonDiv.addEventListener('mouseenter', function(){
+    this.style.color = 'lime';
+    })
+    
+    addButtonDiv.addEventListener('mouseleave', function(){
+    this.style.color = 'lightgray';
+    })
+
+    });
+
+    const addButton =  document.getElementById('AddButton');
+    const removeButton = document.getElementById('RemoveButton'); 
+
+    addButton.addEventListener('click', function(){
+        editor.addItem = true;
+        editor.loadList(load.Data);
+        
+    });
+
+    removeButton.addEventListener('click', function(){
+        editor.delItem = true;
+        editor.loadList(load.Data);
+        removeButton.style.color = 'hotpink'
+
+    // Reset deleteMode after time.
+    setTimeout(() => {
+    editor.delItem = false; 
+    removeButton.style.color = 'lightgray'
+    }, 2000); // 2000 milliseconds = 2 seconds
+        
+    });
   }
 
-//Map through Inventory.
+  // Iterate over each key in load.Data for mention of foundNPC.id...
+  const excludedKeys = ['townText',  'npcs'];
+ 
+  for (const key in load.Data) {
+  if (load.Data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+  const dataArray = load.Data[key];
 
-foundNPC.inventory.map(item => {
+  dataArray.forEach(obj => {
+
+    let objs = obj.tags.filter(item => parseInt(item.id) === parseInt(foundNPC.id) && item.key === 'npcs');
+  
+    if(objs.length > 0){addressBook.push({key: obj.key, id: obj.id})}
+
+  })
+  }}
+
+addressBook.forEach(address => {
+
+const index = load.Data[address.key].findIndex(obj => parseInt(obj.id) === parseInt(address.id));
+const item = load.Data[address.key][index];
 
 const itemContainer = document.createElement('div'); 
 
 let itemContent =
 `<h3>
-<span class="centreText"
+<span 
+class="leftText"
+style="font-family:'SoutaneBlack'; color:${item.color}"
 id = ${item.id}>
-${Items.getItems(item.name)}
+${item.name}
 </span>
 </h3>`
 
@@ -1134,14 +1270,17 @@ itemContainer.addEventListener('click', function() {
 if(editor.delItem === true){
 //Reset Trigger
 editor.delItem = false;
+
 //Remove NPC name from item.tags
 const delId = item.id;
-let itemObj = load.Data.items.find(item => item.id === delId);
-let tags = itemObj.tags
-let tagsArray = tags.split(',').map(item => item.trim());
-tagsArray = tagsArray.filter(item => item !== foundNPC.name);
-tags = tagsArray.join(', ');
-itemObj.tags = tags;
+let index = load.Data.items.findIndex(item => item.id === delId);
+let itemObj = load.Data.items[index];
+let delTags = itemObj.tags
+console.log(delTags, delId)
+delTags = delTags.filter(item => parseInt(item.id) !== parseInt(foundNPC.id));
+console.log(delTags)
+load.Data.items[index].tags = delTags;
+
 //reLoad NPC.
 NPCs.buildNPC();
 NPCs.addNPCInfo(foundNPC.name);
@@ -1150,10 +1289,8 @@ NPCs.addNPCInfo(foundNPC.name);
 editor.createForm(item);
 }
 
-});
-
-});
-
+})
+})
 }
 
 if (foundNPC.treasure) {

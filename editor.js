@@ -8,6 +8,7 @@ import Events from "./events.js";
 import Spells from "./spells.js";
 import Map from "./map.js";
 
+
 const editor = {
 
 editMode : false,
@@ -18,6 +19,12 @@ delItem: false,
 fullScreen: false,
 divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 sectionShow:[],
+
+//List Display Variables
+ sectionHeadDisplay: 'none',
+ subSectionHeadDisplay: 'none',
+ subSectionEntryDisplay:  'none',
+ EntryDisplay: 'none',
 
 init: function () {
 this.divIds.forEach((divId) => {
@@ -105,6 +112,15 @@ target.style.display = 'block';
 const excludedKeys = ['townText'];
 const numKeys = Object.keys(data).length;
 let startVisible = "false";
+
+//List Display Variables
+let sectionHeadDisplay = this.sectionHeadDisplay //'block'
+let keyshow = sectionHeadDisplay === 'block'? "true" : "false"
+let subSectionHeadDisplay = this.subSectionHeadDisplay //'block';
+let sectionShow = subSectionHeadDisplay === 'block'? "true" : "false"
+let subSectionEntryDisplay = this.subSectionEntryDisplay //'block';
+let subsectionShow = subSectionEntryDisplay === 'block'? "true" : "false"
+let EntryDisplay = this.EntryDisplay //'block';
 
 // 0. Iterate over each property in the data object
 for (const key in data) {
@@ -197,15 +213,20 @@ if(entry.sectionHead){
 currentSection++
 currentSubSection = 0;
 
+
 nameDiv.setAttribute("scope", 'section');
 nameDiv.setAttribute("id", currentSection);
-nameDiv.setAttribute('style', "display: none");
+nameDiv.setAttribute('style', "display:" + sectionHeadDisplay);
 
 let entryName = entry[type] === ''? 'Misc' : entry[type];
 
 nameDiv.innerHTML = 
-`<span id = "${entryName}" class = "cyan" style="font-family:'SoutaneBlack'"> 
-<hr>&nbsp;${entryName}
+`<span
+id = "${entryName}"
+class = "cyan"
+style="font-family:'SoutaneBlack'"> 
+<hr>
+&nbsp;${entryName}
 </span>`;
 
 //3.2 subSection Heads --- subType values.
@@ -214,52 +235,70 @@ currentSubSection++
 
 nameDiv.setAttribute("scope", 'subsection');
 nameDiv.setAttribute("id", currentSubSection);
-nameDiv.setAttribute('style', "display: none");
+nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
 
 let entryName = entry[type] === ''? 'Misc' : entry[subType];
 
 nameDiv.innerHTML= 
-`<span id = "${entryName}" class ="hotpink" style="font-family:'SoutaneBlack'">
-<hr>&nbsp; ${this.proper(subType)} ${entryName}</span>`;
+`<span 
+id = "${entryName}"
+class ="hotpink"
+style="font-family:'SoutaneBlack'">
+<hr>
+&nbsp; ${this.proper(subType)} ${entryName}
+</span>`;
 
 //3.3 subSection Entries   
 }else if (entry[type] && entry[subType]){
 nameDiv.setAttribute('id', entry.id)
-nameDiv.setAttribute('style', "display: none")
+nameDiv.setAttribute('style', "display:" + subSectionEntryDisplay)
 
 nameDiv.innerHTML = 
-`<span id = "${entry.id}" class ="white">
+`<span 
+id = "${entry.id}"
+class ="white">
 &nbsp;&nbsp;&nbsp;&nbsp;${entry.name}
 </span>`;
 
 //3.4 no subSection
 }else if (entry[type]){
 nameDiv.setAttribute('id', entry.id)
-nameDiv.setAttribute('style', "display: none")
+nameDiv.setAttribute('style', "display:" + EntryDisplay)
 
 nameDiv.innerHTML = 
-`<span id = "${entry.id}" class ="white">
+`<span 
+id = "${entry.id}" 
+class ="white">
 &nbsp;&nbsp;${entry.name}
 </span>`;
 
 //3.5 Other Entries
 }else {
 nameDiv.setAttribute('id', entry.id)
-nameDiv.setAttribute('style', "display: none")
+nameDiv.setAttribute('style', "display:" + EntryDisplay)
 
 nameDiv.innerHTML = 
-`<span id = "${entry.id}" class = "gray"> 
+`<span 
+id = "${entry.id}" 
+class = "gray"> 
 &nbsp;&nbsp;${entry.name}
 </span>`;
 
 }
 
 nameDiv.setAttribute('key', key)
-nameDiv.setAttribute('keyShow', "false")
+nameDiv.setAttribute('keyShow', keyshow)
 nameDiv.setAttribute('section', currentSection)
-nameDiv.setAttribute('sectionShow', "false")
+nameDiv.setAttribute('sectionShow', sectionShow)
 nameDiv.setAttribute('subsection', currentSubSection)
-nameDiv.setAttribute('subsectionShow', "false")
+nameDiv.setAttribute('subsectionShow', subsectionShow)
+
+// nameDiv.setAttribute('key', key)
+// nameDiv.setAttribute('keyShow', "true")
+// nameDiv.setAttribute('section', currentSection)
+// nameDiv.setAttribute('sectionShow', "true")
+// nameDiv.setAttribute('subsection', currentSubSection)
+// nameDiv.setAttribute('subsectionShow', "true")
 
 target.appendChild(nameDiv);
 this.listEvents(entry, nameDiv, key);
@@ -311,11 +350,23 @@ if(key === 'npcs' && editor.addItem === false){
 NPCs.addNPCInfo(entry.name, Ref.Left);
 } 
 else if(editor.addItem === true){
-console.log(div)
+//console.log(div)
 const itemId = div.getAttribute('id')
 const key = div.getAttribute('key')
 editor.addItem = false;
 editor.addTagtoItem(itemId, key);
+
+//Return to Default List
+this.sectionHeadDisplay = 'none',
+this.subSectionHeadDisplay = 'none',
+this.subSectionEntryDisplay =  'none',
+this.EntryDisplay = 'none',
+this.loadList(load.Data)
+
+if(editor.editMode === false){
+console.log("click")
+Ref.Editor.style.display = 'none';
+}
 
 }
 else{
@@ -326,31 +377,67 @@ Ref.Left.appendChild(form);
 
 }},
 
-addTagtoItem(itemId, key){
+addTagtoItem(itemId, tagKey){
 
-// const currentId = document.getElementById('currentId').value;
-// console.log(currentId)
+//console.log(editor.addItem);
+//Item adding tag to.
+const currentId = document.getElementById('currentId').value;
+const currentKey = document.getElementById('key').value;
+const homeObjAddress = {key: currentKey, id: currentId};
+const homeObj = load.Data[currentKey].find(obj => parseInt(obj.id) === parseInt(currentId));
+//console.log('home object', homeObj);
+const homeObjIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
+const homeObjTags = homeObj.tags //.split(',').map(tag => tag.trim());
 
-const obj = load.Data[key].find(obj => parseInt(obj.id) === parseInt(itemId));
-const objName = obj.name
-const itemIndex = load.Data.items.findIndex(item => parseInt(item.id) === parseInt(itemId));
-load.Data.items[itemIndex].tags = objName;
-console.log(load.Data.items[itemIndex])
 
-editor.createForm()
+//Item tag refers to.
+const tagObjAddress = {key: tagKey, id: itemId};
+const tagObj = load.Data[tagKey].find(obj => parseInt(obj.id) === parseInt(itemId));
+//console.log('tag object', tagObj)
+const tagObjName = tagObj.name
+const tagItemIndex = load.Data[tagKey].findIndex(item => parseInt(item.id) === parseInt(itemId));
+const tagObjTags = tagObj.tags //.split(',').map(tag => tag.trim());
+
+if(currentKey === 'npcs'){
+//Add NPC Name as Tag to tagObj.
+tagObjTags.push(homeObjAddress);
+//let newTags = tagObjTags.join(', ');
+
+//Replace current tags with appended tags.
+load.Data[tagKey][tagItemIndex].tags = tagObjTags;
+
+NPCs.addNPCInfo(homeObj.name);
+
+}else{
+//Append tagObjName as tag to homeObj
+homeObjTags.push(tagObjAddress);
+tagObjTags.push(homeObjAddress);
+//let newTags = homeObjTags.join(', ');
+
+//Replace current tags with appended tags.
+load.Data[currentKey][homeObjIndex].tags = homeObjTags;
+load.Data[tagKey][tagItemIndex].tags = tagObjTags;
+//console.log(load.Data[currentKey][homeObjIndex].tags)
+
+editor.createForm(load.Data[currentKey][homeObjIndex]);
+};
+
+//Repackage.
 NPCs.buildNPC();
-NPCs.addNPCInfo(objName);   
+//editor.loadList(load.Data);
+
+   
 },
 
-searchAllData: function (searchText) {
+searchAllData: function (searchText, data) {
 const resultsByKeys = {}; // Object to store results grouped by keys
 const excludedKeys = ['townText'];
 
 // Iterate over each key in load.Data
-for (const key in load.Data) {
-if (load.Data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+for (const key in data) {
+if (data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
 // Get the array corresponding to the key
-const dataArray = load.Data[key];
+const dataArray = data[key];
 
 // Iterate over each object in the array
 dataArray.forEach(obj => {
@@ -371,8 +458,23 @@ break;
 }}
 
 if(searchText === ''){
-this.loadList(load.Data)
+this.sectionHeadDisplay = 'none',
+this.subSectionHeadDisplay = 'none',
+this.subSectionEntryDisplay =  'none',
+this.EntryDisplay = 'none',
+this.loadList(data)
+
+if(editor.editMode === false){
+console.log("click")
+Ref.Editor.style.display = 'none';
+}
+
 }else{
+//List Display Variables
+this.sectionHeadDisplay = 'block',
+this.subSectionHeadDisplay = 'block',
+this.subSectionEntryDisplay =  'block',
+this.EntryDisplay = 'block',
 this.loadList(resultsByKeys);
 }
 
@@ -562,7 +664,15 @@ buildSection: function (headerValue, obj){
 
 createForm: function (obj){
 
-const color = obj.color? obj.color : 'cyan';
+let color
+
+//console.log(obj.color)
+
+if(obj.color){
+color = obj.color;
+}else{
+color = 'cyan';
+};
 
 ['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker', 'newArea'].forEach(id => {
 const element = document.getElementById(id);
@@ -619,7 +729,7 @@ console.log(load.Data.spells[0]);
 
 }
 
-const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key']; // Define keys to exclude
+const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key', 'tags']; // Define keys to exclude
 
 if(obj.key === 'items'){excludedKeys.push('tags')};
 
@@ -631,7 +741,7 @@ existingId.remove(); // Remove the existing form
 }
 
 const idArea = document.createElement('div');
-idArea.id = 'currentId';
+idArea.id = 'currentIdArea';
 
 let idContent =  
 `<label class="entry-label" 
@@ -821,7 +931,7 @@ divId="key">
 <input 
 class="leftText white entry-input"
 style="display:none" 
-id="dataEntryKey"
+id="key"
 divId= "edit${obj.key}"
 value="${obj.key}"></h3>`;
 
@@ -906,17 +1016,24 @@ elementContainer.querySelector('.leftText').select();
 // Ref.Left.appendChild(newArea);
 // }
 
-if(obj.key === 'items'){
+// if(obj.key === 'items'){
+if(obj.tags){
 
 const container = document.getElementById(this.buildSection('Tags', obj));
 
 
-    const buttons = ['Add New Tag', 'Remove Tag']
+    const buttons = ['Add', 'Remove']
 
     buttons.forEach(button =>{
     //Add New Tag
     const addButtonDiv = document.createElement('div');
-    let addButtonHTML = `<h3><span class = 'leftText'>[${button}]</span></h3>`;
+    let addButtonHTML = 
+    `<h3 id = ${button}Button>
+     <span
+      class = 'leftText'>
+      [${button} Tag]
+     </span>
+     </h3>`;
     
     addButtonDiv.innerHTML = addButtonHTML;
     container.appendChild(addButtonDiv);
@@ -930,45 +1047,78 @@ const container = document.getElementById(this.buildSection('Tags', obj));
     addButtonDiv.addEventListener('mouseleave', function(){
     this.style.color = 'lightgray';
     })
-    
-    addButtonDiv.addEventListener('click', function(){
-        editor.addItem = true;
-        editor.loadList(load.Data);
-        
-    })
 
     });
 
-const tagsToAdd = obj.tags.split(',').map(tag => tag.trim());
+    const addButton =  document.getElementById('AddButton');
+    const removeButton = document.getElementById('RemoveButton'); 
+
+    addButton.addEventListener('click', function(){
+        editor.addItem = true;
+        editor.loadList(load.Data);
+        
+    });
+
+    removeButton.addEventListener('click', function(){
+        editor.delItem = true;
+        editor.loadList(load.Data);
+        removeButton.style.color = 'hotpink'
+
+    // Reset deleteMode after time.
+    setTimeout(() => {
+    editor.delItem = false; 
+    removeButton.style.color = 'lightgray'
+    }, 2000); // 2000 milliseconds = 2 seconds
+        
+    });
+
+if(obj.tags){
+//console.log(obj.tags)
+let tagsToAdd = obj.tags//.split(',').map(tag => tag.trim());
     
 tagsToAdd.forEach(tag => {
 
+let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+let tagName = load.Data[tag.key][index].name
+
 const taggedArea = document.createElement('div');
-let tagHTML = `<h3><span>${tag}</span></h3>`;
+let tagHTML = `<h3><span>${tagName}</span></h3>`;
 
 taggedArea.innerHTML = tagHTML;
 container.appendChild(taggedArea);
 
-if(parseInt(tag.active) === 1){
-taggedArea.style.color = 'lightgray'
-}else{
-taggedArea.style.color = 'gray'
-}
-taggedArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-taggedArea.addEventListener('mouseleave', function(){
-if(parseInt(tag.active) === 1){
-taggedArea.style.color = 'lightgray'
-}else{
-taggedArea.style.color = 'gray'
-}
-})
-// taggedArea.addEventListener('click', function(){
-// editor.createForm(tag);
-// })
-});
+taggedArea.style.color = load.Data[tag.key][index].color;
 
+taggedArea.addEventListener('click', function(){
+if(editor.delItem === true){
+//Reset Trigger
+editor.delItem = false;
+
+//Remove tag from item.
+obj.tags = obj.tags.filter(item => item.id !== tag.id);
+
+//Remove item from other item's tags.
+if(tag.key !== 'npcs'){
+let delTags = load.Data[tag.key][index].tags
+console.log(delTags, obj.id)
+delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
+console.log(delTags)
+load.Data[tag.key][index].tags = delTags;
+};
+
+//Repackage.
+NPCs.buildNPC();
+editor.createForm(obj);   
+}else{
+//find tagObj based on Name!
+if(tag.key === 'npcs'){
+NPCs.addNPCInfo(load.Data[tag.key][index].name);
+}else{
+editor.createForm(load.Data[tag.key][index]);   
+}
+}})
+});
+}
 
 }
 

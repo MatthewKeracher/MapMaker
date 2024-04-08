@@ -90,6 +90,8 @@ Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
 
 escButton(){
 
+window.speechSynthesis.cancel();
+
 if(Ref.Centre.style.display !== "none"){
 const textBox = document.getElementById('descriptionText');
 //Make normal.
@@ -241,7 +243,7 @@ Ref.eventManager.style.display = 'block';
 Ref.Storyteller.style.display = 'block';
 Ref.Storyteller.innerHTML = '';
 
-toolbar.refreshLocation();
+Storyteller.refreshLocation();
 
 if(Ref.Storyteller.innerHTML === ''){
 Storyteller.showTownText();
@@ -262,22 +264,6 @@ div.removeEventListener('mouseenter', editor.handleMouseHover);
 div.removeEventListener('mouseleave', editor.handleMouseHover);
 });
 }}};
-
-refreshLocation(){
-    
-if(Storyteller.returnLocation !== ''){
-const returnLocation = Storyteller.returnLocation;
-Storyteller.changeContent(returnLocation);
-}
-
-else if(load.fileName !== ''){
-Ref.locationLabel.textContent = load.fileName;
-}else{
-Ref.locationLabel.textContent = 'Information';    
-}
-
-
-}
 
 saveButton(){
     
@@ -315,7 +301,7 @@ if(Ref.Centre.style.display === 'none'){
                 let searchText = Ref.eventManager.value.toLowerCase();
 
                 if(editor.editMode === true){
-                editor.searchAllData(searchText);
+                editor.searchAllData(searchText, load.Data);
                 };
                 };
 
@@ -348,7 +334,7 @@ editor.loadList(load.Data);
 let searchText = Ref.eventManager.value.toLowerCase();
 
 if(editor.editMode === true){
-editor.searchAllData(searchText);
+editor.searchAllData(searchText, load.Data);
 };
 }
 load.displayLocations(load.Data.locations);
