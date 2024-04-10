@@ -121,8 +121,13 @@ try {
 if (fileContent) {
 
 load.Data = JSON.parse(fileContent);
-//this.generateTags(load.Data);
-this.sortData(load.Data);
+
+//Helpers
+// load.Data.tags = [];
+// this.generateTags(load.Data, 'npcs');
+// this.generateTags(load.Data, 'locations');
+//this.sortData(load.Data);
+
 Storyteller.townText = load.Data.townText;
 Storyteller.showTownText();
 console.log(load.Data)
@@ -146,48 +151,71 @@ reject(error);
 });
 },
 
-generateTags(data) {
-let tagsArray = [];
+generateTags(data, key) {
 
-const excludedKeys = ['townText']
+let allTags = [];
 
+//Get all tags.
+data[key].forEach(obj => {
 
-for (const key in data) {
+let tags = obj.tags.split(',').map(tag => tag.trim());
 
-if (!excludedKeys.includes(key)) { // Check if key is not excluded
+tags.forEach(tag => {
+allTags.push({tag: tag, id: obj.id})
+})
 
-let obj = data[key];
-
-obj.forEach(entry => {
-const tags = entry.tags ? entry.tags.split(',').map(tag => tag.trim()) : [];
-tagsArray.push(...tags);
-});
-}
-
-// Convert to a set to remove duplicates, then back to an array
-const uniqueTagsArray = [...new Set(tagsArray)];
-
-tagsArray = uniqueTagsArray.map((tag, index) => {
-return {
-//metadata
-key: 'tags',
-type: 'parent', 
-subType: 'child',
-
-//stay same
-id: index,
-name: tag, 
-parent: 'type',
-child: 'subType',
-description: '',
-}
 });
 
+allTags.sort((a, b) => a.tag.localeCompare(b.tag));
 
-load.Data.tags = tagsArray;
+// Group tag objects by tag name
+const groupedTags = {};
+allTags.forEach(tag => {
+    if (!groupedTags[tag.tag]) {
+        groupedTags[tag.tag] = [];
+    }
+    groupedTags[tag.tag].push({ key: key, id: tag.id });
+});
 
-//console.log(load.Data);
+// Create tag objects for each unique tag
+for (const tagName in groupedTags) {
+    const tagObj = {
+        id: load.generateUniqueId(load.Data.tags, 'entry'),
+        key: 'tags',
+        type: 'color',
+        subType: 'group',
+        color: 'cyan',
+        name: tagName,
+        tags: groupedTags[tagName],
+        // target: '',
+        group: '',
+        // location: '',
+        // npc: '',
+        description: 'This is a tag.'
+    };
+    load.Data.tags.push(tagObj);
 }
+
+
+//Now swap out old tags for references to tagObjs.
+
+data[key].forEach(obj => {
+
+obj.tags = [];
+
+load.Data.tags.forEach(tagObj => {
+
+    tagObj.tags.forEach(tag => {
+
+        if(tag.id === obj.id && tag.key === obj.key){obj.tags.push({key: 'tags', id: tagObj.id})}
+
+    })
+
+});
+
+
+});
+
 },
 
 sortData(data){
@@ -195,7 +223,7 @@ sortData(data){
 for (const key in data) {
 
 let obj = data[key];
-// console.log(obj)
+//console.log(obj)
 
 if(key === 'townText' ){
 

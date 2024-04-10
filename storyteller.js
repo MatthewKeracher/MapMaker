@@ -130,7 +130,6 @@ showTownText(){
   
   if(Storyteller.townText !== ''){
   storytellerText.textContent = Storyteller.townText
-  window.speechSynthesis.cancel(storytellerText.textContent);
   } else {
       storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
   }

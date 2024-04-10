@@ -26,6 +26,28 @@ sectionShow:[],
  subSectionEntryDisplay:  'none',
  EntryDisplay: 'none',
 
+readAddressBook: function (data){
+let addressBook = [];
+
+const excludedKeys = ['townText', 'npcs'];
+
+for (const key in load.Data) {
+if (load.Data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+const dataArray = load.Data[key];
+
+dataArray.forEach(obj => {
+
+let objs = obj.tags.filter(item => parseInt(item.id) === parseInt(data.id) && item.key === data.key);
+
+if(objs.length > 0){addressBook.push({key: obj.key, id: obj.id})}
+
+})
+}}
+
+return addressBook;
+
+},
+
 init: function () {
 this.divIds.forEach((divId) => {
 const divElement = document.getElementById(divId);
@@ -370,8 +392,7 @@ Ref.Editor.style.display = 'none';
 
 }
 else{
-const form = editor.createForm(entry)
-Ref.Left.appendChild(form);
+editor.createForm(entry)
 }
 });
 
@@ -398,19 +419,9 @@ const tagObjName = tagObj.name
 const tagItemIndex = load.Data[tagKey].findIndex(item => parseInt(item.id) === parseInt(itemId));
 const tagObjTags = tagObj.tags //.split(',').map(tag => tag.trim());
 
-if(currentKey === 'npcs'){
-//Add NPC Name as Tag to tagObj.
-tagObjTags.push(homeObjAddress);
-//let newTags = tagObjTags.join(', ');
-
-//Replace current tags with appended tags.
-load.Data[tagKey][tagItemIndex].tags = tagObjTags;
-
-NPCs.addNPCInfo(homeObj.name);
-
-}else{
 //Append tagObjName as tag to homeObj
 homeObjTags.push(tagObjAddress);
+console.log(tagObj, homeObj)
 tagObjTags.push(homeObjAddress);
 //let newTags = homeObjTags.join(', ');
 
@@ -419,8 +430,12 @@ load.Data[currentKey][homeObjIndex].tags = homeObjTags;
 load.Data[tagKey][tagItemIndex].tags = tagObjTags;
 //console.log(load.Data[currentKey][homeObjIndex].tags)
 
+if(currentKey === 'npcs'){
+NPCs.addNPCInfo(homeObj.name)
+}else{
 editor.createForm(load.Data[currentKey][homeObjIndex]);
 };
+
 
 //Repackage.
 NPCs.buildNPC();
@@ -665,15 +680,18 @@ buildSection: function (headerValue, obj){
 createForm: function (obj){
 
 let color
+let fullScreen = false
 
-//console.log(obj.color)
-
+//Initialise Form.
+if(obj){
+//0.1. Set Colour of Form
 if(obj.color){
 color = obj.color;
 }else{
 color = 'cyan';
 };
 
+//0.2. Clear Form of old HTML divs.
 ['editForm', 'typeArea', 'nameArea', 'subTypeArea', 'breaker', 'newArea'].forEach(id => {
 const element = document.getElementById(id);
 if (element) {
@@ -681,9 +699,9 @@ element.remove();
 }
 });
 
-//Check if fullScreen on Centre
+//0.3. Reset displays to Default for new Form.
 const fullScreenDivs = document.querySelectorAll('.fullScreen');
-let fullScreen = false
+
 
 if (fullScreenDivs.length === 0) {
 Ref.Left.style.display = 'block';
@@ -699,9 +717,11 @@ Ref.Left.innerHTML = '';
 const form = document.createElement('form');
 form.id = 'editForm';
 form.classList.add('form');
+}
 
-if (obj) {
+//If needed, make copy Obj for basis of new data entry.
 if (editor.makeNew === true) {
+
 const reservedTerms = ['id', 'key', 'type', 'subtype', 'active', 'order','color'];
 
 // Create a deep copy of the original object
@@ -729,11 +749,36 @@ console.log(load.Data.spells[0]);
 
 }
 
-const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key', 'tags']; // Define keys to exclude
+//Use Obj to fill Form.
+if (obj) {
 
-if(obj.key === 'items'){excludedKeys.push('tags')};
+//Define key groups for different areas of the form.
+const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key', 'tags']; 
+const universalKeys = ['group', 'color'];
 
-//12. Make ID Manually
+//Make MetaData elements -- key and id.
+if(obj){
+//Make Key and Make Invisible
+if(obj.key){
+    const keyArea = document.createElement('div');
+    
+    let keyContent =  
+    `<label class="entry-label" 
+    style="display: none"
+    divId="key">
+    </label>
+    <input 
+    class="leftText white entry-input"
+    style="display:none" 
+    id="key"
+    divId= "edit${obj.key}"
+    value="${obj.key}"></h3>`;
+    
+    keyArea.innerHTML = keyContent;
+    Ref.Left.appendChild(keyArea);
+}
+
+//Make ID Manually
 if(obj.id){
 const existingId = document.getElementById('currentId');
 if (existingId) {
@@ -758,8 +803,9 @@ value="${obj.id || 'N/A'} ">`;
 idArea.innerHTML = idContent;
 Ref.Left.appendChild(idArea);
 }
+}
 
-//1. Make Description Manually
+//Make Description Manually
 if(obj){
 
 const description = document.createElement('div');
@@ -838,6 +884,8 @@ this.style.height = this.scrollHeight + 'px';
 });
 }
 
+//Make Top Area -- Name, Type, subType.
+if(obj){
 const topArea = document.createElement('div');
 topArea.style.display = 'block'; 
 
@@ -919,35 +967,16 @@ nameArea.style.height = nameArea.scrollHeight + 'px';
 // breaker.id = 'breaker';
 // topArea.appendChild(breaker);
 
-//6. Make Key and Make Invisible
-if(obj.key){
-const keyArea = document.createElement('div');
 
-let keyContent =  
-`<label class="entry-label" 
-style="display: none"
-divId="key">
-</label>
-<input 
-class="leftText white entry-input"
-style="display:none" 
-id="key"
-divId= "edit${obj.key}"
-value="${obj.key}"></h3>`;
-
-keyArea.innerHTML = keyContent;
-Ref.Left.appendChild(keyArea);
 }
 
-//7. Generate Settings Fields Dynamically
-
-//Add Section Header -- Settings
+//Make Form Section with Universal Keys
 if(obj){
 
-const container = document.getElementById(this.buildSection('Settings', obj));
+const container = document.getElementById(this.buildSection('General Settings', obj));
 
 for (const key in obj) {
-if (obj.hasOwnProperty(key) && !excludedKeys.includes(key)) { // Check if key is not excluded
+if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && universalKeys.includes(key)) { // Check if key is not excluded
 
 const elementContainer = document.createElement('div');
 
@@ -987,37 +1016,73 @@ elementContainer.style.height = this.scrollHeight + lineHeight + 'px';
 });
 
 elementContainer.addEventListener('click', function() {
-elementContainer.querySelector('.leftText').focus();
-elementContainer.querySelector('.leftText').select();
+elementContainer.querySelector('.leftTextshort').focus();
+elementContainer.querySelector('.leftTextshort').select();
+});
+
+}
+}
+
+
+};
+
+//Make Form Section with ${key} specific Keys.
+if(obj){
+
+const properKey = this.proper(obj.key)
+const container = document.getElementById(this.buildSection(properKey + ' Settings', obj));
+
+for (const key in obj) {
+if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && !universalKeys.includes(key)) { // Check if key is not excluded
+
+const elementContainer = document.createElement('div');
+
+let elementContent =  
+`<h3>
+<label class="expandable entry-label" 
+style="font-family:'SoutaneBlack'; color:${color}"
+data-content-type="rule" 
+divId="${[key]}">
+${this.proper(key)}
+</label>
+<input class="leftTextshort white entry-input" 
+id= "edit${[key]}">
+</input>
+</h3>`;
+
+elementContainer.innerHTML = elementContent;
+container.appendChild(elementContainer);
+
+const elementText = document.getElementById('edit' + key);
+const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
+const numLines = Math.floor(elementText.scrollHeight / lineHeight);
+
+elementText.value = obj[key] || '';
+
+// if(numLines === 2){
+// elementText.style.height = Math.max(elementText.scrollHeight - lineHeight, lineHeight) + 'px';
+// } else {
+// elementText.style.height = elementText.scrollHeight + 'px';
+// }
+
+elementText.addEventListener('input', function() {
+// Set the height based on the scroll height of the content
+this.style.height = 'auto';
+this.style.height = this.scrollHeight + 'px';
+elementContainer.style.height = this.scrollHeight + lineHeight + 'px';
+});
+
+elementContainer.addEventListener('click', function() {
+elementContainer.querySelector('.leftTextshort').focus();
+elementContainer.querySelector('.leftTextshort').select();
 });
 
 }
 }
 }
 
-//8. Add field for New
-// if(obj){
-// const newArea = document.createElement('div');
-
-// let newContent =  
-// `<hr><h3>
-// <input class="leftText orange entry-label" 
-// style="font-family:'SoutaneBlack'; width: auto;"
-// data-content-type="rule" 
-// divId="newField"
-// value="New Field">
-// <input 
-// class="leftText white entry-input" 
-// type="text" 
-// divId= "newContent"
-// value="Insert New Value"></h3>`;
-
-// newArea.innerHTML = newContent;
-// Ref.Left.appendChild(newArea);
-// }
-
 // if(obj.key === 'items'){
-if(obj.tags){
+if(obj){
 
 const container = document.getElementById(this.buildSection('Tags', obj));
 
@@ -1061,7 +1126,6 @@ const container = document.getElementById(this.buildSection('Tags', obj));
 
     removeButton.addEventListener('click', function(){
         editor.delItem = true;
-        editor.loadList(load.Data);
         removeButton.style.color = 'hotpink'
 
     // Reset deleteMode after time.
@@ -1074,15 +1138,23 @@ const container = document.getElementById(this.buildSection('Tags', obj));
 
 if(obj.tags){
 //console.log(obj.tags)
-let tagsToAdd = obj.tags//.split(',').map(tag => tag.trim());
-    
+let tagsToAdd = obj.tags//.split(',').map(tag => tag.trim());  
 tagsToAdd.forEach(tag => {
 
 let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
 let tagName = load.Data[tag.key][index].name
 
 const taggedArea = document.createElement('div');
-let tagHTML = `<h3><span>${tagName}</span></h3>`;
+let tagHTML = 
+`<h3>
+<span 
+class = "tag"
+tagid = ${tag.id} 
+tagkey = ${tag.key}
+>
+${tagName}
+</span>
+</h3>`;
 
 taggedArea.innerHTML = tagHTML;
 container.appendChild(taggedArea);
@@ -1098,13 +1170,13 @@ editor.delItem = false;
 obj.tags = obj.tags.filter(item => item.id !== tag.id);
 
 //Remove item from other item's tags.
-if(tag.key !== 'npcs'){
+
 let delTags = load.Data[tag.key][index].tags
 console.log(delTags, obj.id)
 delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
 console.log(delTags)
 load.Data[tag.key][index].tags = delTags;
-};
+
 
 //Repackage.
 NPCs.buildNPC();
@@ -1122,8 +1194,13 @@ editor.createForm(load.Data[tag.key][index]);
 
 }
 
-//10. Add Events in Same Location
-if(obj.key === 'locations' || obj.key === 'events'){
+}
+
+//Add associated events.
+if(obj){
+
+//Add Events in Same Location
+if(obj.key === 'events' && obj.target === 'Location'){
 //get data
 let locEvents
 let parentLocation
@@ -1142,7 +1219,7 @@ locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.loc
 parentLocation = obj.location;
 }
 
-const container = document.getElementById(this.buildSection(parentLocation + ' Events', obj));
+const container = document.getElementById(this.buildSection('Events Happening Here', obj));
 
 //Make New Event.
 const newEventArea = document.createElement('div');
@@ -1220,7 +1297,7 @@ editor.createForm(locEv);
 }
 
 //11. Add Events in Same Group
-if(obj.key === 'locations' || obj.key === 'events'){
+if(obj.key === 'events' && obj.target === 'NPC'){
 //get data
 let groupEvents = [];
 let group
@@ -1240,7 +1317,7 @@ groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.g
 group = obj.group;
 }
 
-const container = document.getElementById(this.buildSection(group + ' Group Events', obj));
+const container = document.getElementById(this.buildSection('Events in Group', obj));
 
 //Make New Event.
 const groupEventArea = document.createElement('div');
@@ -1349,9 +1426,9 @@ for (const tag in matchedEvents) {
 if (matchedEvents.hasOwnProperty(tag)) {
 
 const evHeaderObj = load.Data.events.find(event => event.npc === tag && event.target === 'NPC');
-console.log(tag, evHeaderObj)
+//console.log(tag, evHeaderObj)
 
-const container = document.getElementById(this.buildSection(tag, obj));
+const container = document.getElementById(this.buildSection('Events Affecting Target', obj));
 
 //Make New Event.
 const groupEventArea = document.createElement('div');
@@ -1426,7 +1503,7 @@ editor.createForm(evObj)
 }
 
 //12. Add Sub-Locations
-if(obj.key === 'locations' || obj.key === 'events' && obj.target === 'Location'){
+if(obj.key === 'locations'){
 //get data
 let subLocations
 let parentLocation
@@ -1453,7 +1530,7 @@ parentLocation = obj.location;
 // }
 // }
 
-const container = document.getElementById(this.buildSection(parentLocation, obj));
+const container = document.getElementById(this.buildSection('Sub-Locations', obj));
 
 //Make New Sublocation.
 const subLocArea = document.createElement('div');
@@ -1534,8 +1611,6 @@ editor.createForm(subLoc);
 
 }
 
-return form;
-
 },
 
 saveDataEntry: function() {
@@ -1586,12 +1661,23 @@ inputs.push(value.trim());
 }
 });
 
-//console.log(labels, inputs);
+console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {
 saveEntry[labels[i]] = inputs[i];
 }
+
+//get Array of tag addresses
+const tagElements = document.querySelectorAll('.tag');
+const tags = [];
+
+tagElements.forEach(input => {
+const tagId  = input.getAttribute('tagid');
+const tagKey = input.getAttribute('tagkey');
+tags.push({key: tagKey, id: tagId});
+
+});
 
 //Edit saveEntry object for type and subType -- will need to change if to be user-access'
 
@@ -1601,38 +1687,60 @@ saveEntry['type'] = document.getElementById('typeEntry').getAttribute('pair');
 saveEntry['subType']= document.getElementById('subTypeEntry').getAttribute('pair');
 }catch{console.error("No type or subType found.")}
 saveEntry['id'] = parseInt(saveEntry['id']);
+saveEntry['tags'] = tags;
 
 const key = saveEntry && saveEntry['key'];
 const id = saveEntry && saveEntry['id'];
 const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
-//console.log(key, id, index);
 
+//console.log('saving...');
+//console.log('Updated saveEntry:');
 //console.log(saveEntry)
+// console.log(load.Data[key][index]);
 
 if(index === -1){
 load.Data[key].push(saveEntry)
 }else{
 load.Data[key][index] = saveEntry
-
 }
 
-if(key === 'npcs'){
+//Reset programme with new Data.
 NPCs.buildNPC();
+
+//Reset Editor and Search 
+if(Ref.eventManager.value === ''){   
+editor.loadList(load.Data);
+}else{
+let searchText = Ref.eventManager.value.toLowerCase();
+
+if(editor.editMode === true){
+editor.searchAllData(searchText, load.Data);
+};
+}
+
+if(editor.editMode === false){
+Ref.Editor.style.display = 'none';
+}
+
+//Reload Map to reflect changes.
+load.displayLocations(load.Data.locations);
+
+//Reload form to reflect changes.
+if(key === 'npcs'){
 NPCs.addNPCInfo(saveEntry.name)
 }else{
 editor.createForm(saveEntry);
 }
 
-
-// console.log('Updated saveEntry:');
-// console.log(load.Data[key][index]);
+//Reload location to reflect changes.
+Storyteller.refreshLocation();
 
 },
 
 deleteDataEntry: function(){
 
 //Retrieve key and id of entry for deletion.
-const key = document.getElementById('dataEntryKey').getAttribute('value');
+const key = document.getElementById('key').getAttribute('value');
 const id = document.getElementById('currentId').getAttribute('value');
 //console.log(key, id);
 

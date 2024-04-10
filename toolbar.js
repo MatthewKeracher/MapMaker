@@ -92,6 +92,10 @@ escButton(){
 
 window.speechSynthesis.cancel();
 
+//Close search and empty search box.
+Ref.eventManager.value = '';
+Ref.Editor.style.display = 'none';
+
 if(Ref.Centre.style.display !== "none"){
 const textBox = document.getElementById('descriptionText');
 //Make normal.
@@ -112,7 +116,7 @@ if(Ref.Left.style.display === "none" && Ref.Centre.style.display === "none"){
 
 // Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
-Ref.eventManager.value = '';
+
 
 // if(editor.editMode === true){
 // Ref.mainToolbar.style.display = "none";
@@ -202,9 +206,8 @@ Ref.editToolbar.style.display = 'flex';
 const obj = load.Data.locations.find(obj => obj.name === Ref.locationLabel.textContent);
 
 if(obj){
-const form = editor.createForm(obj);
-Ref.Left.appendChild(form);}
-
+editor.createForm(obj);
+}
 //Ref.locationLabel.textContent = load.fileName;
 
 //Hide Storyteller
@@ -270,46 +273,23 @@ saveButton(){
 //Save whole file.
 if(Ref.Centre.style.display === 'none'){
 
-    saveButton.classList.add('click-button');
-    setTimeout(() => {
-    saveButton.classList.remove('click-button');
-    }, 1000); // 1000 milliseconds = 1 second
+saveButton.classList.add('click-button');
+setTimeout(() => {
+saveButton.classList.remove('click-button');
+}, 1000); // 1000 milliseconds = 1 second
 
-    save.exportArray();
+save.exportArray();
 
 //Save this form.
 }else{
 
-        editSaveButton.classList.add('click-button');
-        setTimeout(() => {
-        editSaveButton.classList.remove('click-button');
-        }, 1000); // 1000 milliseconds = 1 second
+editSaveButton.classList.add('click-button');
+setTimeout(() => {
+editSaveButton.classList.remove('click-button');
+}, 1000); // 1000 milliseconds = 1 second
 
-        console.log('saving...')
-        
-        editor.saveDataEntry();
-        if(load.Data.npcs){
-        NPCs.buildNPC();
-        }
-
-        if(Ref.Storyteller.style.display === 'none'){
-        //Check if searching. 
-                console.log(Ref.eventManager.value)
-                if(Ref.eventManager.value === ''){   
-                editor.loadList(load.Data);
-                }else{
-                let searchText = Ref.eventManager.value.toLowerCase();
-
-                if(editor.editMode === true){
-                editor.searchAllData(searchText, load.Data);
-                };
-                };
-
-        } else {
-                toolbar.refreshLocation();
-        }
-    
-    load.displayLocations(load.Data.locations);
+      
+editor.saveDataEntry();
 
 };
 }
@@ -321,23 +301,10 @@ setTimeout(() => {
 editSaveButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
-console.log('saving...')
-editor.saveDataEntry();
-if(load.Data.npcs){
-NPCs.buildNPC();
-}
-//Check if searching. 
-console.log(Ref.eventManager.value)
-if(Ref.eventManager.value === ''){   
-editor.loadList(load.Data);
-}else{
-let searchText = Ref.eventManager.value.toLowerCase();
 
-if(editor.editMode === true){
-editor.searchAllData(searchText, load.Data);
-};
-}
-load.displayLocations(load.Data.locations);
+editor.saveDataEntry();
+
+
 }
 
 newButton(){
