@@ -205,7 +205,7 @@ Ref.editToolbar.style.display = 'flex';
 
 const obj = load.Data.locations.find(obj => obj.name === Ref.locationLabel.textContent);
 
-if(obj){
+if(obj && Ref.Left.style.display === 'none'){
 editor.createForm(obj);
 }
 //Ref.locationLabel.textContent = load.fileName;
@@ -316,6 +316,14 @@ editNewButton.classList.remove('click-button');
 
 //Select a header type and it will generate a blank version. 
 editor.makeNew = true;
+Ref.eventManager.value = '';
+
+    editor.sectionHeadDisplay = 'none'
+    editor.subSectionHeadDisplay = 'none'
+    editor.subSectionEntryDisplay =  'none'
+    editor.EntryDisplay = 'none'
+    
+editor.loadList(load.Data);
 
 }
 

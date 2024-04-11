@@ -79,6 +79,16 @@ this.textToSpeech(Ref.Storyteller.textContent);
 }, 
 
 textToSpeech(text){
+
+//Add Button
+const speakButton = document.createElement('div');
+let buttonHTML =  `<button id="fullScreenButton" class="speakButton">[Speak]</button>`;
+speakButton.innerHTML = buttonHTML;
+document.body.appendChild(speakButton);
+
+let speaking = false;
+
+speakButton.addEventListener('click',() => {
 // Check if the browser supports the SpeechSynthesis API
 if ('speechSynthesis' in window) {
   const synth = window.speechSynthesis;
@@ -91,11 +101,21 @@ if ('speechSynthesis' in window) {
       // Speak the text
       synth.speak(utterance);
   }
-  speak(text);
+
+  if(speaking === false){
+    speak(text);
+    speaking = true
+  }else{
+    window.speechSynthesis.cancel();
+    speaking = false
+  }
+  
 } else {
   // Browser doesn't support SpeechSynthesis API
   console.error('Speech synthesis is not supported in this browser.');
 }
+});
+
 },
 
 

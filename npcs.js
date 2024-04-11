@@ -164,6 +164,9 @@ let story = ``;
 
 //use SubLocation to look for tags.
 let subLocationObj = load.Data.events.find(subLoc => subLoc.name === subLocation);
+
+if(subLocationObj){
+
 let subLocationTags = subLocationObj.tags;
 
 subLocationTags.forEach(tag => {
@@ -209,6 +212,9 @@ subLocationTags.forEach(tag => {
   })
 
 })
+}else{
+story += ``;
+}
 
 return story;
 
@@ -217,7 +223,7 @@ return story;
 addNPCInfo(npcName) {
   
 const findNPC = npcName.replace(/-/g, ' ');
-const foundNPC = load.Data.npcs.find(npc => npc.name === findNPC);
+let foundNPC = load.Data.npcs.find(npc => npc.name === findNPC);
 
 if (foundNPC) {
 
@@ -229,6 +235,25 @@ Ref.Left.innerHTML = '';
 // Ref.centreToolbar.style.display = 'flex';
 Ref.Centre.style.display = 'block';
 Ref.Left.style.display = 'block';
+
+//If needed, make copy Obj for basis of new data entry.
+if (editor.makeNew === true) {
+
+  const reservedTerms = ['id', 'key', 'type', 'subtype', 'active', 'order','color'];
+  
+  // Create a deep copy of the original object
+  const newObj = JSON.parse(JSON.stringify(foundNPC));
+  
+  // Generate a unique ID for the new object
+  newObj.id = load.generateUniqueId(load.Data[foundNPC.key], 'entry');
+  newObj.name = 'NPC ' + newObj.id;
+  newObj.description = 'A vague humanoid lacking description; giving NPC energy.'
+  
+  foundNPC = newObj
+  // Print the first spell in load.Data to see if it's modified
+  //console.log(load.Data.spells[0]);
+  
+  }
 
 //0. Make Hidden MetaData -- KEY, ID
 if(foundNPC){
@@ -538,64 +563,15 @@ statContainer.querySelector('.centreStat').select();
 }
 });
 
+//Tags
 if(foundNPC){
 
   const container = document.getElementById(editor.buildSection('Tags', foundNPC));
   
-  
-      const buttons = ['Add', 'Remove']
-  
-      buttons.forEach(button =>{
-      //Add New Tag
-      const addButtonDiv = document.createElement('div');
-      let addButtonHTML = 
-      `<h3 id = ${button}Button>
-       <span
-        class = 'leftText'>
-        [${button} Tag]
-       </span>
-       </h3>`;
-      
-      addButtonDiv.innerHTML = addButtonHTML;
-      container.appendChild(addButtonDiv);
-      
-      addButtonDiv.style.color = 'lightgray'
-      
-      addButtonDiv.addEventListener('mouseenter', function(){
-      this.style.color = 'lime';
-      })
-      
-      addButtonDiv.addEventListener('mouseleave', function(){
-      this.style.color = 'lightgray';
-      })
-  
-      });
-  
-      const addButton =  document.getElementById('AddButton');
-      const removeButton = document.getElementById('RemoveButton'); 
-  
-      addButton.addEventListener('click', function(){
-          editor.addItem = true;
-          editor.loadList(load.Data);
-          
-      });
-  
-      removeButton.addEventListener('click', function(){
-          editor.delItem = true;
-          removeButton.style.color = 'hotpink'
-  
-      // Reset deleteMode after time.
-      setTimeout(() => {
-      editor.delItem = false; 
-      removeButton.style.color = 'lightgray'
-      }, 2000); // 2000 milliseconds = 2 seconds
-          
-      });
-  
   if(foundNPC.tags){
   //console.log(obj.tags)
   let tagsToAdd = foundNPC.tags
-  console.log(tagsToAdd)   
+  //console.log(tagsToAdd)   
   tagsToAdd.forEach(tag => {
   
   let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
@@ -617,26 +593,26 @@ if(foundNPC){
   container.appendChild(taggedArea);
   
   taggedArea.style.color = load.Data[tag.key][index].color;
-  
-  taggedArea.addEventListener('click', function(){
-  if(editor.delItem === true){
-  //Reset Trigger
-  editor.delItem = false;
-  
+
+  taggedArea.addEventListener('click', (event) => {
+
+  if(event.shiftKey){ //shift-click
+  //Remove tag from item.
+  event.preventDefault();
   //Remove tag from item.
   foundNPC.tags = foundNPC.tags.filter(item => item.id !== tag.id);
-  
+
   //Remove item from other item's tags.
   let delTags = load.Data[tag.key][index].tags
-  console.log(delTags, foundNPC.id)
+  //console.log(delTags, foundNPC.id)
   delTags = delTags.filter(item => parseInt(item.id) !== foundNPC.id);
-  console.log(delTags)
+  //console.log(delTags)
   load.Data[tag.key][index].tags = delTags;
-  
+
   //Repackage.
   NPCs.buildNPC();
   NPCs.addNPCInfo(foundNPC.name);   
-  }else{
+  }else if(event.button === 0){ 
   //find tagObj based on Name!
   if(tag.key === 'npcs'){
   NPCs.addNPCInfo(load.Data[tag.key][index].name);
@@ -648,334 +624,6 @@ if(foundNPC){
   }
   
   }
-
-if (foundNPC.tags){
-
-// let addressBook = editor.readAddressBook(foundNPC);
-
-// const container = document.getElementById(editor.buildSection('Tags', foundNPC));
-
-// //build Section
-// if(foundNPC){
-// const buttons = ['Add', 'Remove']
-
-// buttons.forEach(button =>{
-// //Add New Tag
-// const addButtonDiv = document.createElement('div');
-// let addButtonHTML = 
-// `<h3 id = ${button}Button>
-// <span
-// class = 'leftText'>
-// [${button} Tag]
-// </span>
-// </h3>`;
-
-// addButtonDiv.innerHTML = addButtonHTML;
-// container.appendChild(addButtonDiv);
-
-// addButtonDiv.style.color = 'lightgray'
-
-// addButtonDiv.addEventListener('mouseenter', function(){
-// this.style.color = 'lime';
-// })
-
-// addButtonDiv.addEventListener('mouseleave', function(){
-// this.style.color = 'lightgray';
-// })
-
-// });
-
-// const addButton =  document.getElementById('AddButton');
-// const removeButton = document.getElementById('RemoveButton'); 
-
-// addButton.addEventListener('click', function(){
-// editor.addItem = true;
-// editor.loadList(load.Data);
-
-// });
-
-// removeButton.addEventListener('click', function(){
-// editor.delItem = true;
-// editor.loadList(load.Data);
-// removeButton.style.color = 'hotpink'
-
-// // Reset deleteMode after time.
-// setTimeout(() => {
-// editor.delItem = false; 
-// removeButton.style.color = 'lightgray'
-// }, 2000); // 2000 milliseconds = 2 seconds
-
-// });
-// }
-
-// addressBook.forEach(address => {
-
-// const index = load.Data[address.key].findIndex(obj => parseInt(obj.id) === parseInt(address.id));
-// const item = load.Data[address.key][index];
-
-// const itemContainer = document.createElement('div'); 
-
-// let itemContent =
-// `<h3>
-// <span 
-// class="leftText"
-// style="font-family:'SoutaneBlack'; color:${item.color}"
-// id = ${item.id}>
-// ${item.name}
-// </span>
-// </h3>`
-
-// itemContainer.innerHTML = itemContent;
-// container.appendChild(itemContainer);
-
-// itemContainer.addEventListener('click', function() {
-
-// if(editor.delItem === true){
-// //Reset Trigger
-// editor.delItem = false;
-
-// //Remove NPC name from item.tags
-// const delId = item.id;
-// let index = load.Data.items.findIndex(item => item.id === delId);
-// let itemObj = load.Data.items[index];
-// let delTags = itemObj.tags
-// console.log(delTags, delId)
-// delTags = delTags.filter(item => parseInt(item.id) !== parseInt(foundNPC.id));
-// console.log(delTags)
-// load.Data.items[index].tags = delTags;
-
-// //reLoad NPC.
-// NPCs.buildNPC();
-// NPCs.addNPCInfo(foundNPC.name);
-
-// }else{
-// editor.createForm(item);
-// }
-
-// })
-// })
-
-// // //Add Relationships
-// // if(foundNPC.tags){ 
-
-
-// // // Split the foundNPC tags into an array
-// // const tags = foundNPC.tags.split(',').map(item => item.trim());
-
-// // const taggedNPCs = {};
-
-// // // Iterate over each NPC
-// // load.Data.npcs.forEach(npc => {
-// // // Split the npc tag string into an array of tags
-// // const npcTags = npc.tags.split(',').map(item => item.trim());
-// // const commonTags = tags.filter(tag => npcTags.includes(tag));
-
-// // // Iterate over each common tag associated with the NPC
-// // commonTags.forEach(tag => {
-// // if (!taggedNPCs[tag]) {
-// // taggedNPCs[tag] = [];
-// // }
-
-// // if(foundNPC.id !== npc.id){
-// // taggedNPCs[tag].push(npc.id);
-// // };
-// // });
-// // });
-
-// // let totalLength = 0;
-
-// // for (const key in taggedNPCs) {
-// //   if (Object.prototype.hasOwnProperty.call(taggedNPCs, key)) {
-// //     totalLength += taggedNPCs[key].length;
-// //   }
-// // }
-
-// // const container = document.getElementById(editor.buildSection('Relationships', foundNPC));
-
-// // //Make New NPC.
-// // const addButtonDiv = document.createElement('div');
-// // let addButtonHTML = `<h3><span class = 'leftText'>[Add New NPC]</span></h3>`;
-
-// // addButtonDiv.innerHTML = addButtonHTML;
-// // container.appendChild(addButtonDiv);
-
-// // addButtonDiv.style.color = 'lightgray'
-
-// // addButtonDiv.addEventListener('mouseenter', function(){
-// // this.style.color = 'lime';
-// // })
-
-// // addButtonDiv.addEventListener('mouseleave', function(){
-// // this.style.color = 'lightgray';
-// // })
-
-// // addButtonDiv.addEventListener('click', function(){
-
-// // const newObj = {
-
-// // //Obj Format -- New NPC
-// // id: load.generateUniqueId(load.Data.npcs, 'entry'),
-// // key: 'npcs',
-// // type: 'class', 
-// // subType: 'level',
-
-// // name: 'Copy of ' + foundNPC.name, 
-// // tags: foundNPC.tags,
-// // level: foundNPC.level,
-// // class: foundNPC.class,
-// // monsterTemplate: foundNPC.monsterTemplate,
-// // str: foundNPC.str,
-// // dex: foundNPC.dex,
-// // int: foundNPC.int,
-// // wis: foundNPC.wis,
-// // con: foundNPC.con,
-// // cha: foundNPC.cha,
-// // description: '(Copy): ' + foundNPC.Backstory,
-// // inventory: foundNPC.inventory,
-
-// // }
-// // load.Data.npcs.push(newObj);
-// // NPCs.buildNPC();
-// // NPCs.addNPCInfo(newObj.name); 
-// // })
-
-// // for (const tag in taggedNPCs) {
-
-// // if (taggedNPCs.hasOwnProperty(tag)) {
-
-// // const evObj = load.Data.events.find(event => event.group === tag && event.target === 'NPC');
-// // //console.log(tag, evObj)
-
-// // const relationshipHeader = document.createElement('div');
-// // let relationshipContent = 
-// // `<h3>
-// // <span class='orange'>
-// // ${tag}
-// // </span></h3>`;
-
-// // relationshipHeader.innerHTML = relationshipContent;
-
-// // if(taggedNPCs[tag].length > 0){
-// // container.appendChild(relationshipHeader);
-
-// // relationshipHeader.addEventListener('click', function(){
-// // editor.createForm(evObj);
-// // })
-// // };
-
-// // // Add Names
-// // const npcIds = taggedNPCs[tag];
-// // npcIds.forEach(npcId => {
-// // const npcObj = load.Data.npcs.find(npc => parseInt(npc.id) === npcId);
-
-// // const npcNameArea = document.createElement('div');
-// // let npcNameContent = `<h3><span>${npcObj.name}</span></h3>`;
-
-// // npcNameArea.innerHTML = npcNameContent;
-// // container.appendChild(npcNameArea);
-
-// // npcNameArea.style.color = 'lightgray';
-
-// // npcNameArea.addEventListener('mouseenter', function(){
-// // this.style.color = 'white';
-// // })
-
-// // npcNameArea.addEventListener('mouseleave', function(){
-// // npcNameArea.style.color = 'lightgray'
-// // })
-
-// // npcNameArea.addEventListener('click', function(){
-// // NPCs.addNPCInfo(npcObj.name);
-// // })
-
-// // });
-// // }
-// // }
-// // }
-
-// // //Add Current Whereabouts
-// // if(foundNPC.tags){
-
-// //  // Split the foundNPC tags into an array
-// // const tags = foundNPC.tags.split(',').map(item => item.trim());
-// // tags.push(foundNPC.name);
-// // const taggedLocations = {};
-
-// // //subLocations to search
-// // const subLocations = load.Data.events.filter(subLoc => subLoc.target === 'NPC');
-
-// // // Iterate over each NPC
-// // subLocations.forEach(event => {
-
-// // // Split the npc tag string into an array of tags
-// // const locEvTags = event.npc.split(',').map(item => item.trim());
-// // const commonTags = tags.filter(tag => locEvTags.includes(tag));
-
-// // // Iterate over each common tag associated with the subLocation.
-// // commonTags.forEach(tag => {
-// // if (!taggedLocations[tag]) {
-// // taggedLocations[tag] = [];
-// // }
-
-// // taggedLocations[tag].push(event.id);
-
-// // });
-// // }); 
-
-// // let totalLength = 0;
-
-// // for (const key in taggedLocations) {
-// //   if (Object.prototype.hasOwnProperty.call(taggedLocations, key)) {
-// //     totalLength += taggedLocations[key].length;
-// //   }
-// // }
-
-// // const container = document.getElementById(editor.buildSection('Whereabouts', foundNPC));
-
-// // for (const tag in taggedLocations) {
-
-// //   if (taggedLocations.hasOwnProperty(tag)) {
-// //     const locIds = taggedLocations[tag];
-// //     locIds.forEach(locId => {
-// //     const taggedEvent = load.Data.events.find(obj => parseInt(obj.id) === locId);
-// //     let header = taggedEvent.location;
-
-// //     if(taggedEvent.location !== 'All'){
-    
-// //     let subLocObj = load.Data.events.find(obj => obj.name === taggedEvent.location && obj.target === 'Location');
-    
-// //     //console.log(taggedEvent, subLocObj)
-// //     // FOUND IT! console.log(load.Data.locations[0].name)
-// //     if(subLocObj){
-// //       header = subLocObj.name
-// //     }else{
-// //       subLocObj= load.Data.locations.find(loc => loc.name === taggedEvent.location)
-      
-// //     };
-    
-// //   const whereaboutsHeader = document.createElement('div');
-// //   let whereaboutsContent = 
-// //   `<h3>
-// //   <span class='orange'>
-// //   ${header}
-// //   </span></h3>`;
-  
-// //   whereaboutsHeader.innerHTML = whereaboutsContent;
-  
-// //   if(taggedLocations[tag].length > 0){
-// //   container.appendChild(whereaboutsHeader);
- 
-// //   whereaboutsHeader.addEventListener('click', function(){
-// //   console.log(subLocObj)
-// //   editor.createForm(subLocObj);
-// //   })
-// //   }};
-
-// //   })
-// // }
-// // }}
-
-};
 
 if (foundNPC.Skills){
 

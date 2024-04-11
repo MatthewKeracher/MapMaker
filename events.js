@@ -41,7 +41,7 @@ subType: 'group',
 order: 1,
 name: 'SubLocation ' + newId, 
 active: 1,
-tags: '',
+tags: [],
 target: 'Location', 
 group: '', 
 location: locObj.name, 
@@ -270,22 +270,20 @@ Ref.eventManager.addEventListener('input', (event) => {
 //console.log('*input*')
 let searchText = event.target.value.toLowerCase();
 
-if(editor.editMode === true && editor.addItem === false){
-editor.searchAllData(searchText, load.Data);
-};
-
+// if(editor.editMode === true && editor.addItem === false){
+// editor.searchAllData(searchText, load.Data);
+// };
 
 //editor.searchAllData(searchText, { items: load.Data.items });
 editor.searchAllData(searchText,load.Data);
 
-
 })
 
 Ref.eventManager.addEventListener('click', () => {
-// console.log('*click*')
-// Ref.Centre.style.display = 'none';
-// Ref.Left.style.display = 'none';
-//this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
+  if(Ref.eventManager.value !== ''){
+    let searchText = event.target.value.toLowerCase();
+    editor.searchAllData(searchText,load.Data);
+    }
 
 })
 

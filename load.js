@@ -534,7 +534,8 @@ if (!location.dataset.hasListener) {
 
 location.addEventListener('click', () => {
 Storyteller.changeContent(location);
-if (Ref.Centre.style.display !== "none" || editor.editMode === true){
+// Ref.Centre.style.display !== "none" || 
+if (editor.editMode === true){
 //console.log(location)
 const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));
 editor.createForm(obj);

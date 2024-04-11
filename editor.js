@@ -144,6 +144,8 @@ let subSectionEntryDisplay = this.subSectionEntryDisplay //'block';
 let subsectionShow = subSectionEntryDisplay === 'block'? "true" : "false"
 let EntryDisplay = this.EntryDisplay //'block';
 
+console.log(keyshow)
+
 // 0. Iterate over each property in the data object
 for (const key in data) {
 
@@ -366,31 +368,32 @@ this.classList.add('misc');
 }else{
 
 //1. showEntry
-div.addEventListener('click', () => {
+div.addEventListener('click', (event) => {
 
-if(key === 'npcs' && editor.addItem === false){
-NPCs.addNPCInfo(entry.name, Ref.Left);
-} 
-else if(editor.addItem === true){
+//if shift-click, add Tag
+if(event.shiftKey && Ref.Left.style.display === 'block'){
 //console.log(div)
+event.preventDefault();
 const itemId = div.getAttribute('id')
 const key = div.getAttribute('key')
 editor.addItem = false;
 editor.addTagtoItem(itemId, key);
 
 //Return to Default List
-this.sectionHeadDisplay = 'none',
-this.subSectionHeadDisplay = 'none',
-this.subSectionEntryDisplay =  'none',
-this.EntryDisplay = 'none',
-this.loadList(load.Data)
+// this.sectionHeadDisplay = 'none',
+// this.subSectionHeadDisplay = 'none',
+// this.subSectionEntryDisplay =  'none',
+// this.EntryDisplay = 'none',
+// this.loadList(load.Data)
 
 if(editor.editMode === false){
-console.log("click")
 Ref.Editor.style.display = 'none';
 }
 
 }
+else if(key === 'npcs' && editor.addItem === false){
+NPCs.addNPCInfo(entry.name, Ref.Left);
+} 
 else{
 editor.createForm(entry)
 }
@@ -419,11 +422,21 @@ const tagObjName = tagObj.name
 const tagItemIndex = load.Data[tagKey].findIndex(item => parseInt(item.id) === parseInt(itemId));
 const tagObjTags = tagObj.tags //.split(',').map(tag => tag.trim());
 
+//Check for duplicates.
+const duplicateCheckHome = homeObjTags.find(obj => tagKey === obj.key && itemId === obj.id)? true: false;
+const duplicateCheckTag = tagObjTags.find(obj => currentKey === obj.key && currentId === obj.id)? true: false;
+const addtoSelfCheck = tagObj === homeObj? true:false;
+
+if(duplicateCheckHome === false && addtoSelfCheck === false){
+homeObjTags.push(tagObjAddress)
+}
+
+if(duplicateCheckTag === false && addtoSelfCheck === false){
+tagObjTags.push(homeObjAddress);  
+}
+
 //Append tagObjName as tag to homeObj
-homeObjTags.push(tagObjAddress);
-console.log(tagObj, homeObj)
-tagObjTags.push(homeObjAddress);
-//let newTags = homeObjTags.join(', ');
+//console.log(tagObj, homeObj)
 
 //Replace current tags with appended tags.
 load.Data[currentKey][homeObjIndex].tags = homeObjTags;
@@ -441,7 +454,6 @@ editor.createForm(load.Data[currentKey][homeObjIndex]);
 NPCs.buildNPC();
 //editor.loadList(load.Data);
 
-   
 },
 
 searchAllData: function (searchText, data) {
@@ -504,7 +516,12 @@ if (scope === 'key'){ //has clicked on a keyHeading
 let key = div.getAttribute("id")
 
 if(editor.makeNew === true){ // to make new Entries
-editor.createForm(load.Data[key][0])
+let randomNumber = Math.floor(Math.random() * load.Data[key].length) + 1;
+if(key === 'npcs'){
+NPCs.addNPCInfo(load.Data[key][randomNumber].name)
+}else{
+editor.createForm(load.Data[key][randomNumber])
+}
 editor.makeNew = false;
 div.classList.remove('item');   
 div.classList.add('misc');
@@ -729,23 +746,26 @@ const newObj = JSON.parse(JSON.stringify(obj));
 
 // Generate a unique ID for the new object
 newObj.id = load.generateUniqueId(load.Data[obj.key], 'entry');
-newObj.active = 1;
-newObj.order = 1;
+//newObj.active = 1;
+//newObj.order = 1;
 newObj.color = obj.color
+const properKey = this.proper(obj.key.slice(0, -1));
+newObj.name = 'New ' + properKey + ' ' + newObj.id;
+newObj.description = 'An unknown entity.'
 
 // Iterate over each property in the new object
-for (let key in newObj) {
-// Check if the property is not reserved
-if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
-// Update the value of each property to 'Insert Value Here'
-const properKey = this.proper(obj.key.slice(0, -1));
-newObj[key] = 'Insert ' + key;
-}
-}
+// for (let key in newObj) {
+// // Check if the property is not reserved
+// if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
+// // Update the value of each property to 'Insert Value Here'
+
+// newObj[key] = 'Insert ' + key;
+// }
+// }
 
 obj = newObj
 // Print the first spell in load.Data to see if it's modified
-console.log(load.Data.spells[0]);
+//console.log(load.Data.spells[0]);
 
 }
 
@@ -1086,57 +1106,7 @@ if(obj){
 
 const container = document.getElementById(this.buildSection('Tags', obj));
 
-
-    const buttons = ['Add', 'Remove']
-
-    buttons.forEach(button =>{
-    //Add New Tag
-    const addButtonDiv = document.createElement('div');
-    let addButtonHTML = 
-    `<h3 id = ${button}Button>
-     <span
-      class = 'leftText'>
-      [${button} Tag]
-     </span>
-     </h3>`;
-    
-    addButtonDiv.innerHTML = addButtonHTML;
-    container.appendChild(addButtonDiv);
-    
-    addButtonDiv.style.color = 'lightgray'
-    
-    addButtonDiv.addEventListener('mouseenter', function(){
-    this.style.color = 'lime';
-    })
-    
-    addButtonDiv.addEventListener('mouseleave', function(){
-    this.style.color = 'lightgray';
-    })
-
-    });
-
-    const addButton =  document.getElementById('AddButton');
-    const removeButton = document.getElementById('RemoveButton'); 
-
-    addButton.addEventListener('click', function(){
-        editor.addItem = true;
-        editor.loadList(load.Data);
-        
-    });
-
-    removeButton.addEventListener('click', function(){
-        editor.delItem = true;
-        removeButton.style.color = 'hotpink'
-
-    // Reset deleteMode after time.
-    setTimeout(() => {
-    editor.delItem = false; 
-    removeButton.style.color = 'lightgray'
-    }, 2000); // 2000 milliseconds = 2 seconds
-        
-    });
-
-if(obj.tags){
+if(obj.tags && editor.makeNew === false){
 //console.log(obj.tags)
 let tagsToAdd = obj.tags//.split(',').map(tag => tag.trim());  
 tagsToAdd.forEach(tag => {
@@ -1153,7 +1123,7 @@ tagid = ${tag.id}
 tagkey = ${tag.key}
 >
 ${tagName}
-</span>
+</span> 
 </h3>`;
 
 taggedArea.innerHTML = tagHTML;
@@ -1161,12 +1131,11 @@ container.appendChild(taggedArea);
 
 taggedArea.style.color = load.Data[tag.key][index].color;
 
-taggedArea.addEventListener('click', function(){
-if(editor.delItem === true){
-//Reset Trigger
-editor.delItem = false;
+taggedArea.addEventListener('click', function(event){
 
+if(event.shiftKey){ //shift-click
 //Remove tag from item.
+event.preventDefault();
 obj.tags = obj.tags.filter(item => item.id !== tag.id);
 
 //Remove item from other item's tags.
@@ -1177,23 +1146,26 @@ delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
 console.log(delTags)
 load.Data[tag.key][index].tags = delTags;
 
-
 //Repackage.
 NPCs.buildNPC();
-editor.createForm(obj);   
-}else{
+editor.createForm(obj);  
+}
+
+else if(event.button === 0){ //left-click
 //find tagObj based on Name!
 if(tag.key === 'npcs'){
-NPCs.addNPCInfo(load.Data[tag.key][index].name);
-}else{
-editor.createForm(load.Data[tag.key][index]);   
+    NPCs.addNPCInfo(load.Data[tag.key][index].name);
+    }else{
+    editor.createForm(load.Data[tag.key][index]);   
+    }
 }
-}})
+
 });
-}
+
+});
 
 }
-
+}
 }
 
 //Add associated events.

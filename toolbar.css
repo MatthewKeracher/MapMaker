@@ -40,6 +40,23 @@ background-color: rgba(0, 128, 128, 0.663);;
 transition: background-color 0.3s; 
 }
 
+.speakButton {
+    position: absolute;
+    bottom: 2.2vh;
+    left: 1.2vw;
+    z-index: 1000;
+    width: auto; /* Make each button fill the width of the toolbar */
+    height: 6vh; 
+    font-size: 2.2vh; 
+    padding: 1vh 1vw; 
+    margin: 0.0vh 0; /* Add margin to control spacing */
+    border: 0.1vh solid teal; 
+    font-family: 'SoutaneBlack';
+    color: cyan;
+    background-color: rgba(0, 128, 128, 0.663);;
+    transition: background-color 0.3s; 
+    }
+
 
 .button {
 width: 100%; /* Make each button fill the width of the toolbar */
@@ -55,7 +72,8 @@ transition: background-color 0.3s;
 }
 
 .button:hover,
-.singButton:hover {
+.singButton:hover,
+.speakButton:hover {
 background-color: cyan; /* Change the background color when hovering */
 color: teal;
 }                       
