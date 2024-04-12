@@ -126,7 +126,7 @@ load.Data = JSON.parse(fileContent);
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
-//this.sortData(load.Data);
+this.sortData(load.Data);
 
 Storyteller.townText = load.Data.townText;
 Storyteller.showTownText();
@@ -220,222 +220,40 @@ load.Data.tags.forEach(tagObj => {
 
 sortData(data){
 
+let subLocations = [];
+
 for (const key in data) {
 
 let obj = data[key];
-//console.log(obj)
 
 if(key === 'townText' ){
 
 }else{
-// // Modify each object in the array
-// obj = obj.map(item => ({
-//     // Existing properties
-//     ...item,
 
-//     // New property
-//     tags: []
-// }));
-// }
+if(key === 'events'){
 
-if(key !== 'npcs'){
-
-    // Modify each object in the array
-    obj = obj.map(item => ({
-        // Existing properties
-        ...item,
+// Modify each object in the array
+obj.forEach(item => ({
     
-        // New property
-        tags: []
-    }));
-    }
+if(item.target === 'Location'){
+    
+subLocations.push(item)
 
 };
 
-// if (key === 'spells') {
-// obj = obj.map(spell => ({
+}));
 
-// //metadata
-// key: key,
-// type: 'class', 
-// subType: 'level',
-
-// //change
-// class: spell.type, 
-// level: spell.subType, 
-
-// //stay same
-// id: spell.id,
-// name: spell.name, 
-// range: spell.range, 
-// duration: spell.duration, 
-// description: spell.description, 
-// reverse: spell.reverse, 
-// note: spell.note, 
-
-// }));
-// }
-
-// if( key === 'monsters'){
-// obj = obj.map(monster => ({
-
-// //metadata
-// key: key,
-// type: 'class', 
-// subType: 'level',
-
-// //change
-// class: monster.class, 
-// level: monster.level, 
-
-// //stay same
-// id: monster.id,
-// name: monster.name,
-// color: 'hotpink',
-// hd: monster.hd,
-// attacks: monster.attacks,
-// damage: monster.damage,
-// movement: monster.movement,
-// noApp: monster.noApp,
-// ac: monster.ac,
-// morale: monster.morale,
-// treasure: monster.treasure,
-// lairTreasure: monster.lairTreasure,
-// xp: monster.xp,
-// description: monster.description,
-// special: monster.special,
+}
 
 
-// }));
-// }
-
-// if( key === 'items'){
-// obj = obj.map(item => ({
-
-// //metadata
-// key: key,
-// type: 'group', 
-// subType: 'rarity',
-// tags: '',
-
-// //change
-// group: item.group,
-// rarity: 'Common',
-
-// //For All
-// id: item.id,
-// name: item.name,
-// weight: item.weight,
-// cost: item.cost,
-
-// //Weapons and Armour
-// damage: item.damage,
-// range: item.range,
-// ac: item.ac,
-// description: item.description
-
-// }));
-// }
-
-// if(key === 'events'){
-
-// obj = obj.map(event => ({
 
 
-// id: event.id,
-// key: key,
-// type: 'target', 
-// subType: 'group',
-// order: 1,
-// name: event.name, 
-// active: event.active,
-// tags: event.tags,
-// target: event.target, 
-// group: event.group, 
-// location: event.location, 
-// npc: event.npc, 
-// description: event.description, 
+};
 
-
-// }));
-// }
-
-// if( key === 'npcs'){
-// obj = obj.map(npc => ({
-
-// //metadata
-// key: key,
-// type: 'class', 
-// subType: 'level',
-
-// //same
-// "id": npc.id,
-// "name": npc.name,
-// "tags": npc.tags,
-// "level": npc.level,
-// "class": npc.class,
-// "monsterTemplate": npc.monsterTemplate,
-// "str": npc.str,
-// "dex": npc.dex,
-// "int": npc.int,
-// "wis": npc.wis,
-// "con": npc.con,
-// "cha": npc.cha,
-// "description": npc.Backstory,
-// // "strMod": npc.strMod,
-// // "dexMod": npc.dexMod,
-// // "intMod": npc.intMod,
-// // "wisMod": npc.wisMod,
-// // "conMod": npc.conMod,
-// // "chaMod": npc.chaMod,
-// // "Modifiers": npc.Modifiers,
-// // "hitPoints": npc.hitPoints,
-// "inventory": npc.inventory,
-// // "savingThrows": npc.savingThrows,
-// // "attackBonus": npc.attackBonus,
-// // "AC": npc.AC,
-// // "attacks": npc.attacks,
-// // "damage": npc.damage,
-// // "XP": npc.xp,
-// // "movement": npc.movement,
-// // "treasure": npc.treasure,
-
-// }));
-// }
-
-// if( key === 'locations'){
-// obj = obj.map(location => ({
-
-// //metadata
-// key: key,
-// type: 'group', 
-// subType: 'color',
-
-// //add
-// group: 'Test', //location.group, 
-// color: 'hotpink', //location.faction, 
-
-// //stay same
-// id: null,//location.id,
-// name: location.name, 
-// tags: location.tags, 
-// description: location.description,
-
-// left: location.left, 
-// top: location.top, 
-// width: location.width, 
-// height: location.height, 
-
-
-// }));
-
-// }
-
-//Sort Ids
-//doesn't work with generateTags
-// this.generateUniqueId(obj, 'array');
-
-data[key]= obj;
+// data[key]= obj;
+// let defTag = data.tags[0]
+// data.tags=[];
+// data.tags.push(defTag);
 
 }},
 

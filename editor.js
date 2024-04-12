@@ -516,7 +516,8 @@ if (scope === 'key'){ //has clicked on a keyHeading
 let key = div.getAttribute("id")
 
 if(editor.makeNew === true){ // to make new Entries
-let randomNumber = Math.floor(Math.random() * load.Data[key].length) + 1;
+let randomNumber = Math.floor(Math.random() * load.Data[key].length);
+console.log(randomNumber)
 if(key === 'npcs'){
 NPCs.addNPCInfo(load.Data[key][randomNumber].name)
 }else{

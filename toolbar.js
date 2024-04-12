@@ -220,6 +220,12 @@ Ref.Editor.style.display = 'block';
 //Ref.Centre.style.display = 'block';
 //Ref.Left.style.display = 'block';
 
+
+//List Display Variables
+this.sectionHeadDisplay = 'none',
+this.subSectionHeadDisplay = 'none',
+this.subSectionEntryDisplay =  'none',
+this.EntryDisplay = 'none',
 editor.loadList(load.Data);
 
 

@@ -171,8 +171,10 @@ let subLocationTags = subLocationObj.tags;
 
 subLocationTags.forEach(tag => {
 
+  //Tags in subLocation
   let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
   let tags = load.Data[tag.key][index].tags;
+
   let bundle = []
   
   tags.forEach(tag => {
@@ -190,6 +192,46 @@ subLocationTags.forEach(tag => {
 
     story += `<span class="expandable" style="font-family:'SoutaneBlack'; color: cyan" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
 
+    //Floating Tags (no subLocation) for NPCs
+    let npcTags = npc.tags;
+
+    npcTags.forEach(tag => {
+    let isFloating = true;
+    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+    let floatTag = load.Data[tag.key][index];
+    let insideTags = floatTag.tags.filter(obj => obj.key === 'events');
+
+      insideTags.forEach(tag => {
+
+      let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+      let insideTag = load.Data[tag.key][index];
+
+      if(insideTag.target === 'Location'){isFloating = false}
+
+      })
+
+          if(isFloating === true){
+          //add events tagged to tag to eventBundle
+
+          let eventsToAdd = floatTag.tags.filter(obj => obj.key === 'events');
+
+          eventsToAdd.forEach(tag => {
+
+          let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+          let event = load.Data[tag.key][index];
+
+          eventBundle.push(event)
+
+          })
+
+          };
+
+    });
+    
+    // if(floatingTags.length > 0){eventBundle.push(floatingTags)};
+
+    console.log(eventBundle)
+
     eventBundle.forEach(event => {
 
     story += 
@@ -197,17 +239,19 @@ subLocationTags.forEach(tag => {
     divId="${event.name}"data-content-type="events">${event.name}. </span>`;
 
     const options = event.description.split('??').filter(Boolean);
-
+   
     if (options.length > 0) {
     const randomIndex = Math.floor(Math.random() * options.length);
     const selectedOption = options[randomIndex].trim();
 
-    story += `${selectedOption}<br><br>`;
+    story += `${selectedOption}<br>`;
     } else {
-    story += `${event.description}<br><br>`;
+    story += `${event.description}<br>`;
     }
 
     })
+
+    story += `<br>`;
   
   })
 
