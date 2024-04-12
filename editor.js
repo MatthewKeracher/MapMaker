@@ -1481,13 +1481,13 @@ if(obj.key === 'locations'){
 let subLocations
 let parentLocation
 if(obj.key === 'locations'){
-subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.name);
+subLocations = load.Data.subLocations.filter(event => event.location === obj.name);
 parentLocation = obj.name
 }
 
 else if (obj.key === 'events' && obj.target === 'Location'){
 
-subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.location);
+subLocations = load.Data.subLocations.filter(event => event.location === obj.location);
 parentLocation = obj.location;
 }
 

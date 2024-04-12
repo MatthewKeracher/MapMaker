@@ -23,8 +23,17 @@ const activeEvents = [];
 
 //console.log('finding events...')
 
-const subLocations = load.Data.events.filter(entry => entry.location === currentLocation)
-const tags = locObj.tags
+const subLocations = load.Data.subLocations.filter(entry => entry.location === currentLocation)
+
+subLocations.forEach(subLocation =>{
+
+//Make a subLocation Div.
+
+//Generate NPC Divs
+const npcs = NPCs.generateNPCStory(subLocation);
+
+
+});
 
 //If no subLocations then add one.
 if(subLocations.length === 0){
@@ -51,9 +60,6 @@ description: '*Click* to add information about this SubLocation here.'
 
 load.Data.events.push(newsubLocation);
 }
-
-//console.log(currentLocation,locObj)
-//console.log(load.Data.events)
 
 //Search for events active by 'All', Location Name, or by Tag
 for (const entry of load.Data.events) {

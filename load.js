@@ -232,21 +232,14 @@ if(key === 'townText' ){
 
 if(key === 'events'){
 
-// Modify each object in the array
-obj.forEach(item => ({
-    
-if(item.target === 'Location'){
-    
-subLocations.push(item)
-
-};
-
-}));
-
+obj.forEach(item => {
+if(item.target && item.target === 'Location'){
+subLocations.push(item);
 }
 
+})
 
-
+}
 
 };
 
@@ -255,7 +248,12 @@ subLocations.push(item)
 // data.tags=[];
 // data.tags.push(defTag);
 
-}},
+}
+
+load.Data.events = load.Data.events.filter(obj => obj.target === "NPC");
+load.Data.subLocations = subLocations;
+
+},
 
 displayLocations(data) {
 

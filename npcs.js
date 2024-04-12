@@ -160,14 +160,10 @@ npc.monsterTemplate = data
 })}},
 
 generateNPCStory(subLocation) {
+
 let story = ``;
 
-//use SubLocation to look for tags.
-let subLocationObj = load.Data.events.find(subLoc => subLoc.name === subLocation);
-
-if(subLocationObj){
-
-let subLocationTags = subLocationObj.tags;
+let subLocationTags = subLocation.tags;
 
 subLocationTags.forEach(tag => {
 
@@ -184,6 +180,8 @@ subLocationTags.forEach(tag => {
   bundle.push(obj);
 
   })
+
+  console.log(bundle)
 
   let npcBundle = bundle.filter(obj => obj.key === 'npcs');
   let eventBundle = bundle.filter(obj => obj.key === 'events' && obj.target === 'NPC');
@@ -256,9 +254,6 @@ subLocationTags.forEach(tag => {
   })
 
 })
-}else{
-story += ``;
-}
 
 return story;
 
