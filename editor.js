@@ -1,11 +1,11 @@
-import Ref from "./ref.js";
+import ref from "./ref.js";
 import load from "./load.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
-import Monsters from "./monsters.js";
-import Items from "./items.js";
+import expandable from "./expandable.js";
+
 import Events from "./events.js";
-import Spells from "./spells.js";
+
 import Map from "./map.js";
 
 
@@ -21,385 +21,83 @@ divIds : ['textLocation', 'npcBackStory','ambienceDescription'],
 sectionShow:[],
 
 //List Display Variables
- sectionHeadDisplay: 'none',
- subSectionHeadDisplay: 'none',
- subSectionEntryDisplay:  'none',
- EntryDisplay: 'none',
-
-readAddressBook: function (data){
-let addressBook = [];
-
-const excludedKeys = ['townText', 'npcs'];
-
-for (const key in load.Data) {
-if (load.Data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
-const dataArray = load.Data[key];
-
-dataArray.forEach(obj => {
-
-let objs = obj.tags.filter(item => parseInt(item.id) === parseInt(data.id) && item.key === data.key);
-
-if(objs.length > 0){addressBook.push({key: obj.key, id: obj.id})}
-
-})
-}}
-
-return addressBook;
-
-},
+sectionHeadDisplay: 'none',
+subSectionHeadDisplay: 'none',
+subSectionEntryDisplay:  'none',
+EntryDisplay: 'none',
 
 init: function () {
-this.divIds.forEach((divId) => {
-const divElement = document.getElementById(divId);
-if (divElement) {
-divElement.addEventListener('input', (event) => {
-const text = event.target.value;
-const cursorPosition = event.target.selectionStart;
-const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
-const openTildeIndex = text.lastIndexOf('~', cursorPosition); // Add this line for ~
+// this.divIds.forEach((divId) => {
+// const divElement = document.getElementById(divId);
+// if (divElement) {
+// divElement.addEventListener('input', (event) => {
+//     console.log('test')
+// const text = event.target.value;
+// const cursorPosition = event.target.selectionStart;
+// const openBraceIndex = text.lastIndexOf('#', cursorPosition);
+// const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
+// const openTildeIndex = text.lastIndexOf('~', cursorPosition); // Add this line for ~
 
-if (openBraceIndex !== -1 || openAsteriskIndex !== -1 || openTildeIndex !== -1) { // Add openTildeIndex here
-let searchText;
-let filteredItems;
+// if (openBraceIndex !== -1 || openAsteriskIndex !== -1 || openTildeIndex !== -1) { // Add openTildeIndex here
+// let searchText;
+// let filteredItems;
 
-if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
-searchText = text.substring(openBraceIndex + 1, cursorPosition);
-filteredItems = load.Data.items.filter(item =>
-item.Name.toLowerCase().includes(searchText.toLowerCase())
-);
-} else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
-searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-filteredItems = load.Data.monsters.filter(monster =>
-monster.name.toLowerCase().includes(searchText.toLowerCase())
-);
-} else {
-searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
-filteredItems = load.Data.spells.filter(spell =>
-spell.Name.toLowerCase().includes(searchText.toLowerCase())
-);
-}
+// if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
+// searchText = text.substring(openBraceIndex + 1, cursorPosition);
+// filteredItems = load.Data.items.filter(item =>
+// item.Name.toLowerCase().includes(searchText.toLowerCase())
+// );
+// } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
+// searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
+// filteredItems = load.Data.monsters.filter(monster =>
+// monster.name.toLowerCase().includes(searchText.toLowerCase())
+// );
+// } else {
+// searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
+// filteredItems = load.Data.spells.filter(spell =>
+// spell.Name.toLowerCase().includes(searchText.toLowerCase())
+// );
+// }
 
-console.log(searchText);
+// console.log(searchText);
 
-// Show Centre
-Ref.Centre.style.display = 'block';
-Ref.Centre.innerHTML = ''; // Clear existing content
+// // Show Centre
+// Ref.Centre.style.display = 'block';
+// Ref.Centre.innerHTML = ''; // Clear existing content
 
-filteredItems.forEach(item => {
-const option = document.createElement('div');
-option.textContent = item.Name || item; // Use "Name" property if available
-option.addEventListener('click', () => {
-const replacement = openBraceIndex !== -1
-? `#${item.Name}#`
-: openAsteriskIndex !== -1
-? `*${item.Name}*`
-: openTildeIndex !== -1 // Add this line
-? `~${item.Name}~` // Add this line
-: ''; // Add this line for ~
+// filteredItems.forEach(item => {
+// const option = document.createElement('div');
+// option.textContent = item.Name || item; // Use "Name" property if available
+// option.addEventListener('click', () => {
+// const replacement = openBraceIndex !== -1
+// ? `#${item.Name}#`
+// : openAsteriskIndex !== -1
+// ? `*${item.Name}*`
+// : openTildeIndex !== -1 // Add this line
+// ? `~${item.Name}~` // Add this line
+// : ''; // Add this line for ~
 
-const newText = text.substring(
-0,
-openBraceIndex !== -1
-? openBraceIndex
-: openAsteriskIndex !== -1
-? openAsteriskIndex
-: openTildeIndex // Add this line for ~
-) + replacement + text.substring(cursorPosition);
-event.target.value = newText;
+// const newText = text.substring(
+// 0,
+// openBraceIndex !== -1
+// ? openBraceIndex
+// : openAsteriskIndex !== -1
+// ? openAsteriskIndex
+// : openTildeIndex // Add this line for ~
+// ) + replacement + text.substring(cursorPosition);
+// event.target.value = newText;
 
-//Ref.Centre.style.display = 'none'; // Hide Ref.optionsList
-});
-Ref.Centre.appendChild(option);
-});
-} else {
+// //Ref.Centre.style.display = 'none'; // Hide Ref.optionsList
+// });
+// Ref.Centre.appendChild(option);
+// });
+// } else {
 
-}
-});
-}
-});
+// }
+// });
+// }
+// });
 },
-
-proper(string) {
-return string.charAt(0).toUpperCase() + string.slice(1);
-},
-
-loadList: function(data) {
-//console.log('loading List')
-//console.log(data)
-//Where to put list...
-let target = Ref.Editor
-target.innerHTML = '';
-target.style.display = 'block'; 
-const excludedKeys = ['townText'];
-const numKeys = Object.keys(data).length;
-let startVisible = "false";
-
-//List Display Variables
-let sectionHeadDisplay = this.sectionHeadDisplay //'block'
-let keyshow = sectionHeadDisplay === 'block'? "true" : "false"
-let subSectionHeadDisplay = this.subSectionHeadDisplay //'block';
-let sectionShow = subSectionHeadDisplay === 'block'? "true" : "false"
-let subSectionEntryDisplay = this.subSectionEntryDisplay //'block';
-let subsectionShow = subSectionEntryDisplay === 'block'? "true" : "false"
-let EntryDisplay = this.EntryDisplay //'block';
-
-console.log(keyshow)
-
-// 0. Iterate over each property in the data object
-for (const key in data) {
-
-if (!excludedKeys.includes(key)){
-
-if(numKeys === 1){startVisible = "true"};
-
-let obj = data[key]
-//console.log(key)
-
-if(obj[0]){
-// Set type and subType
-const type = obj[0].type;
-const subType = obj[0].subType;
-
-
-if(obj.length < 2){
-
-//Not enough entries to run comparison. No need to either.
-
-}else{
-
-// 1. Sort the items by item type alphabetically and then by Level numerically.
-obj.sort((a, b) => {
-const typeComparison = a[type].localeCompare(b[type]);
-
-if (typeComparison !== 0) {
-// If classes are different, return the result of class comparison
-return typeComparison;
-} else {
-// If classes are the same, sort by Level numerically
-return a[subType] - b[subType] || a.name.localeCompare(b.name);
-}
-});
-
-};
-
-// 2. Attach Key, Section and subSection Heads.
-obj = obj.reduce((result, currentEntry, index, array) => {
-
-const reversedArray = array.slice(0, index).reverse();
-const lastEntryIndex = reversedArray.findIndex(entry => entry[type] === currentEntry[type]);
-
-if (lastEntryIndex === -1 || currentEntry[type] !== reversedArray[lastEntryIndex][type]) {
-
-result.push({sectionHead: true, key: key, [type]: currentEntry[type], [subType]: currentEntry[subType]});
-
-if(currentEntry[subType]){
-
-result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: currentEntry[subType]})};
-
-} else if (currentEntry[subType] !== reversedArray[lastEntryIndex][subType]) {
-
-result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: currentEntry[subType]});
-
-}
-
-result.push(currentEntry);
-return result;
-}, []);
-
-//list Title
-const titleDiv = document.createElement('div');
-
-titleDiv.setAttribute("scope", 'key');
-titleDiv.setAttribute("id", key);
-titleDiv.classList.add('misc');
-
-titleDiv.innerHTML = 
-`<h2>
-<span
-style="display: block; letter-spacing: 0.18vw;">
-${this.proper(key)}
-</span></h2>`;
-
-target.appendChild(titleDiv)
-this.listEvents(null, titleDiv);
-
-let currentSection = 0; // Keep track of the current section.
-let currentSubSection = 0;
-
-
-// 3. Iterate through the sorted entries.
-for (const entry of obj) {
-const nameDiv = document.createElement('div');
-
-//3.1 Section Heads --- Type
-if(entry.sectionHead){
-currentSection++
-currentSubSection = 0;
-
-
-nameDiv.setAttribute("scope", 'section');
-nameDiv.setAttribute("id", currentSection);
-nameDiv.setAttribute('style', "display:" + sectionHeadDisplay);
-
-let entryName = entry[type] === ''? 'Misc' : entry[type];
-
-nameDiv.innerHTML = 
-`<span
-id = "${entryName}"
-class = "cyan"
-style="font-family:'SoutaneBlack'"> 
-<hr>
-&nbsp;${entryName}
-</span>`;
-
-//3.2 subSection Heads --- subType values.
-} else if (entry.subSectionHead){
-currentSubSection++
-
-nameDiv.setAttribute("scope", 'subsection');
-nameDiv.setAttribute("id", currentSubSection);
-nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
-
-let entryName = entry[type] === ''? 'Misc' : entry[subType];
-
-nameDiv.innerHTML= 
-`<span 
-id = "${entryName}"
-class ="hotpink"
-style="font-family:'SoutaneBlack'">
-<hr>
-&nbsp; ${this.proper(subType)} ${entryName}
-</span>`;
-
-//3.3 subSection Entries   
-}else if (entry[type] && entry[subType]){
-nameDiv.setAttribute('id', entry.id)
-nameDiv.setAttribute('style', "display:" + subSectionEntryDisplay)
-
-nameDiv.innerHTML = 
-`<span 
-id = "${entry.id}"
-class ="white">
-&nbsp;&nbsp;&nbsp;&nbsp;${entry.name}
-</span>`;
-
-//3.4 no subSection
-}else if (entry[type]){
-nameDiv.setAttribute('id', entry.id)
-nameDiv.setAttribute('style', "display:" + EntryDisplay)
-
-nameDiv.innerHTML = 
-`<span 
-id = "${entry.id}" 
-class ="white">
-&nbsp;&nbsp;${entry.name}
-</span>`;
-
-//3.5 Other Entries
-}else {
-nameDiv.setAttribute('id', entry.id)
-nameDiv.setAttribute('style', "display:" + EntryDisplay)
-
-nameDiv.innerHTML = 
-`<span 
-id = "${entry.id}" 
-class = "gray"> 
-&nbsp;&nbsp;${entry.name}
-</span>`;
-
-}
-
-nameDiv.setAttribute('key', key)
-nameDiv.setAttribute('keyShow', keyshow)
-nameDiv.setAttribute('section', currentSection)
-nameDiv.setAttribute('sectionShow', sectionShow)
-nameDiv.setAttribute('subsection', currentSubSection)
-nameDiv.setAttribute('subsectionShow', subsectionShow)
-
-// nameDiv.setAttribute('key', key)
-// nameDiv.setAttribute('keyShow', "true")
-// nameDiv.setAttribute('section', currentSection)
-// nameDiv.setAttribute('sectionShow', "true")
-// nameDiv.setAttribute('subsection', currentSubSection)
-// nameDiv.setAttribute('subsectionShow', "true")
-
-target.appendChild(nameDiv);
-this.listEvents(entry, nameDiv, key);
-
-}}
-}}
-},
-
-listEvents: function(entry, div, key){
-
-div.addEventListener('mouseover', function() {
-this.classList.add('highlight');
-});
-
-div.addEventListener('mouseout', function() {
-this.classList.remove('highlight');
-});
-
-if(div.getAttribute('scope')){
-//1. showHide
-div.addEventListener('click', () => {
-this.showHide(div);
-});
-
-//2.makeNew Hover
-div.addEventListener('mouseover', function() {
-
-if(editor.makeNew === true){ 
-this.classList.remove('misc');   
-this.classList.add('item');
-}
-});
-
-div.addEventListener('mouseout', function() {
-
-if(editor.makeNew === true){ 
-this.classList.remove('item');   
-this.classList.add('misc');
-}
-
-});
-
-}else{
-
-//1. showEntry
-div.addEventListener('click', (event) => {
-
-//if shift-click, add Tag
-if(event.shiftKey && Ref.Left.style.display === 'block'){
-//console.log(div)
-event.preventDefault();
-const itemId = div.getAttribute('id')
-const key = div.getAttribute('key')
-editor.addItem = false;
-editor.addTagtoItem(itemId, key);
-
-//Return to Default List
-// this.sectionHeadDisplay = 'none',
-// this.subSectionHeadDisplay = 'none',
-// this.subSectionEntryDisplay =  'none',
-// this.EntryDisplay = 'none',
-// this.loadList(load.Data)
-
-if(editor.editMode === false){
-Ref.Editor.style.display = 'none';
-}
-
-}
-else if(key === 'npcs' && editor.addItem === false){
-NPCs.addNPCInfo(entry.name, Ref.Left);
-} 
-else{
-editor.createForm(entry)
-}
-});
-
-}},
 
 addTagtoItem(itemId, tagKey){
 
@@ -409,7 +107,7 @@ const currentId = document.getElementById('currentId').value;
 const currentKey = document.getElementById('key').value;
 const homeObjAddress = {key: currentKey, id: currentId};
 const homeObj = load.Data[currentKey].find(obj => parseInt(obj.id) === parseInt(currentId));
-//console.log('home object', homeObj);
+console.log('home object', homeObj);
 const homeObjIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
 const homeObjTags = homeObj.tags //.split(',').map(tag => tag.trim());
 
@@ -417,7 +115,7 @@ const homeObjTags = homeObj.tags //.split(',').map(tag => tag.trim());
 //Item tag refers to.
 const tagObjAddress = {key: tagKey, id: itemId};
 const tagObj = load.Data[tagKey].find(obj => parseInt(obj.id) === parseInt(itemId));
-//console.log('tag object', tagObj)
+console.log('tag object', tagObj)
 const tagObjName = tagObj.name
 const tagItemIndex = load.Data[tagKey].findIndex(item => parseInt(item.id) === parseInt(itemId));
 const tagObjTags = tagObj.tags //.split(',').map(tag => tag.trim());
@@ -456,245 +154,6 @@ NPCs.buildNPC();
 
 },
 
-searchAllData: function (searchText, data) {
-const resultsByKeys = {}; // Object to store results grouped by keys
-const excludedKeys = ['townText'];
-
-// Iterate over each key in load.Data
-for (const key in data) {
-if (data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
-// Get the array corresponding to the key
-const dataArray = data[key];
-
-// Iterate over each object in the array
-dataArray.forEach(obj => {
-// Check if any property of the object contains the search string
-for (const prop in obj) {
-if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-const propValue = obj[prop];
-// If the property value is a string and contains the search text
-if (typeof propValue === 'string' && propValue.toLowerCase().includes(searchText.toLowerCase())) {
-// Group the result by obj.key
-if (!resultsByKeys[obj.key]) {
-resultsByKeys[obj.key] = []; // Initialize array if not exist
-}
-resultsByKeys[obj.key].push(obj);
-// Break out of the loop to avoid duplicate results
-break;
-}}}});
-}}
-
-if(searchText === ''){
-this.sectionHeadDisplay = 'none',
-this.subSectionHeadDisplay = 'none',
-this.subSectionEntryDisplay =  'none',
-this.EntryDisplay = 'none',
-this.loadList(data)
-
-if(editor.editMode === false){
-console.log("click")
-Ref.Editor.style.display = 'none';
-}
-
-}else{
-//List Display Variables
-this.sectionHeadDisplay = 'block',
-this.subSectionHeadDisplay = 'block',
-this.subSectionEntryDisplay =  'block',
-this.EntryDisplay = 'block',
-this.loadList(resultsByKeys);
-}
-
-},
-
-showHide: function (div) {
-const scope = div.getAttribute("scope");
-let items
-
-if (scope === 'key'){ //has clicked on a keyHeading
-
-let key = div.getAttribute("id")
-
-if(editor.makeNew === true){ // to make new Entries
-let randomNumber = Math.floor(Math.random() * load.Data[key].length);
-console.log(randomNumber)
-if(key === 'npcs'){
-NPCs.addNPCInfo(load.Data[key][randomNumber].name)
-}else{
-editor.createForm(load.Data[key][randomNumber])
-}
-editor.makeNew = false;
-div.classList.remove('item');   
-div.classList.add('misc');
-
-}else{
-
-items = document.querySelectorAll(`[key="${key}"]`); 
-
-
-items.forEach(item => {
-
-const keyShow = item.getAttribute('keyShow');
-const isHeader = item.getAttribute('subSection') === '0'? true : false;
-
-if(isHeader){
-
-const newKeyShow = keyShow === 'true'? 'false' : 'true';
-item.setAttribute('keyShow', newKeyShow); 
-
-const keyDisplay = newKeyShow === 'true'? 'block' : 'none';
-item.style.display = keyDisplay;
-
-}else{
-
-item.style.display = 'none';
-
-}
-
-item.setAttribute('sectionShow', "false")
-item.setAttribute('subSectionShow', "false")
-
-})
-
-}}
-
-else if (scope === 'section'){ //has clicked on a section heading
-
-let key = div.getAttribute("key")
-let section = div.getAttribute("id")
-
-items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
-
-items.forEach((item,index) => {
-
-if(index > 0){
-
-const sectionShow = item.getAttribute('sectionShow');
-
-const newSectionShow = sectionShow === 'true'? 'false' : 'true';
-item.setAttribute('sectionShow', newSectionShow); 
-
-const sectionDisplay = newSectionShow === 'true'? 'block' : 'none';
-item.style.display = sectionDisplay;
-
-item.setAttribute('subSectionShow', "true")
-
-}}) 
-}
-
-else if (scope === 'subsection'){ //has clicked on a subSection Heading
-
-let key = div.getAttribute("key")
-let section = div.getAttribute("section")
-let subSection = div.getAttribute("id")
-
-items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
-
-items.forEach((item,index) => {
-
-if(index > 0){
-
-const subSectionShow = item.getAttribute('subsectionshow');
-
-const newSubSectionShow = subSectionShow === 'true'? 'false' : 'true';
-item.setAttribute('subSectionShow', newSubSectionShow); 
-
-const subSectionDisplay = newSubSectionShow === 'true'? 'block' : 'none';
-item.style.display = subSectionDisplay;
-
-item.setAttribute('sectionShow', "true")
-
-}
-
-})  }
-
-},
-
-buildSection: function (headerValue, obj){
-
-    const sectionHeadDiv = document.createElement('div');
-    let headerHTML = 
-    `<hr> <h3>
-    <span style="font-family:'SoutaneBlack'; color:${obj.color}" id="${headerValue}Header">
-    ${headerValue} [...]
-    </span></h3>`;
-    
-    sectionHeadDiv.innerHTML = headerHTML;
-    Ref.Left.appendChild(sectionHeadDiv);
-    
-    //let isFrozen = false;
-    let headerDiv = headerValue + 'Header'
-    let headerContent = document.getElementById(headerDiv);
-    let index = editor.sectionShow.findIndex(entry => entry.section === headerDiv);
-    
-    let currentShow
-    if(index === -1){
-    currentShow = 'none';
-    } else {
-    currentShow = editor.sectionShow[index].visible === 1? 'block' : 'none';
-    }
-
-    // Add Show/Hide on Header for Section
-    sectionHeadDiv.addEventListener('click', function() {
-    
-    //if (!isFrozen) {
-    
-    // 1 --- Show
-    if(container.style.display === "none") {
-    
-    container.style.display = "block";
-    headerContent.textContent = headerValue + ':';
-    
-    //}
-
-    let sectionData = {section: headerDiv, visible: 1};
-
-        //Update sectionShow data.
-        if(index === -1){
-        editor.sectionShow.push(sectionData);
-        }else{
-        editor.sectionShow[index] = sectionData; 
-        }
-        } 
-
-    //2 --- Hide
-    else if(container.style.display === "block") {
-    //isFrozen = true; // Set the freeze flag
-
-    container.style.display = "none";
-    headerContent.textContent = headerValue + ' [...]';
-
-    let sectionData = {section: headerDiv, visible: 0};
-
-        //Update sectionShow data.
-        if(index === -1){
-        editor.sectionShow.push(sectionData);
-        }else{
-        editor.sectionShow[index] = sectionData; 
-        }
-        
-    // // Unfreeze after 2 seconds (adjust the delay as needed)
-    // setTimeout(() => {
-    // isFrozen = false; // Unset the freeze flag
-    // }, 1000); // 2000 milliseconds = 2 seconds
-
-    }
-    });
-    
-    //Add Container -- Settings
-    const newContainer = document.createElement('div');
-    let containerName = headerValue + 'Container'
-    newContainer.setAttribute('id', containerName);
-    newContainer.classList.add('no-hover');
-    newContainer.classList.add('collapse');
-    Ref.Left.appendChild(newContainer);
-    const container = document.getElementById(containerName);
-    container.style.display = currentShow;
-
-    return containerName
-
-},
-
 createForm: function (obj){
 
 let color
@@ -722,14 +181,14 @@ const fullScreenDivs = document.querySelectorAll('.fullScreen');
 
 
 if (fullScreenDivs.length === 0) {
-Ref.Left.style.display = 'block';
+ref.Left.style.display = 'block';
 } else{
 fullScreen = true;
 }
 
-Ref.Centre.innerHTML = '';
-Ref.Centre.style.display = 'block';
-Ref.Left.innerHTML = '';
+ref.Centre.innerHTML = '';
+ref.Centre.style.display = 'block';
+ref.Left.innerHTML = '';
 
 
 const form = document.createElement('form');
@@ -781,22 +240,22 @@ const universalKeys = ['group', 'color'];
 if(obj){
 //Make Key and Make Invisible
 if(obj.key){
-    const keyArea = document.createElement('div');
-    
-    let keyContent =  
-    `<label class="entry-label" 
-    style="display: none"
-    divId="key">
-    </label>
-    <input 
-    class="leftText white entry-input"
-    style="display:none" 
-    id="key"
-    divId= "edit${obj.key}"
-    value="${obj.key}"></h3>`;
-    
-    keyArea.innerHTML = keyContent;
-    Ref.Left.appendChild(keyArea);
+const keyArea = document.createElement('div');
+
+let keyContent =  
+`<label class="entry-label" 
+style="display: none"
+divId="key">
+</label>
+<input 
+class="leftText white entry-input"
+style="display:none" 
+id="key"
+divId= "edit${obj.key}"
+value="${obj.key}"></h3>`;
+
+keyArea.innerHTML = keyContent;
+ref.Left.appendChild(keyArea);
 }
 
 //Make ID Manually
@@ -822,7 +281,7 @@ id="currentId"
 value="${obj.id || 'N/A'} ">`;
 
 idArea.innerHTML = idContent;
-Ref.Left.appendChild(idArea);
+ref.Left.appendChild(idArea);
 }
 }
 
@@ -849,18 +308,18 @@ class="entry-input ${centreText}"
 >`;
 
 description.innerHTML = centreContent;
-Ref.Centre.appendChild(description);
-Ref.Centre.style.display = 'block';
+ref.Centre.appendChild(description);
+ref.Centre.style.display = 'block';
 
 const button = document.getElementById('fullScreenButton');
 const textBox = document.getElementById('descriptionText');
 button.addEventListener('click', () => {
 if(editor.fullScreen === true){
 //Make normal.
-Ref.Left.style.display = "block";
+ref.Left.style.display = "block";
 editor.fullScreen = false;
-Ref.Centre.classList.remove("fullScreen");
-Ref.Centre.classList.add("Centre");
+ref.Centre.classList.remove("fullScreen");
+ref.Centre.classList.add("Centre");
 textBox.classList.remove("fullScreenText");
 textBox.classList.add("centreText");
 //Set Height
@@ -872,9 +331,9 @@ descriptionText.style.height = 'auto';
 descriptionText.style.height = descriptionText.scrollHeight + 'px';
 }else if (editor.fullScreen === false){
 //Make fullScreen.
-Ref.Left.style.display = "none";
-Ref.Centre.classList.remove("Centre");
-Ref.Centre.classList.add("fullScreen");
+ref.Left.style.display = "none";
+ref.Centre.classList.remove("Centre");
+ref.Centre.classList.add("fullScreen");
 textBox.classList.remove("centreText");
 textBox.classList.add("fullScreenText");
 editor.fullScreen = true;
@@ -932,8 +391,8 @@ id="typeEntry"
 value="${obj[type] || 'none'} ">`;
 
 topAreaTop.innerHTML = typeContent;
-Ref.Left.appendChild(topAreaTop);
-Ref.Left.appendChild(topArea);
+ref.Left.appendChild(topAreaTop);
+ref.Left.appendChild(topArea);
 }
 
 //3. Make subType Manually
@@ -1102,14 +561,15 @@ elementContainer.querySelector('.leftTextshort').select();
 }
 }
 
-// if(obj.key === 'items'){
+//Make Tags section.
 if(obj){
 
 const container = document.getElementById(this.buildSection('Tags', obj));
 
 if(obj.tags && editor.makeNew === false){
 //console.log(obj.tags)
-let tagsToAdd = obj.tags//.split(',').map(tag => tag.trim());  
+let tagsToAdd = obj.tags
+tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));;
 tagsToAdd.forEach(tag => {
 
 let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
@@ -1155,10 +615,10 @@ editor.createForm(obj);
 else if(event.button === 0){ //left-click
 //find tagObj based on Name!
 if(tag.key === 'npcs'){
-    NPCs.addNPCInfo(load.Data[tag.key][index].name);
-    }else{
-    editor.createForm(load.Data[tag.key][index]);   
-    }
+NPCs.addNPCInfo(load.Data[tag.key][index].name);
+}else{
+editor.createForm(load.Data[tag.key][index]);   
+}
 }
 
 });
@@ -1586,6 +1046,535 @@ editor.createForm(subLoc);
 
 },
 
+loadList: function(data) {
+//console.log('loading List')
+//console.log(data)
+//Where to put list...
+let target = ref.Editor
+target.innerHTML = '';
+target.style.display = 'block'; 
+const excludedKeys = ['townText'];
+const numKeys = Object.keys(data).length;
+let startVisible = "false";
+
+//List Display Variables
+let sectionHeadDisplay = this.sectionHeadDisplay //'block'
+let keyshow = sectionHeadDisplay === 'block'? "true" : "false"
+let subSectionHeadDisplay = this.subSectionHeadDisplay //'block';
+let sectionShow = subSectionHeadDisplay === 'block'? "true" : "false"
+let subSectionEntryDisplay = this.subSectionEntryDisplay //'block';
+let subsectionShow = subSectionEntryDisplay === 'block'? "true" : "false"
+let EntryDisplay = this.EntryDisplay //'block';
+
+console.log(keyshow)
+
+// 0. Iterate over each property in the data object
+for (const key in data) {
+
+if (!excludedKeys.includes(key)){
+
+if(numKeys === 1){startVisible = "true"};
+
+let obj = data[key]
+//console.log(key)
+
+if(obj[0]){
+// Set type and subType
+const type = obj[0].type;
+const subType = obj[0].subType;
+
+
+if(obj.length < 2){
+
+//Not enough entries to run comparison. No need to either.
+
+}else{
+
+// 1. Sort the items by item type alphabetically and then by Level numerically.
+obj.sort((a, b) => {
+const typeComparison = a[type].localeCompare(b[type]);
+
+if (typeComparison !== 0) {
+// If classes are different, return the result of class comparison
+return typeComparison;
+} else {
+// If classes are the same, sort by Level numerically
+return a[subType] - b[subType] || a.name.localeCompare(b.name);
+}
+});
+
+};
+
+// 2. Attach Key, Section and subSection Heads.
+obj = obj.reduce((result, currentEntry, index, array) => {
+
+const reversedArray = array.slice(0, index).reverse();
+const lastEntryIndex = reversedArray.findIndex(entry => entry[type] === currentEntry[type]);
+
+if (lastEntryIndex === -1 || currentEntry[type] !== reversedArray[lastEntryIndex][type]) {
+
+result.push({sectionHead: true, key: key, [type]: currentEntry[type], [subType]: currentEntry[subType]});
+
+if(currentEntry[subType]){
+
+result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: currentEntry[subType]})};
+
+} else if (currentEntry[subType] !== reversedArray[lastEntryIndex][subType]) {
+
+result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: currentEntry[subType]});
+
+}
+
+result.push(currentEntry);
+return result;
+}, []);
+
+//list Title
+const titleDiv = document.createElement('div');
+
+titleDiv.setAttribute("scope", 'key');
+titleDiv.setAttribute("id", key);
+titleDiv.classList.add('misc');
+
+titleDiv.innerHTML = 
+`<h2>
+<span
+style="display: block; letter-spacing: 0.18vw;">
+${this.proper(key)}
+</span></h2>`;
+
+target.appendChild(titleDiv)
+this.listEvents(null, titleDiv);
+
+let currentSection = 0; // Keep track of the current section.
+let currentSubSection = 0;
+
+
+// 3. Iterate through the sorted entries.
+for (const entry of obj) {
+const nameDiv = document.createElement('div');
+
+//3.1 Section Heads --- Type
+if(entry.sectionHead){
+currentSection++
+currentSubSection = 0;
+
+
+nameDiv.setAttribute("scope", 'section');
+nameDiv.setAttribute("id", currentSection);
+nameDiv.setAttribute('style', "display:" + sectionHeadDisplay);
+
+let entryName = entry[type] === ''? 'Misc' : entry[type];
+
+nameDiv.innerHTML = 
+`<span
+id = "${entryName}"
+class = "cyan"
+style="font-family:'SoutaneBlack'"> 
+<hr>
+&nbsp;${this.proper(entryName)}
+</span>`;
+
+//3.2 subSection Heads --- subType values.
+} else if (entry.subSectionHead){
+currentSubSection++
+
+nameDiv.setAttribute("scope", 'subsection');
+nameDiv.setAttribute("id", currentSubSection);
+nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
+
+let entryName = entry[type] === ''? 'Misc' : entry[subType];
+
+let displayName;
+if (!isNaN(entryName) && !isNaN(parseFloat(entryName))) {
+displayName = `Level: ${entryName}`;
+} else {
+displayName = this.proper(entryName);
+}
+
+nameDiv.innerHTML= 
+`<span 
+id = "${entryName}"
+class ="hotpink"
+style="font-family:'SoutaneBlack'">
+<hr>
+&nbsp;  ${this.proper(displayName)}
+</span>`;
+
+//${this.proper(subType)}
+
+//3.3 subSection Entries   
+}else if (entry[type] && entry[subType]){
+nameDiv.setAttribute('id', entry.id)
+nameDiv.setAttribute('style', "display:" + subSectionEntryDisplay)
+
+nameDiv.innerHTML = 
+`<span 
+id = "${entry.id}"
+class ="white">
+&nbsp;&nbsp;&nbsp;&nbsp;${entry.name}
+</span>`;
+
+//3.4 no subSection
+}else if (entry[type]){
+nameDiv.setAttribute('id', entry.id)
+nameDiv.setAttribute('style', "display:" + EntryDisplay)
+
+nameDiv.innerHTML = 
+`<span 
+id = "${entry.id}" 
+class ="white">
+&nbsp;&nbsp;${entry.name}
+</span>`;
+
+//3.5 Other Entries
+}else {
+nameDiv.setAttribute('id', entry.id)
+nameDiv.setAttribute('style', "display:" + EntryDisplay)
+
+nameDiv.innerHTML = 
+`<span 
+id = "${entry.id}" 
+class = "gray"> 
+&nbsp;&nbsp;${entry.name}
+</span>`;
+
+}
+
+nameDiv.setAttribute('key', key)
+nameDiv.setAttribute('keyShow', keyshow)
+nameDiv.setAttribute('section', currentSection)
+nameDiv.setAttribute('sectionShow', sectionShow)
+nameDiv.setAttribute('subsection', currentSubSection)
+nameDiv.setAttribute('subsectionShow', subsectionShow)
+
+// nameDiv.setAttribute('key', key)
+// nameDiv.setAttribute('keyShow', "true")
+// nameDiv.setAttribute('section', currentSection)
+// nameDiv.setAttribute('sectionShow', "true")
+// nameDiv.setAttribute('subsection', currentSubSection)
+// nameDiv.setAttribute('subsectionShow', "true")
+
+target.appendChild(nameDiv);
+this.listEvents(entry, nameDiv, key);
+
+}}
+}}
+},
+
+showHide: function (div) {
+const scope = div.getAttribute("scope");
+let items
+
+if (scope === 'key'){ //has clicked on a keyHeading
+
+let key = div.getAttribute("id")
+
+if(editor.makeNew === true){ // to make new Entries
+let randomNumber = Math.floor(Math.random() * load.Data[key].length);
+console.log(randomNumber)
+if(key === 'npcs'){
+NPCs.addNPCInfo(load.Data[key][randomNumber].name)
+}else{
+editor.createForm(load.Data[key][randomNumber])
+}
+editor.makeNew = false;
+div.classList.remove('item');   
+div.classList.add('misc');
+
+}else{
+
+items = document.querySelectorAll(`[key="${key}"]`); 
+
+
+items.forEach(item => {
+
+const keyShow = item.getAttribute('keyShow');
+const isHeader = item.getAttribute('subSection') === '0'? true : false;
+
+if(isHeader){
+
+const newKeyShow = keyShow === 'true'? 'false' : 'true';
+item.setAttribute('keyShow', newKeyShow); 
+
+const keyDisplay = newKeyShow === 'true'? 'block' : 'none';
+item.style.display = keyDisplay;
+
+}else{
+
+item.style.display = 'none';
+
+}
+
+item.setAttribute('sectionShow', "false")
+item.setAttribute('subSectionShow', "false")
+
+})
+
+}}
+
+else if (scope === 'section'){ //has clicked on a section heading
+
+let key = div.getAttribute("key")
+let section = div.getAttribute("id")
+
+items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
+
+items.forEach((item,index) => {
+
+if(index > 0){
+
+const sectionShow = item.getAttribute('sectionShow');
+
+const newSectionShow = sectionShow === 'true'? 'false' : 'true';
+item.setAttribute('sectionShow', newSectionShow); 
+
+const sectionDisplay = newSectionShow === 'true'? 'block' : 'none';
+item.style.display = sectionDisplay;
+
+item.setAttribute('subSectionShow', "true")
+
+}}) 
+}
+
+else if (scope === 'subsection'){ //has clicked on a subSection Heading
+
+let key = div.getAttribute("key")
+let section = div.getAttribute("section")
+let subSection = div.getAttribute("id")
+
+items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
+
+items.forEach((item,index) => {
+
+if(index > 0){
+
+const subSectionShow = item.getAttribute('subsectionshow');
+
+const newSubSectionShow = subSectionShow === 'true'? 'false' : 'true';
+item.setAttribute('subSectionShow', newSubSectionShow); 
+
+const subSectionDisplay = newSubSectionShow === 'true'? 'block' : 'none';
+item.style.display = subSectionDisplay;
+
+item.setAttribute('sectionShow', "true")
+
+}
+
+})  }
+
+},
+
+listEvents: function(entry, div, key){
+
+div.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+});
+
+div.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+});
+
+if(div.getAttribute('scope')){
+//1. showHide
+div.addEventListener('click', () => {
+this.showHide(div);
+});
+
+//2.makeNew Hover
+div.addEventListener('mouseover', function() {
+
+if(editor.makeNew === true){ 
+this.classList.remove('misc');   
+this.classList.add('item');
+}
+});
+
+div.addEventListener('mouseout', function() {
+
+if(editor.makeNew === true){ 
+this.classList.remove('item');   
+this.classList.add('misc');
+}
+
+});
+
+}else{
+
+//1. showEntry
+div.addEventListener('click', (event) => {
+
+//if shift-click, add Tag
+if(event.shiftKey && ref.Left.style.display === 'block'){
+//console.log(div)
+event.preventDefault();
+const itemId = div.getAttribute('id')
+const key = div.getAttribute('key')
+editor.addItem = false;
+editor.addTagtoItem(itemId, key);
+
+//Return to Default List
+// this.sectionHeadDisplay = 'none',
+// this.subSectionHeadDisplay = 'none',
+// this.subSectionEntryDisplay =  'none',
+// this.EntryDisplay = 'none',
+// this.loadList(load.Data)
+
+if(editor.editMode === false){
+ref.Editor.style.display = 'none';
+}
+
+}
+else if(key === 'npcs' && editor.addItem === false){
+NPCs.addNPCInfo(entry.name, ref.Left);
+} 
+else{
+editor.createForm(entry)
+}
+});
+
+}},
+
+searchAllData: function (searchText, data) {
+const resultsByKeys = {}; // Object to store results grouped by keys
+const excludedKeys = ['townText'];
+
+// Iterate over each key in load.Data
+for (const key in data) {
+if (data.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+// Get the array corresponding to the key
+const dataArray = data[key];
+
+// Iterate over each object in the array
+dataArray.forEach(obj => {
+// Check if any property of the object contains the search string
+for (const prop in obj) {
+if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+const propValue = obj[prop];
+// If the property value is a string and contains the search text
+if (typeof propValue === 'string' && propValue.toLowerCase().includes(searchText.toLowerCase())) {
+// Group the result by obj.key
+if (!resultsByKeys[obj.key]) {
+resultsByKeys[obj.key] = []; // Initialize array if not exist
+}
+resultsByKeys[obj.key].push(obj);
+// Break out of the loop to avoid duplicate results
+break;
+}}}});
+}}
+
+if(searchText === ''){
+this.sectionHeadDisplay = 'none',
+this.subSectionHeadDisplay = 'none',
+this.subSectionEntryDisplay =  'none',
+this.EntryDisplay = 'none',
+this.loadList(data)
+
+if(editor.editMode === false){
+console.log("click")
+ref.Editor.style.display = 'none';
+}
+
+}else{
+//List Display Variables
+this.sectionHeadDisplay = 'block',
+this.subSectionHeadDisplay = 'block',
+this.subSectionEntryDisplay =  'block',
+this.EntryDisplay = 'block',
+this.loadList(resultsByKeys);
+}
+
+},
+
+buildSection: function (headerValue, obj){
+
+const sectionHeadDiv = document.createElement('div');
+let headerHTML = 
+`<hr> <h3>
+<span style="font-family:'SoutaneBlack'; color:${obj.color}" id="${headerValue}Header">
+${headerValue} [...]
+</span></h3>`;
+
+sectionHeadDiv.innerHTML = headerHTML;
+ref.Left.appendChild(sectionHeadDiv);
+
+//let isFrozen = false;
+let headerDiv = headerValue + 'Header'
+let headerContent = document.getElementById(headerDiv);
+let index = editor.sectionShow.findIndex(entry => entry.section === headerDiv);
+
+let currentShow
+if(index === -1){
+currentShow = 'none';
+} else {
+currentShow = editor.sectionShow[index].visible === 1? 'block' : 'none';
+}
+
+// Add Show/Hide on Header for Section
+sectionHeadDiv.addEventListener('click', function() {
+
+//if (!isFrozen) {
+
+// 1 --- Show
+if(container.style.display === "none") {
+
+container.style.display = "block";
+headerContent.textContent = headerValue + ':';
+
+//}
+
+let sectionData = {section: headerDiv, visible: 1};
+
+//Update sectionShow data.
+if(index === -1){
+editor.sectionShow.push(sectionData);
+}else{
+editor.sectionShow[index] = sectionData; 
+}
+} 
+
+//2 --- Hide
+else if(container.style.display === "block") {
+//isFrozen = true; // Set the freeze flag
+
+container.style.display = "none";
+headerContent.textContent = headerValue + ' [...]';
+
+let sectionData = {section: headerDiv, visible: 0};
+
+//Update sectionShow data.
+if(index === -1){
+editor.sectionShow.push(sectionData);
+}else{
+editor.sectionShow[index] = sectionData; 
+}
+
+// // Unfreeze after 2 seconds (adjust the delay as needed)
+// setTimeout(() => {
+// isFrozen = false; // Unset the freeze flag
+// }, 1000); // 2000 milliseconds = 2 seconds
+
+}
+});
+
+//Add Container -- Settings
+const newContainer = document.createElement('div');
+let containerName = headerValue + 'Container'
+newContainer.setAttribute('id', containerName);
+newContainer.classList.add('no-hover');
+newContainer.classList.add('collapse');
+ref.Left.appendChild(newContainer);
+const container = document.getElementById(containerName);
+container.style.display = currentShow;
+
+return containerName
+
+},
+
+proper(string) {
+return string.charAt(0).toUpperCase() + string.slice(1);
+},
+
 saveDataEntry: function() {
 
 const saveEntry = {};
@@ -1681,10 +1670,10 @@ load.Data[key][index] = saveEntry
 NPCs.buildNPC();
 
 //Reset Editor and Search 
-if(Ref.eventManager.value === ''){   
+if(ref.eventManager.value === ''){   
 editor.loadList(load.Data);
 }else{
-let searchText = Ref.eventManager.value.toLowerCase();
+let searchText = ref.eventManager.value.toLowerCase();
 
 if(editor.editMode === true){
 editor.searchAllData(searchText, load.Data);
@@ -1692,7 +1681,7 @@ editor.searchAllData(searchText, load.Data);
 }
 
 if(editor.editMode === false){
-Ref.Editor.style.display = 'none';
+ref.Editor.style.display = 'none';
 }
 
 //Reload Map to reflect changes.
@@ -1729,8 +1718,8 @@ if (confirmation) {
 // Remove entry at index
 load.Data[key].splice(index, 1);
 editor.loadList(load.Data);
-Ref.Left.style.display = 'none';
-Ref.Centre.style.display = 'none';
+ref.Left.style.display = 'none';
+ref.Centre.style.display = 'none';
 
 //if Location then delete locationDiv
 if(key === 'locations'){

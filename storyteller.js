@@ -1,12 +1,12 @@
 
 import Events from "./events.js";
-import Monsters from "./monsters.js";
+import expandable from "./expandable.js";
 import load from "./load.js";
 import NPCs from "./npcs.js";
-import Items from "./items.js";
-import Spells from "./spells.js";
+
+
 import editor from "./editor.js";
-import Ref from "./ref.js";
+import ref from "./ref.js";
 
 const Storyteller = {
 
@@ -23,11 +23,11 @@ const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt
 const locName = locObj.name
 
 //Change Location Label Contents
-Ref.locationLabel.textContent = locName;
-Ref.locationLabel.style.color = locObj.color;
+ref.locationLabel.textContent = locName;
+ref.locationLabel.style.color = locObj.color;
 
 //Set new Return Location
-const returnLocationName = Ref.locationLabel.textContent;
+const returnLocationName = ref.locationLabel.textContent;
 //console.log(returnLocationName)
 const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
 Storyteller.returnLocation = returnLocation;
@@ -42,9 +42,9 @@ this.monsterArray = [];
 //console.log(Events.eventDesc)
 const squareCurly = this.getMisc(Events.eventDesc, this.miscArray, locObj.color);
 //console.log(squareCurly)
-const withMonsters = await Monsters.getMonsters(squareCurly);
-const withSpells = await Spells.getSpells(withMonsters);
-const withItems = await Items.getItems(withSpells);
+const withMonsters = await expandable.getMonsters(squareCurly);
+const withSpells = await expandable.getSpells(withMonsters);
+const withItems = await expandable.getItems(withSpells);
 
 const finalStory = withItems;
 
@@ -56,24 +56,14 @@ Story += `
 //---
 
 //Finish Up.
-Ref.Storyteller.innerHTML = Story;
-
-//Update Editor Content
-//Ref.textLocation.value = locObj.description;
-//Ref.editLocationTags.value = locObj.tags;
-
-  if(editor.editPage === 2){
-    Events.loadEventsList(load.Data.events, Ref.Centre);
-  }else if (editor.editPage === 3){
-    NPCs.loadNPC(load.Data.npcs)
-  }
+ref.Storyteller.innerHTML = Story;
 
 //Tell expandable Divs what to show.
-this.showExpandable(Ref.Storyteller, Ref.Centre);
+this.showExpandable(ref.Storyteller, ref.Centre);
 this.showFloatingExpandable();
 //---
 window.speechSynthesis.cancel();
-this.textToSpeech(Ref.Storyteller.textContent);
+this.textToSpeech(ref.Storyteller.textContent);
 
 };
 }, 
@@ -91,210 +81,209 @@ let speaking = false;
 speakButton.addEventListener('click',() => {
 // Check if the browser supports the SpeechSynthesis API
 if ('speechSynthesis' in window) {
-  const synth = window.speechSynthesis;
+const synth = window.speechSynthesis;
 
-  // Function to speak the provided text
-  function speak(text) {
-      // Create a new SpeechSynthesisUtterance instance
-      const utterance = new SpeechSynthesisUtterance(text);
-      
-      // Speak the text
-      synth.speak(utterance);
-  }
+// Function to speak the provided text
+function speak(text) {
+// Create a new SpeechSynthesisUtterance instance
+const utterance = new SpeechSynthesisUtterance(text);
 
-  if(speaking === false){
-    speak(text);
-    speaking = true
-  }else{
-    window.speechSynthesis.cancel();
-    speaking = false
-  }
-  
+// Speak the text
+synth.speak(utterance);
+}
+
+if(speaking === false){
+speak(text);
+speaking = true
+}else{
+window.speechSynthesis.cancel();
+speaking = false
+}
+
 } else {
-  // Browser doesn't support SpeechSynthesis API
-  console.error('Speech synthesis is not supported in this browser.');
+// Browser doesn't support SpeechSynthesis API
+console.error('Speech synthesis is not supported in this browser.');
 }
 });
 
 },
 
-
 refreshLocation(){
-    
-  if(Storyteller.returnLocation !== ''){
-  const returnLocation = Storyteller.returnLocation;
-  Storyteller.changeContent(returnLocation);
-  }
-  
-  else if(load.fileName !== ''){
-  Ref.locationLabel.textContent = load.fileName;
-  }else{
-  Ref.locationLabel.textContent = 'Information';    
-  }
-  
-  
-  },
+
+if(Storyteller.returnLocation !== ''){
+const returnLocation = Storyteller.returnLocation;
+Storyteller.changeContent(returnLocation);
+}
+
+else if(load.fileName !== ''){
+ref.locationLabel.textContent = load.fileName;
+}else{
+ref.locationLabel.textContent = 'Information';    
+}
+
+
+},
 
 showTownText(){
 
-  //Show General Information
-  Ref.Storyteller.innerHTML = 
-  `<textarea
-  id="storytellerText"
-  class="rightText" 
-  ></textarea>`;
-  
-  const storytellerText = document.getElementById("storytellerText")
-  //Ref.locationLabel.style.color = 'teal';
-  
-  
-  if(Storyteller.townText !== ''){
-  storytellerText.textContent = Storyteller.townText
-  } else {
-      storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
-  }
-  
-  storytellerText.addEventListener('focus', () => {
-      // Set the selection range to the end of the text
-      storytellerText.setSelectionRange(storytellerText.value.length, storytellerText.value.length);
-  });
-  
-  storytellerText.addEventListener('focusout', () => {    
-  Storyteller.townText = storytellerText.value
-  load.Data.townText = storytellerText.value
-  //console.log(load.Data);
-  //console.log(Storyteller.townText);
+//Show General Information
+ref.Storyteller.innerHTML = 
+`<textarea
+id="storytellerText"
+class="rightText" 
+></textarea>`;
 
-  });
-  
-  },
+const storytellerText = document.getElementById("storytellerText")
+//Ref.locationLabel.style.color = 'teal';
+
+
+if(Storyteller.townText !== ''){
+storytellerText.textContent = Storyteller.townText
+} else {
+storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
+}
+
+storytellerText.addEventListener('focus', () => {
+// Set the selection range to the end of the text
+storytellerText.setSelectionRange(storytellerText.value.length, storytellerText.value.length);
+});
+
+storytellerText.addEventListener('focusout', () => {    
+Storyteller.townText = storytellerText.value
+load.Data.townText = storytellerText.value
+//console.log(load.Data);
+//console.log(Storyteller.townText);
+
+});
+
+},
 
 getQuotes(locationText) {
-  const quotationMarks = /"([^"]+)"/g;
+const quotationMarks = /"([^"]+)"/g;
 
-  return locationText.replace(quotationMarks, (match, targetText) => {
-      return `<span class="hotpink">"${targetText}"</span>`;
-  });
+return locationText.replace(quotationMarks, (match, targetText) => {
+return `<span class="hotpink">"${targetText}"</span>`;
+});
 },
 
 addRulesInfo(contentId, target) {
- 
-  const rulesItem = this.rulesArray.find(rule => rule.name === contentId);
-    
-    if (rulesItem) { 
-      const showRule = [ 
-        
-      `<h3><span class="misc">${rulesItem.name}</span></h3>
-      <span class="withbreak">${rulesItem.body}</span>`]
-  
-      target.innerHTML = showRule;
 
-    } else {
-      console.log(`Rule with name "${contentId}" not found in the rulesArray.`);
-    }
-  },
+const rulesItem = this.rulesArray.find(rule => rule.name === contentId);
+
+if (rulesItem) { 
+const showRule = [ 
+
+`<h3><span class="misc">${rulesItem.name}</span></h3>
+<span class="withbreak">${rulesItem.body}</span>`]
+
+target.innerHTML = showRule;
+
+} else {
+console.log(`Rule with name "${contentId}" not found in the rulesArray.`);
+}
+},
 
 addMiscInfo(contentId, contentStyle, target) {
 // console.log('adding...')
 const MiscItem = this.miscArray.find(item => item.square === contentId);
 const miscDiv = document.createElement('div');
 
-  if (MiscItem) {
-    const withMonsters = Monsters.getMonsters(MiscItem.curly);
-    const withItems = Items.getItems(withMonsters);
-    const withSpells = Spells.getSpells(withItems);
-    const title = editor.proper(MiscItem.square); 
-    const miscInfo = `
-    <h2>
-    <span style=${contentStyle}>
-    ${title}
-    <hr>
-    </span>
-    </h2>
-    <span class="withbreak">
-    ${withSpells}
-    <br>
-    </span>`;
+if (MiscItem) {
+const withMonsters = expandable.getMonsters(MiscItem.curly);
+const withItems = Items.getItems(withMonsters);
+const withSpells = Spells.getSpells(withItems);
+const title = editor.proper(MiscItem.square); 
+const miscInfo = `
+<h2>
+<span style=${contentStyle}>
+${title}
+<hr>
+</span>
+</h2>
+<span class="withbreak">
+${withSpells}
+<br>
+</span>`;
 
-    miscDiv.innerHTML = miscInfo;
-    target.appendChild(miscDiv);
-    //Ref.Left.style.display = 'none';
+miscDiv.innerHTML = miscInfo;
+target.appendChild(miscDiv);
+//Ref.Left.style.display = 'none';
 
-  } else {
-    console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
-  }
+} else {
+console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
+}
 },
 
 addLocationItems(locationObject){
 
-  let locationItems = '';
+let locationItems = '';
 
-    // Filter itemsArray based on location Name and Tags
-    const filteredItems = load.Data.items.filter(item => {
-      const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
-  
-      // Check if the item matches the criteria
-      return (
-        (itemTags.includes(locationObject.divId)) ||
-        (locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
-      );
-    });
+// Filter itemsArray based on location Name and Tags
+const filteredItems = load.Data.items.filter(item => {
+const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
 
-    // Format each item and add to this.inventory
-    locationItems = filteredItems.map(item => ({
-     Name: item.Name,
-     Type: item.Type,
-     Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
-        tag === locationObject.divId || 
-        (locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(locTag => locTag === tag))
-        ) : ''
-    }));
+// Check if the item matches the criteria
+return (
+(itemTags.includes(locationObject.divId)) ||
+(locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
+);
+});
 
-    // Sort the inventory alphabetically by item.Tag and then by item.Name
-    locationItems.sort((a, b) => {
-    // Compare item.Tag first
-    if (a.Tag > b.Tag) return 1;
-    if (a.Tag < b.Tag) return -1;
+// Format each item and add to this.inventory
+locationItems = filteredItems.map(item => ({
+Name: item.Name,
+Type: item.Type,
+Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
+tag === locationObject.divId || 
+(locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(locTag => locTag === tag))
+) : ''
+}));
 
-    // If item.Tags are the same, compare item.Type
-    if (a.Type > b.Type) return 1;
-    if (a.Type < b.Type) return -1;
+// Sort the inventory alphabetically by item.Tag and then by item.Name
+locationItems.sort((a, b) => {
+// Compare item.Tag first
+if (a.Tag > b.Tag) return 1;
+if (a.Tag < b.Tag) return -1;
 
-    // If item.Type are the same, compare item.Name
-    if (a.Name > b.Name) return 1;
-    if (a.Name < b.Name) return -1;
+// If item.Tags are the same, compare item.Type
+if (a.Type > b.Type) return 1;
+if (a.Type < b.Type) return -1;
 
-    return 0; // Both item.Tag and item.Name are equal
+// If item.Type are the same, compare item.Name
+if (a.Name > b.Name) return 1;
+if (a.Name < b.Name) return -1;
+
+return 0; // Both item.Tag and item.Name are equal
 
 });
 
-    // Log the names of the items
-    //console.log(locationItems)
-    //console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
-  
-    return locationItems;
+// Log the names of the items
+//console.log(locationItems)
+//console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
+
+return locationItems;
 },
 
 getMisc(locationText, comboArray, color) {
-  const squareBrackets = /\[([^\]]+)\]\{([^}]+)\}/g;
+const squareBrackets = /\[([^\]]+)\]\{([^}]+)\}/g;
 
-  const matches = [...locationText.matchAll(squareBrackets)];
-  let updatedText = locationText;
+const matches = [...locationText.matchAll(squareBrackets)];
+let updatedText = locationText;
 
-  for (const match of matches) {
-    const square = match[1];
-    const curly = match[2];
+for (const match of matches) {
+const square = match[1];
+const curly = match[2];
 
-    const replacement = `<span class="float" style="color:${color}" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
+const replacement = `<span class="float" style="color:${color}" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
 
-    updatedText = updatedText.replace(match[0], replacement);
+updatedText = updatedText.replace(match[0], replacement);
 
-    // Store the square curly combo in the provided array
-    comboArray.push({ square, curly });
-  
-  }
+// Store the square curly combo in the provided array
+comboArray.push({ square, curly });
 
-  return updatedText;
+}
+
+return updatedText;
 },
 
 showExpandable(source, target) {
@@ -309,34 +298,34 @@ const contentType = event.target.getAttribute('data-content-type');
 const contentId = event.target.getAttribute('divId');
 
 switch (contentType) {
-    case 'npc':
-    NPCs.addNPCInfo(contentId, target); // Handle NPCs
-    break;
-    // case 'misc':
-    // this.addMiscInfo(contentId, target);
-    // break;
-    case 'rules':
-    this.addRulesInfo(contentId, target);
-    break;
-    default:
-      //for monsters, spells, items, etc.
-      //1. Find the Obj.
-      const contentIdLowercase = contentId.toLowerCase();
-      const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
-      //console.log(obj)
-      //2.
-      // const currentId = document.getElementById("currentId").value;
-      // console.log
-      //     if(obj.id === currentId){
-      //     Ref.Left.style.display = 'none';
-      //     Ref.Centre.style.display = 'none';
-      //     } else {
-      editor.createForm(obj);
-      //     }
+case 'npc':
+NPCs.addNPCInfo(contentId, target); // Handle NPCs
+break;
+// case 'misc':
+// this.addMiscInfo(contentId, target);
+// break;
+case 'rules':
+this.addRulesInfo(contentId, target);
+break;
+default:
+//for monsters, spells, items, etc.
+//1. Find the Obj.
+const contentIdLowercase = contentId.toLowerCase();
+const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
+//console.log(obj)
+//2.
+// const currentId = document.getElementById("currentId").value;
+// console.log
+//     if(obj.id === currentId){
+//     Ref.Left.style.display = 'none';
+//     Ref.Centre.style.display = 'none';
+//     } else {
+editor.createForm(obj);
+//     }
 }          
 
 //target.style.display = "block";
-this.showExtraExpandable(Ref.Left); 
+this.showExtraExpandable(ref.Left); 
 
 });
 
@@ -348,145 +337,143 @@ this.showExtraExpandable(Ref.Left);
 },
 
 showExtraExpandable(target) {
- 
-  const expandableElements = Ref.Centre.querySelectorAll('.expandable');
-  
-  expandableElements.forEach(element => {
-    
-    element.addEventListener('mouseenter', (event) => {
-      
-      const contentType = event.target.getAttribute('data-content-type');
-      const contentId = event.target.getAttribute('divId');
-     
-      switch (contentType) {
-        case 'npc':
-        NPCs.addNPCInfo(contentId, target); // Handle NPCs
-        break;
-        case 'monster':
-        Monsters.addMonsterInfo(contentId, target); // Handle Monsters
-        break;
-        case 'item':
-        Items.addIteminfo(contentId, target); // Handle Items
-        break;
-        case 'spell':
-        editor.addInfo(contentId, target); // Handle Spells
-        break;
-        // case 'misc':
-        // this.addMiscInfo(contentId, target); //Handle Misc
-        // break;
-        // case 'rule':
-        // this.addRulesInfo(contentId, target); //Handle Rule
-        // break;
-        default:
-        console.log('Unknown content type');
-      }        
 
-      target.style.display = "block";
-      this.showFloatingExpandable();
-      
-    });   
+const expandableElements = ref.Centre.querySelectorAll('.expandable');
 
-  });
+expandableElements.forEach(element => {
+
+element.addEventListener('mouseenter', (event) => {
+
+const contentType = event.target.getAttribute('data-content-type');
+const contentId = event.target.getAttribute('divId');
+
+switch (contentType) {
+case 'npc':
+NPCs.addNPCInfo(contentId, target); // Handle NPCs
+break;
+case 'monster':
+expandable.addMonsterInfo(contentId, target); // Handle Monsters
+break;
+case 'item':
+Items.addIteminfo(contentId, target); // Handle Items
+break;
+case 'spell':
+editor.addInfo(contentId, target); // Handle Spells
+break;
+// case 'misc':
+// this.addMiscInfo(contentId, target); //Handle Misc
+// break;
+// case 'rule':
+// this.addRulesInfo(contentId, target); //Handle Rule
+// break;
+default:
+console.log('Unknown content type');
+}        
+
+target.style.display = "block";
+this.showFloatingExpandable();
+
+});   
+
+});
 
 },
 
 showFloatingExpandable() {
 const expandableElements = document.querySelectorAll('.float');
-const expandableElementsCentre = Ref.Centre.querySelectorAll('.float');
+const expandableElementsCentre = ref.Centre.querySelectorAll('.float');
 // const expandableElements = [...expandableElementsLeft, ...expandableElementsCentre];
 
 
-  expandableElements.forEach(element => {
-    
-    element.addEventListener('click', (event) => {
-      
-      const contentType = event.target.getAttribute('data-content-type');
-      const contentId = event.target.getAttribute('divId');
-      const contentStyle = element.getAttribute('style');
-      
-      // Create a floating box div
-      let floatingBox = document.createElement('div');
-      floatingBox.classList.add('floating-box');
-      const divId = "floatingBox";
-      floatingBox.setAttribute('id', divId);
+expandableElements.forEach(element => {
 
-      // Append the floating box to the document body
-      const dupCheck = document.getElementById(divId);
-      if(dupCheck){
-      floatingBox = document.getElementById(divId);
-      }else{
-      document.body.appendChild(floatingBox);
-      }
+element.addEventListener('click', (event) => {
 
-      // Remove the floating box when leaving the element
-      floatingBox.addEventListener('click', () => {
-      
-      try{
-      document.body.removeChild(floatingBox);
-      }catch{
+const contentType = event.target.getAttribute('data-content-type');
+const contentId = event.target.getAttribute('divId');
+const contentStyle = element.getAttribute('style');
 
-      }
+// Create a floating box div
+let floatingBox = document.createElement('div');
+floatingBox.classList.add('floating-box');
+const divId = "floatingBox";
+floatingBox.setAttribute('id', divId);
 
-      });
-     
-      switch (contentType) {
-        case 'npc':
-        NPCs.addNPCInfo(contentId, contentStyle, floatingBox); // Handle NPCs
-        break;
-        case 'monster':
-        Monsters.addMonsterInfo(contentId, contentStyle, floatingBox); // Handle Monsters
-        break;
-        case 'item':
-        Items.addIteminfo(contentId,contentStyle, floatingBox); // Handle Items
-        break;
-        case 'spell':
-        editor.addInfo(contentId,contentStyle, floatingBox); // Handle Spells
-        break;
-        case 'misc':
-        this.addMiscInfo(contentId,contentStyle, floatingBox); //Handle Misc
-        break;
-        case 'rule':
-        this.addRulesInfo(contentId,contentStyle, floatingBox); //Handle Rule
-        console.log('rule')
-        break;
-        default:
-        console.log('Unknown content type');
-      }  
+// Append the floating box to the document body
+const dupCheck = document.getElementById(divId);
+if(dupCheck){
+floatingBox = document.getElementById(divId);
+}else{
+document.body.appendChild(floatingBox);
+}
 
-      
+// Remove the floating box when leaving the element
+floatingBox.addEventListener('click', () => {
 
-    });
-  });
+try{
+document.body.removeChild(floatingBox);
+}catch{
+
+}
+
+});
+
+switch (contentType) {
+case 'npc':
+NPCs.addNPCInfo(contentId, contentStyle, floatingBox); // Handle NPCs
+break;
+case 'monster':
+expandable.addMonsterInfo(contentId, contentStyle, floatingBox); // Handle Monsters
+break;
+case 'item':
+Items.addIteminfo(contentId,contentStyle, floatingBox); // Handle Items
+break;
+case 'spell':
+editor.addInfo(contentId,contentStyle, floatingBox); // Handle Spells
+break;
+case 'misc':
+this.addMiscInfo(contentId,contentStyle, floatingBox); //Handle Misc
+break;
+case 'rule':
+this.addRulesInfo(contentId,contentStyle, floatingBox); //Handle Rule
+console.log('rule')
+break;
+default:
+console.log('Unknown content type');
+}  
+
+
+
+});
+});
 },
-
-
 
 rulesArray: [
 {name: 'Attack Bonus',
- body: `To roll "to hit," the attacker rolls 1d20 and adds their <span class = "lime">attack bonus (AB) </span>, as shown on the Attack Bonus table, as well as <span class = "spell"> Strength </span> bonus (if performing a melee attack) or <span class = "spell"> Dexterity </span> bonus (if performing a missile attack)  and any other adjustments required by the situation. If the total is equal to or greater than the opponent's Armor Class, the attack hits and damage is rolled. A <span class="hotpink">natural "1"</span> on the die roll is always a failure. A <span class="cyan">natural "20"</span> is always a hit, if the opponent can be hit at all (for example, monsters that can only be hit by silver or magic weapons cannot be hit by normal weapons, so a natural "20" with a normal weapon will not hit such a monster).
- 
- Attacks made from behind an opponent usually receive a +2 attack bonus. This does not combine with the Sneak Attack ability.`
+body: `To roll "to hit," the attacker rolls 1d20 and adds their <span class = "lime">attack bonus (AB) </span>, as shown on the Attack Bonus table, as well as <span class = "spell"> Strength </span> bonus (if performing a melee attack) or <span class = "spell"> Dexterity </span> bonus (if performing a missile attack)  and any other adjustments required by the situation. If the total is equal to or greater than the opponent's Armor Class, the attack hits and damage is rolled. A <span class="hotpink">natural "1"</span> on the die roll is always a failure. A <span class="cyan">natural "20"</span> is always a hit, if the opponent can be hit at all (for example, monsters that can only be hit by silver or magic weapons cannot be hit by normal weapons, so a natural "20" with a normal weapon will not hit such a monster).
+
+Attacks made from behind an opponent usually receive a +2 attack bonus. This does not combine with the Sneak Attack ability.`
 },
 {name: 'Saving Throws',
- body:`Saving throws represent the ability of a character or creature to resist or avoid special attacks, such as spells or poisons. 
- 
- Saving throws are made by rolling a d20 against a target number based on the character's class and level; for monsters, a comparable class and level are provided for the purpose of determining the monster's saving throw figures. As with attack rolls, a natural (unadjusted) roll of 20 is always a success, and a natural 1 is always a failure.
+body:`Saving throws represent the ability of a character or creature to resist or avoid special attacks, such as spells or poisons. 
 
- The five categories of saving throw as follows: <span class="hotpink">Death Ray or Poison, Magic Wands, Paralysis or Petrify, Dragon Breath, and Spells</span>. Spells and monster special attacks will indicate which category applies (when a saving throw is allowed), but in some unusual situations the Game Master will need to choose a category. 
- 
- One way to make this choice is to interpret the categories metaphorically. For example, a GM might be writing an adventure wherein there is a trap that pours burning oil on the hapless adventurers. Avoiding the oil might be considered similar to avoiding Dragon Breath. Or perhaps a stone idol shoots beams of energy from its glaring eyes when approached. This attack may be considered similar to a Magic Wand, or if especially potent, a Spell. The saving throw vs. Death Ray is often used as a "catch all" save versus many of the "ordinary" dangers encountered in a dungeon environment. 
+Saving throws are made by rolling a d20 against a target number based on the character's class and level; for monsters, a comparable class and level are provided for the purpose of determining the monster's saving throw figures. As with attack rolls, a natural (unadjusted) roll of 20 is always a success, and a natural 1 is always a failure.
 
- In general, saving throw rolls are not adjusted by ability score bonus or penalty figures. There are a few exceptions: 
- 
- • Poison saving throws are adjusted by the character's Constitution modifier. 
- 
- • Saving throws against illusions (such as phantasmal force) are adjusted by the character's Intelligence modifier. 
- 
- • Saving throws against charm spells (and other forms of mind control) are adjusted by the character's Wisdom modifier. The GM may decide on other saving throw adjustments as they see fit. 
+The five categories of saving throw as follows: <span class="hotpink">Death Ray or Poison, Magic Wands, Paralysis or Petrify, Dragon Breath, and Spells</span>. Spells and monster special attacks will indicate which category applies (when a saving throw is allowed), but in some unusual situations the Game Master will need to choose a category. 
 
- <span class="cyan">Item Saving Throws</span>
- 
- Area effects (such as fireball or lightning bolt spells) may damage items carried by a character as well as injuring the character. For simplicity, assume that items carried are unaffected if the character or creature carrying them makes their own saving throw. However, very fragile items (paper vs. fire, glass vs. physical impact, etc.) may still be considered subject to damage even if the bearer makes their save. In any case where one or more items may be subject to damage, use the saving throw roll of the bearer to determine if the item is damaged or not. For example, if a character holding an open spellbook is struck by a fireball spell, they must save vs. Spells, and then save again at the same odds for the spellbook. The GM should feel free to amend this rule as they wish; for instance, a backpack full of fragile items might be given a single saving throw rather than laboriously rolling for each and every item.`
+One way to make this choice is to interpret the categories metaphorically. For example, a GM might be writing an adventure wherein there is a trap that pours burning oil on the hapless adventurers. Avoiding the oil might be considered similar to avoiding Dragon Breath. Or perhaps a stone idol shoots beams of energy from its glaring eyes when approached. This attack may be considered similar to a Magic Wand, or if especially potent, a Spell. The saving throw vs. Death Ray is often used as a "catch all" save versus many of the "ordinary" dangers encountered in a dungeon environment. 
+
+In general, saving throw rolls are not adjusted by ability score bonus or penalty figures. There are a few exceptions: 
+
+• Poison saving throws are adjusted by the character's Constitution modifier. 
+
+• Saving throws against illusions (such as phantasmal force) are adjusted by the character's Intelligence modifier. 
+
+• Saving throws against charm spells (and other forms of mind control) are adjusted by the character's Wisdom modifier. The GM may decide on other saving throw adjustments as they see fit. 
+
+<span class="cyan">Item Saving Throws</span>
+
+Area effects (such as fireball or lightning bolt spells) may damage items carried by a character as well as injuring the character. For simplicity, assume that items carried are unaffected if the character or creature carrying them makes their own saving throw. However, very fragile items (paper vs. fire, glass vs. physical impact, etc.) may still be considered subject to damage even if the bearer makes their save. In any case where one or more items may be subject to damage, use the saving throw roll of the bearer to determine if the item is damaged or not. For example, if a character holding an open spellbook is struck by a fireball spell, they must save vs. Spells, and then save again at the same odds for the spellbook. The GM should feel free to amend this rule as they wish; for instance, a backpack full of fragile items might be given a single saving throw rather than laboriously rolling for each and every item.`
 },
 {name: 'Spellcasting',
 body:`The number of spells of each level which a Magic User may cast per day is shown on the appropriate table in the Characters section starting on page 3. 
@@ -495,7 +482,7 @@ Magic-Users cast spells through the exercise of knowledge and will. They prepare
 
 <span class="hotpink">Spellbooks</span> are written in a magical script that can only be read by the one who wrote it, or through the use of the spell read magic. All Magic-Users begin play knowing read magic, and it is so ingrained that it can be prepared without a <span class="hotpink">spellbook</span>. 
 
- A Magic-User <span class="hotpink"> may only prepare spells after resting </span> (i.e. a good night's sleep) , and needs one turn per each three spell levels to do so (rounding fractions up). Spells prepared but not used on a previous day are not lost. 
+A Magic-User <span class="hotpink"> may only prepare spells after resting </span> (i.e. a good night's sleep) , and needs one turn per each three spell levels to do so (rounding fractions up). Spells prepared but not used on a previous day are not lost. 
 
 For example, a 3rd level Magic-User preparing all three of their available spells (two 1st level and one 2nd level) is preparing a total of 4 levels of spells, and thus needs 2 turns (4 divided by 3 and rounded up). Rules for the acquisition of new spells are found in the Game Master's section on page 186.
 
@@ -509,7 +496,7 @@ If a spellcaster is attacked (even if not hit) or must make a saving throw (whet
 
 As a specific exception, two spell casters releasing their spells at each other on the same Initiative number will both succeed in their casting; one caster may disrupt another with a spell only if they have a better Initiative, and choose to delay casting the spell until right before the other caster. Some spells are reversible; such spells are shown with an asterisk after the name.
 
- `
+`
 },
 {name: 'Orsons',
 body:`The number of spells of each level which a Cleric may cast per day is shown on the appropriate table in the Characters section starting on page 3. 

@@ -1,10 +1,10 @@
 // Import the necessary module
 import editor from "./editor.js";
 
-import Ref from "./ref.js";
-import Items from "./items.js";
-import Monsters from "./monsters.js";
-import Spells from "./spells.js";
+import ref from "./ref.js";
+
+import expandable from "./expandable.js";
+
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
@@ -22,7 +22,7 @@ fetch(url)
 .then(data => {
 // Here, 'data' will be your JSON array
 this.Data = data
-Ref.Storyteller.style.display = 'block';
+ref.Storyteller.style.display = 'block';
 
 //console.log(this.Data);
 })
@@ -61,6 +61,7 @@ return 1
 }
 
 }},
+    
 
 loadSaveFile: async (event) => {
 const file = event.target.files[0];
@@ -220,38 +221,91 @@ load.Data.tags.forEach(tagObj => {
 
 sortData(data){
 
-let subLocations = [];
+//let ambience = [];
 
 for (const key in data) {
 
 let obj = data[key];
 
-if(key === 'townText' ){
+// if(key === 'subLocations' ){
 
-}else{
+//     obj.forEach(obj => {
+//         // Extract the number at the start of the name, if present
+//     let numberMatch = obj.name.match(/^\d+(\.\d+)?/);
+//     if (numberMatch) {
+//         let numberAtStart = parseFloat(numberMatch[0]);
 
-if(key === 'events'){
+//         // Assign the extracted number to the active property
+//         obj.order = numberAtStart;
 
-obj.forEach(item => {
-if(item.target && item.target === 'Location'){
-subLocations.push(item);
+//         // Remove the number from the start of the name
+//         obj.name = obj.name.replace(/^\d+(\.\d+)?\s*/, '');
+//     }
+// });
+
+
+// obj = obj.map(obj => {
+    
+//     return {
+
+//     //Universal Settings
+//     id: obj.id,
+//     key: obj.key,
+//     color: obj.color,
+//     group: obj.group,
+//     name: obj.name,
+//     description: obj.description,
+//     tags: obj.tags,
+
+//     //Key Specific Settings
+//     type: "location",
+//     subType: "group",
+//     location: obj.location,
+
+//     order: 1, 
+//     active: obj.active,
+     
+//     };
+// });
 }
 
-})
+// data[key]= obj;};
 
-}
 
-};
+// for (const key in data) {
 
-// data[key]= obj;
-// let defTag = data.tags[0]
-// data.tags=[];
-// data.tags.push(defTag);
+// let obj = data[key];
 
-}
+// if(key === 'townText' ){
 
-load.Data.events = load.Data.events.filter(obj => obj.target === "NPC");
-load.Data.subLocations = subLocations;
+// }else{
+
+// // if(key === 'ambience'){
+
+// // obj.forEach(item => {
+// // if(item.location && item.location === 'All'){
+// // item.key = 'ambience';
+// // //item.type = 'location';
+// // ambience.push(item);
+
+// // }
+
+// // })
+
+
+// // }
+
+// };
+
+
+// // let defTag = data.tags[0]
+// // data.tags=[];
+// // data.tags.push(defTag);
+
+// }
+
+// //load.Data.subLocations = load.Data.subLocations.filter(obj => obj.location !== "All");
+// //load.Data.ambience = ambience;
 
 },
 

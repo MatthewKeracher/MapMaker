@@ -1,1027 +1,156 @@
 import editor from "./editor.js";
-import Ref from "./ref.js";
+import ref from "./ref.js";
 import NPCs from "./npcs.js";
-import Storyteller from "./storyteller.js";
 import load from "./load.js";
 
-import Items from "./items.js";
+
 
 const Events = {
 
-phase: 0,
-hour: 0,
-current: '',
 eventDesc: "",
-focusEvent: "",
-
-tagsArray: [],
 eventsArray: [],
 searchArray: [],
 
 async getEvent(currentLocation, locObj) {
-const activeEvents = [];
 
-//console.log('finding events...')
-
-const subLocations = load.Data.subLocations.filter(entry => entry.location === currentLocation)
-
-subLocations.forEach(subLocation =>{
-
-//Make a subLocation Div.
-
-//Generate NPC Divs
-const npcs = NPCs.generateNPCStory(subLocation);
-
-
-});
-
-//If no subLocations then add one.
-if(subLocations.length === 0){
-
-const newId = load.generateUniqueId(load.Data.events, 'entry')
-
-const newsubLocation = 
-
-{
-id: newId,
-key: 'events',
-type: 'target', 
-subType: 'group',
-order: 1,
-name: 'SubLocation ' + newId, 
-active: 1,
-tags: [],
-target: 'Location', 
-group: '', 
-location: locObj.name, 
-npc: '', 
-description: '*Click* to add information about this SubLocation here.'
-}
-
-load.Data.events.push(newsubLocation);
-}
-
-//Search for events active by 'All', Location Name, or by Tag
-for (const entry of load.Data.events) {
-if (
-parseInt(entry.active) === 1 && 
-(
-(entry.location === "All") || 
-(entry.location.split(',').map(locItem => locItem.trim()).some(locItem => locItem === currentLocation)) ||
-(subLocations.some(subLoc => subLoc.name === entry.location)) 
-// ||(tags.split(',').map(item => item.trim()).some(tag => entry.location.split(',').map(locItem => locItem.trim()).includes(tag)))
-)
-){activeEvents.push(entry);}
-}
-
-//Seperate activeEvents by Target (NPC||Location)
-const npcEvents = activeEvents.filter(entry => entry.target === 'NPC');
-
-const locationEvents = activeEvents.filter(entry => entry.target === 'Location');
-
-const randEvents = activeEvents.filter(entry => entry.location === currentLocation && entry.target === 'NPC');
-
-for(const event of randEvents){
-const possibleLocations = locationEvents.filter(loc => loc.location !== 'All');
-
-if(possibleLocations.length === 0){
-
-const newsubLocation = 
-{name: currentLocation,
-description: "",
-group: event.group,
-active: 1, 
-npc: event.npc, 
-target: "Location", 
-location: currentLocation}
-
-//console.log(newsubLocation);
-locationEvents.push(newsubLocation)
-
-}
-
-const randomIndex = Math.floor(Math.random() * possibleLocations.length);
-
-const newEvent = {
-name: event.name,
-description: event.description,
-group: event.group,
-active: 1, 
-npc: event.npc, 
-target: event.target, 
-location: locationEvents[randomIndex].name
-}
-
-npcEvents.push(newEvent)
-
-}
-
-locationEvents.sort((a, b) => {
-// If a's location is 'All', it should come first
-if (a.location === 'All') return -1;
-// If b's location is 'All', it should come first
-if (b.location === 'All') return 1;
-
-// For other cases, compare based on the name property
-if (a.order > b.order) return 1;
-if (a.order < b.order) return -1;
-
-return 0;
-});
-
-const allCount = locationEvents.filter(entry => entry.location === 'All').length;
-
-// Create an array of matching NPC events for each Location event
-const matchedEvents = locationEvents.map(locEvent => {
-const matchedNPCs = npcEvents.filter(npcEvent => npcEvent.location === locEvent.name);
-return {
-location: locEvent,
-npc: matchedNPCs,
-};
-});
-
-if(matchedEvents.length > 0){
 this.eventDesc = '';
 
-if(allCount === 0){
-this.eventDesc = `<span class="expandable beige" 
-divId="${locObj.name}"
-data-content-type="locations">
-${locObj.description}
-</span>`
-}
+//Location Description.
+if(locObj){
+let locObjDesc = Events.filterRandomOptions(locObj);
 
-// Concatenate location description and NPC event descriptions
-this.eventDesc += matchedEvents.map((entry, index) => {
-let locDesc = '';
-let npcDesc = '';
-let currentAll = index + 1;
-
-//Get Items for SubLocation
-const eventItems = this.addEventItems(entry.location.name);
-let previousTag = '';
-let previousType = '';
-let eventItemsFormatted = '';
-
-const eventItemsTagged = eventItems.map(item => {
-
-const tagToDisplay = item.tag !== previousTag ? `` : '';
-previousTag = item.tag;
-
-const typetoDisplay = item.Type !== previousType ? `<br><span class = 'underline'>${item.type}</span><br>` : '';
-previousType = item.type;
-
-return `${tagToDisplay}${typetoDisplay}#${item.name}#`;
-});
-
-if(eventItemsTagged.length > 0){
-eventItemsFormatted = `<span class = "cyan"> | </span> [Items List]{<hr>${eventItemsTagged.join('<br>')}}`;
-}
-
-//---
-if (entry.location.location === 'All') {
-
-//enable ??
-const options = entry.location.description.split('??').filter(Boolean);
-let filteredDescription
-
-if (options.length > 0) {
-const randomIndex = Math.floor(Math.random() * options.length);
-const selectedOption = options[randomIndex].trim();
-
-filteredDescription = `${selectedOption}`;
-} else {
-filteredDescription = `${entry.description}`;
-}
-
-if (currentAll - allCount === 0) {
-//If last 'All' event enter location description.
-locDesc = `<span class="expandable" style="color:${entry.location.color}" 
-divId="${entry.location.name}"
-data-content-type="events">
-${filteredDescription}
-</span><span class="expandable beige" 
-divId="${locObj.name}"
-data-content-type="locations">
-${locObj.description}
-</span>
-<hr>`;
-} else {
-locDesc = `<span class="expandable all" 
-divId="${entry.location.name}"
-data-content-type="events">
-${filteredDescription}
-</span>
-`;
-}} 
-
-else if (entry.location !== 'All'){
-
-//Generate NPC Divs
-const npcStory = NPCs.generateNPCStory(entry.location.name);
-
-
-if (entry.npc.length === 0) {
-npcDesc += `<br> <span style="color:${entry.location.color}">There is nobody around. </span><br><br>`;
-} else {
-npcDesc += `<span class="withbreak">${npcStory}</span><br>`;
-}
-
-//enable ??
-const options = entry.location.description.split('??').filter(Boolean);
-let filteredDescription
-
-if (options.length > 0) {
-const randomIndex = Math.floor(Math.random() * options.length);
-const selectedOption = options[randomIndex].trim();
-
-filteredDescription = `${selectedOption}`;
-} else {
-filteredDescription = `${entry.description}`;
-}
-
-
-//Put together.
-locDesc = 
-`<h3> ${entry.location.name !== currentLocation ? 
+//Location Wrapper
+let locWrapper = 
 `<span class="expandable"
-style="color:${entry.location.color}"
-divId="${entry.location.name}"
-data-content-type="events"> ${entry.location.name} </span>` : ''}` +
-` ${eventItemsFormatted} </h3>` +         
+divId="${locObj.name}"
+data-content-type="locations"> ${locObjDesc} </span> `
 
-`${entry.location.name !== currentLocation ? `<span class="expandable beige" 
-divId="${entry.location.name}"
-data-content-type="events"><br> ${filteredDescription} </span> <br>` : ''}` + 
+this.eventDesc += locWrapper;
+this.eventDesc += `<br>`
+};
 
-`<br>${npcDesc}` +
+// locObj.tags --> tags
+let locObjTags = Events.getTagsfromObj(locObj.tags);
+// console.log('locObj.tags --> tags', locObjTags)
 
-`<hr>`;
-
-}
-return locDesc;
-}).join('');
-}else{
-
-this.eventDesc = locObj.description;
-
-}
-},
-
-loadEventListeners(){
-
-// -- EVENT MANAGER LISTENERS
-
-Ref.eventManager.addEventListener('input', (event) => {
-//console.log('*input*')
-let searchText = event.target.value.toLowerCase();
-
-// if(editor.editMode === true && editor.addItem === false){
-// editor.searchAllData(searchText, load.Data);
-// };
-
-//editor.searchAllData(searchText, { items: load.Data.items });
-editor.searchAllData(searchText,load.Data);
-
+//tags --> tagEvents
+let locTagEvents = [];
+locObjTags.forEach(obj => {
+locTagEvents = Events.getTagsfromObj(obj.tags);
+// console.log('tags --> tagEvents', locTagEvents)
 })
 
-Ref.eventManager.addEventListener('click', () => {
-  if(Ref.eventManager.value !== ''){
+locTagEvents.forEach(tag => {
+Events.getAmbiencefromTag(tag);
+this.eventDesc += `<br>`
+});
+
+//subLocations ---> NPCs ---> NPC Events.
+const subLocations = load.Data.subLocations.filter(entry => entry.location === currentLocation)
+subLocations.sort((a, b) => a.order - b.order);
+subLocations.forEach(subLocation =>{
+
+//SubLocation Header
+let subLocHeader = 
+`<h2> <span class="expandable"
+style="color:${subLocation.color}"
+divId="${subLocation.name}"
+data-content-type="subLocations"> ${subLocation.name} </span> 
+</h2>`
+
+this.eventDesc += subLocHeader;
+
+//SubLocation Description
+let subLocDesc = Events.filterRandomOptions(subLocation);
+this.eventDesc += subLocDesc;
+this.eventDesc += `<br><br>`
+
+//Add NPCs to SubLocation
+const npcStory = NPCs.generateNPCStory(subLocation);
+this.eventDesc += npcStory;
+});
+
+},
+
+    filterRandomOptions(obj){
+
+    let returnDesc
+
+    //Filter if use of <<??>> in description.
+    const options = obj.description.split('??').filter(Boolean);
+
+    if (options.length > 0) {
+    const randomIndex = Math.floor(Math.random() * options.length);
+    const selectedOption = options[randomIndex].trim();
+
+    returnDesc = `${selectedOption}`;
+    } else {
+    returnDesc = `${obj.description}`;
+    }
+
+    return returnDesc;
+
+    },
+
+    getTagsfromObj(tags){
+
+    let array = [];
+
+    tags.forEach(tag => {
+
+    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+    let tagObj = load.Data[tag.key][index];
+
+    array.push(tagObj);
+    })
+
+
+    //console.log(array)
+    return array;
+
+    },
+
+    getAmbiencefromTag(obj){
+    if(obj.key === 'ambience'){
+    const ambienceObj = obj;
+    let ambienceDesc = Events.filterRandomOptions(ambienceObj);
+
+    //Ambience Wrapper
+    let ambienceWrapper = 
+    `<span class="expandable"
+    style="color:${ambienceObj.color}"
+    divId="${ambienceObj.name}"
+    data-content-type="ambience"> ${ambienceDesc} </span>`
+
+    this.eventDesc += ambienceWrapper;
+    this.eventDesc += `<br>`
+
+    }},
+
+    loadEventListeners(){
+
+    // -- EVENT MANAGER LISTENERS
+
+    ref.eventManager.addEventListener('input', (event) => {
+    let searchText = event.target.value.toLowerCase();
+    //editor.searchAllData(searchText, { items: load.Data.items });
+    editor.searchAllData(searchText,load.Data);
+
+    })
+
+    ref.eventManager.addEventListener('click', () => {
+    if(ref.eventManager.value !== ''){
     let searchText = event.target.value.toLowerCase();
     editor.searchAllData(searchText,load.Data);
     }
 
-})
+    })
 
-Ref.eventManager.addEventListener('blur', () => {
-console.log('*blur*')
-//Ref.Centre.style.display = 'block';
-//Ref.Left.style.display = 'block';
-//this.loadEventsList(load.Data.events, Ref.Storyteller, 'eventsManager');
+    ref.eventManager.addEventListener('blur', () => {
+    console.log('*blur*')
+    })
 
-})
-
-},
-
-// Function to append tags to NPCs and Locations
-addTag(tag) {
-
-let target = Ref.editLocationTags; //DEFAULT
-
-if (editor.editPage === 2){target = Ref.eventTags};
-if (editor.editPage === 3){target = Ref.npcTags};
-
-const currentText = target.value;
-
-if (currentText === '') {
-// If the textarea is empty, just add the text
-target.value = tag;
-} else {
-// If not empty, add a comma and the text to the end
-target.value = `${currentText}, ${tag}`;
-}
-},
-
-addEventInfo(data){
-
-//Search for Event in the Array   
-const event = load.Data.events.find(event => event.name === data.name && event.target === data.target);
-
-if (event) {
-
-Ref.Left.innerHTML = ''; //Clear existing content.
-Ref.Centre.innerHTML = ''; //Clear existing content.
-
-// 1. NAME
-const nameContainer = document.createElement('div');
-
-let nameContent =  
-`<h2><input 
-class="centreName orange" 
-type="text" 
-divId="npcName"
-value="${event.name}"></h2>`;
-
-nameContainer.innerHTML = nameContent;
-Ref.Centre.appendChild(nameContainer);
-
-nameContainer.addEventListener('click', function() {
-nameContainer.querySelector('.leftText').focus();
-nameContainer.querySelector('.leftText').select();
-});
-
-// 2. Event Group
-const tagsContainer = document.createElement('div');
-
-let tagsContent =  
-`<h3><input 
-class="centreTag" 
-type="text" 
-divId= "npcTags"
-value="${event.group}"></h3><hr>`;
-
-tagsContainer.innerHTML = tagsContent;
-Ref.Centre.appendChild(tagsContainer);
-
-tagsContainer.addEventListener('click', function() {
-tagsContainer.querySelector('.centreTag').focus();
-tagsContainer.querySelector('.centreTag').select();
-});
-
-//3. Event Description
-const backStoryText = document.createElement('textarea');
-backStoryText.id = 'backStoryText';
-backStoryText.classList.add('centreText'); 
-backStoryText.textContent = event.description || 'Insert information about ' + event.name + ' here.';
-
-//Attach and display.
-Ref.Centre.appendChild(backStoryText);
-Ref.Centre.style.display = 'block';
-Ref.Left.style.display = 'block';
-
-backStoryText.style.height = backStoryText.scrollHeight + 'px';
-
-// Add event listener for input event
-backStoryText.addEventListener('input', function() {
-// Set the height based on the scroll height of the content
-this.style.height = 'auto';
-this.style.height = this.scrollHeight + 'px';
-
-});
-
-// 4. Event Target
-const targetContainer = document.createElement('div');
-
-let targetContent =  
-`<h3>
-<label class="expandable orange" 
-data-content-type="rule" 
-divId="labelTarget">
-Target
-</label>
-<input 
-class="leftText white" 
-type="text" 
-divId= "eventTarget"
-value="${event.target}"></h3>`;
-
-targetContainer.innerHTML = targetContent;
-Ref.Left.appendChild(targetContainer);
-
-targetContainer.addEventListener('click', function() {
-targetContainer.querySelector('.leftText').focus();
-targetContainer.querySelector('.leftText').select();
-});
-
-// 4. Event Location
-const locationContainer = document.createElement('div');
-
-let locationContent =  
-`<h3>
-<label class="expandable orange" 
-data-content-type="rule" 
-divId="labelLocation">
-Location
-</label>
-<input 
-class="leftText white" 
-type="text" 
-divId= "eventLocation"
-value="${event.location}"></h3>`;
-
-locationContainer.innerHTML = locationContent;
-Ref.Left.appendChild(locationContainer);
-
-locationContainer.addEventListener('click', function() {
-locationContainer.querySelector('.leftText').focus();
-locationContainer.querySelector('.leftText').select();
-});
-
-// 4. Event NPCs
-const npcContainer = document.createElement('div');
-
-let npcContent =  
-`<h3>
-<label class="expandable orange" 
-data-content-type="rule" 
-divId="labelNPCs">
-NPCs
-</label>
-<input 
-class="leftText white" 
-type="text" 
-divId= "eventNPCs"
-value="${event.npc}"></h3>`;
-
-npcContainer.innerHTML = npcContent;
-Ref.Left.appendChild(npcContainer);
-
-npcContainer.addEventListener('click', function() {
-npcContainer.querySelector('.leftText').focus();
-npcContainer.querySelector('.leftText').select();
-});
-
-
-// const formattedItem = eventInfo
-// .filter(attribute => attribute.split(": ")[1] !== '""' && attribute.split(": ")[1] !== '0' && attribute.split(": ")[1] !== 'Nil')
-// .join(" ");
-
-// Set the formatted content in the Centre element
-
-} else {
-console.log(`Event not found: ${data.event}`);
-
-}
-
-},
-
-loadEventsList: function(data, target, origin) {
-
-target.innerHTML = '';
-target.style.display = 'block'; // Display the container
-
-data = data.sort((a, b) => {
-const locationA = a.location.toLowerCase();
-const locationB = b.location.toLowerCase();
-
-if (locationA === locationB) {
-const eventA = a.name.toLowerCase();
-const eventB = b.name.toLowerCase();
-
-// Custom function to handle events starting with numbers
-const compareEvents = (event1, event2) => {
-// Extract numbers from event names
-const numA = parseFloat(event1.match(/\d+(\.\d+)?/));
-const numB = parseFloat(event2.match(/\d+(\.\d+)?/));
-
-// If both events start with numbers, compare them numerically
-if (!isNaN(numA) && !isNaN(numB)) {
-return numA - numB;
-}
-
-// If only one of them starts with a number, prioritize it
-if (!isNaN(numA)) {
-return -1;
-} else if (!isNaN(numB)) {
-return 1;
-}
-
-// If none of them start with numbers, use localeCompare
-return event1.localeCompare(event2);
-};
-
-return compareEvents(eventA, eventB);
-}
-
-return locationA.localeCompare(locationB);
-});
-
-// Move NPC Events after Location Events
-const tempArray = [];
-const locationsList = load.Data.locations.map(location => location.divId);
-
-for (const event of data) {
-if (event.target === 'Location' && (locationsList.includes(event.location) || event.location === 'All')) {
-// If the event is a location, add it to the tempArray
-tempArray.push(event);
-}}
-
-for (const event of data) {
-if (event.target === 'NPC') {
-// If the event is an NPC, find its corresponding location in tempArray
-const index = tempArray.findIndex(locationEvent => locationEvent.name === event.location || locationEvent.location == event.location);
-
-if (index !== -1 && tempArray[index].name === event.location) {
-// If the corresponding location is found, insert the NPC event after it
-tempArray.splice(index + 1, 0, event);
-
-} else if(index !== -1 && tempArray[index].location === event.location){
-//If wandering event, put before subLocations
-tempArray.splice(index, 0, event);  
-}
-else {
-// If the corresponding location is not found, add the NPC event to the end
-tempArray.push(event);
-}
-}
-}
-
-// Update the data array with the events in the correct order
-data = tempArray;
-
-data = data.reduce((result, currentEvent, index, array) => {
-const reversedArray = array.slice(0, index).reverse();
-const lastLocationIndex = reversedArray.findIndex(event => event.target === 'Location' || event.location === currentEvent.location);
-
-if (currentEvent.target === 'Location'){
-
-if (lastLocationIndex === -1 || currentEvent.location !== reversedArray[lastLocationIndex].location) {
-// Insert <hr> when a new location is encountered after the last 'Location' event
-result.push({name: currentEvent.location, active: 1, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
-}
-}
-
-if (currentEvent.target === 'NPC'){
-
-if (array[index-1] === undefined || (currentEvent.location!== array[index - 1].location && currentEvent.location !== array[index - 1].name)) {
-// Insert <hr> when a new location is encountered after the last 'Location' event
-result.push({ name: currentEvent.location, active: 1, locationSeparator: true, npc: currentEvent.npc, location: currentEvent.location });
-}
-}
-
-result.push(currentEvent);
-return result;
-}, []);
-
-//Move currentLocation entries to the top.
-
-
-let currentLocation = Ref.locationLabel.textContent;  
-
-if(currentLocation !== ''){
-
-//Figure out for current location events:
-
-let startIndex = data.findIndex(event => event.locationSeparator && event.location === currentLocation);
-let nextSeparatorIndex = data.findIndex((event, index) => index > startIndex && event.locationSeparator);
-let eventsToMove = data.splice(startIndex, nextSeparatorIndex - startIndex);
-
-//Figure out for global events:
-
-let startIndexAll = data.findIndex(event => event.locationSeparator && event.location === "All");
-let nextSeparatorIndexAll = data.findIndex((event, index) => index > startIndexAll && event.locationSeparator);
-let eventsToMoveAll = data.splice(startIndexAll, nextSeparatorIndexAll - startIndexAll);
-
-data = [...eventsToMoveAll, ...eventsToMove, ...data];
-
-}
-
-if(data.filter(event => event.location === 'All').length > 0){
-
-//Figure out for global events:
-
-let startIndexAll = data.findIndex(event => event.locationSeparator && event.location === "All");
-let nextSeparatorIndexAll = data.findIndex((event, index) => index > startIndexAll && event.locationSeparator);
-let eventsToMoveAll = data.splice(startIndexAll, nextSeparatorIndexAll - startIndexAll);
-
-data = [...eventsToMoveAll, ...data];
-
-}
-
-let subLocationActive = true;
-
-//Format EventDiv and add NPCs BOOKMARK
-for (const event of data) {
-const eventNameDiv = document.createElement('div');
-
-//All Location
-if(event.location === 'All' && event.target === 'Location'){
-
-let allEventColour;
-
-if(event.active === 1){
-allEventColour = "lime"
-}
-else if(event.active === 0){
-allEventColour = "gray"
-}
-
-eventNameDiv.id = event.name;
-eventNameDiv.className = allEventColour;
-eventNameDiv.innerHTML = `<span>${event.name} </span>`;
-target.appendChild(eventNameDiv);
-
-
-} else
-
-//New Location
-if(event.locationSeparator === true){
-
-//Make an array of taggedEvents
-// const tagLocations = load.Data.events.filter(event => !locationsList.includes(event.location) && event.target === 'Location');
-// console.log(tagLocations);
-
-//Add locationSeparator
-eventNameDiv.classList.add('no-hover');
-eventNameDiv.innerHTML = `<hr><span class="cyan">${event.location}</span>`;
-target.appendChild(eventNameDiv);
-
-}
-
-//subLocation
-else if (event.target === 'Location'){
-
-let eventColour;
-
-if(event.active === 1){
-eventColour = "misc";
-subLocationActive = true;
-}
-else if(event.active === 0){
-eventColour = "lightgray";
-subLocationActive = false;
-}
-
-eventNameDiv.className = eventColour;
-eventNameDiv.innerHTML = `<span>${event.name} </span>`;
-target.appendChild(eventNameDiv);
-
-}
-
-//Active NPC Event
-else if(event.target === 'NPC'){
-
-let eventColour
-let npcColour
-let allEventColour
-
-if(event.active === 1){
-eventColour = "hotpink";
-npcColour = "teal";
-}
-else if(event.active === 0 || !subLocationActive){
-eventColour = "lightgray";
-npcColour = "gray";
-}
-
-if(event.location !== 'All'){
-eventNameDiv.className = eventColour;
-eventNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
-target.appendChild(eventNameDiv);
-
-NPCs.searchNPC(event.npc.toLowerCase());
-
-if(NPCs.npcSearchArray.length === load.Data.npcs.length){
-
-const npcNameDiv = document.createElement('div');
-npcNameDiv.className = npcColour;
-npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any</span>`;
-target.appendChild(npcNameDiv);
-
-}else 
-
-if(event.location === 'All'){
-
-//do nothing.
-
-}else{
-
-for (const npc of NPCs.npcSearchArray){
-const npcNameDiv = document.createElement('div');
-npcNameDiv.id = npc.name
-npcNameDiv.className = npcColour;
-npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
-target.appendChild(npcNameDiv);
-
-NPCs.fillNPCForm(npc,npcNameDiv);
-
-npcNameDiv.addEventListener('mouseover', () => {
-Ref.Left.style.display = 'block';
-Ref.Centre.style.display = 'block';
-NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
-});
-
-//Add div elements for 'All' Events affecting this NPC.
-const npcTags = npc.tags.split(',').map(word => word.trim());
-
-const allEvents = load.Data.events.filter(event => {
-const eventTags = event.npc.split(',').map(word => word.trim());
-return (
-event.location === 'All' &&
-(
-event.npc === npc.name || 
-npcTags.some(tag => eventTags.includes(tag))
-)
-);
-});
-
-for (const event of allEvents){
-
-if(event.active === 1){
-  allEventColour = "fadepink"}
-  else if(event.active === 0 || !subLocationActive){
-  allEventColour = "darkgray";
-  }
-
-const allEventDiv = document.createElement('div');
-allEventDiv.id = event.name;
-allEventDiv.className = allEventColour;
-allEventDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${event.name} </span>`;
-target.appendChild(allEventDiv);
-
-allEventDiv.addEventListener('mouseover', () => {
-this.focusEvent = event.name;
-this.searchArray = [event]; // Assign an array with a single element
-this.addEventInfo(event);
-Ref.Left.style.display = 'block';
-});
-
-if(origin === 'eventsManager'){
-  this.addCurrentEventNames(event, allEventDiv);
-  }else if (editor.editPage === 2){
-  this.fillEventForm(event, allEventDiv);
-  }
-
-}
-
-}}
-
-} else
-
-if(event.location === 'All'){
-
-//Do nothing.
-
-}
-
-else{
-eventNameDiv.innerHTML = `<span class="lightgray">${event.name} </span>`;
-target.appendChild(eventNameDiv);
-};
-
-}
-if(origin === 'eventsManager'){
-this.addCurrentEventNames(event, eventNameDiv);
-}else{
-this.fillEventForm(event, eventNameDiv);
-}
-
-eventNameDiv.addEventListener('mouseover', () => {
-this.focusEvent = event.name;
-this.searchArray = [event]; // Assign an array with a single element
-this.addEventInfo(event);
-Ref.Left.style.display = 'block';
-});
-}
-
-const unassignedDiv = document.createElement('div');
-unassignedDiv.classList.add('no-hover');
-unassignedDiv.innerHTML = `<hr><span class="orange">Unassigned NPCs</span>`;
-target.appendChild(unassignedDiv);
-
-for (const npc of load.Data.npcs) {
-const npcNameDiv = document.getElementById(npc.name);
-const divExists = npcNameDiv !== null;
-
-if(!divExists){
-
-const npcNameDiv = document.createElement('div');
-npcNameDiv.id = npc.name
-npcNameDiv.className = "gray";
-npcNameDiv.innerHTML = `<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${npc.name} </span>`;
-target.appendChild(npcNameDiv);
-
-NPCs.fillNPCForm(npc,npcNameDiv);
-
-npcNameDiv.addEventListener('mouseover', () => {
-Ref.Left.style.display = 'block';
-Ref.Centre.style.display = 'block';
-NPCs.addNPCInfo(npcNameDiv.id, Ref.Left);
-});
-
-}
-}
-
-
-},
-
-loadLocationsList: function(data) {
-const Centre = document.getElementById('Centre'); // Do not delete!!
-Centre.innerHTML = '';
-
-const AllDiv = document.createElement('div');
-AllDiv.innerHTML = "<span class= cyan>All</span>";
-AllDiv.setAttribute('divId', 'All');
-AllDiv.setAttribute('location', 'All');
-Centre.appendChild(AllDiv);
-
-//Loop through Data and make NameDivs
-for (const location of data) {
-
-const locNameDiv = document.createElement('div');
-
-if(location.divId){
-locNameDiv.innerHTML = `<span class="${location.tags !== undefined ? 'cyan' : ''}"><hr>${location.tags !== undefined ? `[${location.tags}]` : ''}
-</span> <span class="hotpink">${location.divId}</span>`;
-locNameDiv.setAttribute('divId', location.divId);
-locNameDiv.setAttribute('location', location.divId);
-Centre.appendChild(locNameDiv);
-
-} else if(location.target === "Location") {
-locNameDiv.innerHTML = `<span class="${location.location !== undefined ? 'cyan' : ''}">${location.location === 'All' ? `[${location.location}]` : ''}
-</span><span class="misc">${location.name} </span>`;
-locNameDiv.setAttribute('divId', location.name);
-locNameDiv.setAttribute('location', location.location);
-Centre.appendChild(locNameDiv);
-}
-
-//Add CLICK Event to each NameDiv
-locNameDiv.addEventListener('click', () => {
-const divId = locNameDiv.getAttribute('divId');
-Ref.eventLocation.value = divId;
-});
-}
-
-// Convert HTMLCollection to an array
-const divArray = [...Centre.children];
-
-// Sort the array based on divId
-divArray.sort((a, b) => {
-const divIdA = a.getAttribute('location');
-const divIdB = b.getAttribute('location');
-
-return divIdA.localeCompare(divIdB);
-});
-
-// Clear the Centre before appending sorted divs
-Centre.innerHTML = '';
-
-// Append the sorted divs to the Centre
-divArray.forEach(div => {
-Centre.appendChild(div);
-});
-
-
-},
-
-
-
-addCurrentEventNames(event, eventNameDiv){
-
-eventNameDiv.addEventListener('click', () => {
-Ref.eventManager.value = event.name;
-this.focusEvent = event.name;
-this.searchArray = [event]; // Assign an array with a single element
-this.addEventInfo(event);
-Ref.Left.style.display = 'block';
-});
-
-},
-
-addEventItems(event){
-
-let locationItems = '';
-
-// Filter itemsArray based on location Name and Tags
-const filteredItems = load.Data.items.filter(item => {
-const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
-
-// Check if the item matches the criteria
-return (
-(itemTags.includes(event))
-);
-});
-
-// Format each item and add to this.inventory
-locationItems = filteredItems.map(item => ({
-Name: item.Name,
-Type: item.Type,
-Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
-tag === event) : ''}));
-
-// Sort the inventory alphabetically by item.tag and then by item.Name
-locationItems.sort((a, b) => {
-// Compare item.tag first
-if (a.tag > b.tag) return 1;
-if (a.tag < b.tag) return -1;
-
-// If item.Tags are the same, compare item.Type
-if (a.type > b.type) return 1;
-if (a.type < b.type) return -1;
-
-// If item.Type are the same, compare item.Name
-if (a.name > b.name) return 1;
-if (a.name < b.name) return -1;
-
-return 0; // Both item.tag and item.Name are equal
-
-});
-
-// Log the names of the items
-//console.log(locationItems)
-//console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
-
-return locationItems;
-},
-
-fillEventForm: function(event, ambienceNameDiv) {
-// Add click event listener to each ambience name
-ambienceNameDiv.addEventListener('click', () => {
-Ref.eventId.value = event.id;
-Ref.eventTags.value = event.group;
-Ref.eventName.value = event.name;
-Ref.eventNPC.value = event.npc;
-Ref.eventLocation.value = event.location;
-Ref.eventDescription.value = event.description;
-Ref.eventForm.style.display = 'flex'; // Display the eventForm
-
-//Check target and tick relevent box
-if(event.target === 'NPC' && Ref.npcCheckbox.checked === false){
-//Ref.npcCheckbox.checked = true;
-Ref.npcCheckbox.click();
-//Ref.locationCheck.checked = false;
-}
-else if(event.target === 'Location' && Ref.locationCheck.checked === false){
-//Ref.locationCheck.checked = true;
-Ref.locationCheck.click();
-//Ref.npcCheckbox.checked = false;
-
-
-}
-});
-},
-
-saveEvent: function() {
-
-const index = load.Data.events.findIndex(event => event.id === parseInt(Ref.eventId.value) && event.name === Ref.eventName.value);
-
-let target;
-if (Ref.eventTarget.checked) {
-target = 'NPC';
-} else {
-target = 'Location';
-}
-
-const event = {
-id: parseInt(Ref.eventId.value), 
-active: 1,
-target: target,
-name: Ref.eventName.value,
-group: Ref.eventTags.value,
-description: Ref.eventDescription.value,
-location: Ref.eventLocation.value,
-npc: Ref.eventNPC.value,
-};
-
-if (index !== -1) {
-// Update the existing event entry
-load.Data.events[index] = event;
-console.log('Event updated:', event);
-} else {
-// Make a new event entry
-event.id = Array.generateUniqueId(load.Data.events, 'entry');
-Ref.eventId.value = event.id
-load.Data.events.push(event);
-console.log('Event added:', event);
-}
-
-this.loadEventsList(this.searchArray, Ref.Centre, 'eventsManager');
-},
-
-populateDropdown(dropdown, options, replace) {
-
-if(replace === 1){    
-dropdown.innerHTML = ''; // Clear existing options
-}
-
-options.forEach(option => {
-const optionElement = document.createElement("option");
-optionElement.value = option;
-optionElement.text = option;
-dropdown.appendChild(optionElement);
-});
-},
-
+    },
 
 }
 

@@ -166,7 +166,7 @@ text-align: left;
 /* Appearance */
 background-color: black;
 opacity: 1;
-display: none;
+display: block;
 padding: 1vh; 
 overflow-y: auto;
 overflow-x: hidden;

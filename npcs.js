@@ -1,25 +1,14 @@
 // Import the necessary module
 import editor from "./editor.js";
 
-import Ref from "./ref.js";
-import Items from "./items.js";
-import Monsters from "./monsters.js";
-import Spells from "./spells.js";
+import ref from "./ref.js";
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 import NPCbuild from "./classes.js";
 import load from "./load.js";
 
-
-
 // Define the NPCs module
 const NPCs = {
-npcArray: [],
-npcSearchArray:[],
-namedNPCs: [],
-groupedNPCs : [],
-absentNPCs: [],
-uniqueNames: [],
 
 loadAndBuild: async function(fileContent) {
 try {
@@ -48,117 +37,6 @@ load.Data.npcs = npcInstances;
 
 },
 
-loadNPC: function(NPCArray) {
-
-Events.loadEventsList(load.Data.events, Ref.Centre, 'eventsManager');
-
-},
-
-sortNPCs: function(npc, npcNameDiv, sortEvents) {
-
-//Takes NPCs one at a time and sorts them. 
-
-// Is the NPC named directly in sortEvents?
-sortEvents.forEach(event => {
-if (npc.name === event.npc && !this.uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = `<span class = "white"> ${npc.name} </span>` ;
-this.groupedNPCs.push(npcNameDiv);
-this.uniqueNames.push(npc.name);
-} 
-});
-
-//Is the NPC named indirectly through tags in sortEvents?
-sortEvents.forEach(event => {
-const npcTags = npc.tags ? npc.tags.split(',').map(item => item.trim()) : [];
-const eventTags = event.npc.split(',').map(item => item.trim());
-
-const matchingTag = eventTags.find(eventTag => npcTags.includes(eventTag) && !this.uniqueNames.includes(eventTag));
-
-if (matchingTag) {
-npcNameDiv.innerHTML = `<span class="white">${npc.name}</span>`;
-this.groupedNPCs.push(npcNameDiv);
-this.uniqueNames.push(npc.name);
-}
-});
-
-// Mark absent NPCs are somewhere else.
-if (!this.uniqueNames.includes(npc.name)) {
-npcNameDiv.innerHTML = `${npc.name}` ;
-this.absentNPCs.push(npcNameDiv);
-}
-
-},
-
-fillNPCForm: function(npc, npcNameDiv){
-// Add click event listener to each NPC name
-npcNameDiv.addEventListener('click', () => {
-
-if(editor.editPage === 3){
-
-Ref.npcForm.style.display = 'flex'; // Display the npcForm
-
-//console.log(npc)
-Ref.npcId.value = parseInt(npc.id);
-Ref.npcName.value = npc.name;
-Ref.npcTags.value = npc.tags;
-
-//Ref.MorningLocation.value = npc.MorningLocation;
-
-Ref.npcLevel.value = npc.level;
-Ref.npcClass.value = npc.class;
-Ref.monsterTemplate.value = npc.monsterTemplate;
-
-Ref.STR.value = npc.str;  
-Ref.DEX.value = npc.dex; 
-Ref.INT.value = npc.int; 
-Ref.WIS.value = npc.wis; 
-Ref.CON.value = npc.con; 
-Ref.CHA.value = npc.cha; 
-
-Ref.Backstory.value = npc.Backstory;
-}else{
-
-//Ref.eventNPC.value = npc.name
-
-
-}
-
-});
-
-},
-
-bulkAdd(data, target){
-
-// Iterate over itemsSearchArray and update Tags
-//console.log('bulkAdd')
-
-if(target === 'tags'){
-
-this.npcSearchArray.forEach(npc => {
-
-if (npc.tags) {
-// Split existing Tags into an array
-const existingTags = npc.tags.split(',').map(tag => tag.trim());
-
-// Check if the new tag is not already present
-if (!existingTags.includes(data)) {
-// If not present, append the new tag value
-npc.tags += `, ${data}`;
-}
-} else {
-// If Tags is empty, set it to the new tag value
-npc.tags = data;
-}
-
-})};
-
-if (target === 'monsterTemplate'){
-//console.log('monster')
-this.npcSearchArray.forEach(npc => {
-npc.monsterTemplate = data
-
-})}},
-
 generateNPCStory(subLocation) {
 
 let story = ``;
@@ -181,80 +59,91 @@ subLocationTags.forEach(tag => {
 
   })
 
-  console.log(bundle)
+  //filter out empty entries
+  bundle = bundle.filter(entry => entry !== undefined);
 
   let npcBundle = bundle.filter(obj => obj.key === 'npcs');
-  let eventBundle = bundle.filter(obj => obj.key === 'events' && obj.target === 'NPC');
+  let ambienceBundle = bundle.filter(obj => obj.key === 'ambience');
+
+  ambienceBundle.forEach(tag => {
+  Events.getAmbiencefromTag(tag);
+  });
 
   npcBundle.forEach(npc => {
 
-    story += `<span class="expandable" style="font-family:'SoutaneBlack'; color: cyan" data-content-type="npc" divId="${npc.name.replace(/\s+/g, '-')}"> ${npc.name} is here. </span> <br>`;
+    let eventBundle = bundle.filter(obj => obj.key === 'events');
+    
+    story += `<h3><span 
+    class="expandable" 
+    style="font-family:'SoutaneBlack'; 
+    color: cyan" data-content-type="npc" 
+    divId="${npc.name.replace(/\s+/g, '-')}"> 
+    ${npc.name} is here. </span></h3>`;
+
+    //Insert first sentence of Backstory
+    let firstPeriodIndex = npc.description.indexOf('.');
+    let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
+
+
+    story += `<span
+    class="expandable"
+    data-content-type="npc" 
+    style="font-family:'SoutaneBlack'; color:DarkSeaGreen" 
+    divId="${npc.name.replace(/\s+/g, '-')}"> ${firstSentence}</span> <br>`
 
     //Floating Tags (no subLocation) for NPCs
     let npcTags = npc.tags;
 
     npcTags.forEach(tag => {
-    let isFloating = true;
+    let isFloating = false;
     let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+
+    //Check inside Tag for subLocations, filter out.
     let floatTag = load.Data[tag.key][index];
-    let insideTags = floatTag.tags.filter(obj => obj.key === 'events');
+    let floatCheck = floatTag.tags.filter(obj => obj.key === 'subLocations');
+    if(floatCheck.length === 0){isFloating = true};
 
-      insideTags.forEach(tag => {
+    if(isFloating === true){
 
-      let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-      let insideTag = load.Data[tag.key][index];
+    //add events tagged to tag to eventBundle
 
-      if(insideTag.target === 'Location'){isFloating = false}
+    let eventsToAdd = floatTag.tags.filter(obj => obj.key === 'events');
 
-      })
+    eventsToAdd.forEach(tag => {
 
-          if(isFloating === true){
-          //add events tagged to tag to eventBundle
+    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
+    let event = load.Data[tag.key][index];
 
-          let eventsToAdd = floatTag.tags.filter(obj => obj.key === 'events');
-
-          eventsToAdd.forEach(tag => {
-
-          let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-          let event = load.Data[tag.key][index];
-
-          eventBundle.push(event)
-
-          })
-
-          };
-
-    });
-    
-    // if(floatingTags.length > 0){eventBundle.push(floatingTags)};
-
-    console.log(eventBundle)
-
-    eventBundle.forEach(event => {
-
-    story += 
-    `<span class="expandable" style="color:${event.color}" 
-    divId="${event.name}"data-content-type="events">${event.name}. </span>`;
-
-    const options = event.description.split('??').filter(Boolean);
-   
-    if (options.length > 0) {
-    const randomIndex = Math.floor(Math.random() * options.length);
-    const selectedOption = options[randomIndex].trim();
-
-    story += `${selectedOption}<br>`;
-    } else {
-    story += `${event.description}<br>`;
-    }
+    eventBundle.push(event)
 
     })
 
+    };
+
+    });
+
+    eventBundle.forEach(event => {
+      
+    story += 
+    `<span 
+    class="expandable"
+    style="font-family:'SoutaneBlack'; color:${event.color}" 
+    divId="${event.name}"
+    data-content-type="events">${event.name}. </span>`;
+
+    let eventDesc = Events.filterRandomOptions(event);
+    story += eventDesc;
     story += `<br>`;
+
+    })
+
+    
   
   })
 
 })
 
+story += `<br>`;
 return story;
 
 },
@@ -267,13 +156,13 @@ let foundNPC = load.Data.npcs.find(npc => npc.name === findNPC);
 if (foundNPC) {
 
 let npcContent = ``;
-Ref.Centre.innerHTML = '';
-Ref.Left.innerHTML = '';
+ref.Centre.innerHTML = '';
+ref.Left.innerHTML = '';
 
 
 // Ref.centreToolbar.style.display = 'flex';
-Ref.Centre.style.display = 'block';
-Ref.Left.style.display = 'block';
+ref.Centre.style.display = 'block';
+ref.Left.style.display = 'block';
 
 //If needed, make copy Obj for basis of new data entry.
 if (editor.makeNew === true) {
@@ -312,7 +201,7 @@ if(foundNPC){
   value="npcs">`;
   
   keyArea.innerHTML = keyContent;
-  Ref.Left.appendChild(keyArea);
+  ref.Left.appendChild(keyArea);
   
   const idArea = document.createElement('div');
   idArea.id = 'currentIdArea';
@@ -330,7 +219,7 @@ if(foundNPC){
   value="${foundNPC.id || 'N/A'} ">`;
   
   idArea.innerHTML = idContent;
-  Ref.Left.appendChild(idArea);
+  ref.Left.appendChild(idArea);
   };
 
 // 1. NAME
@@ -350,7 +239,7 @@ divId="npcName"
 value="${foundNPC.name}"></h2><hr>`;
 
 nameContainer.innerHTML = nameContent;
-Ref.Centre.appendChild(nameContainer);
+ref.Centre.appendChild(nameContainer);
 
 nameContainer.addEventListener('click', function() {
 nameContainer.querySelector('.leftText').focus();
@@ -374,8 +263,8 @@ class="entry-input centreText"
 >`;
 
 backStoryText.innerHTML = backStoryContent;
-Ref.Centre.appendChild(backStoryText);
-Ref.Centre.style.display = 'block';
+ref.Centre.appendChild(backStoryText);
+ref.Centre.style.display = 'block';
 
 //Attach and display.
 const extraSpace = 125
@@ -418,7 +307,7 @@ value="${foundNPC.class}">
 </h3>`;
 
 classContainer.innerHTML = classContent;
-Ref.Left.appendChild(classContainer);
+ref.Left.appendChild(classContainer);
 
 classContainer.addEventListener('click', function() {
 classContainer.querySelector('.leftTextshort').focus();
@@ -444,7 +333,7 @@ value="${foundNPC.level}">
 </h3><hr>`;
 
 levelContainer.innerHTML = levelContent;
-Ref.Left.appendChild(levelContainer);
+ref.Left.appendChild(levelContainer);
 
 levelContainer.addEventListener('click', function() {
 levelContainer.querySelector('.centreNumber').focus();
@@ -469,7 +358,7 @@ value="${foundNPC.hitPoints}">
 </h3>`;
 
 hitPointsCont.innerHTML = hitPoints;
-Ref.Left.appendChild(hitPointsCont);
+ref.Left.appendChild(hitPointsCont);
 
 hitPointsCont.addEventListener('click', function() {
 hitPointsCont.querySelector('.centreNumber').focus();
@@ -496,7 +385,7 @@ value="${foundNPC.attackBonus}">
 attackBonus += `<hr>`;
 
 attackBonusCont.innerHTML = attackBonus;
-Ref.Left.appendChild(attackBonusCont);
+ref.Left.appendChild(attackBonusCont);
 
 attackBonusCont.addEventListener('click', function() {
 attackBonusCont.querySelector('.centreNumber').focus();
@@ -592,7 +481,7 @@ value="${foundNPC[stat.toLowerCase()]}">
 statBlock += `</h2>`;
 
 statContainer.innerHTML = statBlock;
-Ref.Left.appendChild(statContainer);
+ref.Left.appendChild(statContainer);
 
 statContainer.addEventListener('click', function() {
 statContainer.querySelector('.centreStat').focus();

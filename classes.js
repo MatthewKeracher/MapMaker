@@ -1,11 +1,11 @@
 // Import the necessary module
 import editor from "./editor.js";
 
-import Ref from "./ref.js";
+import ref from "./ref.js";
 import load from "./load.js";
-import Items from "./items.js";
-import Monsters from "./monsters.js";
-import Spells from "./spells.js";
+
+import expandable from "./expandable.js";
+
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";

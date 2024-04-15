@@ -1,13 +1,5 @@
-import Events from "./events.js";
-import editor from "./editor.js";
-import Storyteller from "./storyteller.js";
-import NPCs from "./npcs.js";
-import Monsters from "./monsters.js";
-import Ref from "./ref.js";
-import Items from "./items.js";
-import Spells from "./spells.js";
 import load from "./load.js";
-import Map from "./map.js";
+
 
 const save = {
 
@@ -18,16 +10,6 @@ saveFile(content, filename, mimeType) {
     },
     
     exportArray: function () {
-    
-    // Create the main object to be exported
-    const exportData = {
-    eventsArray: load.Data.events,
-    locations: load.Data.locations,                
-    npcArray: load.Data.npcs,
-    monsters: load.Data.monsters,
-    items: load.Data.items,
-    spells: load.Data.spells,
-    };
     
     const json = JSON.stringify(load.Data, null, 2);
     const mimeType = 'application/json';
