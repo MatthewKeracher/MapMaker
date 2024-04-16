@@ -37,7 +37,7 @@ const currentId = document.getElementById('currentId').value;
 const currentKey = document.getElementById('key').getAttribute('pair');
 const homeObjAddress = {key: currentKey, id: currentId};
 const homeObj = load.Data[currentKey].find(obj => parseInt(obj.id) === parseInt(currentId));
-console.log('home object', homeObj);
+//console.log('home object', homeObj);
 const homeObjIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
 const homeObjTags = homeObj.tags //.split(',').map(tag => tag.trim());
 
@@ -45,7 +45,7 @@ const homeObjTags = homeObj.tags //.split(',').map(tag => tag.trim());
 //Item tag refers to.
 const tagObjAddress = {key: tagKey, id: itemId};
 const tagObj = load.Data[tagKey].find(obj => parseInt(obj.id) === parseInt(itemId));
-console.log('tag object', tagObj)
+//console.log('tag object', tagObj)
 const tagObjName = tagObj.name
 const tagItemIndex = load.Data[tagKey].findIndex(item => parseInt(item.id) === parseInt(itemId));
 const tagObjTags = tagObj.tags //.split(',').map(tag => tag.trim());
@@ -460,17 +460,92 @@ elementContainer.querySelector('.leftTextshort').select();
 //Make Tags section.
 if(obj){
 
-const container = document.getElementById(this.buildSection('Tags', obj));
+let keys = [];
+if(obj.key === 'tags'){keys = ['ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
+if(obj.key === 'ambience'){keys = ['tags']};
+if(obj.key === 'locations'){keys = ['tags', 'subLocations']};
+if(obj.key === 'subLocations'){keys = ['tags', 'locations']};
+if(obj.key === 'items'){keys = ['tags', 'npcs']};
+if(obj.key === 'spells'){keys = ['tags', 'npcs']};
+if(obj.key === 'monsters'){keys = ['tags', 'npcs']};
+if(obj.key === 'events'){keys = ['tags']};
 
-if(obj.tags && editor.makeNew === false){
-//console.log(obj.tags)
-let tagsToAdd = obj.tags
-tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));;
+keys.forEach(key => {
+const properKey = this.proper(key)
+const singleKey = properKey.endsWith('s')? properKey.slice(0, -1): properKey;
+const container = document.getElementById(this.buildSection(properKey, obj));
+
+//Make New Entry.
+if(obj){
+const newTagArea = document.createElement('div');
+let newTagContent = `<h3><span class = 'leftText'>[Create New ${singleKey}]</span></h3>`;
+
+newTagArea.innerHTML = newTagContent;
+container.appendChild(newTagArea);
+
+newTagArea.style.color = 'lightgray'
+
+newTagArea.addEventListener('mouseenter', function(){
+this.style.color = 'lime';
+})
+
+newTagArea.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+newTagArea.addEventListener('click', function(){
+
+if(key !== 'npcs'){
+const newId = load.generateUniqueId(load.Data[key], 'entry');
+//console.log(key, newId)
+const newEntry = {
+
+//metadata -- New Entry
+id: newId,
+key: key,
+type: 'group', 
+subType: 'subGroup',
+color: obj.color,
+
+name: obj.name + ' ' + singleKey, 
+tags: [{key: obj.key, id: obj.id}],
+group: obj.group? obj.group: '',
+subGroup: obj.subGroup? obj.subGroup: '',
+
+description: 'This '+ singleKey + ' has been generated and attached to ' + obj.name + '. ',
+
+}
+//Add new Tag to curent Object
+let objEntry = {key: key, id: newId};
+let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
+load.Data[obj.key][index].tags.push(objEntry);
+
+//Load new Tag!
+editor.createForm(newEntry)  
+
+}else{
+
+let randomNumber = Math.floor(Math.random() * load.Data[key].length);
+NPCs.makeNewNPC(load.Data[key][randomNumber], obj)
+
+};
+
+})
+
+};
+
+//Add Entries.
+if(obj.tags){
+let tagsToAdd = obj.tags.filter(entry => entry.key === key);
+
+if(obj.tags.length > 1){
+tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));
+}
+
 tagsToAdd.forEach(tag => {
 
 let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
 let tagName = load.Data[tag.key][index].name
-
 const taggedArea = document.createElement('div');
 let tagHTML = 
 `<h3>
@@ -486,6 +561,7 @@ ${tagName}
 taggedArea.innerHTML = tagHTML;
 container.appendChild(taggedArea);
 
+
 taggedArea.style.color = load.Data[tag.key][index].color;
 
 taggedArea.addEventListener('click', function(event){
@@ -498,9 +574,9 @@ obj.tags = obj.tags.filter(item => item.id !== tag.id);
 //Remove item from other item's tags.
 
 let delTags = load.Data[tag.key][index].tags
-console.log(delTags, obj.id)
+//console.log(delTags, obj.id)
 delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
-console.log(delTags)
+//console.log(delTags)
 load.Data[tag.key][index].tags = delTags;
 
 //Repackage.
@@ -518,319 +594,9 @@ editor.createForm(load.Data[tag.key][index]);
 }
 
 });
-
-});
-
-}
-}
-}
-
-//Add associated events.
-if(obj){
-
-//Add Events in Same Location
-if(obj.key === 'events' && obj.target === 'Location'){
-//get data
-let locEvents
-let parentLocation
-if(obj.key === 'locations'){
-locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
-parentLocation = obj.name
-}
-
-else if (obj.key === 'events' && obj.target === 'Location'){
-locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.name);
-parentLocation = obj.name;
-} 
-
-else if (obj.key === 'events' && obj.target === 'NPC'){
-locEvents = load.Data.events.filter(event => event.target === 'NPC' && event.location === obj.location);
-parentLocation = obj.location;
-}
-
-const container = document.getElementById(this.buildSection('Events Happening Here', obj));
-
-//Make New Event.
-const newEventArea = document.createElement('div');
-let newEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
-
-newEventArea.innerHTML = newEventContent;
-container.appendChild(newEventArea);
-
-newEventArea.style.color = 'lightgray'
-
-newEventArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-
-newEventArea.addEventListener('mouseleave', function(){
-this.style.color = 'lightgray';
-})
-
-newEventArea.addEventListener('click', function(){
-
-const newsubLoc = {
-
-//metadata
-id: load.generateUniqueId(load.Data.events, 'entry'),
-key: 'events',
-type: 'target', 
-subType: 'group',
-color: obj.color,
-
-name: 'New Event', 
-active: 1,
-tags: '',
-target: 'NPC',
-group: parentLocation,
-location: parentLocation,
-npc: 'All', 
-
-description: 'They are in the ' + parentLocation,
-
-}
-editor.createForm(newsubLoc)  
-})
-
-//Add locEvents
-if(locEvents){
-locEvents.forEach(locEv => {
-
-const subLocArea = document.createElement('div');
-let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
-
-subLocArea.innerHTML = subLocContent;
-container.appendChild(subLocArea);
-
-if(parseInt(locEv.active) === 1){
-subLocArea.style.color = 'lightgray'
-}else{
-subLocArea.style.color = 'gray'
-}
-subLocArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-subLocArea.addEventListener('mouseleave', function(){
-if(parseInt(locEv.active) === 1){
-subLocArea.style.color = 'lightgray'
-}else{
-subLocArea.style.color = 'gray'
-}
-})
-subLocArea.addEventListener('click', function(){
-editor.createForm(locEv);
-})
 });
 }
-
-}
-
-//11. Add Events in Same Group
-if(obj.key === 'events' && obj.target === 'NPC'){
-//get data
-let groupEvents = [];
-let group
-if(obj.key === 'locations'){
-groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
-group = obj.group;
-}
-
-else if (obj.key === 'events' && obj.target === 'Location'){
-groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
-group = obj.group;
-} 
-
-else if (obj.key === 'events' && obj.target === 'NPC'){
-//Events affecting same NPC. 
-groupEvents = load.Data.events.filter(event => event.target === 'NPC' && event.group === obj.group);
-group = obj.group;
-}
-
-const container = document.getElementById(this.buildSection('Events in Group', obj));
-
-//Make New Event.
-const groupEventArea = document.createElement('div');
-let groupEventContent = `<h3><span class = 'leftText'>[Add New Event]</span></h3>`;
-
-groupEventArea.innerHTML = groupEventContent;
-container.appendChild(groupEventArea);
-
-groupEventArea.style.color = 'lightgray'
-
-groupEventArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
 })
-
-groupEventArea.addEventListener('mouseleave', function(){
-this.style.color = 'lightgray';
-})
-
-groupEventArea.addEventListener('click', function(){
-
-const newGroupEv = {
-
-//metadata -- New Event in the SAME GROUP
-id: load.generateUniqueId(load.Data.events, 'entry'),
-key: 'events',
-type: 'target', 
-subType: 'group',
-color: obj.color,
-
-name: 'New ' + group + ' Event', 
-active: 1,
-tags: '',
-target: 'NPC',
-group: group,
-location: obj.location,
-npc: group, 
-
-description: 'They are a kind of ' + group,
-
-}
-editor.createForm(newGroupEv)  
-})
-
-//Add locEvents
-groupEvents.forEach(locEv => {
-
-const subLocArea = document.createElement('div');
-let subLocContent = `<h3><span>${locEv.name}</span></h3>`;
-
-subLocArea.innerHTML = subLocContent;
-container.appendChild(subLocArea);
-
-if(parseInt(locEv.active) === 1){
-subLocArea.style.color = 'lightgray'
-}else{
-subLocArea.style.color = 'gray'
-}
-
-subLocArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-
-subLocArea.addEventListener('mouseleave', function(){
-if(parseInt(locEv.active) === 1){
-subLocArea.style.color = 'lightgray'
-}else{
-subLocArea.style.color = 'gray'
-}
-})
-
-subLocArea.addEventListener('click', function(){
-editor.createForm(locEv);
-})
-
-
-});
-
-}
-
-//12. Add Sub-Locations
-if(obj.key === 'locations'){
-//get data
-let subLocations
-let parentLocation
-if(obj.key === 'locations'){
-subLocations = load.Data.subLocations.filter(event => event.location === obj.name);
-parentLocation = obj.name
-}
-
-else if (obj.key === 'events' && obj.target === 'Location'){
-
-subLocations = load.Data.subLocations.filter(event => event.location === obj.location);
-parentLocation = obj.location;
-}
-
-// else if (obj.key === 'events' && obj.target === 'NPC'){
-// try{
-// let helper1 = load.Data.events.find(event => event.name === obj.location);
-// let helper2 = helper1.location
-// subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === helper2);
-// parentLocation = helper2;
-// }catch{
-// subLocations = load.Data.events.filter(event => event.target === 'Location' && event.location === obj.location);
-// parentLocation = obj.location;
-// }
-// }
-
-const container = document.getElementById(this.buildSection('Sub-Locations', obj));
-
-//Make New Sublocation.
-const subLocArea = document.createElement('div');
-let subLocContent = `<h3><span class = 'leftText'>[Add New Sub-Location]</span></h3>`;
-
-subLocArea.innerHTML = subLocContent;
-container.appendChild(subLocArea);
-
-subLocArea.style.color = 'lightgray'
-
-subLocArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-
-subLocArea.addEventListener('mouseleave', function(){
-this.style.color = 'lightgray';
-})
-
-subLocArea.addEventListener('click', function(){
-
-const newsubLoc = {
-
-//metadata -- New SUBLOCATION
-id: load.generateUniqueId(load.Data.subLocations, 'entry'),
-order: subLocations.length + 1,
-key: 'subLocations',
-type: 'target', 
-subType: 'group',
-color: obj.color,
-
-name: parentLocation + ' subLocation', 
-active: 1,
-tags: '',
-target: 'Location',
-group: '',
-location: parentLocation,
-npc: '', 
-
-description: 'There is a blank space here lacking details. ',
-
-}
-editor.createForm(newsubLoc)  
-})
-
-//Add subLocations
-subLocations.forEach(subLoc => {
-
-const subLocArea = document.createElement('div');
-let subLocContent = `<h3><span>${subLoc.name}</span></h3>`;
-
-subLocArea.innerHTML = subLocContent;
-container.appendChild(subLocArea);
-
-if(parseInt(subLoc.active) === 1){
-subLocArea.style.color = 'lightgray'
-}else{
-subLocArea.style.color = 'gray'
-}
-
-subLocArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-
-subLocArea.addEventListener('mouseleave', function(){
-if(parseInt(subLoc.active) === 1){
-subLocArea.style.color = 'lightgray'
-}else{
-subLocArea.style.color = 'gray'
-}
-})
-
-subLocArea.addEventListener('click', function(){
-editor.createForm(subLoc);
-})
-
-});
 }
 
 }
@@ -857,7 +623,7 @@ let subSectionEntryDisplay = this.subSectionEntryDisplay //'block';
 let subsectionShow = subSectionEntryDisplay === 'block'? "true" : "false"
 let EntryDisplay = this.EntryDisplay //'block';
 
-console.log(keyshow)
+//console.log(keyshow)
 
 // 0. Iterate over each property in the data object
 for (const key in data) {
@@ -1065,7 +831,7 @@ if(editor.makeNew === true){ // to make new Entries
 let randomNumber = Math.floor(Math.random() * load.Data[key].length);
 console.log(randomNumber)
 if(key === 'npcs'){
-NPCs.addNPCInfo(load.Data[key][randomNumber].name)
+NPCs.makeNewNPC(load.Data[key][randomNumber])
 }else{
 editor.createForm(load.Data[key][randomNumber])
 }
@@ -1280,6 +1046,7 @@ this.loadList(resultsByKeys);
 buildSection: function (headerValue, obj){
 
 const sectionHeadDiv = document.createElement('div');
+
 let headerHTML = 
 `<hr> <h3>
 <span style="font-family:'SoutaneBlack'; color:${obj.color}" id="${headerValue}Header">

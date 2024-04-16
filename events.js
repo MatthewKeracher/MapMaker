@@ -36,23 +36,37 @@ this.eventDesc += `<br>`
 // locObj.tags --> tags
 let locObjTags = Events.getTagsfromObj(locObj.tags);
 // console.log('locObj.tags --> tags', locObjTags)
+locObjTags = locObjTags.filter(obj => obj.key === 'tags');
 
 //tags --> tagEvents
 let locTagEvents = [];
+
 locObjTags.forEach(obj => {
-locTagEvents = Events.getTagsfromObj(obj.tags);
-// console.log('tags --> tagEvents', locTagEvents)
+let tagEvents = Events.getTagsfromObj(obj.tags);
+    tagEvents = tagEvents.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
+
+    tagEvents.forEach(tag => {
+        locTagEvents.push(tag);
+    })
 })
 
 locTagEvents.forEach(tag => {
 Events.getAmbiencefromTag(tag);
+this.eventDesc += `<br><br>`
 });
-
-this.eventDesc += `<br>`
 
 //SUBLOCATIONS
 //subLocations ---> NPCs ---> NPC Events.
-const subLocations = load.Data.subLocations.filter(entry => entry.location === currentLocation)
+let searchKey = locObj.key;
+let searchId = parseInt(locObj.id);
+let subLocations = [];
+
+load.Data.subLocations.forEach(subLoc =>{
+
+    let locSearch = subLoc.tags.filter(tag => tag.key === searchKey && parseInt(tag.id) === searchId);
+    if(locSearch.length === 1){subLocations.push(subLoc)}
+    })
+
 subLocations.sort((a, b) => a.order - b.order);
 subLocations.forEach(subLocation =>{
 
@@ -69,6 +83,7 @@ this.eventDesc += subLocHeader;
 
 //SubLocation Description
 let subLocDesc = Events.filterRandomOptions(subLocation);
+this.eventDesc += `<br>`
 this.eventDesc += subLocDesc;
 //this.eventDesc += `<br><br>`
 
@@ -105,10 +120,12 @@ generateNPCStory(subLocation) {
     bundle = bundle.filter(entry => entry !== undefined);
     
     let npcBundle = bundle.filter(obj => obj.key === 'npcs');
-    let ambienceBundle = bundle.filter(obj => obj.key === 'ambience');
+    let ambienceBundle = bundle.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
     
     ambienceBundle.forEach(tag => {
+    this.eventDesc += `<br><br>`
     Events.getAmbiencefromTag(tag);
+
     });
     
     npcBundle.forEach(npc => {
@@ -163,7 +180,8 @@ generateNPCStory(subLocation) {
     };
     
     });
-    
+
+    eventBundle.sort((a, b) => a.order - b.order);
     eventBundle.forEach(event => {
     
     story += 
@@ -218,6 +236,7 @@ let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(ta
 let tagObj = load.Data[tag.key][index];
 
 array.push(tagObj);
+
 })
 
 
@@ -227,17 +246,16 @@ return array;
 },
 
 getAmbiencefromTag(obj){
+
 if(obj.key === 'ambience'){
 const ambienceObj = obj;
 let ambienceDesc = Events.filterRandomOptions(ambienceObj);
-
 //Ambience Wrapper
 let ambienceWrapper = 
 `<span class="expandable"
 style="color:${ambienceObj.color}"
 divId="${ambienceObj.name}"
 data-content-type="ambience"> ${ambienceDesc} </span>`
-
 this.eventDesc += ambienceWrapper;
 
 }},

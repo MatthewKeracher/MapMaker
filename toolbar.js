@@ -172,12 +172,6 @@ const obj = load.Data.locations.find(obj => obj.name === ref.locationLabel.textC
 if(obj && ref.Left.style.display === 'none'){
 editor.createForm(obj);
 }
-//Ref.locationLabel.textContent = load.fileName;
-
-//Hide Storyteller
-//Ref.eventManager.style.display = 'none';
-//Ref.locationLabel.style.display = 'none';
-
 
 //Show Editor loadLists()
 ref.Editor.style.display = 'block';
@@ -191,7 +185,6 @@ this.subSectionHeadDisplay = 'none',
 this.subSectionEntryDisplay =  'none',
 this.EntryDisplay = 'none',
 editor.loadList(load.Data);
-
 
 
 // Add the event listeners to each .selection element

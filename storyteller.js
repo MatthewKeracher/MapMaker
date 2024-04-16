@@ -60,8 +60,8 @@ ref.Storyteller.innerHTML = Story;
 expandable.showExpandable(ref.Storyteller, ref.Centre);
 expandable.showFloatingExpandable();
 //---
-window.speechSynthesis.cancel();
-this.textToSpeech(ref.Storyteller.textContent);
+//window.speechSynthesis.cancel();
+//this.textToSpeech(ref.Storyteller.textContent);
 
 };
 }, 

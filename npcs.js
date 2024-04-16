@@ -38,6 +38,35 @@ load.Data.npcs = npcInstances;
 
 },
 
+makeNewNPC(npc, obj){
+  console.log(obj)
+  // Create a deep copy of the original object
+  const newObj = JSON.parse(JSON.stringify(npc));
+  const newId = load.generateUniqueId(load.Data[npc.key], 'entry');
+  
+  // Generate a unique ID for the new object
+  newObj.id = newId
+  newObj.name = 'NPC ' + newObj.id;
+  newObj.description = 'A vague humanoid lacking description; giving NPC energy.'
+
+  if(obj){
+  newObj.tags = [{key: obj.key, id: obj.id}];
+
+  //Add new Tag to curent Object
+  let objEntry = {key: 'npcs', id: newId};
+  let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
+  load.Data[obj.key][index].tags.push(objEntry);
+  };
+  
+  npc = newObj
+  // Print the first spell in load.Data to see if it's modified
+  //console.log(load.Data.spells[0]);
+
+  load.Data.npcs.push(npc);
+  NPCs.addNPCInfo(npc.name);
+
+},
+
 addNPCInfo(npcName) {
   
 const findNPC = npcName.replace(/-/g, ' ');
@@ -53,25 +82,6 @@ ref.Left.innerHTML = '';
 // Ref.centreToolbar.style.display = 'flex';
 ref.Centre.style.display = 'block';
 ref.Left.style.display = 'block';
-
-//If needed, make copy Obj for basis of new data entry.
-if (editor.makeNew === true) {
-
-  const reservedTerms = ['id', 'key', 'type', 'subtype', 'active', 'order','color'];
-  
-  // Create a deep copy of the original object
-  const newObj = JSON.parse(JSON.stringify(foundNPC));
-  
-  // Generate a unique ID for the new object
-  newObj.id = load.generateUniqueId(load.Data[foundNPC.key], 'entry');
-  newObj.name = 'NPC ' + newObj.id;
-  newObj.description = 'A vague humanoid lacking description; giving NPC energy.'
-  
-  foundNPC = newObj
-  // Print the first spell in load.Data to see if it's modified
-  //console.log(load.Data.spells[0]);
-  
-  }
 
 //0. Make Hidden MetaData -- KEY, ID
 if(foundNPC){
@@ -133,8 +143,8 @@ nameContainer.innerHTML = nameContent;
 ref.Centre.appendChild(nameContainer);
 
 nameContainer.addEventListener('click', function() {
-nameContainer.querySelector('.leftText').focus();
-nameContainer.querySelector('.leftText').select();
+nameContainer.querySelector('.centreName').focus();
+nameContainer.querySelector('.centreName').select();
 });
 }
 
@@ -365,14 +375,6 @@ ${foundNPC.XP}
 
 }
 
-const statNames = {
-"STR": "Strength",
-"DEX": "Dexterity",
-"INT": "Intelligence",
-"WIS": "Wisdom",
-"CON": "Constitution",
-"CHA": "Charisma"
-};
 
 ["STR", "DEX", "INT", "WIS", "CON", "CHA"].forEach(stat => {
 if (foundNPC[stat.toLowerCase()]) {
@@ -415,6 +417,7 @@ if(foundNPC){
   if(foundNPC.tags){
   //console.log(obj.tags)
   let tagsToAdd = foundNPC.tags
+
   tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));
   //console.log(tagsToAdd)   
   tagsToAdd.forEach(tag => {

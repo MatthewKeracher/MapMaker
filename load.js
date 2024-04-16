@@ -51,7 +51,7 @@ else if(scope === 'entry'){
 
 try{
 const largestId = array.reduce((maxId, entry) => (entry.id && entry.id > maxId) ? entry.id : maxId, 0);
-
+//console.log(largestId)
 return largestId + 1;
 }
 
@@ -223,17 +223,26 @@ load.Data.tags.forEach(tagObj => {
 
 sortData(data){
 
-//let ambience = [];
+// //let ambience = [];
 
 // for (const key in data) {
 //     let obj = data[key];
 
-//     if (key === 'npcs') {
-//         // Use map() to modify each object in the array
-//         obj = obj.map(tagObj => ({
-//             ...tagObj,
-//             color: 'hotpink' // Add the property 
-//         }));
+//     if (key === 'subLocations') {
+//         obj = obj.map(subLocation => {
+//             // Remove some fields
+//             delete subLocation.npc;
+//             delete subLocation.target;
+//             delete subLocation.location;
+//             delete subLocation.npc;
+
+//             // Add new fields
+//             subLocation.subGroup = '';
+            
+
+//             // Return the modified object
+//             return subLocation;
+//         });
 //     }
 
 //     data[key] = obj;

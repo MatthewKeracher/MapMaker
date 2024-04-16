@@ -141,7 +141,7 @@ deleteDataEntry: function(){
 //Retrieve key and id of entry for deletion.
 const key = document.getElementById('key').getAttribute('pair');
 const id = document.getElementById('currentId').getAttribute('value');
-console.log(key, id);
+//console.log(key, id);
 
 //Use key and id to find index.
 const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
@@ -157,6 +157,25 @@ load.Data[key].splice(index, 1);
 editor.loadList(load.Data);
 ref.Left.style.display = 'none';
 ref.Centre.style.display = 'none';
+
+//remove Tags 
+for (const key in load.Data) {
+    let obj = load.Data[key];
+
+    if (key !== 'townText') {
+        for (const entry of obj) {
+            let tagsToSearch = entry.tags;
+
+            // Use filter to remove deleteTag from tagsToSearch
+            entry.tags = tagsToSearch.filter(tag => !(tag.key === key && parseInt(tag.id) === parseInt(id)));
+
+        }
+    }
+
+    load.Data[key] = obj;
+}
+
+
 
 //if Location then delete locationDiv
 if(key === 'locations'){
