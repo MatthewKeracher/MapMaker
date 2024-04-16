@@ -13,22 +13,22 @@ class Toolbar{
 init() {   
 
 toolbar.getStoredData();
-ref.locationLabel.textContent = 'Information';
 ref.editToolbar.style.display = 'none';
+Storyteller.showTownText();
 
 //Readme.
-ref.Storyteller.innerHTML = 
-`<span class="withbreak">
-Welcome to Excel_DM, a hypertextual Game Master worldbuilding and game running tool.
+// ref.Storyteller.innerHTML = 
+// `<span class="withbreak">
+// Welcome to Excel_DM, a hypertextual Game Master worldbuilding and game running tool.
 
-All you need to do to being is select [M]ap button and load an image file. [D]ata is loaded from, and saved to a .json file.
+// All you need to do to being is select [M]ap button and load an image file. [D]ata is loaded from, and saved to a .json file.
 
-*Link to Library*
+// *Link to Library*
 
-Matthew Keracher, 2024.
-keracher@uwm.edu
-</span>
-`;
+// Matthew Keracher, 2024.
+// keracher@uwm.edu
+// </span>
+// `;
 
 //editor.addPredictiveContent();
 editor.init();
@@ -56,34 +56,30 @@ toolbar.saveToBrowser();
 };
 
 escButton(){
-
+  
 window.speechSynthesis.cancel();
 
 //Close search and empty search box.
 ref.eventManager.value = '';
 ref.Editor.style.display = 'none';
 
-if(ref.Centre.style.display !== "none"){
+//Reset fullScreen mode on descriptionText.
 const textBox = document.getElementById('descriptionText');
-//Make normal.
+if(textBox && ref.Centre.style.display !== "none"){
 ref.Left.style.display = "block";
 editor.fullScreen = false;
 ref.Centre.classList.remove("fullScreen");
 ref.Centre.classList.add("Centre");
 textBox.classList.remove("fullScreenText");
 textBox.classList.add("centreText");
-//Set Height
-const descriptionText = document.getElementById('descriptionText');
-// Set the initial height based on the scroll height of the content
-descriptionText.style.height = 'auto';
-descriptionText.style.height = descriptionText.scrollHeight + 'px';
+textBox.style.height = 'auto';
+textBox.style.height = descriptionText.scrollHeight + 'px';
 }
 
 if(ref.Left.style.display === "none" && ref.Centre.style.display === "none"){
 
 // Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
-
 
 // if(editor.editMode === true){
 // Ref.mainToolbar.style.display = "none";
@@ -101,7 +97,7 @@ Storyteller.showTownText();
     
 
 }else{
-ref.locationLabel.textContent = 'Information';    
+//   
 }
 
 }else {
@@ -251,7 +247,7 @@ setTimeout(() => {
 editSaveButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
-editor.saveDataEntry();
+save.saveDataEntry();
 
 //Save whole file.
 }else{
@@ -273,7 +269,7 @@ editSaveButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
 
-editor.saveDataEntry();
+save.saveDataEntry();
 
 
 }
@@ -299,7 +295,7 @@ editor.loadList(load.Data);
 }
 
 deleteFormButton(){
-editor.deleteDataEntry();
+save.deleteDataEntry();
 };
 
 getStoredData(){
@@ -308,7 +304,9 @@ if (localStorage.getItem('myData')) {
 let storedData = localStorage.getItem('myData');
 let parsedData = JSON.parse(storedData);
 load.Data = parsedData;
-
+Storyteller.townText = load.Data.townText.description;
+locationLabel.textContent = load.Data.townText.name;
+load.fileName = load.Data.townText.name;
 } 
 
 }

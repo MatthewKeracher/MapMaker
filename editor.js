@@ -3,7 +3,6 @@ import load from "./load.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import expandable from "./expandable.js";
-
 import Events from "./events.js";
 
 import Map from "./map.js";
@@ -27,76 +26,7 @@ subSectionEntryDisplay:  'none',
 EntryDisplay: 'none',
 
 init: function () {
-// this.divIds.forEach((divId) => {
-// const divElement = document.getElementById(divId);
-// if (divElement) {
-// divElement.addEventListener('input', (event) => {
-//     console.log('test')
-// const text = event.target.value;
-// const cursorPosition = event.target.selectionStart;
-// const openBraceIndex = text.lastIndexOf('#', cursorPosition);
-// const openAsteriskIndex = text.lastIndexOf('*', cursorPosition);
-// const openTildeIndex = text.lastIndexOf('~', cursorPosition); // Add this line for ~
-
-// if (openBraceIndex !== -1 || openAsteriskIndex !== -1 || openTildeIndex !== -1) { // Add openTildeIndex here
-// let searchText;
-// let filteredItems;
-
-// if (openBraceIndex > openAsteriskIndex && openBraceIndex > openTildeIndex) { // Modify this condition
-// searchText = text.substring(openBraceIndex + 1, cursorPosition);
-// filteredItems = load.Data.items.filter(item =>
-// item.Name.toLowerCase().includes(searchText.toLowerCase())
-// );
-// } else if (openAsteriskIndex > openBraceIndex && openAsteriskIndex > openTildeIndex) { // Modify this condition
-// searchText = text.substring(openAsteriskIndex + 1, cursorPosition);
-// filteredItems = load.Data.monsters.filter(monster =>
-// monster.name.toLowerCase().includes(searchText.toLowerCase())
-// );
-// } else {
-// searchText = text.substring(openTildeIndex + 1, cursorPosition); // Handle ~ case
-// filteredItems = load.Data.spells.filter(spell =>
-// spell.Name.toLowerCase().includes(searchText.toLowerCase())
-// );
-// }
-
-// console.log(searchText);
-
-// // Show Centre
-// Ref.Centre.style.display = 'block';
-// Ref.Centre.innerHTML = ''; // Clear existing content
-
-// filteredItems.forEach(item => {
-// const option = document.createElement('div');
-// option.textContent = item.Name || item; // Use "Name" property if available
-// option.addEventListener('click', () => {
-// const replacement = openBraceIndex !== -1
-// ? `#${item.Name}#`
-// : openAsteriskIndex !== -1
-// ? `*${item.Name}*`
-// : openTildeIndex !== -1 // Add this line
-// ? `~${item.Name}~` // Add this line
-// : ''; // Add this line for ~
-
-// const newText = text.substring(
-// 0,
-// openBraceIndex !== -1
-// ? openBraceIndex
-// : openAsteriskIndex !== -1
-// ? openAsteriskIndex
-// : openTildeIndex // Add this line for ~
-// ) + replacement + text.substring(cursorPosition);
-// event.target.value = newText;
-
-// //Ref.Centre.style.display = 'none'; // Hide Ref.optionsList
-// });
-// Ref.Centre.appendChild(option);
-// });
-// } else {
-
-// }
-// });
-// }
-// });
+//Empty
 },
 
 addTagtoItem(itemId, tagKey){
@@ -104,7 +34,7 @@ addTagtoItem(itemId, tagKey){
 //console.log(editor.addItem);
 //Item adding tag to.
 const currentId = document.getElementById('currentId').value;
-const currentKey = document.getElementById('key').value;
+const currentKey = document.getElementById('key').getAttribute('pair');
 const homeObjAddress = {key: currentKey, id: currentId};
 const homeObj = load.Data[currentKey].find(obj => parseInt(obj.id) === parseInt(currentId));
 console.log('home object', homeObj);
@@ -213,19 +143,8 @@ const properKey = this.proper(obj.key.slice(0, -1));
 newObj.name = 'New ' + properKey + ' ' + newObj.id;
 newObj.description = 'An unknown entity.'
 
-// Iterate over each property in the new object
-// for (let key in newObj) {
-// // Check if the property is not reserved
-// if (newObj.hasOwnProperty(key) && !reservedTerms.includes(key)) {
-// // Update the value of each property to 'Insert Value Here'
-
-// newObj[key] = 'Insert ' + key;
-// }
-// }
-
 obj = newObj
-// Print the first spell in load.Data to see if it's modified
-//console.log(load.Data.spells[0]);
+
 
 }
 
@@ -233,30 +152,8 @@ obj = newObj
 if (obj) {
 
 //Define key groups for different areas of the form.
-const excludedKeys = ['id', 'name', 'type', 'subType', 'description', 'key', 'tags']; 
-const universalKeys = ['group', 'color'];
-
-//Make MetaData elements -- key and id.
-if(obj){
-//Make Key and Make Invisible
-if(obj.key){
-const keyArea = document.createElement('div');
-
-let keyContent =  
-`<label class="entry-label" 
-style="display: none"
-divId="key">
-</label>
-<input 
-class="leftText white entry-input"
-style="display:none" 
-id="key"
-divId= "edit${obj.key}"
-value="${obj.key}"></h3>`;
-
-keyArea.innerHTML = keyContent;
-ref.Left.appendChild(keyArea);
-}
+const excludedKeys = ['id', 'name', 'description', 'key', 'tags']; 
+const universalKeys = ['color', 'type', 'subType'];
 
 //Make ID Manually
 if(obj.id){
@@ -282,7 +179,6 @@ value="${obj.id || 'N/A'} ">`;
 
 idArea.innerHTML = idContent;
 ref.Left.appendChild(idArea);
-}
 }
 
 //Make Description Manually
@@ -369,31 +265,31 @@ if(obj){
 const topArea = document.createElement('div');
 topArea.style.display = 'block'; 
 
-//2. Make Type Manually
+//2. Make Top Area Manually -- Key, duplicate subType
 const topAreaTop = document.createElement('div');
 topAreaTop.style.display = 'flex'; // Set the display property to flex
 
-
-if(obj.type){
-const type = obj.type
-topArea.id = 'typeArea';
-
-let typeContent =  
-`<label 
-style="display: none"
-divId="type">
-</label>
-<input
-pair="${type}" 
-class="centreType" 
-style="font-family:'SoutaneBlack'; color:${color}"
-id="typeEntry"
-value="${obj[type] || 'none'} ">`;
-
-topAreaTop.innerHTML = typeContent;
-ref.Left.appendChild(topAreaTop);
-ref.Left.appendChild(topArea);
-}
+if(obj.key){
+    topArea.id = 'topArea';
+    const properKey = editor.proper(obj.key)
+    const key = obj.key
+    
+    let keyContent =  
+    `<label 
+    style="display: none"
+    divId="key">
+    </label>
+    <input
+    pair="${key}" 
+    class="centreType" 
+    style="font-family:'SoutaneBlack'; color:${color}"
+    id="key"
+    value="${properKey || 'None'} ">`;
+    
+    topAreaTop.innerHTML = keyContent;
+    ref.Left.appendChild(topAreaTop);
+    ref.Left.appendChild(topArea);
+    }
 
 //3. Make subType Manually
 if(obj.subType){
@@ -830,111 +726,6 @@ editor.createForm(locEv);
 
 }
 
-//12. Add Events affecting same NPCs
-if(obj.key === 'events'){
-if(obj.target === 'NPC'){
-// Split the obj.tags into an array
-const tags = obj.npc.split(',').map(item => item.trim());
-const matchedEvents = {};
-
-// Iterate over each event
-load.Data.events.forEach(event => {
-// Split the event tag string into an array of tags
-const eventTags = event.npc.split(',').map(item => item.trim());
-const commonTags = tags.filter(tag => eventTags.includes(tag));
-
-// Iterate over each common tag associated with the NPC
-commonTags.forEach(tag => {
-if (!matchedEvents[tag]) {
-matchedEvents[tag] = [];
-}
-
-if(obj.id !== event.id){
-matchedEvents[tag].push(event.id);
-};
-});
-});
-
-for (const tag in matchedEvents) {
-if (matchedEvents.hasOwnProperty(tag)) {
-
-const evHeaderObj = load.Data.events.find(event => event.npc === tag && event.target === 'NPC');
-//console.log(tag, evHeaderObj)
-
-const container = document.getElementById(this.buildSection('Events Affecting Target', obj));
-
-//Make New Event.
-const groupEventArea = document.createElement('div');
-let groupEventContent = `<h3><span class = 'leftText'>[Add New ${tag} Event]</span></h3>`;
-
-groupEventArea.innerHTML = groupEventContent;
-container.appendChild(groupEventArea);
-
-groupEventArea.style.color = 'lightgray'
-
-groupEventArea.addEventListener('mouseenter', function(){
-this.style.color = 'lime';
-})
-
-groupEventArea.addEventListener('mouseleave', function(){
-this.style.color = 'lightgray';
-})
-
-groupEventArea.addEventListener('click', function(){
-
-const newTagEvent = {
-
-//metadata -- New Event with SAME TAG
-id: load.generateUniqueId(load.Data.events, 'entry'),
-key: 'events',
-type: 'target', 
-subType: 'group',
-color: obj.color,
-
-name: 'New ' + tag + ' Event', 
-active: 1,
-tags: tag,
-target: 'NPC',
-group: '',
-location: obj.location,
-npc: tag, 
-
-description: 'What are the ' + tag + 's doing?',
-
-}
-editor.createForm(newTagEvent)  
-})
-
-// Add Names
-const evIds = matchedEvents[tag];
-evIds.forEach(evId => {
-const evObj = load.Data.events.find(event => parseInt(event.id) === evId);
-
-const evNameArea = document.createElement('div');
-let evNameContent = `<h3><span>${evObj.name}</span></h3>`;
-
-evNameArea.innerHTML = evNameContent;
-container.appendChild(evNameArea);
-
-evNameArea.style.color = 'lightgray';
-
-evNameArea.addEventListener('mouseenter', function(){
-this.style.color = 'white';
-})
-
-evNameArea.addEventListener('mouseleave', function(){
-evNameArea.style.color = 'lightgray'
-})
-
-evNameArea.addEventListener('click', function(){
-editor.createForm(evObj)
-})
-
-
-});
-}}}
-}
-
 //12. Add Sub-Locations
 if(obj.key === 'locations'){
 //get data
@@ -987,9 +778,9 @@ subLocArea.addEventListener('click', function(){
 const newsubLoc = {
 
 //metadata -- New SUBLOCATION
-id: load.generateUniqueId(load.Data.events, 'entry'),
+id: load.generateUniqueId(load.Data.subLocations, 'entry'),
 order: subLocations.length + 1,
-key: 'events',
+key: 'subLocations',
 type: 'target', 
 subType: 'group',
 color: obj.color,
@@ -1183,7 +974,7 @@ nameDiv.setAttribute("scope", 'subsection');
 nameDiv.setAttribute("id", currentSubSection);
 nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
 
-let entryName = entry[type] === ''? 'Misc' : entry[subType];
+let entryName = entry[subType] === ''? 'Misc' : entry[subType];
 
 let displayName;
 if (!isNaN(entryName) && !isNaN(parseFloat(entryName))) {
@@ -1575,164 +1366,7 @@ proper(string) {
 return string.charAt(0).toUpperCase() + string.slice(1);
 },
 
-saveDataEntry: function() {
 
-const saveEntry = {};
-
-// get array of label divIds.
-const labelElements = document.querySelectorAll('.entry-label');
-const labels = [];
-
-labelElements.forEach(label => {
-
-const divId = label.getAttribute('divId');
-
-if(divId === 'newField' ){
-
-if(label.value !== "New Field"){
-const newField = label.value 
-console.log('Saving newField...', newField)
-labels.push(newField)   
-}else{//Do Nothing
-}
-
-}else{
-labels.push(divId);
-}
-});
-
-//get array of input divIds
-const inputElements = document.querySelectorAll('.entry-input');
-const inputs = [];
-
-inputElements.forEach(input => {
-const value = input.value;
-const divId = input.getAttribute('divId');
-
-if(divId === 'newContent'){
-if(value !== 'Insert New Value'){
-const newValue = value 
-console.log('Saving newContent...', newValue)
-inputs.push(newValue)   
-}else{//Do Nothing
-}
-
-}else{
-inputs.push(value.trim());
-
-}
-});
-
-console.log(labels, inputs);
-
-// Pair the contents of the labels and inputs arrays to create the saveEntry object
-for (let i = 0; i < labels.length; i++) {
-saveEntry[labels[i]] = inputs[i];
-}
-
-//get Array of tag addresses
-const tagElements = document.querySelectorAll('.tag');
-const tags = [];
-
-tagElements.forEach(input => {
-const tagId  = input.getAttribute('tagid');
-const tagKey = input.getAttribute('tagkey');
-tags.push({key: tagKey, id: tagId});
-
-});
-
-//Edit saveEntry object for type and subType -- will need to change if to be user-access'
-
-//console.log(document.getElementById('subTypeEntry').getAttribute('pair'))
-try{
-saveEntry['type'] = document.getElementById('typeEntry').getAttribute('pair');
-saveEntry['subType']= document.getElementById('subTypeEntry').getAttribute('pair');
-}catch{console.error("No type or subType found.")}
-saveEntry['id'] = parseInt(saveEntry['id']);
-saveEntry['tags'] = tags;
-
-const key = saveEntry && saveEntry['key'];
-const id = saveEntry && saveEntry['id'];
-const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
-
-//console.log('saving...');
-//console.log('Updated saveEntry:');
-//console.log(saveEntry)
-// console.log(load.Data[key][index]);
-
-if(index === -1){
-load.Data[key].push(saveEntry)
-}else{
-load.Data[key][index] = saveEntry
-}
-
-//Reset programme with new Data.
-NPCs.buildNPC();
-
-//Reset Editor and Search 
-if(ref.eventManager.value === ''){   
-editor.loadList(load.Data);
-}else{
-let searchText = ref.eventManager.value.toLowerCase();
-
-if(editor.editMode === true){
-editor.searchAllData(searchText, load.Data);
-};
-}
-
-if(editor.editMode === false){
-ref.Editor.style.display = 'none';
-}
-
-//Reload Map to reflect changes.
-load.displayLocations(load.Data.locations);
-
-//Reload form to reflect changes.
-if(key === 'npcs'){
-NPCs.addNPCInfo(saveEntry.name)
-}else{
-editor.createForm(saveEntry);
-}
-
-//Reload location to reflect changes.
-Storyteller.refreshLocation();
-
-},
-
-deleteDataEntry: function(){
-
-//Retrieve key and id of entry for deletion.
-const key = document.getElementById('key').getAttribute('value');
-const id = document.getElementById('currentId').getAttribute('value');
-//console.log(key, id);
-
-//Use key and id to find index.
-const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
-//console.log(index)
-
-//Delete index and refresh.
-if (index !== -1) { // Check if index was found
-// Confirm deletion
-const confirmation = confirm('Are you sure you want to delete this entry?');
-if (confirmation) {
-// Remove entry at index
-load.Data[key].splice(index, 1);
-editor.loadList(load.Data);
-ref.Left.style.display = 'none';
-ref.Centre.style.display = 'none';
-
-//if Location then delete locationDiv
-if(key === 'locations'){
-load.displayLocations(load.Data.locations);
-}
-
-// Refresh or update UI as needed
-} else {
-console.log('Deletion canceled.');
-}
-} else {
-console.log('Entry not found or invalid key/id.');
-}},
 
 
 };

@@ -10,8 +10,6 @@ import ref from "./ref.js";
 
 const Storyteller = {
 
-miscArray: [],
-monsterArray:[],
 returnLocation: '',
 townText: '',
 
@@ -40,7 +38,7 @@ Events.getEvent(locName, locObj);
 this.miscArray = [];
 this.monsterArray = [];
 //console.log(Events.eventDesc)
-const squareCurly = this.getMisc(Events.eventDesc, this.miscArray, locObj.color);
+const squareCurly = expandable.getMisc(Events.eventDesc, expandable.miscArray, locObj.color);
 //console.log(squareCurly)
 const withMonsters = await expandable.getMonsters(squareCurly);
 const withSpells = await expandable.getSpells(withMonsters);
@@ -59,8 +57,8 @@ Story += `
 ref.Storyteller.innerHTML = Story;
 
 //Tell expandable Divs what to show.
-this.showExpandable(ref.Storyteller, ref.Centre);
-this.showFloatingExpandable();
+expandable.showExpandable(ref.Storyteller, ref.Centre);
+expandable.showFloatingExpandable();
 //---
 window.speechSynthesis.cancel();
 this.textToSpeech(ref.Storyteller.textContent);
@@ -118,7 +116,7 @@ Storyteller.changeContent(returnLocation);
 else if(load.fileName !== ''){
 ref.locationLabel.textContent = load.fileName;
 }else{
-ref.locationLabel.textContent = 'Information';    
+ref.locationLabel.textContent = 'No fileName';    
 }
 
 
@@ -138,7 +136,7 @@ const storytellerText = document.getElementById("storytellerText")
 
 
 if(Storyteller.townText !== ''){
-storytellerText.textContent = Storyteller.townText
+storytellerText.textContent = Storyteller.townText;
 } else {
 storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
 }
@@ -150,302 +148,13 @@ storytellerText.setSelectionRange(storytellerText.value.length, storytellerText.
 
 storytellerText.addEventListener('focusout', () => {    
 Storyteller.townText = storytellerText.value
-load.Data.townText = storytellerText.value
+load.Data.townText.description = storytellerText.value
+load.fileName = locationLabel.textContent;
 //console.log(load.Data);
 //console.log(Storyteller.townText);
 
 });
 
-},
-
-getQuotes(locationText) {
-const quotationMarks = /"([^"]+)"/g;
-
-return locationText.replace(quotationMarks, (match, targetText) => {
-return `<span class="hotpink">"${targetText}"</span>`;
-});
-},
-
-addRulesInfo(contentId, target) {
-
-const rulesItem = this.rulesArray.find(rule => rule.name === contentId);
-
-if (rulesItem) { 
-const showRule = [ 
-
-`<h3><span class="misc">${rulesItem.name}</span></h3>
-<span class="withbreak">${rulesItem.body}</span>`]
-
-target.innerHTML = showRule;
-
-} else {
-console.log(`Rule with name "${contentId}" not found in the rulesArray.`);
-}
-},
-
-addMiscInfo(contentId, contentStyle, target) {
-// console.log('adding...')
-const MiscItem = this.miscArray.find(item => item.square === contentId);
-const miscDiv = document.createElement('div');
-
-if (MiscItem) {
-const withMonsters = expandable.getMonsters(MiscItem.curly);
-const withItems = Items.getItems(withMonsters);
-const withSpells = Spells.getSpells(withItems);
-const title = editor.proper(MiscItem.square); 
-const miscInfo = `
-<h2>
-<span style=${contentStyle}>
-${title}
-<hr>
-</span>
-</h2>
-<span class="withbreak">
-${withSpells}
-<br>
-</span>`;
-
-miscDiv.innerHTML = miscInfo;
-target.appendChild(miscDiv);
-//Ref.Left.style.display = 'none';
-
-} else {
-console.log(`Square curly combo with square "${contentId}" not found in the comboArray.`);
-}
-},
-
-addLocationItems(locationObject){
-
-let locationItems = '';
-
-// Filter itemsArray based on location Name and Tags
-const filteredItems = load.Data.items.filter(item => {
-const itemTags = item.Tags ? item.Tags.split(',').map(tag => tag.trim()) : [];
-
-// Check if the item matches the criteria
-return (
-(itemTags.includes(locationObject.divId)) ||
-(locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
-);
-});
-
-// Format each item and add to this.inventory
-locationItems = filteredItems.map(item => ({
-Name: item.Name,
-Type: item.Type,
-Tag: item.Tags ? item.Tags.split(',').map(tag => tag.trim()).find(tag => 
-tag === locationObject.divId || 
-(locationObject.tags && locationObject.tags.split(',').map(tag => tag.trim()).some(locTag => locTag === tag))
-) : ''
-}));
-
-// Sort the inventory alphabetically by item.Tag and then by item.Name
-locationItems.sort((a, b) => {
-// Compare item.Tag first
-if (a.Tag > b.Tag) return 1;
-if (a.Tag < b.Tag) return -1;
-
-// If item.Tags are the same, compare item.Type
-if (a.Type > b.Type) return 1;
-if (a.Type < b.Type) return -1;
-
-// If item.Type are the same, compare item.Name
-if (a.Name > b.Name) return 1;
-if (a.Name < b.Name) return -1;
-
-return 0; // Both item.Tag and item.Name are equal
-
-});
-
-// Log the names of the items
-//console.log(locationItems)
-//console.log(locationItems.length !== 0 ? "Location Items:" + JSON.stringify(locationItems) : 'No location Items found.');
-
-return locationItems;
-},
-
-getMisc(locationText, comboArray, color) {
-const squareBrackets = /\[([^\]]+)\]\{([^}]+)\}/g;
-
-const matches = [...locationText.matchAll(squareBrackets)];
-let updatedText = locationText;
-
-for (const match of matches) {
-const square = match[1];
-const curly = match[2];
-
-const replacement = `<span class="float" style="color:${color}" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
-
-updatedText = updatedText.replace(match[0], replacement);
-
-// Store the square curly combo in the provided array
-comboArray.push({ square, curly });
-
-}
-
-return updatedText;
-},
-
-showExpandable(source, target) {
-
-const expandableElements = source.querySelectorAll('.expandable');
-
-expandableElements.forEach(element => {
-
-element.addEventListener('click', (event) => {
-//console.log('mouseenter')
-const contentType = event.target.getAttribute('data-content-type');
-const contentId = event.target.getAttribute('divId');
-
-switch (contentType) {
-case 'npc':
-NPCs.addNPCInfo(contentId, target); // Handle NPCs
-break;
-// case 'misc':
-// this.addMiscInfo(contentId, target);
-// break;
-case 'rules':
-this.addRulesInfo(contentId, target);
-break;
-default:
-//for monsters, spells, items, etc.
-//1. Find the Obj.
-const contentIdLowercase = contentId.toLowerCase();
-const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
-//console.log(obj)
-//2.
-// const currentId = document.getElementById("currentId").value;
-// console.log
-//     if(obj.id === currentId){
-//     Ref.Left.style.display = 'none';
-//     Ref.Centre.style.display = 'none';
-//     } else {
-editor.createForm(obj);
-//     }
-}          
-
-//target.style.display = "block";
-this.showExtraExpandable(ref.Left); 
-
-});
-
-// Ref.Centre.addEventListener('mouseenter', () => {
-// Ref.Left.style.display = 'none';
-
-// });
-});
-},
-
-showExtraExpandable(target) {
-
-const expandableElements = ref.Centre.querySelectorAll('.expandable');
-
-expandableElements.forEach(element => {
-
-element.addEventListener('mouseenter', (event) => {
-
-const contentType = event.target.getAttribute('data-content-type');
-const contentId = event.target.getAttribute('divId');
-
-switch (contentType) {
-case 'npc':
-NPCs.addNPCInfo(contentId, target); // Handle NPCs
-break;
-case 'monster':
-expandable.addMonsterInfo(contentId, target); // Handle Monsters
-break;
-case 'item':
-Items.addIteminfo(contentId, target); // Handle Items
-break;
-case 'spell':
-editor.addInfo(contentId, target); // Handle Spells
-break;
-// case 'misc':
-// this.addMiscInfo(contentId, target); //Handle Misc
-// break;
-// case 'rule':
-// this.addRulesInfo(contentId, target); //Handle Rule
-// break;
-default:
-console.log('Unknown content type');
-}        
-
-target.style.display = "block";
-this.showFloatingExpandable();
-
-});   
-
-});
-
-},
-
-showFloatingExpandable() {
-const expandableElements = document.querySelectorAll('.float');
-const expandableElementsCentre = ref.Centre.querySelectorAll('.float');
-// const expandableElements = [...expandableElementsLeft, ...expandableElementsCentre];
-
-
-expandableElements.forEach(element => {
-
-element.addEventListener('click', (event) => {
-
-const contentType = event.target.getAttribute('data-content-type');
-const contentId = event.target.getAttribute('divId');
-const contentStyle = element.getAttribute('style');
-
-// Create a floating box div
-let floatingBox = document.createElement('div');
-floatingBox.classList.add('floating-box');
-const divId = "floatingBox";
-floatingBox.setAttribute('id', divId);
-
-// Append the floating box to the document body
-const dupCheck = document.getElementById(divId);
-if(dupCheck){
-floatingBox = document.getElementById(divId);
-}else{
-document.body.appendChild(floatingBox);
-}
-
-// Remove the floating box when leaving the element
-floatingBox.addEventListener('click', () => {
-
-try{
-document.body.removeChild(floatingBox);
-}catch{
-
-}
-
-});
-
-switch (contentType) {
-case 'npc':
-NPCs.addNPCInfo(contentId, contentStyle, floatingBox); // Handle NPCs
-break;
-case 'monster':
-expandable.addMonsterInfo(contentId, contentStyle, floatingBox); // Handle Monsters
-break;
-case 'item':
-Items.addIteminfo(contentId,contentStyle, floatingBox); // Handle Items
-break;
-case 'spell':
-editor.addInfo(contentId,contentStyle, floatingBox); // Handle Spells
-break;
-case 'misc':
-this.addMiscInfo(contentId,contentStyle, floatingBox); //Handle Misc
-break;
-case 'rule':
-this.addRulesInfo(contentId,contentStyle, floatingBox); //Handle Rule
-console.log('rule')
-break;
-default:
-console.log('Unknown content type');
-}  
-
-
-
-});
-});
 },
 
 rulesArray: [

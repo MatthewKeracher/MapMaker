@@ -20,6 +20,7 @@ constructor(data) {
 this.type = 'class', 
 this.subType = 'level',
 this.key = 'npcs',
+this.color = data.color,
 
 //Character Sheet
 this.id = data.id;

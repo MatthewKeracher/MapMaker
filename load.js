@@ -96,7 +96,7 @@ await NPCs.loadAndBuild(content);
 
 // Return the file name
 load.fileName = fileNameWithoutExtension;
-Ref.locationLabel.textContent = load.fileName;
+ref.locationLabel.textContent = load.fileName;
 //load.locationLabelEvents();
 
 } catch (error) {
@@ -108,7 +108,7 @@ console.error('Error reading file:', error);
 
 locationLabelEvents(){
 
-Ref.locationLabel.addEventListener('click', function() {
+ref.locationLabel.addEventListener('click', function() {
 editor.createForm()
 
 });
@@ -129,7 +129,9 @@ load.Data = JSON.parse(fileContent);
 // this.generateTags(load.Data, 'locations');
 this.sortData(load.Data);
 
-Storyteller.townText = load.Data.townText;
+Storyteller.townText = load.Data.townText.description;
+load.fileName = load.Data.townText.name;
+locationLabel.textContent = load.Data.townText.name;
 Storyteller.showTownText();
 console.log(load.Data)
 
@@ -223,89 +225,20 @@ sortData(data){
 
 //let ambience = [];
 
-for (const key in data) {
-
-let obj = data[key];
-
-// if(key === 'subLocations' ){
-
-//     obj.forEach(obj => {
-//         // Extract the number at the start of the name, if present
-//     let numberMatch = obj.name.match(/^\d+(\.\d+)?/);
-//     if (numberMatch) {
-//         let numberAtStart = parseFloat(numberMatch[0]);
-
-//         // Assign the extracted number to the active property
-//         obj.order = numberAtStart;
-
-//         // Remove the number from the start of the name
-//         obj.name = obj.name.replace(/^\d+(\.\d+)?\s*/, '');
-//     }
-// });
-
-
-// obj = obj.map(obj => {
-    
-//     return {
-
-//     //Universal Settings
-//     id: obj.id,
-//     key: obj.key,
-//     color: obj.color,
-//     group: obj.group,
-//     name: obj.name,
-//     description: obj.description,
-//     tags: obj.tags,
-
-//     //Key Specific Settings
-//     type: "location",
-//     subType: "group",
-//     location: obj.location,
-
-//     order: 1, 
-//     active: obj.active,
-     
-//     };
-// });
-}
-
-// data[key]= obj;};
-
-
 // for (const key in data) {
+//     let obj = data[key];
 
-// let obj = data[key];
+//     if (key === 'npcs') {
+//         // Use map() to modify each object in the array
+//         obj = obj.map(tagObj => ({
+//             ...tagObj,
+//             color: 'hotpink' // Add the property 
+//         }));
+//     }
 
-// if(key === 'townText' ){
-
-// }else{
-
-// // if(key === 'ambience'){
-
-// // obj.forEach(item => {
-// // if(item.location && item.location === 'All'){
-// // item.key = 'ambience';
-// // //item.type = 'location';
-// // ambience.push(item);
-
-// // }
-
-// // })
-
-
-// // }
-
-// };
-
-
-// // let defTag = data.tags[0]
-// // data.tags=[];
-// // data.tags.push(defTag);
-
+//     data[key] = obj;
 // }
 
-// //load.Data.subLocations = load.Data.subLocations.filter(obj => obj.location !== "All");
-// //load.Data.ambience = ambience;
 
 },
 
@@ -404,7 +337,7 @@ if (!location.dataset.hasListener) {
 
 location.addEventListener('click', () => {
 Storyteller.changeContent(location);
-// Ref.Centre.style.display !== "none" || 
+// ref.Centre.style.display !== "none" || 
 if (editor.editMode === true){
 //console.log(location)
 const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));

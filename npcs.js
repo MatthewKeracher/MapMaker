@@ -6,6 +6,7 @@ import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 import NPCbuild from "./classes.js";
 import load from "./load.js";
+import expandable from "./expandable.js";
 
 // Define the NPCs module
 const NPCs = {
@@ -34,117 +35,6 @@ load.Data.npcs = npcInstances;
 
 // For example, you can log the properties of each NPC instance
 //npcInstances.forEach(npc => console.log(npc));
-
-},
-
-generateNPCStory(subLocation) {
-
-let story = ``;
-
-let subLocationTags = subLocation.tags;
-
-subLocationTags.forEach(tag => {
-
-  //Tags in subLocation
-  let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-  let tags = load.Data[tag.key][index].tags;
-
-  let bundle = []
-  
-  tags.forEach(tag => {
-
-  let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-  let obj = load.Data[tag.key][index]
-  bundle.push(obj);
-
-  })
-
-  //filter out empty entries
-  bundle = bundle.filter(entry => entry !== undefined);
-
-  let npcBundle = bundle.filter(obj => obj.key === 'npcs');
-  let ambienceBundle = bundle.filter(obj => obj.key === 'ambience');
-
-  ambienceBundle.forEach(tag => {
-  Events.getAmbiencefromTag(tag);
-  });
-
-  npcBundle.forEach(npc => {
-
-    let eventBundle = bundle.filter(obj => obj.key === 'events');
-    
-    story += `<h3><span 
-    class="expandable" 
-    style="font-family:'SoutaneBlack'; 
-    color: cyan" data-content-type="npc" 
-    divId="${npc.name.replace(/\s+/g, '-')}"> 
-    ${npc.name} is here. </span></h3>`;
-
-    //Insert first sentence of Backstory
-    let firstPeriodIndex = npc.description.indexOf('.');
-    let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
-
-
-    story += `<span
-    class="expandable"
-    data-content-type="npc" 
-    style="font-family:'SoutaneBlack'; color:DarkSeaGreen" 
-    divId="${npc.name.replace(/\s+/g, '-')}"> ${firstSentence}</span> <br>`
-
-    //Floating Tags (no subLocation) for NPCs
-    let npcTags = npc.tags;
-
-    npcTags.forEach(tag => {
-    let isFloating = false;
-    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-
-    //Check inside Tag for subLocations, filter out.
-    let floatTag = load.Data[tag.key][index];
-    let floatCheck = floatTag.tags.filter(obj => obj.key === 'subLocations');
-    if(floatCheck.length === 0){isFloating = true};
-
-    if(isFloating === true){
-
-    //add events tagged to tag to eventBundle
-
-    let eventsToAdd = floatTag.tags.filter(obj => obj.key === 'events');
-
-    eventsToAdd.forEach(tag => {
-
-    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-    let event = load.Data[tag.key][index];
-
-    eventBundle.push(event)
-
-    })
-
-    };
-
-    });
-
-    eventBundle.forEach(event => {
-      
-    story += 
-    `<span 
-    class="expandable"
-    style="font-family:'SoutaneBlack'; color:${event.color}" 
-    divId="${event.name}"
-    data-content-type="events">${event.name}. </span>`;
-
-    let eventDesc = Events.filterRandomOptions(event);
-    story += eventDesc;
-    story += `<br>`;
-
-    })
-
-    
-  
-  })
-
-})
-
-story += `<br>`;
-return story;
 
 },
 
@@ -197,6 +87,7 @@ if(foundNPC){
   <input
   class="entry-input" 
   style="display:none"
+  pair="npcs"
   id="key"
   value="npcs">`;
   
@@ -338,6 +229,31 @@ ref.Left.appendChild(levelContainer);
 levelContainer.addEventListener('click', function() {
 levelContainer.querySelector('.centreNumber').focus();
 levelContainer.querySelector('.centreNumber').select();
+});
+
+
+const colorContainer = document.createElement('div');
+
+let colorContent =  
+`<h3>
+<label class="entry-label expandable orange" 
+divId="color">
+Color
+</label>
+<input 
+class="entry-input leftTextshort white"
+pair="color" 
+type="text" 
+id= "color"
+value="${foundNPC.color}">
+</h3><hr>`;
+
+colorContainer.innerHTML = colorContent;
+ref.Left.appendChild(colorContainer);
+
+colorContainer.addEventListener('click', function() {
+colorContainer.querySelector('.leftTextshort').focus();
+colorContainer.querySelector('.leftTextshort').select();
 });
 
 const hitPointsCont = document.createElement('div');
@@ -499,6 +415,7 @@ if(foundNPC){
   if(foundNPC.tags){
   //console.log(obj.tags)
   let tagsToAdd = foundNPC.tags
+  tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));
   //console.log(tagsToAdd)   
   tagsToAdd.forEach(tag => {
   
@@ -768,7 +685,7 @@ treasureContainer.querySelector('.centreNumber').select();
 };
 
 
-Storyteller.showFloatingExpandable();
+expandable.showFloatingExpandable();
 
 }},
 
