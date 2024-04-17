@@ -17,10 +17,12 @@ class NPCbuild {
 constructor(data) {
 
 //metadata
-this.type = 'class', 
-this.subType = 'level',
+this.type = 'group', 
+this.subType = 'subGroup',
 this.key = 'npcs',
 this.color = data.color,
+this.group = data.group,
+this.subGroup = data.subGroup,
 
 //Character Sheet
 this.id = data.id;

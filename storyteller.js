@@ -26,13 +26,11 @@ ref.locationLabel.style.color = locObj.color;
 
 //Set new Return Location
 const returnLocationName = ref.locationLabel.textContent;
-//console.log(returnLocationName)
 const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
 Storyteller.returnLocation = returnLocation;
 
 if (locObj) {
-//console.log(locObj)
-Events.getEvent(locName, locObj);
+Events.getEvent(locObj);
 
 //Feed locationText through filters too generate hypertext elements. 
 this.miscArray = [];

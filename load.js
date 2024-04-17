@@ -1,6 +1,6 @@
 // Import the necessary module
 import editor from "./editor.js";
-
+import helper from "./helper.js";
 import ref from "./ref.js";
 
 import expandable from "./expandable.js";
@@ -127,7 +127,7 @@ load.Data = JSON.parse(fileContent);
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
-this.sortData(load.Data);
+helper.sortData(load.Data);
 
 Storyteller.townText = load.Data.townText.description;
 load.fileName = load.Data.townText.name;
@@ -218,36 +218,6 @@ load.Data.tags.forEach(tagObj => {
 
 
 });
-
-},
-
-sortData(data){
-
-// //let ambience = [];
-
-// for (const key in data) {
-//     let obj = data[key];
-
-//     if (key === 'subLocations') {
-//         obj = obj.map(subLocation => {
-//             // Remove some fields
-//             delete subLocation.npc;
-//             delete subLocation.target;
-//             delete subLocation.location;
-//             delete subLocation.npc;
-
-//             // Add new fields
-//             subLocation.subGroup = '';
-            
-
-//             // Return the modified object
-//             return subLocation;
-//         });
-//     }
-
-//     data[key] = obj;
-// }
-
 
 },
 

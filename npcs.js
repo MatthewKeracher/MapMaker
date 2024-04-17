@@ -1,6 +1,6 @@
 // Import the necessary module
 import editor from "./editor.js";
-
+import helper from "./helper.js";
 import ref from "./ref.js";
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
@@ -54,8 +54,11 @@ makeNewNPC(npc, obj){
 
   //Add new Tag to curent Object
   let objEntry = {key: 'npcs', id: newId};
-  let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
-  load.Data[obj.key][index].tags.push(objEntry);
+  // let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
+  // load.Data[obj.key][index].tags.push(objEntry);
+  let tagObj = helper.getObjfromTag({key: obj.key, id: obj.id});
+  let tags = tagObj.tags;
+  tags.push(objEntry)
   };
   
   npc = newObj
@@ -242,21 +245,22 @@ levelContainer.querySelector('.centreNumber').select();
 });
 
 
+['color','group','subGroup'].forEach(entry => {
 const colorContainer = document.createElement('div');
 
 let colorContent =  
 `<h3>
 <label class="entry-label expandable orange" 
-divId="color">
-Color
+divId="${entry}" >
+${helper.proper(entry)} 
 </label>
 <input 
 class="entry-input leftTextshort white"
-pair="color" 
+pair="${entry}" 
 type="text" 
-id= "color"
-value="${foundNPC.color}">
-</h3><hr>`;
+id= "${entry}" 
+value="${foundNPC[entry]}">
+</h3>`;
 
 colorContainer.innerHTML = colorContent;
 ref.Left.appendChild(colorContainer);
@@ -266,10 +270,12 @@ colorContainer.querySelector('.leftTextshort').focus();
 colorContainer.querySelector('.leftTextshort').select();
 });
 
+});
+
 const hitPointsCont = document.createElement('div');
 
 let hitPoints = 
-`<h3>
+`<hr><h3>
 <label class="expandable orange" 
 data-content-type="rule" 
 divId="hitPoints">
@@ -410,68 +416,70 @@ statContainer.querySelector('.centreStat').select();
 });
 
 //Tags
-if(foundNPC){
+// if(foundNPC){
 
-  const container = document.getElementById(editor.buildSection('Tags', foundNPC));
+//   const container = document.getElementById(editor.buildSection('Tags', foundNPC));
   
-  if(foundNPC.tags){
-  //console.log(obj.tags)
-  let tagsToAdd = foundNPC.tags
+//   if(foundNPC.tags){
+//   //console.log(obj.tags)
+//   let tagsToAdd = foundNPC.tags
 
-  tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));
-  //console.log(tagsToAdd)   
-  tagsToAdd.forEach(tag => {
+//   tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));
+//   //console.log(tagsToAdd)   
+//   tagsToAdd.forEach(tag => {
   
-  let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-  let tagName = load.Data[tag.key][index].name
+//   let tagObj = helper.getObjfromTag(tag);
+//   let tagName = tagObj.name
   
-  const taggedArea = document.createElement('div');
-  let tagHTML = 
-  `<h3>
-  <span 
-  class = "tag"
-  tagid = ${tag.id} 
-  tagkey = ${tag.key}
-  >
-  ${tagName}
-  </span>
-  </h3>`;
+//   const taggedArea = document.createElement('div');
+//   let tagHTML = 
+//   `<h3>
+//   <span 
+//   class = "tag"
+//   tagid = ${tag.id} 
+//   tagkey = ${tag.key}
+//   >
+//   ${tagName}
+//   </span>
+//   </h3>`;
   
-  taggedArea.innerHTML = tagHTML;
-  container.appendChild(taggedArea);
+//   taggedArea.innerHTML = tagHTML;
+//   container.appendChild(taggedArea);
   
-  taggedArea.style.color = load.Data[tag.key][index].color;
+//   taggedArea.style.color = tagObj.color;
 
-  taggedArea.addEventListener('click', (event) => {
+//   taggedArea.addEventListener('click', (event) => {
 
-  if(event.shiftKey){ //shift-click
-  //Remove tag from item.
-  event.preventDefault();
-  //Remove tag from item.
-  foundNPC.tags = foundNPC.tags.filter(item => item.id !== tag.id);
+//   if(event.shiftKey){ //shift-click
+//   //Remove tag from item.
+//   event.preventDefault();
+//   //Remove tag from item.
+//   foundNPC.tags = foundNPC.tags.filter(item => item.id !== tag.id);
 
-  //Remove item from other item's tags.
-  let delTags = load.Data[tag.key][index].tags
-  //console.log(delTags, foundNPC.id)
-  delTags = delTags.filter(item => parseInt(item.id) !== foundNPC.id);
-  //console.log(delTags)
-  load.Data[tag.key][index].tags = delTags;
+//   //Remove item from other item's tags.
+//   let delTags = tagObj.tags
+//   //console.log(delTags, foundNPC.id)
+//   delTags = delTags.filter(item => parseInt(item.id) !== foundNPC.id);
+//   //console.log(delTags)
+//   tagObj.tags = delTags;
 
-  //Repackage.
-  NPCs.buildNPC();
-  NPCs.addNPCInfo(foundNPC.name);   
-  }else if(event.button === 0){ 
-  //find tagObj based on Name!
-  if(tag.key === 'npcs'){
-  NPCs.addNPCInfo(load.Data[tag.key][index].name);
-  }else{
-  editor.createForm(load.Data[tag.key][index]);   
-  }
-  }})
-  });
-  }
+//   //Repackage.
+//   NPCs.buildNPC();
+//   NPCs.addNPCInfo(foundNPC.name);   
+//   }else if(event.button === 0){ 
+//   //find tagObj based on Name!
+//   if(tag.key === 'npcs'){
+//   NPCs.addNPCInfo(tagObj.name);
+//   }else{
+//   editor.createForm(tagObj);   
+//   }
+//   }})
+//   });
+//   }
   
-  }
+//   }
+
+editor.addTagstoForm(foundNPC);
 
 if (foundNPC.Skills){
 
@@ -640,7 +648,7 @@ const treasureContainer = document.createElement('div');
 
 let treasure = foundNPC.treasure[0]
 
-console.log(foundNPC.name, treasure)
+//console.log(foundNPC.name, treasure)
 const allEmptyOrZero = Object.values(treasure).every(value => value.length === 0 || value === 0);
 
 let treasureContent = 

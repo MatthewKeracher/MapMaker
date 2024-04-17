@@ -2,6 +2,7 @@ import editor from "./editor.js";
 import ref from "./ref.js";
 import NPCs from "./npcs.js";
 import load from "./load.js";
+import helper from "./helper.js";
 
 
 
@@ -13,13 +14,13 @@ searchArray: [],
 
 
 
-async getEvent(currentLocation, locObj) {
+async getEvent(locObj) {
 
 this.eventDesc = '';
 
 //LOCATION DESCRIPTION
 if(locObj){
-let locObjDesc = Events.filterRandomOptions(locObj);
+let locObjDesc = helper.filterRandomOptions(locObj);
 
 //Location Wrapper
 let locWrapper = 
@@ -34,7 +35,7 @@ this.eventDesc += `<br>`
 
 //LOCATION AMBIENCE
 // locObj.tags --> tags
-let locObjTags = Events.getTagsfromObj(locObj.tags);
+let locObjTags = helper.getTagsfromObj(locObj.tags);
 // console.log('locObj.tags --> tags', locObjTags)
 locObjTags = locObjTags.filter(obj => obj.key === 'tags');
 
@@ -42,7 +43,7 @@ locObjTags = locObjTags.filter(obj => obj.key === 'tags');
 let locTagEvents = [];
 
 locObjTags.forEach(obj => {
-let tagEvents = Events.getTagsfromObj(obj.tags);
+let tagEvents = helper.getTagsfromObj(obj.tags);
     tagEvents = tagEvents.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
 
     tagEvents.forEach(tag => {
@@ -82,7 +83,7 @@ this.eventDesc += `<br><hr><br>`;
 this.eventDesc += subLocHeader;
 
 //SubLocation Description
-let subLocDesc = Events.filterRandomOptions(subLocation);
+let subLocDesc = helper.filterRandomOptions(subLocation);
 this.eventDesc += `<br>`
 this.eventDesc += subLocDesc;
 //this.eventDesc += `<br><br>`
@@ -103,16 +104,19 @@ generateNPCStory(subLocation) {
     subLocationTags.forEach(tag => {
     
     //Tags in subLocation
-    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-    let tags = load.Data[tag.key][index].tags;
+  
+    let tagObj = helper.getObjfromTag(tag);
+    if(tagObj === undefined){console.error('No tagObj')}
+    
+    let tags = tagObj.tags;
     
     let bundle = []
     
     tags.forEach(tag => {
     
-    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-    let obj = load.Data[tag.key][index]
-    bundle.push(obj);
+    let tagObj = helper.getObjfromTag(tag);
+
+    bundle.push(tagObj);
     
     })
     
@@ -155,10 +159,9 @@ generateNPCStory(subLocation) {
     
     npcTags.forEach(tag => {
     let isFloating = false;
-    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-    
+
     //Check inside Tag for subLocations, filter out.
-    let floatTag = load.Data[tag.key][index];
+    let floatTag = helper.getObjfromTag(tag);
     let floatCheck = floatTag.tags.filter(obj => obj.key === 'subLocations');
     if(floatCheck.length === 0){isFloating = true};
     
@@ -170,12 +173,41 @@ generateNPCStory(subLocation) {
     
     eventsToAdd.forEach(tag => {
     
-    let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-    let event = load.Data[tag.key][index];
+    let event = helper.getObjfromTag(tag);
     
     eventBundle.push(event)
     
     })
+    
+    };
+    
+    });
+
+    //Resting Tags (no NPCs) in subLocation.
+    let restingTags = subLocation.tags;
+    
+    restingTags.forEach(tag => {
+    let isResting = false;
+
+    //Check inside Tag for NPCs, filter out.
+    let restTag = helper.getObjfromTag(tag);
+    let restCheck = restTag.tags.filter(obj => obj.key === 'npcs');
+    if(restCheck.length === 0){isResting = true};
+    
+    if(isResting === true){
+    
+    //add events tagged to tag to eventBundle
+    
+    let eventsToAdd = restTag.tags.filter(obj => obj.key === 'events');
+    
+    if(eventsToAdd.lenght > 0){
+    eventsToAdd.forEach(tag => {
+    
+    let event = helper.getObjfromTag(tag);
+    
+    eventBundle.push(event)
+    
+    })};
     
     };
     
@@ -191,7 +223,7 @@ generateNPCStory(subLocation) {
     divId="${event.name}"
     data-content-type="events">${event.name}. </span>`;
     
-    let eventDesc = Events.filterRandomOptions(event);
+    let eventDesc = helper.filterRandomOptions(event);
     story += eventDesc;
     story += `<br>`;
     
@@ -204,52 +236,13 @@ generateNPCStory(subLocation) {
     story += `<br>`;
     return story;
     
-    },
-
-filterRandomOptions(obj){
-
-let returnDesc
-
-//Filter if use of <<??>> in description.
-const options = obj.description.split('??').filter(Boolean);
-
-if (options.length > 0) {
-const randomIndex = Math.floor(Math.random() * options.length);
-const selectedOption = options[randomIndex].trim();
-
-returnDesc = `${selectedOption}`;
-} else {
-returnDesc = `${obj.description}`;
-}
-
-return returnDesc;
-
-},
-
-getTagsfromObj(tags){
-
-let array = [];
-
-tags.forEach(tag => {
-
-let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-let tagObj = load.Data[tag.key][index];
-
-array.push(tagObj);
-
-})
-
-
-//console.log(array)
-return array;
-
 },
 
 getAmbiencefromTag(obj){
 
 if(obj.key === 'ambience'){
 const ambienceObj = obj;
-let ambienceDesc = Events.filterRandomOptions(ambienceObj);
+let ambienceDesc = helper.filterRandomOptions(ambienceObj);
 //Ambience Wrapper
 let ambienceWrapper = 
 `<span class="expandable"

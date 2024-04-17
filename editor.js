@@ -4,6 +4,7 @@ import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
 import expandable from "./expandable.js";
 import Events from "./events.js";
+import helper from "./helper.js";
 
 import Map from "./map.js";
 
@@ -29,63 +30,10 @@ init: function () {
 //Empty
 },
 
-addTagtoItem(itemId, tagKey){
 
-//console.log(editor.addItem);
-//Item adding tag to.
-const currentId = document.getElementById('currentId').value;
-const currentKey = document.getElementById('key').getAttribute('pair');
-const homeObjAddress = {key: currentKey, id: currentId};
-const homeObj = load.Data[currentKey].find(obj => parseInt(obj.id) === parseInt(currentId));
-//console.log('home object', homeObj);
-const homeObjIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
-const homeObjTags = homeObj.tags //.split(',').map(tag => tag.trim());
-
-
-//Item tag refers to.
-const tagObjAddress = {key: tagKey, id: itemId};
-const tagObj = load.Data[tagKey].find(obj => parseInt(obj.id) === parseInt(itemId));
-//console.log('tag object', tagObj)
-const tagObjName = tagObj.name
-const tagItemIndex = load.Data[tagKey].findIndex(item => parseInt(item.id) === parseInt(itemId));
-const tagObjTags = tagObj.tags //.split(',').map(tag => tag.trim());
-
-//Check for duplicates.
-const duplicateCheckHome = homeObjTags.find(obj => tagKey === obj.key && itemId === obj.id)? true: false;
-const duplicateCheckTag = tagObjTags.find(obj => currentKey === obj.key && currentId === obj.id)? true: false;
-const addtoSelfCheck = tagObj === homeObj? true:false;
-
-if(duplicateCheckHome === false && addtoSelfCheck === false){
-homeObjTags.push(tagObjAddress)
-}
-
-if(duplicateCheckTag === false && addtoSelfCheck === false){
-tagObjTags.push(homeObjAddress);  
-}
-
-//Append tagObjName as tag to homeObj
-//console.log(tagObj, homeObj)
-
-//Replace current tags with appended tags.
-load.Data[currentKey][homeObjIndex].tags = homeObjTags;
-load.Data[tagKey][tagItemIndex].tags = tagObjTags;
-//console.log(load.Data[currentKey][homeObjIndex].tags)
-
-if(currentKey === 'npcs'){
-NPCs.addNPCInfo(homeObj.name)
-}else{
-editor.createForm(load.Data[currentKey][homeObjIndex]);
-};
-
-
-//Repackage.
-NPCs.buildNPC();
-//editor.loadList(load.Data);
-
-},
 
 createForm: function (obj){
-
+console.log(obj.tags)
 let color
 let fullScreen = false
 
@@ -139,7 +87,7 @@ newObj.id = load.generateUniqueId(load.Data[obj.key], 'entry');
 //newObj.active = 1;
 //newObj.order = 1;
 newObj.color = obj.color
-const properKey = this.proper(obj.key.slice(0, -1));
+const properKey = helper.proper(obj.key.slice(0, -1));
 newObj.name = 'New ' + properKey + ' ' + newObj.id;
 newObj.description = 'An unknown entity.'
 
@@ -270,26 +218,26 @@ const topAreaTop = document.createElement('div');
 topAreaTop.style.display = 'flex'; // Set the display property to flex
 
 if(obj.key){
-    topArea.id = 'topArea';
-    const properKey = editor.proper(obj.key)
-    const key = obj.key
-    
-    let keyContent =  
-    `<label 
-    style="display: none"
-    divId="key">
-    </label>
-    <input
-    pair="${key}" 
-    class="centreType" 
-    style="font-family:'SoutaneBlack'; color:${color}"
-    id="key"
-    value="${properKey || 'None'} ">`;
-    
-    topAreaTop.innerHTML = keyContent;
-    ref.Left.appendChild(topAreaTop);
-    ref.Left.appendChild(topArea);
-    }
+topArea.id = 'topArea';
+const properKey = helper.proper(obj.key)
+const key = obj.key
+
+let keyContent =  
+`<label 
+style="display: none"
+divId="key">
+</label>
+<input
+pair="${key}" 
+class="centreType" 
+style="font-family:'SoutaneBlack'; color:${color}"
+id="key"
+value="${properKey || 'None'} ">`;
+
+topAreaTop.innerHTML = keyContent;
+ref.Left.appendChild(topAreaTop);
+ref.Left.appendChild(topArea);
+}
 
 //3. Make subType Manually
 if(obj.subType){
@@ -362,7 +310,7 @@ let elementContent =
 style="font-family:'SoutaneBlack'; color:${color}"
 data-content-type="rule" 
 divId="${[key]}">
-${this.proper(key)}
+${helper.proper(key)}
 </label>
 <input class="leftTextshort white entry-input" 
 id= "edit${[key]}">
@@ -405,7 +353,7 @@ elementContainer.querySelector('.leftTextshort').select();
 //Make Form Section with ${key} specific Keys.
 if(obj){
 
-const properKey = this.proper(obj.key)
+const properKey = helper.proper(obj.key)
 const container = document.getElementById(this.buildSection(properKey + ' Settings', obj));
 
 for (const key in obj) {
@@ -419,7 +367,7 @@ let elementContent =
 style="font-family:'SoutaneBlack'; color:${color}"
 data-content-type="rule" 
 divId="${[key]}">
-${this.proper(key)}
+${helper.proper(key)}
 </label>
 <input class="leftTextshort white entry-input" 
 id= "edit${[key]}">
@@ -458,10 +406,19 @@ elementContainer.querySelector('.leftTextshort').select();
 }
 
 //Make Tags section.
+editor.addTagstoForm(obj);
+
+}
+
+},
+
+addTagstoForm(obj){
+
 if(obj){
 
 let keys = [];
 if(obj.key === 'tags'){keys = ['ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
+if(obj.key === 'npcs'){keys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'ambience'){keys = ['tags']};
 if(obj.key === 'locations'){keys = ['tags', 'subLocations']};
 if(obj.key === 'subLocations'){keys = ['tags', 'locations']};
@@ -471,7 +428,7 @@ if(obj.key === 'monsters'){keys = ['tags', 'npcs']};
 if(obj.key === 'events'){keys = ['tags']};
 
 keys.forEach(key => {
-const properKey = this.proper(key)
+const properKey = helper.proper(key)
 const singleKey = properKey.endsWith('s')? properKey.slice(0, -1): properKey;
 const container = document.getElementById(this.buildSection(properKey, obj));
 
@@ -506,11 +463,12 @@ key: key,
 type: 'group', 
 subType: 'subGroup',
 color: obj.color,
+active: 1,
 
 name: obj.name + ' ' + singleKey, 
 tags: [{key: obj.key, id: obj.id}],
-group: obj.group? obj.group: '',
-subGroup: obj.subGroup? obj.subGroup: '',
+group: helper.proper(obj.key),
+subGroup: obj.name,
 
 description: 'This '+ singleKey + ' has been generated and attached to ' + obj.name + '. ',
 
@@ -538,15 +496,14 @@ NPCs.makeNewNPC(load.Data[key][randomNumber], obj)
 if(obj.tags){
 let tagsToAdd = obj.tags.filter(entry => entry.key === key);
 
-if(obj.tags.length > 1){
-tagsToAdd.sort((a, b) => a.key.localeCompare(b.key));
-}
-
 tagsToAdd.forEach(tag => {
 
-let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
-let tagName = load.Data[tag.key][index].name
+let tagObj = helper.getObjfromTag(tag);
+
+let tagName = tagObj.name
+
 const taggedArea = document.createElement('div');
+
 let tagHTML = 
 `<h3>
 <span 
@@ -561,8 +518,7 @@ ${tagName}
 taggedArea.innerHTML = tagHTML;
 container.appendChild(taggedArea);
 
-
-taggedArea.style.color = load.Data[tag.key][index].color;
+taggedArea.style.color = tagObj.color;
 
 taggedArea.addEventListener('click', function(event){
 
@@ -573,11 +529,11 @@ obj.tags = obj.tags.filter(item => item.id !== tag.id);
 
 //Remove item from other item's tags.
 
-let delTags = load.Data[tag.key][index].tags
+let delTags = tagObj.tags
 //console.log(delTags, obj.id)
 delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
 //console.log(delTags)
-load.Data[tag.key][index].tags = delTags;
+tagObj.tags = delTags;
 
 //Repackage.
 NPCs.buildNPC();
@@ -587,9 +543,9 @@ editor.createForm(obj);
 else if(event.button === 0){ //left-click
 //find tagObj based on Name!
 if(tag.key === 'npcs'){
-NPCs.addNPCInfo(load.Data[tag.key][index].name);
+NPCs.addNPCInfo(tagObj.name);
 }else{
-editor.createForm(load.Data[tag.key][index]);   
+editor.createForm(tagObj);   
 }
 }
 
@@ -597,8 +553,6 @@ editor.createForm(load.Data[tag.key][index]);
 });
 }
 })
-}
-
 }
 
 },
@@ -697,7 +651,7 @@ titleDiv.innerHTML =
 `<h2>
 <span
 style="display: block; letter-spacing: 0.18vw;">
-${this.proper(key)}
+${helper.proper(key)}
 </span></h2>`;
 
 target.appendChild(titleDiv)
@@ -729,7 +683,7 @@ id = "${entryName}"
 class = "cyan"
 style="font-family:'SoutaneBlack'"> 
 <hr>
-&nbsp;${this.proper(entryName)}
+&nbsp;${helper.proper(entryName)}
 </span>`;
 
 //3.2 subSection Heads --- subType values.
@@ -746,7 +700,7 @@ let displayName;
 if (!isNaN(entryName) && !isNaN(parseFloat(entryName))) {
 displayName = `Level: ${entryName}`;
 } else {
-displayName = this.proper(entryName);
+displayName = helper.proper(entryName);
 }
 
 nameDiv.innerHTML= 
@@ -755,10 +709,10 @@ id = "${entryName}"
 class ="hotpink"
 style="font-family:'SoutaneBlack'">
 <hr>
-&nbsp;  ${this.proper(displayName)}
+&nbsp;  ${helper.proper(displayName)}
 </span>`;
 
-//${this.proper(subType)}
+//${helper.proper(subType)}
 
 //3.3 subSection Entries   
 }else if (entry[type] && entry[subType]){
@@ -958,17 +912,41 @@ this.classList.add('misc');
 
 }else{
 
-//1. showEntry
+//When you click on a list item...
 div.addEventListener('click', (event) => {
 
-//if shift-click, add Tag
+//... if shift-click, add Tag
 if(event.shiftKey && ref.Left.style.display === 'block'){
-//console.log(div)
 event.preventDefault();
-const itemId = div.getAttribute('id')
-const key = div.getAttribute('key')
+
+//Key-ID pairs and Indexes for both Objs -- clicked and current.
+const clickId = div.getAttribute('id')
+const clickKey = div.getAttribute('key')
+const clickIndex = load.Data[clickKey].findIndex(item => parseInt(item.id) === parseInt(clickId));
+const clickArray = {id: clickId, key: clickKey, index: clickIndex}
+
+const currentId = document.getElementById('currentId').value;
+const currentKey = document.getElementById('key').getAttribute('pair');
+const currentIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
+const currentArray = {id: currentId, key: currentKey, index: currentIndex}
+
+//Not sure if need this.
 editor.addItem = false;
-editor.addTagtoItem(itemId, key);
+
+//...add the Tag to the Obj, and vice versa.
+helper.addTagtoItem(clickArray, currentArray);
+
+//Finally, Repackage to reflect change.
+if(currentKey === 'npcs'){
+const currentObj = load.Data[currentArray.key].find(obj => parseInt(obj.id) === parseInt(currentArray.id));
+NPCs.addNPCInfo(currentObj.name)
+}else{
+editor.createForm(load.Data[currentKey][currentIndex]);
+};
+
+NPCs.buildNPC();
+
+
 
 //Return to Default List
 // this.sectionHeadDisplay = 'none',
@@ -1049,7 +1027,7 @@ const sectionHeadDiv = document.createElement('div');
 
 let headerHTML = 
 `<hr> <h3>
-<span style="font-family:'SoutaneBlack'; color:${obj.color}" id="${headerValue}Header">
+<span style="font-family:'SoutaneBlack'; color:lightgray" id="${headerValue}Header">
 ${headerValue} [...]
 </span></h3>`;
 
@@ -1067,6 +1045,15 @@ currentShow = 'none';
 } else {
 currentShow = editor.sectionShow[index].visible === 1? 'block' : 'none';
 }
+
+// sectionHeadDiv.addEventListener('mouseenter', function(){
+// this.style.color = obj.color;
+// })
+
+// sectionHeadDiv.addEventListener('mouseleave', function(){
+// this.style.color = 'lightgray';
+// })
+
 
 // Add Show/Hide on Header for Section
 sectionHeadDiv.addEventListener('click', function() {
@@ -1129,9 +1116,7 @@ return containerName
 
 },
 
-proper(string) {
-return string.charAt(0).toUpperCase() + string.slice(1);
-},
+
 
 
 

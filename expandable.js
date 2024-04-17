@@ -3,6 +3,7 @@ import load from "./load.js";
 import ref from "./ref.js";
 import editor from "./editor.js";
 import NPCs from "./npcs.js";
+import helper from "./helper.js";
 
 const expandable = {
 
@@ -84,7 +85,7 @@ addIteminfo(contentId, target) {
 
 //Search for Item in the Array   
 const item = Object.values(load.Data.items).find(item => item.name.toLowerCase() === contentId.toLowerCase());
-const newCost = this.standardizeCost(item.cost) + 'Gold Pieces';
+const newCost = helper.standardizeCost(item.cost) + 'Gold Pieces';
 
 
 if (item) {
@@ -148,7 +149,7 @@ if (MiscItem) {
 const withMonsters = expandable.getMonsters(MiscItem.curly);
 const withItems = expandable.getItems(withMonsters);
 const withSpells = expandable.getSpells(withItems);
-const title = editor.proper(MiscItem.square); 
+const title = helper.proper(MiscItem.square); 
 const miscInfo = `
 <h2>
 <span style=${contentStyle}>
@@ -371,24 +372,6 @@ console.log('Unknown content type');
 
 });
 });
-},
-
-standardizeCost(cost) {
-// Use regex to find the figure followed by a space and optional '+'
-const match = cost.match(/(\d+)(\s*\+*)/);
-
-if (match) {
-// Extract the figure and optional '+'
-const figure = match[1];
-const plusSign = match[2];
-
-// Divide the figure by 100 and add back the optional '+'
-const inGold = figure / 100 + plusSign;
-
-return inGold;
-}
-
-return cost; // Return the original cost if no match is found
 },
 
 
