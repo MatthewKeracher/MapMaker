@@ -27,27 +27,30 @@ for (const key in data) {
         });
     }
 
-    // if(key === 'npcs'){
+    if(key === 'events'){
 
-    //     obj = obj.map(entry => {
-    //         // Remove some fields
-    //         // delete entry.key;
+        obj = obj.map(entry => {
+            // Remove some fields
+            // delete entry.key;
+            delete entry.npc;
+            delete entry.location;
+            delete entry.target;
 
-    //         // Add new fields
-    //         // entry.key = '';
-    //         //entry.active = 1;
-    //         entry.group = helper.getSurname(entry.name);
-    //         entry.subGroup= '';
+            // Add new fields
+            // entry.key = '';
+            //entry.active = 1;
+            entry.group = '';
+            entry.subGroup= '';
 
-    //         // Change field values.
-    //         entry.type = 'group';
-    //         entry.subType= 'subGroup';
+            // Change field values.
+            entry.type = 'group';
+            entry.subType= 'subGroup';
 
-    //         // Return the modified object
-    //         return entry;
-    //     });
+            // Return the modified object
+            return entry;
+        });
 
-    // }
+    }
 
     data[key] = obj;
 }
@@ -148,14 +151,19 @@ return obj
 getTagsfromObj(tags){
 
     let array = [];
-    
-    tags.forEach(tag => {
+
+    if(tags){   
+        
+    let tidyTags = helper.tidyTags(tags);
+
+    tidyTags.forEach(tag => {
     
     let tagObj = helper.getObjfromTag(tag);
     
     array.push(tagObj);
     
     })
+    }
     
     //console.log(array)
     return array;

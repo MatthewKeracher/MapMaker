@@ -1,26 +1,28 @@
 
-.mainToolbar,
-.editToolbar{
+.mainToolbar{
 position: absolute;
-top: 0vh; 
-right: 0vw; 
+bottom: 1vh; 
+left: 0.2vw; 
 height: 6vh;
-width: 34.3vw;
+width: 64.7vw;
 z-index: 5;
-
 display: flex; 
 flex-direction: row; 
- 
+outline: 0.4vh solid teal;
+
 }
 
-.centreToolbar{
-position: fixed;
-bottom: 1.5vh; 
-right: 35.5vw; 
-z-index: 100;
-width: 31vw;
-display: none; 
-flex-direction: row;     
+.button {
+width: 100%; /* Make each button fill the width of the toolbar */
+height: 6vh; 
+font-size: 2.2vh; 
+padding: 1vh 1vw; 
+margin: 0.0vh 0; /* Add margin to control spacing */
+border: 0.1vh solid teal; 
+font-family: 'SoutaneBlack';
+color: cyan;
+background-color: rgb(1, 51, 51);;
+transition: background-color 0.3s; 
 }
 
 .singButton {
@@ -41,25 +43,11 @@ transition: background-color 0.3s;
 }
 
 .speakButton {
-    position: absolute;
-    bottom: 2.2vh;
-    left: 1.2vw;
-    z-index: 1000;
-    width: auto; /* Make each button fill the width of the toolbar */
-    height: 6vh; 
-    font-size: 2.2vh; 
-    padding: 1vh 1vw; 
-    margin: 0.0vh 0; /* Add margin to control spacing */
-    border: 0.1vh solid teal; 
-    font-family: 'SoutaneBlack';
-    color: cyan;
-    background-color: rgba(0, 128, 128, 0.663);;
-    transition: background-color 0.3s; 
-    }
-
-
-.button {
-width: 100%; /* Make each button fill the width of the toolbar */
+position: absolute;
+bottom: 2.2vh;
+left: 1.2vw;
+z-index: 1000;
+width: auto; /* Make each button fill the width of the toolbar */
 height: 6vh; 
 font-size: 2.2vh; 
 padding: 1vh 1vw; 

@@ -30,10 +30,8 @@ init: function () {
 //Empty
 },
 
-
-
 createForm: function (obj){
-console.log(obj.tags)
+//console.log(obj.tags)
 let color
 let fullScreen = false
 
@@ -413,7 +411,7 @@ editor.addTagstoForm(obj);
 },
 
 addTagstoForm(obj){
-
+//console.log(obj.tags);
 if(obj){
 
 let keys = [];
@@ -452,27 +450,31 @@ this.style.color = 'lightgray';
 
 newTagArea.addEventListener('click', function(){
 
+
 if(key !== 'npcs'){
+
+//Make a copy of an object in the same key.
+const newEntry = JSON.parse(JSON.stringify(load.Data[key][0]));
 const newId = load.generateUniqueId(load.Data[key], 'entry');
-//console.log(key, newId)
-const newEntry = {
 
-//metadata -- New Entry
-id: newId,
-key: key,
-type: 'group', 
-subType: 'subGroup',
-color: obj.color,
-active: 1,
-
-name: obj.name + ' ' + singleKey, 
-tags: [{key: obj.key, id: obj.id}],
-group: helper.proper(obj.key),
-subGroup: obj.name,
-
-description: 'This '+ singleKey + ' has been generated and attached to ' + obj.name + '. ',
-
+for (let prop in newEntry) {
+    if (newEntry.hasOwnProperty(prop)) {
+        newEntry[prop] = ''; // Empty the value of each property
+    }
 }
+
+//Define what values for copy "newEntry".
+newEntry.type = 'group',
+newEntry.subType = 'subGroup',
+newEntry.id = newId,
+newEntry.key = key,
+newEntry.color = obj.color,
+newEntry.name = obj.name + ' ' + singleKey 
+newEntry.tags = [{key: obj.key, id: obj.id}]
+newEntry.group = helper.proper(obj.key)
+newEntry.subGroup = obj.name
+newEntry.description = 'This '+ singleKey + ' has been generated and attached to ' + obj.name + '. '
+
 //Add new Tag to curent Object
 let objEntry = {key: key, id: newId};
 let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
@@ -480,11 +482,13 @@ load.Data[obj.key][index].tags.push(objEntry);
 
 //Load new Tag!
 editor.createForm(newEntry)  
+saveButton.click();
 
 }else{
 
 let randomNumber = Math.floor(Math.random() * load.Data[key].length);
 NPCs.makeNewNPC(load.Data[key][randomNumber], obj)
+saveButton.click();
 
 };
 
@@ -499,6 +503,8 @@ let tagsToAdd = obj.tags.filter(entry => entry.key === key);
 tagsToAdd.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
+
+if(tagObj){
 
 let tagName = tagObj.name
 
@@ -537,7 +543,8 @@ tagObj.tags = delTags;
 
 //Repackage.
 NPCs.buildNPC();
-editor.createForm(obj);  
+editor.createForm(obj);
+//Storyteller.refreshLocation();  
 }
 
 else if(event.button === 0){ //left-click
@@ -550,6 +557,9 @@ editor.createForm(tagObj);
 }
 
 });
+
+}
+
 });
 }
 })
@@ -790,6 +800,7 @@ NPCs.makeNewNPC(load.Data[key][randomNumber])
 editor.createForm(load.Data[key][randomNumber])
 }
 editor.makeNew = false;
+newButton.classList.remove('click-button');
 div.classList.remove('item');   
 div.classList.add('misc');
 

@@ -1,5 +1,6 @@
 
 import load from "./load.js";
+import ref from "./ref.js";
 
 const Map = {
 
@@ -43,7 +44,7 @@ imageContainer.className = "image-container";
 imageContainer.appendChild(mapElement);
 
 // Add the container to the body
-document.body.appendChild(imageContainer);
+ref.mapContainer.appendChild(imageContainer);
 }
 
 this.mapHeight = mapElement.naturalHeight;
@@ -76,7 +77,7 @@ const color = "gold";
 const id = load.generateUniqueId(load.Data.locations, 'entry'); 
 const name = location.name;
 const tags = "";
-const description = "Click here to add general description.";
+const description = "You are at a point in spacetime.";
 const left = parseFloat(location.style.left);
 const top = parseFloat(location.style.top);
 const width = parseFloat(location.style.width);

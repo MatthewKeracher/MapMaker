@@ -10,7 +10,6 @@ init() {
 
 document.addEventListener('keydown', (event) => {
 const key = event.key.toLowerCase(); // Convert the pressed key to lowercase
-const editMode = editor.editMode
 
 if (key === 'escape') {
 toolbar.escButton();
@@ -23,7 +22,6 @@ if (
     !Ref.Left.contains(document.activeElement) 
     ) {
 
-if (!editMode){
 switch (key) {
 case 'm':
     mapButton.click();
@@ -37,7 +35,7 @@ case 's':
 case 'e':
     editButton.click();
     break;
-case 'd':
+case 'l':
     dataButton.click();
     break;
 case ',':
@@ -46,29 +44,16 @@ case ',':
  case '.':
     Map.decreaseOpacity();
  break;
-
-
-// Add more cases for additional hotkeys here
-}
-}else{if(editMode){
-switch (key) {
-case 'e':
-    editButton.click();
-    break;
-case 's':
-    editSaveButton.click();
-    break;
-case 'n':
-    editNewButton.click();
+ case 'n':
+    newButton.click();
     break;
 case 'd':
-    editDeleteButton.click();
+    deleteButton.click();
     break;
-
-}}}
 
 }
 
+}
 
 });  
 

@@ -3,6 +3,7 @@ import editor from "./editor.js";
 const ref = {
 
 //Map
+mapContainer: document.getElementById('mapContainer'),
 imageContainer: document.querySelector('.image-container'),
 mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
@@ -24,13 +25,7 @@ Right: document.getElementById('Right'),
 Centre: document.querySelector('.Centre'),
 Left: document.querySelector('.Left'),
 
-//Toolbars
-editToolbar: document.getElementById('editToolbar'),
-    editEditButton: document.getElementById('editEditButton'),
-    editSaveButton: document.getElementById('editSaveButton'),
-    editNewButton: document.getElementById('editNewButton'),
-    editDeleteButton: document.getElementById('editDeleteButton'),
-
+//Toolbar
 mainToolbar: document.getElementById('mainToolbar'),
     mapButton: document.getElementById('mapButton'),
     dataButton: document.getElementById('dataButton'),
@@ -38,6 +33,9 @@ mainToolbar: document.getElementById('mainToolbar'),
     editButton: document.getElementById('editButton'),
     saveButton: document.getElementById('saveButton'),
     fileInput: document.getElementById('fileInput'),
+    newButton: document.getElementById('newButton'),
+    deleteButton: document.getElementById('deleteButton'),
+
 
 //Export .csv
 exportData: document.getElementById('exportData'),

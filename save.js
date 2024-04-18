@@ -154,25 +154,29 @@ const confirmation = confirm('Are you sure you want to delete this entry?');
 if (confirmation) {
 // Remove entry at index
 load.Data[key].splice(index, 1);
-editor.loadList(load.Data);
+//editor.loadList(load.Data);
 ref.Left.style.display = 'none';
 ref.Centre.style.display = 'none';
 
-//remove Tags 
-for (const key in load.Data) {
-    let obj = load.Data[key];
+if(key==='locations'){
+ref.locationLabel.textContent = load.fileName;
+Storyteller.showTownText;
+}
 
-    if (key !== 'townText') {
+//remove Tags 
+for (const section in load.Data) {
+    let obj = load.Data[section];
+
+    if (section !== 'townText') {
         for (const entry of obj) {
             let tagsToSearch = entry.tags;
-
-            // Use filter to remove deleteTag from tagsToSearch
+            
             entry.tags = tagsToSearch.filter(tag => !(tag.key === key && parseInt(tag.id) === parseInt(id)));
 
         }
     }
 
-    load.Data[key] = obj;
+    load.Data[section] = obj;
 }
 
 

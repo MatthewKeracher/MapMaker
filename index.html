@@ -25,40 +25,40 @@
 <img id="Banner" src="BannerLogo.gif" alt="Your GIF">
 </div>
 
+<!-- MAP -->
+<div class="mapContainer" id="mapContainer">
+</div>
+    
 <main>
 
-<div class=  "Right"  id="Right" >
+<!-- TOOLBARS -->
+<div class = "mainToolbar" id="mainToolbar">
 
-    <!-- TOOLBARS -->
-    <div class = "mainToolbar" id="mainToolbar">
-
-    <button class= "button" id="mapButton"  >[M]ap</button>
+   
     <!-- Add this hidden input element -->
     <input type="file" id="fileInput" style="display: none">
-    <button class= "button" id="dataButton" >[D]ata</button>
-    <button class= "button" id="addButton"  >[A]dd</button>
-    <button class= "button" id="editButton"  >[E]dit</button>
-    <button class= "button" id="saveButton" >[S]ave</button>
+    <button class= "button" id="editButton" >[E]dit </button>
+    <button class= "button" id="saveButton" >[S]ave </button>
+    <button class= "button" id="newButton"  >[N]ew  </button>
+    <button class= "button" id="addButton"  >[A]dd  </button>
+    <button class= "button" id="deleteButton" >[D]elete </button>
+    <button class= "button" id="dataButton" >[L]oad </button>
+    <button class= "button" id="mapButton"  >[M]ap</button>
+    
+    
+   
+    
 
     </div>
 
-    <div class = "editToolbar" id="editToolbar"> 
-
-    <button class= "button" id="editEditButton"    >[E]dit   </button>
-    <button class= "button" id="editSaveButton"    >[S]ave   </button>
-    <button class= "button" id="editNewButton"     >[N]ew   </button>
-    <button class= "button" id="editDeleteButton"  >[D]elete </button>
-
-    </div> 
+<div class=  "Right"  id="Right" >
 
 <!-- EVENTS MANAGER -->
-
 <label class="locationLabel" id = "locationLabel"></label>
 
 <input class="eventManager" type="textarea" id="eventManager" name="eventManager" placeholder="Search for something..."> </div>
 
 <!-- STORYTELLER -->
-
 <div class="Storyteller" id="Storyteller">
 
 </div>   
@@ -68,20 +68,16 @@
 </div>
 
 <div class = "Centre" id="Centre">
-
-
 </div>
 
-
 <div class = "Left"   id="Left">  </div>
-
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script type="module" src="expandable.js"></script>
 <script type="module" src="load.js"></script> 
 <script type="module" src="save.js"></script>
-<script type="module" src="map.js"></script> 
+<script type="module" src="map.js"></script> m
 <script type="module" src="toolbar.js"></script> 
 <script type="module" src="hotkeys.js"></script> 
 <script type="module" src="helper.js"></script>

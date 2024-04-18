@@ -4,14 +4,14 @@
 position: fixed;
 top:1vh; 
 min-height: 10vh; 
-max-height: 96vh;
+max-height: 89.5vh;
 left: 0.2vw; 
 width: 63.5vw;
 height: auto;
 z-index:11;
 
 /* Text */  
-font-family: monospace;
+font-family: 'CenturyGothic', monospace;
 color: whitesmoke;
 font-size: 1.9vh;
 line-height: 1.5; 
@@ -35,7 +35,7 @@ outline: 0.4vh solid teal;
 position: fixed;
 top:1vh; 
 min-height: 10vh; 
-max-height: 96vh;
+max-height: 89.5vh;
 right: 35.1vw; 
 width: 32vw;
 height: auto;

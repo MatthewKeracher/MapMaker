@@ -13,7 +13,6 @@ class Toolbar{
 init() {   
 
 toolbar.getStoredData();
-ref.editToolbar.style.display = 'none';
 Storyteller.showTownText();
 
 //Readme.
@@ -44,12 +43,8 @@ ref.addButton.addEventListener('click', this.addButon);
 ref.editButton.addEventListener('click', this.editButton);
 ref.saveButton.addEventListener('click', this.saveButton);  
 ref.fileInput.addEventListener('change', load.loadSaveFile); 
-
-//editToolbar
-ref.editEditButton.addEventListener('click', this.editButton);
-ref.editSaveButton.addEventListener('click', this.saveFormButton);
-ref.editNewButton.addEventListener('click', this.newButton); 
-ref.editDeleteButton.addEventListener('click', this.deleteFormButton);
+ref.newButton.addEventListener('click', this.newButton); 
+ref.deleteButton.addEventListener('click', this.deleteButton);
 
 toolbar.saveToBrowser();
 
@@ -80,14 +75,6 @@ if(ref.Left.style.display === "none" && ref.Centre.style.display === "none"){
 
 // Ref.centreToolbar.style.display = "none";
 document.activeElement.blur();
-
-// if(editor.editMode === true){
-// Ref.mainToolbar.style.display = "none";
-// Ref.editToolbar.style.display = "flex";
-// } else if (editor.editMode === false){
-// Ref.mainToolbar.style.display = "flex";
-// Ref.editToolbar.style.display = "none";
-// }
 
 if(load.fileName !== ''){
 ref.locationLabel.textContent = load.fileName;
@@ -122,8 +109,39 @@ fileInput.click();
 
 };
 
+newButton(){
+
+newButton.classList.add('click-button');
+
+if(!editor.makeNew){
+//Select a header type and it will generate a blank version. 
+editor.makeNew = true;
+ref.eventManager.value = '';
+
+editor.sectionHeadDisplay = 'none'
+editor.subSectionHeadDisplay = 'none'
+editor.subSectionEntryDisplay =  'none'
+editor.EntryDisplay = 'none'
+
+editor.loadList(load.Data);
+
+}else if (editor.makeNew){
+
+editor.makeNew = false;
+newButton.classList.remove('click-button');
+if(!editor.editMode){
+ref.Editor.style.display = 'none';
+};
+}
+};
+
+deleteButton(){
+save.deleteDataEntry();
+};
+
 addButon() {
 const mapElement = document.getElementById('mapElement');
+
 if(!Add.addMode){
 Add.addMode = true;
 addButton.classList.add('click-button');
@@ -159,11 +177,7 @@ if (!editor.editMode) {
 
 editor.editMode = true; // Now editing.
 
-editEditButton.classList.add('click-button');
-
-//Switch Toolbars
-ref.mainToolbar.style.display = 'none';
-ref.editToolbar.style.display = 'flex';
+editButton.classList.add('click-button');
 
 //By default, load Location in Form
 
@@ -197,7 +211,7 @@ div.addEventListener('mouseleave', editor.handleMouseHover);
 
 editor.editMode = false; // Now Storytelling.
 
-editEditButton.classList.remove('click-button');
+editButton.classList.remove('click-button');
 // Ref.centreToolbar.style.display = "none";
 
 //document.getElementById('miniBanner').style.display = "none";
@@ -220,9 +234,6 @@ ref.Editor.style.display = 'none';
 ref.Centre.style.display = 'none';
 ref.Left.style.display = 'none';
 
-//Switch Toolbars
-ref.mainToolbar.style.display = 'flex';
-ref.editToolbar.style.display = 'none';
 
 // Remove the event listeners from each .selection element
 ref.locationDivs.forEach((div) => {
@@ -232,64 +243,21 @@ div.removeEventListener('mouseleave', editor.handleMouseHover);
 }}};
 
 saveButton(){
-//Save this form.
-
-if(ref.Centre.style.display === 'block'){
-editSaveButton.classList.add('click-button');
-setTimeout(() => {
-editSaveButton.classList.remove('click-button');
-}, 1000); // 1000 milliseconds = 1 second
-
-save.saveDataEntry();
-
-//Save whole file.
-}else{
 
 saveButton.classList.add('click-button');
 setTimeout(() => {
 saveButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
+if(ref.Centre.style.display === 'block'){
+//Save whole file.
+save.saveDataEntry();
+
+}else{
+//Save whole file.
 save.exportArray();
 };
 }
-
-saveFormButton(){
-
-editSaveButton.classList.add('click-button');
-setTimeout(() => {
-editSaveButton.classList.remove('click-button');
-}, 1000); // 1000 milliseconds = 1 second
-
-
-save.saveDataEntry();
-
-
-}
-
-newButton(){
-
-editNewButton.classList.add('click-button');
-setTimeout(() => {
-editNewButton.classList.remove('click-button');
-}, 1000); // 1000 milliseconds = 1 second
-
-//Select a header type and it will generate a blank version. 
-editor.makeNew = true;
-ref.eventManager.value = '';
-
-    editor.sectionHeadDisplay = 'none'
-    editor.subSectionHeadDisplay = 'none'
-    editor.subSectionEntryDisplay =  'none'
-    editor.EntryDisplay = 'none'
-    
-editor.loadList(load.Data);
-
-}
-
-deleteFormButton(){
-save.deleteDataEntry();
-};
 
 getStoredData(){
 

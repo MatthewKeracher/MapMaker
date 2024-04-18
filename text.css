@@ -1,13 +1,13 @@
 /* Everything to do with text classes. */
 
 @font-face {
-    font-family: "CenturyGothic";
-    src: url("fonts/CenturyGothic.ttf");
+    font-family: "SoutaneBlack";
+    src: url("fonts/SoutaneBlack.ttf") format('truetype');
 }
 
 @font-face {
-    font-family: "SoutaneBlack";
-    src: url("fonts/SoutaneBlack.ttf");
+    font-family: "CenturyGothic";
+    src: url("fonts/CenturyGothic.ttf") format('truetype');
 }
 
 ::placeholder {
