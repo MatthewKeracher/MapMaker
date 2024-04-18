@@ -10,8 +10,8 @@ width: 63.5vw;
 height: auto;
 z-index:11;
 
-/* Text */  
-font-family: 'CenturyGothic', monospace;
+/* Text 'CenturyGothic',*/  
+font-family: monospace;
 color: whitesmoke;
 font-size: 1.9vh;
 line-height: 1.5; 

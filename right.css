@@ -158,8 +158,8 @@ width: 33vw;
 height: 80vh;
 z-index:3;
 
-/* Text */  
-font-family: 'CenturyGothic', monospace;
+/* Text 'CenturyGothic', */  
+font-family: monospace;
 color: whitesmoke;
 font-size: 2vh;
 line-height: 1.5; 
