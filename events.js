@@ -33,9 +33,9 @@ this.eventDesc += `<br>`
 this.eventDesc += `<br>`
 };
 
-//LOCATION AMBIENCE
+//LOCATION TAGS
 // locObj.tags --> tags
-let locObjTags = helper.getTagsfromObj(locObj.tags);
+let locObjTags = helper.getTagsfromObj(locObj);
 
 // console.log('locObj.tags --> tags', locObjTags)
 locObjTags = locObjTags.filter(obj => obj.key === 'tags');
@@ -43,11 +43,27 @@ locObjTags = locObjTags.filter(obj => obj.key === 'tags');
 //tags --> locAmbience & locNPCs
 let locAmbience = [];
 let locNPCs = [];
+let childTags = [];
+
+//Find Children.
+locObjTags.forEach(objTag => {
+    let tagEvents = helper.getTagsfromObj(objTag);
+    let hasChildren = tagEvents.filter(obj => obj.key === 'tags' && parseInt(obj.order) > parseInt(objTag.order));
+
+//Add Children
+if(hasChildren.length > 0){
+    hasChildren.forEach(tag => {
+    childTags.push(tag);
+    })};
+
+});
+
+locObjTags = [...locObjTags, ...childTags];
 
 //Look inside each tag to see what's there.
-locObjTags.forEach(obj => {
-let newTag = {key: obj.key, id: obj.id};
-let tagEvents = helper.getTagsfromObj(obj.tags);
+locObjTags.forEach(objTag => {
+let newTag = {key: objTag.key, id: objTag.id};
+let tagEvents = helper.getTagsfromObj(objTag);
 let hasAmbience = tagEvents.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
 let hasNPCs = tagEvents.filter(obj => obj.key === 'npcs');
 
@@ -55,9 +71,12 @@ hasAmbience.forEach(tag => {
 locAmbience.push(tag);
 });
 
+//Fetch all location NPCs.
 if(hasNPCs.length > 0){locNPCs.push(newTag)};
-
 })
+
+//Add Ambience for Location.
+locAmbience.sort((a, b) => a.order - b.order);
 
 locAmbience.forEach(tag => {
 Events.getAmbiencefromTag(tag);
@@ -71,16 +90,44 @@ locNPCs = locNPCs.concat();
 //subLocations ---> NPCs ---> NPC Events.
 let searchKey = locObj.key;
 let searchId = parseInt(locObj.id);
-let subLocations = [];
+let filterData = [];
 
-load.Data.subLocations.forEach(subLoc =>{
+load.Data.subLocations.forEach(subLoc => {
+    let locSearch = subLoc.tags.filter(tag => tag.key === searchKey && parseInt(tag.id) === searchId);
+    if (locSearch.length === 1) {
+        filterData.push(JSON.parse(JSON.stringify(subLoc))); // Deep copy each object
+    }
+});
 
-let locSearch = subLoc.tags.filter(tag => tag.key === searchKey && parseInt(tag.id) === searchId);
-if(locSearch.length === 1){subLocations.push(subLoc)}
-})
+
+//Make a copy of subLocations.
+let subLocations = [...filterData];
 
 subLocations.sort((a, b) => a.order - b.order);
-subLocations.forEach(subLocation =>{
+
+//Add NPCs directly in Location to a random subLocation. 
+let locNPCSearch = locObj.tags.filter(obj => obj.key === 'npcs');
+let floatNPCs = [];
+
+locNPCSearch.forEach(npc => {
+    let npcObj = helper.getObjfromTag(npc);
+    floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
+});
+
+floatNPCs.forEach(npc => {
+let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
+let r = Math.floor(Math.random() * activeLocations.length);
+npc.location = activeLocations[r].id;
+});
+
+//Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
+locNPCs.forEach(locNPC => {
+let locDie = subLocations.length;
+let randomSubLoc = Math.floor(Math.random() * locDie)
+subLocations[randomSubLoc].tags.push(locNPC)
+});
+
+subLocations.forEach((subLocation) =>{
 
 //SubLocation Header
 let subLocHeader = 
@@ -108,8 +155,8 @@ this.eventDesc += subLocWrapper;
 //this.eventDesc += `<br><br>`
 
 //Add NPCs to SubLocation
+Events.getSubLocDetails(subLocation, floatNPCs);
 
-Events.getSubLocDetails(subLocation, locNPCs);
 //Events.addLocDetails(locNPCs);
 
 });
@@ -117,21 +164,18 @@ Events.getSubLocDetails(subLocation, locNPCs);
 },
 
 
-getSubLocDetails(subLocation, locationTags) {
-//need to split locationTags up so that they appear uniquely, randomly dist' between subLocs.
+getSubLocDetails(subLocation, floatNPCs) {
+    
+subLocation.tags.forEach(tag => {
 
-let subLocationTags = [...subLocation.tags, ...locationTags]
-
-subLocationTags.forEach(tag => {
+let bundle = []
 
 //Tags in subLocation
-
 let tagObj = helper.getObjfromTag(tag);
+
 if(tagObj === undefined){console.error('No tagObj')}
 
 let tags = tagObj.tags;
-
-let bundle = []
 
 tags.forEach(tag => {
 
@@ -146,7 +190,7 @@ bundle.push(tagObj);
 bundle = bundle.filter(entry => entry !== undefined);
 
 //get different data for subLocation
-let npcBundle = bundle.filter(obj => obj.key === 'npcs');
+let npcBundle = tag.key !== 'locations'? bundle.filter(obj => obj.key === 'npcs'): [];
 let ambienceBundle = bundle.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
 let itemBundle = bundle.filter(obj => obj.key === 'items');
 
@@ -155,6 +199,11 @@ this.eventDesc += `<br><br>`
 Events.getAmbiencefromTag(tag);
 
 });
+
+//add floatNPCs
+floatNPCs.forEach(npc => {
+if(npc.location === subLocation.id && tag.key === 'locations'){npcBundle.push(npc)}
+})
 
 npcBundle.forEach(npc => {
 
@@ -175,10 +224,10 @@ let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
 this.eventDesc += `<span
 class="expandable"
 data-content-type="npc" 
-style="font-family: 'CenturyGothic', monospace; color:mediumturquoise" 
+style="color:mediumturquoise" 
 divId="${npc.name.replace(/\s+/g, '-')}"> ${firstSentence}</span> <br>`
 
-//Floating Tags (no subLocation) for NPCs
+//Floating Tags (no subLocation) for NPCs:: //font-family: 'CenturyGothic', monospace; 
 let npcTags = npc.tags;
 
 npcTags.forEach(tag => {
@@ -224,7 +273,7 @@ if(isResting === true){
 
 let eventsToAdd = restTag.tags.filter(obj => obj.key === 'events');
 
-if(eventsToAdd.lenght > 0){
+if(eventsToAdd.length > 0){
 eventsToAdd.forEach(tag => {
 
 let event = helper.getObjfromTag(tag);
@@ -236,6 +285,8 @@ eventBundle.push(event)
 };
 
 });
+
+
 
 eventBundle.sort((a, b) => a.order - b.order);
 eventBundle.forEach(event => {

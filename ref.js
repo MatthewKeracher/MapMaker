@@ -37,11 +37,6 @@ mainToolbar: document.getElementById('mainToolbar'),
     deleteButton: document.getElementById('deleteButton'),
 
 
-//Export .csv
-exportData: document.getElementById('exportData'),
-importData: document.getElementById('importData'),
-csvFileInput: document.getElementById('csvFileInput'),
-
 
 };
 

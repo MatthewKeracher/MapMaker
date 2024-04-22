@@ -104,6 +104,13 @@ console.error('Error reading file:', error);
 // Handle the error appropriately, e.g., display an error message to the user
 }
 }
+
+// Example keys to export (replace these with your desired keys)
+const keysToExport = ['monsters', 'spells', 'items', 'locations', 'subLocations'];
+
+// Export data for each key
+keysToExport.forEach(key => load.exportDataForKey(key));
+
 },
 
 locationLabelEvents(){
@@ -327,6 +334,52 @@ console.log(obj)
 location.dataset.hasListener = true;
 }
 });
+},
+
+// Function to convert JSON to CSV
+convertJsonToCsv(data) {
+    // Extract header from the first object's keys
+    const header = Object.keys(data[0]);
+
+    // Convert each object to a CSV row
+    const rows = data.map(obj => {
+        return header.map(key => {
+            let value = obj[key];
+            // If the value contains commas, enclose it in double quotes
+            if (typeof value === 'string' && value.includes(',')) {
+                value = `"${value}"`;
+            }
+            return value;
+        }).join(',');
+    });
+
+    // Combine header and rows
+    return [header.join(','), ...rows].join('\n');
+},
+
+
+downloadCsv(csvData, fileName) {
+    // Create a Blob object from the CSV data
+    const blob = new Blob([csvData], { type: 'text/csv' });
+
+    // Create a link element to trigger the download
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+
+    // Trigger the download
+    link.click();
+},
+
+exportDataForKey(key) {
+    // Example JSON data for the key (replace this with your actual data)
+    const jsonData = load.Data[key];
+
+    // Convert JSON data to CSV format
+    const csvData = this.convertJsonToCsv(jsonData);
+
+    // Download the CSV file
+    this.downloadCsv(csvData, `${key}.csv`);
 },
 
 

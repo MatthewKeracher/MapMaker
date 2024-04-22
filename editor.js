@@ -415,11 +415,11 @@ addTagstoForm(obj){
 if(obj){
 
 let keys = [];
-if(obj.key === 'tags'){keys = ['ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
+if(obj.key === 'tags'){keys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
 if(obj.key === 'npcs'){keys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'ambience'){keys = ['tags']};
-if(obj.key === 'locations'){keys = ['tags', 'subLocations']};
-if(obj.key === 'subLocations'){keys = ['tags', 'locations']};
+if(obj.key === 'locations'){keys = ['npcs', 'tags', 'subLocations']};
+if(obj.key === 'subLocations'){keys = ['npcs', 'tags', 'locations']};
 if(obj.key === 'items'){keys = ['tags', 'npcs']};
 if(obj.key === 'spells'){keys = ['tags', 'npcs']};
 if(obj.key === 'monsters'){keys = ['tags', 'npcs']};
@@ -611,16 +611,28 @@ if(obj.length < 2){
 
 }else{
 
-// 1. Sort the items by item type alphabetically and then by Level numerically.
+// 1. Sort the items by item type alphabetically and then by subType alphabetically or numerically.
 obj.sort((a, b) => {
 const typeComparison = a[type].localeCompare(b[type]);
 
 if (typeComparison !== 0) {
-// If classes are different, return the result of class comparison
+// If types are different, return the result of type comparison
 return typeComparison;
 } else {
-// If classes are the same, sort by Level numerically
-return a[subType] - b[subType] || a.name.localeCompare(b.name);
+    // If types are the same, sort by subType
+    const subTypeA = parseFloat(a[subType]);
+    const subTypeB = parseFloat(b[subType]);
+
+
+    if (!isNaN(subTypeA) && !isNaN(subTypeB)) {
+        // If subTypes can be converted to numbers, sort them numerically
+        return subTypeA - subTypeB || a.name.localeCompare(b.name);
+    } else {
+        // Otherwise, sort them alphabetically
+        try{
+        return a[subType].localeCompare(b[subType]) || a.name.localeCompare(b.name);
+        }catch{}
+    }
 }
 });
 

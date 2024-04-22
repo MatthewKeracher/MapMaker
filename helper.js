@@ -27,24 +27,23 @@ for (const key in data) {
         });
     }
 
-    if(key === 'events'){
+    if(key === 'subLocations'){
 
         obj = obj.map(entry => {
             // Remove some fields
             // delete entry.key;
-            delete entry.npc;
-            delete entry.location;
-            delete entry.target;
+            // delete entry.npc;
+            // delete entry.location;
+            // delete entry.target;
 
             // Add new fields
             // entry.key = '';
             //entry.active = 1;
-            entry.group = '';
-            entry.subGroup= '';
+            entry.order = entry.order? entry.order : '';
 
             // Change field values.
-            entry.type = 'group';
-            entry.subType= 'subGroup';
+            // entry.type = 'group';
+            // entry.subType= 'subGroup';
 
             // Return the modified object
             return entry;
@@ -148,9 +147,22 @@ return obj
 
 },
 
-getTagsfromObj(tags){
+getChildren(tagObj){
+
+    //Take a tag and return all child tags.
+    if(tagObj.key === 'tags'){
+
+        tagObj.tags.filter(tag => tag.key === 'tags');
+        console.log(tagObj.name, tagObj.tags.filter(tag => tag.key === 'tags'));
+
+    }
+
+},
+
+getTagsfromObj(obj){
 
     let array = [];
+    let tags = obj.tags;
 
     if(tags){   
         
@@ -159,6 +171,7 @@ getTagsfromObj(tags){
     tidyTags.forEach(tag => {
     
     let tagObj = helper.getObjfromTag(tag);
+    //this.getChildren(tagObj);
     
     array.push(tagObj);
     
