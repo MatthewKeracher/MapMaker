@@ -166,10 +166,11 @@ Events.getSubLocDetails(subLocation, floatNPCs);
 
 getSubLocDetails(subLocation, floatNPCs) {
     
+let i = 0
+
 subLocation.tags.forEach(tag => {
 
 let bundle = []
-
 //Tags in subLocation
 let tagObj = helper.getObjfromTag(tag);
 
@@ -202,7 +203,7 @@ Events.getAmbiencefromTag(tag);
 
 //add floatNPCs
 floatNPCs.forEach(npc => {
-if(npc.location === subLocation.id && tag.key === 'locations'){npcBundle.push(npc)}
+if(npc.location === subLocation.id && i === 0){npcBundle.push(npc)}
 })
 
 npcBundle.forEach(npc => {
@@ -286,7 +287,18 @@ eventBundle.push(event)
 
 });
 
+let uniqueEvents = [];
+let uniqueEventIds = new Set();
 
+//Filter out duplicate Events.
+eventBundle.forEach(obj => {
+    if (!uniqueEventIds.has(obj.id)) {
+        uniqueEventIds.add(obj.id);
+        uniqueEvents.push(obj);
+    }
+});
+
+eventBundle = uniqueEvents;
 
 eventBundle.sort((a, b) => a.order - b.order);
 eventBundle.forEach(event => {
@@ -307,7 +319,7 @@ this.eventDesc += `<br>`;
 })
 
 Events.generateLocItems(itemBundle, tagObj);
-
+i++
 })
 
 this.eventDesc += `<br>`;
