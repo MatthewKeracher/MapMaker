@@ -1,5 +1,7 @@
 //Helper should not take outside references, except load.Data[...]
 import load from "./load.js";
+import editor from "./editor.js";
+import NPCs from "./npcs.js";
 
 const helper = {
 
@@ -21,6 +23,7 @@ for (const key in data) {
 
             // Change field values.
             entry.tags = helper.tidyTags(entry.tags)
+            entry.subGroup = entry.subGroup? entry.subGroup : '';
 
             // Return the modified object
             return entry;
@@ -136,6 +139,39 @@ load.Data[clickArray.key][clickArray.index].tags = clickObjTags;
 
 },
 
+bulkAdd(item){
+
+//Bulk-Add    
+console.log(item)
+//Key-ID pairs and Indexes for both Objs -- clicked and current.
+const clickId = item.getAttribute('id')
+const clickKey = item.getAttribute('key')
+const clickIndex = load.Data[clickKey].findIndex(item => parseInt(item.id) === parseInt(clickId));
+const clickArray = {id: clickId, key: clickKey, index: clickIndex}
+
+const currentId = document.getElementById('currentId').value;
+const currentKey = document.getElementById('key').getAttribute('pair');
+const currentIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
+const currentArray = {id: currentId, key: currentKey, index: currentIndex}
+
+//Not sure if need this.
+editor.addItem = false;
+
+//...add the Tag to the Obj, and vice versa.
+helper.addTagtoItem(clickArray, currentArray);
+
+//Finally, Repackage to reflect change.
+if(currentKey === 'npcs'){
+const currentObj = load.Data[currentArray.key].find(obj => parseInt(obj.id) === parseInt(currentArray.id));
+NPCs.addNPCInfo(currentObj.name)
+}else{
+editor.createForm(load.Data[currentKey][currentIndex]);
+};
+
+NPCs.buildNPC();
+
+},
+
 getObjfromTag(tag){
 
 let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
@@ -207,9 +243,14 @@ getTagsfromObj(obj){
         return uniqueTags;
         }, []);
 
-    }
+    },
     
     
+rollDice(sides){
+
+return Math.floor(Math.random() * sides) + 1;
+
+}
 
 };
 

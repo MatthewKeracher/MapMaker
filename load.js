@@ -106,10 +106,10 @@ console.error('Error reading file:', error);
 }
 
 // Example keys to export (replace these with your desired keys)
-const keysToExport = ['monsters', 'spells', 'items', 'locations', 'subLocations'];
+//const keysToExport = ['monsters', 'spells', 'items', 'locations', 'subLocations'];
 
 // Export data for each key
-keysToExport.forEach(key => load.exportDataForKey(key));
+//keysToExport.forEach(key => load.exportDataForKey(key));
 
 },
 
@@ -356,7 +356,6 @@ convertJsonToCsv(data) {
     // Combine header and rows
     return [header.join(','), ...rows].join('\n');
 },
-
 
 downloadCsv(csvData, fileName) {
     // Create a Blob object from the CSV data

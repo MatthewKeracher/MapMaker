@@ -7,6 +7,7 @@ import Events from "./events.js";
 import load from "./load.js";
 import save   from "./save.js";
 import Storyteller from "./storyteller.js";
+import party from "./party.js";
 
 class Toolbar{
 
@@ -37,6 +38,7 @@ Events.loadEventListeners();
 //Ambience.getAmbience();
 
 //mainToolbar
+ref.partyButton.addEventListener('click', this.partyButton);
 ref.mapButton.addEventListener('click', this.mapButton);
 ref.dataButton.addEventListener('click', this.dataButton);
 ref.addButton.addEventListener('click', this.addButon); 
@@ -49,6 +51,19 @@ ref.deleteButton.addEventListener('click', this.deleteButton);
 toolbar.saveToBrowser();
 
 };
+
+partyButton(){
+
+if(ref.leftParty.style.display === 'block'){
+partyButton.classList.remove('click-button')
+ref.leftParty.style.display = 'none'
+
+}else{
+    partyButton.classList.add('click-button')
+    party.loadParty()
+}
+
+}
 
 escButton(){
   
@@ -194,10 +209,10 @@ ref.Editor.style.display = 'block';
 
 
 //List Display Variables
-this.sectionHeadDisplay = 'none',
-this.subSectionHeadDisplay = 'none',
-this.subSectionEntryDisplay =  'none',
-this.EntryDisplay = 'none',
+editor.sectionHeadDisplay = 'none',
+editor.subSectionHeadDisplay = 'none',
+editor.subSectionEntryDisplay =  'none',
+editor.EntryDisplay = 'none',
 editor.loadList(load.Data);
 
 

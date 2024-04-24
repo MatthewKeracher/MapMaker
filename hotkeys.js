@@ -23,6 +23,9 @@ if (
     ) {
 
 switch (key) {
+case 'p':
+partyButton.click();
+break;
 case 'm':
     mapButton.click();
     break;

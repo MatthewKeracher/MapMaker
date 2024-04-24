@@ -49,9 +49,9 @@ getItems(locationText) {
 const hashBrackets = /#([^#]+)#/g;
 
 return locationText.replace(hashBrackets, (match, targetText) => {
-const item = Object.values(load.Data.items).find(item => item.name.toLowerCase() === targetText.toLowerCase());
+const item = Object.values(load.Data.tags).find(item => item.name.toLowerCase() === targetText.toLowerCase());
 if (item) {
-return `<span class="expandable" style="color:${item.color}" data-content-type="items" divId="${item.name}">${item.name}</span>`;
+return `<span class="expandable" style="color:${item.color}" data-content-type="tags" divId="${item.name}">${item.name}</span>`;
 } else {
 console.log(`Item not found: ${targetText}`);
 return match;
@@ -84,8 +84,8 @@ return `<span class="hotpink">"${targetText}"</span>`;
 addIteminfo(contentId, target) {
 
 //Search for Item in the Array   
-const item = Object.values(load.Data.items).find(item => item.name.toLowerCase() === contentId.toLowerCase());
-const newCost = helper.standardizeCost(item.cost) + 'Gold Pieces';
+const item = Object.values(load.Data.tags).find(item => item.name.toLowerCase() === contentId.toLowerCase());
+//const newCost = helper.standardizeCost(item.cost) + 'Gold Pieces';
 
 
 if (item) {

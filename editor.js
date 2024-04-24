@@ -5,7 +5,7 @@ import NPCs from "./npcs.js";
 import expandable from "./expandable.js";
 import Events from "./events.js";
 import helper from "./helper.js";
-
+import party from "./party.js";
 import Map from "./map.js";
 
 
@@ -29,6 +29,7 @@ EntryDisplay: 'none',
 init: function () {
 //Empty
 },
+
 
 createForm: function (obj){
 //console.log(obj.tags)
@@ -98,8 +99,9 @@ obj = newObj
 if (obj) {
 
 //Define key groups for different areas of the form.
-const excludedKeys = ['id', 'name', 'description', 'key', 'tags']; 
-const universalKeys = ['color', 'type', 'subType'];
+const excludedKeys = ['name', 'description', 'key', 'tags']; 
+const invisibleKeys = ['id','type', 'subType'];
+const universalKeys = ['group', 'subGroup', 'color'];
 
 //Make ID Manually
 if(obj.id){
@@ -126,6 +128,39 @@ value="${obj.id || 'N/A'} ">`;
 idArea.innerHTML = idContent;
 ref.Left.appendChild(idArea);
 }
+
+//Make Invisible Elements
+if(obj){
+
+for (const key in obj) {
+if (obj.hasOwnProperty(key) && invisibleKeys.includes(key)) { // Check if key is not excluded
+
+const elementContainer = document.createElement('div');
+
+let elementContent =  
+`<h3 style="display:none">
+<label class="expandable entry-label" 
+style="font-family:'SoutaneBlack'; color:${color}"
+data-content-type="rule" 
+divId="${[key]}">
+${helper.proper(key)}
+</label>
+<input class="leftTextshort white entry-input" 
+id= "edit${[key]}">
+</input>
+</h3>`;
+
+elementContainer.innerHTML = elementContent;
+ref.Left.appendChild(elementContainer);
+
+const elementText = document.getElementById('edit' + key);
+elementText.value = obj[key] || '';
+
+}
+}
+
+
+};
 
 //Make Description Manually
 if(obj){
@@ -298,12 +333,12 @@ if(obj){
 const container = document.getElementById(this.buildSection('General Settings', obj));
 
 for (const key in obj) {
-if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && universalKeys.includes(key)) { // Check if key is not excluded
+if (obj.hasOwnProperty(key) && universalKeys.includes(key)) { // Check if key is not excluded
 
 const elementContainer = document.createElement('div');
 
 let elementContent =  
-`<h3>
+`<h3 id = ${key}Container>
 <label class="expandable entry-label" 
 style="font-family:'SoutaneBlack'; color:${color}"
 data-content-type="rule" 
@@ -345,8 +380,54 @@ elementContainer.querySelector('.leftTextshort').select();
 }
 }
 
+// Add Color Selector
+const editcolor = document.getElementById('colorContainer');
+editcolor.innerHTML = '';
+const colorContainer = document.createElement('div');
+
+editcolor.innerHTML = 
+`<h3 id = colorContainer>
+<label class="expandable entry-label" 
+style="font-family:'SoutaneBlack'; color:${obj.color}"
+data-content-type="rule" 
+divId="color">
+Color
+</label>
+<input type="color" id="editcolor" value="#ffffff">
+<div id="colorPalette"></div>
+</input>
+</h3> `
+
+const colorWheel = document.getElementById('editcolor');
+const colorPalette = colorContainer.querySelector('#colorPalette');
+
+// Function to handle color change
+function handleColorChange(event) {
+    const color = event.target.value;
+    console.log(color)
+    // Set the background color of the color palette
+    editcolor.value = color;
+}
+
+// Event listener for color input change
+colorWheel.addEventListener('input', handleColorChange);
+
+// // Create color palette squares
+// const paletteColors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
+// paletteColors.forEach(color => {
+//     const colorSquare = document.createElement('div');
+//     colorSquare.classList.add('paletteColor');
+//     colorSquare.style.backgroundColor = color;
+//     colorSquare.addEventListener('click', () => {
+//         colorWheel.value = color;
+//         handleColorChange({ target: colorWheel });
+//     });
+//     colorPalette.appendChild(colorSquare);
+// });
 
 };
+
+
 
 //Make Form Section with ${key} specific Keys.
 if(obj){
@@ -355,7 +436,7 @@ const properKey = helper.proper(obj.key)
 const container = document.getElementById(this.buildSection(properKey + ' Settings', obj));
 
 for (const key in obj) {
-if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && !universalKeys.includes(key)) { // Check if key is not excluded
+if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && !universalKeys.includes(key) && !invisibleKeys.includes(key)) { // Check if key is not excluded
 
 const elementContainer = document.createElement('div');
 
@@ -420,8 +501,8 @@ if(obj.key === 'npcs'){keys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'ambience'){keys = ['tags']};
 if(obj.key === 'locations'){keys = ['npcs', 'tags', 'subLocations']};
 if(obj.key === 'subLocations'){keys = ['npcs', 'tags', 'locations']};
-if(obj.key === 'items'){keys = ['tags', 'npcs']};
-if(obj.key === 'spells'){keys = ['tags', 'npcs']};
+if(obj.key === 'items'){keys = ['tags', 'npcs', 'spells']};
+if(obj.key === 'spells'){keys = ['tags', 'npcs', 'items']};
 if(obj.key === 'monsters'){keys = ['tags', 'npcs']};
 if(obj.key === 'events'){keys = ['tags']};
 
@@ -458,9 +539,9 @@ const newEntry = JSON.parse(JSON.stringify(load.Data[key][0]));
 const newId = load.generateUniqueId(load.Data[key], 'entry');
 
 for (let prop in newEntry) {
-    if (newEntry.hasOwnProperty(prop)) {
-        newEntry[prop] = ''; // Empty the value of each property
-    }
+if (newEntry.hasOwnProperty(prop)) {
+newEntry[prop] = ''; // Empty the value of each property
+}
 }
 
 //Define what values for copy "newEntry".
@@ -619,20 +700,20 @@ if (typeComparison !== 0) {
 // If types are different, return the result of type comparison
 return typeComparison;
 } else {
-    // If types are the same, sort by subType
-    const subTypeA = parseFloat(a[subType]);
-    const subTypeB = parseFloat(b[subType]);
+// If types are the same, sort by subType
+const subTypeA = parseFloat(a[subType]);
+const subTypeB = parseFloat(b[subType]);
 
 
-    if (!isNaN(subTypeA) && !isNaN(subTypeB)) {
-        // If subTypes can be converted to numbers, sort them numerically
-        return subTypeA - subTypeB || a.name.localeCompare(b.name);
-    } else {
-        // Otherwise, sort them alphabetically
-        try{
-        return a[subType].localeCompare(b[subType]) || a.name.localeCompare(b.name);
-        }catch{}
-    }
+if (!isNaN(subTypeA) && !isNaN(subTypeB)) {
+// If subTypes can be converted to numbers, sort them numerically
+return subTypeA - subTypeB || a.name.localeCompare(b.name);
+} else {
+// Otherwise, sort them alphabetically
+try{
+return a[subType].localeCompare(b[subType]) || a.name.localeCompare(b.name);
+}catch{}
+}
 }
 });
 
@@ -795,7 +876,7 @@ this.listEvents(entry, nameDiv, key);
 }}
 },
 
-showHide: function (div) {
+listHeaderEvents: function (div, event) {
 const scope = div.getAttribute("scope");
 let items
 
@@ -821,8 +902,16 @@ div.classList.add('misc');
 items = document.querySelectorAll(`[key="${key}"]`); 
 
 
+
 items.forEach(item => {
 
+//Shift-Click
+if(event.shiftKey && ref.Left.style.display === 'block'){   
+//Bulk-Add    
+
+
+}else{
+//Show-Hide
 const keyShow = item.getAttribute('keyShow');
 const isHeader = item.getAttribute('subSection') === '0'? true : false;
 
@@ -842,8 +931,9 @@ item.style.display = 'none';
 
 item.setAttribute('sectionShow', "false")
 item.setAttribute('subSectionShow', "false")
-
+}
 })
+
 
 }}
 
@@ -855,6 +945,16 @@ let section = div.getAttribute("id")
 items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
 
 items.forEach((item,index) => {
+let noScope = item.getAttribute("scope");
+console.log(noScope)
+//Shift-Click
+if(event.shiftKey && ref.Left.style.display === 'block' && !noScope){   
+event.preventDefault();
+helper.bulkAdd(item);   
+
+
+}else{
+//Show-Hide
 
 if(index > 0){
 
@@ -867,7 +967,7 @@ const sectionDisplay = newSectionShow === 'true'? 'block' : 'none';
 item.style.display = sectionDisplay;
 
 item.setAttribute('subSectionShow', "true")
-
+}
 }}) 
 }
 
@@ -880,7 +980,14 @@ let subSection = div.getAttribute("id")
 items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
 
 items.forEach((item,index) => {
+let noScope = item.getAttribute("scope");
+//Shift-Click
+if(event.shiftKey && ref.Left.style.display === 'block' && !noScope){     
+event.preventDefault();
+helper.bulkAdd(item);
 
+}else{
+//Show-Hide
 if(index > 0){
 
 const subSectionShow = item.getAttribute('subsectionshow');
@@ -894,7 +1001,7 @@ item.style.display = subSectionDisplay;
 item.setAttribute('sectionShow', "true")
 
 }
-
+}
 })  }
 
 },
@@ -910,9 +1017,12 @@ this.classList.remove('highlight');
 });
 
 if(div.getAttribute('scope')){
-//1. showHide
-div.addEventListener('click', () => {
-this.showHide(div);
+//Clicked on Header...
+div.addEventListener('click', (event) => {
+
+this.listHeaderEvents(div, event);
+
+
 });
 
 //2.makeNew Hover
@@ -938,8 +1048,23 @@ this.classList.add('misc');
 //When you click on a list item...
 div.addEventListener('click', (event) => {
 
-//... if shift-click, add Tag
-if(event.shiftKey && ref.Left.style.display === 'block'){
+//... if shift-click
+//...add NPC to Party
+if(event.shiftKey && ref.leftParty.style.display === 'block'){
+event.preventDefault();
+const clickId = div.getAttribute('id')
+const clickKey = div.getAttribute('key')
+
+if(clickKey === 'npcs'){
+load.Data.townText.party.push({key: clickKey, id: clickId})
+}
+
+//Repackage.
+party.loadParty();
+
+}
+//add Tag
+else if(event.shiftKey && ref.Left.style.display === 'block'){
 event.preventDefault();
 
 //Key-ID pairs and Indexes for both Objs -- clicked and current.
@@ -983,8 +1108,9 @@ ref.Editor.style.display = 'none';
 }
 
 }
+//load Forms
 else if(key === 'npcs' && editor.addItem === false){
-NPCs.addNPCInfo(entry.name, ref.Left);
+NPCs.addNPCInfo(entry.name);
 } 
 else{
 editor.createForm(entry)

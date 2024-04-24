@@ -1,5 +1,3 @@
-import editor from "./editor.js";
-
 const ref = {
 
 //Map
@@ -24,17 +22,19 @@ expandableElements: document.querySelectorAll('.expandable'),
 Right: document.getElementById('Right'),
 Centre: document.querySelector('.Centre'),
 Left: document.querySelector('.Left'),
+leftParty: document.getElementById('leftParty'),
 
 //Toolbar
 mainToolbar: document.getElementById('mainToolbar'),
-    mapButton: document.getElementById('mapButton'),
-    dataButton: document.getElementById('dataButton'),
-    addButton: document.getElementById('addButton'),
-    editButton: document.getElementById('editButton'),
-    saveButton: document.getElementById('saveButton'),
-    fileInput: document.getElementById('fileInput'),
-    newButton: document.getElementById('newButton'),
-    deleteButton: document.getElementById('deleteButton'),
+partyButton: document.getElementById('partyButton'),
+mapButton: document.getElementById('mapButton'),
+dataButton: document.getElementById('dataButton'),
+addButton: document.getElementById('addButton'),
+editButton: document.getElementById('editButton'),
+saveButton: document.getElementById('saveButton'),
+fileInput: document.getElementById('fileInput'),
+newButton: document.getElementById('newButton'),
+deleteButton: document.getElementById('deleteButton'),
 
 
 

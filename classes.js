@@ -23,6 +23,7 @@ this.key = 'npcs',
 this.color = data.color,
 this.group = data.group,
 this.subGroup = data.subGroup,
+this.initiative = this.initiative === undefined? 0 : this.initiative,
 
 //Character Sheet
 this.id = data.id;

@@ -5,7 +5,6 @@ import load from "./load.js";
 import helper from "./helper.js";
 
 
-
 const Events = {
 
 eventDesc: "",
@@ -117,7 +116,9 @@ locNPCSearch.forEach(npc => {
 floatNPCs.forEach(npc => {
 let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
 let r = Math.floor(Math.random() * activeLocations.length);
+try{
 npc.location = activeLocations[r].id;
+}catch{console.error('No Active subLocations here.')}
 });
 
 //Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
