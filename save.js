@@ -56,7 +56,7 @@ inputs.push(value.trim());
 }
 });
 
-//console.log(labels, inputs);
+console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {

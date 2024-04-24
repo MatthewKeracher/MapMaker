@@ -99,8 +99,8 @@ obj = newObj
 if (obj) {
 
 //Define key groups for different areas of the form.
-const excludedKeys = ['name', 'description', 'key', 'tags']; 
-const invisibleKeys = ['id','type', 'subType'];
+const excludedKeys = ['id','name', 'description', 'key', 'tags']; 
+const invisibleKeys = ['type', 'subType'];
 const universalKeys = ['group', 'subGroup', 'color'];
 
 //Make ID Manually
@@ -146,7 +146,7 @@ divId="${[key]}">
 ${helper.proper(key)}
 </label>
 <input class="leftTextshort white entry-input" 
-id= "edit${[key]}">
+id="edit${[key]}">
 </input>
 </h3>`;
 
@@ -393,7 +393,7 @@ data-content-type="rule"
 divId="color">
 Color
 </label>
-<input type="color" id="editcolor" value="#ffffff">
+<input type="color" class="entry-input" id="editcolor" value="#ffffff">
 <div id="colorPalette"></div>
 </input>
 </h3> `
