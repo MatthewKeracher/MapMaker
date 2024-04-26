@@ -24,7 +24,8 @@ background-color: black;
 opacity: 0.85;
 display: none;
 padding: 1vh; 
-overflow: auto;
+overflow-y: auto;
+overflow-x:hidden;
 scrollbar-color: black;
 flex-direction: column;
 outline: 0.4vh solid teal;
@@ -35,10 +36,10 @@ width: 5px; /* Set the width of the scrollbar */
 }
 
 
-#Left div:not(.no-hover):hover {
-background-color: rgba(245, 245, 245, 0.474);
+/* #Left div:not(.no-hover):hover {
+background-color: rgba(245, 245, 245, 0.214);
 cursor: pointer;
-}
+} */
 
 .Left hr {
 border: none;
@@ -112,7 +113,7 @@ height: 3vh;
 
 /* Position */
 margin: 0vh;
-width: auto;
+width: 10vw;
 height: auto;
 
 /* Text */
@@ -131,6 +132,7 @@ border-radius: 0;
 margin-bottom: 0;
 margin-top: 0;
 overflow-y: hidden;
+overflow-x: hidden;
 }
 
 
@@ -138,7 +140,6 @@ overflow-y: hidden;
 .leftTextshort:focus{
 /* Appearance */
 background-color: transparent;
-border-color: hotpink;
 color: lime;
 outline: none;
 border-radius: 0;

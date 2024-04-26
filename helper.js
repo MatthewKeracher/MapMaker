@@ -25,29 +25,40 @@ obj = obj.map(entry => {
 // Change field values.
 entry.tags = helper.tidyTags(entry.tags)
 entry.subGroup = entry.subGroup? entry.subGroup : '';
+//entry.color = '#f08928'
 
 // Return the modified object
 return entry;
 });
 }
 
-if(key === 'subLocations'){
+if(key === 'monsters'){
 
 obj = obj.map(entry => {
 // Remove some fields
 // delete entry.key;
 // delete entry.npc;
 // delete entry.location;
-// delete entry.target;
+
+delete entry.level;
+delete entry.special;
+
+// const newKeys = ["hd", "xp", "noApp", "Wisdom", "ac"];
+
+// const oldKeys = ["hitDice", "experience", "numAppearing", "armourClass"];
 
 // Add new fields
-// entry.key = '';
+entry.group = entry.class;
+entry.subGroup = '';
+entry.color = '#65ece3';
 //entry.active = 1;
-entry.order = entry.order? entry.order : '';
+//entry.order = entry.order? entry.order : '';
 
 // Change field values.
-// entry.type = 'group';
-// entry.subType= 'subGroup';
+entry.type = 'group';
+entry.subType= 'subGroup';
+
+delete entry.class;
 
 // Return the modified object
 return entry;
@@ -61,15 +72,25 @@ data[key] = obj;
 
 },
 
+proper(string){
+return string.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+},
+
+convertKeys(keys) {
+    //console.log(keys)
+    const properWords = [];
+    for (const key in keys) {
+        const words = key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        properWords.push(words);
+    }
+    return properWords;
+},
+
 getIndex(key, id){
 
 const index = load.Data[key].findIndex(obj => parseInt(obj.id) === parseInt(id))
 return index
 
-},
-
-proper(string) {
-return string.charAt(0).toUpperCase() + string.slice(1);
 },
 
 standardizeCost(cost) {

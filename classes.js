@@ -1,4 +1,5 @@
 import load from "./load.js";
+import helper from "./helper.js";
 
 class NPCbuild {
 
@@ -14,24 +15,28 @@ this.id = data.id;
 this.name = data.name;
 
 this.class = data.class === ''? 'Fighter' : data.class;
-this.monsterTemplate = data.monsterTemplate;
-NPCbuild.getMonster(this);
-this.level = data.level === ''? 1 : data.level;
+this.level = data.level === ''? 1 : parseInt(data.level);
 this.color = data.color,
+this.alignment = data.alignment,
+this.species = data.species,
+this.tags = data.tags;
+NPCbuild.getHitPoints(this);
+NPCbuild.getAttackBonus(this);
+NPCbuild.getSpeciesData(this);
 this.group = data.group,
 this.subGroup = data.subGroup,
 this.description = data.description;
 
-NPCbuild.getHitPoints(this);
-NPCbuild.getAttackBonus(this);
 
-const scores = ["str", "dex", "int", "wis", "con", "cha"];
+
+const scores = ["Strength", "Dexterity", "Intelligence", "Wisdom", "Constitution", "Charisma"];
 
 for (const str of scores) {
-  this[str] = {score: data[str], mod: NPCbuild.getModifier(data[str])}
+  this[str] = parseInt(data[str]);
+  this['mod'+str] = NPCbuild.getModifier(data[str]);
 }
 
-this.tags = data.tags;
+
 
 this.initiative = this.initiative === undefined? 0 : this.initiative,
 
@@ -41,89 +46,76 @@ NPCbuild.getSavingThrows(this);
 
 }
 
-static getMonster(npc){
+static getSpeciesData(npc){
 
-  //console.log(npc.name, npc.monsterTemplate)
-  // Find Monster
-  const stats = load.Data.monsters.filter(monster => monster.name === npc.class);
-
-  if(stats.length !== 0){
+  const obj = load.Data.monsters.find(monster => monster.name.toLowerCase() === npc.species.toLowerCase()); 
   
+  npc.damage = obj.damage;
+  npc.armourClass = obj.armourClass;
+  npc.attacks = obj.attacks;
+  npc.experience = obj.experience;
+  npc.movement = obj.movement;
+  npc.morale = obj.morale;
+
+  //addTags
+  //Add Tags from Class, Species, etc.
+  obj.tags.forEach(tag => {
+  console.log(tag)
+  npc.tags.push(tag)
+  })
+
   //Saving Throws
-  const saveAs = stats[0].level;
-  const monsterLevel = parseInt(saveAs.match(/\d+/)[0], 10);
-  let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, monsterLevel, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
-  
+  let savingThrows = NPCbuild.mapSkills(NPCbuild.fighterSavingThrowTable, npc.level, ['deathRay', 'magicWands', 'paralysisPetrify','dragonBreath',  'spells']);
   npc.savingThrows = savingThrows;
-  
-  //HitPoints
-  const matches = stats[0].hd.match(/(\d+)(?:\+(\d+))?(?:\*(\d+))?/);
-  const baseDice = parseInt(matches[1], 10);
-  const bonusDice = matches[2] ? parseInt(matches[2], 10) : 0;
-  const specialBonus = matches[3] ? parseInt(matches[3], 10) : 0;
-  //console.log(baseDice)
-  const totalHitPoints = NPCbuild.rollDice(baseDice+'d8') + bonusDice + specialBonus;
-  
-  npc.hitPoints = totalHitPoints;
-  npc.attackBonus = baseDice;
-  npc.AC = stats[0].ac;
-  npc.attacks = stats[0].attacks;
-  npc.damage = stats[0].damage;
-  npc.XP = stats[0].xp;
-  npc.level = monsterLevel;
-  npc.movement = stats[0].movement;
-
-  //Get Treasure
-  
-  const rawTreasureTypes = stats[0].treasure.split(',');
-
-  // Use a regular expression to match valid treasure types (A, B, C)
-  const treasureTypes = rawTreasureTypes.map(entry => {
-  const match = entry.match(/[A-Za-z]/);
-  return match ? match[0] : null;
-  }).filter(entry => entry !== null);
-
-let allLoot = {
-  Copper: 0,
-  Electrum: 0,
-  Gems: [],
-  Gold: 0,
-  Jewelry: [],
-  Platinum: 0,
-  Silver: 0,
-  magicItems: [] // Assuming magicItems is an array
-};
-
-for (const treasureType of treasureTypes) {
-  const lootEntry = NPCbuild.treasureTable[treasureType];
-  const loot = NPCbuild.genLoot(lootEntry);
  
 
-  // Accumulate the loot values within the same entry
-  allLoot.Copper += loot.Copper || 0;
-  allLoot.Electrum += loot.Electrum || 0;
-  allLoot.Gems = loot.Gems || allLoot.Gems;
-  allLoot.Gold += loot.Gold || 0;
-  allLoot.Jewelry = loot.Jewelry || allLoot.Jewelry;
-  allLoot.Platinum += loot.Platinum || 0;
-  allLoot.Silver += loot.Silver || 0;
+//   //Get Treasure
+//   const rawTreasureTypes = obj.treasure.split(',');
 
-  // Concatenate magicItems arrays
-  allLoot.magicItems = allLoot.magicItems.concat(loot.magicItems || []);
-}
+//   // Use a regular expression to match valid treasure types (A, B, C)
+//   const treasureTypes = rawTreasureTypes.map(entry => {
+//   const match = entry.match(/[A-Za-z]/);
+//   return match ? match[0] : null;
+//   }).filter(entry => entry !== null);
 
-// Convert the combinedLoot object into an array of a single entry
-const lootArray = [allLoot];
+// let allLoot = {
+//   Copper: 0,
+//   Electrum: 0,
+//   Gems: [],
+//   Gold: 0,
+//   Jewelry: [],
+//   Platinum: 0,
+//   Silver: 0,
+//   magicItems: [] // Assuming magicItems is an array
+// };
 
-npc.treasure = lootArray;
-//console.log(npc.treasure)
-  
+// for (const treasureType of treasureTypes) {
+//   const lootEntry = NPCbuild.treasureTable[treasureType];
+//   const loot = NPCbuild.genLoot(lootEntry);
+ 
 
-  } else {
+//   // Accumulate the loot values within the same entry
+//   allLoot.Copper += loot.Copper || 0;
+//   allLoot.Electrum += loot.Electrum || 0;
+//   allLoot.Gems = loot.Gems || allLoot.Gems;
+//   allLoot.Gold += loot.Gold || 0;
+//   allLoot.Jewelry = loot.Jewelry || allLoot.Jewelry;
+//   allLoot.Platinum += loot.Platinum || 0;
+//   allLoot.Silver += loot.Silver || 0;
+
+//   // Concatenate magicItems arrays
+//   allLoot.magicItems = allLoot.magicItems.concat(loot.magicItems || []);
+// }
+
+// // Convert the combinedLoot object into an array of a single entry
+// const lootArray = [allLoot];
+
+// npc.treasure = lootArray;
+// //console.log(npc.treasure)
+
     
-    this.treasure = undefined;
+//     this.treasure = undefined;
   
-  }
   
   }
 

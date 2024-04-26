@@ -103,7 +103,7 @@ const itemStats = [
 `${item.weight ? `<span class="lime">Weight:</span> ${item.weight} lbs<br>` : ''}`,
 `${item.damage ? `<span class="lime">Damage:</span> ${item.damage}<br>` : ''}`,
 `${item.range ? `<span class="lime">Range:</span> ${item.range}<br>` : ''}`,
-`${item.ac ? `<span class="lime">Armour Class:</span> ${item.ac}<br><br>` : ''}`,
+`${item.armourClass ? `<span class="lime">Armour Class:</span> ${item.armourClass}<br><br>` : ''}`,
 `${item.tags ? `<span class="hotpink">Assigned to:</span> ${item.tags}<br>` : ''}<hr></h3>`,
 `${item.description ? ` ${item.description} ` : ''}`,
 ];

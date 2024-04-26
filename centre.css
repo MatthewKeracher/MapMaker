@@ -136,7 +136,6 @@ border-radius: 0;
 .centreName:focus{
 /* Appearance */
 background-color: transparent;
-border-color: hotpink;
 color: lime;
 outline: none;
 border-radius: 0;
@@ -166,7 +165,6 @@ border-radius: 0;
 .centreType:focus{
 /* Appearance */
 background-color: transparent;
-border-color: hotpink;
 color: lime;
 outline: none;
 border-radius: 0;
@@ -235,7 +233,6 @@ border-radius: 0;
 .centreLabel:focus{
 /* Appearance */
 background-color: transparent;
-border-color: hotpink;
 color: lime;
 outline: none;
 border-radius: 0;
@@ -361,7 +358,6 @@ margin-top: 0;
 .fullScreenText:focus{
 /* Appearance */
 background-color: transparent;
-border-color: hotpink;
 color: lime;
 outline: none;
 border-radius: 0;

@@ -71,14 +71,38 @@ form.createForm(memberObj);
 // Create button row
 const buttonDiv = document.createElement('div');
 
-let buttonHTML = `<br><button id="initButton" class="partyButton">Initiative</button>`;
+let buttonHTML = 
+`<br>
+<select id="partyDice" class="partyNumber">
+    <option value=4>4</option>
+    <option value=6>6</option>
+    <option value=8>8</option>
+    <option value=10>10</option>
+    <option value=12>12</option>
+    <option value=20 selected>20</option>
+    <option value=100>100</option>
+</select>
+
+<select id="partyMod" class="partyText">
+    <option value="modStrength">Strength</option>
+    <option value="modDexterity">Dexterity</option>
+    <option value="modWisdom">Wisdom</option>
+    <option value="modIntelligence">Intelligence</option>
+    <option value="modConstitution">Constitution</option>
+    <option value="modCharisma">Charisma</option>
+    <option value="none" selected>Raw</option>
+</select>
+
+<button id="rollButton" class="partyButton">Roll</button>`;
 
 buttonDiv.innerHTML = buttonHTML;
 ref.leftParty.appendChild(buttonDiv);
+const rollButton = document.getElementById("rollButton");
 
-const initButton = document.getElementById("initButton");
 
-initButton.addEventListener('click', () => {
+rollButton.addEventListener('click', () => {
+let sides  = document.getElementById("partyDice").value;
+let modifier = document.getElementById("partyMod").value;
 
 const rows = document.querySelectorAll(".member-row");
 const initResults = [];
@@ -92,10 +116,18 @@ const npcObj = load.Data.npcs.find(npc => npc.name === name)
 
 //Roll Initiative with Dex Modifier.
 const initCol = row.getElementsByClassName('init-column');
-const roll = helper.rollDice(6) + npcObj.dexMod;
-initCol[0].innerHTML = roll;
-initResults.push({name,roll})
-npcObj.initiative = roll;
+
+let rawRoll = helper.rollDice(parseInt(sides)) 
+let modifiedRoll = rawRoll + (modifier === 'none'? '': npcObj[modifier]);
+
+//Natural 20!
+if(parseInt(sides) === 20 && parseInt(rawRoll) === 20){
+modifiedRoll = modifiedRoll + '*'
+}
+
+initCol[0].innerHTML = modifiedRoll;
+initResults.push({name,modifiedRoll})
+npcObj.initiative = modifiedRoll;
 
 });
 

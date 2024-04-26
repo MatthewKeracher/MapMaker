@@ -1,3 +1,5 @@
+/* PLAYER TABLE */
+
 .name-column:hover {
     background-color: rgba(245, 245, 245, 0.167);
     cursor: pointer;
@@ -15,10 +17,9 @@
 
 .member-cell {
     display: table-cell;
-    padding: 5px;
     font-family: 'SoutaneBlack';
     font-size: 2.2vh;
-    color: whitesmoke;
+    color: white;
     border: 1px solid transparent; /* Add border for visualization */
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Prevent overflow */
@@ -40,7 +41,7 @@
 
 .scores-table {
     display: table;
-    width: 18vw;
+    width: 28vw;
     table-layout: fixed; /* Ensures consistent column widths */
 }
 
@@ -50,10 +51,9 @@
 
 .score-cell {
     display: table-cell;
-    padding: 5px;
     font-family: 'SoutaneBlack';
-    font-size: 2.5vh;
-    color: whitesmoke;
+    font-size: 2.2vh;
+    color: white;
     border: 1px solid transparent; /* Add border for visualization */
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Prevent overflow */
@@ -61,6 +61,39 @@
 }
 
 /* Set individual column widths */
-.scoreName-column { width: 7vw; }
+.scoreName-column { width: 17vw; }
 .score-column { width: 3vw; }
 .modifier-column { width: 5vw; }
+
+/* NPC Fields */
+
+.field-column:hover {
+    background-color: rgba(245, 245, 245, 0.167);
+    cursor: pointer;
+    }
+
+.field-table {
+    display: table;
+    width: 30vw;
+    table-layout: fixed; /* Ensures consistent column widths */
+}
+
+.field-row {
+    display: table-row;
+}
+
+.field-cell {
+    display: table-cell;
+    font-family: 'SoutaneBlack';
+    font-size: 2.2vh;
+    color: white;
+    border: 1px solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+    vertical-align: middle;
+}
+
+/* Set individual column widths */
+.fieldName-column { width: 17vw; }
+.fielValue-column { width: 10vw; }

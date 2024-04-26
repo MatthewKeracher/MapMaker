@@ -79,7 +79,7 @@ if (obj) {
 //Define key groups for different areas of the form.
 const excludedKeys = ['id','name', 'description', 'key', 'tags', 'color']; 
 const invisibleKeys = ['type', 'subType'];
-const universalKeys = ['group', 'subGroup'];
+const universalKeys = ['subGroup', 'group'];
 
 //Make ID Manually
 if(obj.id){
@@ -147,20 +147,18 @@ const description = document.createElement('div');
 const centreText = fullScreen === true? 'fullScreenText' : 'centreText'
 
 let centreContent =  
-`<h2>
-<label class="entry-label"
+`<label class="entry-label"
 style="font-family:'SoutaneBlack'; color: ${color}; width: auto;"
 divId="description">
-${obj.name}
 </label>
-<button id="fullScreenButton" class="singButton">
-[...]
-</button>
-<hr></h2>
+
 <textarea
 id="descriptionText"
 class="entry-input ${centreText}" 
->`;
+></textarea>
+
+<button id="fullScreenButton" class="singButton">
+[...]</button>`;
 
 description.innerHTML = centreContent;
 ref.Centre.appendChild(description);
@@ -265,9 +263,9 @@ divId="subType">
 <input
 pair="${subType}" 
 class="centreSubType" 
-style="font-family:'SoutaneBlack'; color:${color}"
+style="font-family:'SoutaneBlack'; color:white"
 id="subTypeEntry"
-value="${obj[subType] || 'none'} ">`;
+value="${obj.group || 'none'} => ${obj.subGroup || 'none'} ">`;
 
 topAreaTop.innerHTML += subTypeContent;
 }
@@ -316,17 +314,23 @@ if (obj.hasOwnProperty(key) && universalKeys.includes(key)) { // Check if key is
 const elementContainer = document.createElement('div');
 
 let elementContent =  
-`<h3 id = ${key}Container>
-<label class="expandable entry-label" 
-style="font-family:'SoutaneBlack'; color:${color}"
-key="rule" 
-divId="${[key]}">
+`<div class="field-table">
+
+<div id="${key}Container" class="field-row">
+
+<label divId="${[key]}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">
 ${helper.proper(key)}
 </label>
-<input class="leftTextshort white entry-input" 
-id= "edit${[key]}">
-</input>
-</h3>`;
+
+<input 
+id="edit${[key]}" 
+type="text" 
+class="field-cell field-column leftTextshort entry-input">
+
+</div>
+
+</div>
+`;
 
 elementContainer.innerHTML = elementContent;
 container.appendChild(elementContainer);
@@ -355,21 +359,25 @@ elementContainer.querySelector('.leftTextshort').select();
 const colorContainer = document.createElement('colorContainer');
 
 let colorContent = 
-`<h3 id = colorContainer>
-<label class="expandable entry-label" 
-style="font-family:'SoutaneBlack'; color:${obj.color}"
-key="rule" 
-divId="color">
-Color
+`<div class="field-table">
+
+<div id="colorContainer" class="field-row">
+
+<label divId="color" class="field-cell fieldName-column entry-label" style="color:${obj.color}">
+Colour
 </label>
+
 <input 
-type="color" 
-class="entry-input colorBox" 
 id="editcolor" 
+type="color" 
+class="field-cell field-column entry-input"
 style="background-color: ${obj.color}"
-value=${obj.color}>
+value=${obj.color}
 </input>
-</h3> `
+</div>
+
+</div>
+`;
 
 colorContainer.innerHTML = colorContent;
 container.appendChild(colorContainer);
@@ -392,10 +400,50 @@ colorWheel.addEventListener('input', handleColorChange);
 
 //Add NPC Form Elements
 if(obj.key === 'npcs'){
-console.log(obj)
+
+//Add Class, Level, and Species
+if(obj){
+
+const container = document.getElementById(this.buildSection('Build', obj));
+const keys = ["class", "level", "alignment", "species"]
+
+keys.forEach(key => {
+
+// Inside the loop that creates memberDiv elements
+const div = document.createElement('div');
+    
+let HTML = `
+<div class="field-table">
+
+    <div id="${key}Row" class="field-row">
+
+    <label divId="${key}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">${helper.proper(key)}
+    </label>
+
+    <input 
+    id="${key}Entry" 
+    type="text" 
+    class="field-cell field-column leftTextshort entry-input"
+    value=${obj[key]}>
+
+    </div>
+
+    </div>
+    `;
+
+div.innerHTML = HTML;
+container.appendChild(div);
+
+})
+    
+}
+
+//Add Scores
+if(obj){
+
 const container = document.getElementById(this.buildSection('Stats', obj));
 
-const stats = ["str", "dex", "int", "wis", "con", "cha"];
+const stats = ["Strength", "Dexterity", "Intelligence", "Wisdom", "Constitution", "Charisma"];
 
 stats.forEach(stat =>{ 
 
@@ -407,15 +455,16 @@ stats.forEach(stat =>{
 
     <div id="${stat}Row" class="score-row">
 
-    <div id="${stat}" class="score-cell scoreName-column entry-label" style="color:${obj.color}">${stat.toUpperCase()}</div>
+    <label divId="${stat}" class="score-cell scoreName-column entry-label" style="color:${obj.color}">${stat}
+    </label>
 
     <input 
     id="${stat}Entry" 
     type="text" 
     class="score-cell score-column centreNumber entry-input"
-    value=${obj[stat].score}>
+    value=${obj[stat]}>
 
-    <div class="score-cell modifier-column">( ${obj[stat].mod} )</div>
+    <div class="score-cell modifier-column">( ${obj['mod' + stat]} )</div>
 
     </div>
 
@@ -427,7 +476,6 @@ stats.forEach(stat =>{
 
     const thisRow = document.getElementById(stat + 'Row')
     const thisEntry = document.getElementById(stat + 'Entry')
-    console.log(thisEntry)
 
     thisRow.addEventListener('click', function() {
         thisEntry.focus();
@@ -435,15 +483,123 @@ stats.forEach(stat =>{
     });
 
 })
+}
+
+//Add Combat Information
+if(obj.hitPoints){
+    const container = document.getElementById(this.buildSection('Combat', obj));
+    const dataKeys = [obj.hitPoints, obj.attackBonus, obj.armourClass, obj.damage, obj.attacks, obj.movement, obj.morale,obj.experience];
+    const keys = ["Max Hit Points", "Attack Bonus", "Armour Class", "Damage", "# Attacks", "Movement", "Morale","Experience"];
+    
+    keys.forEach((key, index) => {
+    
+    // Inside the loop that creates memberDiv elements
+    const div = document.createElement('div');
+        
+    let HTML = `
+    <div class="field-table">
+    
+        <div id="${dataKeys[index]}Row" class="field-row">
+        <label divId="${dataKeys[index]}" class="field-cell fieldName-column" style="color:${obj.color}">
+        ${key}
+        </label>
+    
+        <label 
+        id="${dataKeys[index]}Entry" 
+        type="text" 
+        class="field-cell field-column leftTextshort">
+        ${dataKeys[index]}
+        </div>
+    
+        </div>
+        `;
+    
+    div.innerHTML = HTML;
+    container.appendChild(div);
+    
+    })
+};
+
+//Add Saving Throws
+if(obj.savingThrows){
+    const container = document.getElementById(this.buildSection('Saving Throws', obj));
+    const dataKeys = Object.keys(obj.savingThrows);
+    const keys = helper.convertKeys(obj.savingThrows);
+    
+    keys.forEach((key, index) => {
+    
+    // Inside the loop that creates memberDiv elements
+    const div = document.createElement('div');
+        
+    let HTML = `
+    <div class="field-table">
+    
+        <div id="${dataKeys[index]}Row" class="field-row">
+    
+        <label divId="${dataKeys[index]}" class="field-cell fieldName-column" style="color:${obj.color}">
+        ${key}
+        </label>
+    
+        <label 
+        id="${dataKeys[index]}Entry" 
+        type="text" 
+        class="field-cell field-column leftTextshort">
+        ${obj.savingThrows[dataKeys[index]]}
+    
+        </div>
+    
+        </div>
+        `;
+    
+    div.innerHTML = HTML;
+    container.appendChild(div);
+    
+    })
+};
+
+//Add Class-specific Skills
+if(obj.Skills){
+    const container = document.getElementById(this.buildSection(obj.class + ' Skills', obj));
+    const dataKeys = Object.keys(obj.Skills);
+    const keys = helper.convertKeys(obj.Skills);
+    
+    keys.forEach((key, index) => {
+    
+    // Inside the loop that creates memberDiv elements
+    const div = document.createElement('div');
+        
+    let HTML = `
+    <div class="field-table">
+    
+        <div id="${dataKeys[index]}Row" class="field-row">
+    
+        <label divId="${dataKeys[index]}" class="field-cell fieldName-column" style="color:${obj.color}">
+        ${key}
+        </label>
+    
+        <label 
+        id="${dataKeys[index]}Entry" 
+        type="text" 
+        class="field-cell field-column leftTextshort">
+        ${obj.Skills[dataKeys[index]]}
+    
+        </div>
+    
+        </div>
+        `;
+    
+    div.innerHTML = HTML;
+    container.appendChild(div);
+
+})};
 
 
 }
 
-
 //Make Form Section with ${key} specific Keys.
 if(obj.key !== 'npcs'){
 
-const properKey = helper.proper(obj.key)
+const properKey = helper.proper(obj.key);
 const container = document.getElementById(this.buildSection(properKey + ' Settings', obj));
 
 for (const key in obj) {
@@ -451,18 +607,24 @@ if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && !universalKeys.inc
 
 const elementContainer = document.createElement('div');
 
-let elementContent =  
-`<h3>
-<label class="expandable entry-label" 
-style="font-family:'SoutaneBlack'; color:${color}"
-key="rule" 
-divId="${[key]}">
-${helper.proper(key)}
-</label>
-<input class="leftTextshort white entry-input" 
-id= "edit${[key]}">
-</input>
-</h3>`;
+let elementContent =  `
+<div class="field-table">
+
+    <div id="${[key]}Row" class="field-row">
+
+    <label divId="${[key]}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">
+    ${helper.proper(key)}
+    </label>
+
+    <input 
+    id="edit${[key]}" 
+    type="text" 
+    class="field-cell field-column leftTextshort entry-input">
+
+    </div>
+
+    </div>
+    `;
 
 elementContainer.innerHTML = elementContent;
 container.appendChild(elementContainer);
@@ -542,8 +704,6 @@ this.style.color = 'lightgray';
 newTagArea.addEventListener('click', function(){
 
 
-if(key !== 'npcs'){
-
 //Make a copy of an object in the same key.
 const newEntry = JSON.parse(JSON.stringify(load.Data[key][0]));
 const newId = load.generateUniqueId(load.Data[key], 'entry');
@@ -574,14 +734,6 @@ load.Data[obj.key][index].tags.push(objEntry);
 //Load new Tag!
 form.createForm(newEntry)  
 saveButton.click();
-
-}else{
-
-let randomNumber = Math.floor(Math.random() * load.Data[key].length);
-NPCs.makeNewNPC(load.Data[key][randomNumber], obj)
-saveButton.click();
-
-};
 
 })
 
@@ -654,7 +806,7 @@ form.createForm(tagObj);
 
 },
 
-buildSection: function (headerValue, obj){
+buildSection: function (headerValue, obj, parent){
 
 const sectionHeadDiv = document.createElement('div');
 
@@ -665,7 +817,12 @@ ${headerValue} [...]
 </span></h3>`;
 
 sectionHeadDiv.innerHTML = headerHTML;
+
+if(parent){
+parent.appendChild(sectionHeadDiv);
+}else{
 ref.Left.appendChild(sectionHeadDiv);
+}
 
 //let isFrozen = false;
 let headerDiv = headerValue + 'Header'

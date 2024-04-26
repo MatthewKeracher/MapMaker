@@ -325,7 +325,7 @@ items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
 
 items.forEach((item,index) => {
 let noScope = item.getAttribute("scope");
-console.log(noScope)
+//console.log(noScope)
 //Shift-Click
 if(event.shiftKey && ref.Left.style.display === 'block' && !noScope){   
 event.preventDefault();

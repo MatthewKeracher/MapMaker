@@ -227,8 +227,7 @@ this.eventDesc += `<span
 class="expandable"
 key="${npc.key}" 
 style="color:mediumturquoise" 
-id="${npc.id}">
-${firstSentence} </span> <br>`
+id="${npc.id}">${firstSentence} </span> <br>`
 
 //Floating Tags (no subLocation) for NPCs:: //font-family: 'CenturyGothic', monospace; 
 let npcTags = npc.tags;

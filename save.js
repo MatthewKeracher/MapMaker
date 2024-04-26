@@ -126,7 +126,7 @@ ref.Editor.style.display = 'none';
 load.displayLocations(load.Data.locations);
 
 //Reload form to reflect changes.
-form.createForm(saveEntry);
+form.createForm(load.Data[key][index]);
 
 
 //Reload location to reflect changes.

@@ -141,7 +141,6 @@ overflow-y: scroll;
 .rightText:focus{
 /* Appearance */
 background-color: transparent;
-border-color: hotpink;
 color: lime;
 outline: none;
 border-radius: 0;
