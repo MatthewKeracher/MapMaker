@@ -1,4 +1,5 @@
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import ref from "./ref.js";
 import NPCs from "./npcs.js";
 import load from "./load.js";
@@ -24,8 +25,8 @@ let locObjDesc = helper.filterRandomOptions(locObj);
 //Location Wrapper
 let locWrapper = 
 `<span class="expandable"
-divId="${locObj.name}"
-data-content-type="locations"> ${locObjDesc} </span> `
+id="${locObj.id}"
+key="${locObj.key}"> ${locObjDesc} </span> `
 
 this.eventDesc += locWrapper;
 this.eventDesc += `<br>`
@@ -134,8 +135,8 @@ subLocations.forEach((subLocation) =>{
 let subLocHeader = 
 `<h2> <span class="expandable"
 style="color:${subLocation.color}"
-divId="${subLocation.name}"
-data-content-type="subLocations"> ${subLocation.name} </span> 
+id="${subLocation.id}"
+key="${subLocation.key}"> ${subLocation.name} </span> 
 </h2>`
 
 this.eventDesc += `<br><hr><br>`;
@@ -147,8 +148,8 @@ let subLocDesc = helper.filterRandomOptions(subLocation);
 //subLoc Wrapper
 let subLocWrapper = 
 `<span class="expandable"
-divId="${subLocation.name}"
-data-content-type="subLocations"> ${subLocDesc} </span> `
+id="${subLocation.id}"
+key="${subLocation.key}"> ${subLocDesc} </span> `
 
 this.eventDesc += `<br>`
 this.eventDesc += subLocWrapper;
@@ -214,20 +215,20 @@ let eventBundle = bundle.filter(obj => obj.key === 'events');
 this.eventDesc += `<h3><span 
 class="expandable" 
 style="font-family:'SoutaneBlack'; 
-color: ${npc.color}" data-content-type="npc" 
-divId="${npc.name.replace(/\s+/g, '-')}"> 
+color: ${npc.color}" key="${npc.key}" 
+id="${npc.id}"> 
 ${npc.name} is here. </span></h3>`;
 
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');
 let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
 
-
 this.eventDesc += `<span
 class="expandable"
-data-content-type="npc" 
+key="${npc.key}" 
 style="color:mediumturquoise" 
-divId="${npc.name.replace(/\s+/g, '-')}"> ${firstSentence}</span> <br>`
+id="${npc.id}">
+${firstSentence} </span> <br>`
 
 //Floating Tags (no subLocation) for NPCs:: //font-family: 'CenturyGothic', monospace; 
 let npcTags = npc.tags;
@@ -308,8 +309,8 @@ this.eventDesc +=
 `<span 
 class="expandable"
 style="font-family:'SoutaneBlack'; color:${event.color}" 
-divId="${event.name}"
-data-content-type="events">${event.name}. </span>`;
+id="${event.id}"
+key="${event.key}">${event.name}. </span>`;
 
 let eventDesc = helper.filterRandomOptions(event);
 this.eventDesc += eventDesc;
@@ -336,8 +337,8 @@ let ambienceDesc = helper.filterRandomOptions(ambienceObj);
 let ambienceWrapper = 
 `<span class="expandable"
 style="color:${ambienceObj.color}"
-divId="${ambienceObj.name}"
-data-content-type="ambience"> ${ambienceDesc} </span>`
+id="${ambienceObj.id}"
+key="${ambienceObj.key}"> ${ambienceDesc} </span>`
 this.eventDesc += ambienceWrapper;
 
 }},
@@ -348,8 +349,8 @@ let header =
 `<h3><span 
 class="expandable" 
 style='color:${tag.color}'
-divId="${tag.name}"
-data-content-type="tags"> ${tag.name}</span></h3>`
+id="${tag.id}"
+key="${tag.key}"> ${tag.name}</span></h3>`
 
 if(bundle.length > 0){
 this.eventDesc += `<br>`
@@ -360,8 +361,8 @@ this.eventDesc += header
 let descWrapper = 
 `<span 
 class="expandable" 
-divId="${tag.name}"
-data-content-type="tags"> ${tag.description}</span>`
+id="${tag.id}"
+key="${tag.key}"> ${tag.description}</span>`
 
 if(bundle.length > 0){
 this.eventDesc += descWrapper
@@ -376,8 +377,8 @@ bundle.forEach(item => {
 let wrapper = 
 `<span class="expandable"
 style="color:${item.color}"
-divId="${item.name}"
-data-content-type="items"> ${item.name} [${item.cost}] </span>`
+id="${item.id}"
+key="${tag.key}"> ${item.name} [${item.cost}] </span>`
 
 this.eventDesc += wrapper;
 this.eventDesc += `<br>`;

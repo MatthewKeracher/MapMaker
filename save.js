@@ -1,7 +1,8 @@
 import load from "./load.js";
 import NPCs from "./npcs.js";
 import ref from "./ref.js";
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import Storyteller from "./storyteller.js";
 
 
@@ -56,7 +57,7 @@ inputs.push(value.trim());
 }
 });
 
-console.log(labels, inputs);
+//console.log(labels, inputs);
 
 // Pair the contents of the labels and inputs arrays to create the saveEntry object
 for (let i = 0; i < labels.length; i++) {
@@ -125,11 +126,8 @@ ref.Editor.style.display = 'none';
 load.displayLocations(load.Data.locations);
 
 //Reload form to reflect changes.
-if(key === 'npcs'){
-NPCs.addNPCInfo(saveEntry.name)
-}else{
-editor.createForm(saveEntry);
-}
+form.createForm(saveEntry);
+
 
 //Reload location to reflect changes.
 Storyteller.refreshLocation();

@@ -1,9 +1,11 @@
 // Import the necessary module
 import load from "./load.js";
 import ref from "./ref.js";
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import NPCs from "./npcs.js";
 import helper from "./helper.js";
+
 
 const expandable = {
 
@@ -20,7 +22,7 @@ for (const match of matches) {
 const square = match[1];
 const curly = match[2];
 
-const replacement = `<span class="float" style="color:${color}" data-content-type="misc" divId="${square}">${this.getQuotes(square)}</span>`;
+const replacement = `<span class="float" style="color:${color}" key="misc" divId="${square}">${this.getQuotes(square)}</span>`;
 
 updatedText = updatedText.replace(match[0], replacement);
 
@@ -37,9 +39,9 @@ const asteriskBrackets = /\*([^*]+)\*/g;
 return locationText.replace(asteriskBrackets, (match, targetText) => {
 const monster = load.Data.monsters.find(monster => monster.name.toLowerCase() === targetText.toLowerCase());
 if (monster) {
-return `<span class="expandable monster" data-content-type="monsters" divId="${targetText}">${targetText}</span>`;
+return `<span class="expandable monster" key="monsters" divId="${targetText}">${targetText}</span>`;
 } else {
-console.log(`Monster not found: ${targetText}`);
+//console.log(`Monster not found: ${targetText}`);
 return match;
 }
 });
@@ -51,9 +53,9 @@ const hashBrackets = /#([^#]+)#/g;
 return locationText.replace(hashBrackets, (match, targetText) => {
 const item = Object.values(load.Data.tags).find(item => item.name.toLowerCase() === targetText.toLowerCase());
 if (item) {
-return `<span class="expandable" style="color:${item.color}" data-content-type="tags" divId="${item.name}">${item.name}</span>`;
+return `<span class="expandable" style="color:${item.color}" key="tags" divId="${item.name}">${item.name}</span>`;
 } else {
-console.log(`Item not found: ${targetText}`);
+//console.log(`Item not found: ${targetText}`);
 return match;
 }
 });
@@ -65,7 +67,7 @@ const tildeBrackets = /~([^~]+)~/g;
 return locationText.replace(tildeBrackets, (match, targetText) => {
 const spell = Object.values(load.Data.spells).find(spell => spell.name.toLowerCase() === targetText.toLowerCase());
 if (spell) {
-return `<span class="expandable spell" data-content-type="spells" divId="${spell.name}">${spell.name}</span>`;
+return `<span class="expandable spell" key="spells" divId="${spell.name}">${spell.name}</span>`;
 } else {
 console.log(`Spell not found: ${targetText}`);
 return match;
@@ -90,11 +92,11 @@ const item = Object.values(load.Data.tags).find(item => item.name.toLowerCase() 
 
 if (item) {
 
-//`<span class="expandable" data-content-type="rule" divId="Money"">${foundNPC.class} Skills:</span><br>`
+//`<span class="expandable" key="rule" divId="Money"">${foundNPC.class} Skills:</span><br>`
 
 const itemStats = [
 `<h2><span class="misc">${contentId}</span></h2>`,
-`<h3><span class="expandable" data-content-type="rule" divId="Money">${item.cost ? `(${newCost})` : ''}</span><hr>`,
+`<h3><span class="expandable" key="rule" divId="Money">${item.cost ? `(${newCost})` : ''}</span><hr>`,
 `<span class="cyan">${item.type}</span>.<br>`,
 
 `${item.size ? `<span class="lime">Size:</span> ${item.size}<br>` : ''}`,
@@ -221,44 +223,21 @@ return 0; // Both item.Tag and item.Name are equal
 return locationItems;
 },
 
-showExpandable(source, target) {
+showExpandable(source) {
 
 const expandableElements = source.querySelectorAll('.expandable');
 
 expandableElements.forEach(element => {
 
 element.addEventListener('click', (event) => {
-//console.log('mouseenter')
-const contentType = event.target.getAttribute('data-content-type');
-const contentId = event.target.getAttribute('divId');
-
-switch (contentType) {
-case 'npc':
-NPCs.addNPCInfo(contentId, target); // Handle NPCs
-break;
-// case 'misc':
-// this.addMiscInfo(contentId, target);
-// break;
-case 'rules':
-this.addRulesInfo(contentId, target);
-break;
-default:
-//for monsters, spells, items, etc.
-//1. Find the Obj.
-const contentIdLowercase = contentId.toLowerCase();
-const obj = load.Data[contentType].find(obj => obj.name.toLowerCase() === contentIdLowercase);
-editor.createForm(obj);
-}          
-
-//target.style.display = "block";
-this.showExtraExpandable(ref.Left); 
+const key = event.target.getAttribute('key');
+const id = event.target.getAttribute('id');
+const index = helper.getIndex(key, id);
+const obj = load.Data[key][index];
+form.createForm(obj);          
 
 });
 
-// Ref.Centre.addEventListener('mouseenter', () => {
-// Ref.Left.style.display = 'none';
-
-// });
 });
 },
 
@@ -270,13 +249,10 @@ expandableElements.forEach(element => {
 
 element.addEventListener('mouseenter', (event) => {
 
-const contentType = event.target.getAttribute('data-content-type');
+const contentType = event.target.getAttribute('key');
 const contentId = event.target.getAttribute('divId');
 
 switch (contentType) {
-case 'npc':
-NPCs.addNPCInfo(contentId, target); // Handle NPCs
-break;
 case 'monster':
 expandable.addMonsterInfo(contentId, target); // Handle Monsters
 break;
@@ -315,7 +291,7 @@ expandableElements.forEach(element => {
 
 element.addEventListener('click', (event) => {
 
-const contentType = event.target.getAttribute('data-content-type');
+const contentType = event.target.getAttribute('key');
 const contentId = event.target.getAttribute('divId');
 const contentStyle = element.getAttribute('style');
 
@@ -345,9 +321,6 @@ document.body.removeChild(floatingBox);
 });
 
 switch (contentType) {
-case 'npc':
-NPCs.addNPCInfo(contentId, contentStyle, floatingBox); // Handle NPCs
-break;
 case 'monster':
 expandable.addMonsterInfo(contentId, contentStyle, floatingBox); // Handle Monsters
 break;

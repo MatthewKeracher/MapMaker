@@ -5,7 +5,8 @@ import load from "./load.js";
 import NPCs from "./npcs.js";
 
 
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import ref from "./ref.js";
 
 const Storyteller = {

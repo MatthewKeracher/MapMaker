@@ -1,6 +1,7 @@
 //Helper should not take outside references, except load.Data[...]
 import load from "./load.js";
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import NPCs from "./npcs.js";
 
 const helper = {
@@ -10,53 +11,60 @@ sortData(data){
 // const focusKey = 'ambience'
 
 for (const key in data) {
-    let obj = data[key];
+let obj = data[key];
 
-    if (key !== 'townText') {
-        obj = obj.map(entry => {
-            // Remove some fields
-            // delete entry.key;
+if (key !== 'townText') {
+obj = obj.map(entry => {
+// Remove some fields
+// delete entry.key;
 
-            // Add new fields
-            // entry.key = '';
-            //entry.active = 1;
+// Add new fields
+// entry.key = '';
+//entry.active = 1;
 
-            // Change field values.
-            entry.tags = helper.tidyTags(entry.tags)
-            entry.subGroup = entry.subGroup? entry.subGroup : '';
+// Change field values.
+entry.tags = helper.tidyTags(entry.tags)
+entry.subGroup = entry.subGroup? entry.subGroup : '';
 
-            // Return the modified object
-            return entry;
-        });
-    }
-
-    if(key === 'subLocations'){
-
-        obj = obj.map(entry => {
-            // Remove some fields
-            // delete entry.key;
-            // delete entry.npc;
-            // delete entry.location;
-            // delete entry.target;
-
-            // Add new fields
-            // entry.key = '';
-            //entry.active = 1;
-            entry.order = entry.order? entry.order : '';
-
-            // Change field values.
-            // entry.type = 'group';
-            // entry.subType= 'subGroup';
-
-            // Return the modified object
-            return entry;
-        });
-
-    }
-
-    data[key] = obj;
+// Return the modified object
+return entry;
+});
 }
 
+if(key === 'subLocations'){
+
+obj = obj.map(entry => {
+// Remove some fields
+// delete entry.key;
+// delete entry.npc;
+// delete entry.location;
+// delete entry.target;
+
+// Add new fields
+// entry.key = '';
+//entry.active = 1;
+entry.order = entry.order? entry.order : '';
+
+// Change field values.
+// entry.type = 'group';
+// entry.subType= 'subGroup';
+
+// Return the modified object
+return entry;
+});
+
+}
+
+data[key] = obj;
+}
+
+
+},
+
+getIndex(key, id){
+
+const index = load.Data[key].findIndex(obj => parseInt(obj.id) === parseInt(id))
+return index
 
 },
 
@@ -103,11 +111,11 @@ return returnDesc;
 },
 
 getSurname(fullName) {
-    // Split the full name into components
-    let nameComponents = fullName.split(' ');
-    // Extract the last component as the surname
-    let surname = nameComponents[nameComponents.length - 1];
-    return surname;
+// Split the full name into components
+let nameComponents = fullName.split(' ');
+// Extract the last component as the surname
+let surname = nameComponents[nameComponents.length - 1];
+return surname;
 },
 
 addTagtoItem(clickArray, currentArray){
@@ -161,14 +169,9 @@ editor.addItem = false;
 helper.addTagtoItem(clickArray, currentArray);
 
 //Finally, Repackage to reflect change.
-if(currentKey === 'npcs'){
-const currentObj = load.Data[currentArray.key].find(obj => parseInt(obj.id) === parseInt(currentArray.id));
-NPCs.addNPCInfo(currentObj.name)
-}else{
-editor.createForm(load.Data[currentKey][currentIndex]);
-};
-
 NPCs.buildNPC();
+form.createForm(load.Data[currentKey][currentIndex]);
+
 
 },
 
@@ -185,67 +188,67 @@ return obj
 
 getChildren(tagObj){
 
-    //Take a tag and return all child tags.
-    if(tagObj.key === 'tags'){
+//Take a tag and return all child tags.
+if(tagObj.key === 'tags'){
 
-        tagObj.tags.filter(tag => tag.key === 'tags');
-        console.log(tagObj.name, tagObj.tags.filter(tag => tag.key === 'tags'));
+tagObj.tags.filter(tag => tag.key === 'tags');
+console.log(tagObj.name, tagObj.tags.filter(tag => tag.key === 'tags'));
 
-    }
+}
 
 },
 
 getTagsfromObj(obj){
 
-    let array = [];
-    let tags = obj.tags;
+let array = [];
+let tags = obj.tags;
 
-    if(tags){   
-        
-    let tidyTags = helper.tidyTags(tags);
+if(tags){   
 
-    tidyTags.forEach(tag => {
-    
-    let tagObj = helper.getObjfromTag(tag);
-    //this.getChildren(tagObj);
-    
-    array.push(tagObj);
-    
-    })
-    }
-    
-    //console.log(array)
-    return array;
-    
-    },
+let tidyTags = helper.tidyTags(tags);
 
-    tidyTags(tags) {
-        // Remove dead tags
-        tags = tags.filter(tag => {
-            // Get the tag object
-            let tagObj = this.getObjfromTag(tag);
-            // Keep the tag if the tag object is not undefined
-            return tagObj !== undefined;
-        });
+tidyTags.forEach(tag => {
 
-        //return tags;
-    
-        // Use reduce to create a new array with unique tags
-        return tags.reduce((uniqueTags, tag) => {
-        // Check if the tag already exists in uniqueTags based on key and id
-        let isDuplicate = uniqueTags.some(existingTag =>
-        existingTag.key === tag.key && parseInt(existingTag.id) === parseInt(tag.id)
-        );
-        // If the tag is not a duplicate, add it to uniqueTags
-        if (!isDuplicate) {
-        uniqueTags.push(tag);
-        }
-        return uniqueTags;
-        }, []);
+let tagObj = helper.getObjfromTag(tag);
+//this.getChildren(tagObj);
 
-    },
-    
-    
+array.push(tagObj);
+
+})
+}
+
+//console.log(array)
+return array;
+
+},
+
+tidyTags(tags) {
+// Remove dead tags
+tags = tags.filter(tag => {
+// Get the tag object
+let tagObj = this.getObjfromTag(tag);
+// Keep the tag if the tag object is not undefined
+return tagObj !== undefined;
+});
+
+//return tags;
+
+// Use reduce to create a new array with unique tags
+return tags.reduce((uniqueTags, tag) => {
+// Check if the tag already exists in uniqueTags based on key and id
+let isDuplicate = uniqueTags.some(existingTag =>
+existingTag.key === tag.key && parseInt(existingTag.id) === parseInt(tag.id)
+);
+// If the tag is not a duplicate, add it to uniqueTags
+if (!isDuplicate) {
+uniqueTags.push(tag);
+}
+return uniqueTags;
+}, []);
+
+},
+
+
 rollDice(sides){
 
 return Math.floor(Math.random() * sides) + 1;

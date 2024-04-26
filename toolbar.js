@@ -2,7 +2,8 @@
 import ref from "./ref.js";
 import Map   from "./map.js";
 import Add   from "./add.js";
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import Events from "./events.js";
 import load from "./load.js";
 import save   from "./save.js";
@@ -31,7 +32,6 @@ Storyteller.showTownText();
 // `;
 
 //editor.addPredictiveContent();
-editor.init();
 
 Events.loadEventListeners();
 
@@ -199,7 +199,7 @@ editButton.classList.add('click-button');
 const obj = load.Data.locations.find(obj => obj.name === ref.locationLabel.textContent);
 
 if(obj && ref.Left.style.display === 'none'){
-editor.createForm(obj);
+form.createForm(obj);
 }
 
 //Show Editor loadLists()

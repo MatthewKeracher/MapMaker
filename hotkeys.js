@@ -1,5 +1,6 @@
 
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import Map from "./map.js";
 import toolbar from "./toolbar.js";
 import Ref from "./ref.js";

@@ -1,5 +1,6 @@
 // Import the necessary module
-import editor from "./editor.js";
+import editor from "./editor.js"; 
+import form from "./form.js";
 import helper from "./helper.js";
 import ref from "./ref.js";
 
@@ -116,7 +117,7 @@ console.error('Error reading file:', error);
 locationLabelEvents(){
 
 ref.locationLabel.addEventListener('click', function() {
-editor.createForm()
+form.createForm()
 
 });
 

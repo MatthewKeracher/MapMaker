@@ -1,16 +1,4 @@
-// Import the necessary module
-import editor from "./editor.js";
-
-import ref from "./ref.js";
 import load from "./load.js";
-
-import expandable from "./expandable.js";
-
-import Events from "./events.js";
-import Storyteller from "./storyteller.js";
-import NPCs from "./npcs.js";
-
-// classes.js
 
 class NPCbuild {
 
@@ -20,36 +8,36 @@ constructor(data) {
 this.type = 'group', 
 this.subType = 'subGroup',
 this.key = 'npcs',
+this.id = data.id;
+
+//Character Sheet
+this.name = data.name;
+
+this.class = data.class === ''? 'Fighter' : data.class;
+this.monsterTemplate = data.monsterTemplate;
+NPCbuild.getMonster(this);
+this.level = data.level === ''? 1 : data.level;
 this.color = data.color,
 this.group = data.group,
 this.subGroup = data.subGroup,
-this.initiative = this.initiative === undefined? 0 : this.initiative,
-
-//Character Sheet
-this.id = data.id;
-this.name = data.name;
-this.tags = data.tags;
-
-this.level = data.level === ''? 1 : data.level;
-this.class = data.class === ''? 'Fighter' : data.class;
-this.monsterTemplate = data.monsterTemplate;
-
-const attributes = ["str", "dex", "int", "wis", "con", "cha"];
-
-for (const attribute of attributes) {
-  this[attribute] = data[attribute] === ''? NPCbuild.rollScore(this, attribute) : data[attribute];
-}
-
 this.description = data.description;
 
-NPCbuild.getModifiers(this);
-NPCbuild.getCharacterSkills(this);
 NPCbuild.getHitPoints(this);
-NPCbuild.getMagic(this);
-// NPCbuild.getInventory(this);
-NPCbuild.getSavingThrows(this);
 NPCbuild.getAttackBonus(this);
-NPCbuild.getMonster(this);
+
+const scores = ["str", "dex", "int", "wis", "con", "cha"];
+
+for (const str of scores) {
+  this[str] = {score: data[str], mod: NPCbuild.getModifier(data[str])}
+}
+
+this.tags = data.tags;
+
+this.initiative = this.initiative === undefined? 0 : this.initiative,
+
+NPCbuild.getMagic(this);
+NPCbuild.getCharacterSkills(this);
+NPCbuild.getSavingThrows(this);
 
 }
 
@@ -700,20 +688,12 @@ static abilityScoreTable = [
 // Add more ranges as needed
 ];
 
-static getModifiers(npc) {
-// Array of ability scores
-const abilityScores = [npc.str, npc.dex, npc.int, npc.wis, npc.con, npc.cha];
+static getModifier(score) {
 
-// Calculate modifiers for each ability score
-const modifiers = abilityScores.map(score => {
 const modifierEntry = NPCbuild.abilityScoreTable.find(entry => score >= entry.range.min && score <= entry.range.max);
+
 return modifierEntry ? modifierEntry.bonus : 0;
-});
 
-// Assign modifiers back to the respective properties
-[npc.strMod, npc.dexMod, npc.intMod, npc.wisMod, npc.conMod, npc.chaMod] = modifiers;
-
-npc.Modifiers = modifiers;
 }
 
 

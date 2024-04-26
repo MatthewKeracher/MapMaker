@@ -1,0 +1,66 @@
+.name-column:hover {
+    background-color: rgba(245, 245, 245, 0.167);
+    cursor: pointer;
+    }
+
+.member-table {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensures consistent column widths */
+}
+
+.member-row {
+    display: table-row;
+}
+
+.member-cell {
+    display: table-cell;
+    padding: 5px;
+    font-family: 'SoutaneBlack';
+    font-size: 2.2vh;
+    color: whitesmoke;
+    border: 1px solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+}
+
+/* Set individual column widths */
+.name-column { width: 50%; }
+.class-column { width: 40%; }
+.init-column { width: 10%; }
+
+
+/* NPC SCORES */
+
+.score-column:hover {
+    background-color: rgba(245, 245, 245, 0.167);
+    cursor: pointer;
+    }
+
+.scores-table {
+    display: table;
+    width: 18vw;
+    table-layout: fixed; /* Ensures consistent column widths */
+}
+
+.score-row {
+    display: table-row;
+}
+
+.score-cell {
+    display: table-cell;
+    padding: 5px;
+    font-family: 'SoutaneBlack';
+    font-size: 2.5vh;
+    color: whitesmoke;
+    border: 1px solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+}
+
+/* Set individual column widths */
+.scoreName-column { width: 7vw; }
+.score-column { width: 3vw; }
+.modifier-column { width: 5vw; }

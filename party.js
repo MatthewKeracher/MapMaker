@@ -1,5 +1,6 @@
 import ref from "./ref.js";
 import load from "./load.js";
+import form from "./form.js";
 import helper from "./helper.js";
 import NPCs from "./npcs.js";
 
@@ -58,7 +59,8 @@ party.loadParty();
 else if(event.button === 0){ //left-click
 ref.leftParty.style.display = "none";
 partyButton.classList.remove('click-button')
-NPCs.addNPCInfo(member.name);
+let memberObj = load.Data.npcs.find(npc => npc.name === member.name);
+form.createForm(memberObj);
 }
 
 });
