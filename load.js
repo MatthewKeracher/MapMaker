@@ -137,10 +137,10 @@ load.Data = JSON.parse(fileContent);
 // this.generateTags(load.Data, 'locations');
 helper.sortData(load.Data);
 
-Storyteller.townText = load.Data.townText.description;
-load.fileName = load.Data.townText.name;
-locationLabel.textContent = load.Data.townText.name;
-Storyteller.showTownText();
+//Storyteller.miscInfo = load.Data.miscInfo.description;
+load.fileName = load.Data.miscInfo.fileName;
+locationLabel.textContent = load.Data.miscInfo.fileName;
+Storyteller.showmiscInfo();
 console.log(load.Data)
 
 try {

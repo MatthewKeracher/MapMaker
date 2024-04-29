@@ -3,7 +3,7 @@ import Events from "./events.js";
 import expandable from "./expandable.js";
 import load from "./load.js";
 import NPCs from "./npcs.js";
-
+import helper from "./helper.js";
 
 import editor from "./editor.js"; 
 import form from "./form.js";
@@ -12,7 +12,7 @@ import ref from "./ref.js";
 const Storyteller = {
 
 returnLocation: '',
-townText: '',
+miscInfo: '',
 
 async changeContent(locationDiv) {
 let Story = ``
@@ -32,18 +32,8 @@ Storyteller.returnLocation = returnLocation;
 
 if (locObj) {
 Events.getEvent(locObj);
-
-//Feed locationText through filters too generate hypertext elements. 
-this.miscArray = [];
-this.monsterArray = [];
-//console.log(Events.eventDesc)
-const squareCurly = expandable.getMisc(Events.eventDesc, expandable.miscArray, locObj.color);
-//console.log(squareCurly)
-const withMonsters = await expandable.getMonsters(squareCurly);
-const withSpells = await expandable.getSpells(withMonsters);
-const withItems = await expandable.getItems(withSpells);
-
-const finalStory = withItems;
+const keywords = expandable.generateKeyWords(load.Data)
+const finalStory = expandable.findKeywords(Events.eventDesc, keywords)
 
 
 Story += `
@@ -56,7 +46,7 @@ Story += `
 ref.Storyteller.innerHTML = Story;
 
 //Tell expandable Divs what to show.
-expandable.showExpandable(ref.Storyteller, ref.Centre);
+expandable.expandExtend(ref.Storyteller, ref.Centre);
 expandable.showFloatingExpandable();
 //---
 //window.speechSynthesis.cancel();
@@ -121,40 +111,131 @@ ref.locationLabel.textContent = 'No fileName';
 
 },
 
-showTownText(){
+showmiscInfo() {
 
-//Show General Information
-ref.Storyteller.innerHTML = 
-`<textarea
-id="storytellerText"
-class="rightText" 
-></textarea>`;
+    let fileInformation = load.Data.miscInfo.cover;
 
-const storytellerText = document.getElementById("storytellerText")
-//Ref.locationLabel.style.color = 'teal';
+    // Clear the existing content of ref.Storyteller
+    ref.Storyteller.innerHTML = '';
 
+    fileInformation.forEach((file, index) => {
+        // Generate unique identifiers for each header and text element
+        const headerId = `header${index}`;
+        const textId = `text${index}`;
 
-if(Storyteller.townText !== ''){
-storytellerText.textContent = Storyteller.townText;
-} else {
-storytellerText.textContent = 'Insert information about ' + load.fileName + ' here.'
-}
+        // Create the header element
+        const header = document.createElement('h2');
+        header.innerHTML = `
+            
+            <input type="text" value="${file.name}" id="${headerId}" class="miscInfo rightHeader" showHide="hide" toHide="${textId}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
+        `;
 
-storytellerText.addEventListener('focus', () => {
-// Set the selection range to the end of the text
-storytellerText.setSelectionRange(storytellerText.value.length, storytellerText.value.length);
-});
+        // Create the text area element
+        const text = document.createElement('textarea');
+        text.id = textId;
+        text.classList.add('rightText');
+        text.classList.add('miscInfo');
+        text.textContent = file.description.trim();
 
-storytellerText.addEventListener('focusout', () => {    
-Storyteller.townText = storytellerText.value
-load.Data.townText.description = storytellerText.value
-load.fileName = locationLabel.textContent;
-//console.log(load.Data);
-//console.log(Storyteller.townText);
+        ref.Storyteller.appendChild(header);
+        ref.Storyteller.appendChild(text);
+   
 
-});
+})
 
+this.addNewEntry();
+this.addMiscEvents();
 },
+
+addNewEntry(){
+
+    //Add New Info
+    
+    // Create the header element
+    const header = document.createElement('h2');
+    header.innerHTML = `
+        
+    <input type="text" value="Add New Entry" id="newHeader" class="rightHeader" showHide="hide" toHide="newEntry" style="display: block; letter-spacing: 0.18vw; text-align: left;">
+    `;
+    
+    // Create the text area element
+    const text = document.createElement('textarea');
+    text.id = 'newEntry';
+    text.classList.add('rightText')
+    text.style.display = 'none';
+    text.textContent = 'Insert text here.';
+    
+    ref.Storyteller.appendChild(header);
+    ref.Storyteller.appendChild(text);
+    
+    },
+
+addMiscEvents(){
+
+    const headers = document.querySelectorAll('.rightHeader')
+
+    // Attach event listener to each header element
+    headers.forEach((header, index) => {
+    header.addEventListener('click', (event) => {
+        const showHide = header.getAttribute("showHide");
+        const toHide = header.getAttribute("toHide");
+        const hideElement = document.getElementById(toHide)
+
+        if(event.shiftKey){
+            const confirmation = confirm('Are you sure you want to delete ' + header.value +'?');
+            if (confirmation) {
+                load.Data.miscInfo.cover.splice(index, 1)
+            }
+    
+        }
+        
+        if (showHide === "show") {
+            hideElement.style.display = 'none';
+            header.setAttribute("showHide", "hide");
+        } else {
+            hideElement.style.display = 'block';
+            header.setAttribute("showHide", "show");
+        }
+    });
+    
+    header.addEventListener('focusout', () => {    
+        //Save Data
+        try{
+        load.Data.miscInfo.cover[index].name = header.value;
+        }catch{
+        load.Data.miscInfo.cover.push({name: header.value, description: 'Insert text here.'});
+        }
+        });
+        
+    });
+
+    // Attach event listener to each input element
+    const inputs = document.querySelectorAll('.rightText')
+    inputs.forEach((input, index) => {
+       
+    input.addEventListener('focus', () => {
+    input.setSelectionRange(input.value.length, input.value.length);
+    });
+
+    input.addEventListener('focusout', () => {    
+    //Save Data
+    load.fileName = locationLabel.textContent;
+    try{
+    load.Data.miscInfo.cover[index].description = input.value;
+    }catch{
+    load.Data.miscInfo.cover.push({name: 'Insert Name.', description: input.value});
+    }
+    });
+
+});
+
+    
+},
+
+
+
+
+
 
 rulesArray: [
 {name: 'Attack Bonus',

@@ -34,7 +34,7 @@ loadList: function(data) {
 let target = ref.Editor
 target.innerHTML = '';
 target.style.display = 'block'; 
-const excludedKeys = ['townText'];
+const excludedKeys = ['miscInfo'];
 const numKeys = Object.keys(data).length;
 let startVisible = "false";
 
@@ -212,6 +212,7 @@ class ="white">
 }else if (entry[type]){
 nameDiv.setAttribute('id', entry.id)
 nameDiv.setAttribute('style', "display:" + EntryDisplay)
+currentSubSection++
 
 nameDiv.innerHTML = 
 `<span 
@@ -279,8 +280,6 @@ div.classList.add('misc');
 }else{
 
 items = document.querySelectorAll(`[key="${key}"]`); 
-
-
 
 items.forEach(item => {
 
@@ -435,7 +434,7 @@ const clickId = div.getAttribute('id')
 const clickKey = div.getAttribute('key')
 
 if(clickKey === 'npcs'){
-load.Data.townText.party.push({key: clickKey, id: clickId})
+load.Data.miscInfo.party.push({key: clickKey, id: clickId})
 }
 
 //Repackage.
@@ -491,7 +490,7 @@ form.createForm(entry)
 
 searchAllData: function (searchText, data) {
 const resultsByKeys = {}; // Object to store results grouped by keys
-const excludedKeys = ['townText'];
+const excludedKeys = ['miscInfo'];
 
 // Iterate over each key in load.Data
 for (const key in data) {

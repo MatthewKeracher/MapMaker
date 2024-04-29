@@ -22,7 +22,7 @@ this.species = data.species,
 this.tags = data.tags;
 NPCbuild.getHitPoints(this);
 NPCbuild.getAttackBonus(this);
-NPCbuild.getSpeciesData(this);
+try{NPCbuild.getSpeciesData(this)}catch{console.error('Cannot find species for ' + data.name)}
 this.group = data.group,
 this.subGroup = data.subGroup,
 this.description = data.description;
@@ -622,7 +622,7 @@ static getInventory(npc) {
 
 for (const key in load.Data){
 
-const excludedKeys = ['townText',  'npcs'];
+const excludedKeys = ['miscInfo',  'npcs'];
 
 if(!excludedKeys.includes(key)){
 

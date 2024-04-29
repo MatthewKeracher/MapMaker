@@ -248,7 +248,7 @@ ref.Left.appendChild(topAreaTop);
 ref.Left.appendChild(topArea);
 }
 
-//3. Make subType Manually
+//3. Make Directory Manually
 if(obj.subType){
 const subType = obj.subType
 
@@ -405,7 +405,20 @@ if(obj.key === 'npcs'){
 if(obj){
 
 const container = document.getElementById(this.buildSection('Build', obj));
-const keys = ["class", "level", "alignment", "species"]
+const keys = [
+    {name: "class", options: ["Fighter", "Thief", "Magic User", "Cleric", "Assassin","Ranger"]},
+    {name: "level"},
+    {name: "alignment", options: [
+    "Lawful Good",
+    "Neutral Good",
+    "Chaotic Good",
+    "Lawful Neutral",
+    "True Neutral",
+    "Chaotic Neutral",
+    "Lawful Evil",
+    "Neutral Evil",
+    "Chaotic Evil"]},
+    {name: "species"}]
 
 keys.forEach(key => {
 
@@ -415,16 +428,23 @@ const div = document.createElement('div');
 let HTML = `
 <div class="field-table">
 
-    <div id="${key}Row" class="field-row">
+    <div id="${key.name}Row" class="field-row">
 
-    <label divId="${key}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">${helper.proper(key)}
+    <label divId="${key.name}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">${helper.proper(key.name)}
     </label>
 
-    <input 
-    id="${key}Entry" 
-    type="text" 
-    class="field-cell field-column leftTextshort entry-input"
-    value=${obj[key]}>
+    ${
+        key.options ? 
+        `<select 
+        id="${key.name}Select" 
+        class="field-cell field-column leftTextshort entry-input">
+            ${key.options.map(option => `<option value="${option}" ${option === obj[key.name] ? 'selected' : ''}>${option}</option>`).join('')}
+        </select>` :
+        `<input id="${key.name}Entry" 
+        type="text" 
+        class="field-cell field-column leftTextshort entry-input" 
+        value="${obj[key.name]}">`
+    }
 
     </div>
 

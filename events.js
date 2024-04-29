@@ -119,15 +119,19 @@ let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 
 let r = Math.floor(Math.random() * activeLocations.length);
 try{
 npc.location = activeLocations[r].id;
+console.log(npc.name)
 }catch{console.error('No Active subLocations here.')}
 });
 
 //Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
 locNPCs.forEach(locNPC => {
-let locDie = subLocations.length;
-let randomSubLoc = Math.floor(Math.random() * locDie)
-subLocations[randomSubLoc].tags.push(locNPC)
-});
+let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
+let r = Math.floor(Math.random() * activeLocations.length);
+try{
+    let randomSubLoc = activeLocations[r];
+    randomSubLoc.tags.push(locNPC)
+    }catch{console.error('No Active subLocations here.')}
+    });
 
 subLocations.forEach((subLocation) =>{
 
@@ -203,10 +207,28 @@ Events.getAmbiencefromTag(tag);
 
 });
 
+//add permanent subLocation npcs
+let npcTags = subLocation.tags.filter(obj => obj.key === 'npcs');
+
+if(npcTags.length > 0 && i === 0){
+
+   npcTags.forEach(tag => {
+    let subLocNPC = helper.getObjfromTag(tag);
+    npcBundle.push(subLocNPC)
+})  
+};
+
 //add floatNPCs
 floatNPCs.forEach(npc => {
 if(npc.location === subLocation.id && i === 0){npcBundle.push(npc)}
 })
+
+//remove Party Members
+let partyMembers = load.Data.miscInfo.party;
+partyMembers.forEach(member => {
+let filterBundle = npcBundle.filter(npc => npc.id !== parseInt(member.id));
+npcBundle = filterBundle;
+});
 
 npcBundle.forEach(npc => {
 
@@ -224,10 +246,12 @@ let firstPeriodIndex = npc.description.indexOf('.');
 let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
 
 this.eventDesc += `<span
-class="expandable"
+class="extendable"
+showHide="hide"
 key="${npc.key}" 
-style="color:mediumturquoise" 
+style="color:whitesmoke" 
 id="${npc.id}">${firstSentence} </span> <br>`
+
 
 //Floating Tags (no subLocation) for NPCs:: //font-family: 'CenturyGothic', monospace; 
 let npcTags = npc.tags;
@@ -377,7 +401,7 @@ let wrapper =
 `<span class="expandable"
 style="color:${item.color}"
 id="${item.id}"
-key="${tag.key}"> ${item.name} [${item.cost}] </span>`
+key="${item.key}"> ${item.name} [${item.cost}] </span>`
 
 this.eventDesc += wrapper;
 this.eventDesc += `<br>`;

@@ -13,7 +13,7 @@ sortData(data){
 for (const key in data) {
 let obj = data[key];
 
-if (key !== 'townText') {
+if (key !== 'miscInfo') {
 obj = obj.map(entry => {
 // Remove some fields
 // delete entry.key;
@@ -25,7 +25,7 @@ obj = obj.map(entry => {
 // Change field values.
 entry.tags = helper.tidyTags(entry.tags)
 entry.subGroup = entry.subGroup? entry.subGroup : '';
-//entry.color = '#f08928'
+//entry.color = helper.cssColorToHex(entry.color);
 
 // Return the modified object
 return entry;
@@ -42,13 +42,14 @@ obj = obj.map(entry => {
 
 delete entry.level;
 delete entry.special;
+delete entry.hitDice
 
 // const newKeys = ["hd", "xp", "noApp", "Wisdom", "ac"];
 
 // const oldKeys = ["hitDice", "experience", "numAppearing", "armourClass"];
 
 // Add new fields
-entry.group = entry.class;
+entry.group = entry.group;
 entry.subGroup = '';
 entry.color = '#65ece3';
 //entry.active = 1;
@@ -71,6 +72,23 @@ data[key] = obj;
 
 
 },
+
+cssColorToHex(cssColorName) {
+    const tempElement = document.createElement("div");
+    tempElement.style.color = cssColorName;
+    document.body.appendChild(tempElement);
+    const computedColor = window.getComputedStyle(tempElement).color;
+    document.body.removeChild(tempElement);
+    const match = computedColor.match(/\d+/g);
+    if (!match) return null;
+    const hex = match.map(x => {
+        const hexValue = parseInt(x).toString(16);
+        return hexValue.length === 1 ? "0" + hexValue : hexValue;
+    });
+    return `#${hex.join("")}`;
+},
+
+
 
 proper(string){
 return string.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');

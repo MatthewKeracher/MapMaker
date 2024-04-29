@@ -3,13 +3,14 @@ import load from "./load.js";
 import form from "./form.js";
 import helper from "./helper.js";
 import NPCs from "./npcs.js";
+import Storyteller from "./storyteller.js";
 
 const party = {
 
 loadParty(){
 
 ref.leftParty.innerHTML = '';
-let membersList = load.Data.townText.party;
+let membersList = load.Data.miscInfo.party;
 let members = [];
 
 membersList.forEach(element => {
@@ -49,10 +50,11 @@ if(event.shiftKey){ //shift-click
 //Remove tag from item.
 event.preventDefault();
 membersList = membersList.filter(members => parseInt(members.id) !== parseInt(member.id));
-load.Data.townText.party = membersList;
+load.Data.miscInfo.party = membersList;
 
 //Repackage.
 party.loadParty();
+Storyteller.refreshLocation();
 
 }
 

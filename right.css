@@ -114,14 +114,37 @@ border-radius: 0;
 padding: 0.8vh;
 }
 
+.rightHeader{
+/* Position */
+position: block;
+width: 30vw;
+/* Text */
+font-family: 'SoutaneBlack';
+color: gold;  
+font-size: 2.6vh;
+font-weight: bold;
+letter-spacing: 0.1vw;
+/* text-decoration: underline; */
+text-align: left;
+margin-top: 0vh;
+margin-bottom: 0.5vh; 
+background-color: black;      
+overflow:hidden;
+border-style: solid;
+border-color: black;
 
+/* Appearance */
+height: 2.6vh;
+width: 33vw;
+padding: 0vh;    
+}
 
 .rightText {
 /* Position */
+position: block;
 width: 33vw;
 margin: 0vh;
-height: 80vh;
-max-height: 80vh;
+padding: 0;
 
 /* Text */
 font-size: 2vh;
@@ -135,10 +158,10 @@ background-color: transparent;
 vertical-align: middle;
 resize: none;
 border-radius: 0;
-overflow-y: scroll;
 }
 
-.rightText:focus{
+.rightText:focus,
+.rightHeader:focus{
 /* Appearance */
 background-color: transparent;
 color: lime;

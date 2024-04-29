@@ -14,22 +14,10 @@ class Toolbar{
 
 init() {   
 
+
 toolbar.getStoredData();
-Storyteller.showTownText();
+Storyteller.showmiscInfo();
 
-//Readme.
-// ref.Storyteller.innerHTML = 
-// `<span class="withbreak">
-// Welcome to Excel_DM, a hypertextual Game Master worldbuilding and game running tool.
-
-// All you need to do to being is select [M]ap button and load an image file. [D]ata is loaded from, and saved to a .json file.
-
-// *Link to Library*
-
-// Matthew Keracher, 2024.
-// keracher@uwm.edu
-// </span>
-// `;
 
 //editor.addPredictiveContent();
 
@@ -95,7 +83,7 @@ if(load.fileName !== ''){
 ref.locationLabel.textContent = load.fileName;
 ref.Storyteller.innerHTML = '';
 
-Storyteller.showTownText();
+Storyteller.showmiscInfo();
     
 
 }else{
@@ -109,6 +97,23 @@ ref.Left.style.display = "none";
 }
 
 };
+
+readMe(){
+const readMe =
+`<span class="withbreak">
+Welcome to Excel_DM, a hypertextual Game Master worldbuilding and game running tool.
+
+All you need to do to being is select [M]ap button and load an image file. [D]ata is loaded from, and saved to a .json file.
+
+*Link to Library*
+
+Matthew Keracher, 2024.
+keracher@uwm.edu
+</span>
+`;
+
+return readMe
+}
 
 mapButton() {  
 Map.fetchAndProcessImage()
@@ -241,7 +246,7 @@ ref.Storyteller.innerHTML = '';
 Storyteller.refreshLocation();
 
 if(ref.Storyteller.innerHTML === ''){
-Storyteller.showTownText();
+Storyteller.showmiscInfo();
 }
 
 //Hide Editor, Centre, Left
@@ -280,9 +285,9 @@ if (localStorage.getItem('myData')) {
 let storedData = localStorage.getItem('myData');
 let parsedData = JSON.parse(storedData);
 load.Data = parsedData;
-Storyteller.townText = load.Data.townText.description;
-locationLabel.textContent = load.Data.townText.name;
-load.fileName = load.Data.townText.name;
+Storyteller.miscInfo = load.Data.miscInfo.description? load.Data.miscInfo.description: toolbar.readMe();
+locationLabel.textContent = load.Data.miscInfo.fileName;
+load.fileName = load.Data.miscInfo.fileName;
 } 
 
 }

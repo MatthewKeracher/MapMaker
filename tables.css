@@ -95,5 +95,5 @@
 }
 
 /* Set individual column widths */
-.fieldName-column { width: 17vw; }
-.fielValue-column { width: 10vw; }
+.fieldName-column { width: 12vw; }
+.fielValue-column { width: 18vw; }

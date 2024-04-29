@@ -158,14 +158,14 @@ ref.Centre.style.display = 'none';
 
 if(key==='locations'){
 ref.locationLabel.textContent = load.fileName;
-Storyteller.showTownText;
+Storyteller.showmiscInfo;
 }
 
 //remove Tags 
 for (const section in load.Data) {
     let obj = load.Data[section];
 
-    if (section !== 'townText') {
+    if (section !== 'miscInfo') {
         for (const entry of obj) {
             let tagsToSearch = entry.tags;
             
