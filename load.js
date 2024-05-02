@@ -3,7 +3,7 @@ import editor from "./editor.js";
 import form from "./form.js";
 import helper from "./helper.js";
 import ref from "./ref.js";
-
+import toolbar from "./toolbar.js";
 import expandable from "./expandable.js";
 
 import Events from "./events.js";
@@ -14,6 +14,33 @@ const load = {
 
 Data : [],
 fileName : '',
+
+readMe(){
+
+    // Create the header element
+    const readMe = document.createElement('div');
+    readMe.innerHTML = `<span class='withbreak'>
+    Welcome to <span class="green">Excel_DM</span>, a hypertextual Game Master worldbuilding and game running tool.
+    
+    With <span class="green">Excel_DM</span>, you can create a hypertextual map to take the place of your Game Master screen. 
+    
+    To get started, click the <span class="cyan">[M]ap</span> button and load an image of your choice. Then click <span class="cyan">[A]dd</span> to draw a location over your map.
+
+    Links:
+    *Online Library of Maps and Datafiles*
+    *YouTube Tutorial Series*
+    <a href="https://www.reddit.com/r/Excel_DM/" class="cyan"> *Excel_DM SubReddit* </a>
+    
+    <span class = 'hotpink'> 
+    Matthew Keracher, 2024.
+    keracher@uwm.edu
+    </span>
+    </span>
+    `;
+    
+    ref.Storyteller.appendChild(readMe);
+    ref.locationLabel.textContent = 'Welcome';
+    },
 
 loadDefault(){
 const url = 'data.json';
@@ -63,7 +90,6 @@ return 1
 
 }},
     
-
 loadSaveFile: async (event) => {
 const file = event.target.files[0];
 if (file) {
@@ -146,7 +172,7 @@ console.log(load.Data)
 try {
 load.displayLocations(load.Data.locations);
 } catch (error) {
-console.error('Error loading file:', error);
+console.error('No map to display locations.');
 reject(error);
 }
 
@@ -335,6 +361,28 @@ console.log(obj)
 location.dataset.hasListener = true;
 }
 });
+},
+
+getStoredData(){
+
+if (localStorage.getItem('myData')) {
+let storedData = localStorage.getItem('myData');
+let parsedData = JSON.parse(storedData);
+load.Data = parsedData;
+
+//miscInfo
+locationLabel.textContent = load.Data.miscInfo.fileName;
+load.fileName = load.Data.miscInfo.fileName;
+} 
+
+},
+
+saveToBrowser(){
+
+window.addEventListener('beforeunload', function() {
+localStorage.setItem('myData', JSON.stringify(load.Data));
+});
+
 },
 
 // Function to convert JSON to CSV

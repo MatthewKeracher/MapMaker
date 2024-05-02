@@ -18,7 +18,7 @@ await load.handleFileLoad(fileContent);
 // Now you can call buildNPC safely
 await this.buildNPC();
 } catch (error) {
-console.error('Error loading file and building NPC:', error);
+console.error('Error loading file and building NPC');
 }
 },
 

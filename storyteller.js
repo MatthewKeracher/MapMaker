@@ -113,128 +113,161 @@ ref.locationLabel.textContent = 'No fileName';
 
 showmiscInfo() {
 
-    let fileInformation = load.Data.miscInfo.cover;
+let fileInformation = load.Data.miscInfo.ledger;
 
-    // Clear the existing content of ref.Storyteller
-    ref.Storyteller.innerHTML = '';
+if (fileInformation.length === 0){Storyteller.addNewEntry()} 
 
-    fileInformation.forEach((file, index) => {
-        // Generate unique identifiers for each header and text element
-        const headerId = `header${index}`;
-        const textId = `text${index}`;
 
-        // Create the header element
-        const header = document.createElement('h2');
-        header.innerHTML = `
-            
-            <input type="text" value="${file.name}" id="${headerId}" class="miscInfo rightHeader" showHide="hide" toHide="${textId}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
-        `;
+// Clear the existing content of ref.Storyteller
+ref.Storyteller.innerHTML = '';
 
-        // Create the text area element
-        const text = document.createElement('textarea');
-        text.id = textId;
-        text.classList.add('rightText');
-        text.classList.add('miscInfo');
-        text.textContent = file.description.trim();
+fileInformation.forEach((file, index) => {
+// Generate unique identifiers for each header and text element
+const headerId = `header${index}`;
+const textId = `text${index}`;
 
-        ref.Storyteller.appendChild(header);
-        ref.Storyteller.appendChild(text);
-   
+// Create the header element
+const header = document.createElement('h2');
+header.innerHTML = `
+
+<input type="text" value="${file.name}" id="${headerId}" class="miscInfo rightHeader" showHide="show" toHide="${textId}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
+`;
+
+// Create the text area element
+const text = document.createElement('textarea');
+text.id = textId;
+text.classList.add('rightText');
+text.classList.add('miscInfo');
+
+//As default, show only first sentence.
+let firstPeriodIndex = file.description.indexOf('.');
+let firstSentence = file.description.slice(0, firstPeriodIndex + 1);
+text.textContent = firstSentence;
+
+ref.Storyteller.appendChild(header);
+ref.Storyteller.appendChild(text);
 
 })
 
-this.addNewEntry();
 this.addMiscEvents();
+
 },
 
 addNewEntry(){
 
-    //Add New Info
-    
-    // Create the header element
-    const header = document.createElement('h2');
-    header.innerHTML = `
-        
-    <input type="text" value="Add New Entry" id="newHeader" class="rightHeader" showHide="hide" toHide="newEntry" style="display: block; letter-spacing: 0.18vw; text-align: left;">
-    `;
-    
-    // Create the text area element
-    const text = document.createElement('textarea');
-    text.id = 'newEntry';
-    text.classList.add('rightText')
-    text.style.display = 'none';
-    text.textContent = 'Insert text here.';
-    
-    ref.Storyteller.appendChild(header);
-    ref.Storyteller.appendChild(text);
-    
-    },
+// Create the header element
+const header = document.createElement('h2');
+header.innerHTML = `
+
+<input type="text" value="Add New Entry" id="newHeader" class="rightHeader" showHide="show" toHide="newEntry" style="display: block; letter-spacing: 0.18vw; text-align: left;">
+`;
+
+// Create the text area element
+const text = document.createElement('textarea');
+text.id = 'newEntry';
+text.classList.add('rightText')
+text.style.display = 'block';
+text.textContent = 'Insert text here.';
+
+ref.Storyteller.appendChild(header);
+ref.Storyteller.appendChild(text);
+
+load.Data.miscInfo.ledger.push({name: 'Add New Entry', description: 'Insert text here.'})
+this.addMiscEvents();
+
+},
 
 addMiscEvents(){
 
-    const headers = document.querySelectorAll('.rightHeader')
+const headers = document.querySelectorAll('.rightHeader')
 
-    // Attach event listener to each header element
-    headers.forEach((header, index) => {
-    header.addEventListener('click', (event) => {
-        const showHide = header.getAttribute("showHide");
-        const toHide = header.getAttribute("toHide");
-        const hideElement = document.getElementById(toHide)
+// Attach event listener to each header element
+headers.forEach((header, index) => {
+header.addEventListener('click', (event) => {
+const showHide = header.getAttribute("showHide");
+const toHide = header.getAttribute("toHide");
+const hideElement = document.getElementById(toHide)
 
-        if(event.shiftKey){
-            const confirmation = confirm('Are you sure you want to delete ' + header.value +'?');
-            if (confirmation) {
-                load.Data.miscInfo.cover.splice(index, 1)
-            }
-    
-        }
-        
-        if (showHide === "show") {
-            hideElement.style.display = 'none';
-            header.setAttribute("showHide", "hide");
-        } else {
-            hideElement.style.display = 'block';
-            header.setAttribute("showHide", "show");
-        }
-    });
-    
-    header.addEventListener('focusout', () => {    
-        //Save Data
-        try{
-        load.Data.miscInfo.cover[index].name = header.value;
-        }catch{
-        load.Data.miscInfo.cover.push({name: header.value, description: 'Insert text here.'});
-        }
-        });
-        
-    });
+if(event.shiftKey){
+const confirmation = confirm('Are you sure you want to delete ' + header.value +'?');
+if (confirmation) {
+load.Data.miscInfo.ledger.splice(index, 1)
+Storyteller.showmiscInfo();
+}
 
-    // Attach event listener to each input element
-    const inputs = document.querySelectorAll('.rightText')
-    inputs.forEach((input, index) => {
-       
-    input.addEventListener('focus', () => {
-    input.setSelectionRange(input.value.length, input.value.length);
-    });
+}
 
-    input.addEventListener('focusout', () => {    
-    //Save Data
-    load.fileName = locationLabel.textContent;
-    try{
-    load.Data.miscInfo.cover[index].description = input.value;
-    }catch{
-    load.Data.miscInfo.cover.push({name: 'Insert Name.', description: input.value});
-    }
-    });
+// if (showHide === "show") {
+//     hideElement.style.display = 'none';
+//     header.setAttribute("showHide", "hide");
+// } else {
+//     hideElement.style.display = 'block';
+//     header.setAttribute("showHide", "show");
+// }
+});
+
+header.addEventListener('focusout', () => {    
+//Save Data
+try{
+file.name = header.value;
+}catch{
+console.error('Could not find save location.')
+}
+});
 
 });
 
-    
+// Attach event listener to each input element
+const inputs = document.querySelectorAll('.rightText')
+inputs.forEach((input, index) => {
+
+const file = load.Data.miscInfo.ledger[index];
+
+input.addEventListener('click', (event) => {
+
+let firstPeriodIndex = file.description.indexOf('.');
+let firstSentence = file.description.slice(0, firstPeriodIndex + 1);
+
+if(input.value === firstSentence){
+input.value = file.description;
+// Change height.
+input.style.height = 'auto';
+input.style.height = input.scrollHeight + 'px';
+}
+
+if(event.shiftKey){
+
+//Save Data
+load.fileName = locationLabel.textContent;
+try{
+file.description = input.value;
+}catch{
+load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
+}
+
+//Return to one-sentence view.
+let firstPeriodIndex = file.description.indexOf('.');
+let newFirstSentence = file.description.slice(0, firstPeriodIndex + 1);
+
+input.value = newFirstSentence;
+input.style.height = 'auto';
+input.style.height = input.scrollHeight + 'px';
+}
+   
+});
+
+input.addEventListener('focus', () => {
+input.setSelectionRange(input.value.length, input.value.length);
+});
+
+// Set the initial height based on the scroll height of the content
+input.style.height = 'auto';
+input.style.height = input.scrollHeight + 'px';
+
+});
+
+
 },
-
-
-
-
 
 
 rulesArray: [

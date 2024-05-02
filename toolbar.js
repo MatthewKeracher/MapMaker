@@ -9,14 +9,23 @@ import load from "./load.js";
 import save   from "./save.js";
 import Storyteller from "./storyteller.js";
 import party from "./party.js";
+import helper from "./helper.js";
 
 class Toolbar{
 
-init() {   
+init() {  
+    
+    load.readMe();
 
+    helper.showPrompt('Do you want to load the autosave?');
 
-toolbar.getStoredData();
-Storyteller.showmiscInfo();
+    helper.handleConfirm = function(confirmation) {
+      if (confirmation) {
+        load.getStoredData();
+      }
+      
+    };
+    
 
 
 //editor.addPredictiveContent();
@@ -36,7 +45,7 @@ ref.fileInput.addEventListener('change', load.loadSaveFile);
 ref.newButton.addEventListener('click', this.newButton); 
 ref.deleteButton.addEventListener('click', this.deleteButton);
 
-toolbar.saveToBrowser();
+load.saveToBrowser();
 
 };
 
@@ -56,6 +65,7 @@ ref.leftParty.style.display = 'none'
 escButton(){
   
 window.speechSynthesis.cancel();
+const ledgerCheck = document.querySelectorAll('.miscInfo').length === 0
 
 //Close search and empty search box.
 ref.eventManager.value = '';
@@ -83,12 +93,13 @@ if(load.fileName !== ''){
 ref.locationLabel.textContent = load.fileName;
 ref.Storyteller.innerHTML = '';
 
-Storyteller.showmiscInfo();
-    
-
+if(!ledgerCheck){
+load.readMe();
 }else{
-//   
-}
+Storyteller.showmiscInfo()
+};
+
+};
 
 }else {
 ref.Centre.style.display = "none";
@@ -97,23 +108,6 @@ ref.Left.style.display = "none";
 }
 
 };
-
-readMe(){
-const readMe =
-`<span class="withbreak">
-Welcome to Excel_DM, a hypertextual Game Master worldbuilding and game running tool.
-
-All you need to do to being is select [M]ap button and load an image file. [D]ata is loaded from, and saved to a .json file.
-
-*Link to Library*
-
-Matthew Keracher, 2024.
-keracher@uwm.edu
-</span>
-`;
-
-return readMe
-}
 
 mapButton() {  
 Map.fetchAndProcessImage()
@@ -161,8 +155,14 @@ save.deleteDataEntry();
 
 addButon() {
 const mapElement = document.getElementById('mapElement');
+const ledgerCheck = document.querySelectorAll('.miscInfo').length === 0
+console.log(ledgerCheck)
 
-if(!Add.addMode){
+if(!ledgerCheck){
+Storyteller.addNewEntry()
+}
+
+if(!Add.addMode && ledgerCheck){
 Add.addMode = true;
 addButton.classList.add('click-button');
 
@@ -175,7 +175,7 @@ ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
 });
 
-}else{if(Add.addMode){
+}else{if(Add.addMode &&ledgerCheck){
 
 Add.addMode = false;
 addButton.classList.remove('click-button');
@@ -277,27 +277,6 @@ save.saveDataEntry();
 //Save whole file.
 save.exportArray();
 };
-}
-
-getStoredData(){
-
-if (localStorage.getItem('myData')) {
-let storedData = localStorage.getItem('myData');
-let parsedData = JSON.parse(storedData);
-load.Data = parsedData;
-Storyteller.miscInfo = load.Data.miscInfo.description? load.Data.miscInfo.description: toolbar.readMe();
-locationLabel.textContent = load.Data.miscInfo.fileName;
-load.fileName = load.Data.miscInfo.fileName;
-} 
-
-}
-
-saveToBrowser(){
-
-window.addEventListener('beforeunload', function() {
-localStorage.setItem('myData', JSON.stringify(load.Data));
-});
-    
 }
 
 };

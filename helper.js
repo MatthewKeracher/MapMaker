@@ -88,6 +88,55 @@ cssColorToHex(cssColorName) {
     return `#${hex.join("")}`;
 },
 
+showPrompt(prompt) {
+    const promptBox = this.createPromptBox(prompt); // Assuming you're using "this" to refer to the object containing these functions
+    document.body.appendChild(promptBox);
+  },
+  
+  createPromptBox(prompt) {
+    const promptBox = document.createElement('div');
+    promptBox.classList.add('prompt');
+  
+    const promptContent = document.createElement('div');
+    promptContent.classList.add('prompt-content');
+  
+    const promptText = document.createElement('p');
+    promptText.textContent = prompt;
+  
+    const yesButton = document.createElement('button');
+    yesButton.textContent = 'Yes';
+    yesButton.onclick = () => { 
+      this.handleConfirm(true); 
+    };
+  
+    const noButton = document.createElement('button');
+    noButton.textContent = 'No';
+    noButton.onclick = () => { 
+      this.handleConfirm(false); 
+    };
+  
+    promptContent.appendChild(promptText);
+    promptContent.appendChild(yesButton);
+    promptContent.appendChild(noButton);
+  
+    promptBox.appendChild(promptContent);
+  
+    return promptBox;
+  },
+  
+  handleConfirm(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+    promptBox.remove();
+  
+    if (confirmation) {
+      // Do something if confirmed
+      console.log('Confirmed');
+    } else {
+      // Do something if not confirmed
+      console.log('Not confirmed');
+    }
+  },
+  
 
 
 proper(string){

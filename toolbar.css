@@ -25,6 +25,25 @@ background-color: rgb(1, 51, 51);;
 transition: background-color 0.3s; 
 }
 
+.ledgerButton{
+position: absolute;
+z-index: 10;
+left: 0vw;
+bottom: 0vh;
+width: 36vw; /* Make each button fill the width of the toolbar */
+height: 6vh; 
+
+font-size: 2.2vh; 
+padding: 1vh 1vw; 
+margin: 0.0vh 0; /* Add margin to control spacing */
+border: 0.1vh solid teal;
+ 
+font-family: 'SoutaneBlack';
+color: cyan;
+background-color: rgb(1, 51, 51);;
+transition: background-color 0.3s; 
+}
+
 .partyButton{
 width: auto; /* Make each button fill the width of the toolbar */
 height: 6vh; 
@@ -101,7 +120,8 @@ transition: background-color 0.3s;
 .button:hover,
 .singButton:hover,
 .speakButton:hover,
-.partyButton:hover {
+.partyButton:hover,
+.ledgerButton:hover {
 background-color: cyan; /* Change the background color when hovering */
 color: teal;
 }                       

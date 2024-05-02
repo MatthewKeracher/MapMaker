@@ -112,6 +112,10 @@ h3 {
     .teal{
     color: rgb(3, 195, 195);
     }
+
+    .green{
+    color:rgb(28, 169, 28);
+    }
     
     .underline{
     text-decoration: underline;
