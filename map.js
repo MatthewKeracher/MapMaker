@@ -1,6 +1,8 @@
 
+import helper from "./helper.js";
 import load from "./load.js";
 import ref from "./ref.js";
+
 
 const Map = {
 
@@ -76,12 +78,19 @@ const group = "Default";
 const color = "#f4d50b";
 const id = load.generateUniqueId(load.Data.locations, 'entry'); 
 const name = location.name;
-const tags = "";
-const description = "You are at a point in spacetime.";
+const tags = [
+    {
+      "key": "subLocations",
+      "id": "1"
+    }]
+const description = "A general description about this location goes here. Click on this text or click the <span class = 'cyan'> [E]dit </span> button to edit information about <span class = 'gold'> " + location.name + "</span>.";
 const left = parseFloat(location.style.left);
 const top = parseFloat(location.style.top);
 const width = parseFloat(location.style.width);
 const height = parseFloat(location.style.height);
+
+const subLoc = helper.getIndex("subLocations", 1)
+load.Data.subLocations[subLoc].tags.push({key:"locations", id: id})
 
 return {
 key,

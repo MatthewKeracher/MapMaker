@@ -36,6 +36,7 @@ fileInput: document.getElementById('fileInput'),
 newButton: document.getElementById('newButton'),
 deleteButton: document.getElementById('deleteButton'),
 
+promptBox: document.getElementById('promptBox'),
 
 
 };

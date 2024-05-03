@@ -21,7 +21,8 @@ if (
     !Ref.Right.contains(document.activeElement) &&
     !Ref.Storyteller.contains(document.activeElement) &&
     !Ref.Left.contains(document.activeElement) &&
-    !Ref.leftParty.contains(document.activeElement)
+    !Ref.leftParty.contains(document.activeElement) &&
+    !Ref.promptBox.contains(document.activeElement)
     ) {
 
 switch (key) {

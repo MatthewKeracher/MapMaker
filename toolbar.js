@@ -16,17 +16,7 @@ class Toolbar{
 init() {  
     
     load.readMe();
-
-    helper.showPrompt('Do you want to load the autosave?');
-
-    helper.handleConfirm = function(confirmation) {
-      if (confirmation) {
-        load.getStoredData();
-      }
-      
-    };
-    
-
+    load.checkStoredData();
 
 //editor.addPredictiveContent();
 
@@ -63,9 +53,8 @@ ref.leftParty.style.display = 'none'
 }
 
 escButton(){
-  
+console.log('esc')
 window.speechSynthesis.cancel();
-const ledgerCheck = document.querySelectorAll('.miscInfo').length === 0
 
 //Close search and empty search box.
 ref.eventManager.value = '';
@@ -90,13 +79,15 @@ if(ref.Left.style.display === "none" && ref.Centre.style.display === "none"){
 document.activeElement.blur();
 
 if(load.fileName !== ''){
-ref.locationLabel.textContent = load.fileName;
 ref.Storyteller.innerHTML = '';
 
-if(!ledgerCheck){
-load.readMe();
-}else{
+const readMe = ref.locationLabel.value;
+console.log(readMe)
+
+if(readMe === 'Read Me'){
 Storyteller.showmiscInfo()
+}else{
+load.readMe();
 };
 
 };
@@ -201,7 +192,7 @@ editButton.classList.add('click-button');
 
 //By default, load Location in Form
 
-const obj = load.Data.locations.find(obj => obj.name === ref.locationLabel.textContent);
+const obj = load.Data.locations.find(obj => obj.name === ref.locationLabel.value);
 
 if(obj && ref.Left.style.display === 'none'){
 form.createForm(obj);
@@ -269,14 +260,8 @@ setTimeout(() => {
 saveButton.classList.remove('click-button');
 }, 1000); // 1000 milliseconds = 1 second
 
-if(ref.Centre.style.display === 'block'){
-//Save whole file.
 save.saveDataEntry();
 
-}else{
-//Save whole file.
-save.exportArray();
-};
 }
 
 };

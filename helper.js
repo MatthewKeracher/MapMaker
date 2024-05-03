@@ -74,69 +74,103 @@ data[key] = obj;
 },
 
 cssColorToHex(cssColorName) {
-    const tempElement = document.createElement("div");
-    tempElement.style.color = cssColorName;
-    document.body.appendChild(tempElement);
-    const computedColor = window.getComputedStyle(tempElement).color;
-    document.body.removeChild(tempElement);
-    const match = computedColor.match(/\d+/g);
-    if (!match) return null;
-    const hex = match.map(x => {
-        const hexValue = parseInt(x).toString(16);
-        return hexValue.length === 1 ? "0" + hexValue : hexValue;
-    });
-    return `#${hex.join("")}`;
+const tempElement = document.createElement("div");
+tempElement.style.color = cssColorName;
+document.body.appendChild(tempElement);
+const computedColor = window.getComputedStyle(tempElement).color;
+document.body.removeChild(tempElement);
+const match = computedColor.match(/\d+/g);
+if (!match) return null;
+const hex = match.map(x => {
+const hexValue = parseInt(x).toString(16);
+return hexValue.length === 1 ? "0" + hexValue : hexValue;
+});
+return `#${hex.join("")}`;
 },
 
-showPrompt(prompt) {
-    const promptBox = this.createPromptBox(prompt); // Assuming you're using "this" to refer to the object containing these functions
-    document.body.appendChild(promptBox);
-  },
-  
-  createPromptBox(prompt) {
-    const promptBox = document.createElement('div');
-    promptBox.classList.add('prompt');
-  
-    const promptContent = document.createElement('div');
-    promptContent.classList.add('prompt-content');
-  
+showPrompt(prompt, type) {
+const promptBox = this.createPromptBox(prompt, type); // Assuming you're using "this" to refer to the object containing these functions
+document.body.appendChild(promptBox);
+},
+
+createPromptBox(prompt, type) {
+const promptBox = document.getElementById('promptBox');
+promptBox.classList.add('prompt');
+promptBox.innerHTML = '';
+
+const promptContent = document.createElement('div');
+promptContent.classList.add('prompt-content');
+
+if(type === 'yesNo'){
     const promptText = document.createElement('p');
     promptText.textContent = prompt;
-  
+
+
     const yesButton = document.createElement('button');
     yesButton.textContent = 'Yes';
+    yesButton.classList.add('button')
     yesButton.onclick = () => { 
-      this.handleConfirm(true); 
+    this.handleConfirm(true); 
     };
-  
+
     const noButton = document.createElement('button');
     noButton.textContent = 'No';
+    noButton.classList.add('button')
     noButton.onclick = () => { 
-      this.handleConfirm(false); 
+    this.handleConfirm(false); 
     };
-  
+
     promptContent.appendChild(promptText);
     promptContent.appendChild(yesButton);
     promptContent.appendChild(noButton);
-  
-    promptBox.appendChild(promptContent);
-  
-    return promptBox;
-  },
-  
-  handleConfirm(confirmation) {
-    const promptBox = document.querySelector('.prompt');
-    promptBox.remove();
-  
-    if (confirmation) {
-      // Do something if confirmed
-      console.log('Confirmed');
-    } else {
-      // Do something if not confirmed
-      console.log('Not confirmed');
-    }
-  },
-  
+}
+
+if(type === 'input'){
+    const userInput = document.createElement('input');
+    userInput.textContent = 'here is some text'
+    userInput.classList.add('userInput')
+    promptContent.appendChild(userInput);
+
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = 'Yes';
+    confirmButton.classList.add('button')
+    confirmButton.onclick = () => { 
+    this.handleConfirm(true); 
+    };
+
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'No';
+    cancelButton.classList.add('button')
+    cancelButton.onclick = () => { 
+    this.handleConfirm(false); 
+};
+
+    promptContent.appendChild(userInput);
+    promptContent.appendChild(confirmButton);
+    promptContent.appendChild(cancelButton);
+
+}
+
+
+promptBox.appendChild(promptContent);
+promptBox.style.display = 'block';
+
+return promptBox;
+},
+
+handleConfirm(confirmation) {
+const promptBox = document.querySelector('.prompt');
+promptBox.style.display = 'none';
+
+if (confirmation) {
+// Do something if confirmed
+console.log('Confirmed');
+} else {
+// Do something if not confirmed
+console.log('Not confirmed');
+}
+},
+
 
 
 proper(string){
@@ -144,13 +178,13 @@ return string.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word
 },
 
 convertKeys(keys) {
-    //console.log(keys)
-    const properWords = [];
-    for (const key in keys) {
-        const words = key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        properWords.push(words);
-    }
-    return properWords;
+//console.log(keys)
+const properWords = [];
+for (const key in keys) {
+const words = key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+properWords.push(words);
+}
+return properWords;
 },
 
 getIndex(key, id){

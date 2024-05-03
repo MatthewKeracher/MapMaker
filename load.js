@@ -19,7 +19,7 @@ readMe(){
 
     // Create the header element
     const readMe = document.createElement('div');
-    readMe.innerHTML = `<span class='withbreak'>
+    readMe.innerHTML = `<span class='withbreak readMe'>
     Welcome to <span class="green">Excel_DM</span>, a hypertextual Game Master worldbuilding and game running tool.
     
     With <span class="green">Excel_DM</span>, you can create a hypertextual map to take the place of your Game Master screen. 
@@ -39,7 +39,8 @@ readMe(){
     `;
     
     ref.Storyteller.appendChild(readMe);
-    ref.locationLabel.textContent = 'Welcome';
+    ref.locationLabel.value = 'Read Me';
+    ref.locationLabel.disabled = true;
     },
 
 loadDefault(){
@@ -51,6 +52,8 @@ fetch(url)
 // Here, 'data' will be your JSON array
 this.Data = data
 ref.Storyteller.style.display = 'block';
+load.fileName = load.Data.miscInfo.fileName
+console.log(load.Data)
 
 //console.log(this.Data);
 })
@@ -123,7 +126,9 @@ await NPCs.loadAndBuild(content);
 
 // Return the file name
 load.fileName = fileNameWithoutExtension;
-ref.locationLabel.textContent = load.fileName;
+ref.locationLabel.value = load.fileName;
+ref.locationLabel.disabled = false;
+
 //load.locationLabelEvents();
 
 } catch (error) {
@@ -165,7 +170,7 @@ helper.sortData(load.Data);
 
 //Storyteller.miscInfo = load.Data.miscInfo.description;
 load.fileName = load.Data.miscInfo.fileName;
-locationLabel.textContent = load.Data.miscInfo.fileName;
+locationLabel.value = load.Data.miscInfo.fileName;
 Storyteller.showmiscInfo();
 console.log(load.Data)
 
@@ -297,6 +302,7 @@ newLoc.style.height = height + 'px';
 newLoc.name = name;
 newLoc.id = id;
 
+
 // Create a label element for the location name
 const imageContainer = document.querySelector('.image-container');
 const labelElement = document.createElement('div');
@@ -313,7 +319,6 @@ left,
 top, 
 width, 
 height, 
-id,
 name, 
 tags, 
 description,
@@ -363,17 +368,36 @@ location.dataset.hasListener = true;
 });
 },
 
-getStoredData(){
+checkStoredData(){
 
 if (localStorage.getItem('myData')) {
+
+helper.showPrompt('Do you want to load autosave?', 'yesNo');
+
+    helper.handleConfirm = function(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+        
+    if (confirmation) {
+    load.getStoredData();
+    promptBox.style.display = 'none';
+    } else{
+    load.loadDefault();
+    promptBox.style.display = 'none';
+    }
+    
+}}
+},
+
+getStoredData(){
+
 let storedData = localStorage.getItem('myData');
 let parsedData = JSON.parse(storedData);
 load.Data = parsedData;
+console.log(load.Data)
 
 //miscInfo
-locationLabel.textContent = load.Data.miscInfo.fileName;
+locationLabel.value = load.Data.miscInfo.fileName;
 load.fileName = load.Data.miscInfo.fileName;
-} 
 
 },
 

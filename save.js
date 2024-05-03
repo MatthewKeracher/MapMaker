@@ -4,12 +4,24 @@ import ref from "./ref.js";
 import editor from "./editor.js"; 
 import form from "./form.js";
 import Storyteller from "./storyteller.js";
+import helper from "./helper.js";
 
 
 const save = {
 
 
 saveDataEntry: function() {
+
+    if(ref.locationLabel.disabled === false){
+        load.fileName = ref.locationLabel.value
+        }
+
+    if(ref.Centre.style.display !== 'block'){
+        //Save whole file.
+        save.exportArray();
+        
+        }else{
+    
 
 const saveEntry = {};
 
@@ -132,7 +144,7 @@ form.createForm(load.Data[key][index]);
 //Reload location to reflect changes.
 Storyteller.refreshLocation();
 
-},
+}},
 
 deleteDataEntry: function(){
 
@@ -148,7 +160,11 @@ const index = key && id && load.Data[key].findIndex(entry => entry.id === parseI
 //Delete index and refresh.
 if (index !== -1) { // Check if index was found
 // Confirm deletion
-const confirmation = confirm('Are you sure you want to delete this entry?');
+helper.showPrompt('Are you sure you want to delete this entry?', 'yesNo');
+
+    helper.handleConfirm = function(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+
 if (confirmation) {
 // Remove entry at index
 load.Data[key].splice(index, 1);
@@ -157,7 +173,8 @@ ref.Left.style.display = 'none';
 ref.Centre.style.display = 'none';
 
 if(key==='locations'){
-ref.locationLabel.textContent = load.fileName;
+ref.locationLabel.value = load.fileName;
+ref.locationLabel.disabled = false;
 Storyteller.showmiscInfo;
 }
 
@@ -184,13 +201,21 @@ if(key === 'locations'){
 load.displayLocations(load.Data.locations);
 }
 
+
+promptBox.style.display = 'none';
+Storyteller.showmiscInfo();
 // Refresh or update UI as needed
 } else {
 console.log('Deletion canceled.');
+promptBox.style.display = 'none';
 }
-} else {
+}} else {
 console.log('Entry not found or invalid key/id.');
-}},
+}
+
+
+
+},
 
 
 
@@ -204,15 +229,7 @@ exportArray: function () {
 const json = JSON.stringify(load.Data, null, 2);
 const mimeType = 'application/json';
 
-// Prompt the user to enter a filename
-const filename = prompt('Enter the filename for the JSON file:', load.fileName + '.json');
-
-if (filename) {
-// Call the function to save the JSON string as a file
-this.saveFile(json, filename, mimeType);
-} else {
-console.log('Filename not provided, file not saved.');
-}
+this.saveFile(json, load.fileName, mimeType);
 
 }, 
 

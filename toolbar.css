@@ -140,6 +140,37 @@ display: none;
 flex-direction: row; 
 }
 
+.prompt{
+position: absolute;
+bottom: 40vh; 
+left: 19vw; 
+height: auto;
+width: 25vw;
+z-index: 5;
+outline: 0.4vh solid teal;
+background-color: black;
+text-align: center;
+font-family:  'SoutaneBlack';
+font-size: 2.2vh;
+color: white;
+}
+
+.userInput{
+position: flex;
+top: 0vh; 
+left: 19vw; 
+height: 5vh;
+width: 24vw;
+z-index: 6;
+outline: none;
+background-color: black;
+border-style: solid;
+text-align: center;
+font-family:  'SoutaneBlack';
+font-size: 2.2vh;
+color: white;
+}
+
 
 
 

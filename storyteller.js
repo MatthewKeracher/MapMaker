@@ -22,11 +22,12 @@ const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt
 const locName = locObj.name
 
 //Change Location Label Contents
-ref.locationLabel.textContent = locName;
+ref.locationLabel.value = locName;
+ref.locationLabel.disabled = true;
 ref.locationLabel.style.color = locObj.color;
 
 //Set new Return Location
-const returnLocationName = ref.locationLabel.textContent;
+const returnLocationName = ref.locationLabel.value;
 const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
 Storyteller.returnLocation = returnLocation;
 
@@ -103,9 +104,11 @@ Storyteller.changeContent(returnLocation);
 }
 
 else if(load.fileName !== ''){
-ref.locationLabel.textContent = load.fileName;
+ref.locationLabel.value = load.fileName;
+ref.locationLabel.disabled = false;
 }else{
-ref.locationLabel.textContent = 'No fileName';    
+ref.locationLabel.value = 'No fileName';  
+ref.locationLabel.disabled = false;  
 }
 
 
@@ -114,6 +117,7 @@ ref.locationLabel.textContent = 'No fileName';
 showmiscInfo() {
 
 let fileInformation = load.Data.miscInfo.ledger;
+ref.locationLabel.value = load.Data.miscInfo.fileName;
 
 if (fileInformation.length === 0){Storyteller.addNewEntry()} 
 
@@ -123,19 +127,17 @@ ref.Storyteller.innerHTML = '';
 
 fileInformation.forEach((file, index) => {
 // Generate unique identifiers for each header and text element
-const headerId = `header${index}`;
-const textId = `text${index}`;
 
 // Create the header element
 const header = document.createElement('h2');
 header.innerHTML = `
 
-<input type="text" value="${file.name}" id="${headerId}" class="miscInfo rightHeader" showHide="show" toHide="${textId}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
+<input type="text" value="${file.name}" id="${index}" class="miscInfo rightHeader" showHide="show" toHide="${index}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
 `;
 
 // Create the text area element
 const text = document.createElement('textarea');
-text.id = textId;
+text.id = index;
 text.classList.add('rightText');
 text.classList.add('miscInfo');
 
@@ -184,32 +186,32 @@ const headers = document.querySelectorAll('.rightHeader')
 // Attach event listener to each header element
 headers.forEach((header, index) => {
 header.addEventListener('click', (event) => {
-const showHide = header.getAttribute("showHide");
-const toHide = header.getAttribute("toHide");
-const hideElement = document.getElementById(toHide)
 
 if(event.shiftKey){
-const confirmation = confirm('Are you sure you want to delete ' + header.value +'?');
-if (confirmation) {
-load.Data.miscInfo.ledger.splice(index, 1)
-Storyteller.showmiscInfo();
+    helper.showPrompt('Are you sure you want to delete ' + header.value +'?', 'yesNo');
+
+    helper.handleConfirm = function(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+        
+    if (confirmation) {
+    load.Data.miscInfo.ledger.splice(index, 1)
+    Storyteller.showmiscInfo();
+    promptBox.style.display = 'none';
+    } else{
+    promptBox.style.display = 'none';
+    }
 }
 
 }
-
-// if (showHide === "show") {
-//     hideElement.style.display = 'none';
-//     header.setAttribute("showHide", "hide");
-// } else {
-//     hideElement.style.display = 'block';
-//     header.setAttribute("showHide", "show");
-// }
 });
 
 header.addEventListener('focusout', () => {    
 //Save Data
+const index = header.getAttribute('id');
+const entry = load.Data.miscInfo.ledger[index];
+
 try{
-file.name = header.value;
+entry.name = header.value;
 }catch{
 console.error('Could not find save location.')
 }
@@ -222,6 +224,18 @@ const inputs = document.querySelectorAll('.rightText')
 inputs.forEach((input, index) => {
 
 const file = load.Data.miscInfo.ledger[index];
+
+input.addEventListener('focusout', () => {  
+//Save Data
+const index = input.getAttribute('id');
+const entry = load.Data.miscInfo.ledger[index];
+load.fileName = locationLabel.value;
+try{
+entry.description = input.value;
+}catch{
+load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
+}
+});
 
 input.addEventListener('click', (event) => {
 
@@ -236,11 +250,12 @@ input.style.height = input.scrollHeight + 'px';
 }
 
 if(event.shiftKey){
-
 //Save Data
-load.fileName = locationLabel.textContent;
+const index = input.getAttribute('id');
+const entry = load.Data.miscInfo.ledger[index];
+load.fileName = locationLabel.value;
 try{
-file.description = input.value;
+entry.description = input.value;
 }catch{
 load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
 }
