@@ -14,13 +14,15 @@ saveDataEntry: function() {
 
     if(ref.locationLabel.disabled === false){
         load.fileName = ref.locationLabel.value
+        load.Data.miscInfo.fileName = load.fileName
+        helper.adjustFontSize();
         }
 
     if(ref.Centre.style.display !== 'block'){
         //Save whole file.
         save.exportArray();
         
-        }else{
+    }else{
     
 
 const saveEntry = {};
@@ -92,6 +94,10 @@ saveEntry['key'] = document.getElementById('key').getAttribute('pair');
 
 }catch{console.error("No type or subType found.")}
 saveEntry['id'] = parseInt(saveEntry['id']);
+
+//But what about tags that are not displated on the form?
+//Tags are added on a case by case so maybe don't need them here?
+//Remove input class from tags? 
 saveEntry['tags'] = tags;
 
 const key = saveEntry && saveEntry['key'];
@@ -116,6 +122,10 @@ load.Data[key].push(saveEntry)
 load.Data[key][index] = saveEntry
 }
 
+//Reload form to reflect changes.
+const newEntry = load.Data[key][index]
+form.createForm(newEntry);
+
 //Reset programme with new Data.
 NPCs.buildNPC();
 
@@ -136,9 +146,6 @@ ref.Editor.style.display = 'none';
 
 //Reload Map to reflect changes.
 load.displayLocations(load.Data.locations);
-
-//Reload form to reflect changes.
-form.createForm(load.Data[key][index]);
 
 
 //Reload location to reflect changes.
@@ -168,12 +175,14 @@ helper.showPrompt('Are you sure you want to delete this entry?', 'yesNo');
 if (confirmation) {
 // Remove entry at index
 load.Data[key].splice(index, 1);
-//editor.loadList(load.Data);
+
 ref.Left.style.display = 'none';
 ref.Centre.style.display = 'none';
 
+
 if(key==='locations'){
 ref.locationLabel.value = load.fileName;
+helper.adjustFontSize();
 ref.locationLabel.disabled = false;
 Storyteller.showmiscInfo;
 }
@@ -195,15 +204,20 @@ for (const section in load.Data) {
 }
 
 
+if(ref.Editor.style.display === 'block'){
+editor.loadList(load.Data);
+}
+
+
+Storyteller.refreshLocation();
 
 //if Location then delete locationDiv
 if(key === 'locations'){
 load.displayLocations(load.Data.locations);
 }
 
-
 promptBox.style.display = 'none';
-Storyteller.showmiscInfo();
+
 // Refresh or update UI as needed
 } else {
 console.log('Deletion canceled.');

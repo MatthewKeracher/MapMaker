@@ -121,7 +121,8 @@ transition: background-color 0.3s;
 .singButton:hover,
 .speakButton:hover,
 .partyButton:hover,
-.ledgerButton:hover {
+.ledgerButton:hover,
+.prompt-button:hover {
 background-color: cyan; /* Change the background color when hovering */
 color: teal;
 }                       
@@ -146,13 +147,32 @@ bottom: 40vh;
 left: 19vw; 
 height: auto;
 width: 25vw;
-z-index: 5;
+z-index: 15;
 outline: 0.4vh solid teal;
 background-color: black;
 text-align: center;
 font-family:  'SoutaneBlack';
 font-size: 2.2vh;
 color: white;
+}
+
+.prompt-button-container{
+display: inline-block;
+width: 25vw;
+}
+
+.prompt-button {
+display: inline-block;
+width: 100%; /* Make each button fill the width of the toolbar */
+height: 6vh; 
+font-size: 2.2vh; 
+padding: 1vh 1vw; 
+margin-right: 2vw;;
+border: 0.1vh solid teal; 
+font-family: 'SoutaneBlack';
+color: cyan;
+background-color: rgb(1, 51, 51);;
+transition: background-color 0.3s; 
 }
 
 .userInput{

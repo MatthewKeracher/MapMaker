@@ -40,6 +40,7 @@ readMe(){
     
     ref.Storyteller.appendChild(readMe);
     ref.locationLabel.value = 'Read Me';
+    helper.adjustFontSize();
     ref.locationLabel.disabled = true;
     },
 
@@ -127,6 +128,7 @@ await NPCs.loadAndBuild(content);
 // Return the file name
 load.fileName = fileNameWithoutExtension;
 ref.locationLabel.value = load.fileName;
+helper.adjustFontSize();
 ref.locationLabel.disabled = false;
 
 //load.locationLabelEvents();
@@ -170,7 +172,8 @@ helper.sortData(load.Data);
 
 //Storyteller.miscInfo = load.Data.miscInfo.description;
 load.fileName = load.Data.miscInfo.fileName;
-locationLabel.value = load.Data.miscInfo.fileName;
+// locationLabel.value = load.Data.miscInfo.fileName;
+// helper.adjustFontSize();
 Storyteller.showmiscInfo();
 console.log(load.Data)
 
@@ -397,6 +400,7 @@ console.log(load.Data)
 
 //miscInfo
 locationLabel.value = load.Data.miscInfo.fileName;
+helper.adjustFontSize();
 load.fileName = load.Data.miscInfo.fileName;
 
 },

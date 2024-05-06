@@ -18,7 +18,11 @@ init() {
     load.readMe();
     load.checkStoredData();
 
-//editor.addPredictiveContent();
+    // Add an input event listener to ref.locationLabel
+ref.locationLabel.addEventListener('input', () => {
+    helper.adjustFontSize();
+});
+
 
 Events.loadEventListeners();
 
@@ -82,10 +86,12 @@ if(load.fileName !== ''){
 ref.Storyteller.innerHTML = '';
 
 const readMe = ref.locationLabel.value;
+helper.adjustFontSize();
 console.log(readMe)
 
 if(readMe === 'Read Me'){
 Storyteller.showmiscInfo()
+ref.locationLabel.disabled = false;
 }else{
 load.readMe();
 };

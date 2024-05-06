@@ -12,7 +12,7 @@ fullScreen: false,
 
 
 createForm: function (obj){
-//console.log(obj.tags)
+console.log(obj.name)
 let color
 let fullScreen = false
 
@@ -290,9 +290,9 @@ value="${obj.name || 'insert name here'} "></h2>`;
 nameArea.innerHTML = nameContent;
 topArea.appendChild(nameArea);
 
-setTimeout(function() {
-nameArea.style.height = nameArea.scrollHeight + 'px';
-}, 0);
+// setTimeout(function() {
+// nameArea.style.height = nameArea.scrollHeight + 'px';
+// }, 0);
 }
 
 // //5. Add Breaker
@@ -370,7 +370,7 @@ Colour
 <input 
 id="editcolor" 
 type="color" 
-class="field-cell field-column entry-input"
+class="field-cell fieldValue-column entry-input"
 style="background-color: ${obj.color}"
 value=${obj.color}
 </input>
@@ -386,7 +386,7 @@ const colorWheel = document.getElementById('editcolor');
 
 function handleColorChange(event) {
     const color = event.target.value;
-    console.log(color)
+    //console.log(color)
     colorContainer.value = color;
     colorWheel.style.backgroundColor = color;
 
@@ -704,7 +704,7 @@ const singleKey = properKey.endsWith('s')? properKey.slice(0, -1): properKey;
 const container = document.getElementById(this.buildSection(properKey, obj));
 
 //Make New Entry.
-if(obj){
+if(obj && key !=='locations'){
 const newTagArea = document.createElement('div');
 let newTagContent = `<h3><span class = 'leftText'>[Create New ${singleKey}]</span></h3>`;
 
@@ -723,37 +723,7 @@ this.style.color = 'lightgray';
 
 newTagArea.addEventListener('click', function(){
 
-
-//Make a copy of an object in the same key.
-const newEntry = JSON.parse(JSON.stringify(load.Data[key][0]));
-const newId = load.generateUniqueId(load.Data[key], 'entry');
-
-for (let prop in newEntry) {
-if (newEntry.hasOwnProperty(prop)) {
-newEntry[prop] = ''; // Empty the value of each property
-}
-}
-
-//Define what values for copy "newEntry".
-newEntry.type = 'group',
-newEntry.subType = 'subGroup',
-newEntry.id = newId,
-newEntry.key = key,
-newEntry.color = obj.color,
-newEntry.name = obj.name + ' ' + singleKey 
-newEntry.tags = [{key: obj.key, id: obj.id}]
-newEntry.group = helper.proper(obj.key)
-newEntry.subGroup = obj.name
-newEntry.description = 'This '+ singleKey + ' has been generated and attached to ' + obj.name + '. '
-
-//Add new Tag to curent Object
-let objEntry = {key: key, id: newId};
-let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
-load.Data[obj.key][index].tags.push(objEntry);
-
-//Load new Tag!
-form.createForm(newEntry)  
-saveButton.click();
+form.makeNewObj(obj, key);
 
 })
 
@@ -822,6 +792,58 @@ form.createForm(tagObj);
 });
 }
 })
+
+//Add Make Copies Button
+if(obj){
+    console.log('TAGS', obj.tags)
+    const container = document.getElementById(this.buildSection('Actions', obj));
+    const bulkTagArea = document.createElement('div');
+    let newTagContent = `<h3><span class = 'leftText'>[Make Copies]</span></h3>`;
+    
+    bulkTagArea.innerHTML = newTagContent;
+    container.appendChild(bulkTagArea);
+    
+    bulkTagArea.style.color = 'lightgray'
+    
+    bulkTagArea.addEventListener('mouseenter', function(){
+    this.style.color = 'lime';
+    })
+    
+    bulkTagArea.addEventListener('mouseleave', function(){
+    this.style.color = 'lightgray';
+    })
+    
+    bulkTagArea.addEventListener('click', function(){
+    
+        helper.showPrompt('How many copies?', 'input');
+        ref.promptBox.focus();
+        
+        helper.handleConfirm = function(response, promptBox) {
+            if (response !== null) {
+                // Check if the response is a valid number
+                const numCopies = parseInt(response);
+                if (!isNaN(numCopies)) {
+                    // Valid number, proceed with creating copies
+                    form.makeMultipleObjs(numCopies, obj, obj.key);
+                } else {
+                    // Invalid input, show error message or handle accordingly
+                    alert('Please enter a valid number.');
+                }
+            } else {
+                // User cancelled
+                console.log('User cancelled');
+            }
+            // Hide the prompt box
+            promptBox.style.display = 'none';
+        };
+        
+    
+    })
+    
+    };
+    
+
+
 }
 
 },
@@ -923,6 +945,89 @@ const container = document.getElementById(containerName);
 container.style.display = currentShow;
 
 return containerName
+
+},
+
+makeMultipleObjs(num, obj, key){
+
+    for (let i = 0; i < num; i++) {
+        form.makeNewObj(obj, key, i);
+    }
+
+},
+
+makeNewObj(obj, key, copy){
+
+//Dynamically create proper and single key names for obj and copy.
+const properKey = helper.proper(key)
+const singleKey = properKey.endsWith('s')? properKey.slice(0, -1): properKey;
+const properObjKey = helper.proper(obj.key)
+const singleObjKey = properObjKey.endsWith('s')? properObjKey.slice(0, -1): properObjKey;
+
+//Make a copy of an object in the same key.
+let newEntry 
+
+//Generate new unique ID.
+const newId = load.generateUniqueId(load.Data[key], 'entry');
+
+if(copy === undefined){
+    //Making a blankish new Obj.
+    newEntry = JSON.parse(JSON.stringify(load.Data[key][0]));
+
+    // Empty the value of each property
+    for (let prop in newEntry) {
+    if (newEntry.hasOwnProperty(prop)) {
+    newEntry[prop] = ''; 
+    }
+    }
+    //Define what values for copy "newEntry".
+    newEntry.type = 'group',
+    newEntry.subType = 'subGroup',
+    newEntry.key = key,
+    newEntry.id = newId,
+    newEntry.color = obj.color,
+    newEntry.name = singleKey + ' ' + newId,
+    newEntry.tags = [{key: obj.key, id: obj.id}],
+    newEntry.group = helper.proper(obj.key),
+    newEntry.subGroup = obj.name,
+    newEntry.description = 'This '+ singleKey + ' has been generated and attached to ' + singleObjKey + ' ' + obj.name + '. Click here to edit it. ',
+
+    //Optional
+    newEntry.active? newEntry.active = 1 : '';
+    newEntry.order? newEntry.order = 1 : '';
+
+    //Add new Tag to curent Object
+    let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
+    let objEntry = {key: key, id: newId};
+    load.Data[obj.key][index].tags.push(objEntry);
+
+}else if (copy !== undefined){
+    //Making n exact copies.
+    newEntry = JSON.parse(JSON.stringify(obj));
+
+    //Define what values for copies.
+    newEntry.id = newId,
+    newEntry.name = obj.name + ' ' + (copy + 2)
+
+    //Add new obj to all original tags.
+    let tags = obj.tags
+    tags.forEach(tag => {
+
+    let tagObj = helper.getObjfromTag(tag);
+    tagObj.tags.push({key: obj.key, id: newId});
+
+    })
+
+    console.log(obj.tags, newEntry.tags)
+
+}
+
+//Add newEntry to Data
+load.Data[key].push(newEntry);
+console.log(newEntry)
+//Load new Tag!
+form.createForm(newEntry); 
+saveButton.click(); 
 
 },
 

@@ -15,6 +15,7 @@ returnLocation: '',
 miscInfo: '',
 
 async changeContent(locationDiv) {
+
 let Story = ``
 const locId = locationDiv.id;
 
@@ -23,6 +24,7 @@ const locName = locObj.name
 
 //Change Location Label Contents
 ref.locationLabel.value = locName;
+helper.adjustFontSize();
 ref.locationLabel.disabled = true;
 ref.locationLabel.style.color = locObj.color;
 
@@ -33,18 +35,17 @@ Storyteller.returnLocation = returnLocation;
 
 if (locObj) {
 Events.getEvent(locObj);
-const keywords = expandable.generateKeyWords(load.Data)
-const finalStory = expandable.findKeywords(Events.eventDesc, keywords)
-
 
 Story += `
-<span class="withbreak">${finalStory}</span>
+<span class="withbreak">${Events.eventDesc}</span>
 `;
 
-//---
+//Add Keywords
+const keywords = expandable.generateKeyWords(load.Data)
+const finalStory = expandable.findKeywords(Story, keywords)
 
 //Finish Up.
-ref.Storyteller.innerHTML = Story;
+ref.Storyteller.innerHTML = finalStory;
 
 //Tell expandable Divs what to show.
 expandable.expandExtend(ref.Storyteller, ref.Centre);
@@ -105,9 +106,11 @@ Storyteller.changeContent(returnLocation);
 
 else if(load.fileName !== ''){
 ref.locationLabel.value = load.fileName;
+helper.adjustFontSize();
 ref.locationLabel.disabled = false;
 }else{
 ref.locationLabel.value = 'No fileName';  
+helper.adjustFontSize();
 ref.locationLabel.disabled = false;  
 }
 
@@ -118,6 +121,7 @@ showmiscInfo() {
 
 let fileInformation = load.Data.miscInfo.ledger;
 ref.locationLabel.value = load.Data.miscInfo.fileName;
+helper.adjustFontSize();
 
 if (fileInformation.length === 0){Storyteller.addNewEntry()} 
 
@@ -130,7 +134,12 @@ fileInformation.forEach((file, index) => {
 
 // Create the header element
 const header = document.createElement('h2');
-header.innerHTML = `
+
+if(index > 0){
+header.innerHTML = `<br>`
+}
+
+header.innerHTML += `
 
 <input type="text" value="${file.name}" id="${index}" class="miscInfo rightHeader" showHide="show" toHide="${index}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
 `;
@@ -161,7 +170,7 @@ addNewEntry(){
 const header = document.createElement('h2');
 header.innerHTML = `
 
-<input type="text" value="Add New Entry" id="newHeader" class="rightHeader" showHide="show" toHide="newEntry" style="display: block; letter-spacing: 0.18vw; text-align: left;">
+<br><input type="text" value="Add New Entry" id="newHeader" class="rightHeader" showHide="show" toHide="newEntry" style="display: block; letter-spacing: 0.18vw; text-align: left;">
 `;
 
 // Create the text area element
@@ -169,12 +178,12 @@ const text = document.createElement('textarea');
 text.id = 'newEntry';
 text.classList.add('rightText')
 text.style.display = 'block';
-text.textContent = 'Insert text here.';
+text.textContent = 'Insert text here. Shift-Click to Expand/Hide and Save.';
 
 ref.Storyteller.appendChild(header);
 ref.Storyteller.appendChild(text);
 
-load.Data.miscInfo.ledger.push({name: 'Add New Entry', description: 'Insert text here.'})
+load.Data.miscInfo.ledger.push({name: 'Add New Entry', description: text.textContent})
 this.addMiscEvents();
 
 },
@@ -227,6 +236,9 @@ const file = load.Data.miscInfo.ledger[index];
 
 input.addEventListener('focusout', () => {  
 //Save Data
+let firstPeriodIndex = file.description.indexOf('.');
+let firstSentence = file.description.slice(0, firstPeriodIndex + 1);
+if(input.value !== firstSentence){
 const index = input.getAttribute('id');
 const entry = load.Data.miscInfo.ledger[index];
 load.fileName = locationLabel.value;
@@ -235,7 +247,15 @@ entry.description = input.value;
 }catch{
 load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
 }
+}
 });
+
+input.addEventListener('input', () => {
+// Change height.
+input.style.height = 'auto';
+input.style.height = input.scrollHeight + 'px';
+});
+
 
 input.addEventListener('click', (event) => {
 
@@ -247,10 +267,11 @@ input.value = file.description;
 // Change height.
 input.style.height = 'auto';
 input.style.height = input.scrollHeight + 'px';
-}
+};
 
 if(event.shiftKey){
 //Save Data
+if(input.value !== firstSentence){
 const index = input.getAttribute('id');
 const entry = load.Data.miscInfo.ledger[index];
 load.fileName = locationLabel.value;
@@ -258,6 +279,7 @@ try{
 entry.description = input.value;
 }catch{
 load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
+}
 }
 
 //Return to one-sentence view.

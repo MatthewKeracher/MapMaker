@@ -20,7 +20,7 @@
     font-family: 'SoutaneBlack';
     font-size: 2.2vh;
     color: white;
-    border: 1px solid transparent; /* Add border for visualization */
+    border: 0vh solid transparent; /* Add border for visualization */
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Prevent overflow */
     text-overflow: ellipsis; /* Show ellipsis for overflow */
@@ -53,8 +53,9 @@
     display: table-cell;
     font-family: 'SoutaneBlack';
     font-size: 2.2vh;
+    height: 2.3vh;
     color: white;
-    border: 1px solid transparent; /* Add border for visualization */
+    border: 0vh solid transparent; /* Add border for visualization */
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Prevent overflow */
     text-overflow: ellipsis; /* Show ellipsis for overflow */
@@ -86,14 +87,17 @@
     display: table-cell;
     font-family: 'SoutaneBlack';
     font-size: 2.2vh;
+    height: 2.3vh;
+    width: 15vw;
     color: white;
-    border: 1px solid transparent; /* Add border for visualization */
+    border: 0vh solid transparent; /* Add border for visualization */
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Prevent overflow */
     text-overflow: ellipsis; /* Show ellipsis for overflow */
     vertical-align: middle;
 }
 
+
 /* Set individual column widths */
 .fieldName-column { width: 12vw; }
-.fielValue-column { width: 18vw; }
+.fielValue-column { width: 10vw; }

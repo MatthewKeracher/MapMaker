@@ -1,5 +1,8 @@
 import load from "./load.js";
 import map from "./map.js";
+import Storyteller from "./storyteller.js";
+import helper from "./helper.js";
+import ref from "./ref.js";
 
 const Add = {
 
@@ -85,16 +88,36 @@ location.style.top = top + 'px';
 location.style.width = width + 'px';
 location.style.height = height + 'px';
 
-    // Prompt the user for input to set the div ID
-    const name = prompt('What is the *unique* name of this location?');
-    location.name = name; // Set the ID based on user input 
+helper.showPrompt('What is the name of the location?', 'input');
+this.isDragging = false;
+ref.promptBox.focus();
+
+helper.handleConfirm = function(response, promptBox) {
+    if (response !== null) {
+        // Do something with the response
+        location.name = response; // Set the ID based on user input 
+
+        // Create a label element for the div ID
+        var labelElement = document.createElement('div');
+        // Add text content to the label
+        labelElement.textContent = response;
+
+        // Continue with any other actions you need to perform
+        // ...
+
+        // Hide the prompt box
+        promptBox.style.display = 'none';
+
+
+    // // Prompt the user for input to set the div ID
+    // const name = prompt('What is the *unique* name of this location?');
+    // location.name = name; // Set the ID based on user input 
 
     // Create a label element for the div ID
     var labelElement = document.createElement('div');
     labelElement.className = 'div-name-label';
     labelElement.textContent = name;
        
-
     // Append the label to the location -switch around?
     location.appendChild(labelElement);
 
@@ -105,26 +128,37 @@ imageContainer.insertBefore(location,firstChild);
 //Add Events to Divs
 load.addLocationEvents();
 
-// Create an object with the location information
-const locationInfo = map.addNewLocation(location);
+// Add Location to load.Data.
+map.addNewLocation(location);
 
-// // Check if Data.locations is undefined
-// if (typeof load.Data.locations === 'undefined') {
-//     // Initialize Data.locations as an empty array
-//     load.Data.locations = [];
-// }
-
-// Add the locationInfo to the Data.locations
-load.Data.locations.push(locationInfo);
 load.displayLocations(load.Data.locations);
-//console.log(locationInfo, load.Data.locations)
 
-this.isDragging = false;
+//Open new Location in Storyteller
+
+const locations = document.querySelectorAll('.selection');
+
+// Convert NodeList to an array using Array.from() or spread operator
+const locationsArray = Array.from(locations);
+
+// Filter the locations to find the one with the specific ID
+const thisLoc = locationsArray.find(loc => loc.name === location.name);
+Storyteller.changeContent(thisLoc);
+
+} else {
+    // User cancelled
+    console.log('User cancelled');
+    // Hide the prompt box
+    promptBox.style.display = 'none';
+}
+};
+
+
+//Close Function
 this.previewDiv.remove();
 addButton.click();
 
     
-    }
+}
 
 }, 
 

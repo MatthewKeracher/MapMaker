@@ -1,7 +1,10 @@
 
+import form from "./form.js";
 import helper from "./helper.js";
 import load from "./load.js";
 import ref from "./ref.js";
+import Storyteller from "./storyteller.js";
+
 
 
 const Map = {
@@ -68,9 +71,11 @@ inputElement.click();
 
 
 addNewLocation(location) {
+//adds Location to load.Data
 const rect = location.getBoundingClientRect();
 
 //Ingredients for a Location
+
 const key = "locations";
 const type = "group";
 const subType = "color";
@@ -78,35 +83,36 @@ const group = "Default";
 const color = "#f4d50b";
 const id = load.generateUniqueId(load.Data.locations, 'entry'); 
 const name = location.name;
-const tags = [
-    {
-      "key": "subLocations",
-      "id": "1"
-    }]
-const description = "A general description about this location goes here. Click on this text or click the <span class = 'cyan'> [E]dit </span> button to edit information about <span class = 'gold'> " + location.name + "</span>.";
+const tags = []
 const left = parseFloat(location.style.left);
 const top = parseFloat(location.style.top);
 const width = parseFloat(location.style.width);
 const height = parseFloat(location.style.height);
+const description = "A general description about this location goes here. Click on this text or click the <span class = 'cyan'> [E]dit </span> button to edit information about <span class = 'cyan'> " + location.name + "</span>.";
 
-const subLoc = helper.getIndex("subLocations", 1)
-load.Data.subLocations[subLoc].tags.push({key:"locations", id: id})
+const locationData = {key,
+  type,
+  subType,
+  group,
+  color,
+  id,
+  name,
+  tags,
+  description,
+  left,
+  top,
+  width,
+  height,}
 
-return {
-key,
-type,
-subType,
-group,
-color,
-id,
-name,
-tags,
-description,
-left,
-top,
-width,
-height,
-};
+//Add Location to load.Data
+load.Data.locations.push(locationData);
+//Make Default subLocation and tag to Location.
+form.makeNewObj(locationData, 'subLocations');
+
+//Open form to edit location.
+form.createForm(locationData);
+
+
 },
 
 increaseOpacity() {
