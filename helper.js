@@ -56,7 +56,7 @@ return entry;
 if(key === 'tags'){
     obj = obj.map(entry => {
 
-entry.chance = 100;
+// entry.chance = 100;
 // Return the modified object
 return entry;
 });
