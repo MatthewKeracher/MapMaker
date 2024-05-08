@@ -22,7 +22,7 @@ this.species = data.species,
 this.tags = data.tags;
 NPCbuild.getHitPoints(this);
 NPCbuild.getAttackBonus(this);
-try{NPCbuild.getSpeciesData(this)}catch{console.error('Cannot find species for ' + data.name)}
+try{NPCbuild.getSpeciesData(this)}catch{this.species = 'Human'}
 this.group = data.group,
 this.subGroup = data.subGroup,
 this.description = data.description;
@@ -31,16 +31,23 @@ this.description = data.description;
 
 const scores = ["Strength", "Dexterity", "Intelligence", "Wisdom", "Constitution", "Charisma"];
 
-for (const str of scores) {
-  this[str] = parseInt(data[str]);
-  this['mod'+str] = NPCbuild.getModifier(data[str]);
+for (const score of scores) {
+
+  if(data[score]){
+     this[score] = data[score]
+  } else{
+     this[score] = helper.rollDice(18)
+  }
+
+  this['mod'+score] = NPCbuild.getModifier(parseInt(this[score]));
+  //console.log(this.name,'mod'+score, this[score], this['mod'+score] )
+  
 }
 
 
 
-this.initiative = this.initiative === undefined? 0 : this.initiative,
-
-NPCbuild.getMagic(this);
+this.initiative = this.initiative === undefined? 0 : this.initiative;
+try{NPCbuild.getMagic(this)}catch{console.error('Cannot find spells for ' + data.name)};
 NPCbuild.getCharacterSkills(this);
 NPCbuild.getSavingThrows(this);
 
@@ -670,7 +677,7 @@ npc.inventory.sort((a, b) => (a.tag > b.tag) ? 1 : -1);
 
 //Ability Scores & Modifiers
 static abilityScoreTable = [
-{ range: { min: 3, max: 3 }, bonus: -3 },
+{ range: { min: 1, max: 3 }, bonus: -3 },
 { range: { min: 4, max: 5 }, bonus: -2 },
 { range: { min: 6, max: 8 }, bonus: -1 },
 { range: { min: 9, max: 12 }, bonus: 0 },

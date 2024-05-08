@@ -134,7 +134,7 @@ npcObj.initiative = modifiedRoll;
 });
 
 // Sort the memberResults array based on the rollResult
-initResults.sort((a, b) => b.roll - a.roll);
+initResults.sort((a, b) => parseInt(b.modifiedRoll) - parseInt(a.modifiedRoll));
 
 initResults.forEach((result, index) => {
 const name = result.name;

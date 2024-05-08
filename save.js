@@ -122,12 +122,12 @@ load.Data[key].push(saveEntry)
 load.Data[key][index] = saveEntry
 }
 
+//Reset programme with new Data.
+NPCs.buildNPC();
+
 //Reload form to reflect changes.
 const newEntry = load.Data[key][index]
 form.createForm(newEntry);
-
-//Reset programme with new Data.
-NPCs.buildNPC();
 
 //Reset Editor and Search 
 if(ref.eventManager.value === ''){   

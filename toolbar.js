@@ -35,6 +35,7 @@ ref.dataButton.addEventListener('click', this.dataButton);
 ref.addButton.addEventListener('click', this.addButon); 
 ref.editButton.addEventListener('click', this.editButton);
 ref.saveButton.addEventListener('click', this.saveButton);  
+ref.copyButton.addEventListener('click', this.copyButton);  
 ref.fileInput.addEventListener('change', load.loadSaveFile); 
 ref.newButton.addEventListener('click', this.newButton); 
 ref.deleteButton.addEventListener('click', this.deleteButton);
@@ -269,6 +270,40 @@ saveButton.classList.remove('click-button');
 save.saveDataEntry();
 
 }
+
+copyButton(){
+
+    const currentId = parseInt(document.getElementById('currentId').value);
+    const currentKey = document.getElementById('key').getAttribute('pair');
+    const address = {key: currentKey, id: currentId};
+    console.log(address);
+    const obj = helper.getObjfromTag(address);
+    
+        helper.showPrompt('How many copies of ' +  obj.name + '?', 'input');
+        ref.promptBox.focus();
+        
+        helper.handleConfirm = function(response, promptBox) {
+            if (response !== null) {
+                // Check if the response is a valid number
+                const numCopies = parseInt(response);
+                if (!isNaN(numCopies)) {
+                    // Valid number, proceed with creating copies
+                    form.makeMultipleObjs(numCopies, obj, obj.key);
+                } else {
+                    // Invalid input, show error message or handle accordingly
+                    alert('Please enter a valid number.');
+                }
+            } else {
+                // User cancelled
+                console.log('User cancelled');
+            }
+            // Hide the prompt box
+            promptBox.style.display = 'none';
+        };
+    
+    }
+
+
 
 };
 

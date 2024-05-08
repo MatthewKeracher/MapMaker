@@ -12,7 +12,7 @@ fullScreen: false,
 
 
 createForm: function (obj){
-console.log(obj.name)
+//console.log(obj.name)
 let color
 let fullScreen = false
 
@@ -467,6 +467,7 @@ const stats = ["Strength", "Dexterity", "Intelligence", "Wisdom", "Constitution"
 
 stats.forEach(stat =>{ 
 
+    //console.log(obj['mod' + stat])
     // Inside the loop that creates memberDiv elements
     const statDiv = document.createElement('div');
     
@@ -687,26 +688,36 @@ addTagstoForm(obj){
 //console.log(obj.tags);
 if(obj){
 
-let keys = [];
-if(obj.key === 'tags'){keys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
-if(obj.key === 'npcs'){keys = ['tags', 'npcs', 'items', 'spells']};
-if(obj.key === 'ambience'){keys = ['tags']};
-if(obj.key === 'locations'){keys = ['npcs', 'tags', 'subLocations']};
-if(obj.key === 'subLocations'){keys = ['npcs', 'tags', 'locations']};
-if(obj.key === 'items'){keys = ['tags', 'npcs', 'spells']};
-if(obj.key === 'spells'){keys = ['tags', 'npcs', 'items']};
-if(obj.key === 'monsters'){keys = ['tags', 'npcs']};
-if(obj.key === 'events'){keys = ['tags']};
+let keys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters'];
+let visibleKeys = [];
+let display = '';
+
+if(obj.key === 'tags'){visibleKeys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
+if(obj.key === 'npcs'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
+if(obj.key === 'ambience'){visibleKeys = ['tags']};
+if(obj.key === 'locations'){visibleKeys = ['npcs', 'tags', 'subLocations']};
+if(obj.key === 'subLocations'){visibleKeys = ['npcs', 'tags', 'locations']};
+if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'spells']};
+if(obj.key === 'spells'){visibleKeys = ['tags', 'npcs', 'items']};
+if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs']};
+if(obj.key === 'events'){visibleKeys = ['tags']};
 
 keys.forEach(key => {
+
+    if(!visibleKeys.includes(key)){
+        display = 'none'
+        }else{
+        display = 'block'
+        };
+
 const properKey = helper.proper(key)
 const singleKey = properKey.endsWith('s')? properKey.slice(0, -1): properKey;
-const container = document.getElementById(this.buildSection(properKey, obj));
+const container = document.getElementById(this.buildSection(properKey, obj, null, display));
 
 //Make New Entry.
 if(obj && key !=='locations'){
 const newTagArea = document.createElement('div');
-let newTagContent = `<h3><span class = 'leftText'>[Create New ${singleKey}]</span></h3>`;
+let newTagContent = `<h3 style='display:${display}'><span class = 'leftText'>[Create New ${singleKey}]</span></h3>`;
 
 newTagArea.innerHTML = newTagContent;
 container.appendChild(newTagArea);
@@ -791,56 +802,10 @@ form.createForm(tagObj);
 
 });
 }
-})
 
-//Add Make Copies Button
-if(obj){
-    console.log('TAGS', obj.tags)
-    const container = document.getElementById(this.buildSection('Actions', obj));
-    const bulkTagArea = document.createElement('div');
-    let newTagContent = `<h3><span class = 'leftText'>[Make Copies]</span></h3>`;
-    
-    bulkTagArea.innerHTML = newTagContent;
-    container.appendChild(bulkTagArea);
-    
-    bulkTagArea.style.color = 'lightgray'
-    
-    bulkTagArea.addEventListener('mouseenter', function(){
-    this.style.color = 'lime';
-    })
-    
-    bulkTagArea.addEventListener('mouseleave', function(){
-    this.style.color = 'lightgray';
-    })
-    
-    bulkTagArea.addEventListener('click', function(){
-    
-        helper.showPrompt('How many copies?', 'input');
-        ref.promptBox.focus();
-        
-        helper.handleConfirm = function(response, promptBox) {
-            if (response !== null) {
-                // Check if the response is a valid number
-                const numCopies = parseInt(response);
-                if (!isNaN(numCopies)) {
-                    // Valid number, proceed with creating copies
-                    form.makeMultipleObjs(numCopies, obj, obj.key);
-                } else {
-                    // Invalid input, show error message or handle accordingly
-                    alert('Please enter a valid number.');
-                }
-            } else {
-                // User cancelled
-                console.log('User cancelled');
-            }
-            // Hide the prompt box
-            promptBox.style.display = 'none';
-        };
-        
-    
-    })
-    
-    };
+
+
+})
     
 
 
@@ -848,13 +813,17 @@ if(obj){
 
 },
 
-buildSection: function (headerValue, obj, parent){
+buildSection: function (headerValue, obj, parent, display){
 
 const sectionHeadDiv = document.createElement('div');
+let headerHTML = ``;
 
-let headerHTML = 
-`<hr> <h3>
-<span style="font-family:'SoutaneBlack'; color:lightgray" id="${headerValue}Header">
+if(display === undefined){display = 'block'};
+if(display === 'block'){headerHTML += `<hr>`;};
+
+headerHTML += 
+`<h3>
+<span style="font-family:'SoutaneBlack'; color:lightgray; display: ${display}" id="${headerValue}Header">
 ${headerValue} [...]
 </span></h3>`;
 
@@ -866,7 +835,6 @@ parent.appendChild(sectionHeadDiv);
 ref.Left.appendChild(sectionHeadDiv);
 }
 
-//let isFrozen = false;
 let headerDiv = headerValue + 'Header'
 let headerContent = document.getElementById(headerDiv);
 let index = editor.sectionShow.findIndex(entry => entry.section === headerDiv);
@@ -878,27 +846,15 @@ currentShow = 'none';
 currentShow = editor.sectionShow[index].visible === 1? 'block' : 'none';
 }
 
-// sectionHeadDiv.addEventListener('mouseenter', function(){
-// this.style.color = obj.color;
-// })
-
-// sectionHeadDiv.addEventListener('mouseleave', function(){
-// this.style.color = 'lightgray';
-// })
-
 
 // Add Show/Hide on Header for Section
 sectionHeadDiv.addEventListener('click', function() {
-
-//if (!isFrozen) {
 
 // 1 --- Show
 if(container.style.display === "none") {
 
 container.style.display = "block";
 headerContent.textContent = headerValue + ':';
-
-//}
 
 let sectionData = {section: headerDiv, visible: 1};
 
@@ -912,7 +868,6 @@ editor.sectionShow[index] = sectionData;
 
 //2 --- Hide
 else if(container.style.display === "block") {
-//isFrozen = true; // Set the freeze flag
 
 container.style.display = "none";
 headerContent.textContent = headerValue + ' [...]';
@@ -925,11 +880,6 @@ editor.sectionShow.push(sectionData);
 }else{
 editor.sectionShow[index] = sectionData; 
 }
-
-// // Unfreeze after 2 seconds (adjust the delay as needed)
-// setTimeout(() => {
-// isFrozen = false; // Unset the freeze flag
-// }, 1000); // 2000 milliseconds = 2 seconds
 
 }
 });
@@ -993,8 +943,10 @@ if(copy === undefined){
     newEntry.description = 'This '+ singleKey + ' has been generated and attached to ' + singleObjKey + ' ' + obj.name + '. Click here to edit it. ',
 
     //Optional
-    newEntry.active? newEntry.active = 1 : '';
-    newEntry.order? newEntry.order = 1 : '';
+    newEntry.active = 1;
+    newEntry.order = 1;
+
+    if(key === 'tags'){newEntry.chance = 100}
 
     //Add new Tag to curent Object
     let index = load.Data[obj.key].findIndex(entry => parseInt(entry.id) === parseInt(obj.id));
@@ -1008,6 +960,7 @@ if(copy === undefined){
     //Define what values for copies.
     newEntry.id = newId,
     newEntry.name = obj.name + ' ' + (copy + 2)
+    newEntry.order = parseInt(copy) + parseInt(obj.order);
 
     //Add new obj to all original tags.
     let tags = obj.tags
@@ -1018,13 +971,13 @@ if(copy === undefined){
 
     })
 
-    console.log(obj.tags, newEntry.tags)
+    //console.log(obj.tags, newEntry.tags)
 
 }
 
 //Add newEntry to Data
 load.Data[key].push(newEntry);
-console.log(newEntry)
+//console.log(newEntry)
 //Load new Tag!
 form.createForm(newEntry); 
 saveButton.click(); 

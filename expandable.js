@@ -30,15 +30,15 @@ const index = helper.getIndex(key, id);
 const obj = load.Data[key][index];
 
 if(event.shiftKey){
-if(key === 'npcs'){
+if(key === 'npcs' && ref.leftParty.style.display === 'block'){
 load.Data.miscInfo.party.push({key, id});
 party.loadParty();
 Storyteller.refreshLocation();
 }
 
-}else{
+else{
 form.createForm(obj);         
-}
+}}
 });
 
 });
@@ -70,9 +70,36 @@ const showHide = element.getAttribute("showHide");
 // console.log(element.getAttribute("showHide"));
 
 if (showHide === 'hide') {
-// Show full description.
+// Show full description and items.
+const itemsTags = obj.tags.filter(tag => tag.key === 'items');
+let itemsHTML = ''
+
+if(itemsTags.length > 0){itemsHTML = 
+    `<h3 style="color:${obj.color}">Inventory:</h3>`
+
+itemsTags.forEach(tag => {
+let item = helper.getObjfromTag(tag)
+
+const itemHTML = 
+`<span 
+class="expandable" 
+style="color:${item.color}"
+id="${item.id}"
+key="${item.key}"> ${item.name}</span><br>`
+
+itemsHTML += itemHTML
+})
+
+
 element.setAttribute('showHide', 'show')
-element.innerHTML = `${description}`;
+element.innerHTML = 
+`${itemsHTML}
+${description}
+`;}else{
+element.setAttribute('showHide', 'show')
+element.innerHTML = 
+`${description}`;
+}
 this.expand(element)
 
 
@@ -82,6 +109,35 @@ element.setAttribute('showHide', 'hide')
 element.innerHTML = `${firstSentence}`;
 this.expand(element)
 }
+
+} else if (key === 'tags'){
+
+// Show/Hide Tag Description.
+const showHide = element.getAttribute("showHide");
+
+if (showHide === 'hide') {
+// Show full description in place of name.
+element.setAttribute('showHide', 'show')
+element.innerHTML = 
+`
+<h3 class="extendable"
+showHide="hide"
+id="${obj.id}" 
+key="${obj.key}"
+style="color:${obj.color}">${obj.name}:</h3>
+<span style="font-family:monospace; color: whitesmoke"> ${description} </span>
+
+<hr>`;
+
+this.extend(element)
+
+} else {
+// Show only the tag name.
+element.setAttribute('showHide', 'hide')
+element.innerHTML = `${obj.name}`;
+//this.expand(element)
+}
+
 
 }});
 
@@ -161,10 +217,11 @@ return text.replace(regex, match => {
 const keyword = keywords.find(kw => kw.name.toLowerCase() === match.toLowerCase());
 if (keyword) {
 return `<span 
-class="expandable"
+class="extendable"
+showHide="hide"
 id="${keyword.id}" 
 key="${keyword.key}"
-style='color:${keyword.color}'>${match}</span>`;
+style='font-family: SoutaneBlack; color:${keyword.color}'>${match}</span>`;
 } else {
 return match;
 }

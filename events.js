@@ -109,29 +109,42 @@ subLocations.sort((a, b) => a.order - b.order);
 let locNPCSearch = locObj.tags.filter(obj => obj.key === 'npcs');
 let floatNPCs = [];
 
+//Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
+locNPCs.forEach(locNPC => {
+// let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
+// let r = Math.floor(Math.random() * activeLocations.length);
+// try{
+//     let randomSubLoc = activeLocations[r];
+//     randomSubLoc.tags.push(locNPC)
+//     }catch{console.error('No Active subLocations here.')}
+const locTagObj = helper.getObjfromTag(locNPC);
+let npcFilter = locTagObj.tags.filter(obj => obj.key === 'npcs');
+
+npcFilter.forEach(tag => {
+
+    const npc = helper.getObjfromTag(tag);
+    floatNPCs.push(JSON.parse(JSON.stringify(npc)))
+    
+})
+
+});
+
 locNPCSearch.forEach(npc => {
     let npcObj = helper.getObjfromTag(npc);
     floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
 });
+
+
 
 floatNPCs.forEach(npc => {
 let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
 let r = Math.floor(Math.random() * activeLocations.length);
 try{
 npc.location = activeLocations[r].id;
-console.log(npc.name)
+
 }catch{console.error('No Active subLocations here.')}
 });
 
-//Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
-locNPCs.forEach(locNPC => {
-let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
-let r = Math.floor(Math.random() * activeLocations.length);
-try{
-    let randomSubLoc = activeLocations[r];
-    randomSubLoc.tags.push(locNPC)
-    }catch{console.error('No Active subLocations here.')}
-    });
 
 subLocations.forEach((subLocation) =>{
 
@@ -171,46 +184,59 @@ Events.getSubLocDetails(subLocation, floatNPCs);
 
 
 getSubLocDetails(subLocation, floatNPCs) {
-    
-let i = 0
-
-subLocation.tags.forEach(tag => {
 
 let bundle = []
-//Tags in subLocation
-let tagObj = helper.getObjfromTag(tag);
 
+//Get all objs from tags and put into a big bundle.
+subLocation.tags.forEach(subLocTag => {
+
+let itemBundle = [];
+//Tags in subLocation
+if(subLocTag.key !== 'locations'){
+let tagObj = helper.getObjfromTag(subLocTag);
 if(tagObj === undefined){console.error('No tagObj')}
 
+if(tagObj.key === 'tags'){
+//console.log(tagObj.name)
+//Roll for chance.
+let chanceRoll = helper.rollDice(100);
+let toBeat = parseInt(tagObj.chance)
+if(chanceRoll > toBeat){
+//console.log('failed roll', toBeat, chanceRoll)
+return  
+}
+}
+
+//Add Item Containers to subLocation
 let tags = tagObj.tags;
-
 tags.forEach(tag => {
-
 let tagObj = helper.getObjfromTag(tag);
-
-bundle.push(tagObj);
-
+bundle.push(tagObj)
+if(tag.key === 'items' && subLocTag.key === 'tags'){itemBundle.push(tagObj)}
 })
+Events.generateLocItems(itemBundle, tagObj);
+}
+});
 
-
-//filter out empty entries
+//Filter out empty entries.
 bundle = bundle.filter(entry => entry !== undefined);
 
-//get different data for subLocation
-let npcBundle = tag.key !== 'locations'? bundle.filter(obj => obj.key === 'npcs'): [];
+//Parse out different bundles from big bundle.
+let npcBundle = bundle.filter(obj => obj.key === 'npcs');
 let ambienceBundle = bundle.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
-let itemBundle = bundle.filter(obj => obj.key === 'items');
 
+
+//Use ambienceBundle for subLocation ambience.
 ambienceBundle.forEach(tag => {
 this.eventDesc += `<br><br>`
 Events.getAmbiencefromTag(tag);
 
 });
 
-//add permanent subLocation npcs
+//Add NPCs tagged directly to subLocation.
 let npcTags = subLocation.tags.filter(obj => obj.key === 'npcs');
 
-if(npcTags.length > 0 && i === 0){
+if(npcTags.length > 0){
 
    npcTags.forEach(tag => {
     let subLocNPC = helper.getObjfromTag(tag);
@@ -218,18 +244,19 @@ if(npcTags.length > 0 && i === 0){
 })  
 };
 
-//add floatNPCs
+//Add floatNPCs.
 floatNPCs.forEach(npc => {
-if(npc.location === subLocation.id && i === 0){npcBundle.push(npc)}
+if(npc.location === subLocation.id){npcBundle.push(npc)}
 })
 
-//remove Party Members
+//Remove NPCs who are in the [P]arty.
 let partyMembers = load.Data.miscInfo.party;
 partyMembers.forEach(member => {
 let filterBundle = npcBundle.filter(npc => npc.id !== parseInt(member.id));
 npcBundle = filterBundle;
 });
 
+//Unpack npcBundle.
 npcBundle.forEach(npc => {
 
 let eventBundle = bundle.filter(obj => obj.key === 'events');
@@ -343,9 +370,7 @@ this.eventDesc += `<br>`;
 
 })
 
-Events.generateLocItems(itemBundle, tagObj);
-i++
-})
+
 
 this.eventDesc += `<br>`;
 
@@ -401,7 +426,7 @@ let wrapper =
 `<span class="expandable"
 style="color:${item.color}"
 id="${item.id}"
-key="${item.key}"> ${item.name} [${item.cost}] </span>`
+key="${item.key}"> - ${item.name.toUpperCase()}: ${item.cost} </span>`
 
 this.eventDesc += wrapper;
 this.eventDesc += `<br>`;

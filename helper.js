@@ -53,6 +53,15 @@ return entry;
 //     }
 // }
 
+if(key === 'tags'){
+    obj = obj.map(entry => {
+
+entry.chance = 100;
+// Return the modified object
+return entry;
+});
+}
+
 
 // if(key === 'monsters'){
 
@@ -117,106 +126,104 @@ document.body.appendChild(promptBox);
 },
 
 createPromptBox(prompt, type) {
-    const promptBox = document.getElementById('promptBox');
-    promptBox.classList.add('prompt');
-    promptBox.innerHTML = '';
+const promptBox = document.getElementById('promptBox');
+promptBox.classList.add('prompt');
+promptBox.innerHTML = '';
 
-    const promptContent = document.createElement('div');
-    promptContent.classList.add('prompt-content');
+const promptContent = document.createElement('div');
+promptContent.classList.add('prompt-content');
 
-    const promptText = document.createElement('p');
-        promptText.textContent = prompt;
-        promptContent.appendChild(promptText);
+const promptText = document.createElement('p');
+promptText.textContent = prompt;
+promptContent.appendChild(promptText);
 
-    if(type === 'yesNo'){
-        
-        const buttonContainer = document.createElement('div');
-        buttonContainer.classList.add('prompt-button-container');
+if(type === 'yesNo'){
 
-        const yesButton = document.createElement('button');
-        yesButton.textContent = 'Yes';
-        yesButton.classList.add('prompt-button');
-        yesButton.onclick = () => { 
-            this.handleConfirm(true, promptBox); 
-        };
+const buttonContainer = document.createElement('div');
+buttonContainer.classList.add('prompt-button-container');
 
-        const noButton = document.createElement('button');
-        noButton.textContent = 'No';
-        noButton.classList.add('prompt-button');
-        noButton.onclick = () => { 
-            this.handleConfirm(false, promptBox); 
-        };
+const yesButton = document.createElement('button');
+yesButton.textContent = 'Yes';
+yesButton.classList.add('prompt-button');
+yesButton.onclick = () => { 
+this.handleConfirm(true, promptBox); 
+};
 
-        buttonContainer.appendChild(yesButton);
-        buttonContainer.appendChild(noButton);
+const noButton = document.createElement('button');
+noButton.textContent = 'No';
+noButton.classList.add('prompt-button');
+noButton.onclick = () => { 
+this.handleConfirm(false, promptBox); 
+};
 
-        
-        promptContent.appendChild(buttonContainer);
-    }
+buttonContainer.appendChild(yesButton);
+buttonContainer.appendChild(noButton);
 
-    if(type === 'input'){
-        const userInput = document.createElement('input');
-        userInput.placeholder = 'Type here...';
-        userInput.classList.add('userInput');
 
-        const buttonContainer = document.createElement('div');
-        buttonContainer.classList.add('prompt-button-container');
+promptContent.appendChild(buttonContainer);
+}
 
-        const confirmButton = document.createElement('button');
-        confirmButton.textContent = 'Confirm';
-        confirmButton.classList.add('prompt-button');
-        confirmButton.onclick = () => { 
-            this.handleConfirm(userInput.value, promptBox); 
-        };
+if(type === 'input'){
+const userInput = document.createElement('input');
+userInput.placeholder = 'Type here...';
+userInput.classList.add('userInput');
 
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = 'Cancel';
-        cancelButton.classList.add('prompt-button');
-        cancelButton.onclick = () => { 
-            this.handleConfirm(null, promptBox); 
-        };
+const buttonContainer = document.createElement('div');
+buttonContainer.classList.add('prompt-button-container');
 
-        buttonContainer.appendChild(confirmButton);
-        buttonContainer.appendChild(cancelButton);
+const confirmButton = document.createElement('button');
+confirmButton.textContent = 'Confirm';
+confirmButton.classList.add('prompt-button');
+confirmButton.onclick = () => { 
+this.handleConfirm(userInput.value, promptBox); 
+};
 
-        promptContent.appendChild(userInput);
-        promptContent.appendChild(buttonContainer);
-    }
+const cancelButton = document.createElement('button');
+cancelButton.textContent = 'Cancel';
+cancelButton.classList.add('prompt-button');
+cancelButton.onclick = () => { 
+this.handleConfirm(null, promptBox); 
+};
 
-    promptBox.appendChild(promptContent);
-    promptBox.style.display = 'block';
+buttonContainer.appendChild(confirmButton);
+buttonContainer.appendChild(cancelButton);
 
-    return promptBox;
+promptContent.appendChild(userInput);
+promptContent.appendChild(buttonContainer);
+}
+
+promptBox.appendChild(promptContent);
+promptBox.style.display = 'block';
+
+return promptBox;
 },
 
 handleConfirm(response, promptBox) {
-    promptBox.style.display = 'none';
+promptBox.style.display = 'none';
 
-    if (response !== null) {
-        // Do something with the response
-        console.log('User response:', response);
-    } else {
-        // User cancelled
-        console.log('User cancelled');
-    }
+if (response !== null) {
+// Do something with the response
+console.log('User response:', response);
+} else {
+// User cancelled
+console.log('User cancelled');
+}
 },
 
+adjustFontSize() {
+// Default font size
+let fontSize = 3.8; // Set your default font size here
 
-    adjustFontSize() {
-        // Default font size
-        let fontSize = 3.8; // Set your default font size here
-        
-        // Set initial font size
-        ref.locationLabel.style.fontSize = fontSize + 'vh';
-    
-        // Check if the text overflows
-        while (ref.locationLabel.scrollWidth > ref.locationLabel.offsetWidth) {
-            // Reduce font size
-            fontSize -= 0.1;
-            ref.locationLabel.style.fontSize = fontSize + 'vh';
-        }
-    },
-    
+// Set initial font size
+ref.locationLabel.style.fontSize = fontSize + 'vh';
+
+// Check if the text overflows
+while (ref.locationLabel.scrollWidth > ref.locationLabel.offsetWidth) {
+// Reduce font size
+fontSize -= 0.1;
+ref.locationLabel.style.fontSize = fontSize + 'vh';
+}
+},
 
 proper(string){
 return string.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -414,7 +421,6 @@ return uniqueTags;
 }, []);
 
 },
-
 
 rollDice(sides){
 

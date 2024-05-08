@@ -399,10 +399,11 @@ load.Data = parsedData;
 console.log(load.Data)
 
 //miscInfo
+try{
 locationLabel.value = load.Data.miscInfo.fileName;
 helper.adjustFontSize();
 load.fileName = load.Data.miscInfo.fileName;
-
+}catch{console.error('Could not recover data.')}
 },
 
 saveToBrowser(){
