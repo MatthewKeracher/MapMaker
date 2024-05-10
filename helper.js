@@ -24,10 +24,45 @@ obj = obj.map(entry => {
 //entry.active = 1;
 
 // Change field values.
-entry.tags = helper.tidyTags(entry.tags)
+entry.tags = []; //helper.tidyTags(entry.tags)
 // entry.subGroup = entry.subGroup? entry.subGroup : '';
 //entry.color = helper.cssColorToHex(entry.color);
+if(key === 'spells'){
 
+entry.id = '';
+entry.key = 'spells';
+entry.tags = [];
+entry.color = "#ffd700";
+
+delete entry.note;
+delete entry.reverse;
+
+entry.type = 'group';
+entry.subType = 'subGroup';
+entry.group = entry.Class;
+entry.subGroup = entry.Level;
+
+
+entry.name = entry.Name;
+entry.range = entry.Range;
+entry.duration = entry.Duration;
+entry.class = entry.Class
+entry.level = entry.Level
+entry.description = entry.Description
+entry.source = entry.Book + ': ' + entry.Page;
+
+delete entry.Name;
+delete entry.Range;
+delete entry.Duration;
+delete entry.Class;
+delete entry.Level;
+delete entry.Description;
+delete entry.Source;
+delete entry.Book;
+delete entry.Page;
+
+
+}
 // Return the modified object
 return entry;
 });
@@ -53,14 +88,14 @@ return entry;
 //     }
 // }
 
-if(key === 'tags'){
-    obj = obj.map(entry => {
+// if(key === 'locations'){
+//     obj = obj.map(entry => {
 
-// entry.chance = 100;
-// Return the modified object
-return entry;
-});
-}
+// entry.order = entry.id;
+// // Return the modified object
+// return entry;
+// });
+// }
 
 
 // if(key === 'monsters'){

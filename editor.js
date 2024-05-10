@@ -64,6 +64,7 @@ if(obj[0]){
 const type = obj[0].type;
 const subType = obj[0].subType;
 
+if(key !== 'locations'){
 
 if(obj.length < 2){
 
@@ -121,6 +122,24 @@ result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: curren
 result.push(currentEntry);
 return result;
 }, []);
+}else{
+
+//For Locations, sort by Order.
+if(obj.length < 2){
+
+    //Not enough entries to run comparison. No need to either.
+    }else{
+
+        //Sort by Order
+        obj.sort((a, b) => {
+         
+            return parseInt(a.order) - parseInt(b.order);
+            
+            });
+
+    }
+}
+
 
 //list Title
 const titleDiv = document.createElement('div');
@@ -151,7 +170,6 @@ const nameDiv = document.createElement('div');
 if(entry.sectionHead){
 currentSection++
 currentSubSection = 0;
-
 
 nameDiv.setAttribute("scope", 'section');
 nameDiv.setAttribute("id", currentSection);
@@ -201,12 +219,26 @@ style="font-family:'SoutaneBlack'">
 nameDiv.setAttribute('id', entry.id)
 nameDiv.setAttribute('style', "display:" + subSectionEntryDisplay)
 
+if(key === 'locations'){
+
 nameDiv.innerHTML = 
 `<span 
 id = "${entry.id}"
-class ="white">
+style ="color: ${entry.color}">
+&nbsp;${entry.order + '. ' + entry.name}
+</span>`;
+
+}else{
+
+nameDiv.innerHTML = 
+`<span 
+id = "${entry.id}"
+style ="color: ${entry.color}">
 &nbsp;&nbsp;&nbsp;&nbsp;${entry.name}
 </span>`;
+
+
+}
 
 //3.4 no subSection
 }else if (entry[type]){
@@ -254,6 +286,10 @@ this.listEvents(entry, nameDiv, key);
 
 }}
 }}
+
+//Add Option to import extra Data to project.
+editor.addLibrary();
+
 },
 
 listHeaderEvents: function (div, event) {
@@ -539,12 +575,40 @@ this.loadList(resultsByKeys);
 
 },
 
+addLibrary(){
+
+//list Title
+const div = document.createElement('div');
+
+div.innerHTML = 
+`<h2>
+<span
+style="color:orange; display: block; letter-spacing: 0.18vw;">
+Import Data
+</span></h2>`;
+
+ref.Editor.appendChild(div)
+
+div.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+});
+
+div.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+});
+
+div.addEventListener('click', () => {
+ref.importData.addEventListener('change', (event) => {
+console.log('happening')
+load.loadSaveFile(event, 'part');
+});
+
+importData.click();
 
 
+});
 
-
-
-
+},
 
 };
 

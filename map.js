@@ -82,6 +82,7 @@ const subType = "color";
 const group = "Default"; 
 const color = "#f4d50b";
 const id = load.generateUniqueId(load.Data.locations, 'entry'); 
+const order = id;
 const name = location.name;
 const tags = []
 const left = parseFloat(location.style.left);
@@ -96,6 +97,7 @@ const locationData = {key,
   group,
   color,
   id,
+  order,
   name,
   tags,
   description,

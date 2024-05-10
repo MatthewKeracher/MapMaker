@@ -36,7 +36,6 @@ ref.addButton.addEventListener('click', this.addButon);
 ref.editButton.addEventListener('click', this.editButton);
 ref.saveButton.addEventListener('click', this.saveButton);  
 ref.copyButton.addEventListener('click', this.copyButton);  
-ref.fileInput.addEventListener('change', load.loadSaveFile); 
 ref.newButton.addEventListener('click', this.newButton); 
 ref.deleteButton.addEventListener('click', this.deleteButton);
 
@@ -116,7 +115,10 @@ ref.Storyteller.display = 'block';
 };
 
 dataButton() {
-const fileInput = document.getElementById('fileInput');
+ref.fileInput.addEventListener('change', (event) => {
+load.loadSaveFile(event, 'whole');
+});
+
 fileInput.click();
 
 };
@@ -301,7 +303,7 @@ copyButton(){
             promptBox.style.display = 'none';
         };
     
-    }
+}
 
 
 

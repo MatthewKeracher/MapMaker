@@ -231,8 +231,6 @@ console.log('Entry not found or invalid key/id.');
 
 },
 
-
-
 saveFile(content, filename, mimeType) {
 const blob = new Blob([content], { type: mimeType });
 saveAs(blob, filename);

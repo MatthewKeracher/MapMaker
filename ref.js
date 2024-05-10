@@ -34,6 +34,7 @@ editButton: document.getElementById('editButton'),
 saveButton: document.getElementById('saveButton'),
 copyButton: document.getElementById('copyButton'),
 fileInput: document.getElementById('fileInput'),
+importData: document.getElementById('importData'),
 newButton: document.getElementById('newButton'),
 deleteButton: document.getElementById('deleteButton'),
 

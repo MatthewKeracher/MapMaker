@@ -85,7 +85,7 @@ const itemHTML =
 class="expandable" 
 style="color:${item.color}"
 id="${item.id}"
-key="${item.key}"> ${item.name}</span><br>`
+key="${item.key}"> ${item.name.toUpperCase()}</span><br>`
 
 itemsHTML += itemHTML
 })
@@ -118,16 +118,14 @@ const showHide = element.getAttribute("showHide");
 if (showHide === 'hide') {
 // Show full description in place of name.
 element.setAttribute('showHide', 'show')
-element.innerHTML = 
+element.innerHTML += 
 `
 <h3 class="extendable"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
 style="color:${obj.color}">${obj.name}:</h3>
-<span style="font-family:monospace; color: whitesmoke"> ${description} </span>
-
-<hr>`;
+<span style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${description} </span>`;
 
 this.extend(element)
 

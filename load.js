@@ -94,7 +94,7 @@ return 1
 
 }},
     
-loadSaveFile: async (event) => {
+loadSaveFile: async (event, action) => {
 const file = event.target.files[0];
 if (file) {
 const reader = new FileReader();
@@ -116,9 +116,12 @@ reader.readAsText(file);
 };
 
 try {
+console.log(action)
 // Wait for the file reading process to complete
 const { content, name } = await readFile();
 
+if(action === 'whole'){ //We are loading a whole file.
+console.log('Overwriting all Data.')
 // Remove the file extension from the name
 const fileNameWithoutExtension = name.replace(/\.[^/.]+$/, "")
 
@@ -132,6 +135,12 @@ helper.adjustFontSize();
 ref.locationLabel.disabled = false;
 
 //load.locationLabelEvents();
+
+}else if(action === 'part'){ //We are loading data into the file.
+
+load.importData(content);
+
+}
 
 } catch (error) {
 console.error('Error reading file:', error);
@@ -156,6 +165,38 @@ form.createForm()
 
 },
 
+importData(fileContent) {
+
+try {
+if (fileContent) {
+
+    const data = JSON.parse(fileContent);
+    //helper.sortData(data);
+
+    for (const key in data) {
+        if (key !== 'miscInfo') {
+            data[key].forEach(entry => {
+                // Push each entry into load.Data
+                entry.id = load.generateUniqueId(load.Data[key], 'entry');
+                load.Data[key].push(entry);
+            });
+        }
+    }
+
+console.log('Importing Data...')
+editor.loadList(load.Data);
+    
+
+} else {
+console.error('Error: File content is empty.');
+}
+} catch (error) {
+console.error('Error parsing JSON:', error);
+}
+
+},
+    
+
 handleFileLoad(fileContent) {
 return new Promise((resolve, reject) => {
 
@@ -163,19 +204,19 @@ try {
 if (fileContent) {
 
 load.Data = JSON.parse(fileContent);
-
+//console.log('Overwriting all Data.')
 //Helpers
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
-helper.sortData(load.Data);
+//helper.sortData(load.Data);
 
 //Storyteller.miscInfo = load.Data.miscInfo.description;
 load.fileName = load.Data.miscInfo.fileName;
 // locationLabel.value = load.Data.miscInfo.fileName;
 // helper.adjustFontSize();
 Storyteller.showmiscInfo();
-console.log(load.Data)
+
 
 try {
 load.displayLocations(load.Data.locations);
