@@ -124,12 +124,12 @@ if (showHide === 'hide') {
 element.setAttribute('showHide', 'show')
 element.innerHTML += 
 `
-<h3 class="extendable"
+<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
 style="color:${obj.color}">${obj.name}:</h3>
-<span style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} </span>`;
+<span class = "nested deleteMe" style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} </span>`;
 
 this.extend(element)
 
@@ -139,9 +139,9 @@ this.extend(element)
 
         const oldNested = source.querySelectorAll('.deleteMe');
         oldNested.forEach(element => {
-            element.remove();
+        element.remove();
         });
-    
+
         // Show full description in extension.
         element.setAttribute('showHide', 'show')
         element.innerHTML += 
@@ -150,8 +150,7 @@ this.extend(element)
         id="${obj.id}" 
         key="${obj.key}"
         style="color:${obj.color}">${obj.name}:</h3>
-        <span class="deleteMe" style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} 
-        </span>`;
+        <span class="nested deleteMe" style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} </span>`;
         
         this.extend(element)
         
