@@ -24,47 +24,64 @@ obj = obj.map(entry => {
 //entry.active = 1;
 
 // Change field values.
-entry.tags = []; //helper.tidyTags(entry.tags)
+//entry.tags = []; //helper.tidyTags(entry.tags)
 // entry.subGroup = entry.subGroup? entry.subGroup : '';
 //entry.color = helper.cssColorToHex(entry.color);
-if(key === 'spells'){
+// if(key === 'spells'){
 
-entry.id = '';
-entry.key = 'spells';
-entry.tags = [];
-entry.color = "#ffd700";
+// entry.id = '';
+// entry.key = 'spells';
+// entry.tags = [];
+// entry.color = "#ffd700";
 
-delete entry.note;
-delete entry.reverse;
+// delete entry.note;
+// delete entry.reverse;
 
-entry.type = 'group';
-entry.subType = 'subGroup';
-entry.group = entry.Class;
-entry.subGroup = entry.Level;
+// entry.type = 'group';
+// entry.subType = 'subGroup';
+// entry.group = entry.Class;
+// entry.subGroup = entry.Level;
 
 
-entry.name = entry.Name;
-entry.range = entry.Range;
-entry.duration = entry.Duration;
-entry.class = entry.Class
-entry.level = entry.Level
-entry.description = entry.Description
-entry.source = entry.Book + ': ' + entry.Page;
+// entry.name = entry.Name;
+// entry.range = entry.Range;
+// entry.duration = entry.Duration;
+// entry.class = entry.Class
+// entry.level = entry.Level
+// entry.description = entry.Description
+// entry.source = entry.Book + ': ' + entry.Page;
 
-delete entry.Name;
-delete entry.Range;
-delete entry.Duration;
-delete entry.Class;
-delete entry.Level;
-delete entry.Description;
-delete entry.Source;
-delete entry.Book;
-delete entry.Page;
+// delete entry.Name;
+// delete entry.Range;
+// delete entry.Duration;
+// delete entry.Class;
+// delete entry.Level;
+// delete entry.Description;
+// delete entry.Source;
+// delete entry.Book;
+// delete entry.Page;
 
+
+// }
+
+if(key === 'monsters'){
+
+// entry.encounter = entry.appearing;
+// entry.wild = entry.appearing;
+// entry.lair = entry.appearing;
+
+// entry.walk = entry.land;
+// entry.turn = entry.land;
+// // entry.swim = entry.movement;
+// // entry.fly =  entry.movement;
+
+// delete entry.land;
+// // delete entry.movement;
 
 }
-// Return the modified object
-return entry;
+
+// // Return the modified object
+// return entry;
 });
 }
 
@@ -261,7 +278,11 @@ ref.locationLabel.style.fontSize = fontSize + 'vh';
 },
 
 proper(string){
+try{
 return string.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}catch{
+return string;
+}
 },
 
 convertKeys(keys) {

@@ -56,14 +56,15 @@ const id = event.target.getAttribute('id');
 const index = helper.getIndex(key, id);
 const obj = load.Data[key][index];
 const keywords = expandable.generateKeyWords(load.Data);
-const description = expandable.findKeywords(obj.description, keywords);
+const hyperDesc = expandable.findKeywords(obj.description, keywords, "nested");
 
 // Insert first sentence of Backstory
-let firstPeriodIndex = description.indexOf('.');
-let firstSentence = description.slice(0, firstPeriodIndex + 1);
+let firstPeriodIndex = hyperDesc.indexOf('.');
+let firstSentence = hyperDesc.slice(0, firstPeriodIndex + 1);
 
 if (event.shiftKey) {
 form.createForm(obj);
+
 } else if(key === 'npcs'){
 // Show/Hide NPC Description.
 const showHide = element.getAttribute("showHide");
@@ -94,13 +95,16 @@ itemsHTML += itemHTML
 element.setAttribute('showHide', 'show')
 element.innerHTML = 
 `${itemsHTML}
-${description}
-`;}else{
+${hyperDesc}
+`
+}else{
+
+//Expand NPC Description
 element.setAttribute('showHide', 'show')
 element.innerHTML = 
-`${description}`;
+`${hyperDesc}`;
 }
-this.expand(element)
+//this.expand(element)
 
 
 } else {
@@ -125,11 +129,37 @@ showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
 style="color:${obj.color}">${obj.name}:</h3>
-<span style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${description} </span>`;
+<span style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} </span>`;
 
 this.extend(element)
 
-} else {
+} else if (event.target.classList.contains("nested")) {
+
+    if (key === 'tags'){
+
+        const oldNested = source.querySelectorAll('.deleteMe');
+        oldNested.forEach(element => {
+            element.remove();
+        });
+    
+        // Show full description in extension.
+        element.setAttribute('showHide', 'show')
+        element.innerHTML += 
+        `<h3 class="nested deleteMe"
+        showHide="hide"
+        id="${obj.id}" 
+        key="${obj.key}"
+        style="color:${obj.color}">${obj.name}:</h3>
+        <span class="deleteMe" style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} 
+        </span>`;
+        
+        this.extend(element)
+        
+        
+        }
+        
+       
+}else{
 // Show only the tag name.
 element.setAttribute('showHide', 'hide')
 element.innerHTML = `${obj.name}`;
@@ -137,9 +167,15 @@ element.innerHTML = `${obj.name}`;
 }
 
 
-}});
+}
 
-})},
+});
+
+})
+
+
+
+},
 
 
 showFloatingExpandable() {
@@ -208,19 +244,35 @@ console.log('Unknown content type');
 });
 },
 
-findKeywords(text, keywords) {
-const regex = new RegExp(keywords.map(keyword => keyword.name).join("|"), "gi");
+findKeywords(text, keywords, nested) {
+    const regex = new RegExp(
+        keywords.map(keyword => `\\b${keyword.name}\\b`).join("|"), 
+        "gi"
+    );
 
 return text.replace(regex, match => {
 const keyword = keywords.find(kw => kw.name.toLowerCase() === match.toLowerCase());
-if (keyword) {
+
+if (keyword && nested === undefined) {
+
 return `<span 
 class="extendable"
 showHide="hide"
 id="${keyword.id}" 
 key="${keyword.key}"
 style='font-family: SoutaneBlack; color:${keyword.color}'>${match}</span>`;
-} else {
+
+} else if(keyword && nested === "nested"){
+
+return `<span 
+class="nested"
+showHide="hide"
+id="${keyword.id}" 
+key="${keyword.key}"
+style='font-family: SoutaneBlack; color:${keyword.color}'>${match}</span>`;
+
+
+}else{
 return match;
 }
 });

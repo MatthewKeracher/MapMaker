@@ -79,7 +79,18 @@ if (obj) {
 //Define key groups for different areas of the form.
 const excludedKeys = ['id','name', 'description', 'key', 'tags', 'color']; 
 const invisibleKeys = ['type', 'subType'];
-const universalKeys = ['subGroup', 'group'];
+const universalKeys = ['order','subGroup', 'group'];
+const monsterKeys = [
+    'encounter',
+    'wild',
+    'lair',
+    'walk',
+    'turn',
+    'swim',
+    'fly',
+    'experience',
+    'treasure',
+    'lairTreasure'];
 
 //Make ID Manually
 if(obj.id){
@@ -624,7 +635,13 @@ const properKey = helper.proper(obj.key);
 const container = document.getElementById(this.buildSection(properKey + ' Settings', obj));
 
 for (const key in obj) {
-if (obj.hasOwnProperty(key) && !excludedKeys.includes(key) && !universalKeys.includes(key) && !invisibleKeys.includes(key)) { // Check if key is not excluded
+    if (
+        obj.hasOwnProperty(key) && 
+        !excludedKeys.includes(key) && 
+        !universalKeys.includes(key) && 
+        !invisibleKeys.includes(key) &&
+        !monsterKeys.includes(key)
+    ) {  // Check if key is not excluded
 
 const elementContainer = document.createElement('div');
 
@@ -678,10 +695,54 @@ elementContainer.querySelector('.leftTextshort').select();
 }
 }
 
+//Add Monster Form Elements
+if(obj.key === 'monsters'){
+    
+    const sections = [
+        {name: "Appearing", keys: ["encounter", "wild", "lair"]},
+        {name: "Movement", keys: ["walk", "turn", "swim", "fly"]},
+        {name: "Rewards", keys: ["treasure", "lairTreasure", "experience"]}
+        ]
+    
+        sections.forEach(section => {
+
+            const container = document.getElementById(this.buildSection(section.name, obj));
+            const keys = section.keys;
+
+            keys.forEach(key => {
+
+            // Inside the loop that creates memberDiv elements
+            const div = document.createElement('div');
+                
+            let HTML = `
+            <div class="field-table">
+            
+                <div id="${key}Row" class="field-row">
+            
+                <label divId="${key}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">${helper.proper(key)}
+                </label> 
+                
+                <input id="${key}Entry" 
+                type="text" 
+                class="field-cell field-column leftTextshort entry-input" 
+                value="${obj[key]}">
+
+                </div>
+            
+                </div>
+                `;
+            
+            div.innerHTML = HTML;
+            container.appendChild(div);
+            
+            })
+        });
+    
+}};
+
 //Make Tags section.
 form.addTagstoForm(obj);
 
-}
 },
 
 addTagstoForm(obj){

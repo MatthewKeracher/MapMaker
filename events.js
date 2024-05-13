@@ -4,6 +4,7 @@ import ref from "./ref.js";
 import NPCs from "./npcs.js";
 import load from "./load.js";
 import helper from "./helper.js";
+import expandable from "./expandable.js";
 
 
 const Events = {
@@ -17,16 +18,20 @@ searchArray: [],
 async getEvent(locObj) {
 
 this.eventDesc = '';
+const keywords = expandable.generateKeyWords(load.Data)
 
 //LOCATION DESCRIPTION
 if(locObj){
 let locObjDesc = helper.filterRandomOptions(locObj);
 
+//Add Keywords
+let hyperDesc = expandable.findKeywords(locObjDesc, keywords);
+
 //Location Wrapper
 let locWrapper = 
 `<span class="expandable"
 id="${locObj.id}"
-key="${locObj.key}"> ${locObjDesc} </span> `
+key="${locObj.key}"> ${hyperDesc} </span> `
 
 this.eventDesc += locWrapper;
 this.eventDesc += `<br>`
@@ -162,11 +167,14 @@ this.eventDesc += subLocHeader;
 //SubLocation Description
 let subLocDesc = helper.filterRandomOptions(subLocation);
 
+//Add Keywords
+let hyperDesc = expandable.findKeywords(subLocDesc, keywords);
+
 //subLoc Wrapper
 let subLocWrapper = 
 `<span class="expandable"
 id="${subLocation.id}"
-key="${subLocation.key}"> ${subLocDesc} </span> `
+key="${subLocation.key}"> ${hyperDesc} </span> `
 
 this.eventDesc += `<br>`
 this.eventDesc += subLocWrapper;
@@ -174,7 +182,7 @@ this.eventDesc += subLocWrapper;
 //this.eventDesc += `<br><br>`
 
 //Add NPCs to SubLocation
-Events.getSubLocDetails(subLocation, floatNPCs);
+Events.getSubLocDetails(subLocation, floatNPCs, keywords);
 
 //Events.addLocDetails(locNPCs);
 
@@ -183,7 +191,7 @@ Events.getSubLocDetails(subLocation, floatNPCs);
 },
 
 
-getSubLocDetails(subLocation, floatNPCs) {
+getSubLocDetails(subLocation, floatNPCs, keywords) {
 
 let bundle = []
 
@@ -271,6 +279,7 @@ ${npc.name} is here. </span></h3>`;
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');
 let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
+
 
 this.eventDesc += `<span
 class="extendable"
@@ -381,12 +390,16 @@ getAmbiencefromTag(obj){
 if(obj.key === 'ambience'){
 const ambienceObj = obj;
 let ambienceDesc = helper.filterRandomOptions(ambienceObj);
+
+//Add Keywords
+let hyperDesc = expandable.findKeywords(ambienceDesc, keywords);
+
 //Ambience Wrapper
 let ambienceWrapper = 
 `<span class="expandable"
 style="color:${ambienceObj.color}"
 id="${ambienceObj.id}"
-key="${ambienceObj.key}"> ${ambienceDesc} </span>`
+key="${ambienceObj.key}"> ${hyperDesc} </span>`
 this.eventDesc += ambienceWrapper;
 
 }},
