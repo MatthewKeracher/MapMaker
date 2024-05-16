@@ -7,6 +7,7 @@ import NPCs from "./npcs.js";
 import helper from "./helper.js";
 import party from "./party.js";
 import Storyteller from "./storyteller.js";
+import save from "./save.js";
 
 
 const expandable = {
@@ -74,9 +75,8 @@ if (showHide === 'hide') {
 // Show full description and items.
 const itemsTags = obj.tags.filter(tag => tag.key === 'items');
 let itemsHTML = ''
-
 if(itemsTags.length > 0){itemsHTML = 
-    `<h3 style="color:${obj.color}">Inventory:</h3>`
+`<h3 style="color:${obj.color}">Inventory:</h3>`
 
 itemsTags.forEach(tag => {
 let item = helper.getObjfromTag(tag)
@@ -114,66 +114,62 @@ element.innerHTML = `${firstSentence}`;
 this.expand(element)
 }
 
-} else if (key === 'tags'){
+}else if (event.target.classList.contains("nested")){
+// Tags within tagEntries: Show tagged entry after the element.
 
-// Show/Hide Tag Description.
-const showHide = element.getAttribute("showHide");
+const toDelete = source.querySelectorAll('.deleteMe');
+toDelete.forEach(element => {
+element.remove();
+});
 
-if (showHide === 'hide') {
-// Show full description in place of name.
 element.setAttribute('showHide', 'show')
-element.innerHTML += 
-`
-<h3 class="nested deleteMe"
+const tagEntry = document.createElement('tagEntry');
+tagEntry.classList.add('deleteMe')
+
+tagEntry.innerHTML = 
+`<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
-style="color:${obj.color}">${obj.name}:</h3>
-<span class = "nested deleteMe" style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} </span>`;
+style="color:${obj.color}">${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
+<span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>`;
 
-this.extend(element)
+element.appendChild(tagEntry);
+Storyteller.addTorch();
+console.log(element)
+//this.extend(element)
 
-} else if (event.target.classList.contains("nested")) {
+}else if (key === 'tags'){
+console.log('Body')
+//Tags within body. 
+const toDelete = source.querySelectorAll('.deleteMe');
+toDelete.forEach(element => {
+element.remove();
+});
 
-    if (key === 'tags'){
+element.setAttribute('showHide', 'show')
+const tagEntry = document.createElement('tagEntry');
+tagEntry.classList.add('deleteMe')
 
-        const oldNested = source.querySelectorAll('.deleteMe');
-        oldNested.forEach(element => {
-        element.remove();
-        });
+tagEntry.innerHTML = 
+`<h3 class="nested deleteMe"
+showHide="hide"
+id="${obj.id}" 
+key="${obj.key}"
+style="color:${obj.color}">${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
+<span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>`;
 
-        // Show full description in extension.
-        element.setAttribute('showHide', 'show')
-        element.innerHTML += 
-        `<h3 class="nested deleteMe"
-        showHide="hide"
-        id="${obj.id}" 
-        key="${obj.key}"
-        style="color:${obj.color}">${obj.name}:</h3>
-        <span class="nested deleteMe" style="font-family:monospace; color: obj.color; font-size: 1.9vh; "> ${hyperDesc} </span>`;
-        
-        this.extend(element)
-        
-        
-        }
-        
-       
-}else{
-// Show only the tag name.
-element.setAttribute('showHide', 'hide')
-element.innerHTML = `${obj.name}`;
-//this.expand(element)
-}
+const parent = event.target.parentNode;
+parent.appendChild(tagEntry);
+Storyteller.addTorch();
+console.log(element)
+// this.extend(parent)
 
-
-}
+};
 
 });
 
 })
-
-
-
 },
 
 
@@ -244,10 +240,10 @@ console.log('Unknown content type');
 },
 
 findKeywords(text, keywords, nested) {
-    const regex = new RegExp(
-        keywords.map(keyword => `\\b${keyword.name}\\b`).join("|"), 
-        "gi"
-    );
+const regex = new RegExp(
+keywords.map(keyword => `\\b${keyword.name}\\b`).join("|"), 
+"gi"
+);
 
 return text.replace(regex, match => {
 const keyword = keywords.find(kw => kw.name.toLowerCase() === match.toLowerCase());

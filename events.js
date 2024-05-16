@@ -29,7 +29,7 @@ let hyperDesc = expandable.findKeywords(locObjDesc, keywords);
 
 //Location Wrapper
 let locWrapper = 
-`<span class="expandable"
+`<span class="expandable extendable"
 id="${locObj.id}"
 key="${locObj.key}"> ${hyperDesc} </span> `
 
@@ -84,7 +84,7 @@ if(hasNPCs.length > 0){locNPCs.push(newTag)};
 locAmbience.sort((a, b) => a.order - b.order);
 
 locAmbience.forEach(tag => {
-Events.getAmbiencefromTag(tag);
+Events.getAmbiencefromTag(tag, keywords);
 this.eventDesc += `<br><br>`
 });
 
@@ -155,14 +155,14 @@ subLocations.forEach((subLocation) =>{
 
 //SubLocation Header
 let subLocHeader = 
-`<h2> <span class="expandable"
+`<br><h2> <span class="expandable"
 style="color:${subLocation.color}"
 id="${subLocation.id}"
-key="${subLocation.key}"> ${subLocation.name} </span> 
-</h2>`
+key="${subLocation.key}"> ${subLocation.name} </span> </h2>`
 
-this.eventDesc += `<br><hr><br>`;
 this.eventDesc += subLocHeader;
+this.eventDesc += `<hr name="subLocHR" style="background-color:${subLocation.color}"><br>`;
+
 
 //SubLocation Description
 let subLocDesc = helper.filterRandomOptions(subLocation);
@@ -172,11 +172,11 @@ let hyperDesc = expandable.findKeywords(subLocDesc, keywords);
 
 //subLoc Wrapper
 let subLocWrapper = 
-`<span class="expandable"
+`<span class="expandable extendable"
 id="${subLocation.id}"
 key="${subLocation.key}"> ${hyperDesc} </span> `
 
-this.eventDesc += `<br>`
+// this.eventDesc += `<br>`
 this.eventDesc += subLocWrapper;
 
 //this.eventDesc += `<br><br>`
@@ -237,7 +237,7 @@ let ambienceBundle = bundle.filter(obj => obj.key === 'ambience' && parseInt(obj
 //Use ambienceBundle for subLocation ambience.
 ambienceBundle.forEach(tag => {
 this.eventDesc += `<br><br>`
-Events.getAmbiencefromTag(tag);
+Events.getAmbiencefromTag(tag, keywords);
 
 });
 
@@ -274,11 +274,13 @@ class="expandable"
 style="font-family:'SoutaneBlack'; 
 color: ${npc.color}" key="${npc.key}" 
 id="${npc.id}"> 
-${npc.name} is here. </span></h3>`;
+${npc.name} is here.</span></h3><hr name="npcHR" style="background-color:${npc.color}"> <br>`;
 
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');
 let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
+//Add Keywords
+let hyperDesc = expandable.findKeywords(firstSentence, keywords);
 
 
 this.eventDesc += `<span
@@ -286,7 +288,7 @@ class="extendable"
 showHide="hide"
 key="${npc.key}" 
 style="color:whitesmoke" 
-id="${npc.id}">${firstSentence} </span> <br>`
+id="${npc.id}">${hyperDesc} </span> <br><br>`
 
 
 //Floating Tags (no subLocation) for NPCs:: //font-family: 'CenturyGothic', monospace; 
@@ -385,7 +387,7 @@ this.eventDesc += `<br>`;
 
 },
 
-getAmbiencefromTag(obj){
+getAmbiencefromTag(obj, keywords){
 
 if(obj.key === 'ambience'){
 const ambienceObj = obj;
@@ -411,7 +413,7 @@ let header =
 class="expandable" 
 style='color:${tag.color}'
 id="${tag.id}"
-key="${tag.key}"> ${tag.name}</span></h3>`
+key="${tag.key}"> ${tag.name}</span></h3><hr name="itemHR" style="background-color:${tag.color}"> <br>`;
 
 if(bundle.length > 0){
 this.eventDesc += `<br>`

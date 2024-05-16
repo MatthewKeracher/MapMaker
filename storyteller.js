@@ -42,6 +42,7 @@ Story += `
 
 //Finish Up.
 ref.Storyteller.innerHTML = Story;
+this.addTorch();
 
 //Tell expandable Divs what to show.
 expandable.expandExtend(ref.Storyteller, ref.Centre);
@@ -52,6 +53,59 @@ expandable.showFloatingExpandable();
 
 };
 }, 
+
+addTorch() {
+    // Get all <hr> elements in the Storyteller
+    const hrElements = ref.Storyteller.querySelectorAll('hr');
+
+    // Iterate over each <hr> element
+    hrElements.forEach(hr => {
+        // Create a <div> container to hold both the <hr> and the <img> elements
+        const container = document.createElement('div');
+        container.classList.add('hr-with-image');
+        const name = hr.getAttribute('name');
+
+        // Create an <img> element for the torch
+        let img 
+        
+        if(name === 'subLocHR'){
+        img = document.createElement('img');
+        img.src = 'door.gif'; // Set the src attribute to your torch GIF URL
+        img.alt = 'Door';
+        img.classList.add('torch');
+        }
+
+        if(name === 'npcHR'){
+        img = document.createElement('img');
+        img.src = 'goblin.gif'; // Set the src attribute to your torch GIF URL
+        img.alt = 'Goblin';
+        img.classList.add('torch');
+        }
+
+        if(name === 'itemHR'){
+        img = document.createElement('img');
+        img.src = 'chest.gif'; // Set the src attribute to your torch GIF URL
+        img.alt = 'Chest';
+        img.classList.add('torch');
+        }
+
+        if(name === 'tagHR'){
+        img = document.createElement('img');
+        img.src = 'book.gif'; // Set the src attribute to your torch GIF URL
+        img.alt = 'Book';
+        img.classList.add('torch');
+        }
+
+        //img.addEventListener('click', this.textToSpeech())
+
+        // Append the <hr> and <img> elements to the container
+        container.appendChild(hr.cloneNode()); // Clone the <hr> element
+        container.appendChild(img);
+
+        // Replace the <hr> element with the container
+        hr.replaceWith(container);
+    });
+},
 
 textToSpeech(text){
 
