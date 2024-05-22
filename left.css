@@ -135,6 +135,13 @@ overflow-y: hidden;
 overflow-x: hidden;
 }
 
+.formImage{
+position: absolute;
+height: 9vh;
+top: 0vh;
+right: 2vw;
+}
+
 
 .leftText:focus,
 .leftTextshort:focus{

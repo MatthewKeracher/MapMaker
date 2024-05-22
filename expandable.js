@@ -135,7 +135,7 @@ style="color:${obj.color}">${obj.name}:</h3><hr name="tagHR" style="background-c
 <span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>`;
 
 element.appendChild(tagEntry);
-Storyteller.addTorch();
+Storyteller.addImagestoStory();
 console.log(element)
 //this.extend(element)
 
@@ -161,7 +161,7 @@ style="color:${obj.color}">${obj.name}:</h3><hr name="tagHR" style="background-c
 
 const parent = event.target.parentNode;
 parent.appendChild(tagEntry);
-Storyteller.addTorch();
+Storyteller.addImagestoStory();
 console.log(element)
 // this.extend(parent)
 

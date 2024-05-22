@@ -9,12 +9,10 @@ const helper = {
 
 sortData(data){
 
-// const focusKey = 'ambience'
-
 for (const key in data) {
 let obj = data[key];
 
-if (key !== 'miscInfo') {
+if (key !== 'miscInfo' && key!== 'locations') {
 obj = obj.map(entry => {
 // Remove some fields
 // delete entry.key;
@@ -23,135 +21,15 @@ obj = obj.map(entry => {
 // entry.key = '';
 //entry.active = 1;
 
-// Change field values.
-//entry.tags = []; //helper.tidyTags(entry.tags)
-// entry.subGroup = entry.subGroup? entry.subGroup : '';
-//entry.color = helper.cssColorToHex(entry.color);
-// if(key === 'spells'){
+entry.image = '';
 
-// entry.id = '';
-// entry.key = 'spells';
-// entry.tags = [];
-// entry.color = "#ffd700";
+return entry
 
-// delete entry.note;
-// delete entry.reverse;
-
-// entry.type = 'group';
-// entry.subType = 'subGroup';
-// entry.group = entry.Class;
-// entry.subGroup = entry.Level;
-
-
-// entry.name = entry.Name;
-// entry.range = entry.Range;
-// entry.duration = entry.Duration;
-// entry.class = entry.Class
-// entry.level = entry.Level
-// entry.description = entry.Description
-// entry.source = entry.Book + ': ' + entry.Page;
-
-// delete entry.Name;
-// delete entry.Range;
-// delete entry.Duration;
-// delete entry.Class;
-// delete entry.Level;
-// delete entry.Description;
-// delete entry.Source;
-// delete entry.Book;
-// delete entry.Page;
-
-
-// }
-
-if(key === 'monsters'){
-
-// entry.encounter = entry.appearing;
-// entry.wild = entry.appearing;
-// entry.lair = entry.appearing;
-
-// entry.walk = entry.land;
-// entry.turn = entry.land;
-// // entry.swim = entry.movement;
-// // entry.fly =  entry.movement;
-
-// delete entry.land;
-// // delete entry.movement;
-
+})
 }
-
-// // Return the modified object
-// return entry;
-});
-}
-
-// for (const key in data) {
-//     let obj = data[key];
-
-//     if (key !== 'miscInfo') {
-//         obj = obj.map(entry => {
-//             // Create a new object to hold the modified entry
-//             const modifiedEntry = {};
-
-//             // Loop through the keys of the original entry
-//             for (const entryKey in entry) {
-//                 // Set each key in the modified entry to a blank value
-//                 modifiedEntry[entryKey] = '';
-//             }
-
-//             // Return the modified object
-//             return modifiedEntry;
-//         });
-//     }
-// }
-
-// if(key === 'locations'){
-//     obj = obj.map(entry => {
-
-// entry.order = entry.id;
-// // Return the modified object
-// return entry;
-// });
-// }
-
-
-// if(key === 'monsters'){
-
-// obj = obj.map(entry => {
-// // Remove some fields
-// // delete entry.key;
-// // delete entry.npc;
-// // delete entry.location;
-
-// delete entry.level;
-// delete entry.special;
-// delete entry.hitDice
-
-// // const newKeys = ["hd", "xp", "noApp", "Wisdom", "ac"];
-
-// // const oldKeys = ["hitDice", "experience", "numAppearing", "armourClass"];
-
-// // Add new fields
-// entry.group = entry.group;
-// entry.subGroup = '';
-// entry.color = '#65ece3';
-// //entry.active = 1;
-// //entry.order = entry.order? entry.order : '';
-
-// // Change field values.
-// entry.type = 'group';
-// entry.subType= 'subGroup';
-
-// delete entry.class;
-
-// // Return the modified object
-// return entry;
-// });
-
-// }
 
 data[key] = obj;
-//console.log(load.Data)
+console.log(load.Data)
 }
 
 

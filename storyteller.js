@@ -42,7 +42,7 @@ Story += `
 
 //Finish Up.
 ref.Storyteller.innerHTML = Story;
-this.addTorch();
+this.addImagestoStory();
 
 //Tell expandable Divs what to show.
 expandable.expandExtend(ref.Storyteller, ref.Centre);
@@ -54,7 +54,7 @@ expandable.showFloatingExpandable();
 };
 }, 
 
-addTorch() {
+addImagestoStory() {
     // Get all <hr> elements in the Storyteller
     const hrElements = ref.Storyteller.querySelectorAll('hr');
 
@@ -65,36 +65,27 @@ addTorch() {
         container.classList.add('hr-with-image');
         const name = hr.getAttribute('name');
 
+        const gifBox = [
+            {name: "subLocHR", src: 'gifs/door.gif'},
+            {name: "npcHR", src:  'gifs/goblin.gif'},
+            {name: "tagHR", src: 'gifs/book.gif'},
+            {name: "itemHR", src: 'gifs/chest.gif'},
+            {name: "fighterHR", src: 'gifs/fighter.gif'},
+            {name: "clericHR", src: 'gifs/cleric.gif'},
+            {name: "thiefHR", src: 'gifs/thief.gif'},
+            {name: "magicuserHR", src: 'gifs/magicuser.gif'},
+        ]
+
         // Create an <img> element for the torch
         let img 
         
-        if(name === 'subLocHR'){
         img = document.createElement('img');
-        img.src = 'door.gif'; // Set the src attribute to your torch GIF URL
-        img.alt = 'Door';
+        let imgEntry = gifBox.find(entry => entry.name === name);
+    
+    
+        img.src = imgEntry === undefined? name : imgEntry.src;
+        img.alt = name;
         img.classList.add('torch');
-        }
-
-        if(name === 'npcHR'){
-        img = document.createElement('img');
-        img.src = 'goblin.gif'; // Set the src attribute to your torch GIF URL
-        img.alt = 'Goblin';
-        img.classList.add('torch');
-        }
-
-        if(name === 'itemHR'){
-        img = document.createElement('img');
-        img.src = 'chest.gif'; // Set the src attribute to your torch GIF URL
-        img.alt = 'Chest';
-        img.classList.add('torch');
-        }
-
-        if(name === 'tagHR'){
-        img = document.createElement('img');
-        img.src = 'book.gif'; // Set the src attribute to your torch GIF URL
-        img.alt = 'Book';
-        img.classList.add('torch');
-        }
 
         //img.addEventListener('click', this.textToSpeech())
 

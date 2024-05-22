@@ -116,16 +116,15 @@ reader.readAsText(file);
 };
 
 try {
-console.log(action)
 // Wait for the file reading process to complete
 const { content, name } = await readFile();
 
 if(action === 'whole'){ //We are loading a whole file.
-console.log('Overwriting all Data.')
 // Remove the file extension from the name
 const fileNameWithoutExtension = name.replace(/\.[^/.]+$/, "")
 
 // Now you can call loadAndBuild safely
+
 await NPCs.loadAndBuild(content);
 
 // Return the file name
@@ -209,7 +208,7 @@ load.Data = JSON.parse(fileContent);
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
-//helper.sortData(load.Data);
+//helper.sortData(load.Data)
 
 //Storyteller.miscInfo = load.Data.miscInfo.description;
 load.fileName = load.Data.miscInfo.fileName;
@@ -221,7 +220,7 @@ Storyteller.showmiscInfo();
 try {
 load.displayLocations(load.Data.locations);
 } catch (error) {
-console.error('No map to display locations.');
+console.error('No map to display locations.', error);
 reject(error);
 }
 

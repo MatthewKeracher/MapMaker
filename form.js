@@ -79,7 +79,7 @@ if (obj) {
 //Define key groups for different areas of the form.
 const excludedKeys = ['id','name', 'description', 'key', 'tags', 'color']; 
 const invisibleKeys = ['type', 'subType'];
-const universalKeys = ['order','subGroup', 'group'];
+const universalKeys = ['order','subGroup', 'group', 'image'];
 const monsterKeys = [
     'encounter',
     'wild',
@@ -274,7 +274,7 @@ divId="subType">
 <input
 pair="${subType}" 
 class="centreSubType" 
-style="font-family:'SoutaneBlack'; color:white"
+style="display: none; font-family:'SoutaneBlack'; color:white"
 id="subTypeEntry"
 value="${obj.group || 'none'} => ${obj.subGroup || 'none'} ">`;
 
@@ -304,6 +304,22 @@ topArea.appendChild(nameArea);
 // setTimeout(function() {
 // nameArea.style.height = nameArea.scrollHeight + 'px';
 // }, 0);
+}
+
+//Add Image
+if(obj.image){
+    const imageArea = document.createElement('div');
+    imageArea.id = 'imageArea';
+    
+    let nameContent =  
+    `<image 
+    class="formImage"
+    src="${obj.image}" 
+    >`;
+    
+    imageArea.innerHTML = nameContent;
+    topArea.appendChild(imageArea);
+
 }
 
 // //5. Add Breaker

@@ -17,6 +17,7 @@ this.name = data.name;
 this.class = data.class === ''? 'Fighter' : data.class;
 this.level = data.level === ''? 1 : parseInt(data.level);
 this.color = data.color,
+this.image = data.image,
 this.alignment = data.alignment,
 this.species = data.species,
 this.tags = data.tags;

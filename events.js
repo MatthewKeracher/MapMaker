@@ -153,6 +153,14 @@ npc.location = activeLocations[r].id;
 
 subLocations.forEach((subLocation) =>{
 
+let subLocHR 
+
+if(subLocation.image !== ''){
+    subLocHR = subLocation.image;
+}else{
+    subLocHR = "subLocHR"
+}
+
 //SubLocation Header
 let subLocHeader = 
 `<br><h2> <span class="expandable"
@@ -161,7 +169,7 @@ id="${subLocation.id}"
 key="${subLocation.key}"> ${subLocation.name} </span> </h2>`
 
 this.eventDesc += subLocHeader;
-this.eventDesc += `<hr name="subLocHR" style="background-color:${subLocation.color}"><br>`;
+this.eventDesc += `<hr name="${subLocHR}" style="background-color:${subLocation.color}"><br>`;
 
 
 //SubLocation Description
@@ -268,13 +276,21 @@ npcBundle = filterBundle;
 npcBundle.forEach(npc => {
 
 let eventBundle = bundle.filter(obj => obj.key === 'events');
+let npcHR 
+
+if(npc.image !== ''){
+npcHR = npc.image;
+}else{
+npcHR = npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
+}
+   
 
 this.eventDesc += `<h3><span 
 class="expandable" 
 style="font-family:'SoutaneBlack'; 
 color: ${npc.color}" key="${npc.key}" 
 id="${npc.id}"> 
-${npc.name} is here.</span></h3><hr name="npcHR" style="background-color:${npc.color}"> <br>`;
+${npc.name} is here.</span></h3><hr name="${npcHR}" style="background-color:${npc.color}"> <br>`;
 
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');
@@ -352,6 +368,7 @@ eventBundle.push(event)
 
 let uniqueEvents = [];
 let uniqueEventIds = new Set();
+
 
 //Filter out duplicate Events.
 eventBundle.forEach(obj => {
