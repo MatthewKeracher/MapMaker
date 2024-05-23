@@ -101,3 +101,64 @@
 /* Set individual column widths */
 .fieldName-column { width: 12vw; }
 .fielValue-column { width: 10vw; }
+
+/* Item Fields */
+
+.item-column:hover,
+.item-bonus-column:hover,
+.item-quant-column:hover {
+background-color: rgba(245, 245, 245, 0.167);
+cursor: pointer;
+}
+
+.item-column:focus,
+.item-bonus-column:focus,
+.item-quant-column:focus {
+color: lime;
+}
+
+.item-table {
+    display: table;
+    width: 30vw;
+    table-layout: fixed; /* Ensures consistent column widths */
+}
+
+.item-row {
+    display: table-row;
+}
+
+.item-name-cell {
+    display: table-cell;
+    font-family: 'SoutaneBlack';
+    font-size: 2.2vh;
+    height: 2.3vh;
+    width: 15vw;
+    color: white;
+    border: 0vh solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+    vertical-align: middle;
+}
+
+.item-quant-cell {
+    display: table-cell;
+    font-family: 'SoutaneBlack';
+    font-size: 2.2vh;
+    height: 2.3vh;
+    width: 3vw;
+    color: white;
+    background-color: transparent;
+    border: 0vh solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+/* Set individual column widths */
+.item-column { width: 20vw; }
+.item-bonus-column { width: 4vw;}
+.item-quant-column { width: 4vw;}

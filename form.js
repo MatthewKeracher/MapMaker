@@ -821,12 +821,118 @@ form.makeNewObj(obj, key);
 if(obj.tags){
 let tagsToAdd = obj.tags.filter(entry => entry.key === key);
 
+if(key === 'items'){
+
+const itemsTable = document.createElement('div');
+
+let itemsTableHTML =  `
+<div class="item-table">
+</div>`
+
+
+itemsTable.innerHTML = itemsTableHTML;
+container.appendChild(itemsTable);
+
+tagsToAdd.forEach(tag => {
+
+const itemsRow = document.createElement('div');
+let tagObj = helper.getObjfromTag(tag);
+let tagName = tagObj.name
+console.log(tagObj)
+
+let rowHTML = `
+
+<div id="${tagObj.name}Row" 
+class = "tag item-row"
+tagid = ${tag.id} 
+tagkey = ${tag.key}
+tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}
+tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? 1 : tag.quantity}
+>
+
+<label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
+${tagName}
+</label>
+
+<input 
+id="${tagObj.name}Quantity" 
+type="text" 
+class="item-quant-cell item-quant-column"
+value="${(tag.quantity === "" || tag.quantity === undefined) ? 1 : tag.quantity}">
+
+
+<input 
+id="${tagObj.name}Bonus" 
+type="text" 
+class="item-quant-cell item-bonus-column"
+value="${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}">
+
+</div>`
+
+itemsRow.innerHTML = rowHTML;
+itemsTable.appendChild(itemsRow);
+
+//On Change of Quant or Bonus update attributes in Row for Save
+const itemRow = document.getElementById(tagObj.name + "Row")
+const quantInput = document.getElementById(tagObj.name + "Quantity");
+const bonusInput = document.getElementById(tagObj.name + "Bonus");
+
+
+quantInput.addEventListener('input', function(){
+itemRow.setAttribute('tagquant', quantInput.value);
+});
+
+bonusInput.addEventListener('input', function(){
+itemRow.setAttribute('tagbonus', bonusInput.value);
+});
+
+quantInput.addEventListener('click', function(){
+quantInput.focus();
+quantInput.select();
+});
+
+bonusInput.addEventListener('click', function(){
+bonusInput.focus();
+bonusInput.select();
+});
+
+
+let tagEventDiv = document.getElementById('Item' + tag.id);
+
+tagEventDiv.addEventListener('click', function(event){
+
+if(event.shiftKey){ //shift-click
+//Remove tag from item.
+event.preventDefault();
+obj.tags = obj.tags.filter(item => item.id !== tag.id);
+
+//Remove item from other item's tags.
+
+let delTags = tagObj.tags
+//console.log(delTags, obj.id)
+delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
+//console.log(delTags)
+tagObj.tags = delTags;
+
+//Repackage.
+NPCs.buildNPC();
+form.createForm(obj);
+//Storyteller.refreshLocation();  
+}
+
+else if(event.button === 0){ //left-click
+//find tagObj based on Name!
+form.createForm(tagObj);   
+}
+});
+});
+
+
+} else{
+
 tagsToAdd.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
-
-if(tagObj){
-
 let tagName = tagObj.name
 
 const taggedArea = document.createElement('div');
@@ -837,6 +943,8 @@ let tagHTML =
 class = "tag"
 tagid = ${tag.id} 
 tagkey = ${tag.key}
+tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? null : tag.bonus}
+tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? null : tag.quantity}
 >
 ${tagName}
 </span> 
@@ -875,17 +983,17 @@ form.createForm(tagObj);
 
 });
 
+});
+
+}
+
+
+
+
 }
 
 });
-}
-
-
-
-})
     
-
-
 }
 
 },

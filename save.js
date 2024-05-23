@@ -78,36 +78,55 @@ for (let i = 0; i < labels.length; i++) {
 saveEntry[labels[i]] = inputs[i];
 }
 
-//get Array of tag addresses
-const tagElements = document.querySelectorAll('.tag');
-const tags = [];
-
-tagElements.forEach(input => {
-const tagId  = input.getAttribute('tagid');
-const tagKey = input.getAttribute('tagkey');
-tags.push({key: tagKey, id: tagId});
-
-});
-
+//Manually Assign Key
 try{
 saveEntry['key'] = document.getElementById('key').getAttribute('pair');
 
 }catch{console.error("No type or subType found.")}
+
+//Manually Assign ID
 saveEntry['id'] = parseInt(saveEntry['id']);
 
-//But what about tags that are not displated on the form?
-//Tags are added on a case by case so maybe don't need them here?
-//Remove input class from tags? 
+//Arrange Tags for Saving
+const tagElements = document.querySelectorAll('.tag');
+const tags = [];
+
+tagElements.forEach(input => {
+    const tagId  = input.getAttribute('tagid');
+    const tagKey = input.getAttribute('tagkey');
+    
+    if(tagKey === 'items' || saveEntry['key'] === 'items'){
+        //Include additional info if Item.
+        const tagBonus = input.getAttribute('tagbonus');
+        const tagQuant = input.getAttribute('tagquant');
+        tags.push({key: tagKey, id: tagId, quantity: tagQuant, bonus: tagBonus});
+        console.log(tags)
+
+        if(tagKey === 'items'){
+    
+        //Reflect changes on mirrorTag.
+        const taggedObj = helper.getObjfromTag({key: tagKey, id: tagId});
+        let mirrorIndex = taggedObj.tags.findIndex(tag => parseInt(tag.id) === saveEntry['id'] && tag.key === saveEntry['key'])
+        console.log(mirrorIndex)
+        const newTag = {key: saveEntry['key'], id: saveEntry['id'], quantity: tagQuant, bonus: tagBonus}
+        taggedObj.tags[mirrorIndex] = newTag;
+        console.log(taggedObj.tags)
+        }
+
+    }else{
+    
+        tags.push({key: tagKey, id: tagId});
+    
+    }
+    
+    });
+
 saveEntry['tags'] = tags;
+
 
 const key = saveEntry && saveEntry['key'];
 const id = saveEntry && saveEntry['id'];
 const index = key && id && load.Data[key].findIndex(entry => entry.id === parseInt(id));
-
-//console.log('saving...');
-//console.log('Updated saveEntry:');
-//console.log(saveEntry)
-// console.log(load.Data[key][index]);
 
 // Change type/subType for all objects in load.Data[key]
 load.Data[key] = load.Data[key].map(obj => ({
@@ -121,6 +140,7 @@ load.Data[key].push(saveEntry)
 }else{
 load.Data[key][index] = saveEntry
 }
+
 
 //Reset programme with new Data.
 NPCs.buildNPC();

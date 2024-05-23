@@ -424,6 +424,7 @@ this.eventDesc += ambienceWrapper;
 }},
 
 generateLocItems(bundle, tag){
+
 //Header Wrapper
 let header = 
 `<h3><span 
@@ -453,12 +454,15 @@ this.eventDesc += `<br>`;
 //Takes tag.filter for items and returns Div.
 bundle.forEach(item => {
 
+//Get Quantity and Bonus from Tag
+const address = item.tags.find(address => address.id === tag.id);
+
 //Items Wrapper
 let wrapper = 
 `<span class="expandable"
 style="color:${item.color}"
 id="${item.id}"
-key="${item.key}"> - ${item.name.toUpperCase()}: ${item.cost} </span>`
+key="${item.key}"> - ${address.quantity} ${item.name.toUpperCase()}: ${parseInt(item.cost) * parseInt(address.quantity)} (${item.cost} each) </span>`
 
 this.eventDesc += wrapper;
 this.eventDesc += `<br>`;
