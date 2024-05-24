@@ -190,7 +190,7 @@ this.eventDesc += subLocWrapper;
 //this.eventDesc += `<br><br>`
 
 //Add NPCs to SubLocation
-Events.getSubLocDetails(subLocation, floatNPCs, keywords);
+Events.getSubLocDetails(subLocation, floatNPCs, keywords, locObj);
 
 //Events.addLocDetails(locNPCs);
 
@@ -199,7 +199,7 @@ Events.getSubLocDetails(subLocation, floatNPCs, keywords);
 },
 
 
-getSubLocDetails(subLocation, floatNPCs, keywords) {
+getSubLocDetails(subLocation, floatNPCs, keywords, locObj) {
 
 let bundle = []
 
@@ -272,10 +272,18 @@ let filterBundle = npcBundle.filter(npc => npc.id !== parseInt(member.id));
 npcBundle = filterBundle;
 });
 
-//Unpack npcBundle.
+this.getNPCEvents(npcBundle, keywords, subLocation, locObj);
+this.eventDesc += `<br>`;
+
+},
+
+getNPCEvents(npcBundle, keywords, subLocation, locObj){
+//loop through npcBundle.
 npcBundle.forEach(npc => {
 
-let eventBundle = bundle.filter(obj => obj.key === 'events');
+//Add NPC to Storyteller.
+if(npc){
+//Insert NPC Image
 let npcHR 
 
 if(npc.image !== ''){
@@ -284,7 +292,7 @@ npcHR = npc.image;
 npcHR = npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
 }
    
-
+//Insert NPC
 this.eventDesc += `<h3><span 
 class="expandable" 
 style="font-family:'SoutaneBlack'; 
@@ -298,46 +306,64 @@ let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
 //Add Keywords
 let hyperDesc = expandable.findKeywords(firstSentence, keywords);
 
-
+//Insert NPC Information
 this.eventDesc += `<span
 class="extendable"
 showHide="hide"
 key="${npc.key}" 
 style="color:whitesmoke" 
 id="${npc.id}">${hyperDesc} </span> <br><br>`
+}
 
+//Make eventBundle with events tagged to NPC directly.
+let eventBundle = [] //npc.tags.filter(tag => tag.key === 'events');
 
-//Floating Tags (no subLocation) for NPCs:: //font-family: 'CenturyGothic', monospace; 
-let npcTags = npc.tags;
+//Get events from Tags where NPC is in Tag.
+let tagsBundle = npc.tags.filter(tag => tag.key === 'tags');
 
-npcTags.forEach(tag => {
-let isFloating = false;
+//Of all tags for NPC only want tags linked to this location, subLocation, or floating.
+const presentTagObjs = [];
 
-//Check inside Tag for subLocations, filter out.
-let floatTag = helper.getObjfromTag(tag);
-let floatCheck = floatTag.tags.filter(obj => obj.key === 'subLocations' || obj.key === 'locations');
-if(floatCheck.length === 0){isFloating = true};
+//Look at tags inside each bundleTag for the current subLocation.
+tagsBundle.forEach(bundleTag => {
+    
+    const tagObj = helper.getObjfromTag(bundleTag);
 
-if(isFloating === true){
+    tagObj.tags.forEach(tag => {
+    //Add tag if tagged to subLocation
+    if(tag.key === 'subLocations' && parseInt(tag.id) === parseInt(subLocation.id) ||
+       tag.key === 'locations' && parseInt(tag.id) === parseInt(locObj.id)){
+    console.log(tagObj.name)
+    presentTagObjs.push(tagObj);
+    }
 
-//add events tagged to tag to eventBundle
+    //Check to see if there are no subLocations or Locations in the bundleTag.
+    let floatCheck = tagObj.tags.filter(obj => obj.key === 'subLocations' || obj.key === 'locations');
+    if(floatCheck.length === 0){
+    presentTagObjs.push(tagObj)
+    };
 
-let eventsToAdd = floatTag.tags.filter(obj => obj.key === 'events');
-
-eventsToAdd.forEach(tag => {
-
-let event = helper.getObjfromTag(tag);
-
-eventBundle.push(event)
-
-})
-
-};
+    //Add tag if tagged to location.
+    //...
 
 });
 
-//Resting Tags (no NPCs) in subLocation.
-let restingTags = subLocation.tags;
+
+});
+
+//Of presentTagObjs, want to bundle only the events in these tags.
+presentTagObjs.forEach(presentTagObj => {   
+const eventTags = presentTagObj.tags.filter(tag => tag.key === 'events'); 
+const eventObjs = [];
+eventTags.forEach(eventTag => { 
+const eventObj = helper.getObjfromTag(eventTag);
+eventObjs.push(eventObj);
+});
+eventBundle = [...eventBundle, ...eventObjs]
+});
+
+//Add Events from SubLocation for all NPCs present.
+let restingTags = [...subLocation.tags, ...locObj.tags]
 
 restingTags.forEach(tag => {
 let isResting = false;
@@ -360,6 +386,7 @@ let event = helper.getObjfromTag(tag);
 
 eventBundle.push(event)
 
+
 })};
 
 };
@@ -376,13 +403,24 @@ eventBundle.forEach(obj => {
         uniqueEventIds.add(obj.id);
         uniqueEvents.push(obj);
     }
+
 });
 
 eventBundle = uniqueEvents;
 
+//Sort Events by Order
 eventBundle.sort((a, b) => a.order - b.order);
 eventBundle.forEach(event => {
 
+//Roll Chance for Events.
+let chanceRoll = helper.rollDice(100);
+let toBeat = parseInt(event.chance)
+if(chanceRoll > toBeat){
+console.log('roll Failed')
+return  
+}
+
+//Add Event to NPC in Storyteller.
 this.eventDesc += 
 `<span 
 class="expandable"
@@ -390,18 +428,13 @@ style="font-family:'SoutaneBlack'; color:${event.color}"
 id="${event.id}"
 key="${event.key}">${event.name}. </span>`;
 
+//Resolve Random Options within Event
 let eventDesc = helper.filterRandomOptions(event);
 this.eventDesc += eventDesc;
 this.eventDesc += `<br>`;
 
-})
-
-})
-
-
-
-this.eventDesc += `<br>`;
-
+});
+});
 },
 
 getAmbiencefromTag(obj, keywords){
@@ -434,7 +467,7 @@ id="${tag.id}"
 key="${tag.key}"> ${tag.name}</span></h3><hr name="itemHR" style="background-color:${tag.color}"> <br>`;
 
 if(bundle.length > 0){
-this.eventDesc += `<br>`
+this.eventDesc += `<br><br>`
 this.eventDesc += header
 };
 
@@ -455,14 +488,15 @@ this.eventDesc += `<br>`;
 bundle.forEach(item => {
 
 //Get Quantity and Bonus from Tag
-const address = item.tags.find(address => address.id === tag.id);
+const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.id));
+//console.log(item.tags,address)
 
-//Items Wrapper
+// Assuming item and address are defined earlier in your code
 let wrapper = 
 `<span class="expandable"
 style="color:${item.color}"
 id="${item.id}"
-key="${item.key}"> - ${address.quantity} ${item.name.toUpperCase()}: ${parseInt(item.cost) * parseInt(address.quantity)} (${item.cost} each) </span>`
+key="${item.key}"> - ${address.quantity > 1 ? `${address.quantity} ` : ''}${item.name.toUpperCase()} ${address.bonus}: ${address.quantity > 1 ? `${(parseFloat(item.cost) * parseFloat(address.quantity)).toFixed(2).replace(/\.?0+$/, '')} gp (${item.cost} each)` : `${item.cost}`} </span>`;
 
 this.eventDesc += wrapper;
 this.eventDesc += `<br>`;

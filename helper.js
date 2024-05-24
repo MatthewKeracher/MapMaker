@@ -12,7 +12,7 @@ sortData(data){
 for (const key in data) {
 let obj = data[key];
 
-if (key !== 'miscInfo' && key!== 'locations') {
+if (key === 'events'){ //(key !== 'miscInfo' && key!== 'locations') {
 obj = obj.map(entry => {
 // Remove some fields
 // delete entry.key;
@@ -21,7 +21,7 @@ obj = obj.map(entry => {
 // entry.key = '';
 //entry.active = 1;
 
-entry.image = '';
+entry.chance = 100;
 
 return entry
 

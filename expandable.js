@@ -72,7 +72,21 @@ const showHide = element.getAttribute("showHide");
 // console.log(element.getAttribute("showHide"));
 
 if (showHide === 'hide') {
-// Show full description and items.
+//Show NPC Stats
+
+console.log(obj)
+
+//Show compacted stats and information about NPC.
+const statsHTML = `<span 
+class="expandable" 
+style="color:whitesmoke"
+id="${obj.id}"
+key="${obj.key}"> Level ${obj.level} ${obj.alignment} ${obj.species} ${obj.class} </span><br>`
+
+const hyperStats = expandable.findKeywords(statsHTML, keywords, "nested");
+
+
+// Show Inventory: full description and items.
 const itemsTags = obj.tags.filter(tag => tag.key === 'items');
 let itemsHTML = ''
 if(itemsTags.length > 0){itemsHTML = 
@@ -81,12 +95,20 @@ if(itemsTags.length > 0){itemsHTML =
 itemsTags.forEach(tag => {
 let item = helper.getObjfromTag(tag)
 
+let itemInfo = item.damage 
+    ? item.damage + ' ' + tag.bonus 
+    : item.armourClass 
+        ? 'AC: ' + item.armourClass + ' ' + tag.bonus 
+        : tag.quantity > 1
+        ? (parseFloat(item.cost) * parseFloat(tag.quantity)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' each)': item.cost;
+
+
 const itemHTML = 
 `<span 
 class="expandable" 
 style="color:${item.color}"
 id="${item.id}"
-key="${item.key}"> ${item.name.toUpperCase()}</span><br>`
+key="${item.key}"> - ${tag.quantity} ${item.name.toUpperCase()} ${itemInfo} </span><br>`
 
 itemsHTML += itemHTML
 })
@@ -94,7 +116,7 @@ itemsHTML += itemHTML
 
 element.setAttribute('showHide', 'show')
 element.innerHTML = 
-`${itemsHTML}
+`${hyperStats} ${itemsHTML}
 ${hyperDesc}
 `
 }else{
@@ -127,7 +149,8 @@ const tagEntry = document.createElement('tagEntry');
 tagEntry.classList.add('deleteMe')
 
 tagEntry.innerHTML = 
-`<h3 class="nested deleteMe"
+`
+<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
@@ -152,7 +175,8 @@ const tagEntry = document.createElement('tagEntry');
 tagEntry.classList.add('deleteMe')
 
 tagEntry.innerHTML = 
-`<h3 class="nested deleteMe"
+`
+<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
