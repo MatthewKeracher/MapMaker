@@ -162,3 +162,50 @@ color: lime;
 .item-column { width: 20vw; }
 .item-bonus-column { width: 4vw;}
 .item-quant-column { width: 4vw;}
+
+/* STORYTELLER ITEMS */
+
+.story-item-table {
+    display: table;
+    width: 30vw;
+    table-layout: fixed; /* Ensures consistent column widths */
+}
+
+.story-item-row {
+    display: table-row;
+}
+
+.story-name-cell {
+    display: table-cell;
+    font-family: 'SoutaneBlack';
+    font-size: 2.2vh;
+    height: 2.3vh;
+    width: 15vw;
+    color: white;
+    border: 0vh solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+    vertical-align: middle;
+}
+
+
+.story-data-cell {
+    display: table-cell;
+    font-size: 2vh;
+    height: 2.3vh;
+    width: 18vw;
+    color: white;
+    background-color: transparent;
+    border: 0vh solid transparent; /* Add border for visualization */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Show ellipsis for overflow */
+    text-align: left;
+    vertical-align: middle;
+}
+
+
+/* Set individual column widths */
+.story-name-column { width: 20vw;}
+.story-data-column { width: 10vw;}

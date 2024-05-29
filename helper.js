@@ -7,6 +7,47 @@ import ref from "./ref.js";
 
 const helper = {
 
+makeIteminfo(item, tag){
+
+let itemQuant = tag.quantity && tag.quantity > 1? tag.quantity : '';
+let itemBonus = tag.bonus && tag.bonus !== '-'? ' (' + tag.bonus + ')' : '';
+let itemName = itemQuant + ' ' + item.name;
+let typeInfo = item.damage? 'Weapon' : item.armourClass? 'Armour' : 'misc';
+let itemInfo = '';
+
+if(typeInfo === 'Weapon'){
+itemInfo += ' Damage: ' + item.damage + itemBonus}
+
+if(typeInfo === 'Armour'){
+itemInfo += ' Armour Class: ' + item.armourClass + itemBonus}
+
+if(typeInfo === 'misc'){
+itemInfo += tag.quantity > 1? 
+(parseFloat(item.cost) * parseFloat(tag.quantity)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' each)': 
+' ' + item.cost}
+
+let itemHTML = `
+<div id="${item.name}Row" 
+class = "item-row"
+tagid = ${tag.id} 
+tagkey = ${tag.key}>
+
+<label key= ${tag.key} id="${tag.id}" class="expandable story-name-cell story-name-column" style="color:${item.color}">
+${itemName}
+</label>
+
+<label 
+id="${typeInfo}" 
+type="text" 
+class="story-data-cell story-data-column">
+${itemInfo}</label>
+
+</div>`
+
+return itemHTML
+
+},
+
 sortData(data){
 
 for (const key in data) {
@@ -175,8 +216,11 @@ return properWords;
 
 getIndex(key, id){
 
+try{
 const index = load.Data[key].findIndex(obj => parseInt(obj.id) === parseInt(id))
 return index
+}catch{ console.error(key, id)}
+
 
 },
 

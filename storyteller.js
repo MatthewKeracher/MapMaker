@@ -64,11 +64,13 @@ addImagestoStory() {
         const container = document.createElement('div');
         container.classList.add('hr-with-image');
         const name = hr.getAttribute('name');
+        if(name === 'blank'){return};
 
         const gifBox = [
             {name: "subLocHR", src: 'gifs/door.gif'},
+            {name: "inventHR", src: 'gifs/backpack.gif'},
             {name: "npcHR", src:  'gifs/goblin.gif'},
-            {name: "tagHR", src: 'gifs/book.gif'},
+            {name: "tagHR", src: 'gifs/scroll.png'},
             {name: "itemHR", src: 'gifs/chest.gif'},
             {name: "fighterHR", src: 'gifs/fighter.gif'},
             {name: "clericHR", src: 'gifs/cleric.gif'},

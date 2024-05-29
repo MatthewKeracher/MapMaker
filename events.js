@@ -293,7 +293,8 @@ npcHR = npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
 }
    
 //Insert NPC
-this.eventDesc += `<h3><span 
+this.eventDesc += `
+<h3><span 
 class="expandable" 
 style="font-family:'SoutaneBlack'; 
 color: ${npc.color}" key="${npc.key}" 
@@ -489,6 +490,7 @@ bundle.forEach(item => {
 
 //Get Quantity and Bonus from Tag
 const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.id));
+let itemInfo = helper.makeIteminfo(item, address)
 //console.log(item.tags,address)
 
 // Assuming item and address are defined earlier in your code
@@ -496,10 +498,9 @@ let wrapper =
 `<span class="expandable"
 style="color:${item.color}"
 id="${item.id}"
-key="${item.key}"> - ${address.quantity > 1 ? `${address.quantity} ` : ''}${item.name.toUpperCase()} ${address.bonus}: ${address.quantity > 1 ? `${(parseFloat(item.cost) * parseFloat(address.quantity)).toFixed(2).replace(/\.?0+$/, '')} gp (${item.cost} each)` : `${item.cost}`} </span>`;
+key="${item.key}">${itemInfo}</span>`;
 
 this.eventDesc += wrapper;
-this.eventDesc += `<br>`;
 
 })
 

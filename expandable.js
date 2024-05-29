@@ -81,7 +81,7 @@ const statsHTML = `<span
 class="expandable" 
 style="color:whitesmoke"
 id="${obj.id}"
-key="${obj.key}"> Level ${obj.level} ${obj.alignment} ${obj.species} ${obj.class} </span><br>`
+key="${obj.key}"> ${obj.name} is a level ${obj.level} ${obj.alignment} ${obj.species} ${obj.class}. </span><br>`
 
 const hyperStats = expandable.findKeywords(statsHTML, keywords, "nested");
 
@@ -90,41 +90,36 @@ const hyperStats = expandable.findKeywords(statsHTML, keywords, "nested");
 const itemsTags = obj.tags.filter(tag => tag.key === 'items');
 let itemsHTML = ''
 if(itemsTags.length > 0){itemsHTML = 
-`<h3 style="color:${obj.color}">Inventory:</h3>`
+`
+<h3 style="color:${obj.color}">${obj.name}'s Inventory.</h3><hr name="inventHR" style="background-color:${obj.color}">`
 
 itemsTags.forEach(tag => {
 let item = helper.getObjfromTag(tag)
 
-let itemInfo = item.damage 
-    ? item.damage + ' ' + tag.bonus 
-    : item.armourClass 
-        ? 'AC: ' + item.armourClass + ' ' + tag.bonus 
-        : tag.quantity > 1
-        ? (parseFloat(item.cost) * parseFloat(tag.quantity)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' each)': item.cost;
+let itemInfo = helper.makeIteminfo(item, tag);
 
-
-const itemHTML = 
-`<span 
-class="expandable" 
-style="color:${item.color}"
-id="${item.id}"
-key="${item.key}"> - ${tag.quantity} ${item.name.toUpperCase()} ${itemInfo} </span><br>`
-
-itemsHTML += itemHTML
+itemsHTML += `${itemInfo}`;
 })
 
+itemsHTML += `<br>`;
 
 element.setAttribute('showHide', 'show')
 element.innerHTML = 
 `${hyperStats} ${itemsHTML}
+<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
 ${hyperDesc}
-`
+
+<hr name="blank" style="background-color:${obj.color}">`
 }else{
 
 //Expand NPC Description
 element.setAttribute('showHide', 'show')
 element.innerHTML = 
-`${hyperDesc}`;
+`${hyperStats}
+<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
+${hyperDesc}
+
+<hr name="blank" style="background-color:${obj.color}">`;
 }
 //this.expand(element)
 
@@ -149,13 +144,15 @@ const tagEntry = document.createElement('tagEntry');
 tagEntry.classList.add('deleteMe')
 
 tagEntry.innerHTML = 
-`
-<h3 class="nested deleteMe"
+`<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
-style="color:${obj.color}">${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
-<span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>`;
+style="color:${obj.color}">
+${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
+<span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>
+
+<hr name="blank" style="background-color:${obj.color}">`;
 
 element.appendChild(tagEntry);
 Storyteller.addImagestoStory();
@@ -175,13 +172,15 @@ const tagEntry = document.createElement('tagEntry');
 tagEntry.classList.add('deleteMe')
 
 tagEntry.innerHTML = 
-`
-<h3 class="nested deleteMe"
+`<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
-style="color:${obj.color}">${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
-<span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>`;
+style="color:${obj.color}">
+${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
+<span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>
+
+<hr name="blank" style="background-color:${obj.color}">`;
 
 const parent = event.target.parentNode;
 parent.appendChild(tagEntry);
@@ -191,9 +190,13 @@ console.log(element)
 
 };
 
+Storyteller.addImagestoStory()
+
 });
 
 })
+
+
 },
 
 
