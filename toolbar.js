@@ -168,8 +168,7 @@ addButton.classList.add('click-button');
 
 // Add the event listeners
 mapElement.addEventListener('mousedown', Add.handleMouseDown);
-mapElement.addEventListener('mousemove', Add.handleMouseMove);
-mapElement.addEventListener('mouseup', Add.handleMouseUp);   
+mapElement.addEventListener('mousemove', Add.handleMouseMove);   
 ref.mainToolbar.style.pointerEvents = 'none';
 ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
@@ -183,7 +182,6 @@ addButton.classList.remove('click-button');
 // Remove the event listeners
 mapElement.removeEventListener('mousedown', Add.handleMouseDown);
 mapElement.removeEventListener('mousemove', Add.handleMouseMove);
-mapElement.removeEventListener('mouseup', Add.handleMouseUp);
 ref.mainToolbar.style.pointerEvents = 'auto';
 ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'auto';

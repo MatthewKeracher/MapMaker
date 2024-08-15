@@ -10,7 +10,7 @@ const Add = {
 
 mapElement: document.getElementById('mapElement'),
 addMode: false,
-isdragging: false,
+isDragging: false,
 
 startX: 0, 
 startY: 0,
@@ -18,60 +18,12 @@ endX  : 0,
 endY  : 0,
 
 previewDiv: '',
-    
+
+//Need to change from a dragging system to a two-click system.
+
 handleMouseDown(e) {
 
-const mapElement = document.getElementById('mapElement');
-const imageContainer = document.querySelector('.image-container');
-const rect = mapElement.getBoundingClientRect();    
-
-this.isDragging = true;
-this.startX = e.clientX - rect.left;
-this.startY = e.clientY - rect.top;
-
-// console.log('isDragging: ' + this.isDragging);
-//console.log('start: ' + this.endX + ',' + this.endY);
-
-// Create a temporary preview div
-this.previewDiv = document.createElement('div');
-this.previewDiv.className = 'position-div preview';
-       
-const firstChild = imageContainer.firstChild;
-imageContainer.insertBefore(this.previewDiv,firstChild);
-
-},
-
-handleMouseMove(e) {
-const mapElement = document.getElementById('mapElement');
-const rect = mapElement.getBoundingClientRect();
-
-e.preventDefault();
-
-if (this.isDragging) {
-    this.endX = e.clientX - rect.left;
-    this.endY = e.clientY - rect.top;
-
-    // console.log('start: ' + this.startX + ',' + this.startY)
-    // console.log('end: ' + this.endX + ',' + this.endY)
-
-    // Calculate position and size for the preview div
-    const left = Math.min(this.startX, this.endX);
-    const top = Math.min(this.startY, this.endY);
-    const width = Math.abs(this.endX - this.startX);
-    const height = Math.abs(this.endY - this.startY);
-
-    // Update styles for the preview div
-    this.previewDiv.style.left = left + 'px';
-    this.previewDiv.style.top = top + 'px';
-    this.previewDiv.style.width = width + 'px';
-    this.previewDiv.style.height = height + 'px';
-      
-}
-
-},
-
-handleMouseUp(e) {
-
+// check if isDragging is true.
 if (this.isDragging) {
 
 // Calculate position and size for the selection div     
@@ -93,33 +45,33 @@ this.isDragging = false;
 ref.promptBox.focus();
 
 helper.handleConfirm = function(response, promptBox) {
-    if (response !== null) {
-        // Do something with the response
-        location.name = response; // Set the ID based on user input 
+if (response !== null) {
+// Do something with the response
+location.name = response; // Set the ID based on user input 
 
-        // Create a label element for the div ID
-        var labelElement = document.createElement('div');
-        // Add text content to the label
-        labelElement.textContent = response;
+// Create a label element for the div ID
+var labelElement = document.createElement('div');
+// Add text content to the label
+labelElement.textContent = response;
 
-        // Continue with any other actions you need to perform
-        // ...
+// Continue with any other actions you need to perform
+// ...
 
-        // Hide the prompt box
-        promptBox.style.display = 'none';
+// Hide the prompt box
+promptBox.style.display = 'none';
 
 
-    // // Prompt the user for input to set the div ID
-    // const name = prompt('What is the *unique* name of this location?');
-    // location.name = name; // Set the ID based on user input 
+// // Prompt the user for input to set the div ID
+// const name = prompt('What is the *unique* name of this location?');
+// location.name = name; // Set the ID based on user input 
 
-    // Create a label element for the div ID
-    var labelElement = document.createElement('div');
-    labelElement.className = 'div-name-label';
-    labelElement.textContent = name;
-       
-    // Append the label to the location -switch around?
-    location.appendChild(labelElement);
+// Create a label element for the div ID
+var labelElement = document.createElement('div');
+labelElement.className = 'div-name-label';
+labelElement.textContent = name;
+
+// Append the label to the location -switch around?
+location.appendChild(labelElement);
 
 const imageContainer = document.querySelector('.image-container');
 const firstChild = imageContainer.firstChild;
@@ -145,10 +97,10 @@ const thisLoc = locationsArray.find(loc => loc.name === location.name);
 Storyteller.changeContent(thisLoc);
 
 } else {
-    // User cancelled
-    console.log('User cancelled');
-    // Hide the prompt box
-    promptBox.style.display = 'none';
+// User cancelled
+console.log('User cancelled');
+// Hide the prompt box
+promptBox.style.display = 'none';
 }
 };
 
@@ -157,10 +109,59 @@ Storyteller.changeContent(thisLoc);
 this.previewDiv.remove();
 addButton.click();
 
-    
+}else{
+
+const mapElement = document.getElementById('mapElement');
+const imageContainer = document.querySelector('.image-container');
+const rect = mapElement.getBoundingClientRect();    
+
+this.isDragging = true;
+this.startX = e.clientX - rect.left;
+this.startY = e.clientY - rect.top;
+
+//console.log('isDragging: ' + this.isDragging);
+//console.log('start: ' + this.endX + ',' + this.endY);
+
+// Create a temporary preview div
+this.previewDiv = document.createElement('div');
+this.previewDiv.className = 'position-div preview';
+
+const firstChild = imageContainer.firstChild;
+imageContainer.insertBefore(this.previewDiv,firstChild);
+
 }
 
-}, 
+},
+
+handleMouseMove(e) {
+const mapElement = document.getElementById('mapElement');
+const rect = mapElement.getBoundingClientRect();
+
+e.preventDefault();
+
+if (this.isDragging) {
+this.endX = e.clientX - rect.left;
+this.endY = e.clientY - rect.top;
+
+//console.log('start: ' + this.startX + ',' + this.startY)
+//console.log('end: ' + this.endX + ',' + this.endY)
+
+// Calculate position and size for the preview div
+const left = Math.min(this.startX, this.endX);
+const top = Math.min(this.startY, this.endY);
+const width = Math.abs(this.endX - this.startX);
+const height = Math.abs(this.endY - this.startY);
+
+// Update styles for the preview div
+this.previewDiv.style.left = left + 'px';
+this.previewDiv.style.top = top + 'px';
+this.previewDiv.style.width = width + 'px';
+this.previewDiv.style.height = height + 'px';
+
+}
+
+
+}
 
 };
 
