@@ -7,6 +7,20 @@ import ref from "./ref.js";
 
 const helper = {
 
+makeHitPointBoxes(obj){
+
+let numberBoxes = obj.hitPoints
+
+let checkboxesHTML = '';
+
+    for (let i = 0; i < numberBoxes; i++) {
+        checkboxesHTML += '<input type="checkbox" name="hitPoint" value="hitPoint' + (i + 1) + '">';
+    }
+
+    return checkboxesHTML;
+
+},
+
 makeIteminfo(item, tag){
 
 let itemQuant = tag.quantity && tag.quantity > 1? tag.quantity : '';

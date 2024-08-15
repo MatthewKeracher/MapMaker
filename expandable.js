@@ -77,21 +77,28 @@ if (showHide === 'hide') {
 console.log(obj)
 
 //Show compacted stats and information about NPC.
+
+const hitPointBoxes = helper.makeHitPointBoxes(obj);
+
 const statsHTML = `<span 
 class="expandable" 
 style="color:whitesmoke"
 id="${obj.id}"
-key="${obj.key}"> ${obj.name} is a level ${obj.level} ${obj.alignment} ${obj.species} ${obj.class}. </span><br>`
+key="${obj.key}">${hitPointBoxes} 
+Level ${obj.level} ${obj.class}. 
+Armour Class: ${obj.armourClass}. </span><br>`
 
 const hyperStats = expandable.findKeywords(statsHTML, keywords, "nested");
+
+//Add Tick Boxes for HP.
 
 
 // Show Inventory: full description and items.
 const itemsTags = obj.tags.filter(tag => tag.key === 'items');
 let itemsHTML = ''
-if(itemsTags.length > 0){itemsHTML = 
-`
-<h3 style="color:${obj.color}">${obj.name}'s Inventory.</h3><hr name="inventHR" style="background-color:${obj.color}">`
+if(itemsTags.length > 0){itemsHTML = ``;
+// `
+// <h3 style="color:${obj.color}">${obj.name}'s Inventory.</h3><hr name="inventHR" style="background-color:${obj.color}">`
 
 itemsTags.forEach(tag => {
 let item = helper.getObjfromTag(tag)
@@ -102,12 +109,10 @@ itemsHTML += `${itemInfo}`;
 })
 
 itemsHTML += `<br>`;
-
+//<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
 element.setAttribute('showHide', 'show')
 element.innerHTML = 
-`${hyperStats} ${itemsHTML}
-<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
-${hyperDesc}
+`${hyperStats}${itemsHTML}${hyperDesc}
 
 <hr name="blank" style="background-color:${obj.color}">`
 }else{
