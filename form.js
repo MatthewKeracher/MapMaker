@@ -838,11 +838,11 @@ tagsToAdd.forEach(tag => {
 const itemsRow = document.createElement('div');
 let tagObj = helper.getObjfromTag(tag);
 let tagName = tagObj.name
-console.log(tagObj)
+//console.log(tagObj)
 
 let rowHTML = `
 
-<div id="${tagObj.name}Row" 
+<div id="${tagObj.name}Container" 
 class = "tag item-row"
 tagid = ${tag.id} 
 tagkey = ${tag.key}
@@ -872,14 +872,15 @@ value="${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}">
 itemsRow.innerHTML = rowHTML;
 itemsTable.appendChild(itemsRow);
 
-//On Change of Quant or Bonus update attributes in Row for Save
-const itemRow = document.getElementById(tagObj.name + "Row")
+//Events for change of Quant or Bonus; update attributes in Row for Save
+//Duplicate itemRow names!
+const itemRow = document.getElementById(tagObj.name + "Container")
 const quantInput = document.getElementById(tagObj.name + "Quantity");
 const bonusInput = document.getElementById(tagObj.name + "Bonus");
 
-
 quantInput.addEventListener('input', function(){
 itemRow.setAttribute('tagquant', quantInput.value);
+console.log(itemRow);
 });
 
 bonusInput.addEventListener('input', function(){
@@ -929,7 +930,7 @@ form.createForm(tagObj);
 
 
 } else{
-
+//If tag is not an item.
 tagsToAdd.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
@@ -986,9 +987,6 @@ form.createForm(tagObj);
 });
 
 }
-
-
-
 
 }
 

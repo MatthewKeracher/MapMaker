@@ -91,16 +91,18 @@ saveEntry['id'] = parseInt(saveEntry['id']);
 const tagElements = document.querySelectorAll('.tag');
 const tags = [];
 
-tagElements.forEach(input => {
-    const tagId  = input.getAttribute('tagid');
-    const tagKey = input.getAttribute('tagkey');
+tagElements.forEach(row => {
+    console.log(row)
+    const tagId  = row.getAttribute('tagid');
+    const tagKey = row.getAttribute('tagkey');
     
     if(tagKey === 'items' || saveEntry['key'] === 'items'){
         //Include additional info if Item.
-        const tagBonus = input.getAttribute('tagbonus');
-        const tagQuant = input.getAttribute('tagquant');
+        const tagBonus = row.getAttribute('tagbonus');
+        const tagQuant = row.getAttribute('tagquant');
+        console.log('Quantity of Item Saved:',tagQuant)
         tags.push({key: tagKey, id: tagId, quantity: tagQuant, bonus: tagBonus});
-        console.log(tags)
+        console.log(row, tags)
 
         if(tagKey === 'items'){
     

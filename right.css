@@ -9,6 +9,7 @@ right: 0.2vw;
 width: 33vw;
 height: 96vh;
 z-index:3;
+resize: horizontal;
 
 /* Text */  
 font-family: monospace;
