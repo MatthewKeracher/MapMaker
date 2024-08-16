@@ -7,16 +7,20 @@ import ref from "./ref.js";
 
 const helper = {
 
-makeHitPointBoxes(obj){
+makeHitPointBoxes(npc){
 
-let numberBoxes = obj.hitPoints
+    let numberBoxes = npc.hitPoints;
+    let checkboxesHTML = '';
 
-let checkboxesHTML = '';
 
-    for (let i = 0; i < numberBoxes; i++) {
-        checkboxesHTML += '<input type="checkbox" name="hitPoint" value="hitPoint' + (i + 1) + '">';
-    }
+    checkboxesHTML += `<input 
+    id="${npc.id}CurrentHP" 
+    type="number" 
+    class="item-quant-cell item-quant-column"
+    value="${npc.hitPoints}">`
+        
 
+    // Return the generated HTML string
     return checkboxesHTML;
 
 },
@@ -26,7 +30,7 @@ makeIteminfo(item, tag){
 let itemQuant = tag.quantity && tag.quantity > 1? tag.quantity : '';
 let itemBonus = tag.bonus && tag.bonus !== '-'? ' (' + tag.bonus + ')' : '';
 let itemName = itemQuant + ' ' + item.name;
-let typeInfo = item.damage? 'Weapon' : item.armourClass? 'Armour' : 'misc';
+let typeInfo = item.damage? 'Weapon' : item.armourClass? 'Armour' : item.key === 'spells'? 'Spell' : 'misc';
 let itemInfo = '';
 
 if(typeInfo === 'Weapon'){
@@ -34,6 +38,9 @@ itemInfo += ' Damage: ' + item.damage + itemBonus}
 
 if(typeInfo === 'Armour'){
 itemInfo += ' Armour Class: ' + item.armourClass + itemBonus}
+
+if(typeInfo === 'Spell'){
+itemInfo += item.class + ' ' + item.level}
 
 if(typeInfo === 'misc'){
 itemInfo += tag.quantity > 1? 

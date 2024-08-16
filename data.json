@@ -6547,7 +6547,61 @@
 "armourClass": null,
 "description": "Swords cover a variety of hilt blade weapons, designed for cutting or thrusting strikes. The different types of swords are based on size, shape, and use. Note that at each size, there are two versions; one straight-bladed, one curved. The Two-Handed Sword is simply any sword requiring two hands to use – due to weight and balance.  These will typically have an elongated handle or hilt, and blades 3½’ feet or longer.  Most European-style fantasy two-handers tend to be large, straight double-edged blades, including claymores, zweihanders, flamberges, and other “\"greatswords.”\"  This also includes curve-bladed single-edged swords such as kriegsmessers, nodachis, great scimitars, and dadaos.",
 "tags": []
-}
+},
+{
+"key": "items",
+"color": "#e0d299",
+"id": 303,
+"type": "group",
+"subType": "subGroup",
+"group": "Treasure",
+"subGroup": "Coins",
+"name": "Gold Pieces",
+"weight": "0.02",
+"size": "S",
+"cost": "1 gp",
+"damage": "",
+"range": "",
+"armourClass": null,
+"description": "",
+"tags": []
+},
+{
+    "key": "items",
+    "color": "#e0d299",
+    "id": 303,
+    "type": "group",
+    "subType": "subGroup",
+    "group": "Treasure",
+    "subGroup": "Coins",
+    "name": "Silver Pieces",
+    "weight": "0.02",
+    "size": "S",
+    "cost": "0.1 gp",
+    "damage": "",
+    "range": "",
+    "armourClass": null,
+    "description": "",
+    "tags": []
+    },
+    {
+        "key": "items",
+        "color": "#e0d299",
+        "id": 303,
+        "type": "group",
+        "subType": "subGroup",
+        "group": "Treasure",
+        "subGroup": "Coins",
+        "name": "Copper Pieces",
+        "weight": "0.02",
+        "size": "S",
+        "cost": "0.01 gp",
+        "damage": "",
+        "range": "",
+        "armourClass": null,
+        "description": "",
+        "tags": []
+        }
 ],
 
 "spells": [

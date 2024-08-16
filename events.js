@@ -291,15 +291,27 @@ npcHR = npc.image;
 }else{
 npcHR = npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
 }
-   
-//Insert NPC
-this.eventDesc += `
+
+//Gather data on NPC.
+
+//Generate hitPointBoxes at HTML obj.
+const hitPointsBox = `<input 
+id="${npc.id}CurrentHP" 
+type="number" 
+class="hitPointBox"
+style="color: ${npc.color}"
+value="${npc.hitPoints}">`
+
+const npcHTML = `
 <h3><span 
 class="expandable" 
 style="font-family:'SoutaneBlack'; 
 color: ${npc.color}" key="${npc.key}" 
 id="${npc.id}"> 
-${npc.name} is here.</span></h3><hr name="${npcHR}" style="background-color:${npc.color}"> <br>`;
+${npc.name} is here.</span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npc.armourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
+   
+//Insert NPC
+this.eventDesc +=`${npcHTML}`;
 
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');

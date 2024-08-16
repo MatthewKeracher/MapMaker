@@ -46,6 +46,7 @@ form.createForm(obj);
 
 },
 
+//Logic for extending elements in the Storyteller to show more information.
 extend(source){
 
 const extendableElements = source.querySelectorAll('.extendable');
@@ -66,70 +67,69 @@ let firstSentence = hyperDesc.slice(0, firstPeriodIndex + 1);
 if (event.shiftKey) {
 form.createForm(obj);
 
+//EXPAND NPC ENTRY IN STORYTELLER
 } else if(key === 'npcs'){
-// Show/Hide NPC Description.
+
+// Define booleon.
 const showHide = element.getAttribute("showHide");
 // console.log(element.getAttribute("showHide"));
 
+//Show expanded NPC entry.
 if (showHide === 'hide') {
-//Show NPC Stats
 
+//obj == NPC
 console.log(obj)
 
-//Show compacted stats and information about NPC.
+//Blank Element
+element.setAttribute('showHide', 'show')
+//element.innerHTML = ``
 
-const hitPointBoxes = helper.makeHitPointBoxes(obj);
+//Add whole backstory.
+element.innerHTML = `${hyperDesc}`
 
-const statsHTML = `<span 
-class="expandable" 
-style="color:whitesmoke"
-id="${obj.id}"
-key="${obj.key}">${hitPointBoxes} 
-Level ${obj.level} ${obj.class}. 
-Armour Class: ${obj.armourClass}. </span><br>`
+// //Gather data on NPC's spells.
+// const spellsTags = obj.tags.filter(tag => tag.key === 'spells');
+// let spellsHTML = ''
 
-const hyperStats = expandable.findKeywords(statsHTML, keywords, "nested");
+// //If there is spells to show...
+// if(spellsTags.length > 0){spellsHTML = `<br><br><h3 style="color:${obj.color}">Spells:</h3><hr name="blank" style="background-color:${obj.color}">`;
 
-//Add Tick Boxes for HP.
+// //Loop for Inventory
+// spellsTags.forEach(tag => {
+//     let item = helper.getObjfromTag(tag)
+//     let itemInfo = helper.makeIteminfo(item, tag);
+//     spellsHTML += `${itemInfo}`;
+//     })
+    
+//     //Format inventory items.
+//     spellsHTML += `<br>`;
 
+//     element.innerHTML += `${spellsHTML} <hr name="blank" style="background-color:${obj.color}">` //Add breaker line.
+// }
 
-// Show Inventory: full description and items.
-const itemsTags = obj.tags.filter(tag => tag.key === 'items');
+// Gather data on NPC's Inventory
+const itemsTags = obj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
 let itemsHTML = ''
-if(itemsTags.length > 0){itemsHTML = ``;
-// `
-// <h3 style="color:${obj.color}">${obj.name}'s Inventory.</h3><hr name="inventHR" style="background-color:${obj.color}">`
 
+//If there is an Inventory to show...
+if(itemsTags.length > 0){itemsHTML = `<br><br><h3 style="color:${obj.color}">Inventory:</h3><hr name="inventHR" style="background-color:${obj.color}">`;
+
+//Loop for Inventory
 itemsTags.forEach(tag => {
 let item = helper.getObjfromTag(tag)
-
 let itemInfo = helper.makeIteminfo(item, tag);
-
 itemsHTML += `${itemInfo}`;
 })
 
+//Format inventory items.
 itemsHTML += `<br>`;
+
+//Title for Expanded Backstory Entry.
 //<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
-element.setAttribute('showHide', 'show')
-element.innerHTML = 
-`${hyperStats}${itemsHTML}${hyperDesc}
 
-<hr name="blank" style="background-color:${obj.color}">`
-}else{
+element.innerHTML += `${itemsHTML} <hr name="blank" style="background-color:${obj.color}">` //Add breaker line.
 
-//Expand NPC Description
-element.setAttribute('showHide', 'show')
-element.innerHTML = 
-`${hyperStats}
-<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
-${hyperDesc}
-
-<hr name="blank" style="background-color:${obj.color}">`;
-}
-//this.expand(element)
-
-
-} else {
+}} else {
 // Show only the first sentence.
 element.setAttribute('showHide', 'hide')
 element.innerHTML = `${firstSentence}`;

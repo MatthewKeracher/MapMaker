@@ -68,7 +68,7 @@ addImagestoStory() {
 
         const gifBox = [
             {name: "subLocHR", src: 'gifs/door.gif'},
-            {name: "inventHR", src: 'gifs/backpack.gif'},
+            {name: "inventHR", src: 'gifs/backpack.png'},
             {name: "npcHR", src:  'gifs/goblin.gif'},
             {name: "tagHR", src: 'gifs/scroll.png'},
             {name: "itemHR", src: 'gifs/chest.gif'},
