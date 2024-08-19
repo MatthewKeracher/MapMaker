@@ -769,6 +769,7 @@ let keys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', '
 let visibleKeys = [];
 let display = '';
 
+//For each kind of form, what kinds of tags are available?
 if(obj.key === 'tags'){visibleKeys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
 if(obj.key === 'npcs'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'ambience'){visibleKeys = ['tags']};
@@ -817,11 +818,100 @@ form.makeNewObj(obj, key);
 
 };
 
+//Delete All Entries.
+
+let tagNumber = obj.tags.filter(tag => tag.key === key).length;
+
+if(obj && tagNumber > 5){
+const delTagsArea = document.createElement('div');
+let deltagsContent = `<h3 style='display:${display}'><span class = 'leftText'>[Remove All ${singleKey}s]</span></h3>`;
+
+delTagsArea.innerHTML = deltagsContent;
+container.appendChild(delTagsArea);
+
+delTagsArea.style.color = 'lightgray'
+
+delTagsArea.addEventListener('mouseenter', function(){
+this.style.color = 'darkred';
+})
+
+delTagsArea.addEventListener('mouseleave', function(){
+this.style.color = 'lightgray';
+})
+
+delTagsArea.addEventListener('click', function() {
+    // Filter out the tags that match the given key
+    let tagsToDel = obj.tags.filter(tag => tag.key === key);
+
+    // Loop over each tag to delete
+    tagsToDel.forEach(tag => {
+        // Get the object associated with the tag
+        let taggedObj = helper.getObjfromTag(tag);
+
+        // Find the corresponding mirror tag on the tagged object
+        let mirrorTag = taggedObj.tags.filter(t => parseInt(t.id) === parseInt(obj.id) && t.key === obj.key);
+
+        // Find the corresponding home tag on the original object
+        let homeTag = obj.tags.filter(t => parseInt(t.id) === parseInt(taggedObj.id) && t.key === taggedObj.key);
+
+        // Log the mirror and home tags for debugging purposes
+        //console.log(mirrorTag, homeTag);
+
+        // Remove the mirror tag from the tagged object
+        mirrorTag.forEach(t => {
+            let index = taggedObj.tags.indexOf(t);
+            if (index > -1) {
+                taggedObj.tags.splice(index, 1);
+            }
+        });
+
+    });
+
+//Delete home objects.
+obj.tags = obj.tags.filter(tag => tag.key !== key);
+form.createForm(obj);
+
+});
+
+
+
+};
+
 //Add Entries.
 if(obj.tags){
 let tagsToAdd = obj.tags.filter(entry => entry.key === key);
 
-if(key === 'items'){
+tagsToAdd.forEach(tag => {
+
+    //Set indicator to save these items.
+    tag.save = "true"
+
+})
+
+
+if(key === 'items' && visibleKeys.includes('items')){
+
+//Add tags from Tags of same key, so an item or spell gained through a Tag.
+let keyTags = obj.tags.filter(entry => entry.key === "tags");
+
+if (keyTags.length > 0){
+
+keyTags.forEach(tag => {
+
+    const tagObj = helper.getObjfromTag(tag);
+    let associatedTags = tagObj.tags.filter(entry => entry.key === key);
+ 
+    
+    associatedTags.forEach(tag => {
+
+        //Add into NPC's tags
+        tag.save = "false"
+        tagsToAdd.push(tag);
+
+    })
+
+
+})}
 
 const itemsTable = document.createElement('div');
 
@@ -838,7 +928,6 @@ tagsToAdd.forEach(tag => {
 const itemsRow = document.createElement('div');
 let tagObj = helper.getObjfromTag(tag);
 let tagName = tagObj.name
-//console.log(tagObj)
 
 let rowHTML = `
 
@@ -846,6 +935,7 @@ let rowHTML = `
 class = "tag item-row"
 tagid = ${tag.id} 
 tagkey = ${tag.key}
+tagsave = ${tag.save}
 tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}
 tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? 1 : tag.quantity}
 >
@@ -872,6 +962,8 @@ value="${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}">
 itemsRow.innerHTML = rowHTML;
 itemsTable.appendChild(itemsRow);
 
+//console.log(itemsRow)
+
 //Events for change of Quant or Bonus; update attributes in Row for Save
 //Duplicate itemRow names!
 const itemRow = document.getElementById(tagObj.name + "Container")
@@ -880,7 +972,7 @@ const bonusInput = document.getElementById(tagObj.name + "Bonus");
 
 quantInput.addEventListener('input', function(){
 itemRow.setAttribute('tagquant', quantInput.value);
-console.log(itemRow);
+//console.log(itemRow);
 });
 
 bonusInput.addEventListener('input', function(){

@@ -22,12 +22,11 @@ makeHitPointBoxes(npc){
 
     // Return the generated HTML string
     return checkboxesHTML;
-
+s
 },
 
 makeIteminfo(item, tag){
-
-let itemQuant = tag.quantity && tag.quantity > 1? tag.quantity : '';
+let itemQuant = tag.quantity && tag.quantity > 1? tag.quantity : tag.quantity && tag.quantity.includes('d')? helper.rollMultipleDice(tag.quantity) : '';
 let itemBonus = tag.bonus && tag.bonus !== '-'? ' (' + tag.bonus + ')' : '';
 let itemName = itemQuant + ' ' + item.name;
 let typeInfo = item.damage? 'Weapon' : item.armourClass? 'Armour' : item.key === 'spells'? 'Spell' : 'misc';
@@ -43,9 +42,9 @@ if(typeInfo === 'Spell'){
 itemInfo += item.class + ' ' + item.level}
 
 if(typeInfo === 'misc'){
-itemInfo += tag.quantity > 1? 
-(parseFloat(item.cost) * parseFloat(tag.quantity)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' each)': 
-' ' + item.cost}
+itemInfo += itemQuant > 1? 
+(parseFloat(item.cost) * parseFloat(itemQuant)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' gp each)': 
+item.cost + ' gp'}
 
 let itemHTML = `
 <div id="${item.name}Row" 
@@ -112,12 +111,12 @@ return hexValue.length === 1 ? "0" + hexValue : hexValue;
 return `#${hex.join("")}`;
 },
 
-showPrompt(prompt, type) {
-const promptBox = this.createPromptBox(prompt, type); // Assuming you're using "this" to refer to the object containing these functions
+showPrompt(prompt, type, option1, option2) {
+const promptBox = this.createPromptBox(prompt, type, option1, option2); // Assuming you're using "this" to refer to the object containing these functions
 document.body.appendChild(promptBox);
 },
 
-createPromptBox(prompt, type) {
+createPromptBox(prompt, type, option1, option2) {
 const promptBox = document.getElementById('promptBox');
 promptBox.classList.add('prompt');
 promptBox.innerHTML = '';
@@ -128,6 +127,33 @@ promptContent.classList.add('prompt-content');
 const promptText = document.createElement('p');
 promptText.textContent = prompt;
 promptContent.appendChild(promptText);
+
+if(type === 'custom'){
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('prompt-button-container');
+    
+    const option1Button = document.createElement('button');
+    option1Button.textContent = option1;
+    option1Button.classList.add('prompt-button');
+    option1Button.onclick = () => { 
+    this.handleConfirm(true, promptBox); 
+    };
+    
+    const option2Button = document.createElement('button');
+    option2Button.textContent = option2;
+    option2Button.classList.add('prompt-button');
+    option2Button.onclick = () => { 
+    this.handleConfirm(false, promptBox); 
+    };
+    
+    buttonContainer.appendChild(option1Button);
+    buttonContainer.appendChild(option2Button);
+    
+    
+    promptContent.appendChild(buttonContainer);
+    }
+    
 
 if(type === 'yesNo'){
 
@@ -318,12 +344,33 @@ clickObjTags.push(currentObjAddress);
 load.Data[currentArray.key][currentArray.index].tags = currentObjTags;
 load.Data[clickArray.key][clickArray.index].tags = clickObjTags;
 
+console.log(clickObj.name + ' added to ' + currentObj.name)
+
+},
+
+shiftClickItem(item){
+
+//Choice whether to bulk add or random add!
+helper.showPrompt('Add all items, or add random item?', 'custom', 'All', 'Random');
+ref.promptBox.focus();
+helper.handleConfirm = function(confirmation) {
+const promptBox = document.querySelector('.prompt');
+if (confirmation) { //'Add All Items'
+
+helper.bulkAdd(item);   
+promptBox.style.display = 'none';
+} else{ //'Add Random Item'
+
+}}
+
+
+
 },
 
 bulkAdd(item){
 
 //Bulk-Add    
-console.log(item)
+//console.log(item)
 //Key-ID pairs and Indexes for both Objs -- clicked and current.
 const clickId = item.getAttribute('id')
 const clickKey = item.getAttribute('key')
@@ -421,12 +468,30 @@ return uniqueTags;
 
 },
 
-rollDice(sides){
+rollMultipleDice(input) {
+    // Split the input string into the number of dice and the number of sides
+    let [number, sides] = input.split('d').map(Number);
 
-return Math.floor(Math.random() * sides) + 1;
+    // If the input is invalid (like "d8" or "1d"), return an error message or handle accordingly
+    if (isNaN(number) || isNaN(sides)) {
+        return 'Invalid input format';
+    }
 
+    let results = 0;
+
+    // Roll the dice the specified number of times
+    for (let i = 0; i < number; i++) {
+        results = results + this.rollDice(sides);
+    }
+
+    return results;
+},
+
+rollDice(sides) {
+    
+    return Math.floor(Math.random() * sides) + 1;
 }
 
-};
+}
 
 export default helper;

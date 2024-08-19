@@ -355,20 +355,56 @@ else if (scope === 'section'){ //has clicked on a section heading
 
 let key = div.getAttribute("key")
 let section = div.getAttribute("id")
-
 items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
 
-items.forEach((item,index) => {
-let noScope = item.getAttribute("scope");
-//console.log(noScope)
-//Shift-Click
-if(event.shiftKey && ref.Left.style.display === 'block' && !noScope){   
-event.preventDefault();
-helper.bulkAdd(item);   
+if(event.shiftKey && ref.Left.style.display === 'block') {
 
+event.preventDefault();
+
+helper.showPrompt('Add all items, or add random item?', 'custom', 'All', 'Random');
+ref.promptBox.focus();
+
+helper.handleConfirm = function(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+    if (confirmation) { //'Add All Items'
+    
+        items.forEach(item => {
+            let noScope = item.getAttribute("scope");
+
+            if(!noScope){   
+                event.preventDefault();
+
+                helper.bulkAdd(item);  
+            }});
+        
+      
+    promptBox.style.display = 'none';
+
+    } else{ //'Add Random Item from each subSection'
+
+    const subSections = document.querySelectorAll(`[key="${key}"][section="${section}"][scope="subSection"]`);
+   
+    subSections.forEach(selection => {
+
+        let key = selection.getAttribute("key")
+        let section = selection.getAttribute("section")
+        let subSection = selection.getAttribute("id")
+        items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
+
+        const randomIndex = Math.floor(Math.random() * items.length);
+        helper.bulkAdd(items[randomIndex]);
+
+
+    })
+    
+
+    promptBox.style.display = 'none';
+
+    }}
 
 }else{
 //Show-Hide
+items.forEach((item,index) => {
 
 if(index > 0){
 
@@ -382,26 +418,52 @@ item.style.display = sectionDisplay;
 
 item.setAttribute('subSectionShow', "true")
 }
-}}) 
-}
+}) 
+}}
 
 else if (scope === 'subsection'){ //has clicked on a subSection Heading
 
 let key = div.getAttribute("key")
 let section = div.getAttribute("section")
 let subSection = div.getAttribute("id")
-
 items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
 
-items.forEach((item,index) => {
-let noScope = item.getAttribute("scope");
-//Shift-Click
-if(event.shiftKey && ref.Left.style.display === 'block' && !noScope){     
+if(event.shiftKey && ref.Left.style.display === 'block') {
 event.preventDefault();
-helper.bulkAdd(item);
+
+helper.showPrompt('Add all items, or add random item?', 'custom', 'All', 'Random');
+ref.promptBox.focus();
+
+helper.handleConfirm = function(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+    if (confirmation) { //'Add All Items'
+
+        items.forEach(item => {
+            let noScope = item.getAttribute("scope");
+
+            if(!noScope){   
+                event.preventDefault();
+
+                helper.bulkAdd(item);  
+            }});
+        
+      
+    promptBox.style.display = 'none';
+
+    } else{ //'Add Random Item'
+
+    const randomIndex = Math.floor(Math.random() * items.length);
+
+    helper.bulkAdd(items[randomIndex]);
+
+    promptBox.style.display = 'none';
+
+    }}
 
 }else{
 //Show-Hide
+items.forEach((item,index) => {
+
 if(index > 0){
 
 const subSectionShow = item.getAttribute('subsectionshow');
@@ -415,8 +477,8 @@ item.style.display = subSectionDisplay;
 item.setAttribute('sectionShow', "true")
 
 }
-}
-})  }
+})
+}}
 
 },
 

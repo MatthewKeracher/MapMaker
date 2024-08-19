@@ -124,10 +124,20 @@ locNPCs.forEach(locNPC => {
 //     }catch{console.error('No Active subLocations here.')}
 const locTagObj = helper.getObjfromTag(locNPC);
 let npcFilter = locTagObj.tags.filter(obj => obj.key === 'npcs');
+let tagChance = locTagObj.chance
 
 npcFilter.forEach(tag => {
 
     const npc = helper.getObjfromTag(tag);
+        
+    //Roll for chance.
+    let chanceRoll = helper.rollDice(100);
+    let toBeat = parseInt(tagChance)
+    if(chanceRoll > toBeat){
+    console.log(npc.name + ' failed roll', toBeat, chanceRoll)
+    return  
+    }
+
     floatNPCs.push(JSON.parse(JSON.stringify(npc)))
     
 })
@@ -218,7 +228,7 @@ if(tagObj.key === 'tags'){
 let chanceRoll = helper.rollDice(100);
 let toBeat = parseInt(tagObj.chance)
 if(chanceRoll > toBeat){
-//console.log('failed roll', toBeat, chanceRoll)
+console.log('failed roll', toBeat, chanceRoll)
 return  
 }
 }

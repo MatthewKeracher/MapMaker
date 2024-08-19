@@ -109,6 +109,21 @@ element.innerHTML = `${hyperDesc}`
 
 // Gather data on NPC's Inventory
 const itemsTags = obj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
+
+    //Add tags from Tags of same key, so an item or spell gained through a Tag.
+    let keyTags = obj.tags.filter(entry => entry.key === "tags");
+    keyTags.forEach(tag => {
+    
+        const tagObj = helper.getObjfromTag(tag);
+        let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
+        
+        associatedTags.forEach(tag => {
+    
+            //Add into NPC's tags
+            itemsTags.push(tag);
+    
+        }) })
+
 let itemsHTML = ''
 
 //If there is an Inventory to show...

@@ -92,31 +92,32 @@ const tagElements = document.querySelectorAll('.tag');
 const tags = [];
 
 tagElements.forEach(row => {
-    console.log(row)
+    //console.log(row)
     const tagId  = row.getAttribute('tagid');
     const tagKey = row.getAttribute('tagkey');
+    const tagSave =  row.getAttribute('tagsave');
     
-    if(tagKey === 'items' || saveEntry['key'] === 'items'){
+    if(tagKey === 'items' && tagSave === "true"|| saveEntry['key'] === 'items' && tagSave === "true"){
         //Include additional info if Item.
         const tagBonus = row.getAttribute('tagbonus');
         const tagQuant = row.getAttribute('tagquant');
-        console.log('Quantity of Item Saved:',tagQuant)
+        //console.log('Quantity of Item Saved:',tagQuant)
         tags.push({key: tagKey, id: tagId, quantity: tagQuant, bonus: tagBonus});
-        console.log(row, tags)
+        //console.log(row, tags)
 
-        if(tagKey === 'items'){
+        if(tagKey === 'items'  && tagSave === "true"){
     
         //Reflect changes on mirrorTag.
         const taggedObj = helper.getObjfromTag({key: tagKey, id: tagId});
         let mirrorIndex = taggedObj.tags.findIndex(tag => parseInt(tag.id) === saveEntry['id'] && tag.key === saveEntry['key'])
-        console.log(mirrorIndex)
+        //console.log(mirrorIndex)
         const newTag = {key: saveEntry['key'], id: saveEntry['id'], quantity: tagQuant, bonus: tagBonus}
         taggedObj.tags[mirrorIndex] = newTag;
-        console.log(taggedObj.tags)
+        //console.log(taggedObj.tags)
         }
 
-    }else{
-    
+    }else if(tagKey !== 'items'){
+        //console.log(row)
         tags.push({key: tagKey, id: tagId});
     
     }

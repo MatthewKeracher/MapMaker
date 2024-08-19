@@ -59,6 +59,7 @@ Storyteller.refreshLocation();
 }
 
 else if(event.button === 0){ //left-click
+console.log('load NPC form.')
 ref.leftParty.style.display = "none";
 partyButton.classList.remove('click-button')
 let memberObj = load.Data.npcs.find(npc => npc.name === member.name);
