@@ -191,13 +191,24 @@ selection.style.pointerEvents = 'auto';
 
 editButton() {
 
-if (!editor.editMode) {
+//Change editMode Booleon
+if(!editor.editMode){
+editor.editMode = true
+}else{
+editor.editMode = false};
 
-editor.editMode = true; // Now editing.
+//Visualise Edit Button Click Effect
+if(editor.editMode){
+    editButton.classList.add('click-button')
+}else{
+    editButton.classList.remove('click-button')
+};
 
-editButton.classList.add('click-button');
+//Changes to Form (Left Panels)
+const editVisibleDivs = document.querySelectorAll('.editVisible');
 
-//By default, load Location in Form
+if(editor.editMode){
+
 
 const obj = load.Data.locations.find(obj => obj.name === ref.locationLabel.value);
 
@@ -205,60 +216,64 @@ if(obj && ref.Left.style.display === 'none'){
 form.createForm(obj);
 }
 
-//Show Editor loadLists()
+//Show Extra Controls
+editVisibleDivs.forEach(div => {   
+div.style.display = 'block';
+})
+
 ref.Editor.style.display = 'block';
-//Ref.Centre.style.display = 'block';
-//Ref.Left.style.display = 'block';
+
+}else{
+
+//Hide Extra Controls
+editVisibleDivs.forEach(div => {   
+div.style.display = 'none'; 
+})
+    
+};
+
+//Changes to Right Panel 
+    
+if(editor.editMode){
+
+        //List Display Variables
+        editor.sectionHeadDisplay = 'none',
+        editor.subSectionHeadDisplay = 'none',
+        editor.subSectionEntryDisplay =  'none',
+        editor.EntryDisplay = 'none',
+        editor.loadList(load.Data);
 
 
-//List Display Variables
-editor.sectionHeadDisplay = 'none',
-editor.subSectionHeadDisplay = 'none',
-editor.subSectionEntryDisplay =  'none',
-editor.EntryDisplay = 'none',
-editor.loadList(load.Data);
+        // Add the event listeners to each .selection element
+        ref.locationDivs.forEach((div) => {
+        div.addEventListener('mouseenter', editor.handleMouseHover);
+        div.addEventListener('mouseleave', editor.handleMouseHover);
+        });
+        
+}else{
+        
+        //Show Storyteller
+        ref.eventManager.style.display = 'block';
+        ref.Storyteller.style.display = 'block';
+        ref.Storyteller.innerHTML = '';
 
+        Storyteller.refreshLocation();
 
-// Add the event listeners to each .selection element
-ref.locationDivs.forEach((div) => {
-div.addEventListener('mouseenter', editor.handleMouseHover);
-div.addEventListener('mouseleave', editor.handleMouseHover);
-});
+        if(ref.Storyteller.innerHTML === ''){
+        Storyteller.showmiscInfo();
+        }
 
-} else { if (editor.editMode) {
+        //Hide Editor
+        ref.Editor.style.display = 'none';
 
-editor.editMode = false; // Now Storytelling.
-
-editButton.classList.remove('click-button');
-// Ref.centreToolbar.style.display = "none";
-
-//document.getElementById('miniBanner').style.display = "none";
-//Ref.locationLabel.style.color = Storyteller.returnLocation.color;
-//console.log(Ref.locationLabel.style.color )
-
-//Show Storyteller
-ref.eventManager.style.display = 'block';
-ref.Storyteller.style.display = 'block';
-ref.Storyteller.innerHTML = '';
-
-Storyteller.refreshLocation();
-
-if(ref.Storyteller.innerHTML === ''){
-Storyteller.showmiscInfo();
+        // Remove the event listeners from each .selection element
+        ref.locationDivs.forEach((div) => {
+        div.removeEventListener('mouseenter', editor.handleMouseHover);
+        div.removeEventListener('mouseleave', editor.handleMouseHover);
+        });
 }
-
-//Hide Editor, Centre, Left
-ref.Editor.style.display = 'none';
-ref.Centre.style.display = 'none';
-ref.Left.style.display = 'none';
-
-
-// Remove the event listeners from each .selection element
-ref.locationDivs.forEach((div) => {
-div.removeEventListener('mouseenter', editor.handleMouseHover);
-div.removeEventListener('mouseleave', editor.handleMouseHover);
-});
-}}};
+}
+        
 
 saveButton(){
 

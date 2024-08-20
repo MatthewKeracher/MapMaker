@@ -171,11 +171,12 @@ if(entry.sectionHead){
 currentSection++
 currentSubSection = 0;
 
+let entryName = entry[type] === ''? 'Misc' : entry[type];
+
 nameDiv.setAttribute("scope", 'section');
 nameDiv.setAttribute("id", currentSection);
+nameDiv.setAttribute("name", entryName);
 nameDiv.setAttribute('style', "display:" + sectionHeadDisplay);
-
-let entryName = entry[type] === ''? 'Misc' : entry[type];
 
 nameDiv.innerHTML = 
 `<span
@@ -190,11 +191,13 @@ style="font-family:'SoutaneBlack'">
 } else if (entry.subSectionHead){
 currentSubSection++
 
-nameDiv.setAttribute("scope", 'subsection');
-nameDiv.setAttribute("id", currentSubSection);
-nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
 
 let entryName = entry[subType] === ''? 'Misc' : entry[subType];
+
+nameDiv.setAttribute("scope", 'subsection');
+nameDiv.setAttribute("id", currentSubSection);
+nameDiv.setAttribute("name", entryName);
+nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
 
 let displayName;
 if (!isNaN(entryName) && !isNaN(parseFloat(entryName))) {
@@ -355,6 +358,7 @@ else if (scope === 'section'){ //has clicked on a section heading
 
 let key = div.getAttribute("key")
 let section = div.getAttribute("id")
+let entryName = div.getAttribute("name")
 items = document.querySelectorAll(`[key="${key}"][section="${section}"]`);
 
 if(event.shiftKey && ref.Left.style.display === 'block') {
@@ -381,7 +385,18 @@ helper.handleConfirm = function(confirmation) {
     promptBox.style.display = 'none';
 
     } else{ //'Add Random Item from each subSection'
+    
+    let leftKey = document.getElementById("key"); //Find out if a Tag is open in Form
 
+    //If onto a tag, store the instruction to apply random item to inheritors of that tag.
+    if(leftKey.value.trim() === 'Tags'){
+    
+    helper.addInstruction(entryName, key, 'group')
+
+    
+
+    //Else, deal out a random item.
+    }else{
     const subSections = document.querySelectorAll(`[key="${key}"][section="${section}"][scope="subSection"]`);
    
     subSections.forEach(selection => {
@@ -395,7 +410,7 @@ helper.handleConfirm = function(confirmation) {
         helper.bulkAdd(items[randomIndex]);
 
 
-    })
+    })}
     
 
     promptBox.style.display = 'none';
@@ -425,6 +440,7 @@ else if (scope === 'subsection'){ //has clicked on a subSection Heading
 
 let key = div.getAttribute("key")
 let section = div.getAttribute("section")
+let entryName = div.getAttribute("name")
 let subSection = div.getAttribute("id")
 items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
 
@@ -452,9 +468,22 @@ helper.handleConfirm = function(confirmation) {
 
     } else{ //'Add Random Item'
 
+    let leftKey = document.getElementById("key"); //Find out if a Tag is open in Form
+    let leftID = document.getElementById("currentId");
+
+    //If onto a tag, apply random item to inheritors of that tag.
+    if(leftKey.value.trim() === 'Tags'){
+
+    helper.addInstruction(entryName, key, 'subGroup')
+    
+    //Else, deal out a random item.
+    }else{
+
     const randomIndex = Math.floor(Math.random() * items.length);
 
     helper.bulkAdd(items[randomIndex]);
+
+    }
 
     promptBox.style.display = 'none';
 

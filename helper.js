@@ -367,6 +367,25 @@ promptBox.style.display = 'none';
 
 },
 
+//Instead of linking to an Obj, link to an instruction to link to an Obj.
+addInstruction(entryName, key, type){
+
+const currentId = document.getElementById('currentId').value;
+const currentKey = document.getElementById('key').getAttribute('pair');
+const currentIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
+
+//Make a special 'instruction' tag.
+let tag = {special: "instruction", id: "i" + Math.floor(Math.random() * 1000), key: key, type: type, name: entryName}
+
+load.Data[currentKey][currentIndex].tags.push(tag)
+
+//Finally, Repackage to reflect change.
+NPCs.buildNPC();
+form.createForm(load.Data[currentKey][currentIndex]);
+
+
+},
+
 bulkAdd(item){
 
 //Bulk-Add    
@@ -397,12 +416,31 @@ form.createForm(load.Data[currentKey][currentIndex]);
 
 getObjfromTag(tag){
 
+//Instruction Tags
+if(tag.special === 'instruction'){
+
+//console.log('Recieved Instructions', tag)
+
+const obj = {
+id:tag.id,
+special: "instruction",
+//color:
+key: tag.key,
+type: tag.type,
+name: tag.name
+}
+
+return obj
+
+//Normal Tags
+}else{
 let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
 let obj = load.Data[tag.key][index];
 
 if(obj === undefined){console.error("Object does not exist at " + tag.key + ':' + tag.id)}
 
 return obj
+}
 
 },
 

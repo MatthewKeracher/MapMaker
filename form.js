@@ -792,10 +792,10 @@ const properKey = helper.proper(key)
 const singleKey = properKey.endsWith('s')? properKey.slice(0, -1): properKey;
 const container = document.getElementById(this.buildSection(properKey, obj, null, display));
 
-//Make New Entry.
+//Make New Entry. 
 if(obj && key !=='locations'){
 const newTagArea = document.createElement('div');
-let newTagContent = `<h3 style='display:${display}'><span class = 'leftText'>[Create New ${singleKey}]</span></h3>`;
+let newTagContent = `<h3 style='display:${display}'><span class = 'editVisible leftText'>[Create New ${singleKey}]</span></h3>`;
 
 newTagArea.innerHTML = newTagContent;
 container.appendChild(newTagArea);
@@ -824,7 +824,7 @@ let tagNumber = obj.tags.filter(tag => tag.key === key).length;
 
 if(obj && tagNumber > 5){
 const delTagsArea = document.createElement('div');
-let deltagsContent = `<h3 style='display:${display}'><span class = 'leftText'>[Remove All ${singleKey}s]</span></h3>`;
+let deltagsContent = `<h3 style='display:${display}'><span class = 'editVisible leftText'>[Remove All ${singleKey}s]</span></h3>`;
 
 delTagsArea.innerHTML = deltagsContent;
 container.appendChild(delTagsArea);
@@ -849,10 +849,7 @@ delTagsArea.addEventListener('click', function() {
         let taggedObj = helper.getObjfromTag(tag);
 
         // Find the corresponding mirror tag on the tagged object
-        let mirrorTag = taggedObj.tags.filter(t => parseInt(t.id) === parseInt(obj.id) && t.key === obj.key);
-
-        // Find the corresponding home tag on the original object
-        let homeTag = obj.tags.filter(t => parseInt(t.id) === parseInt(taggedObj.id) && t.key === taggedObj.key);
+        let mirrorTag = taggedObj.tags.filter(t => parseInt(t.id) === parseInt(obj.id) && t.key === obj.key);;
 
         // Log the mirror and home tags for debugging purposes
         //console.log(mirrorTag, homeTag);
@@ -873,8 +870,6 @@ form.createForm(obj);
 
 });
 
-
-
 };
 
 //Add Entries.
@@ -888,9 +883,6 @@ tagsToAdd.forEach(tag => {
 
 })
 
-
-if(key === 'items' && visibleKeys.includes('items')){
-
 //Add tags from Tags of same key, so an item or spell gained through a Tag.
 let keyTags = obj.tags.filter(entry => entry.key === "tags");
 
@@ -899,6 +891,7 @@ if (keyTags.length > 0){
 keyTags.forEach(tag => {
 
     const tagObj = helper.getObjfromTag(tag);
+    //console.log(tag)
     let associatedTags = tagObj.tags.filter(entry => entry.key === key);
  
     
@@ -906,12 +899,55 @@ keyTags.forEach(tag => {
 
         //Add into NPC's tags
         tag.save = "false"
+
+        const allowedKeys = ['items', 'spells']
+
+        if(allowedKeys.includes(tag.key)){
         tagsToAdd.push(tag);
+        }
 
     })
 
 
 })}
+
+// //Follow Instructions
+// if(obj.key !== 'tags'){
+// const instructions = tagsToAdd.filter(tag => tag.special === 'instruction')
+
+// instructions.forEach(instruction => {
+
+//         let iKey = instruction.key
+//         let iName = instruction.name
+//         let iType = instruction.type
+//         console.log(iKey, iName, iType)
+//         let items = load.Data[iKey].filter(item => item[iType] === iName)
+
+//         if(iType === 'subGroup'){
+
+//         const randomIndex = Math.floor(Math.random() * items.length);
+//         const randomObj = items[randomIndex];
+
+//         const newTag = {key: randomObj.key, id: randomObj.id}
+//         tagsToAdd.push(newTag)
+
+//         }else if(iType === 'group'){
+
+//         const randomIndex = Math.floor(Math.random() * items.length);
+//         const randomObj = items[randomIndex];
+
+//         const newTag = {key: randomObj.key, id: randomObj.id, tagSave: "true"}
+//         tagsToAdd.push(newTag)
+
+
+//         }
+        
+// })
+// };
+
+//console.log(tagsToAdd)
+//Add ITEMS
+if(key === 'items' && visibleKeys.includes('items')){
 
 const itemsTable = document.createElement('div');
 
@@ -925,14 +961,20 @@ container.appendChild(itemsTable);
 
 tagsToAdd.forEach(tag => {
 
+if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+
 const itemsRow = document.createElement('div');
+
 let tagObj = helper.getObjfromTag(tag);
+
 let tagName = tagObj.name
 
 let rowHTML = `
 
 <div id="${tagObj.name}Container" 
 class = "tag item-row"
+instName = "${tagObj.special? tagObj.name: ''}" 
+instType = "${tagObj.special? tagObj.type: ''}" 
 tagid = ${tag.id} 
 tagkey = ${tag.key}
 tagsave = ${tag.save}
@@ -997,15 +1039,18 @@ tagEventDiv.addEventListener('click', function(event){
 if(event.shiftKey){ //shift-click
 //Remove tag from item.
 event.preventDefault();
+console.log(tag, tagObj)
 obj.tags = obj.tags.filter(item => item.id !== tag.id);
 
 //Remove item from other item's tags.
+if(!tagObj.special){
 
 let delTags = tagObj.tags
 //console.log(delTags, obj.id)
 delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
 //console.log(delTags)
 tagObj.tags = delTags;
+}
 
 //Repackage.
 NPCs.buildNPC();
@@ -1013,7 +1058,7 @@ form.createForm(obj);
 //Storyteller.refreshLocation();  
 }
 
-else if(event.button === 0){ //left-click
+else if(event.button === 0 && !tagObj.special){ //left-click
 //find tagObj based on Name!
 form.createForm(tagObj);   
 }
@@ -1026,6 +1071,9 @@ form.createForm(tagObj);
 tagsToAdd.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
+
+if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+
 let tagName = tagObj.name
 
 const taggedArea = document.createElement('div');
@@ -1036,6 +1084,8 @@ let tagHTML =
 class = "tag"
 tagid = ${tag.id} 
 tagkey = ${tag.key}
+instName = "${tagObj.special? tagObj.name: ''}" 
+instType = "${tagObj.special? tagObj.type: ''}" 
 tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? null : tag.bonus}
 tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? null : tag.quantity}
 >
@@ -1056,6 +1106,7 @@ event.preventDefault();
 obj.tags = obj.tags.filter(item => item.id !== tag.id);
 
 //Remove item from other item's tags.
+if(!tagObj.special){
 
 let delTags = tagObj.tags
 //console.log(delTags, obj.id)
@@ -1063,13 +1114,15 @@ delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
 //console.log(delTags)
 tagObj.tags = delTags;
 
+}
+
 //Repackage.
 NPCs.buildNPC();
 form.createForm(obj);
 //Storyteller.refreshLocation();  
 }
 
-else if(event.button === 0){ //left-click
+else if(event.button === 0 && !tagObj.special){ //left-click
 //find tagObj based on Name!
 form.createForm(tagObj);   
 }
