@@ -72,7 +72,7 @@ addImagestoStory() {
             {name: "npcHR", src:  'gifs/goblin.gif'},
             {name: "tagHR", src: 'gifs/scroll.png'},
             {name: "itemHR", src: 'gifs/chest.gif'},
-            {name: "fighterHR", src: 'gifs/fighter.gif'},
+            {name: "fighterHR", src: 'gifs/blankHead.png'},
             {name: "clericHR", src: 'gifs/cleric.gif'},
             {name: "thiefHR", src: 'gifs/thief.gif'},
             {name: "magicuserHR", src: 'gifs/magicuser.gif'},

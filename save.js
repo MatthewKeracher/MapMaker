@@ -97,18 +97,20 @@ tagElements.forEach(row => {
 
     
 let iCheck = tagId.charAt(0); 
+let keyChain = ["items", "spells"]
 
 //Save Logic for Instructions
 if(iCheck === 'i'){
 
     console.log('Saving Instruction')
 
-    if(tagKey === 'items' && tagSave === "true"|| saveEntry['key'] === 'items' && tagSave === "true"){
+    if(keyChain.includes(tagKey) && tagSave === "true"|| keyChain.includes(saveEntry['key']) && tagSave === "true"){
         const tagBonus = row.getAttribute('tagbonus');
         const tagQuant = row.getAttribute('tagquant');
         const tagChance = row.getAttribute('tagchance');
         const entryName = row.getAttribute('instName');
         const type = row.getAttribute('instType');
+        const group = row.getAttribute('instGroup');
        
 
         tags.push({
@@ -116,6 +118,7 @@ if(iCheck === 'i'){
             key: tagKey,
             id: tagId, 
             type: type,
+            group: group,
             name: entryName, 
             chance: tagChance,
             quantity: tagQuant, 
@@ -123,7 +126,7 @@ if(iCheck === 'i'){
         });
         
 
-        }else if(tagKey !== 'items'){
+        }else if(!keyChain.includes(tagKey)){
             
             tags.push({key: tagKey, id: tagId});
         
@@ -132,7 +135,7 @@ if(iCheck === 'i'){
 //Save Logic for Objects
 }else{
     
-    if(tagKey === 'items' && tagSave === "true"|| saveEntry['key'] === 'items' && tagSave === "true"){
+    if(keyChain.includes(tagKey) && tagSave === "true"|| keyChain.includes(saveEntry['key']) && tagSave === "true"){
         const tagBonus = row.getAttribute('tagbonus');
         const tagQuant = row.getAttribute('tagquant');
         const tagChance = row.getAttribute('tagchance');
@@ -162,7 +165,7 @@ if(iCheck === 'i'){
 
         taggedObj.tags[mirrorIndex] = newTag;
 
-    }else if(tagKey !== 'items'){
+    }else if(!keyChain.includes(tagKey)){
         
         tags.push({key: tagKey, id: tagId});
     

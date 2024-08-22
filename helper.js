@@ -368,14 +368,14 @@ promptBox.style.display = 'none';
 },
 
 //Instead of linking to an Obj, link to an instruction to link to an Obj.
-addInstruction(entryName, key, type){
+addInstruction(entryName, key, type, sectionName){
 
 const currentId = document.getElementById('currentId').value;
 const currentKey = document.getElementById('key').getAttribute('pair');
 const currentIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
 
 //Make a special 'instruction' tag.
-let tag = {special: "instruction", id: "i" + Math.floor(Math.random() * 1000), key: key, type: type, name: entryName}
+let tag = {special: "instruction", id: "i" + Math.floor(Math.random() * 1000), key: key, type: type, name: entryName, group: sectionName}
 
 load.Data[currentKey][currentIndex].tags.push(tag)
 
@@ -427,7 +427,8 @@ special: "instruction",
 //color:
 key: tag.key,
 type: tag.type,
-name: tag.name
+name: tag.name,
+group: tag.group
 }
 
 return obj

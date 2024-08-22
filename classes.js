@@ -20,7 +20,7 @@ this.color = data.color,
 this.image = data.image,
 this.alignment = data.alignment,
 this.species = data.species,
-this.tags = NPCbuild.followInstructions(data.tags);
+this.tags = NPCbuild.followInstructions(data.tags, data.class, data.level);
 NPCbuild.getHitPoints(this);
 NPCbuild.getAttackBonus(this);
 try{NPCbuild.getSpeciesData(this)}catch{this.species = 'Human'}
@@ -48,7 +48,7 @@ for (const score of scores) {
 
 
 this.initiative = this.initiative === undefined? 0 : this.initiative;
-try{NPCbuild.getMagic(this)}catch{console.error('Cannot find spells for ' + data.name)};
+//try{NPCbuild.getMagic(this)}catch{console.error('Cannot find spells for ' + data.name)};
 NPCbuild.getCharacterSkills(this);
 NPCbuild.getSavingThrows(this);
 
@@ -555,47 +555,21 @@ let tableReturn = NPCbuild.mapSkills(Table, level, ['attackBonus']);
 npc.attackBonus = tableReturn.attackBonus;
 }
 
-static getMagic(npc) {
+static getSpellSlots(npcClass, npcLevel) {
 let classTable;
-let level = parseInt(npc.level, 10);
+let level = parseInt(npcLevel, 10);
 
-if (npc.class === 'Magic User') {
+if (npcClass === 'Magic User') {
 classTable = NPCbuild.magicUserTable;
-} else if (npc.class === 'Cleric') {
+} else if (npcClass === 'Cleric') {
 classTable = NPCbuild.clericTable;
 }
 
 if (classTable) {
 // Find spellSlots for NPC's Level
 const levelEntry = classTable.find(entry => entry.level === level);
-const spellBook = load.Data.spells.filter(spell => spell.class === npc.class);
-npc.magic =  [];
+return levelEntry.spells
 
-// Start at Level 1
-let levelCheck = 0;
-
-// Loop through spellSlots, assigning spells.
-for (let levelIndex = 0; levelIndex < level; levelIndex++) {
-const spellCount = levelEntry.spells[levelIndex];
-const levelSpells = spellBook.filter(spell => spell.level === (levelIndex + 1).toString());
-
-// Loop through spellCount, choose random spells.
-for (let spellSlot = 0; spellSlot < spellCount; spellSlot++) {
-const randomIndex = Math.floor(Math.random() * levelSpells.length);
-const chosenSpell = levelSpells[randomIndex];
-levelSpells.splice(randomIndex, 1);
-
-// Check for End of Loop
-if (levelCheck < chosenSpell.level) {
-//npc.magic += `LEVEL ${levelIndex + 1} SPELLS <br>`;
-//Bug here if Character is over level 15?
-levelCheck = chosenSpell.level;
-}
-
-npc.magic.push(chosenSpell.name);
-
-}
-}
 }
 }
 
@@ -630,7 +604,35 @@ npc.hitPoints = NPCbuild.rollHitDice(hitDice);
 
 }
 
-static followInstructions(tagsArray) {
+static getBundledItems(tag, tagsArray){
+
+  if(tag.key === 'items'){
+   
+    //Also grab associated items tags onto the item, so a Crossbow might be tagged with its Ammo
+
+    const itemObj = helper.getObjfromTag(tag);
+    console.log(itemObj)
+    const itemObjTags = itemObj.tags.filter(tag => tag.key === "items");
+
+    itemObjTags.forEach(itemTag => {
+
+    //Add into NPC's tags
+    itemTag.save = "false"
+    const newTag = {key: itemTag.key, id: itemTag.id, instruction: tag.id}
+
+    tagsArray.push(newTag)
+
+    })
+
+
+}
+
+
+
+}
+
+static followInstructions(tagsArray, npcClass, npcLevel) {
+
 
 if(tagsArray.length > 0){
 
@@ -643,23 +645,47 @@ if(tagsArray.length > 0){
 
     instructions.forEach(tag => {
 
+      let quantity = tag.quantity
+
+      if(npcClass === 'Magic User' || npcClass === 'Cleric'){
+      const spellSlots = this.getSpellSlots(npcClass, npcLevel)
+      //console.log(spellSlots)
+      const currentLevelSpell = tag.name
+      quantity = spellSlots[currentLevelSpell - 1]
+      }
+
       const alreadyMade = tagsArray.filter(entry => entry.instruction && entry.instruction === tag.id);
 
-      if(alreadyMade.length === tag.quantity){return};
+      if(alreadyMade.length === quantity){return};
 
-      const quantityRemaining = parseInt(tag.quantity) - parseInt(alreadyMade.length);
+      const quantityRemaining = parseInt(quantity) - parseInt(alreadyMade.length);
 
       if(tag.type === 'subGroup'){
 
       for (let i = quantityRemaining; i > 0; i--) {
 
-        let options = load.Data[tag.key].filter(item => item[tag.type] === tag.name)
+        let options
+
+        if(tag.group){
+        options = load.Data[tag.key].filter(item => item[tag.type] === tag.name && item.group === tag.group)
+        } else{ 
+        options = load.Data[tag.key].filter(item => item[tag.type] === tag.name)
+        }
+
+        //Filter out duplicates
+        options = options.filter(entry => {
+          return !tagsArray.some(tag => tag.id === entry.id && tag.key === entry.key);
+      });
+      
+        //console.log(options)
 
         const randomIndex = Math.floor(Math.random() * options.length);
         const randomObj = options[randomIndex];
 
         const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
+
         tagsArray.push(newTag)
+        this.getBundledItems(newTag, tagsArray)
 
       }
 
@@ -672,13 +698,14 @@ if(tagsArray.length > 0){
 
         let randSubGroup = Math.floor(Math.random() * subGroups.length);
         
-        let options = load.Data[tag.key].filter(item => item.subGroup === subGroups[randSubGroup])
+        let options = load.Data[tag.key].filter(item => item.subGroup === subGroups[randSubGroup] && item.group === tag.name)
 
         const randomIndex = Math.floor(Math.random() * options.length);
         const randomObj = options[randomIndex];
 
         const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
         tagsArray.push(newTag)
+        this.getBundledItems(newTag, tagsArray)
 
       }
       

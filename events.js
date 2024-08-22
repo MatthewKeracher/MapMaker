@@ -299,33 +299,12 @@ let npcHR
 if(npc.image !== ''){
 npcHR = npc.image;
 }else{
-npcHR = npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
+npcHR = 'fighterHR' //npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
 }
 
 //Gather data on NPC.
+const npcArmourClass = this.getCurrentAC(npc)
 
-//Check for Highest AC Value.
-const itemTags = npc.tags.filter(tag => tag.key === 'items')
-let npcArmourClass = npc.armourClass; //Default Value
-let npcArmourBonus = '';
-
-itemTags.forEach(option => {
-
-const optionObj = helper.getObjfromTag(option);
-const optionAC = optionObj.armourClass;
-const shieldCheck = optionAC? optionAC.toString().charAt(0) : '';
-const isShield = shieldCheck === '+'
-
-if(isShield){
-npcArmourBonus = +npcArmourBonus + +optionAC;
-return
-}
-if(npc.armourClass < optionObj.armourClass){
-npcArmourClass = optionObj.armourClass
-}
-})
-
-npcArmourClass = npcArmourClass + npcArmourBonus;
 
 //Generate hitPointBoxes at HTML obj.
 const hitPointsBox = `<input 
@@ -534,7 +513,7 @@ this.eventDesc += `<br>`;
 bundle.forEach(item => {
 
 //Resolve chance of appearing.
-console.log(item)
+
 
 
 //Get Quantity and Bonus from Tag
@@ -582,6 +561,31 @@ this.EntryDisplay = 'none'
 })
 
 },
+
+getCurrentAC(npc){
+//Check for Highest AC Value.
+const itemTags = npc.tags.filter(tag => tag.key === 'items')
+let npcArmourClass = npc.armourClass; //Default Value
+let npcArmourBonus = '';
+
+itemTags.forEach(option => {
+
+const optionObj = helper.getObjfromTag(option);
+const optionAC = optionObj.armourClass;
+const shieldCheck = optionAC? optionAC.toString().charAt(0) : '';
+const isShield = shieldCheck === '+'
+
+if(isShield){
+npcArmourBonus = +npcArmourBonus + +optionAC;
+return
+}
+if(npc.armourClass < optionObj.armourClass){
+npcArmourClass = optionObj.armourClass
+}
+})
+
+return npcArmourClass + npcArmourBonus;
+}
 
 }
 

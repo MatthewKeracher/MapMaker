@@ -195,6 +195,7 @@ currentSubSection++
 let entryName = entry[subType] === ''? 'Misc' : entry[subType];
 
 nameDiv.setAttribute("scope", 'subsection');
+//nameDiv.setAttribute("parent", currentSection);
 nameDiv.setAttribute("id", currentSubSection);
 nameDiv.setAttribute("name", entryName);
 nameDiv.setAttribute('style', "display:" + subSectionHeadDisplay);
@@ -388,10 +389,14 @@ helper.handleConfirm = function(confirmation) {
     
     let leftKey = document.getElementById("key"); //Find out if a Tag is open in Form
 
+    //get Section/Group Name
+    let sectionDiv = document.querySelectorAll(`[key="${key}"][section="${section}"][scope="section"]`);
+    let sectionName = sectionDiv[0].getAttribute("name")
+
     //If onto a tag, store the instruction to apply random item to inheritors of that tag.
     if(leftKey.value.trim() === 'Tags'){
     
-    helper.addInstruction(entryName, key, 'group')
+    helper.addInstruction(entryName, key, 'group', sectionName)
 
     
 
@@ -444,6 +449,10 @@ let entryName = div.getAttribute("name")
 let subSection = div.getAttribute("id")
 items = document.querySelectorAll(`[key="${key}"][section="${section}"][subsection="${subSection}"]`);
 
+//get Section/Group Name
+let sectionDiv = document.querySelectorAll(`[key="${key}"][section="${section}"][scope="section"]`);
+let sectionName = sectionDiv[0].getAttribute("name")
+
 if(event.shiftKey && ref.Left.style.display === 'block') {
 event.preventDefault();
 
@@ -474,7 +483,8 @@ helper.handleConfirm = function(confirmation) {
     //If onto a tag, apply random item to inheritors of that tag.
     if(leftKey.value.trim() === 'Tags'){
 
-    helper.addInstruction(entryName, key, 'subGroup')
+    //Need to send name of group for spells
+    helper.addInstruction(entryName, key, 'subGroup', sectionName)
     
     //Else, deal out a random item.
     }else{
@@ -573,12 +583,15 @@ else if(event.shiftKey && ref.Left.style.display === 'block'){
 event.preventDefault();
 
 //Key-ID pairs and Indexes for both Objs -- clicked and current.
+
 const clickId = div.getAttribute('id')
 const clickKey = div.getAttribute('key')
 const clickIndex = load.Data[clickKey].findIndex(item => parseInt(item.id) === parseInt(clickId));
 const clickArray = {id: clickId, key: clickKey, index: clickIndex}
 
-const currentId = document.getElementById('currentId').value;
+console.log(document.getElementById('currentId'))
+
+const currentId = document.getElementById('currentId').value; 
 const currentKey = document.getElementById('key').getAttribute('pair');
 const currentIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) === parseInt(currentId));
 const currentArray = {id: currentId, key: currentKey, index: currentIndex}

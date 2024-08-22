@@ -2,7 +2,7 @@ import ref from "./ref.js";
 import load from "./load.js";
 import form from "./form.js";
 import helper from "./helper.js";
-import NPCs from "./npcs.js";
+import events from "./events.js";
 import Storyteller from "./storyteller.js";
 
 const party = {
@@ -49,6 +49,7 @@ members.forEach(member => {
 
 // Inside the loop that creates memberDiv elements
 const memberDiv = document.createElement('div');
+const memberAC = events.getCurrentAC(member);
 
 let memberHTML = `
     <div class="member-table">
@@ -56,7 +57,7 @@ let memberHTML = `
             <div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
             <div class="member-cell class-column">${member.class}</div>
             <div class="member-cell init-column">${member.initiative}</div>
-            <div class="member-cell init-column">${member.armourClass}</div>
+            <div class="member-cell init-column">${memberAC}</div>
             <div class="member-cell init-column">
             <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" id="${member.name}-hitpoints">
             </div>

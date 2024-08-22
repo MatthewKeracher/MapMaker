@@ -3,7 +3,8 @@ import load from "./load.js";
 import NPCs from "./npcs.js";
 import helper from "./helper.js";
 import editor from "./editor.js"; 
-
+import Add from "./add.js";
+import toolbar from "./toolbar.js";
 
 const form = {
 
@@ -794,7 +795,7 @@ if(obj.key === 'npcs'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'ambience'){visibleKeys = ['tags']};
 if(obj.key === 'locations'){visibleKeys = ['npcs', 'tags', 'subLocations']};
 if(obj.key === 'subLocations'){visibleKeys = ['npcs', 'tags', 'locations']};
-if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'spells']};
+if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'spells'){visibleKeys = ['tags', 'npcs', 'items']};
 if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs']};
 if(obj.key === 'events'){visibleKeys = ['tags']};
@@ -867,6 +868,7 @@ delTagsArea.addEventListener('click', function() {
         // Get the object associated with the tag
         let taggedObj = helper.getObjfromTag(tag);
 
+        if(tag.special && tag.special === 'instruction'){ return }
         // Find the corresponding mirror tag on the tagged object
         let mirrorTag = taggedObj.tags.filter(t => parseInt(t.id) === parseInt(obj.id) && t.key === obj.key);;
 
@@ -926,6 +928,7 @@ keyTags.forEach(tag => {
 
         if(allowedKeys.includes(tag.key)){
         tagsToAdd.push(tag);
+
         }
 
     })
@@ -964,6 +967,7 @@ let rowHTML = `
 class = "tag item-row"
 instName = "${tagObj.special? tagObj.name: ''}" 
 instType = "${tagObj.special? tagObj.type: ''}" 
+instGroup = "${tagObj.special && tagObj.group? tagObj.group: ''}" 
 instid = "${tag.instruction? tag.instruction: ''}" 
 tagid = ${tag.id} 
 tagkey = ${tag.key}
@@ -1028,7 +1032,7 @@ itemRow.setAttribute('tagbonus', bonusInput.value);
 chanceInput.addEventListener('click', function(){
     chanceInput.focus();
     chanceInput.select();
-    });
+});
 
 quantInput.addEventListener('click', function(){
 quantInput.focus();
@@ -1039,7 +1043,6 @@ bonusInput.addEventListener('click', function(){
 bonusInput.focus();
 bonusInput.select();
 });
-
 
 let tagEventDiv = document.getElementById('Item' + tag.id);
 
@@ -1073,6 +1076,86 @@ form.createForm(tagObj);
 }
 });
 });
+
+} else if(key === 'spells' && visibleKeys.includes('spells')){
+
+const spellsTable = document.createElement('div');
+
+let spellsTableHTML =  `
+<div class="item-table">
+</div>`
+    
+spellsTable.innerHTML = spellsTableHTML;
+container.appendChild(spellsTable);
+    
+tagsToAdd.forEach(tag => {
+
+if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+
+const spellsRow = document.createElement('div');
+
+let tagObj = helper.getObjfromTag(tag);
+
+let tagName = tag.special === 'instruction' && tagObj.type === 'subGroup'? tagObj.group + ' Level ' + tagObj.name : tagObj.name;
+    
+let rowHTML = `
+    
+    <div id="${tagObj.name}Container" 
+    class = "tag item-row"
+    instName = "${tagObj.special? tagObj.name: ''}" 
+    instType = "${tagObj.special? tagObj.type: ''}" 
+    instGroup = "${tagObj.special && tagObj.group? tagObj.group: ''}" 
+    instid = "${tag.instruction? tag.instruction: ''}" 
+    tagid = ${tag.id} 
+    tagkey = ${tag.key}
+    tagsave = ${tag.save}
+    tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}
+    tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? 1 : tag.quantity}
+    tagchance = ${(tag.chance === "" || tag.chance === undefined) ? 100 : tag.chance}
+    >
+    
+    <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
+    ${tagName}
+    </label>
+    
+    </div>`
+    
+    spellsRow.innerHTML = rowHTML;
+    spellsTable.appendChild(spellsRow);
+    
+    
+    let tagEventDiv = document.getElementById('Item' + tag.id);
+    
+    tagEventDiv.addEventListener('click', function(event){
+    
+    if(event.shiftKey){ //shift-click
+    //Remove tag from item.
+    event.preventDefault();
+    console.log(tag, tagObj)
+    obj.tags = obj.tags.filter(item => item.id !== tag.id);
+    
+    //Remove item from other item's tags.
+    if(!tagObj.special){
+    
+    let delTags = tagObj.tags
+    //console.log(delTags, obj.id)
+    delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
+    //console.log(delTags)
+    tagObj.tags = delTags;
+    }
+    
+    //Repackage.
+    NPCs.buildNPC();
+    form.createForm(obj);
+    //Storyteller.refreshLocation();  
+    }
+    
+    else if(event.button === 0 && !tagObj.special){ //left-click
+    //find tagObj based on Name!
+    form.createForm(tagObj);   
+    }
+    });
+    });
 
 
 } else{
@@ -1244,7 +1327,7 @@ makeMultipleObjs(num, obj, key){
 
 },
 
-makeNewObj(obj, key, copy){
+makeNewObj(obj, key, copy, nestedID){
 
 //Dynamically create proper and single key names for obj and copy.
 const properKey = helper.proper(key)
@@ -1292,13 +1375,62 @@ if(copy === undefined){
     load.Data[obj.key][index].tags.push(objEntry);
 
 }else if (copy !== undefined){
+    
     //Making n exact copies.
     newEntry = JSON.parse(JSON.stringify(obj));
-
+    
     //Define what values for copies.
     newEntry.id = newId,
-    newEntry.name = obj.name + ' ' + (copy + 2)
+    newEntry.name = obj.name + ' (Copy)'
     newEntry.order = parseInt(copy) + parseInt(obj.order);
+
+    //Special rules from Locations and subLocations
+    if(newEntry.key === 'locations'){
+
+    console.log('Copy is a Location')
+    newEntry.left = newEntry.left + newEntry.width
+
+    const subLocations = newEntry.tags.filter(tag => tag.key === 'subLocations')
+         newEntry.tags = newEntry.tags.filter(tag => tag.key !== 'subLocations')
+
+    subLocations.forEach(subLocTag => {
+
+        const subLocObj = helper.getObjfromTag(subLocTag);
+        const subLocCopy = this.makeNewObj(subLocObj, subLocObj.key, 1, newEntry.id)
+
+        //Tag new subLocation
+        newEntry.tags.push(subLocCopy)
+        
+        //Mirror tag on new subLocation
+        const newSubLocObj = helper.getObjfromTag(subLocCopy);
+        newSubLocObj.tags.push({key: 'locations', id: newEntry.id})
+
+    })
+
+
+    }else if(newEntry.key === 'subLocations'){
+
+    if(nestedID){
+        //Recursive call from copying Location (Above)
+
+        newEntry.tags = newEntry.tags.filter(tag => tag.key !== 'locations')
+        newEntry.name = obj.name 
+
+        const subLocTag = {key: 'subLocations', id: newEntry.id}
+        load.Data[key].push(newEntry);
+        return subLocTag
+
+
+    }else{
+        //copying subLocation
+
+
+
+    }
+
+    }else{
+
+    console.log(newEntry)
 
     //Add new obj to all original tags.
     let tags = obj.tags
@@ -1306,12 +1438,14 @@ if(copy === undefined){
 
     let tagObj = helper.getObjfromTag(tag);
 
-    let iCheck = tag.id.charAt(0); 
+    console.log('iCheck', tag.id)
+
+    let iCheck = tag.id.toString().charAt(0); 
 
     if(iCheck === 'i'){return}
 
     let newTag = {
-        ...tagObj,    
+        ...tag,    
         key: obj.key, 
         id: newId     
     };
@@ -1319,6 +1453,7 @@ if(copy === undefined){
     tagObj.tags.push(newTag);
 
     })
+}
 
     //console.log(obj.tags, newEntry.tags)
 

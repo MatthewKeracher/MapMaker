@@ -32,7 +32,7 @@ Events.loadEventListeners();
 ref.partyButton.addEventListener('click', this.partyButton);
 ref.mapButton.addEventListener('click', this.mapButton);
 ref.dataButton.addEventListener('click', this.dataButton);
-ref.addButton.addEventListener('click', this.addButon); 
+ref.addButton.addEventListener('click', this.addButton); 
 ref.editButton.addEventListener('click', this.editButton);
 ref.saveButton.addEventListener('click', this.saveButton);  
 ref.copyButton.addEventListener('click', this.copyButton);  
@@ -153,7 +153,8 @@ deleteButton(){
 save.deleteDataEntry();
 };
 
-addButon() {
+addButton() {
+console.log('addButton Clicked')
 const mapElement = document.getElementById('mapElement');
 const ledgerCheck = document.querySelectorAll('.miscInfo').length === 0
 console.log(ledgerCheck)
@@ -291,7 +292,7 @@ copyButton(){
     const currentId = parseInt(document.getElementById('currentId').value);
     const currentKey = document.getElementById('key').getAttribute('pair');
     const address = {key: currentKey, id: currentId};
-    console.log(address);
+    //console.log(address);
     const obj = helper.getObjfromTag(address);
     
         helper.showPrompt('How many copies of ' +  obj.name + '?', 'input');
