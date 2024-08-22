@@ -11,20 +11,19 @@ const save = {
 
 
 saveDataEntry: function() {
-
-    if(ref.locationLabel.disabled === false){
-        load.fileName = ref.locationLabel.value
-        load.Data.miscInfo.fileName = load.fileName
-        helper.adjustFontSize();
-        }
-
-    if(ref.Centre.style.display !== 'block'){
-        //Save whole file.
-        save.exportArray();
-        
-    }else{
     
 
+if(ref.locationLabel.disabled === false){
+load.fileName = ref.locationLabel.value
+load.Data.miscInfo.fileName = load.fileName
+helper.adjustFontSize();
+}
+
+if(ref.Centre.style.display !== 'block'){
+//Save whole file.
+save.exportArray();
+}else{
+    
 const saveEntry = {};
 
 // get array of label divIds.
@@ -81,7 +80,6 @@ saveEntry[labels[i]] = inputs[i];
 //Manually Assign Key
 try{
 saveEntry['key'] = document.getElementById('key').getAttribute('pair');
-
 }catch{console.error("No type or subType found.")}
 
 //Manually Assign ID
@@ -91,55 +89,89 @@ saveEntry['id'] = parseInt(saveEntry['id']);
 const tagElements = document.querySelectorAll('.tag');
 const tags = [];
 
+//Loop through each tag attached to saveEntry
 tagElements.forEach(row => {
-    //console.log(row)
     const tagId  = row.getAttribute('tagid');
     const tagKey = row.getAttribute('tagkey');
     const tagSave =  row.getAttribute('tagsave');
+
     
+let iCheck = tagId.charAt(0); 
+
+//Save Logic for Instructions
+if(iCheck === 'i'){
+
+    console.log('Saving Instruction')
+
     if(tagKey === 'items' && tagSave === "true"|| saveEntry['key'] === 'items' && tagSave === "true"){
-        //Include additional info if Item.
         const tagBonus = row.getAttribute('tagbonus');
         const tagQuant = row.getAttribute('tagquant');
+        const tagChance = row.getAttribute('tagchance');
+        const entryName = row.getAttribute('instName');
+        const type = row.getAttribute('instType');
+       
 
-        let iCheck = tagId.charAt(0); //Check to see if i is an instruction, then no Mirror
+        tags.push({
+            special: 'instruction', 
+            key: tagKey,
+            id: tagId, 
+            type: type,
+            name: entryName, 
+            chance: tagChance,
+            quantity: tagQuant, 
+            bonus: tagBonus
+        });
         
-        if(iCheck !== 'i'){
-        //console.log('Quantity of Item Saved:',tagQuant)
-        tags.push({key: tagKey, id: tagId, quantity: tagQuant, bonus: tagBonus});
-        //console.log(row, tags)
 
-        if(tagKey === 'items'  && tagSave === "true"){
+        }else if(tagKey !== 'items'){
+            
+            tags.push({key: tagKey, id: tagId});
+        
+        } 
+
+//Save Logic for Objects
+}else{
+    
+    if(tagKey === 'items' && tagSave === "true"|| saveEntry['key'] === 'items' && tagSave === "true"){
+        const tagBonus = row.getAttribute('tagbonus');
+        const tagQuant = row.getAttribute('tagquant');
+        const tagChance = row.getAttribute('tagchance');
+        const instId = row.getAttribute('instid');
+
+        console.log('Saving Object')
+        
+        tags.push({
+            key: tagKey, 
+            id: tagId,
+            instruction: instId,
+            chance: tagChance,
+            quantity: tagQuant, 
+            bonus: tagBonus});
 
         //Reflect changes on mirrorTag.
         const taggedObj = helper.getObjfromTag({key: tagKey, id: tagId});
-
         let mirrorIndex = taggedObj.tags.findIndex(tag => parseInt(tag.id) === saveEntry['id'] && tag.key === saveEntry['key'])
-        //console.log(mirrorIndex)
-        const newTag = {key: saveEntry['key'], id: saveEntry['id'], quantity: tagQuant, bonus: tagBonus}
-        taggedObj.tags[mirrorIndex] = newTag;
-        //console.log(taggedObj.tags)
+        
+        const newTag = {
+            key: saveEntry['key'], 
+            id: saveEntry['id'], 
+            chance: tagChance,
+            quantity: tagQuant, 
+            bonus: tagBonus
         }
-    
-        }else{
-        //If i(nstruction) then include that in the tag.
-        const entryName = row.getAttribute('instName');
-        const type = row.getAttribute('instType');
 
-        tags.push({special: 'instruction', name: entryName, type: type, key: tagKey, id: tagId, quantity: tagQuant, bonus: tagBonus});
-        }
+        taggedObj.tags[mirrorIndex] = newTag;
 
     }else if(tagKey !== 'items'){
         
-        //console.log(row)
         tags.push({key: tagKey, id: tagId});
     
     }
     
-    });
+    }
+});
 
 saveEntry['tags'] = tags;
-
 
 const key = saveEntry && saveEntry['key'];
 const id = saveEntry && saveEntry['id'];
@@ -157,7 +189,6 @@ load.Data[key].push(saveEntry)
 }else{
 load.Data[key][index] = saveEntry
 }
-
 
 //Reset programme with new Data.
 NPCs.buildNPC();

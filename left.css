@@ -1,7 +1,6 @@
 /* Everything to do with the left panel */
 
-.Left,
-.leftParty {
+.Left {
 
 /* Position */
 position: fixed;
@@ -30,6 +29,37 @@ scrollbar-color: black;
 flex-direction: column;
 outline: 0.4vh solid teal;
 } 
+
+.leftParty {
+
+/* Position */
+position: fixed;
+top:1vh;  
+left: 0.2vw; 
+width: 50vw;
+height: auto;
+max-height: 89.5vh;
+z-index:10;
+
+/* Text */  
+font-family: monospace;
+color: whitesmoke;
+font-size: 1.9vh;
+line-height: 1.5; 
+text-align: left;
+
+/* Appearance */
+background-color: black;
+opacity: 0.85;
+display: none;
+padding: 1vh; 
+overflow-y: auto;
+overflow-x:hidden;
+scrollbar-color: black;
+flex-direction: column;
+outline: 0.4vh solid teal;
+} 
+
 
 #Left::-webkit-scrollbar {
 width: 5px; /* Set the width of the scrollbar */

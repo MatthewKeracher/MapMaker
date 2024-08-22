@@ -131,6 +131,14 @@ if(itemsTags.length > 0){itemsHTML = `<br><br><h3 style="color:${obj.color}">Inv
 
 //Loop for Inventory
 itemsTags.forEach(tag => {
+
+//Resolve Chance of Appearing
+const chance = parseInt(tag.chance)
+const roll = helper.rollDice(100)
+
+if(roll > chance){return}
+
+//Add Item
 let item = helper.getObjfromTag(tag)
 let itemInfo = helper.makeIteminfo(item, tag);
 itemsHTML += `${itemInfo}`;

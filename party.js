@@ -24,6 +24,26 @@ ref.Left.style.display = "none";
 ref.Centre.style.display = "none";
 ref.leftParty.style.display = "block";
 
+//Table Headers
+const headerDiv = document.createElement('div');
+const memberRows = document.createElement('div');
+
+let headerHTML = `
+    <div class="member-table">
+        <div id="headerRow" class="header-row">
+            <div id="nameColumn" class="member-cell name-column" style="color:rgba(255, 255, 255, 0.376)">Name</div>
+            <div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">HP</div>
+        </div>
+    </div>
+`;
+
+headerDiv.innerHTML = headerHTML;
+ref.leftParty.appendChild(headerDiv);
+ref.leftParty.appendChild(memberRows);
+
 //Add party members.
 members.forEach(member => {
 
@@ -36,12 +56,23 @@ let memberHTML = `
             <div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
             <div class="member-cell class-column">${member.class}</div>
             <div class="member-cell init-column">${member.initiative}</div>
+            <div class="member-cell init-column">${member.armourClass}</div>
+            <div class="member-cell init-column">
+            <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" id="${member.name}-hitpoints">
+            </div>
         </div>
     </div>
 `;
 
+// `<input 
+// id="${npc.id}CurrentHP" 
+// type="number" 
+// class="hitPointBox"
+// style="color: ${npc.color}"
+// value="${npc.hitPoints}">`
+
 memberDiv.innerHTML = memberHTML;
-ref.leftParty.appendChild(memberDiv);
+memberRows.appendChild(memberDiv);
 const nameDiv = document.getElementById(member.name);
 
 nameDiv.addEventListener('click', (event) => {
@@ -87,6 +118,7 @@ let buttonHTML =
 </select>
 
 <select id="partyMod" class="partyText">
+    <option value="rollInit" selected>Initiative</option>
     <option value="modStrength">Strength</option>
     <option value="modDexterity">Dexterity</option>
     <option value="modWisdom">Wisdom</option>
@@ -106,6 +138,12 @@ const rollButton = document.getElementById("rollButton");
 rollButton.addEventListener('click', () => {
 let sides  = document.getElementById("partyDice").value;
 let modifier = document.getElementById("partyMod").value;
+let rollInit = false
+
+if(modifier === 'rollInit'){
+modifier = "modDexterity" 
+rollInit = true
+}
 
 const rows = document.querySelectorAll(".member-row");
 const initResults = [];
@@ -117,7 +155,7 @@ const nameCol = row.getElementsByClassName('name-column');
 const name = nameCol[0].id;
 const npcObj = load.Data.npcs.find(npc => npc.name === name)
 
-//Roll Initiative with Dex Modifier.
+//Roll Dice with  Modifier.
 const initCol = row.getElementsByClassName('init-column');
 
 let rawRoll = helper.rollDice(parseInt(sides)) 
@@ -134,14 +172,20 @@ npcObj.initiative = modifiedRoll;
 
 });
 
+if(rollInit === true){
+
 // Sort the memberResults array based on the rollResult
 initResults.sort((a, b) => parseInt(b.modifiedRoll) - parseInt(a.modifiedRoll));
 
 initResults.forEach((result, index) => {
 const name = result.name;
 const newRow = document.getElementById(`${name}Row`).parentNode.parentNode;
-ref.leftParty.insertBefore(newRow, ref.leftParty.childNodes[index]);
+memberRows.insertBefore(newRow, memberRows.childNodes[index]);
 });
+
+document.getElementById("partyMod").value = 'none'
+
+}
 
 
 });

@@ -481,7 +481,26 @@ let HTML = `
 div.innerHTML = HTML;
 container.appendChild(div);
 
+if(key.name === 'species'){
+
+const speciesDiv = document.getElementById('speciesEntry')
+
+speciesDiv.addEventListener('click', (event) => {
+
+if(event.shiftKey){
+
+const objIndex = load.Data.monsters.findIndex(entry => entry.name === speciesDiv.value)
+form.createForm(load.Data.monsters[objIndex])
+
+}
+});
+
+    
+}
+
 })
+
+
     
 }
 
@@ -884,6 +903,10 @@ tagsToAdd.forEach(tag => {
 })
 
 //Add tags from Tags of same key, so an item or spell gained through a Tag.
+const allowedInheritors = ["npcs", "locations", "sublocations"]
+
+if(allowedInheritors.includes(obj.key)){
+
 let keyTags = obj.tags.filter(entry => entry.key === "tags");
 
 if (keyTags.length > 0){
@@ -893,7 +916,6 @@ keyTags.forEach(tag => {
     const tagObj = helper.getObjfromTag(tag);
     //console.log(tag)
     let associatedTags = tagObj.tags.filter(entry => entry.key === key);
- 
     
     associatedTags.forEach(tag => {
 
@@ -910,40 +932,7 @@ keyTags.forEach(tag => {
 
 
 })}
-
-// //Follow Instructions
-// if(obj.key !== 'tags'){
-// const instructions = tagsToAdd.filter(tag => tag.special === 'instruction')
-
-// instructions.forEach(instruction => {
-
-//         let iKey = instruction.key
-//         let iName = instruction.name
-//         let iType = instruction.type
-//         console.log(iKey, iName, iType)
-//         let items = load.Data[iKey].filter(item => item[iType] === iName)
-
-//         if(iType === 'subGroup'){
-
-//         const randomIndex = Math.floor(Math.random() * items.length);
-//         const randomObj = items[randomIndex];
-
-//         const newTag = {key: randomObj.key, id: randomObj.id}
-//         tagsToAdd.push(newTag)
-
-//         }else if(iType === 'group'){
-
-//         const randomIndex = Math.floor(Math.random() * items.length);
-//         const randomObj = items[randomIndex];
-
-//         const newTag = {key: randomObj.key, id: randomObj.id, tagSave: "true"}
-//         tagsToAdd.push(newTag)
-
-
-//         }
-        
-// })
-// };
+}
 
 //console.log(tagsToAdd)
 //Add ITEMS
@@ -975,16 +964,25 @@ let rowHTML = `
 class = "tag item-row"
 instName = "${tagObj.special? tagObj.name: ''}" 
 instType = "${tagObj.special? tagObj.type: ''}" 
+instid = "${tag.instruction? tag.instruction: ''}" 
 tagid = ${tag.id} 
 tagkey = ${tag.key}
 tagsave = ${tag.save}
 tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? "-" : tag.bonus}
 tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? 1 : tag.quantity}
+tagchance = ${(tag.chance === "" || tag.chance === undefined) ? 100 : tag.chance}
 >
 
 <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
 ${tagName}
 </label>
+
+<input 
+id="${tagObj.name}Chance" 
+type="text" 
+class="item-quant-cell item-quant-column"
+value="${(tag.chance === "" || tag.chance === undefined) ? 100 : tag.chance}">
+
 
 <input 
 id="${tagObj.name}Quantity" 
@@ -1009,8 +1007,14 @@ itemsTable.appendChild(itemsRow);
 //Events for change of Quant or Bonus; update attributes in Row for Save
 //Duplicate itemRow names!
 const itemRow = document.getElementById(tagObj.name + "Container")
+const chanceInput = document.getElementById(tagObj.name + "Chance");
 const quantInput = document.getElementById(tagObj.name + "Quantity");
 const bonusInput = document.getElementById(tagObj.name + "Bonus");
+
+chanceInput.addEventListener('input', function(){
+itemRow.setAttribute('tagchance', chanceInput.value);
+//console.log(itemRow);
+});
 
 quantInput.addEventListener('input', function(){
 itemRow.setAttribute('tagquant', quantInput.value);
@@ -1020,6 +1024,11 @@ itemRow.setAttribute('tagquant', quantInput.value);
 bonusInput.addEventListener('input', function(){
 itemRow.setAttribute('tagbonus', bonusInput.value);
 });
+
+chanceInput.addEventListener('click', function(){
+    chanceInput.focus();
+    chanceInput.select();
+    });
 
 quantInput.addEventListener('click', function(){
 quantInput.focus();
@@ -1086,6 +1095,7 @@ tagid = ${tag.id}
 tagkey = ${tag.key}
 instName = "${tagObj.special? tagObj.name: ''}" 
 instType = "${tagObj.special? tagObj.type: ''}" 
+instid = "${tag.instruction? tag.instruction: ''}" 
 tagbonus = ${(tag.bonus === "" || tag.bonus === undefined) ? null : tag.bonus}
 tagquant = ${(tag.quantity === "" || tag.quantity === undefined) ? null : tag.quantity}
 >
@@ -1295,7 +1305,18 @@ if(copy === undefined){
     tags.forEach(tag => {
 
     let tagObj = helper.getObjfromTag(tag);
-    tagObj.tags.push({key: obj.key, id: newId});
+
+    let iCheck = tag.id.charAt(0); 
+
+    if(iCheck === 'i'){return}
+
+    let newTag = {
+        ...tagObj,    
+        key: obj.key, 
+        id: newId     
+    };
+
+    tagObj.tags.push(newTag);
 
     })
 

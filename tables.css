@@ -15,6 +15,10 @@
     display: table-row;
 }
 
+.header-row {
+    display: table-row;
+}
+
 .member-cell {
     display: table-cell;
     font-family: 'SoutaneBlack';
@@ -159,7 +163,7 @@ color: lime;
 
 
 /* Set individual column widths */
-.item-column { width: 20vw; }
+.item-column { width: 15vw; }
 .item-bonus-column { width: 4vw;}
 .item-quant-column { width: 4vw;}
 

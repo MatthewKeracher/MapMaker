@@ -20,7 +20,7 @@ this.color = data.color,
 this.image = data.image,
 this.alignment = data.alignment,
 this.species = data.species,
-this.tags = data.tags;
+this.tags = NPCbuild.followInstructions(data.tags);
 NPCbuild.getHitPoints(this);
 NPCbuild.getAttackBonus(this);
 try{NPCbuild.getSpeciesData(this)}catch{this.species = 'Human'}
@@ -59,17 +59,23 @@ static getSpeciesData(npc){
   const obj = load.Data.monsters.find(monster => monster.name.toLowerCase() === npc.species.toLowerCase()); 
   
   npc.damage = obj.damage;
-  npc.armourClass = obj.armourClass;
   npc.attacks = obj.attacks;
   npc.experience = obj.experience;
   npc.movement = obj.movement;
   npc.morale = obj.morale;
 
+  npc.armourClass = obj.armourClass;
+
   //addTags
   //Add Tags from Class, Species, etc.
   obj.tags.forEach(tag => {
   console.log(tag)
+  
+  const tagCheck = npc.tags.filter(entry => parseInt(entry.id) === parseInt(tag.id)).length
+
+  if(tagCheck === 0){
   npc.tags.push(tag)
+  }
   })
 
   //Saving Throws
@@ -624,55 +630,68 @@ npc.hitPoints = NPCbuild.rollHitDice(hitDice);
 
 }
 
-static getInventory(npc) {
+static followInstructions(tagsArray) {
 
-//Filter all keys...
+if(tagsArray.length > 0){
 
-for (const key in load.Data){
+  const Tags = tagsArray.filter(tag => tag.key === 'tags')
 
-const excludedKeys = ['miscInfo',  'npcs'];
+  Tags.forEach(tag => {
 
-if(!excludedKeys.includes(key)){
+    const tagObj = helper.getObjfromTag(tag)
+    const instructions = tagObj.tags.filter(tag => tag.special && tag.special === 'instruction')
 
-// Filter itemsArray based on characterClass and tags
-const filteredItems = load.Data[key].filter(item => {
-const addressBook = item.tags? item.tags : [];
-let itemTags = []
+    instructions.forEach(tag => {
 
-//turn addresses into names.
-addressBook.forEach(address => {
-let id = parseInt(address.id);
-let key = address.key;
-let obj = load.Data[key].find(obj => parseInt(obj.id) === id);
-let tag = obj.name
-itemTags.push(tag);
-})
-itemTags.length > 1? itemTags.split(',').map(tag => tag.trim()): '';
+      const alreadyMade = tagsArray.filter(entry => entry.instruction && entry.instruction === tag.id);
 
-// Check if the item matches the criteria
-return (
-(npc.class === '' || itemTags.includes(npc.class) || itemTags.includes(npc.name)) ||
-(npc.tags && npc.tags.split(',').map(tag => tag.trim()).some(tag => itemTags.includes(tag)))
-);
-});
+      if(alreadyMade.length === tag.quantity){return};
 
-//If the tag is preceded by '?' there is only a chance they have the item, or only one of that type.
+      const quantityRemaining = parseInt(tag.quantity) - parseInt(alreadyMade.length);
 
-// Format each item and add to npc.inventory
-npc.inventory = filteredItems;
-// npc.inventory = filteredItems.map(item => ({
-// name: item.name,
-// tag: item.tags ? item.tags.split(',').map(tag => tag.trim()).find(tag => 
-// tag === npc.class || 
-// tag === npc.name  ||
-// (npc.tags && npc.tags.split(',').map(tag => tag.trim()).some(occTag => occTag === tag))
-// ) : ''
-// }));
+      if(tag.type === 'subGroup'){
 
-// Sort the inventory alphabetically by item.tag
-npc.inventory.sort((a, b) => (a.tag > b.tag) ? 1 : -1);
+      for (let i = quantityRemaining; i > 0; i--) {
 
-}}
+        let options = load.Data[tag.key].filter(item => item[tag.type] === tag.name)
+
+        const randomIndex = Math.floor(Math.random() * options.length);
+        const randomObj = options[randomIndex];
+
+        const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
+        tagsArray.push(newTag)
+
+      }
+
+    }else if(tag.type === 'group'){
+
+      const options = load.Data[tag.key].filter(item => item[tag.type] === tag.name)
+      const subGroups = [...new Set(options.map(item => item.subGroup))];
+
+      for (let i = quantityRemaining; i > 0; i--) {
+
+        let randSubGroup = Math.floor(Math.random() * subGroups.length);
+        
+        let options = load.Data[tag.key].filter(item => item.subGroup === subGroups[randSubGroup])
+
+        const randomIndex = Math.floor(Math.random() * options.length);
+        const randomObj = options[randomIndex];
+
+        const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
+        tagsArray.push(newTag)
+
+      }
+      
+
+    }
+   
+    })
+    })
+
+    }
+
+
+return tagsArray
 
 }
 

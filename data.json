@@ -6549,59 +6549,109 @@
 "tags": []
 },
 {
-"key": "items",
-"color": "#e0d299",
-"id": 303,
-"type": "group",
-"subType": "subGroup",
-"group": "Treasure",
-"subGroup": "Coins",
-"name": "Gold Pieces",
-"weight": "0.02",
-"size": "S",
-"cost": "1 gp",
-"damage": "",
-"range": "",
-"armourClass": null,
-"description": "",
-"tags": []
-},
-{
-    "key": "items",
-    "color": "#e0d299",
-    "id": 303,
+    "description": "A coin worth one-hundredth of a gold piece. Will buy half a loaf of bread, a piece of chalk, or a torch. Sometimes found in large quantities in dungeons, where they a nuisance for adventurers to carry out due to their low value per weight. Some realms mint a copper piece worth as much as one-fiftieth of a gold piece.",
+    "id": 306,
     "type": "group",
     "subType": "subGroup",
+    "name": "Copper Coin",
     "group": "Treasure",
-    "subGroup": "Coins",
-    "name": "Silver Pieces",
+    "subGroup": "Money",
+    "order": "",
+    "color": "#f59132",
     "weight": "0.02",
-    "size": "S",
-    "cost": "0.1 gp",
+    "size": "XS",
+    "cost": "0.01",
     "damage": "",
     "range": "",
-    "armourClass": null,
-    "description": "",
-    "tags": []
-    },
-    {
-        "key": "items",
-        "color": "#e0d299",
-        "id": 303,
-        "type": "group",
-        "subType": "subGroup",
-        "group": "Treasure",
-        "subGroup": "Coins",
-        "name": "Copper Pieces",
-        "weight": "0.02",
-        "size": "S",
-        "cost": "0.01 gp",
-        "damage": "",
-        "range": "",
-        "armourClass": null,
-        "description": "",
-        "tags": []
-        }
+    "armourClass": "",
+    "key": "items",
+    "tags": [
+      
+    ]
+  },
+  {
+    "description": "A coin worth half a gold piece. Many kingdoms don't use this coin, but old electrum coinage is still found in treasure chests in forgotten dungeons. ",
+    "id": 307,
+    "type": "group",
+    "subType": "subGroup",
+    "name": "Electrum Coin",
+    "group": "Treasure",
+    "subGroup": "Money",
+    "order": "",
+    "color": "#84f5f3",
+    "weight": "0.02",
+    "size": "XS",
+    "cost": "0.5",
+    "damage": "",
+    "range": "",
+    "armourClass": "",
+    "key": "items",
+    "tags": [
+      
+    ]
+  },
+  {
+    "description": "The 'gold standard', both literally and figuratively, although still too valuable for peasants to handle on an everyday basis. One gold piece will buy a shortspear or twenty arrows.",
+    "id": 304,
+    "type": "group",
+    "subType": "subGroup",
+    "name": "Gold Coin",
+    "group": "Treasure",
+    "subGroup": "Money",
+    "color": "#f5cb32",
+    "weight": "0.02",
+    "size": "XS",
+    "cost": "1",
+    "damage": "",
+    "range": "",
+    "armourClass": "",
+    "key": "items",
+    "tags": [
+      
+    ]
+  },
+  {
+    "description": "A commonly-used coin worth one-tenth of a gold piece. Will buy a pound of iron, a lamp, or a day's labour.",
+    "id": 305,
+    "type": "group",
+    "subType": "subGroup",
+    "name": "Silver Coin",
+    "group": "Treasure",
+    "subGroup": "Money",
+    "order": "",
+    "color": "#e7e6e4",
+    "weight": "0.02",
+    "size": "XS",
+    "cost": "0.1",
+    "damage": "",
+    "range": "",
+    "armourClass": "",
+    "key": "items",
+    "tags": [
+      
+    ]
+  },
+  {
+    "description": "A coin worth ten gold pieces. Though rarely used in trade, ancient platinum coins are found in dragon's hoards. A single platinum piece will buy one cow or a steel short sword. In some worlds, owing perhaps to rarity or size, platinum coins are minted with a value of 100 gold pieces.",
+    "id": 308,
+    "type": "group",
+    "subType": "subGroup",
+    "name": "Platinum Coin",
+    "group": "Treasure",
+    "subGroup": "Money",
+    "order": "",
+    "color": "#e9b9e5",
+    "weight": "0.02",
+    "size": "XS",
+    "cost": "100",
+    "damage": "",
+    "range": "",
+    "armourClass": "",
+    "key": "items",
+    "tags": [
+      
+    ]
+  }
 ],
 
 "spells": [

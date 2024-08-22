@@ -304,6 +304,29 @@ npcHR = npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
 
 //Gather data on NPC.
 
+//Check for Highest AC Value.
+const itemTags = npc.tags.filter(tag => tag.key === 'items')
+let npcArmourClass = npc.armourClass; //Default Value
+let npcArmourBonus = '';
+
+itemTags.forEach(option => {
+
+const optionObj = helper.getObjfromTag(option);
+const optionAC = optionObj.armourClass;
+const shieldCheck = optionAC? optionAC.toString().charAt(0) : '';
+const isShield = shieldCheck === '+'
+
+if(isShield){
+npcArmourBonus = +npcArmourBonus + +optionAC;
+return
+}
+if(npc.armourClass < optionObj.armourClass){
+npcArmourClass = optionObj.armourClass
+}
+})
+
+npcArmourClass = npcArmourClass + npcArmourBonus;
+
 //Generate hitPointBoxes at HTML obj.
 const hitPointsBox = `<input 
 id="${npc.id}CurrentHP" 
@@ -318,7 +341,7 @@ class="expandable"
 style="font-family:'SoutaneBlack'; 
 color: ${npc.color}" key="${npc.key}" 
 id="${npc.id}"> 
-${npc.name} is here.</span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npc.armourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
+${npc.name} is here.</span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npcArmourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
    
 //Insert NPC
 this.eventDesc +=`${npcHTML}`;
@@ -509,6 +532,10 @@ this.eventDesc += `<br>`;
 
 //Takes tag.filter for items and returns Div.
 bundle.forEach(item => {
+
+//Resolve chance of appearing.
+console.log(item)
+
 
 //Get Quantity and Bonus from Tag
 const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.id));
