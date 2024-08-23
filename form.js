@@ -308,14 +308,14 @@ topArea.appendChild(nameArea);
 }
 
 //Add Image
-if(obj.image){
+if(obj){
     const imageArea = document.createElement('div');
     imageArea.id = 'imageArea';
     
     let nameContent =  
     `<image 
     class="formImage"
-    src="${obj.image}" 
+    src="${obj.image? obj.image: ''}" 
     >`;
     
     imageArea.innerHTML = nameContent;
@@ -1388,7 +1388,7 @@ if(copy === undefined){
     if(newEntry.key === 'locations'){
 
     console.log('Copy is a Location')
-    newEntry.left = newEntry.left + newEntry.width
+    newEntry.left = parseInt(newEntry.left) + parseInt(newEntry.width)
 
     const subLocations = newEntry.tags.filter(tag => tag.key === 'subLocations')
          newEntry.tags = newEntry.tags.filter(tag => tag.key !== 'subLocations')
@@ -1397,6 +1397,7 @@ if(copy === undefined){
 
         const subLocObj = helper.getObjfromTag(subLocTag);
         const subLocCopy = this.makeNewObj(subLocObj, subLocObj.key, 1, newEntry.id)
+        console.log('copying ' + subLocObj.name)
 
         //Tag new subLocation
         newEntry.tags.push(subLocCopy)

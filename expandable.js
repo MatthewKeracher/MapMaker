@@ -87,26 +87,6 @@ element.setAttribute('showHide', 'show')
 //Add whole backstory.
 element.innerHTML = `${hyperDesc}`
 
-// //Gather data on NPC's spells.
-// const spellsTags = obj.tags.filter(tag => tag.key === 'spells');
-// let spellsHTML = ''
-
-// //If there is spells to show...
-// if(spellsTags.length > 0){spellsHTML = `<br><br><h3 style="color:${obj.color}">Spells:</h3><hr name="blank" style="background-color:${obj.color}">`;
-
-// //Loop for Inventory
-// spellsTags.forEach(tag => {
-//     let item = helper.getObjfromTag(tag)
-//     let itemInfo = helper.makeIteminfo(item, tag);
-//     spellsHTML += `${itemInfo}`;
-//     })
-    
-//     //Format inventory items.
-//     spellsHTML += `<br>`;
-
-//     element.innerHTML += `${spellsHTML} <hr name="blank" style="background-color:${obj.color}">` //Add breaker line.
-// }
-
 // Gather data on NPC's Inventory
 const itemsTags = obj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
 
@@ -226,6 +206,7 @@ console.log(element)
 
 };
 
+helper.addEventToStoryNamedCell();
 Storyteller.addImagestoStory()
 
 });

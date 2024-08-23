@@ -246,7 +246,7 @@ if(tag.key === 'items' && subLocTag.key === 'tags'){
 //Resolve Chance of Appearing
 const chance = parseInt(tag.chance)
 const roll = helper.rollDice(100)
-console.log(tag)
+//console.log(tag)
 if(roll > chance){return}
 
     
@@ -410,7 +410,7 @@ let restTag = helper.getObjfromTag(tag);
 let restCheck = restTag.tags.filter(obj => obj.key === 'npcs');
 if(restCheck.length === 0){isResting = true};
 
-if(isResting === true){
+if(isResting === true && restTag.key === 'tags'){
 
 //add events tagged to tag to eventBundle
 
@@ -457,6 +457,9 @@ console.log('roll Failed')
 return  
 }
 
+//Final Check on Event
+//console.log(eventBundle)
+
 //Add Event to NPC in Storyteller.
 this.eventDesc += 
 `<span 
@@ -473,6 +476,7 @@ this.eventDesc += `<br>`;
 });
 });
 },
+
 
 getAmbiencefromTag(obj, keywords){
 
@@ -495,13 +499,23 @@ this.eventDesc += ambienceWrapper;
 
 generateLocItems(bundle, tag){
 
+//console.log(tag)
+//Resolve Image
+let itemHR
+
+if(tag.image && tag.image !== ''){
+itemHR = tag.image;
+}else{
+itemHR = 'itemHR'
+}
+
 //Header Wrapper
 let header = 
 `<h3><span 
 class="expandable" 
 style='color:${tag.color}'
 id="${tag.id}"
-key="${tag.key}"> ${tag.name}</span></h3><hr name="itemHR" style="background-color:${tag.color}"> <br>`;
+key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}"> <br>`;
 
 if(bundle.length > 0){
 this.eventDesc += `<br><br>`
@@ -529,7 +543,6 @@ const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.
 let itemInfo = helper.makeIteminfo(item, address)
 //console.log(item.tags,address)
 
-// Assuming item and address are defined earlier in your code
 let wrapper = 
 `<span class="expandable"
 style="color:${item.color}"
@@ -573,6 +586,22 @@ this.EntryDisplay = 'none'
 getCurrentAC(npc){
 //Check for Highest AC Value.
 const itemTags = npc.tags.filter(tag => tag.key === 'items')
+
+//Add tags from Tags of same key, so an item or spell gained through a Tag.
+let keyTags = npc.tags.filter(entry => entry.key === "tags");
+keyTags.forEach(tag => {
+
+    const tagObj = helper.getObjfromTag(tag);
+    let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
+    
+    associatedTags.forEach(tag => {
+
+    //Add into NPC's tags
+    itemTags.push(tag);
+
+    }) })
+
+
 let npcArmourClass = npc.armourClass; //Default Value
 let npcArmourBonus = '';
 
@@ -587,6 +616,7 @@ if(isShield){
 npcArmourBonus = +npcArmourBonus + +optionAC;
 return
 }
+
 if(npc.armourClass < optionObj.armourClass){
 npcArmourClass = optionObj.armourClass
 }

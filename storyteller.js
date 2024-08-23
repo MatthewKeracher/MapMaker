@@ -50,6 +50,7 @@ expandable.showFloatingExpandable();
 //---
 //window.speechSynthesis.cancel();
 //this.textToSpeech(ref.Storyteller.textContent);
+helper.addEventToStoryNamedCell();
 
 };
 }, 

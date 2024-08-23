@@ -7,6 +7,99 @@ import ref from "./ref.js";
 
 const helper = {
 
+genGems(data){
+
+const gemsArray = data.items.filter(item => item.subGroup === "Gem")
+console.log(gemsArray)
+
+const gemQualities = [
+    {name: "Ornamental",
+    value: 10,
+    numberFound: "1d10"},
+    {name: "Semiprecious",
+    value: 50,
+    numberFound: "1d10"},
+    {name: "Fancy",
+    value: 100,
+    numberFound: "1d10"},
+    {name: "Precious",
+    value: 500,
+    numberFound: "1d10"},
+    {name: "Gem",
+    value: 1000,
+    numberFound: "1d10"},
+    {name: "Jewel",
+    value: 5000,
+    numberFound: "1"},
+]
+
+const valueAdjustment = [
+    {result: 2,
+    adjustment: "Lower Value Row"},
+    {result: 3,
+    adjustment: 0.5},
+    {result: 4,
+    adjustment: 0.75},
+    {result: 5,
+    adjustment: 1},
+    {result: 6,
+    adjustment: 1},
+    {result: 7,
+    adjustment: 1},
+    {result: 8,
+    adjustment: 1},
+    {result: 9,
+    adjustment: 1},
+    {result: 10,
+    adjustment: 1.5},
+    {result: 11,
+    adjustment: 2},
+    {result: 12,
+    adjustment: "Next Value Row"},
+]
+
+gemsArray.forEach(gemEntry => {
+
+    const valueAdjustmentRoll = helper.rollMultipleDice('2d6')
+    const valueAdjustmentResult = valueAdjustment.find(entry => entry.result === valueAdjustmentRoll)
+
+    console.log('Result', valueAdjustmentResult)
+
+    gemQualities.forEach(qualEntry => {
+
+        const newId = load.generateUniqueId(load.Data.items, 'entry');
+
+        const newGem = {
+            description: "An unknown entity.",
+            id: newId,
+            type: "group",
+            subType: "subGroup",
+            name: gemEntry.name + " (" + qualEntry.name + ")",
+            group: "Gems",
+            subGroup: qualEntry.name,
+            order: "",
+            color: gemEntry.color,
+            weight: "*",
+            size: "XS",
+            cost: qualEntry.value,
+            damage: "",
+            range: "",
+            armourClass: "",
+            key: "items",
+            tags: []
+          }
+
+          load.Data.items.push(newGem)
+
+
+    })
+
+    load.Data.items = load.Data.items.filter(entry => entry !== gemEntry)
+
+})
+
+},
+
 makeHitPointBoxes(npc){
 
     let numberBoxes = npc.hitPoints;
@@ -22,7 +115,99 @@ makeHitPointBoxes(npc){
 
     // Return the generated HTML string
     return checkboxesHTML;
-s
+
+},
+
+coinLogic(item,itemQuant){
+let itemValue = item.cost.toString()
+let color = ''
+
+if(!itemQuant){itemQuant = 1}
+
+    const coinValues = [
+    {coin: 'cp', value: 0.01},
+    {coin: 'sp', value: 0.1},
+    {coin: 'ep', value: 0.5},
+    {coin: 'gp', value: 1},
+    {coin: 'pp', value: 100},
+    ]
+
+    let matchedCoin = coinValues.find(coinObj => itemValue.includes(coinObj.coin));
+    
+    if (matchedCoin) {
+        //As Gold Decimal
+        let costValue = parseFloat(itemValue.replace(matchedCoin.coin, '')) * matchedCoin.value;
+
+        //of type 0.00gp now
+        itemValue = (costValue * itemQuant).toFixed(2);
+    }
+
+        const decimalPlaces = this.getDecimalPlaces(parseFloat(itemValue))
+
+        if(decimalPlaces === 2){
+        itemValue = itemValue * 100 + ' Copper Coin'
+        color = '#B87333'
+        }else if(decimalPlaces === 1){
+        itemValue = itemValue * 10 + ' Silver Coin'
+        color = '#C0C0C0'
+        } else if(decimalPlaces === 0){
+        itemValue = itemValue * 1 + ' Gold Coin'
+        color = '#FFD700'
+        }
+
+
+
+// (parseFloat(item.cost) * parseFloat(itemQuant)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' gp each)': 
+// item.cost + ' gp'
+let returnObj = {value: itemValue, color: color}
+return returnObj
+
+},
+
+addEventToStoryNamedCell(){
+
+
+    const storyNameCell = document.querySelectorAll(".story-name-cell")
+
+    storyNameCell.forEach(div => {
+    
+    div.addEventListener('click', () => {
+    
+    const key = div.getAttribute('key')
+    const id = div.getAttribute('id')
+    let index = load.Data[key].findIndex(entry => parseInt(entry.id) === parseInt(id));
+    
+    //console.log(key, id, index)
+    form.createForm(load.Data[key][index]);
+    
+    });
+    
+    div.addEventListener('mouseover', function() {
+    this.classList.add('highlight');
+    });
+    
+    div.addEventListener('mouseout', function() {
+    this.classList.remove('highlight');
+    });
+    
+    })
+
+},
+
+ getDecimalPlaces(value) {
+    
+
+    if (!isFinite(value) || Math.floor(value) === value) {
+        // Return 0 if the value is not finite or if it's an integer
+        return 0;
+    }
+    
+    // Convert the value to a string and split it at the decimal point
+    let valueString = value.toString();
+    let decimalPart = valueString.split('.')[1];
+    
+    // Return the length of the decimal part
+    return decimalPart.length;
 },
 
 makeIteminfo(item, tag){
@@ -31,9 +216,10 @@ let itemBonus = tag.bonus && tag.bonus !== '-'? ' (' + tag.bonus + ')' : '';
 let itemName = itemQuant + ' ' + item.name;
 let typeInfo = item.damage? 'Weapon' : item.armourClass? 'Armour' : item.key === 'spells'? 'Spell' : 'misc';
 let itemInfo = '';
+let color = item.color;
 
 if(typeInfo === 'Weapon'){
-itemInfo += ' Damage: ' + item.damage + itemBonus}
+itemInfo += item.damage + itemBonus + ' Damage' }
 
 if(typeInfo === 'Armour'){
 itemInfo += ' Armour Class: ' + item.armourClass + itemBonus}
@@ -42,9 +228,12 @@ if(typeInfo === 'Spell'){
 itemInfo += item.class + ' ' + item.level}
 
 if(typeInfo === 'misc'){
-itemInfo += itemQuant > 1? 
-(parseFloat(item.cost) * parseFloat(itemQuant)).toFixed(2).replace(/\.?0+$/, '') + 'gp (' + item.cost + ' gp each)': 
-item.cost + ' gp'}
+const returnedObj = helper.coinLogic(item,itemQuant)
+const itemValue = returnedObj.value
+color = returnedObj.color
+itemInfo += itemValue;
+
+}
 
 let itemHTML = `
 <div id="${item.name}Row" 
@@ -52,14 +241,14 @@ class = "item-row"
 tagid = ${tag.id} 
 tagkey = ${tag.key}>
 
-<label key= ${tag.key} id="${tag.id}" class="expandable story-name-cell story-name-column" style="color:${item.color}">
+<label key= ${item.key} id="${item.id}" class="expandable story-name-cell story-name-column" style="color:${item.color}">
 ${itemName}
 </label>
 
 <label 
 id="${typeInfo}" 
 type="text" 
-class="story-data-cell story-data-column">
+class="story-data-cell story-data-column" style="color:${typeInfo === 'misc'? color: item.color}">
 ${itemInfo}</label>
 
 </div>`
@@ -73,7 +262,7 @@ sortData(data){
 for (const key in data) {
 let obj = data[key];
 
-if (key === 'events'){ //(key !== 'miscInfo' && key!== 'locations') {
+if (key === 'tags'){ //(key !== 'miscInfo' && key!== 'locations') {
 obj = obj.map(entry => {
 // Remove some fields
 // delete entry.key;
@@ -82,7 +271,12 @@ obj = obj.map(entry => {
 // entry.key = '';
 //entry.active = 1;
 
-entry.chance = 100;
+if(entry.image){
+    return
+}else{
+    entry.image = ""}
+    
+    //entry.chance = 100;
 
 return entry
 
@@ -92,8 +286,6 @@ return entry
 data[key] = obj;
 console.log(load.Data)
 }
-
-
 },
 
 cssColorToHex(cssColorName) {
