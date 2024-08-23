@@ -235,10 +235,22 @@ return
 
 //Add Item Containers to subLocation
 let tags = tagObj.tags;
+
 tags.forEach(tag => {
+
 let tagObj = helper.getObjfromTag(tag);
 bundle.push(tagObj)
-if(tag.key === 'items' && subLocTag.key === 'tags'){itemBundle.push(tagObj)}
+
+if(tag.key === 'items' && subLocTag.key === 'tags'){
+
+//Resolve Chance of Appearing
+const chance = parseInt(tag.chance)
+const roll = helper.rollDice(100)
+console.log(tag)
+if(roll > chance){return}
+
+    
+itemBundle.push(tagObj)}
 })
 Events.generateLocItems(itemBundle, tagObj);
 }
@@ -511,10 +523,6 @@ this.eventDesc += `<br>`;
 
 //Takes tag.filter for items and returns Div.
 bundle.forEach(item => {
-
-//Resolve chance of appearing.
-
-
 
 //Get Quantity and Bonus from Tag
 const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.id));

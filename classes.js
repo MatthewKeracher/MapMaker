@@ -647,7 +647,7 @@ if(tagsArray.length > 0){
 
       let quantity = tag.quantity
 
-      if(npcClass === 'Magic User' || npcClass === 'Cleric'){
+      if(npcClass === 'Magic User' && tag.key === 'spells'|| npcClass === 'Cleric' && tag.key === 'spells'){
       const spellSlots = this.getSpellSlots(npcClass, npcLevel)
       //console.log(spellSlots)
       const currentLevelSpell = tag.name

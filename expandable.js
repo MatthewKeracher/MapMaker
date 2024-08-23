@@ -132,6 +132,14 @@ if(itemsTags.length > 0){itemsHTML = `<br><br><h3 style="color:${obj.color}">Inv
 //Loop for Inventory
 itemsTags.forEach(tag => {
 
+//Exclude metaTags
+//console.log('iCheck', tag.id)
+
+let iCheck = tag.id.toString().charAt(0); 
+
+if(iCheck === 'i'){return}
+
+
 //Resolve Chance of Appearing
 const chance = parseInt(tag.chance)
 const roll = helper.rollDice(100)
