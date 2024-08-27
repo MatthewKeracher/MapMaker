@@ -709,7 +709,7 @@ if (options.length > 1) {
 const randomIndex = Math.floor(Math.random() * options.length);
 const selectedOption = options[randomIndex].trim();
 
-returnDesc = `<span class="npcEvent" eventID="${obj.id}"> ${selectedOption} </span>`;
+returnDesc = `<span style="color:lime" class="npcEvent" eventID="${obj.id}"> ${selectedOption} </span>`;
 } else {
 returnDesc = `${obj.description}`;
 }
