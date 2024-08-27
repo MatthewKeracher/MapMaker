@@ -206,7 +206,7 @@ console.log(element)
 
 };
 
-helper.addEventToStoryNamedCell();
+helper.addEventsToStoryteller();
 Storyteller.addImagestoStory()
 
 });

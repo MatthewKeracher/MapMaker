@@ -7,6 +7,7 @@ import helper from "./helper.js";
 import expandable from "./expandable.js";
 
 
+
 const Events = {
 
 eventDesc: "",
@@ -247,7 +248,7 @@ if(tag.key === 'items' && subLocTag.key === 'tags'){
 const chance = parseInt(tag.chance)
 const roll = helper.rollDice(100)
 //console.log(tag)
-if(roll > chance){return}
+if(roll > chance && !tag.special ){return}
 
     
 itemBundle.push(tagObj)}
@@ -363,25 +364,25 @@ const presentTagObjs = [];
 
 //Look at tags inside each bundleTag for the current subLocation.
 tagsBundle.forEach(bundleTag => {
-    
-    const tagObj = helper.getObjfromTag(bundleTag);
 
-    tagObj.tags.forEach(tag => {
-    //Add tag if tagged to subLocation
-    if(tag.key === 'subLocations' && parseInt(tag.id) === parseInt(subLocation.id) ||
-       tag.key === 'locations' && parseInt(tag.id) === parseInt(locObj.id)){
-    console.log(tagObj.name)
-    presentTagObjs.push(tagObj);
-    }
+const tagObj = helper.getObjfromTag(bundleTag);
 
-    //Check to see if there are no subLocations or Locations in the bundleTag.
-    let floatCheck = tagObj.tags.filter(obj => obj.key === 'subLocations' || obj.key === 'locations');
-    if(floatCheck.length === 0){
-    presentTagObjs.push(tagObj)
-    };
+tagObj.tags.forEach(tag => {
+//Add tag if tagged to subLocation
+if(tag.key === 'subLocations' && parseInt(tag.id) === parseInt(subLocation.id) ||
+tag.key === 'locations' && parseInt(tag.id) === parseInt(locObj.id)){
+console.log(tagObj.name)
+presentTagObjs.push(tagObj);
+}
 
-    //Add tag if tagged to location.
-    //...
+//Check to see if there are no subLocations or Locations in the bundleTag.
+let floatCheck = tagObj.tags.filter(obj => obj.key === 'subLocations' || obj.key === 'locations');
+if(floatCheck.length === 0){
+presentTagObjs.push(tagObj)
+};
+
+//Add tag if tagged to location.
+//...
 
 });
 
@@ -499,7 +500,7 @@ this.eventDesc += ambienceWrapper;
 
 generateLocItems(bundle, tag){
 
-//console.log(tag)
+//console.log(bundle, tag)
 //Resolve Image
 let itemHR
 
@@ -515,7 +516,7 @@ let header =
 class="expandable" 
 style='color:${tag.color}'
 id="${tag.id}"
-key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}">`;
+key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}"> <br>`;
 
 if(bundle.length > 0){
 this.eventDesc += `<br><br>`
@@ -535,12 +536,50 @@ this.eventDesc += `<br>`;
 };
 
 //Takes tag.filter for items and returns Div.
+
+//Add Items generated randomly through tags to Containers
 bundle.forEach(item => {
+
+if(item.special === 'instruction'){
+
+//Get full Instriction information.
+let instruction = tag.tags.find(instruction => instruction.id === item.id)
+let newItems = helper.followInstructions(instruction, tag)
+
+newItems.forEach(entry => {
+
+//Resolve Chance of Appearing
+const chance = parseInt(entry.tag.chance)
+const roll = helper.rollDice(100)
+//console.log(tag)
+if(roll > chance){return}
+
+let itemInfo = helper.makeIteminfo(entry.item, entry.tag)
+
+let wrapper = 
+`<span class="expandable"
+style="color:${entry.item.color}"
+id="${entry.item.id}"
+key="${entry.item.key}">${itemInfo}</span>`;
+
+this.eventDesc += wrapper;
+
+
+})
+
+
+}
+});
+
+
+bundle.forEach(item => {
+
+if(item.special){return}
 
 //Get Quantity and Bonus from Tag
 const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.id));
+//console.log(item, address)
 let itemInfo = helper.makeIteminfo(item, address)
-//console.log(item.tags,address)
 
 let wrapper = 
 `<span class="expandable"

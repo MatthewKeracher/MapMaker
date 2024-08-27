@@ -17,6 +17,7 @@ init() {
     
     load.readMe();
     load.checkStoredData();
+    setInterval(helper.updateEventContent, 5000);
 
     // Add an input event listener to ref.locationLabel
 ref.locationLabel.addEventListener('input', () => {

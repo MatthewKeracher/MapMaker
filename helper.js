@@ -7,94 +7,251 @@ import ref from "./ref.js";
 
 const helper = {
 
+followInstructions(instruction, obj) {
+
+console.log(instruction)
+
+let quantity = instruction.quantity? instruction.quantity : 1;
+let madeItems = obj.tags.filter(tag => tag.instruction === instruction.id);
+let options = []
+
+if(madeItems.length === quantity){return};
+
+const quantityRemaining = parseInt(quantity) - parseInt(madeItems.length);
+
+if(instruction.group){
+options = load.Data[instruction.key].filter(item => item[instruction.type] === instruction.name && item.group === instruction.group)
+} else{ 
+options = load.Data[instruction.key].filter(item => item[instruction.type] === instruction.name)
+}
+
+
+if(instruction.type === 'subGroup'){
+
+for (let i = quantityRemaining; i > 0; i--) {
+
+const randomIndex = Math.floor(Math.random() * options.length);
+const randomObj = options[randomIndex];
+
+const newItemTag = {key: randomObj.key, id: randomObj.id, instruction: instruction.id, quantity: "1", chance: instruction.chance}
+
+const newItem = helper.getObjfromTag(newItemTag)
+
+// obj.tags.push(newItemTag)
+// newItem.tags.push({key: obj.key, id: obj.id, quantity: "1", chance: instruction.chance})
+
+madeItems.push({item: newItem, tag: newItemTag})
+
+options.splice(randomIndex, 1)
+
+
+}
+
+// }else if(instruction.type === 'group'){
+
+// const options = load.Data[tag.key].filter(item => item[tag.type] === tag.name)
+// const subGroups = [...new Set(options.map(item => item.subGroup))];
+
+// for (let i = quantityRemaining; i > 0; i--) {
+
+// let randSubGroup = Math.floor(Math.random() * subGroups.length);
+
+// let options = load.Data[tag.key].filter(item => item.subGroup === subGroups[randSubGroup] && item.group === tag.name)
+
+// const randomIndex = Math.floor(Math.random() * options.length);
+// const randomObj = options[randomIndex];
+
+// const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
+// madeItems.push(newTag)
+
+// }
+
+
+}
+
+return madeItems
+
+},
+
+genJewelry(data){
+
+const gemsArray = data.items.filter(item => item.group === "Gem")
+const jewelryArray = 
+
+[
+{"item": "Anklet", "weight": 0.1, "description": "A delicate metal ornament worn around the ankle."},
+{"item": "Earring", "weight": 0.01, "description": "A small, decorative piece of metal jewelry worn on the ear."},
+{"item": "Belt", "weight": 0.5, "description": "A sturdy metal belt, often used as a functional and decorative accessory."},
+{"item": "Flagon", "weight": 1.5, "description": "A large metal vessel used for drinking or serving beverages."},
+{"item": "Bowl", "weight": 1, "description": "A round metal container used for holding food or liquids."},
+{"item": "Goblet", "weight": 0.5, "description": "A decorative metal cup used for drinking."},
+{"item": "Bracelet", "weight": 0.1, "description": "A simple metal band worn around the wrist."},
+{"item": "Brooch", "weight": 0.05, "description": "A decorative metal pin used to fasten garments."},
+{"item": "Buckle", "weight": 0.2, "description": "A metal clasp used to fasten a belt or strap."},
+{"item": "Chain", "weight": 0.2, "description": "A series of interconnected metal links used as decoration or to hold objects."},
+{"item": "Choker", "weight": 0.1, "description": "A close-fitting metal necklace worn around the neck."},
+{"item": "Circlet", "weight": 0.25, "description": "A thin metal band worn around the head, often as a decorative crown."},
+{"item": "Clasp", "weight": 0.05, "description": "A small metal fastener used to secure jewelry or clothing."},
+{"item": "Comb", "weight": 0.1, "description": "A metal grooming tool used to style hair."},
+{"item": "Crown", "weight": 0.75, "description": "An ornate metal headpiece worn by royalty."},
+{"item": "Cup", "weight": 0.5, "description": "A simple metal vessel used for drinking."},
+{"item": "Knife", "weight": 0.3, "description": "A small metal blade used for cutting or as a tool."},
+{"item": "Letter Opener", "weight": 0.2, "description": "A slender metal tool used to open envelopes."},
+{"item": "Locket", "weight": 0.05, "description": "A small metal pendant that opens to reveal a picture or keepsake."},
+{"item": "Medal", "weight": 0.1, "description": "A metal disk awarded as a mark of achievement or honor."},
+{"item": "Necklace", "weight": 0.3, "description": "A decorative metal chain or string worn around the neck."},
+{"item": "Plate", "weight": 2, "description": "A flat metal dish used for serving food."},
+{"item": "Pin", "weight": 0.02, "description": "A small metal fastener used to secure clothing or as a decoration."},
+{"item": "Sceptre", "weight": 2.5, "description": "A ceremonial metal staff held by a ruler or dignitary."},
+{"item": "Statuette", "weight": 5, "description": "A small metal sculpture, often used as a decorative piece."},
+{"item": "Tiara", "weight": 0.6, "description": "An ornate metal headpiece worn by women, similar to a small crown."}
+]
+
+
+const materialArray = [
+{name: 'Copper',
+color: '#B87333',
+value:0.5},
+{name: 'Silver',
+color: '#C0C0C0',
+value: 5},
+{name: 'Gold',
+color: '#FFD700',
+value:50},
+{name: 'Platinum',
+color: '#E5E4E2',
+value:500},
+{name: 'Electrum',
+color: '#E7C697',
+value:25}]
+
+jewelryArray.forEach(piece => {
+
+materialArray.forEach(material => {
+
+const newId = load.generateUniqueId(load.Data.items, 'entry');
+
+const newPiece = {
+description: "An unknown entity.",
+id: newId,
+type: "group",
+subType: "subGroup",
+name: material.name + ' ' + piece.item,
+group: "Jewelry",
+subGroup: material.name + ' Jewelry',
+order: "",
+color: material.color,
+weight: piece.weight,
+size: "XS",
+cost: piece.weight * material.value,
+damage: "",
+range: "",
+armourClass: "",
+key: "items",
+description: piece.description,
+tags: []
+}
+
+load.Data.items.push(newPiece)
+
+})
+
+load.Data.items = load.Data.items.filter(entry => entry.name !== piece.item)
+
+})
+
+
+
+},
+
 genGems(data){
 
 const gemsArray = data.items.filter(item => item.subGroup === "Gem")
 console.log(gemsArray)
 
 const gemQualities = [
-    {name: "Ornamental",
-    value: 10,
-    numberFound: "1d10"},
-    {name: "Semiprecious",
-    value: 50,
-    numberFound: "1d10"},
-    {name: "Fancy",
-    value: 100,
-    numberFound: "1d10"},
-    {name: "Precious",
-    value: 500,
-    numberFound: "1d10"},
-    {name: "Gem",
-    value: 1000,
-    numberFound: "1d10"},
-    {name: "Jewel",
-    value: 5000,
-    numberFound: "1"},
+{name: "Ornamental",
+value: 10,
+numberFound: "1d10"},
+{name: "Semiprecious",
+value: 50,
+numberFound: "1d10"},
+{name: "Fancy",
+value: 100,
+numberFound: "1d10"},
+{name: "Precious",
+value: 500,
+numberFound: "1d10"},
+{name: "Gem",
+value: 1000,
+numberFound: "1d10"},
+{name: "Jewel",
+value: 5000,
+numberFound: "1"},
 ]
 
 const valueAdjustment = [
-    {result: 2,
-    adjustment: "Lower Value Row"},
-    {result: 3,
-    adjustment: 0.5},
-    {result: 4,
-    adjustment: 0.75},
-    {result: 5,
-    adjustment: 1},
-    {result: 6,
-    adjustment: 1},
-    {result: 7,
-    adjustment: 1},
-    {result: 8,
-    adjustment: 1},
-    {result: 9,
-    adjustment: 1},
-    {result: 10,
-    adjustment: 1.5},
-    {result: 11,
-    adjustment: 2},
-    {result: 12,
-    adjustment: "Next Value Row"},
+{result: 2,
+adjustment: "Lower Value Row"},
+{result: 3,
+adjustment: 0.5},
+{result: 4,
+adjustment: 0.75},
+{result: 5,
+adjustment: 1},
+{result: 6,
+adjustment: 1},
+{result: 7,
+adjustment: 1},
+{result: 8,
+adjustment: 1},
+{result: 9,
+adjustment: 1},
+{result: 10,
+adjustment: 1.5},
+{result: 11,
+adjustment: 2},
+{result: 12,
+adjustment: "Next Value Row"},
 ]
 
 gemsArray.forEach(gemEntry => {
 
-    const valueAdjustmentRoll = helper.rollMultipleDice('2d6')
-    const valueAdjustmentResult = valueAdjustment.find(entry => entry.result === valueAdjustmentRoll)
+const valueAdjustmentRoll = helper.rollMultipleDice('2d6')
+const valueAdjustmentResult = valueAdjustment.find(entry => entry.result === valueAdjustmentRoll)
 
-    console.log('Result', valueAdjustmentResult)
+console.log('Result', valueAdjustmentResult)
 
-    gemQualities.forEach(qualEntry => {
+gemQualities.forEach(qualEntry => {
 
-        const newId = load.generateUniqueId(load.Data.items, 'entry');
+const newId = load.generateUniqueId(load.Data.items, 'entry');
 
-        const newGem = {
-            description: "An unknown entity.",
-            id: newId,
-            type: "group",
-            subType: "subGroup",
-            name: gemEntry.name + " (" + qualEntry.name + ")",
-            group: "Gems",
-            subGroup: qualEntry.name,
-            order: "",
-            color: gemEntry.color,
-            weight: "*",
-            size: "XS",
-            cost: qualEntry.value,
-            damage: "",
-            range: "",
-            armourClass: "",
-            key: "items",
-            tags: []
-          }
+const newGem = {
+description: "An unknown entity.",
+id: newId,
+type: "group",
+subType: "subGroup",
+name: gemEntry.name + " (" + qualEntry.name + ")",
+group: "Gems",
+subGroup: qualEntry.name,
+order: "",
+color: gemEntry.color,
+weight: "*",
+size: "XS",
+cost: qualEntry.value,
+damage: "",
+range: "",
+armourClass: "",
+key: "items",
+tags: []
+}
 
-          load.Data.items.push(newGem)
+load.Data.items.push(newGem)
 
 
-    })
+})
 
-    load.Data.items = load.Data.items.filter(entry => entry !== gemEntry)
+load.Data.items = load.Data.items.filter(entry => entry !== gemEntry)
 
 })
 
@@ -102,58 +259,79 @@ gemsArray.forEach(gemEntry => {
 
 makeHitPointBoxes(npc){
 
-    let numberBoxes = npc.hitPoints;
-    let checkboxesHTML = '';
+let numberBoxes = npc.hitPoints;
+let checkboxesHTML = '';
 
 
-    checkboxesHTML += `<input 
-    id="${npc.id}CurrentHP" 
-    type="number" 
-    class="item-quant-cell item-quant-column"
-    value="${npc.hitPoints}">`
-        
+checkboxesHTML += `<input 
+id="${npc.id}CurrentHP" 
+type="number" 
+class="item-quant-cell item-quant-column"
+value="${npc.hitPoints}">`
 
-    // Return the generated HTML string
-    return checkboxesHTML;
+
+// Return the generated HTML string
+return checkboxesHTML;
 
 },
 
 coinLogic(item,itemQuant){
 let itemValue = item.cost.toString()
+let costValue = itemValue
 let color = ''
 
 if(!itemQuant){itemQuant = 1}
 
-    const coinValues = [
-    {coin: 'cp', value: 0.01},
-    {coin: 'sp', value: 0.1},
-    {coin: 'ep', value: 0.5},
-    {coin: 'gp', value: 1},
-    {coin: 'pp', value: 100},
-    ]
+const coinValues = [
+{coin: 'cp', value: 0.01},
+{coin: 'sp', value: 0.1},
+{coin: 'ep', value: 0.5},
+{coin: 'gp', value: 1},
+{coin: 'pp', value: 100},
+]
 
-    let matchedCoin = coinValues.find(coinObj => itemValue.includes(coinObj.coin));
-    
-    if (matchedCoin) {
-        //As Gold Decimal
-        let costValue = parseFloat(itemValue.replace(matchedCoin.coin, '')) * matchedCoin.value;
+let matchedCoin = coinValues.find(coinObj => itemValue.includes(coinObj.coin));
 
-        //of type 0.00gp now
-        itemValue = (costValue * itemQuant).toFixed(2);
-    }
+if (matchedCoin) {
+//As Gold Decimal
+costValue = parseFloat(itemValue.replace(matchedCoin.coin, '')) * matchedCoin.value;
 
-        const decimalPlaces = this.getDecimalPlaces(parseFloat(itemValue))
+//of type 0.00gp now
+}
 
-        if(decimalPlaces === 2){
-        itemValue = itemValue * 100 + ' Copper Coin'
-        color = '#B87333'
-        }else if(decimalPlaces === 1){
-        itemValue = itemValue * 10 + ' Silver Coin'
-        color = '#C0C0C0'
-        } else if(decimalPlaces === 0){
-        itemValue = itemValue * 1 + ' Gold Coin'
-        color = '#FFD700'
-        }
+itemValue = (costValue * itemQuant).toFixed(2);
+
+const decimalPlaces = this.getDecimalPlaces(parseFloat(itemValue))
+
+// if(itemQuant === 1){
+
+if(decimalPlaces === 2){
+itemValue = (itemValue * 100).toFixed(0) + ' Copper Coins'
+color = '#B87333'
+}else if(decimalPlaces === 1){
+itemValue = (itemValue * 10).toFixed(0) + ' Silver Coins'
+color = '#C0C0C0'
+} else if(decimalPlaces === 0){
+itemValue = (itemValue * 1).toFixed(0) + ' Gold Coins'
+color = '#FFD700'
+}
+
+// }else{
+
+// itemValue = itemValue * itemQuant
+
+// if(decimalPlaces === 2){
+// itemValue = itemValue * 100 + ' Copper Coins'
+// color = '#B87333'
+// }else if(decimalPlaces === 1){
+// itemValue = itemValue * 10 + ' Silver Coins'
+// color = '#C0C0C0'
+// } else if(decimalPlaces === 0){
+// itemValue = itemValue * 1 + ' Gold Coins'
+// color = '#FFD700'
+// }
+
+// }
 
 
 
@@ -164,50 +342,89 @@ return returnObj
 
 },
 
-addEventToStoryNamedCell(){
+addEventsToStoryteller(){
 
+const storyNameCell = document.querySelectorAll(".story-name-cell")
 
-    const storyNameCell = document.querySelectorAll(".story-name-cell")
+storyNameCell.forEach(div => {
 
-    storyNameCell.forEach(div => {
-    
-    div.addEventListener('click', () => {
-    
-    const key = div.getAttribute('key')
-    const id = div.getAttribute('id')
-    let index = load.Data[key].findIndex(entry => parseInt(entry.id) === parseInt(id));
-    
-    //console.log(key, id, index)
-    form.createForm(load.Data[key][index]);
-    
-    });
-    
-    div.addEventListener('mouseover', function() {
-    this.classList.add('highlight');
-    });
-    
-    div.addEventListener('mouseout', function() {
-    this.classList.remove('highlight');
-    });
-    
-    })
+div.addEventListener('click', () => {
+
+const key = div.getAttribute('key')
+const id = div.getAttribute('id')
+let index = load.Data[key].findIndex(entry => parseInt(entry.id) === parseInt(id));
+
+//console.log(key, id, index)
+form.createForm(load.Data[key][index]);
+
+});
+
+div.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+});
+
+div.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+});
+
+})
+
 
 },
 
- getDecimalPlaces(value) {
-    
+updateEventContent(){
 
-    if (!isFinite(value) || Math.floor(value) === value) {
-        // Return 0 if the value is not finite or if it's an integer
-        return 0;
-    }
-    
-    // Convert the value to a string and split it at the decimal point
-    let valueString = value.toString();
-    let decimalPart = valueString.split('.')[1];
-    
-    // Return the length of the decimal part
-    return decimalPart.length;
+const npcEvents = document.querySelectorAll(".npcEvent")
+
+npcEvents.forEach(div => {
+
+const eventID = div.getAttribute("eventID")
+const eventObj = load.Data.events.find(obj => obj.id === parseInt(eventID))
+
+if(eventObj === undefined){return}
+
+const options = eventObj.description.split('??').filter(Boolean);
+const currentOption = options.findIndex(option => option === div.textContent)
+
+//if(div.textContent.includes('"')){
+
+// var i = 0;
+// var txt = 'Lorem ipsum dummy text blabla.';
+// var speed = 50;
+
+// function typeWriter() {
+//   if (i < txt.length) {
+//     document.getElementById("demo").innerHTML += txt.charAt(i);
+//     i++;
+//     setTimeout(typeWriter, speed);
+//   }
+// }
+
+if(currentOption === options.length - 1){
+div.textContent = options[0]
+}else{
+div.textContent = options[currentOption + 1]
+}
+
+//}
+
+})
+},
+
+getDecimalPlaces(value) {
+
+
+if (!isFinite(value) || Math.floor(value) === value) {
+// Return 0 if the value is not finite or if it's an integer
+return 0;
+}
+
+// Convert the value to a string and split it at the decimal point
+let valueString = value.toString();
+let decimalPart = valueString.split('.')[1];
+
+// Return the length of the decimal part
+return decimalPart.length;
 },
 
 makeIteminfo(item, tag){
@@ -272,11 +489,11 @@ obj = obj.map(entry => {
 //entry.active = 1;
 
 if(entry.image){
-    return
+return
 }else{
-    entry.image = ""}
-    
-    //entry.chance = 100;
+entry.image = ""}
+
+//entry.chance = 100;
 
 return entry
 
@@ -322,30 +539,30 @@ promptContent.appendChild(promptText);
 
 if(type === 'custom'){
 
-    const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('prompt-button-container');
-    
-    const option1Button = document.createElement('button');
-    option1Button.textContent = option1;
-    option1Button.classList.add('prompt-button');
-    option1Button.onclick = () => { 
-    this.handleConfirm(true, promptBox); 
-    };
-    
-    const option2Button = document.createElement('button');
-    option2Button.textContent = option2;
-    option2Button.classList.add('prompt-button');
-    option2Button.onclick = () => { 
-    this.handleConfirm(false, promptBox); 
-    };
-    
-    buttonContainer.appendChild(option1Button);
-    buttonContainer.appendChild(option2Button);
-    
-    
-    promptContent.appendChild(buttonContainer);
-    }
-    
+const buttonContainer = document.createElement('div');
+buttonContainer.classList.add('prompt-button-container');
+
+const option1Button = document.createElement('button');
+option1Button.textContent = option1;
+option1Button.classList.add('prompt-button');
+option1Button.onclick = () => { 
+this.handleConfirm(true, promptBox); 
+};
+
+const option2Button = document.createElement('button');
+option2Button.textContent = option2;
+option2Button.classList.add('prompt-button');
+option2Button.onclick = () => { 
+this.handleConfirm(false, promptBox); 
+};
+
+buttonContainer.appendChild(option1Button);
+buttonContainer.appendChild(option2Button);
+
+
+promptContent.appendChild(buttonContainer);
+}
+
 
 if(type === 'yesNo'){
 
@@ -488,11 +705,11 @@ let returnDesc
 //Filter if use of <<??>> in description.
 const options = obj.description.split('??').filter(Boolean);
 
-if (options.length > 0) {
+if (options.length > 1) {
 const randomIndex = Math.floor(Math.random() * options.length);
 const selectedOption = options[randomIndex].trim();
 
-returnDesc = `${selectedOption}`;
+returnDesc = `<span class="npcEvent" eventID="${obj.id}"> ${selectedOption} </span>`;
 } else {
 returnDesc = `${obj.description}`;
 }
@@ -700,27 +917,27 @@ return uniqueTags;
 },
 
 rollMultipleDice(input) {
-    // Split the input string into the number of dice and the number of sides
-    let [number, sides] = input.split('d').map(Number);
+// Split the input string into the number of dice and the number of sides
+let [number, sides] = input.split('d').map(Number);
 
-    // If the input is invalid (like "d8" or "1d"), return an error message or handle accordingly
-    if (isNaN(number) || isNaN(sides)) {
-        return 'Invalid input format';
-    }
+// If the input is invalid (like "d8" or "1d"), return an error message or handle accordingly
+if (isNaN(number) || isNaN(sides)) {
+return 'Invalid input format';
+}
 
-    let results = 0;
+let results = 0;
 
-    // Roll the dice the specified number of times
-    for (let i = 0; i < number; i++) {
-        results = results + this.rollDice(sides);
-    }
+// Roll the dice the specified number of times
+for (let i = 0; i < number; i++) {
+results = results + this.rollDice(sides);
+}
 
-    return results;
+return results;
 },
 
 rollDice(sides) {
-    
-    return Math.floor(Math.random() * sides) + 1;
+
+return Math.floor(Math.random() * sides) + 1;
 }
 
 }

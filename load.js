@@ -210,6 +210,7 @@ load.Data = JSON.parse(fileContent);
 // this.generateTags(load.Data, 'locations');
 //helper.sortData(load.Data)
 //helper.genGems(load.Data);
+helper.genJewelry(load.Data);
 
 //Storyteller.miscInfo = load.Data.miscInfo.description;
 load.fileName = load.Data.miscInfo.fileName;
