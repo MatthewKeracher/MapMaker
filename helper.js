@@ -386,27 +386,21 @@ if(eventObj === undefined){return}
 const options = eventObj.description.split('??').filter(Boolean);
 const currentOption = options.findIndex(option => option === div.textContent)
 
-//if(div.textContent.includes('"')){
-
-// var i = 0;
-// var txt = 'Lorem ipsum dummy text blabla.';
-// var speed = 50;
-
-// function typeWriter() {
-//   if (i < txt.length) {
-//     document.getElementById("demo").innerHTML += txt.charAt(i);
-//     i++;
-//     setTimeout(typeWriter, speed);
-//   }
-// }
-
+let nextOption = ''
+    
 if(currentOption === options.length - 1){
-div.textContent = options[0]
+nextOption = options[0]
 }else{
-div.textContent = options[currentOption + 1]
+nextOption = options[currentOption + 1]
 }
 
-//}
+div.textContent = ''
+
+for (let i = 0; i < nextOption.length; i++) {
+  setTimeout(() => {
+    div.textContent += nextOption.charAt(i);
+  }, i * 25); // delay increases with each iteration
+}
 
 })
 },
