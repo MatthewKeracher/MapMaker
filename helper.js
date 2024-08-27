@@ -237,7 +237,7 @@ itemInfo += itemValue;
 
 let itemHTML = `
 <div id="${item.name}Row" 
-class = "item-row"
+class = "story-item-row"
 tagid = ${tag.id} 
 tagkey = ${tag.key}>
 

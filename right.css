@@ -170,8 +170,8 @@ color: lime;
 outline: none;
 border-radius: 0;
 }
-    
-    
+
+
 
 .Storyteller{
 /* Position */
@@ -243,23 +243,24 @@ border-radius: 0px; /* Adjust the border radius for rounded corners */
 }
 
 .hitPointBox {
-    display: table-cell;
-    font-family: 'SoutaneBlack';
-    font-size: 2.2vh;
-    height: 2.5vh;
-    width: 4vw;
-    background-color: black;
-    border: 0.1vh solid rgb(2, 0, 0); /* Add border for visualization */
-    white-space: nowrap; /* Prevent text wrapping */
-    overflow: hidden; /* Prevent overflow */
-    text-overflow: ellipsis; /* Show ellipsis for overflow */
-    vertical-align: middle;
+display: table-cell;
+font-family: 'SoutaneBlack';
+font-size: 2.2vh;
+height: 2.5vh;
+width: 4vw;
+background-color: black;
+border: 0.1vh solid rgb(2, 0, 0); /* Add border for visualization */
+white-space: nowrap; /* Prevent text wrapping */
+overflow: hidden; /* Prevent overflow */
+text-overflow: ellipsis; /* Show ellipsis for overflow */
+vertical-align: middle;
 }
 
 .hitPointBox:focus{
-    /* Appearance */
-    background-color: transparent;
-    outline: none;
-    border-radius: 0;
-    }
+/* Appearance */
+background-color: transparent;
+outline: none;
+border-radius: 0;
+}
+
 

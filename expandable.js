@@ -133,7 +133,7 @@ itemsHTML += `${itemInfo}`;
 })
 
 //Format inventory items.
-itemsHTML += `<br>`;
+//itemsHTML += `<br>`;
 
 //Title for Expanded Backstory Entry.
 //<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
@@ -191,7 +191,7 @@ tagEntry.innerHTML =
 `<h3 class="nested deleteMe"
 showHide="hide"
 id="${obj.id}" 
-key="${obj.key}"
+key="${obj.key}"s
 style="color:${obj.color}">
 ${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
 <span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>

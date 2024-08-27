@@ -180,6 +180,7 @@ color: lime;
 
 .story-item-row {
     display: table-row;
+    table-layout: fixed; /* Ensure consistent cell widths */
 }
 
 .story-name-cell {
@@ -216,3 +217,4 @@ color: lime;
 /* Set individual column widths */
 .story-name-column { width: 20vw;}
 .story-data-column { width: auto;}
+

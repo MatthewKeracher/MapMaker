@@ -515,7 +515,7 @@ let header =
 class="expandable" 
 style='color:${tag.color}'
 id="${tag.id}"
-key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}"> <br>`;
+key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}">`;
 
 if(bundle.length > 0){
 this.eventDesc += `<br><br>`
@@ -531,7 +531,6 @@ key="${tag.key}"> ${tag.description}</span>`
 
 if(bundle.length > 0){
 this.eventDesc += descWrapper
-this.eventDesc += `<br>`;
 this.eventDesc += `<br>`;
 };
 
