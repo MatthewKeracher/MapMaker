@@ -692,7 +692,7 @@ return inGold;
 return cost; // Return the original cost if no match is found
 },
 
-filterRandomOptions(obj){
+filterRandomOptions(obj, npc){
 
 let returnDesc
 
@@ -702,8 +702,9 @@ const options = obj.description.split('??').filter(Boolean);
 if (options.length > 1) {
 const randomIndex = Math.floor(Math.random() * options.length);
 const selectedOption = options[randomIndex].trim();
+const npcEvent = npc? 'npcEvent' : 'notNPC'
 
-returnDesc = `<span style="color:lime" class="npcEvent" eventID="${obj.id}"> ${selectedOption} </span>`;
+returnDesc = `<span style="color:lime" class="${npcEvent}" eventID="${obj.id}"> ${selectedOption} </span>`;
 } else {
 returnDesc = `${obj.description}`;
 }
