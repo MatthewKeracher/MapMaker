@@ -184,7 +184,7 @@ this.eventDesc += `<hr name="${subLocHR}" style="background-color:${subLocation.
 
 
 //SubLocation Description
-let subLocDesc = helper.filterRandomOptions(subLocation);
+let subLocDesc = helper.Options(subLocation);
 
 //Add Keywords
 let hyperDesc = expandable.findKeywords(subLocDesc, keywords);
@@ -470,7 +470,7 @@ id="${event.id}"
 key="${event.key}">${event.name}. </span>`;
 
 //Resolve Random Options within Event
-let eventDesc = helper.filterRandomOptions(event);
+let eventDesc = helper.filterRandomOptions(event, npc);
 this.eventDesc += eventDesc;
 this.eventDesc += `<br>`;
 
