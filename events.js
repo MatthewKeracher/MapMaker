@@ -13,7 +13,7 @@ const Events = {
 eventDesc: "",
 eventsArray: [],
 searchArray: [],
-eventDialogue: [],
+eventActions: [],
 
 
 
@@ -339,20 +339,6 @@ ${npc.name} is here.</span><hr name="${npcHR}" style="background-color:${npc.col
 //Insert NPC
 this.eventDesc +=`${npcHTML}`;
 
-//Insert first sentence of Backstory
-let firstPeriodIndex = npc.description.indexOf('.');
-let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
-//Add Keywords
-let hyperDesc = expandable.findKeywords(firstSentence, keywords);
-
-//Insert NPC Information
-this.eventDesc += `<span
-class="extendable"
-showHide="hide"
-key="${npc.key}" 
-style="color:whitesmoke" 
-id="${npc.id}">${hyperDesc} </span> <br><br>`
-}
 
 //Make eventBundle with events tagged to NPC directly.
 let eventBundle = [] //npc.tags.filter(tag => tag.key === 'events');
@@ -449,7 +435,8 @@ eventBundle.forEach(obj => {
 
 eventBundle = uniqueEvents;
 
-let eventDescriptions = [];
+let npcDialogue = [];
+let npcActions = [];
 
 //Sort Events by Order
 eventBundle.sort((a, b) => a.order - b.order);
@@ -468,7 +455,9 @@ if(parseInt(event.active) === 0){return}
 
 //Filter if use of <<??>> in description.
 let options = event.description.split('??').filter(Boolean);
-let eventDescToAdd = []
+
+let dialogueToAdd = []
+let actionsToAdd = []
 
 //Repackage each option as own object. 
 options.forEach(option => {
@@ -484,43 +473,94 @@ const newObj = {
 
 }
 
-eventDescToAdd.push(newObj)
 
-eventDescriptions = [...eventDescriptions, ...eventDescToAdd];
-
-//Add to global array for helper.updateEventContent()
-this.eventDialogue = [...this.eventDialogue, ...eventDescToAdd];
+if(option.charAt(0) === '"'){
+dialogueToAdd.push(newObj)
+}else{
+actionsToAdd.push(newObj)
+}
 
 });
+
+npcDialogue = [...npcDialogue, ...dialogueToAdd];
+npcActions  = [...npcActions, ...actionsToAdd];
+
+//Add to global arrays for helper.updateEventContent()
+this.eventDialogue = [...this.eventDialogue, ...dialogueToAdd];
+this.eventActions  = [...this.eventActions, ...actionsToAdd];
+
+
 });
+
+if(npcActions.length > 0){
+
+    //Set starting event content. 
+    const firstAction = npcActions[0]
+    let selectedAction = 'You should not be able to see this!'
+    
+    //Tee up for Dialogue
+    if(npcActions.length > 1){
+    
+    const randomIndex = Math.floor(Math.random() * npcActions.length);
+    selectedAction = npcActions[randomIndex].description.trim();
+    const color = firstAction.color? firstAction.color: "lime";
+    this.eventDesc += `<span class="npcAction" style="color:${color}" npcId="${firstAction.npcId}" eventID="${firstAction.id}"> ${selectedAction} </span><br><br> `;
+    
+    //Update Global Array for helper.updateEventContent();
+    // this.eventsDialogue = npcActions
+    
+    
+    //Event only has one, permanent description.
+    }else{
+    
+    selectedAction = npcActions[0].description.trim();
+    const color = firstAction.color? firstAction.color: "whitesmoke";
+    this.eventDesc += `<span style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span><br><br> `;
+    
+    }}
+
+if(npcDialogue.length > 0){
 
 //Set starting event content. 
-const firstEvent = eventDescriptions[0]
+const firstEvent = npcDialogue[0]
+let selectedOption = 'You should not be able to see this!'
 
-//Add Event to NPC in Storyteller.
-// this.eventDesc += 
-// `<span 
-// class="expandable"
-// style="font-family:'SoutaneBlack'; color:${firstEvent.color}" 
-// id="${firstEvent.id}"
-// key="${firstEvent.key}">${firstEvent.name}. </span>`;
+//Tee up for Dialogue
+if(npcDialogue.length > 1){
 
-const randomIndex = Math.floor(Math.random() * eventDescriptions.length);
-const selectedOption = eventDescriptions[randomIndex].description.trim();
+const randomIndex = Math.floor(Math.random() * npcDialogue.length);
+selectedOption = npcDialogue[randomIndex].description.trim();
 const color = firstEvent.color? firstEvent.color: "lime";
-this.eventDesc += `<span class="npcEvent" style="color:lime" npcId="${firstEvent.npcId}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
+this.eventDesc += `<span class="npcDialogue" style="color:lime" npcId="${firstEvent.npcId}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
 
-this.eventsDialogue = eventDescriptions
-
-
-// //Resolve Random Options within Event
-// let eventDesc = helper.filterRandomOptions(event, npc);
-// this.eventDesc += eventDesc;
-// this.eventDesc += `<br>`;
+// //Update Global Array for helper.updateEventContent();
+// this.eventsDialogue = npcDialogue
 
 
+//Event only has one, permanent description.
+}else{
+
+selectedOption = npcDialogue[0].description.trim();
+const color = firstEvent.color? firstEvent.color: "whitesmoke";
+this.eventDesc += `<span style="color:${color}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
+
+}}
 
 
+//Insert first sentence of Backstory
+let firstPeriodIndex = npc.description.indexOf('.');
+let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
+//Add Keywords
+let hyperDesc = expandable.findKeywords(firstSentence, keywords);
+
+//Insert NPC Information
+this.eventDesc += `<br><br><span
+class="extendable"
+showHide="hide"
+key="${npc.key}" 
+style="color:whitesmoke" 
+id="${npc.id}">${hyperDesc} </span> <br><br>`
+}
 
 });
 },

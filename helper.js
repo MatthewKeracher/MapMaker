@@ -400,24 +400,17 @@ this.classList.remove('highlight');
 
 updateEventContent(){
 
-const npcEvents = document.querySelectorAll(".npcEvent")
+const npcDialogue = document.querySelectorAll(".npcDialogue")
+const npcActions = document.querySelectorAll(".npcAction")
 
-npcEvents.forEach(div => {
+npcDialogue.forEach(div => {
 
 const eventID = div.getAttribute("eventID")
 const npcId = div.getAttribute("npcId")
 
-//console.log(Events.eventDialogue)
-
 const options = Events.eventDialogue.filter(event => parseInt(event.npcId) == parseInt(npcId));
 
 if(options === undefined){return}
-
-//const eventObj = load.Data.events.find(obj => obj.id === parseInt(eventID))
-
-//if(eventObj === undefined){return}
-
-//const options = eventObj.description.split('??').filter(Boolean);
 
 const currentOption = options.findIndex(option => option.description === div.textContent)
 
@@ -443,10 +436,42 @@ const newEventDesc = newOption.description;
 for (let i = 0; i < newEventDesc.length; i++) {
   setTimeout(() => {
     div.textContent += newEventDesc.charAt(i);
-  }, i * 25); // delay increases with each iteration
+  }, i * 50); // delay increases with each iteration
 }
 
 })
+
+npcActions.forEach(div => {
+
+    const eventID = div.getAttribute("eventID")
+    const npcId = div.getAttribute("npcId")
+    
+    const options = Events.eventActions.filter(event => parseInt(event.npcId) == parseInt(npcId));
+    
+    if(options === undefined){return}
+    
+    const currentOption = options.findIndex(option => option.description === div.textContent)
+    
+    let newOption = "They are standing around giving NPC Energy."
+    
+    if(currentOption === options.length - 1){
+    newOption = options[0]
+    }else{
+    let nextOptions = options.filter(option => option.eventID !== eventID); //options[currentOption + 1]
+    const randomIndex = Math.floor(Math.random() * nextOptions.length);
+    newOption = nextOptions[randomIndex]
+    }
+    
+    const color = newOption.color? newOption.color: "lime";
+    //div.setAttribute("style", `color:${color}`);
+    div.setAttribute("eventID", newOption.id)
+    div.textContent = ''
+    
+    const newEventDesc = newOption.description;
+    
+    div.textContent = newEventDesc;
+      
+    })
 },
 
 getDecimalPlaces(value) {
