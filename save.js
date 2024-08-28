@@ -124,8 +124,6 @@ if(iCheck === 'i'){
             quantity: tagQuant, 
             bonus: tagBonus
         });
-
-        console.log(tags)
         
 
         }else if(!keyChain.includes(tagKey)){

@@ -4,6 +4,7 @@ import editor from "./editor.js";
 import form from "./form.js";
 import NPCs from "./npcs.js";
 import ref from "./ref.js";
+import Events from "./events.js";
 
 const helper = {
 
@@ -369,6 +370,31 @@ this.classList.remove('highlight');
 
 })
 
+const npcDialogue = document.querySelectorAll(".npcEvent")
+
+npcDialogue.forEach(div => {
+
+div.addEventListener('click', () => {
+
+const key = "events"
+const id = div.getAttribute('eventID')
+let index = load.Data[key].findIndex(entry => parseInt(entry.id) === parseInt(id));
+
+//console.log(key, id, index)
+form.createForm(load.Data[key][index]);
+
+});
+
+div.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+});
+
+div.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+});
+
+})
+
 
 },
 
@@ -379,26 +405,44 @@ const npcEvents = document.querySelectorAll(".npcEvent")
 npcEvents.forEach(div => {
 
 const eventID = div.getAttribute("eventID")
-const eventObj = load.Data.events.find(obj => obj.id === parseInt(eventID))
+const npcId = div.getAttribute("npcId")
 
-if(eventObj === undefined){return}
+//console.log(Events.eventDialogue)
 
-const options = eventObj.description.split('??').filter(Boolean);
-const currentOption = options.findIndex(option => option === div.textContent)
+const options = Events.eventDialogue.filter(event => parseInt(event.npcId) == parseInt(npcId));
 
-let nextOption = ''
+if(options === undefined){return}
+
+//const eventObj = load.Data.events.find(obj => obj.id === parseInt(eventID))
+
+//if(eventObj === undefined){return}
+
+//const options = eventObj.description.split('??').filter(Boolean);
+
+const currentOption = options.findIndex(option => option.description === div.textContent)
+
+let newOption = "I got nothing to say to you."
+
     
 if(currentOption === options.length - 1){
-nextOption = options[0]
+newOption = options[0]
 }else{
-nextOption = options[currentOption + 1]
+let nextOptions = options.filter(option => option.eventID !== eventID); //options[currentOption + 1]
+const randomIndex = Math.floor(Math.random() * nextOptions.length);
+newOption = nextOptions[randomIndex]
 }
 
+const color = newOption.color? newOption.color: "lime";
+//div.setAttribute("style", `color:${color}`);
+div.setAttribute("eventID", newOption.id)
 div.textContent = ''
 
-for (let i = 0; i < nextOption.length; i++) {
+const newEventDesc = newOption.description;
+
+
+for (let i = 0; i < newEventDesc.length; i++) {
   setTimeout(() => {
-    div.textContent += nextOption.charAt(i);
+    div.textContent += newEventDesc.charAt(i);
   }, i * 25); // delay increases with each iteration
 }
 
@@ -704,7 +748,7 @@ const randomIndex = Math.floor(Math.random() * options.length);
 const selectedOption = options[randomIndex].trim();
 const npcEvent = npc? 'npcEvent' : 'notNPC'
 
-returnDesc = `<span style="color:lime" class="${npcEvent}" eventID="${obj.id}"> ${selectedOption} </span>`;
+returnDesc = `<span class="${npcEvent}" eventID="${obj.id}"> ${selectedOption} </span>`;
 } else {
 returnDesc = `${obj.description}`;
 }

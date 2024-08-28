@@ -34,6 +34,7 @@ const returnLocation = load.Data.locations.find(entry => entry.name === returnLo
 Storyteller.returnLocation = returnLocation;
 
 if (locObj) {
+Events.eventDialogue = [];
 Events.getEvent(locObj);
 
 Story += `

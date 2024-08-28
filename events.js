@@ -13,6 +13,7 @@ const Events = {
 eventDesc: "",
 eventsArray: [],
 searchArray: [],
+eventDialogue: [],
 
 
 
@@ -184,7 +185,7 @@ this.eventDesc += `<hr name="${subLocHR}" style="background-color:${subLocation.
 
 
 //SubLocation Description
-let subLocDesc = helper.Options(subLocation);
+let subLocDesc = helper.filterRandomOptions(subLocation);
 
 //Add Keywords
 let hyperDesc = expandable.findKeywords(subLocDesc, keywords);
@@ -371,7 +372,6 @@ tagObj.tags.forEach(tag => {
 //Add tag if tagged to subLocation
 if(tag.key === 'subLocations' && parseInt(tag.id) === parseInt(subLocation.id) ||
 tag.key === 'locations' && parseInt(tag.id) === parseInt(locObj.id)){
-console.log(tagObj.name)
 presentTagObjs.push(tagObj);
 }
 
@@ -436,6 +436,9 @@ let uniqueEventIds = new Set();
 
 
 //Filter out duplicate Events.
+//console.log("eventBundle", eventBundle)
+
+
 eventBundle.forEach(obj => {
     if (!uniqueEventIds.has(obj.id)) {
         uniqueEventIds.add(obj.id);
@@ -445,6 +448,8 @@ eventBundle.forEach(obj => {
 });
 
 eventBundle = uniqueEvents;
+
+let eventDescriptions = [];
 
 //Sort Events by Order
 eventBundle.sort((a, b) => a.order - b.order);
@@ -458,23 +463,65 @@ console.log('roll Failed')
 return  
 }
 
-//Final Check on Event
-//console.log(eventBundle)
+//Check to see if Event is Active
+if(parseInt(event.active) === 0){return}
 
-//Add Event to NPC in Storyteller.
-this.eventDesc += 
-`<span 
-class="expandable"
-style="font-family:'SoutaneBlack'; color:${event.color}" 
-id="${event.id}"
-key="${event.key}">${event.name}. </span>`;
+//Filter if use of <<??>> in description.
+let options = event.description.split('??').filter(Boolean);
+let eventDescToAdd = []
 
-//Resolve Random Options within Event
-let eventDesc = helper.filterRandomOptions(event, npc);
-this.eventDesc += eventDesc;
-this.eventDesc += `<br>`;
+//Repackage each option as own object. 
+options.forEach(option => {
+
+const newObj = {
+
+    id: event.id,
+    npcId: npc.id,
+    key: event.key,
+    name: event.name, 
+    color: event.color,
+    description: option
+
+}
+
+eventDescToAdd.push(newObj)
+
+eventDescriptions = [...eventDescriptions, ...eventDescToAdd];
+
+//Add to global array for helper.updateEventContent()
+this.eventDialogue = [...this.eventDialogue, ...eventDescToAdd];
 
 });
+});
+
+//Set starting event content. 
+const firstEvent = eventDescriptions[0]
+
+//Add Event to NPC in Storyteller.
+// this.eventDesc += 
+// `<span 
+// class="expandable"
+// style="font-family:'SoutaneBlack'; color:${firstEvent.color}" 
+// id="${firstEvent.id}"
+// key="${firstEvent.key}">${firstEvent.name}. </span>`;
+
+const randomIndex = Math.floor(Math.random() * eventDescriptions.length);
+const selectedOption = eventDescriptions[randomIndex].description.trim();
+const color = firstEvent.color? firstEvent.color: "lime";
+this.eventDesc += `<span class="npcEvent" style="color:lime" npcId="${firstEvent.npcId}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
+
+this.eventsDialogue = eventDescriptions
+
+
+// //Resolve Random Options within Event
+// let eventDesc = helper.filterRandomOptions(event, npc);
+// this.eventDesc += eventDesc;
+// this.eventDesc += `<br>`;
+
+
+
+
+
 });
 },
 
