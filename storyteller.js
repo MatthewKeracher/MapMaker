@@ -35,6 +35,7 @@ Storyteller.returnLocation = returnLocation;
 
 if (locObj) {
 Events.eventDialogue = [];
+Events.eventActions = [];
 Events.getEvent(locObj);
 
 Story += `

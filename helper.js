@@ -370,9 +370,11 @@ this.classList.remove('highlight');
 
 })
 
-const npcDialogue = document.querySelectorAll(".npcEvent")
+const npcDialogue = document.querySelectorAll(".npcDialogue");
+const npcActions = document.querySelectorAll(".npcActions");
+const npcEvents = [...npcDialogue, ...npcActions]
 
-npcDialogue.forEach(div => {
+npcEvents.forEach(div => {
 
 div.addEventListener('click', () => {
 
