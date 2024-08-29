@@ -94,7 +94,7 @@ const locationsArray = Array.from(locations);
 
 // Filter the locations to find the one with the specific ID
 const thisLoc = locationsArray.find(loc => loc.name === location.name);
-Storyteller.changeContent(thisLoc);
+Storyteller.changeContent(thisLoc.id);
 
 } else {
 // User cancelled

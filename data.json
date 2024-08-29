@@ -18,17 +18,11 @@
         "key": "npcs",
         "id": "9"
       }
-    ],
-    "ledger": [
-      {
-        "name": "Ledger Entry",
-        "description": "Click [A]dd to add new Ledger Entries on this screen."
-      }
     ]
   },
   "ambience": [
     {
-      "id": 0,
+      "id": 1000,
       "key": "ambience",
       "image": "",
       "active": 1,
@@ -44,39 +38,56 @@
   ],
   "locations": [
     {
-      "id": 0,
-      "key": "locations",
-      "image": "",
-      "name": "Defaulto",
-      "color": "#00ff00",
+      "description": "Welcome to Excel_DM. This section is for general information about your adventure. Shift-click here, or press the <span class=\"cyan\">[E]dit</span> button to change what this says.",
+      "id": 1000,
       "type": "group",
       "subType": "color",
+      "name": "New Adventure",
+      "image": "",
       "order": "0",
       "group": "Do Not Delete!",
+      "subGroup": "",
+      "color": "#2ab22a",
       "left": "0",
       "top": "0",
       "width": "0",
       "height": "0",
-      "description": "",
-      "tags": [],
-      "subGroup": ""
+      "key": "locations",
+      "tags": [
+        {
+          "key": "subLocations",
+          "id": "1000",
+          "save": "true"
+        }
+      ]
     }
   ],
   "subLocations": [
     {
-      "id": 0,
-      "image": "",
-      "key": "subLocations",
-      "active": 1,
-      "order": 1,
+      "description": "This section is where I will put some instructions to help you use Excel_DM for designing your ttrpg adventure.",
+      "id": 1000,
       "type": "group",
       "subType": "subGroup",
+      "name": "Using Excel_DM",
+      "image": "https://i.redd.it/qvg7ei8v8vb91.gif",
+      "order": "1",
       "group": "Do Not Delete!",
       "subGroup": "",
-      "name": "Defaulto",
-      "color": "#ffd700",
-      "description": "",
-      "tags": []
+      "color": "#9c9154",
+      "active": "1",
+      "key": "subLocations",
+      "tags": [
+        {
+          "key": "locations",
+          "id": "1000",
+          "save": "true"
+        },
+        {
+          "key": "tags",
+          "id": "1000",
+          "save": "true"
+        }
+      ]
     }
   ],
   "npcs": [
@@ -84,7 +95,7 @@
       "type": "group",
       "subType": "subGroup",
       "key": "npcs",
-      "id": 0,
+      "id": 1000,
       "name": "Matthew Keracher",
       "class": "Magic User",
       "level": 10,
@@ -92,8 +103,14 @@
       "image": "https://uwm.edu/anthropology/wp-content/uploads/sites/204/2021/11/Keracher-Final-scaled.jpg",
       "alignment": "Lawful Good",
       "species": "Human",
-      "tags": [],
-      "hitPoints": 20,
+      "tags": [
+        {
+          "key": "tags",
+          "id": "1000",
+          "save": "true"
+        }
+      ],
+      "hitPoints": 28,
       "attackBonus": 4,
       "damage": "1d6 or by weapon",
       "attacks": "1",
@@ -109,18 +126,18 @@
       },
       "group": "Do Not Delete!",
       "subGroup": "Admin",
-      "description": "A handsome genius who knows all the secrets and spells.",
-      "Strength": 5,
+      "description": "They are nearly thirty, with little to show for it. They like to code things and play ttrpgs.",
+      "Strength": "5",
       "modStrength": -2,
-      "Dexterity": 3,
+      "Dexterity": "3",
       "modDexterity": -3,
-      "Intelligence": 12,
+      "Intelligence": "12",
       "modIntelligence": 0,
-      "Wisdom": 15,
+      "Wisdom": "15",
       "modWisdom": 1,
-      "Constitution": 7,
+      "Constitution": "7",
       "modConstitution": -1,
-      "Charisma": 6,
+      "Charisma": "6",
       "modCharisma": -1,
       "initiative": 0
     },
@@ -191,7 +208,7 @@
           "save": "true"
         }
       ],
-      "hitPoints": 17,
+      "hitPoints": 16,
       "attackBonus": 3,
       "damage": "1d6 or by weapon",
       "attacks": "1",
@@ -220,7 +237,7 @@
       "modConstitution": -1,
       "Charisma": "6",
       "modCharisma": -1,
-      "initiative": 5,
+      "initiative": 0,
       "Skills": {
         "Skeleton": 3,
         "Zombie": 7,
@@ -279,7 +296,7 @@
           "save": "true"
         }
       ],
-      "hitPoints": 32,
+      "hitPoints": 40,
       "attackBonus": 6,
       "damage": "1d6 or by weapon",
       "attacks": "1",
@@ -308,7 +325,7 @@
       "modConstitution": -1,
       "Charisma": "6",
       "modCharisma": -1,
-      "initiative": 4
+      "initiative": 0
     },
     {
       "type": "group",
@@ -455,7 +472,7 @@
           "save": "true"
         }
       ],
-      "hitPoints": 19,
+      "hitPoints": 23,
       "attackBonus": 4,
       "damage": "1d6 or by weapon",
       "attacks": "1",
@@ -484,7 +501,7 @@
       "modConstitution": 3,
       "Charisma": "18",
       "modCharisma": 3,
-      "initiative": 20
+      "initiative": 0
     },
     {
       "type": "group",
@@ -550,7 +567,7 @@
           "save": "true"
         }
       ],
-      "hitPoints": 22,
+      "hitPoints": 26,
       "attackBonus": 5,
       "damage": "1d6 or by weapon",
       "attacks": "1",
@@ -579,7 +596,7 @@
       "modConstitution": 3,
       "Charisma": "18",
       "modCharisma": 3,
-      "initiative": 4,
+      "initiative": 0,
       "Skills": {
         "openLocks": 68,
         "removeTraps": 63,
@@ -593,7 +610,7 @@
   ],
   "events": [
     {
-      "id": 0,
+      "id": 1000,
       "key": "events",
       "image": "",
       "active": 1,
@@ -605,23 +622,60 @@
       "color": "#ffd700",
       "description": "",
       "tags": []
+    },
+    {
+      "description": "??\"Hi there and welcome to Excel_DM, I am the developer Matthew Keracher.\"\n??\"Are you looking for a fun way to design your next ttrpg adventure?\"\n??They gesture for you to look at them.\n??They want to tell you how Excel_DM works.",
+      "id": 1001,
+      "type": "group",
+      "subType": "subGroup",
+      "name": "Matthew Chat",
+      "image": "",
+      "group": "Tags",
+      "subGroup": "New Start",
+      "order": "0",
+      "color": "#e1c537",
+      "active": "1",
+      "key": "events",
+      "tags": [
+        {
+          "key": "tags",
+          "id": "1000",
+          "save": "true"
+        }
+      ]
     }
   ],
   "tags": [
     {
-      "id": 0,
-      "key": "tags",
-      "active": 1,
-      "order": 1,
-      "chance": 100,
+      "description": "Insert information about Defaulto here.",
+      "id": 1000,
       "type": "group",
       "subType": "subGroup",
-      "name": "Defaulto",
-      "color": "#ffd700",
+      "name": "New Start",
+      "order": "1",
       "group": "Do Not Delete!",
       "subGroup": "",
-      "description": "",
-      "tags": []
+      "color": "#15b7ac",
+      "active": "1",
+      "chance": "100",
+      "key": "tags",
+      "tags": [
+        {
+          "key": "subLocations",
+          "id": "1000",
+          "save": "true"
+        },
+        {
+          "key": "npcs",
+          "id": "1000",
+          "save": "true"
+        },
+        {
+          "key": "events",
+          "id": 1001,
+          "save": "true"
+        }
+      ]
     },
     {
       "description": "This is the ability to influence or even lead people; those with high Charisma are well-liked, or at least highly respected. \n\nApply the Charisma bonus or penalty to reaction rolls. \n\nAlso, the number of retainers a character may hire, and the loyalty of those retainers, is affected by Charisma.",
@@ -4585,7 +4639,7 @@
       "tags": []
     },
     {
-      "id": 0,
+      "id": 1000,
       "key": "items",
       "type": "group",
       "subType": "subGroup",
@@ -9831,7 +9885,7 @@
       "source": "BF: 35"
     },
     {
-      "id": 0,
+      "id": 1000,
       "key": "spells",
       "type": "group",
       "subType": "subGroup",
@@ -13465,7 +13519,7 @@
       "tags": []
     },
     {
-      "id": 0,
+      "id": 1000,
       "key": "monsters",
       "type": "group",
       "subType": "subGroup",

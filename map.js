@@ -12,16 +12,9 @@ const Map = {
 mapHeight: '',
 mapWidth:  '',
 
-async fetchAndProcessImage() {
-// Create an input element for file upload
-const inputElement = document.createElement("input");
-inputElement.type = "file";
-
-// Listen for the 'change' event on the input element
-inputElement.addEventListener("change", async (event) => {
-const file = event.target.files[0];
-
-if (file) {
+async fetchAndProcessImage(url) {
+  
+console.log('Receievd URL', url)
 
 // Remove the existing map and its associated elements
 const existingMap = document.getElementById('imageContainer');
@@ -29,11 +22,44 @@ if (existingMap) {
 existingMap.remove();
 }
 
+let imageBlob;
 
-// Create a Blob from the uploaded file
-const imageBlob = new Blob([file], { type: file.type });
+if(url){
+console.log('Receievd URL', url)
+// Fetch the image from the URL if provided
+const response = await fetch('https://corsproxy.io/?' + url);
+imageBlob = await response.blob();
 
-// Do something with the imageBlob, such as displaying it or further processing
+}else{
+
+// Create an input element for file upload
+const inputElement = document.createElement("input");
+inputElement.type = "file";
+
+
+// Listen for the 'change' event on the input element
+inputElement.addEventListener("change", async (event) => {
+const file = event.target.files[0];
+
+if (file) {
+imageBlob = new Blob([file], { type: file.type });
+this.processImageBlob(imageBlob);
+
+}
+});
+
+// Simulate a click to open the file dialog
+inputElement.click();
+return; // Exit early as file upload will trigger the rest
+}
+
+if (imageBlob) {
+  this.processImageBlob(imageBlob);
+}
+},
+
+processImageBlob(imageBlob) {
+
 const blobUrl = URL.createObjectURL(imageBlob);
 const mapElement = new Image();
 mapElement.src = blobUrl;
@@ -50,7 +76,6 @@ imageContainer.appendChild(mapElement);
 
 // Add the container to the body
 ref.mapContainer.appendChild(imageContainer);
-}
 
 this.mapHeight = mapElement.naturalHeight;
 this.mapWidth  = mapElement.naturalWidth;
@@ -59,13 +84,6 @@ this.mapWidth  = mapElement.naturalWidth;
 if (localStorage.getItem('myData')) {
 load.displayLocations(load.Data.locations);
 }
-
-});
-
-// Trigger a click event on the input element to open the file dialog
-inputElement.click();
-
-
 
 },
 

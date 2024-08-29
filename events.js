@@ -210,7 +210,6 @@ Events.getSubLocDetails(subLocation, floatNPCs, keywords, locObj);
 
 },
 
-
 getSubLocDetails(subLocation, floatNPCs, keywords, locObj) {
 
 let bundle = []
@@ -515,7 +514,7 @@ if(npcActions.length > 0){
     
     selectedAction = npcActions[0].description.trim();
     const color = firstAction.color? firstAction.color: "whitesmoke";
-    this.eventDesc += `<span style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span><br><br> `;
+    this.eventDesc += `<span class="npcAction" style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span><br><br> `;
     
     }}
 
@@ -542,14 +541,15 @@ this.eventDesc += `<span class="npcDialogue" style="color:lime" npcId="${firstEv
 
 selectedOption = npcDialogue[0].description.trim();
 const color = firstEvent.color? firstEvent.color: "whitesmoke";
-this.eventDesc += `<span style="color:${color}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
+this.eventDesc += `<span class="npcDialogue" style="color:${color}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
 
 }}
 
 
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');
-let firstSentence = npc.description.slice(0, firstPeriodIndex + 1);
+let elipsis = npc.description.length > 130? '...': ''
+let firstSentence = npc.description.substring(0, 130) + elipsis; //slice(0, firstPeriodIndex + 1);
 //Add Keywords
 let hyperDesc = expandable.findKeywords(firstSentence, keywords);
 
@@ -564,7 +564,6 @@ id="${npc.id}">${hyperDesc} </span> <br><br>`
 
 });
 },
-
 
 getAmbiencefromTag(obj, keywords){
 

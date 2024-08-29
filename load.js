@@ -15,35 +15,6 @@ const load = {
 Data : [],
 fileName : '',
 
-readMe(){
-
-    // Create the header element
-    const readMe = document.createElement('div');
-    readMe.innerHTML = `<span class='withbreak readMe'>
-    Welcome to <span class="green">Excel_DM</span>, a hypertextual Game Master worldbuilding and game running tool.
-    
-    With <span class="green">Excel_DM</span>, you can create a hypertextual map to take the place of your Game Master screen. 
-    
-    To get started, click the <span class="cyan">[M]ap</span> button and load an image of your choice. Then click <span class="cyan">[A]dd</span> to draw a location over your map.
-
-    Links:
-    *Online Library of Maps and Datafiles*
-    *YouTube Tutorial Series*
-    <a href="https://www.reddit.com/r/Excel_DM/" class="cyan"> *Excel_DM SubReddit* </a>
-    
-    <span class = 'hotpink'> 
-    Matthew Keracher, 2024.
-    keracher@uwm.edu
-    </span>
-    </span>
-    `;
-    
-    ref.Storyteller.appendChild(readMe);
-    ref.locationLabel.value = 'Read Me';
-    helper.adjustFontSize();
-    ref.locationLabel.disabled = true;
-    },
-
 loadDefault(){
 const url = 'data.json';
 
@@ -53,7 +24,9 @@ fetch(url)
 // Here, 'data' will be your JSON array
 this.Data = data
 ref.Storyteller.style.display = 'block';
-load.fileName = load.Data.miscInfo.fileName
+load.fileName = "Untitled Project"
+Storyteller.changeContent(1000)
+
 console.log(load.Data)
 
 //console.log(this.Data);
@@ -121,19 +94,11 @@ const { content, name } = await readFile();
 
 if(action === 'whole'){ //We are loading a whole file.
 // Remove the file extension from the name
-const fileNameWithoutExtension = name.replace(/\.[^/.]+$/, "")
+//const fileNameWithoutExtension = name.replace(/\.[^/.]+$/, "")
 
 // Now you can call loadAndBuild safely
-
 await NPCs.loadAndBuild(content);
-
-// Return the file name
-load.fileName = fileNameWithoutExtension;
-ref.locationLabel.value = load.fileName;
-helper.adjustFontSize();
-ref.locationLabel.disabled = false;
-
-//load.locationLabelEvents();
+toolbar.showMasterLocation();
 
 }else if(action === 'part'){ //We are loading data into the file.
 
@@ -143,15 +108,9 @@ load.importData(content);
 
 } catch (error) {
 console.error('Error reading file:', error);
-// Handle the error appropriately, e.g., display an error message to the user
+
 }
 }
-
-// Example keys to export (replace these with your desired keys)
-//const keysToExport = ['monsters', 'spells', 'items', 'locations', 'subLocations'];
-
-// Export data for each key
-//keysToExport.forEach(key => load.exportDataForKey(key));
 
 },
 
@@ -204,20 +163,20 @@ if (fileContent) {
 
 load.Data = JSON.parse(fileContent);
 //console.log('Overwriting all Data.')
+
 //Helpers
+//----
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
 //helper.sortData(load.Data)
 //helper.genGems(load.Data);
-helper.genJewelry(load.Data);
+//helper.genJewelry(load.Data);
+//----
 
-//Storyteller.miscInfo = load.Data.miscInfo.description;
-load.fileName = load.Data.miscInfo.fileName;
-// locationLabel.value = load.Data.miscInfo.fileName;
-// helper.adjustFontSize();
-Storyteller.showmiscInfo();
-
+//Return masterLocation and get fileName. 
+const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
+load.fileName = masterLoc.name;
 
 try {
 load.displayLocations(load.Data.locations);
@@ -316,6 +275,9 @@ oldData[0].parentNode.removeChild(oldData[0]);
 
 // 2. Create Location Object.
 data.forEach((location) => {
+
+if(location.id === 1000){return} //Don't draw masterLocation!
+
 const newLoc = this.createLocationObj(location);
 
 // 3. Set the color.
@@ -323,8 +285,11 @@ newLoc.style.backgroundColor = location.color;
 
 //4. Append Location to Map.
 const imageContainer = document.querySelector('.image-container');
+
+try{
 const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(newLoc,firstChild);
+}catch{console.log("There are no locations to draw!")}
 
 //Add Events to Divs
 this.addLocationEvents()
@@ -399,7 +364,7 @@ locations.forEach((location) => {
 if (!location.dataset.hasListener) {
 
 location.addEventListener('click', () => {
-Storyteller.changeContent(location);
+Storyteller.changeContent(location.id);
 // ref.Centre.style.display !== "none" || 
 if (editor.editMode === true){
 //console.log(location)
@@ -440,12 +405,14 @@ let parsedData = JSON.parse(storedData);
 load.Data = parsedData;
 console.log(load.Data)
 
-//miscInfo
+//Test for stored Data
 try{
-locationLabel.value = load.Data.miscInfo.fileName;
-helper.adjustFontSize();
-load.fileName = load.Data.miscInfo.fileName;
-}catch{console.error('Could not recover data.')}
+const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
+Storyteller.changeContent(1000)
+}catch{
+console.error('Could not recover data. Hope you have a recent save!')
+}
+
 },
 
 saveToBrowser(){

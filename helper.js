@@ -153,6 +153,8 @@ description: piece.description,
 tags: []
 }
 
+//console.log(load.Data.items.filter(entry => entry.name === newPiece.name))
+load.Data.items = load.Data.items.filter(entry => entry.name !== newPiece.name)
 load.Data.items.push(newPiece)
 
 })
@@ -371,7 +373,7 @@ this.classList.remove('highlight');
 })
 
 const npcDialogue = document.querySelectorAll(".npcDialogue");
-const npcActions = document.querySelectorAll(".npcActions");
+const npcActions = document.querySelectorAll(".npcAction");
 const npcEvents = [...npcDialogue, ...npcActions]
 
 npcEvents.forEach(div => {
@@ -427,7 +429,7 @@ const randomIndex = Math.floor(Math.random() * nextOptions.length);
 newOption = nextOptions[randomIndex]
 }
 
-const color = newOption.color? newOption.color: "lime";
+//const color = newOption.color? newOption.color: "lime";
 //div.setAttribute("style", `color:${color}`);
 div.setAttribute("eventID", newOption.id)
 div.textContent = ''
@@ -464,14 +466,17 @@ npcActions.forEach(div => {
     newOption = nextOptions[randomIndex]
     }
     
-    const color = newOption.color? newOption.color: "lime";
+    //const color = newOption.color? newOption.color: "lime";
     //div.setAttribute("style", `color:${color}`);
+
+    try{
     div.setAttribute("eventID", newOption.id)
     div.textContent = ''
     
     const newEventDesc = newOption.description;
     
     div.textContent = newEventDesc;
+    }catch{}
       
     })
 },

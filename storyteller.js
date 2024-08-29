@@ -4,23 +4,29 @@ import expandable from "./expandable.js";
 import load from "./load.js";
 import NPCs from "./npcs.js";
 import helper from "./helper.js";
-
+import Map from "./map.js";
 import editor from "./editor.js"; 
 import form from "./form.js";
 import ref from "./ref.js";
 
 const Storyteller = {
 
-returnLocation: '',
+//locID
+returnLocation: 0,
 miscInfo: '',
 
-async changeContent(locationDiv) {
+async changeContent(locId) {
 
 let Story = ``
-const locId = locationDiv.id;
+//const locId = locationDiv.id;
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 const locName = locObj.name
+
+if(locObj.image && locObj.image !== ""){
+console.log('Send URL', locObj.image)
+Map.fetchAndProcessImage(locObj.image)
+}
 
 //Change Location Label Contents
 ref.locationLabel.value = locName;
@@ -29,9 +35,7 @@ ref.locationLabel.disabled = true;
 ref.locationLabel.style.color = locObj.color;
 
 //Set new Return Location
-const returnLocationName = ref.locationLabel.value;
-const returnLocation = load.Data.locations.find(entry => entry.name === returnLocationName);
-Storyteller.returnLocation = returnLocation;
+Storyteller.returnLocation = locId;
 
 if (locObj) {
 Events.eventDialogue = [];
@@ -162,197 +166,6 @@ ref.locationLabel.disabled = false;
 
 
 },
-
-showmiscInfo() {
-
-let fileInformation = load.Data.miscInfo.ledger;
-ref.locationLabel.value = load.Data.miscInfo.fileName;
-helper.adjustFontSize();
-
-if (fileInformation.length === 0){Storyteller.addNewEntry()} 
-
-
-// Clear the existing content of ref.Storyteller
-ref.Storyteller.innerHTML = '';
-
-fileInformation.forEach((file, index) => {
-// Generate unique identifiers for each header and text element
-
-// Create the header element
-const header = document.createElement('h2');
-
-if(index > 0){
-header.innerHTML = `<br>`
-}
-
-header.innerHTML += `
-
-<input type="text" value="${file.name}" id="${index}" class="miscInfo rightHeader" showHide="show" toHide="${index}" style="display: block; letter-spacing: 0.18vw; text-align: left;">
-`;
-
-// Create the text area element
-const text = document.createElement('textarea');
-text.id = index;
-text.classList.add('rightText');
-text.classList.add('miscInfo');
-
-//As default, show only first sentence.
-let firstPeriodIndex = file.description.indexOf('.');
-let firstSentence = file.description.slice(0, firstPeriodIndex + 1);
-text.textContent = firstSentence;
-
-ref.Storyteller.appendChild(header);
-ref.Storyteller.appendChild(text);
-
-})
-
-this.addMiscEvents();
-
-},
-
-addNewEntry(){
-
-// Create the header element
-const header = document.createElement('h2');
-header.innerHTML = `
-
-<br><input type="text" value="Add New Entry" id="newHeader" class="rightHeader" showHide="show" toHide="newEntry" style="display: block; letter-spacing: 0.18vw; text-align: left;">
-`;
-
-// Create the text area element
-const text = document.createElement('textarea');
-text.id = 'newEntry';
-text.classList.add('rightText')
-text.style.display = 'block';
-text.textContent = 'Insert text here. Shift-Click to Expand/Hide and Save.';
-
-ref.Storyteller.appendChild(header);
-ref.Storyteller.appendChild(text);
-
-load.Data.miscInfo.ledger.push({name: 'Add New Entry', description: text.textContent})
-this.addMiscEvents();
-
-},
-
-addMiscEvents(){
-
-const headers = document.querySelectorAll('.rightHeader')
-
-// Attach event listener to each header element
-headers.forEach((header, index) => {
-header.addEventListener('click', (event) => {
-
-if(event.shiftKey){
-    helper.showPrompt('Are you sure you want to delete ' + header.value +'?', 'yesNo');
-
-    helper.handleConfirm = function(confirmation) {
-    const promptBox = document.querySelector('.prompt');
-        
-    if (confirmation) {
-    load.Data.miscInfo.ledger.splice(index, 1)
-    Storyteller.showmiscInfo();
-    promptBox.style.display = 'none';
-    } else{
-    promptBox.style.display = 'none';
-    }
-}
-
-}
-});
-
-header.addEventListener('focusout', () => {    
-//Save Data
-const index = header.getAttribute('id');
-const entry = load.Data.miscInfo.ledger[index];
-
-try{
-entry.name = header.value;
-}catch{
-console.error('Could not find save location.')
-}
-});
-
-});
-
-// Attach event listener to each input element
-const inputs = document.querySelectorAll('.rightText')
-inputs.forEach((input, index) => {
-
-const file = load.Data.miscInfo.ledger[index];
-
-input.addEventListener('focusout', () => {  
-//Save Data
-let firstPeriodIndex = file.description.indexOf('.');
-let firstSentence = file.description.slice(0, firstPeriodIndex + 1);
-if(input.value !== firstSentence){
-const index = input.getAttribute('id');
-const entry = load.Data.miscInfo.ledger[index];
-load.fileName = locationLabel.value;
-try{
-entry.description = input.value;
-}catch{
-load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
-}
-}
-});
-
-input.addEventListener('input', () => {
-// Change height.
-input.style.height = 'auto';
-input.style.height = input.scrollHeight + 'px';
-});
-
-
-input.addEventListener('click', (event) => {
-
-let firstPeriodIndex = file.description.indexOf('.');
-let firstSentence = file.description.slice(0, firstPeriodIndex + 1);
-
-if(input.value === firstSentence){
-input.value = file.description;
-// Change height.
-input.style.height = 'auto';
-input.style.height = input.scrollHeight + 'px';
-};
-
-if(event.shiftKey){
-//Save Data
-if(input.value !== firstSentence){
-const index = input.getAttribute('id');
-const entry = load.Data.miscInfo.ledger[index];
-load.fileName = locationLabel.value;
-try{
-entry.description = input.value;
-}catch{
-load.Data.miscInfo.ledger.push({name: 'Insert Name.', description: input.value});
-}
-}
-
-//Return to one-sentence view.
-let firstPeriodIndex = file.description.indexOf('.');
-let newFirstSentence = file.description.slice(0, firstPeriodIndex + 1);
-
-input.value = newFirstSentence;
-input.style.height = 'auto';
-input.style.height = input.scrollHeight + 'px';
-}
-   
-});
-
-input.addEventListener('focus', () => {
-input.setSelectionRange(input.value.length, input.value.length);
-});
-
-// Set the initial height based on the scroll height of the content
-input.style.height = 'auto';
-input.style.height = input.scrollHeight + 'px';
-
-});
-
-
-},
-
-
 
 };
 

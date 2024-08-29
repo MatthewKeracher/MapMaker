@@ -13,7 +13,7 @@ fullScreen: false,
 
 
 createForm: function (obj){
-//console.log(obj.name)
+
 let color
 let fullScreen = false
 

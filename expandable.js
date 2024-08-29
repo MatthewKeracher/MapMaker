@@ -62,7 +62,8 @@ const hyperDesc = expandable.findKeywords(obj.description, keywords, "nested");
 
 // Insert first sentence of Backstory
 let firstPeriodIndex = hyperDesc.indexOf('.');
-let firstSentence = hyperDesc.slice(0, firstPeriodIndex + 1);
+let elipsis = hyperDesc.length > 130? '...': ''
+let firstSentence = hyperDesc.substring(0, 130) + elipsis//slice(0, firstPeriodIndex + 1);
 
 if (event.shiftKey) {
 form.createForm(obj);
@@ -172,11 +173,11 @@ ${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
 
 element.appendChild(tagEntry);
 Storyteller.addImagestoStory();
-console.log(element)
+//console.log(element)
 //this.extend(element)
 
 }else if (key === 'tags'){
-console.log('Body')
+//console.log('Body')
 //Tags within body. 
 const toDelete = source.querySelectorAll('.deleteMe');
 toDelete.forEach(element => {
@@ -201,7 +202,7 @@ ${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
 const parent = event.target.parentNode;
 parent.appendChild(tagEntry);
 Storyteller.addImagestoStory();
-console.log(element)
+//console.log(element)
 // this.extend(parent)
 
 };

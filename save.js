@@ -12,13 +12,6 @@ const save = {
 
 saveDataEntry: function() {
     
-
-if(ref.locationLabel.disabled === false){
-load.fileName = ref.locationLabel.value
-load.Data.miscInfo.fileName = load.fileName
-helper.adjustFontSize();
-}
-
 if(ref.Centre.style.display !== 'block'){
 //Save whole file.
 save.exportArray();
@@ -217,6 +210,7 @@ if(editor.editMode === false){
 ref.Editor.style.display = 'none';
 }
 
+
 //Reload Map to reflect changes.
 load.displayLocations(load.Data.locations);
 
@@ -257,7 +251,6 @@ if(key==='locations'){
 ref.locationLabel.value = load.fileName;
 helper.adjustFontSize();
 ref.locationLabel.disabled = false;
-Storyteller.showmiscInfo;
 }
 
 //remove Tags 
@@ -313,7 +306,8 @@ exportArray: function () {
 
 const json = JSON.stringify(load.Data, null, 2);
 const mimeType = 'application/json';
-
+const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
+load.fileName = masterLoc.name;
 this.saveFile(json, load.fileName, mimeType);
 
 }, 

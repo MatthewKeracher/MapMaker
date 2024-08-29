@@ -15,7 +15,6 @@ class Toolbar{
 
 init() {  
     
-    load.readMe();
     load.checkStoredData();
     setInterval(helper.updateEventContent, 10000);
 
@@ -80,24 +79,7 @@ textBox.style.height = descriptionText.scrollHeight + 'px';
 
 if(ref.Left.style.display === "none" && ref.Centre.style.display === "none"){
 
-// Ref.centreToolbar.style.display = "none";
-document.activeElement.blur();
-
-if(load.fileName !== ''){
-ref.Storyteller.innerHTML = '';
-
-const readMe = ref.locationLabel.value;
-helper.adjustFontSize();
-console.log(readMe)
-
-if(readMe === 'Read Me'){
-Storyteller.showmiscInfo()
-ref.locationLabel.disabled = false;
-}else{
-load.readMe();
-};
-
-};
+toolbar.showMasterLocation();
 
 }else {
 ref.Centre.style.display = "none";
@@ -106,6 +88,34 @@ ref.Left.style.display = "none";
 }
 
 };
+
+showMasterLocation(){
+
+    if(load.Data.locations.find(entry => entry.id === 1000) === undefined){
+
+        const masterLocation = {
+        key:'locations',
+        image:"",
+        type: "group",
+        subType:"subGroup",
+        group: "Default",
+        color: "#f4d50b",
+        id: 1000,
+        order: 0,
+        name: 'test', //load.fileName,
+        tags: [],
+        description: 'This location appears anytime you press the Esc key enough times.',
+        }
+        
+        load.Data.locations.push(masterLocation)
+        
+        }else{
+        
+        Storyteller.changeContent(1000)
+        
+        }
+
+}
 
 mapButton() {  
 Map.fetchAndProcessImage()
@@ -157,14 +167,9 @@ save.deleteDataEntry();
 addButton() {
 console.log('addButton Clicked')
 const mapElement = document.getElementById('mapElement');
-const ledgerCheck = document.querySelectorAll('.miscInfo').length === 0
-console.log(ledgerCheck)
 
-if(!ledgerCheck){
-Storyteller.addNewEntry()
-}
 
-if(!Add.addMode && ledgerCheck){
+if(!Add.addMode){
 Add.addMode = true;
 addButton.classList.add('click-button');
 
@@ -176,7 +181,7 @@ ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
 });
 
-}else{if(Add.addMode &&ledgerCheck){
+}else{if(Add.addMode){
 
 Add.addMode = false;
 addButton.classList.remove('click-button');
