@@ -27,7 +27,7 @@ let imageBlob;
 if(url){
 console.log('Receievd URL', url)
 // Fetch the image from the URL if provided
-const response = await fetch('https://corsproxy.io/?' + url);
+const response = await fetch(url);
 imageBlob = await response.blob();
 
 }else{
