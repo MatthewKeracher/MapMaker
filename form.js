@@ -1356,6 +1356,7 @@ if(copy === undefined){
     newEntry.subType = 'subGroup',
     newEntry.key = key,
     newEntry.id = newId,
+    newEntry.image = obj.image? obj.image: ""
     newEntry.color = obj.color,
     newEntry.name = singleKey + ' ' + newId,
     newEntry.tags = [{key: obj.key, id: obj.id}],

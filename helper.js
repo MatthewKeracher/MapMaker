@@ -549,7 +549,7 @@ sortData(data){
 for (const key in data) {
 let obj = data[key];
 
-if (key === 'tags'){ //(key !== 'miscInfo' && key!== 'locations') {
+if (key === 'locations') {
 obj = obj.map(entry => {
 // Remove some fields
 // delete entry.key;
@@ -558,10 +558,15 @@ obj = obj.map(entry => {
 // entry.key = '';
 //entry.active = 1;
 
-if(entry.image){
-return
+if(entry.parentId){
+return entry
 }else{
-entry.image = ""}
+entry.parentId = "1000"}
+
+if(entry.image){
+  return entry
+  }else{
+  entry.image = ""}
 
 //entry.chance = 100;
 
@@ -571,7 +576,7 @@ return entry
 }
 
 data[key] = obj;
-console.log(load.Data)
+console.log(obj)
 }
 },
 

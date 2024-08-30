@@ -12,6 +12,7 @@ const Map = {
 mapHeight: '',
 mapWidth:  '',
 
+
 async fetchAndProcessImage(url) {
   
 console.log('Receievd URL', url)
@@ -100,6 +101,8 @@ const subType = "color";
 const group = "Default"; 
 const color = "#f4d50b";
 const id = load.generateUniqueId(load.Data.locations, 'entry'); 
+const parentId = Storyteller.parentLocationId;
+const image = "";
 const order = id;
 const name = location.name;
 const tags = []
@@ -115,6 +118,8 @@ const locationData = {key,
   group,
   color,
   id,
+  parentId,
+  image,
   order,
   name,
   tags,

@@ -11,6 +11,8 @@ const Add = {
 mapElement: document.getElementById('mapElement'),
 addMode: false,
 isDragging: false,
+moveMode: false,
+moveObj: [],
 
 startX: 0, 
 startY: 0,
@@ -20,6 +22,24 @@ endY  : 0,
 previewDiv: '',
 
 //Need to change from a dragging system to a two-click system.
+
+reDrawLocation(location){
+
+Add.moveMode = true
+Add.moveObj = location
+
+// Add the event listeners next time click on Map
+ref.mapContainer.addEventListener('click',() => {
+    mapElement.addEventListener('mousedown', Add.handleMouseDown);
+    mapElement.addEventListener('mousemove', Add.handleMouseMove);   
+    ref.mainToolbar.style.pointerEvents = 'none';
+    ref.locationDivs.forEach((selection) => {
+    selection.style.pointerEvents = 'none';
+    });
+})
+
+
+},
 
 handleMouseDown(e) {
 
@@ -40,53 +60,39 @@ location.style.top = top + 'px';
 location.style.width = width + 'px';
 location.style.height = height + 'px';
 
+//Adding a New Location
+if(Add.addMode){
+
 helper.showPrompt('What is the name of the location?', 'input');
 this.isDragging = false;
 ref.promptBox.focus();
 
-helper.handleConfirm = function(response, promptBox) {
-if (response !== null) {
-// Do something with the response
-location.name = response; // Set the ID based on user input 
+helper.handleConfirm = function(newLocationName, promptBox) {
+if (newLocationName !== null) {
+location.name = newLocationName; // Set the ID based on user input 
 
-// Create a label element for the div ID
 var labelElement = document.createElement('div');
-// Add text content to the label
-labelElement.textContent = response;
-
-// Continue with any other actions you need to perform
-// ...
+labelElement.textContent = newLocationName;
 
 // Hide the prompt box
 promptBox.style.display = 'none';
-
-
-// // Prompt the user for input to set the div ID
-// const name = prompt('What is the *unique* name of this location?');
-// location.name = name; // Set the ID based on user input 
 
 // Create a label element for the div ID
 var labelElement = document.createElement('div');
 labelElement.className = 'div-name-label';
 labelElement.textContent = name;
 
-// Append the label to the location -switch around?
 location.appendChild(labelElement);
 
 const imageContainer = document.querySelector('.image-container');
 const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(location,firstChild);
 
-//Add Events to Divs
 load.addLocationEvents();
-
-// Add Location to load.Data.
 map.addNewLocation(location);
-
 load.displayLocations(load.Data.locations);
 
 //Open new Location in Storyteller
-
 const locations = document.querySelectorAll('.selection');
 
 // Convert NodeList to an array using Array.from() or spread operator
@@ -104,10 +110,40 @@ promptBox.style.display = 'none';
 }
 };
 
-
 //Close Function
 this.previewDiv.remove();
 addButton.click();
+
+}
+
+//Moving a Location
+else if(Add.moveMode = true){
+
+this.isDragging = false;
+
+const newPoints = {left: left, top: top, width: width, height: height}
+
+const locId = Add.moveObj.getAttribute('id');
+const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
+const toChange = ['left', 'top', 'width', 'height']
+
+toChange.forEach(variable =>{
+console.log(locObj, variable)
+locObj[variable] = newPoints[variable]
+
+});
+
+mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+mapElement.removeEventListener('mousemove', Add.handleMouseMove);
+ref.mainToolbar.style.pointerEvents = 'auto';
+ref.locationDivs.forEach((selection) => {
+selection.style.pointerEvents = 'auto';
+});
+
+
+load.displayLocations(load.Data.locations)
+
+}
 
 }else{
 

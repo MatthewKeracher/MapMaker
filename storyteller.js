@@ -14,6 +14,7 @@ const Storyteller = {
 //locID
 returnLocation: 0,
 miscInfo: '',
+parentLocationId: 1000,
 
 async changeContent(locId) {
 
@@ -26,6 +27,8 @@ const locName = locObj.name
 if(locObj.image && locObj.image !== ""){
 console.log('Send URL', locObj.image)
 Map.fetchAndProcessImage(locObj.image)
+this.parentLocationId = locId
+console.log(this.parentLocationId)
 }
 
 //Change Location Label Contents

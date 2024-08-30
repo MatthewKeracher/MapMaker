@@ -5,7 +5,7 @@ import helper from "./helper.js";
 import ref from "./ref.js";
 import toolbar from "./toolbar.js";
 import expandable from "./expandable.js";
-
+import Add from "./add.js";
 import Events from "./events.js";
 import Storyteller from "./storyteller.js";
 import NPCs from "./npcs.js";
@@ -169,7 +169,7 @@ load.Data = JSON.parse(fileContent);
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
-//helper.sortData(load.Data)
+helper.sortData(load.Data)
 //helper.genGems(load.Data);
 //helper.genJewelry(load.Data);
 //----
@@ -273,6 +273,8 @@ while(oldData[0]) {
 oldData[0].parentNode.removeChild(oldData[0]);
 }
 
+data = data.filter(entry => parseInt(entry.parentId) === parseInt(Storyteller.parentLocationId));
+
 // 2. Create Location Object.
 data.forEach((location) => {
 
@@ -363,13 +365,22 @@ const locations = document.querySelectorAll('.selection');
 locations.forEach((location) => {
 if (!location.dataset.hasListener) {
 
-location.addEventListener('click', () => {
+location.addEventListener('click', (event) => {
+
+
+if(event.shiftKey){
+//reDraw Location
+Add.reDrawLocation(location);
+
+}else{
+//load Location
 Storyteller.changeContent(location.id);
 // ref.Centre.style.display !== "none" || 
 if (editor.editMode === true){
 //console.log(location)
 const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));
 console.log(obj)
+}
 }
 });
 

@@ -266,10 +266,6 @@ if(editor.editMode){
 
         Storyteller.refreshLocation();
 
-        if(ref.Storyteller.innerHTML === ''){
-        Storyteller.showmiscInfo();
-        }
-
         //Hide Editor
         ref.Editor.style.display = 'none';
 
