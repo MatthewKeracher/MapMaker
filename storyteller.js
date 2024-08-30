@@ -14,7 +14,9 @@ const Storyteller = {
 //locID
 returnLocation: 0,
 miscInfo: '',
-parentLocationId: 1000,
+currentLocationId: '',
+parentLocationId: '',
+grandParentLocationId: '',
 
 async changeContent(locId) {
 
@@ -23,11 +25,13 @@ let Story = ``
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 const locName = locObj.name
+this.currentLocationId = locId
 
 if(locObj.image && locObj.image !== ""){
-console.log('Send URL', locObj.image)
+//console.log('Send URL', locObj.image)
 Map.fetchAndProcessImage(locObj.image)
 this.parentLocationId = locId
+this.grandParentLocationId = locObj.parentId
 console.log(this.parentLocationId)
 }
 

@@ -25,7 +25,7 @@ fetch(url)
 this.Data = data
 ref.Storyteller.style.display = 'block';
 load.fileName = "Untitled Project"
-Storyteller.changeContent(1000)
+toolbar.showMasterLocation();
 
 console.log(load.Data)
 
@@ -131,9 +131,16 @@ if (fileContent) {
     const data = JSON.parse(fileContent);
     //helper.sortData(data);
 
+
+
     for (const key in data) {
         if (key !== 'miscInfo') {
             data[key].forEach(entry => {
+
+                //Avoid Duplicate
+                const check = load.Data[key].find(copy => copy.name === entry.name)
+                if(check !== undefined){return}
+
                 // Push each entry into load.Data
                 entry.id = load.generateUniqueId(load.Data[key], 'entry');
                 load.Data[key].push(entry);
@@ -169,7 +176,7 @@ load.Data = JSON.parse(fileContent);
 // load.Data.tags = [];
 // this.generateTags(load.Data, 'npcs');
 // this.generateTags(load.Data, 'locations');
-helper.sortData(load.Data)
+//helper.sortData(load.Data)
 //helper.genGems(load.Data);
 //helper.genJewelry(load.Data);
 //----
@@ -177,6 +184,7 @@ helper.sortData(load.Data)
 //Return masterLocation and get fileName. 
 const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
 load.fileName = masterLoc.name;
+
 
 try {
 load.displayLocations(load.Data.locations);
@@ -278,7 +286,7 @@ data = data.filter(entry => parseInt(entry.parentId) === parseInt(Storyteller.pa
 // 2. Create Location Object.
 data.forEach((location) => {
 
-if(location.id === 1000){return} //Don't draw masterLocation!
+if(parseInt(location.id) === parseInt(Storyteller.parentLocationId)){return} //Don't draw masterLocation!
 
 const newLoc = this.createLocationObj(location);
 
@@ -418,8 +426,7 @@ console.log(load.Data)
 
 //Test for stored Data
 try{
-const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
-Storyteller.changeContent(1000)
+toolbar.showMasterLocation();
 }catch{
 console.error('Could not recover data. Hope you have a recent save!')
 }

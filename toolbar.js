@@ -17,6 +17,7 @@ init() {
     
     load.checkStoredData();
     setInterval(helper.updateEventContent, 10000);
+    
 
     // Add an input event listener to ref.locationLabel
 ref.locationLabel.addEventListener('input', () => {
@@ -57,7 +58,7 @@ ref.leftParty.style.display = 'none'
 }
 
 escButton(){
-console.log('esc')
+//console.log('esc')
 window.speechSynthesis.cancel();
 
 //Close search and empty search box.
@@ -110,10 +111,20 @@ showMasterLocation(){
         load.Data.locations.push(masterLocation)
         
         }else{
-        
-        Storyteller.changeContent(1000)
-        
+
+        if(Storyteller.parentLocationId === ''){
+
+            const start = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(entry.parentId))
+            Storyteller.changeContent(start.id)
+        }else{
+
+        if (Storyteller.currentLocationId === Storyteller.parentLocationId){
+        Storyteller.changeContent(Storyteller.grandParentLocationId)
+        } else{
+        Storyteller.changeContent(Storyteller.parentLocationId)
         }
+        }
+    }
 
 }
 

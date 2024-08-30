@@ -15,7 +15,7 @@ mapWidth:  '',
 
 async fetchAndProcessImage(url) {
   
-console.log('Receievd URL', url)
+//console.log('Receievd URL', url)
 
 // Remove the existing map and its associated elements
 const existingMap = document.getElementById('imageContainer');
@@ -26,7 +26,7 @@ existingMap.remove();
 let imageBlob;
 
 if(url){
-console.log('Receievd URL', url)
+//console.log('Receievd URL', url)
 // Fetch the image from the URL if provided
 const response = await fetch(url);
 imageBlob = await response.blob();
@@ -55,6 +55,7 @@ return; // Exit early as file upload will trigger the rest
 }
 
 if (imageBlob) {
+  
   this.processImageBlob(imageBlob);
 }
 },

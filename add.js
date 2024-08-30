@@ -13,6 +13,7 @@ addMode: false,
 isDragging: false,
 moveMode: false,
 moveObj: [],
+listenerCheck: false,
 
 startX: 0, 
 startY: 0,
@@ -29,17 +30,10 @@ Add.moveMode = true
 Add.moveObj = location
 
 // Add the event listeners next time click on Map
-ref.mapContainer.addEventListener('click',() => {
-    mapElement.addEventListener('mousedown', Add.handleMouseDown);
-    mapElement.addEventListener('mousemove', Add.handleMouseMove);   
-    ref.mainToolbar.style.pointerEvents = 'none';
-    ref.locationDivs.forEach((selection) => {
-    selection.style.pointerEvents = 'none';
-    });
-})
-
+ref.mapContainer.addEventListener('click',Add.addMapEventListeners);
 
 },
+
 
 handleMouseDown(e) {
 
@@ -128,19 +122,15 @@ const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt
 const toChange = ['left', 'top', 'width', 'height']
 
 toChange.forEach(variable =>{
-console.log(locObj, variable)
+
 locObj[variable] = newPoints[variable]
 
 });
 
-mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-mapElement.removeEventListener('mousemove', Add.handleMouseMove);
-ref.mainToolbar.style.pointerEvents = 'auto';
-ref.locationDivs.forEach((selection) => {
-selection.style.pointerEvents = 'auto';
-});
+ref.mapContainer.addEventListener('click',Add.removeMapEventListeners);
 
-
+this.previewDiv.remove();
+Add.moveMode = false
 load.displayLocations(load.Data.locations)
 
 }
@@ -197,7 +187,37 @@ this.previewDiv.style.height = height + 'px';
 }
 
 
+},
+
+addMapEventListeners(){
+
+    const mapElement = document.getElementById('mapElement');
+    mapElement.addEventListener('mousedown', Add.handleMouseDown);
+    mapElement.addEventListener('mousemove', Add.handleMouseMove);   
+    ref.locationDivs.forEach((selection) => {
+    selection.style.pointerEvents = 'none';
+    });
+
+    Add.listenerCheck = true;
+
+},
+
+removeMapEventListeners(){
+
+    if(Add.listenerCheck === true){
+
+    const mapElement = document.getElementById('mapElement');
+    mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+    mapElement.removeEventListener('mousemove', Add.handleMouseMove);   
+    ref.locationDivs.forEach((selection) => {
+    selection.style.pointerEvents = 'auto';
+    });
+
+    Add.listenerCheck = false
+
 }
+
+},
 
 };
 

@@ -40,6 +40,7 @@
     {
       "description": "Welcome to Excel_DM. This section is for general information about your adventure. Shift-click here, or press the <span class=\"cyan\">[E]dit</span> button to change what this says.",
       "id": 1000,
+      "parentId": "1000",
       "type": "group",
       "subType": "color",
       "name": "New Adventure",
