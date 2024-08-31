@@ -15,6 +15,7 @@ class Toolbar{
 
 init() {  
     
+    load.loadDefault();
     load.checkStoredData();
     setInterval(helper.updateEventContent, 10000);
     
@@ -39,6 +40,7 @@ ref.saveButton.addEventListener('click', this.saveButton);
 ref.copyButton.addEventListener('click', this.copyButton);  
 ref.newButton.addEventListener('click', this.newButton); 
 ref.deleteButton.addEventListener('click', this.deleteButton);
+ref.moveButton.addEventListener('click', this.moveButton);
 
 load.saveToBrowser();
 
@@ -113,8 +115,9 @@ showMasterLocation(){
         }else{
 
         if(Storyteller.parentLocationId === ''){
-
             const start = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(entry.parentId))
+            Storyteller.parentLocationId = start.id
+            Storyteller.grandParentLocationId = start.parentId
             Storyteller.changeContent(start.id)
         }else{
 
@@ -174,6 +177,36 @@ ref.Editor.style.display = 'none';
 deleteButton(){
 save.deleteDataEntry();
 };
+
+moveButton() {
+console.log('moveButton Clicked')
+const mapElement = document.getElementById('mapElement');
+     
+    if(!Add.moveMode){
+    Add.moveMode = true;
+    
+    console.log('Adding Map Events Listeners')
+
+    mapElement.addEventListener('mousedown', Add.handleMouseDown);
+    mapElement.addEventListener('mousemove', Add.handleMouseMove);   
+    ref.locationDivs.forEach((selection) => {
+    selection.style.pointerEvents = 'none';
+    });
+
+    }else{if(Add.moveMode){
+    
+    Add.moveMode = false;
+    
+    console.log('Removing Map Events Listeners')
+   
+    mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+    mapElement.removeEventListener('mousemove', Add.handleMouseMove);   
+    ref.locationDivs.forEach((selection) => {
+    selection.style.pointerEvents = 'auto';
+    });
+    }}
+    };
+    
 
 addButton() {
 console.log('addButton Clicked')

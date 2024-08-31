@@ -37,6 +37,7 @@ fileInput: document.getElementById('fileInput'),
 importData: document.getElementById('importData'),
 newButton: document.getElementById('newButton'),
 deleteButton: document.getElementById('deleteButton'),
+moveButton: document.getElementById('moveButton'),
 
 promptBox: document.getElementById('promptBox'),
 

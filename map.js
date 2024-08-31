@@ -95,6 +95,7 @@ addNewLocation(location) {
 const rect = location.getBoundingClientRect();
 
 //Ingredients for a Location
+console.log(Storyteller.parentLocationId)
 
 const key = "locations";
 const type = "group";

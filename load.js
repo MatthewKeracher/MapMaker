@@ -29,7 +29,7 @@ toolbar.showMasterLocation();
 
 console.log(load.Data)
 
-//console.log(this.Data);
+console.log(this.Data);
 })
 .catch(error => {
 console.error('Error fetching data:', error);
@@ -182,8 +182,9 @@ load.Data = JSON.parse(fileContent);
 //----
 
 //Return masterLocation and get fileName. 
-const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
-load.fileName = masterLoc.name;
+// const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
+// load.fileName = masterLoc.name;
+toolbar.showMasterLocation();
 
 
 try {
@@ -410,7 +411,6 @@ helper.showPrompt('Do you want to load autosave?', 'yesNo');
     load.getStoredData();
     promptBox.style.display = 'none';
     } else{
-    load.loadDefault();
     promptBox.style.display = 'none';
     }
     

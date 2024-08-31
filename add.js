@@ -22,19 +22,6 @@ endY  : 0,
 
 previewDiv: '',
 
-//Need to change from a dragging system to a two-click system.
-
-reDrawLocation(location){
-
-Add.moveMode = true
-Add.moveObj = location
-
-// Add the event listeners next time click on Map
-ref.mapContainer.addEventListener('click',Add.addMapEventListeners);
-
-},
-
-
 handleMouseDown(e) {
 
 // check if isDragging is true.
@@ -74,7 +61,7 @@ promptBox.style.display = 'none';
 // Create a label element for the div ID
 var labelElement = document.createElement('div');
 labelElement.className = 'div-name-label';
-labelElement.textContent = name;
+labelElement.textContent = location.name;
 
 location.appendChild(labelElement);
 
@@ -127,10 +114,8 @@ locObj[variable] = newPoints[variable]
 
 });
 
-ref.mapContainer.addEventListener('click',Add.removeMapEventListeners);
-
 this.previewDiv.remove();
-Add.moveMode = false
+moveButton.click()
 load.displayLocations(load.Data.locations)
 
 }
@@ -189,35 +174,15 @@ this.previewDiv.style.height = height + 'px';
 
 },
 
-addMapEventListeners(){
+//Need to change from a dragging system to a two-click system.
 
-    const mapElement = document.getElementById('mapElement');
-    mapElement.addEventListener('mousedown', Add.handleMouseDown);
-    mapElement.addEventListener('mousemove', Add.handleMouseMove);   
-    ref.locationDivs.forEach((selection) => {
-    selection.style.pointerEvents = 'none';
-    });
+reDrawLocation(location){
 
-    Add.listenerCheck = true;
-
-},
-
-removeMapEventListeners(){
-
-    if(Add.listenerCheck === true){
-
-    const mapElement = document.getElementById('mapElement');
-    mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-    mapElement.removeEventListener('mousemove', Add.handleMouseMove);   
-    ref.locationDivs.forEach((selection) => {
-    selection.style.pointerEvents = 'auto';
-    });
-
-    Add.listenerCheck = false
-
-}
-
-},
+    moveButton.click();
+    Add.moveObj = location
+    
+    },
+    
 
 };
 
