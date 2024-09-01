@@ -98,7 +98,7 @@ if(action === 'whole'){ //We are loading a whole file.
 
 // Now you can call loadAndBuild safely
 await NPCs.loadAndBuild(content);
-toolbar.showMasterLocation();
+//toolbar.showMasterLocation();
 
 }else if(action === 'part'){ //We are loading data into the file.
 
@@ -181,9 +181,6 @@ load.Data = JSON.parse(fileContent);
 //helper.genJewelry(load.Data);
 //----
 
-//Return masterLocation and get fileName. 
-// const masterLoc = load.Data.locations.find(entry => entry.id === 1000);
-// load.fileName = masterLoc.name;
 toolbar.showMasterLocation();
 
 
@@ -300,7 +297,7 @@ const imageContainer = document.querySelector('.image-container');
 try{
 const firstChild = imageContainer.firstChild;
 imageContainer.insertBefore(newLoc,firstChild);
-}catch{console.log("There are no locations to draw!")}
+}catch{console.log("Cannot insert newLoc to imageContainer")}
 
 //Add Events to Divs
 this.addLocationEvents()
@@ -384,7 +381,7 @@ Add.reDrawLocation(location);
 }else{
 //load Location
 Storyteller.changeContent(location.id);
-// ref.Centre.style.display !== "none" || 
+ 
 if (editor.editMode === true){
 //console.log(location)
 const obj = load.Data.locations.find(obj => parseInt(location.id) === parseInt(obj.id));

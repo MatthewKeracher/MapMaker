@@ -14,15 +14,15 @@ import helper from "./helper.js";
 class Toolbar{
 
 init() {  
-    
-    load.loadDefault();
-    load.checkStoredData();
-    setInterval(helper.updateEventContent, 10000);
-    
 
-    // Add an input event listener to ref.locationLabel
+load.loadDefault();
+load.checkStoredData();
+setInterval(helper.updateEventContent, 10000);
+
+
+// Add an input event listener to ref.locationLabel
 ref.locationLabel.addEventListener('input', () => {
-    helper.adjustFontSize();
+helper.adjustFontSize();
 });
 
 
@@ -53,8 +53,8 @@ partyButton.classList.remove('click-button')
 ref.leftParty.style.display = 'none'
 
 }else{
-    partyButton.classList.add('click-button')
-    party.loadParty()
+partyButton.classList.add('click-button')
+party.loadParty()
 }
 
 }
@@ -82,7 +82,29 @@ textBox.style.height = descriptionText.scrollHeight + 'px';
 
 if(ref.Left.style.display === "none" && ref.Centre.style.display === "none"){
 
-toolbar.showMasterLocation();
+if(Storyteller.currentLocationId === Storyteller.grandParentLocationId){
+
+    helper.showPrompt('Do you want to create a new outer level?', 'yesNo');
+
+    helper.handleConfirm = function(confirmation) {
+    const promptBox = document.querySelector('.prompt');
+        
+    if (confirmation) {
+    Map.newMasterLocation();
+    promptBox.style.display = 'none';
+    } else{
+    promptBox.style.display = 'none';
+    }
+
+};
+
+
+}else{
+//Go out one Level
+const currentObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(Storyteller.currentLocationId));
+Storyteller.changeContent(currentObj.parentId)
+
+}
 
 }else {
 ref.Centre.style.display = "none";
@@ -91,45 +113,6 @@ ref.Left.style.display = "none";
 }
 
 };
-
-showMasterLocation(){
-
-    if(load.Data.locations.find(entry => entry.id === 1000) === undefined){
-
-        const masterLocation = {
-        key:'locations',
-        image:"",
-        type: "group",
-        subType:"subGroup",
-        group: "Default",
-        color: "#f4d50b",
-        id: 1000,
-        order: 0,
-        name: 'test', //load.fileName,
-        tags: [],
-        description: 'This location appears anytime you press the Esc key enough times.',
-        }
-        
-        load.Data.locations.push(masterLocation)
-        
-        }else{
-
-        if(Storyteller.parentLocationId === ''){
-            const start = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(entry.parentId))
-            Storyteller.parentLocationId = start.id
-            Storyteller.grandParentLocationId = start.parentId
-            Storyteller.changeContent(start.id)
-        }else{
-
-        if (Storyteller.currentLocationId === Storyteller.parentLocationId){
-        Storyteller.changeContent(Storyteller.grandParentLocationId)
-        } else{
-        Storyteller.changeContent(Storyteller.parentLocationId)
-        }
-        }
-    }
-
-}
 
 mapButton() {  
 Map.fetchAndProcessImage()
@@ -181,32 +164,31 @@ save.deleteDataEntry();
 moveButton() {
 console.log('moveButton Clicked')
 const mapElement = document.getElementById('mapElement');
-     
-    if(!Add.moveMode){
-    Add.moveMode = true;
-    
-    console.log('Adding Map Events Listeners')
 
-    mapElement.addEventListener('mousedown', Add.handleMouseDown);
-    mapElement.addEventListener('mousemove', Add.handleMouseMove);   
-    ref.locationDivs.forEach((selection) => {
-    selection.style.pointerEvents = 'none';
-    });
+if(!Add.moveMode){
+Add.moveMode = true;
 
-    }else{if(Add.moveMode){
-    
-    Add.moveMode = false;
-    
-    console.log('Removing Map Events Listeners')
-   
-    mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-    mapElement.removeEventListener('mousemove', Add.handleMouseMove);   
-    ref.locationDivs.forEach((selection) => {
-    selection.style.pointerEvents = 'auto';
-    });
-    }}
-    };
-    
+console.log('Adding Map Events Listeners')
+
+mapElement.addEventListener('mousedown', Add.handleMouseDown);
+mapElement.addEventListener('mousemove', Add.handleMouseMove);   
+ref.locationDivs.forEach((selection) => {
+selection.style.pointerEvents = 'none';
+});
+
+}else{if(Add.moveMode){
+
+Add.moveMode = false;
+
+console.log('Removing Map Events Listeners')
+
+mapElement.removeEventListener('mousedown', Add.handleMouseDown);
+mapElement.removeEventListener('mousemove', Add.handleMouseMove);   
+ref.locationDivs.forEach((selection) => {
+selection.style.pointerEvents = 'auto';
+});
+}}
+};
 
 addButton() {
 console.log('addButton Clicked')
@@ -250,9 +232,9 @@ editor.editMode = false};
 
 //Visualise Edit Button Click Effect
 if(editor.editMode){
-    editButton.classList.add('click-button')
+editButton.classList.add('click-button')
 }else{
-    editButton.classList.remove('click-button')
+editButton.classList.remove('click-button')
 };
 
 //Changes to Form (Left Panels)
@@ -280,47 +262,46 @@ ref.Editor.style.display = 'block';
 editVisibleDivs.forEach(div => {   
 div.style.display = 'none'; 
 })
-    
+
 };
 
 //Changes to Right Panel 
-    
+
 if(editor.editMode){
 
-        //List Display Variables
-        editor.sectionHeadDisplay = 'none',
-        editor.subSectionHeadDisplay = 'none',
-        editor.subSectionEntryDisplay =  'none',
-        editor.EntryDisplay = 'none',
-        editor.loadList(load.Data);
+//List Display Variables
+editor.sectionHeadDisplay = 'none',
+editor.subSectionHeadDisplay = 'none',
+editor.subSectionEntryDisplay =  'none',
+editor.EntryDisplay = 'none',
+editor.loadList(load.Data);
 
 
-        // Add the event listeners to each .selection element
-        ref.locationDivs.forEach((div) => {
-        div.addEventListener('mouseenter', editor.handleMouseHover);
-        div.addEventListener('mouseleave', editor.handleMouseHover);
-        });
-        
+// Add the event listeners to each .selection element
+ref.locationDivs.forEach((div) => {
+div.addEventListener('mouseenter', editor.handleMouseHover);
+div.addEventListener('mouseleave', editor.handleMouseHover);
+});
+
 }else{
-        
-        //Show Storyteller
-        ref.eventManager.style.display = 'block';
-        ref.Storyteller.style.display = 'block';
-        ref.Storyteller.innerHTML = '';
 
-        Storyteller.refreshLocation();
+//Show Storyteller
+ref.eventManager.style.display = 'block';
+ref.Storyteller.style.display = 'block';
+ref.Storyteller.innerHTML = '';
 
-        //Hide Editor
-        ref.Editor.style.display = 'none';
+Storyteller.refreshLocation();
 
-        // Remove the event listeners from each .selection element
-        ref.locationDivs.forEach((div) => {
-        div.removeEventListener('mouseenter', editor.handleMouseHover);
-        div.removeEventListener('mouseleave', editor.handleMouseHover);
-        });
+//Hide Editor
+ref.Editor.style.display = 'none';
+
+// Remove the event listeners from each .selection element
+ref.locationDivs.forEach((div) => {
+div.removeEventListener('mouseenter', editor.handleMouseHover);
+div.removeEventListener('mouseleave', editor.handleMouseHover);
+});
 }
 }
-        
 
 saveButton(){
 
@@ -335,36 +316,52 @@ save.saveDataEntry();
 
 copyButton(){
 
-    const currentId = parseInt(document.getElementById('currentId').value);
-    const currentKey = document.getElementById('key').getAttribute('pair');
-    const address = {key: currentKey, id: currentId};
-    //console.log(address);
-    const obj = helper.getObjfromTag(address);
-    
-        helper.showPrompt('How many copies of ' +  obj.name + '?', 'input');
-        ref.promptBox.focus();
-        
-        helper.handleConfirm = function(response, promptBox) {
-            if (response !== null) {
-                // Check if the response is a valid number
-                const numCopies = parseInt(response);
-                if (!isNaN(numCopies)) {
-                    // Valid number, proceed with creating copies
-                    form.makeMultipleObjs(numCopies, obj, obj.key);
-                } else {
-                    // Invalid input, show error message or handle accordingly
-                    alert('Please enter a valid number.');
-                }
-            } else {
-                // User cancelled
-                console.log('User cancelled');
-            }
-            // Hide the prompt box
-            promptBox.style.display = 'none';
-        };
-    
+const currentId = parseInt(document.getElementById('currentId').value);
+const currentKey = document.getElementById('key').getAttribute('pair');
+const address = {key: currentKey, id: currentId};
+//console.log(address);
+const obj = helper.getObjfromTag(address);
+
+helper.showPrompt('How many copies of ' +  obj.name + '?', 'input');
+ref.promptBox.focus();
+
+helper.handleConfirm = function(response, promptBox) {
+if (response !== null) {
+// Check if the response is a valid number
+const numCopies = parseInt(response);
+if (!isNaN(numCopies)) {
+// Valid number, proceed with creating copies
+form.makeMultipleObjs(numCopies, obj, obj.key);
+} else {
+// Invalid input, show error message or handle accordingly
+alert('Please enter a valid number.');
+}
+} else {
+// User cancelled
+console.log('User cancelled');
+}
+// Hide the prompt box
+promptBox.style.display = 'none';
+};
+
 }
 
+showMasterLocation(){
+
+// console.log(
+// 'locId:', Storyteller.currentLocationId,
+// 'parentId:', Storyteller.parentLocationId,
+// 'gParentId:', Storyteller.grandParentLocationId
+// );
+
+//Find entry where id and parentId match. 
+const masterLocation = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(entry.parentId))
+Storyteller.changeContent(masterLocation.id)
+
+Storyteller.parentLocationId = masterLocation.id
+Storyteller.grandParentLocationId = masterLocation.id
+
+}
 
 
 };

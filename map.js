@@ -19,6 +19,7 @@ async fetchAndProcessImage(url) {
 
 // Remove the existing map and its associated elements
 const existingMap = document.getElementById('imageContainer');
+
 if (existingMap) {
 existingMap.remove();
 }
@@ -26,7 +27,7 @@ existingMap.remove();
 let imageBlob;
 
 if(url){
-//console.log('Receievd URL', url)
+console.log('Receievd URL', url)
 // Fetch the image from the URL if provided
 const response = await fetch(url);
 imageBlob = await response.blob();
@@ -62,6 +63,8 @@ if (imageBlob) {
 
 processImageBlob(imageBlob) {
 
+console.log('Recieved Image Blob')
+
 const blobUrl = URL.createObjectURL(imageBlob);
 const mapElement = new Image();
 mapElement.src = blobUrl;
@@ -79,13 +82,46 @@ imageContainer.appendChild(mapElement);
 // Add the container to the body
 ref.mapContainer.appendChild(imageContainer);
 
-this.mapHeight = mapElement.naturalHeight;
-this.mapWidth  = mapElement.naturalWidth;
+// this.mapHeight = mapElement.naturalHeight;
+// this.mapWidth  = mapElement.naturalWidth;
 
+// mapElement.style.height = `${ref.mapContainer.offsetHeight}px`;
+// mapElement.style.width = `${ref.mapContainer.offsetWidth}px`;
 
 if (localStorage.getItem('myData')) {
 load.displayLocations(load.Data.locations);
 }
+
+},
+
+newMasterLocation(){
+
+  const newId = load.generateUniqueId(load.Data.locations, 'entry')
+
+  const masterLocation = {
+    key:'locations',
+    image:"https://i.postimg.cc/yNwzct4Y/Aurealm-1.png",
+    type: "group",
+    subType:"subGroup",
+    group: "Default",
+    color: "#f4d50b",
+    id: newId,
+    parentId: newId,
+    order: 0,
+    name: 'New Master Location', //load.fileName,
+    tags: [],
+    description: 'This location appears anytime you press the Esc key enough times.',
+    }
+    
+    load.Data.locations.push(masterLocation)
+
+    //Add new Master as parentId on old Master!
+    const oldLoc = Storyteller.currentLocationId;
+    const oldLocObj = load.Data.locations.find(obj => parseInt(obj.id) === parseInt(oldLoc))
+    oldLocObj.parentId = newId;
+
+    Storyteller.changeContent(newId)
+    
 
 },
 

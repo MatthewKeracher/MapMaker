@@ -20,19 +20,21 @@ grandParentLocationId: '',
 
 async changeContent(locId) {
 
+console.log('Loading Location Id:', locId)
+
 let Story = ``
-//const locId = locationDiv.id;
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 const locName = locObj.name
 this.currentLocationId = locId
 
 if(locObj.image && locObj.image !== ""){
-//console.log('Send URL', locObj.image)
-Map.fetchAndProcessImage(locObj.image)
+
 this.parentLocationId = locId
 this.grandParentLocationId = locObj.parentId
-console.log(this.parentLocationId)
+
+Map.fetchAndProcessImage(locObj.image)
+
 }
 
 //Change Location Label Contents
@@ -69,49 +71,49 @@ helper.addEventsToStoryteller();
 }, 
 
 addImagestoStory() {
-    // Get all <hr> elements in the Storyteller
-    const hrElements = ref.Storyteller.querySelectorAll('hr');
+// Get all <hr> elements in the Storyteller
+const hrElements = ref.Storyteller.querySelectorAll('hr');
 
-    // Iterate over each <hr> element
-    hrElements.forEach(hr => {
-        // Create a <div> container to hold both the <hr> and the <img> elements
-        const container = document.createElement('div');
-        container.classList.add('hr-with-image');
-        const name = hr.getAttribute('name');
-        if(name === 'blank'){return};
+// Iterate over each <hr> element
+hrElements.forEach(hr => {
+// Create a <div> container to hold both the <hr> and the <img> elements
+const container = document.createElement('div');
+container.classList.add('hr-with-image');
+const name = hr.getAttribute('name');
+if(name === 'blank'){return};
 
-        const gifBox = [
-            {name: "subLocHR", src: 'gifs/door.gif'},
-            {name: "inventHR", src: 'gifs/backpack.png'},
-            {name: "npcHR", src:  'gifs/goblin.gif'},
-            {name: "tagHR", src: 'gifs/scroll.png'},
-            {name: "itemHR", src: 'gifs/chest.gif'},
-            {name: "fighterHR", src: 'gifs/blankHead.png'},
-            {name: "clericHR", src: 'gifs/cleric.gif'},
-            {name: "thiefHR", src: 'gifs/thief.gif'},
-            {name: "magicuserHR", src: 'gifs/magicuser.gif'},
-        ]
+const gifBox = [
+    {name: "subLocHR", src: 'gifs/door.gif'},
+    {name: "inventHR", src: 'gifs/backpack.png'},
+    {name: "npcHR", src:  'gifs/goblin.gif'},
+    {name: "tagHR", src: 'gifs/scroll.png'},
+    {name: "itemHR", src: 'gifs/chest.gif'},
+    {name: "fighterHR", src: 'gifs/blankHead.png'},
+    {name: "clericHR", src: 'gifs/cleric.gif'},
+    {name: "thiefHR", src: 'gifs/thief.gif'},
+    {name: "magicuserHR", src: 'gifs/magicuser.gif'},
+]
 
-        // Create an <img> element for the torch
-        let img 
-        
-        img = document.createElement('img');
-        let imgEntry = gifBox.find(entry => entry.name === name);
-    
-    
-        img.src = imgEntry === undefined? name : imgEntry.src;
-        img.alt = name;
-        img.classList.add('torch');
+// Create an <img> element for the torch
+let img 
 
-        //img.addEventListener('click', this.textToSpeech())
+img = document.createElement('img');
+let imgEntry = gifBox.find(entry => entry.name === name);
 
-        // Append the <hr> and <img> elements to the container
-        container.appendChild(hr.cloneNode()); // Clone the <hr> element
-        container.appendChild(img);
 
-        // Replace the <hr> element with the container
-        hr.replaceWith(container);
-    });
+img.src = imgEntry === undefined? name : imgEntry.src;
+img.alt = name;
+img.classList.add('torch');
+
+//img.addEventListener('click', this.textToSpeech())
+
+// Append the <hr> and <img> elements to the container
+container.appendChild(hr.cloneNode()); // Clone the <hr> element
+container.appendChild(img);
+
+// Replace the <hr> element with the container
+hr.replaceWith(container);
+});
 },
 
 textToSpeech(text){

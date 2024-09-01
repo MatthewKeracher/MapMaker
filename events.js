@@ -488,8 +488,9 @@ npcActions  = [...npcActions, ...actionsToAdd];
 this.eventDialogue = [...this.eventDialogue, ...dialogueToAdd];
 this.eventActions  = [...this.eventActions, ...actionsToAdd];
 
-
 });
+
+let lineBreak = `<div style="margin-top: 5px;"></div>`
 
 if(npcActions.length > 0){
 
@@ -503,20 +504,23 @@ if(npcActions.length > 0){
     const randomIndex = Math.floor(Math.random() * npcActions.length);
     selectedAction = npcActions[randomIndex].description.trim();
     const color = firstAction.color? firstAction.color: "lime";
-    this.eventDesc += `<span class="npcAction" style="color:${color}" npcId="${firstAction.npcId}" eventID="${firstAction.id}"> ${selectedAction} </span><br><br> `;
-    
+    this.eventDesc += `<span class="npcAction" style="color:${color}" npcId="${firstAction.npcId}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
+    this.eventDesc += lineBreak
     //Update Global Array for helper.updateEventContent();
     // this.eventsDialogue = npcActions
-    
     
     //Event only has one, permanent description.
     }else{
     
     selectedAction = npcActions[0].description.trim();
     const color = firstAction.color? firstAction.color: "whitesmoke";
-    this.eventDesc += `<span class="npcAction" style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span><br><br> `;
+    this.eventDesc += `<span class="npcAction" style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
+    this.eventDesc += lineBreak
     
-    }}
+    }
+
+    
+}
 
 if(npcDialogue.length > 0){
 
@@ -531,6 +535,7 @@ const randomIndex = Math.floor(Math.random() * npcDialogue.length);
 selectedOption = npcDialogue[randomIndex].description.trim();
 const color = firstEvent.color? firstEvent.color: "lime";
 this.eventDesc += `<span class="npcDialogue" style="color:lime" npcId="${firstEvent.npcId}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
+this.eventDesc += lineBreak
 
 // //Update Global Array for helper.updateEventContent();
 // this.eventsDialogue = npcDialogue
@@ -542,6 +547,7 @@ this.eventDesc += `<span class="npcDialogue" style="color:lime" npcId="${firstEv
 selectedOption = npcDialogue[0].description.trim();
 const color = firstEvent.color? firstEvent.color: "whitesmoke";
 this.eventDesc += `<span class="npcDialogue" style="color:${color}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
+this.eventDesc += lineBreak
 
 }}
 
@@ -554,7 +560,7 @@ let firstSentence = npc.description.substring(0, 130) + elipsis; //slice(0, firs
 let hyperDesc = expandable.findKeywords(firstSentence, keywords);
 
 //Insert NPC Information
-this.eventDesc += `<br><br><span
+this.eventDesc += `<span
 class="extendable"
 showHide="hide"
 key="${npc.key}" 
