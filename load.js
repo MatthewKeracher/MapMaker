@@ -129,12 +129,12 @@ try {
 if (fileContent) {
 
     const data = JSON.parse(fileContent);
-    //helper.sortData(data);
+    const chosenKeys = ["items"]
 
 
 
     for (const key in data) {
-        if (key !== 'miscInfo') {
+        if (key !== 'miscInfo' && chosenKeys.includes(key)) {
             data[key].forEach(entry => {
 
                 //Avoid Duplicate
@@ -143,6 +143,7 @@ if (fileContent) {
 
                 // Push each entry into load.Data
                 entry.id = load.generateUniqueId(load.Data[key], 'entry');
+                entry.tags = [];
                 load.Data[key].push(entry);
             });
         }
@@ -179,6 +180,7 @@ load.Data = JSON.parse(fileContent);
 //helper.sortData(load.Data)
 //helper.genGems(load.Data);
 //helper.genJewelry(load.Data);
+//helper.genPotions();
 //----
 
 toolbar.showMasterLocation();

@@ -25,11 +25,8 @@ const keywords = expandable.generateKeyWords(load.Data)
 //LOCATION DESCRIPTION
 if(locObj){
 let locObjDesc = helper.filterRandomOptions(locObj);
-
-//Add Keywords
 let hyperDesc = expandable.findKeywords(locObjDesc, keywords);
 
-//Location Wrapper
 let locWrapper = 
 `<span class="expandable extendable"
 id="${locObj.id}"
@@ -151,8 +148,6 @@ locNPCSearch.forEach(npc => {
     floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
 });
 
-
-
 floatNPCs.forEach(npc => {
 let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
 let r = Math.floor(Math.random() * activeLocations.length);
@@ -162,7 +157,10 @@ npc.location = activeLocations[r].id;
 }catch{console.error('No Active subLocations here.')}
 });
 
-
+if(subLocations.length === 0){
+console.log('no subLocations')
+subLocations.push(locObj)}
+ 
 subLocations.forEach((subLocation) =>{
 
 let subLocHR 
@@ -174,11 +172,13 @@ if(subLocation.image !== ''){
 }
 
 //SubLocation Header
+if(subLocation.key === 'subLocations'){
 let subLocHeader = 
 `<br><h2> <span class="expandable"
 style="color:${subLocation.color}"
 id="${subLocation.id}"
 key="${subLocation.key}"> ${subLocation.name} </span> </h2>`
+
 
 this.eventDesc += subLocHeader;
 this.eventDesc += `<hr name="${subLocHR}" style="background-color:${subLocation.color}"><br>`;
@@ -198,7 +198,7 @@ key="${subLocation.key}"> ${hyperDesc} </span> `
 
 // this.eventDesc += `<br>`
 this.eventDesc += subLocWrapper;
-
+}
 //this.eventDesc += `<br><br>`
 
 //Add NPCs to SubLocation
@@ -213,6 +213,7 @@ Events.getSubLocDetails(subLocation, floatNPCs, keywords, locObj);
 getSubLocDetails(subLocation, floatNPCs, keywords, locObj) {
 
 let bundle = []
+let itemBundles = []
 
 //Get all objs from tags and put into a big bundle.
 subLocation.tags.forEach(subLocTag => {
@@ -226,11 +227,27 @@ if(tagObj === undefined){console.error('No tagObj')}
 if(tagObj.key === 'tags'){
 //console.log(tagObj.name)
 //Roll for chance.
+
+if(tagObj.chance === 'or'){
+
+    let orObj = { ...tagObj };
+    
+    const orNPCs = orObj.tags.filter(tag => tag.key === 'npcs');
+    const randNPC = Math.floor(Math.random() * orNPCs.length);
+    const newOrNPCs = orNPCs.filter(npc => npc === orNPCs[randNPC]);
+    orObj.tags = orObj.tags.filter(tag => tag.key !== 'npcs');
+    orObj.tags = [...orObj.tags, ...newOrNPCs]
+    tagObj = orObj
+    console.log(tagObj)
+    
+    }else{
+
 let chanceRoll = helper.rollDice(100);
 let toBeat = parseInt(tagObj.chance)
 if(chanceRoll > toBeat){
 console.log('failed roll', toBeat, chanceRoll)
 return  
+}
 }
 }
 
@@ -250,10 +267,12 @@ const roll = helper.rollDice(100)
 //console.log(tag)
 if(roll > chance && !tag.special ){return}
 
-    
 itemBundle.push(tagObj)}
 })
-Events.generateLocItems(itemBundle, tagObj);
+
+itemBundles.push({bundle: itemBundle, tagObj: tagObj});
+
+
 }
 });
 
@@ -297,6 +316,12 @@ npcBundle = filterBundle;
 
 this.getNPCEvents(npcBundle, keywords, subLocation, locObj);
 this.eventDesc += `<br>`;
+
+itemBundles.forEach(entry => {
+
+Events.generateLocItems(entry.bundle, entry.tagObj);
+
+})
 
 },
 

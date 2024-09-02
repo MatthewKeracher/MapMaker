@@ -8,9 +8,41 @@ import Events from "./events.js";
 
 const helper = {
 
+  sortData(data){
+
+    for (const key in data) {
+    let obj = data[key];
+    
+    if (key !== 'miscInfo') {
+    obj = obj.map(entry => {
+    // Remove some fields
+    // delete entry.key;
+    
+    // Add new fields
+    // entry.key = '';
+    //entry.active = 1;
+    
+    if(entry.chance){
+
+      entry.condition = "and"
+
+    }
+    
+    //entry.chance = 100;
+    
+    return entry
+    
+    })
+    }
+    
+    data[key] = obj;
+    console.log(obj)
+    }
+    },
+
 followInstructions(instruction, obj) {
 
-console.log(instruction)
+//console.log(instruction)
 
 let quantity = instruction.quantity? instruction.quantity : 1;
 let madeItems = obj.tags.filter(tag => tag.instruction === instruction.id);
@@ -71,6 +103,177 @@ options.splice(randomIndex, 1)
 }
 
 return madeItems
+
+},
+
+genPotions(){
+
+  const potions = [
+      {
+          name: "Clairaudience",
+          description: "Enables the drinker to hear sounds in another area through the ears of a living creature up to 60' away, functioning as the spell clairvoyance.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Clairvoyance",
+          description: "Grants the effect of the clairvoyance spell.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Cold Resistance",
+          description: "Grants the power of the spell resist cold.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Control Animal",
+          description: "Functions like control human but affects only normal, non-magical animals.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Control Dragon",
+          description: "Functions like control human but affects only dragons.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Control Giant",
+          description: "Functions like control human but affects only giants.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Control Human",
+          description: "Allows the drinker to charm a human, demi-human, or humanoid by gazing at them, functioning as the charm person spell.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Control Plant",
+          description: "Grants control over plants or plant creatures within a 10' square area up to 50' away, making normal plants animated and plant creatures behave as if under charm monster.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Control Undead",
+          description: "Grants command of 3d6 hit dice of undead monsters, with a save vs. Spells allowed to resist the effect.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Delusion",
+          description: "A cursed potion that appears as another potion when tested; the drinker briefly believes they have received the benefits of the 'other' potion, but the illusion is exposed quickly.",
+          duration: "Varies"
+      },
+      {
+          name: "Diminution",
+          description: "Reduces the drinker and their items to one-twelfth of their original height and weight; the drinker becomes tiny and can move about undetected.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "ESP",
+          description: "Grants the power of the ESP spell.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Fire Resistance",
+          description: "Grants the power of the spell resist fire.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Flying",
+          description: "Grants the power of the spell fly.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Gaseous Form",
+          description: "Transforms the drinker and their gear into an insubstantial, misty form with AC 22 vs. magical weapons; the drinker cannot attack or cast spells, and moves at 10' per turn.",
+          duration: "1d4+1 turns (per third of potion)"
+      },
+      {
+          name: "Giant Strength",
+          description: "Grants the Strength of a giant, with +5 on attack and damage rolls and the ability to throw large stones.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Growth",
+          description: "Doubles the drinker’s height and increases their weight eightfold, granting Strength of a Stone Giant but without rock-throwing ability.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Healing",
+          description: "Provides 1d6+1 hit points of healing as the spell cure light wounds.",
+          duration: "Immediate"
+      },
+      {
+          name: "Heroism",
+          description: "Improves the fighting ability of the drinker, with varying effects based on the drinker's level, including temporary hit dice and attack bonuses.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Invisibility",
+          description: "Makes the drinker invisible as the spell; can be quaffed in thirds, with each drink lasting 1d4+1 turns.",
+          duration: "1d4+1 turns (per third of potion)"
+      },
+      {
+          name: "Invulnerability",
+          description: "Grants a +2 bonus to Armor Class.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Levitation",
+          description: "Grants the power of the spell levitate.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Longevity",
+          description: "Makes the drinker younger by 1d10 years.",
+          duration: "Permanent"
+      },
+      {
+          name: "Poison",
+          description: "A trap potion; the drinker must save vs. Poison or die, even if only a sip is imbibed.",
+          duration: "Immediate"
+      },
+      {
+          name: "Polymorph Self",
+          description: "Grants the power of the spell polymorph self.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Speed",
+          description: "Gives the drinker the benefits of the spell haste.",
+          duration: "1d6+6 turns"
+      },
+      {
+          name: "Treasure Finding",
+          description: "Reveals the direction and approximate distance to the largest treasure hoard within a 300' spherical radius, detecting only metal coins.",
+          duration: "1d6+6 turns"
+      }
+  ];
+
+potions.forEach(potion => {
+
+  const newId = load.generateUniqueId(load.Data.items, 'entry');
+
+  const newGem = {
+  description: potion.description,
+  id: newId,
+  type: "group",
+  subType: "subGroup",
+  name: "Potion of "  + potion.name,
+  group: "Magic Items",
+  subGroup: "Potions",
+  order: "",
+  color: "#800080",
+  weight: "0.5",
+  size: "S",
+  cost: "500",
+  damage: "",
+  range: potion.duration,
+  armourClass: "",
+  key: "items",
+  tags: []
+  }
+  
+  load.Data.items.push(newGem)
+
+})
+
 
 },
 
@@ -542,42 +745,6 @@ ${itemInfo}</label>
 
 return itemHTML
 
-},
-
-sortData(data){
-
-for (const key in data) {
-let obj = data[key];
-
-if (key === 'locations') {
-obj = obj.map(entry => {
-// Remove some fields
-// delete entry.key;
-
-// Add new fields
-// entry.key = '';
-//entry.active = 1;
-
-if(entry.parentId){
-return entry
-}else{
-entry.parentId = "1000"}
-
-if(entry.image){
-  return entry
-  }else{
-  entry.image = ""}
-
-//entry.chance = 100;
-
-return entry
-
-})
-}
-
-data[key] = obj;
-console.log(obj)
-}
 },
 
 cssColorToHex(cssColorName) {
