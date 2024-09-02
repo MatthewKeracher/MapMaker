@@ -226,9 +226,11 @@ if(tagObj === undefined){console.error('No tagObj')}
 
 if(tagObj.key === 'tags'){
 //console.log(tagObj.name)
-//Roll for chance.
+//Resolve Chance of Appearing
 
 if(tagObj.chance === 'or'){
+
+    //Only One NPC from this tag will appear.
 
     let orObj = { ...tagObj };
     
