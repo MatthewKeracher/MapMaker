@@ -93,7 +93,7 @@ let subLocations = [...filterData];
 subLocations.sort((a, b) => a.order - b.order);
 
 if(subLocations.length === 0){
-console.log('No Sublocations')
+//console.log('No Sublocations')
 subLocations.push(locObj)}
 
 return subLocations;
