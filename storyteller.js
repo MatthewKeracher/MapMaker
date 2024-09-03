@@ -20,7 +20,7 @@ grandParentLocationId: '',
 
 async changeContent(locId) {
 
-console.log('Loading Location Id:', locId)
+//console.log('Loading Location Id:', locId)
 
 let Story = ``
 

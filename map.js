@@ -63,7 +63,7 @@ if (imageBlob) {
 
 processImageBlob(imageBlob) {
 
-console.log('Recieved Image Blob')
+////console.log('Recieved Image Blob')
 
 const blobUrl = URL.createObjectURL(imageBlob);
 const mapElement = new Image();

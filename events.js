@@ -15,14 +15,143 @@ eventsArray: [],
 searchArray: [],
 eventActions: [],
 
-
+// _________________________________________________
 
 async getEvent(locObj) {
 
 this.eventDesc = '';
-const keywords = expandable.generateKeyWords(load.Data)
+let keywords = expandable.generateKeyWords(load.Data);
 
-//LOCATION DESCRIPTION
+let allTags = Events.getAllTags(locObj);
+let locAmbience = Events.filterKeyTag(allTags, "ambience");
+let locNPCs = Events.filterKeyTag(allTags, "npcs");
+let subLocations = Events.getAllSubLocations(locObj);
+let floatNPCs = Events.getFloatingNPCs(locObj, locNPCs, subLocations);
+
+
+Events.getLocationDescription(locObj, keywords);
+Events.getLocationAmbience(locAmbience, keywords);
+Events.makeSubLocations(locObj, subLocations, keywords, floatNPCs);
+
+},
+
+getAllTags(locObj){
+
+let allTags = helper.getTagsfromObj(locObj);
+allTags = allTags.filter(obj => obj.key === 'tags');
+
+let childTags = [];
+allTags.forEach(objTag => {
+let tagEvents = helper.getTagsfromObj(objTag);
+let hasChildren = tagEvents.filter(obj => obj.key === 'tags' && parseInt(obj.order) > parseInt(objTag.order));
+
+if(hasChildren.length > 0){
+hasChildren.forEach(tag => {
+childTags.push(tag);
+})};
+});
+
+allTags = [...allTags, ...childTags];
+
+return allTags
+
+},
+
+filterKeyTag(allTags, key){
+
+let keyTags = [];
+
+allTags.forEach(objTag => {
+
+let newTag = {key: objTag.key, id: objTag.id};
+let tagEvents = helper.getTagsfromObj(objTag);
+let hasKey = tagEvents.filter(obj => obj.key === key);
+
+if(hasKey.length > 0){
+keyTags.push(newTag)
+}
+});
+
+keyTags = keyTags.concat();
+return keyTags
+
+},
+
+getAllSubLocations(locObj){
+
+let searchId = parseInt(locObj.id);
+let filterData = [];
+
+load.Data.subLocations.forEach(subLoc => {
+let locSearch = subLoc.tags.filter(tag => tag.key === "locations" && parseInt(tag.id) === searchId);
+if (locSearch.length === 1) {
+filterData.push(JSON.parse(JSON.stringify(subLoc))); // Deep copy each object
+}
+});
+
+let subLocations = [...filterData];
+subLocations.sort((a, b) => a.order - b.order);
+
+if(subLocations.length === 0){
+console.log('No Sublocations')
+subLocations.push(locObj)}
+
+return subLocations;
+
+},
+
+getFloatingNPCs(locObj, locNPCs, subLocations){
+
+//Add NPCs directly in Location to a random subLocation. 
+let locNPCSearch = locObj.tags.filter(obj => obj.key === 'npcs');
+let floatNPCs = [];
+
+//Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
+locNPCs.forEach(locNPC => {
+const locTagObj = helper.getObjfromTag(locNPC);
+let npcFilter = locTagObj.tags.filter(obj => obj.key === 'npcs');
+let tagChance = locTagObj.chance
+
+npcFilter.forEach(tag => {
+
+const npc = helper.getObjfromTag(tag);
+
+//Roll for chance.
+let chanceRoll = helper.rollDice(100);
+let toBeat = parseInt(tagChance)
+if(chanceRoll > toBeat){
+console.log(npc.name + ' failed roll', toBeat, chanceRoll)
+return  
+}
+
+floatNPCs.push(JSON.parse(JSON.stringify(npc)))
+
+})
+
+});
+
+locNPCSearch.forEach(npc => {
+let npcObj = helper.getObjfromTag(npc);
+floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
+});
+
+floatNPCs.forEach(npc => {
+let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
+let r = Math.floor(Math.random() * activeLocations.length);
+try{
+npc.location = activeLocations[r].id;
+
+}catch{console.error('No Active subLocations here.')}
+});
+
+return floatNPCs
+
+
+},
+
+getLocationDescription(locObj, keywords){
+
+//1. Get Location description.
 if(locObj){
 let locObjDesc = helper.filterRandomOptions(locObj);
 let hyperDesc = expandable.findKeywords(locObjDesc, keywords);
@@ -37,138 +166,63 @@ this.eventDesc += `<br>`
 this.eventDesc += `<br>`
 };
 
-//LOCATION TAGS
-// locObj.tags --> tags
-let locObjTags = helper.getTagsfromObj(locObj);
+},
 
-// console.log('locObj.tags --> tags', locObjTags)
-locObjTags = locObjTags.filter(obj => obj.key === 'tags');
+getLocationAmbience(locAmbience, keywords){
 
-//tags --> locAmbience & locNPCs
-let locAmbience = [];
-let locNPCs = [];
-let childTags = [];
+//Takes an array of tags and passes the ambience descriptions on.
 
-//Find Children.
-locObjTags.forEach(objTag => {
-    let tagEvents = helper.getTagsfromObj(objTag);
-    let hasChildren = tagEvents.filter(obj => obj.key === 'tags' && parseInt(obj.order) > parseInt(objTag.order));
-
-//Add Children
-if(hasChildren.length > 0){
-    hasChildren.forEach(tag => {
-    childTags.push(tag);
-    })};
-
-});
-
-locObjTags = [...locObjTags, ...childTags];
-
-//Look inside each tag to see what's there.
-locObjTags.forEach(objTag => {
-let newTag = {key: objTag.key, id: objTag.id};
-let tagEvents = helper.getTagsfromObj(objTag);
-let hasAmbience = tagEvents.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
-let hasNPCs = tagEvents.filter(obj => obj.key === 'npcs');
-
-hasAmbience.forEach(tag => {
-locAmbience.push(tag);
-});
-
-//Fetch all location NPCs.
-if(hasNPCs.length > 0){locNPCs.push(newTag)};
-})
-
-//Add Ambience for Location.
-locAmbience.sort((a, b) => a.order - b.order);
+if(locAmbience.length > 0){
 
 locAmbience.forEach(tag => {
-Events.getAmbiencefromTag(tag, keywords);
-this.eventDesc += `<br><br>`
-});
 
-locNPCs = locNPCs.concat();
+let tagObj = helper.getObjfromTag(tag);
+let ambTags = tagObj.tags.filter(entry => entry.key === 'ambience');
 
+ambTags.forEach(tag => {
 
-//SUBLOCATIONS
-//subLocations ---> NPCs ---> NPC Events.
-let searchKey = locObj.key;
-let searchId = parseInt(locObj.id);
-let filterData = [];
+let ambObj = helper.getObjfromTag(tag);
 
-load.Data.subLocations.forEach(subLoc => {
-    let locSearch = subLoc.tags.filter(tag => tag.key === searchKey && parseInt(tag.id) === searchId);
-    if (locSearch.length === 1) {
-        filterData.push(JSON.parse(JSON.stringify(subLoc))); // Deep copy each object
-    }
-});
+Events.getAmbiencefromTag(ambObj, keywords);
+this.eventDesc += `<div style="margin-top: 5px;"></div>`
 
-
-//Make a copy of subLocations.
-let subLocations = [...filterData];
-
-subLocations.sort((a, b) => a.order - b.order);
-
-//Add NPCs directly in Location to a random subLocation. 
-let locNPCSearch = locObj.tags.filter(obj => obj.key === 'npcs');
-let floatNPCs = [];
-
-//Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
-locNPCs.forEach(locNPC => {
-// let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
-// let r = Math.floor(Math.random() * activeLocations.length);
-// try{
-//     let randomSubLoc = activeLocations[r];
-//     randomSubLoc.tags.push(locNPC)
-//     }catch{console.error('No Active subLocations here.')}
-const locTagObj = helper.getObjfromTag(locNPC);
-let npcFilter = locTagObj.tags.filter(obj => obj.key === 'npcs');
-let tagChance = locTagObj.chance
-
-npcFilter.forEach(tag => {
-
-    const npc = helper.getObjfromTag(tag);
-        
-    //Roll for chance.
-    let chanceRoll = helper.rollDice(100);
-    let toBeat = parseInt(tagChance)
-    if(chanceRoll > toBeat){
-    console.log(npc.name + ' failed roll', toBeat, chanceRoll)
-    return  
-    }
-
-    floatNPCs.push(JSON.parse(JSON.stringify(npc)))
-    
 })
 
 });
 
-locNPCSearch.forEach(npc => {
-    let npcObj = helper.getObjfromTag(npc);
-    floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
-});
+locAmbience.sort((a, b) => a.order - b.order);
 
-floatNPCs.forEach(npc => {
-let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
-let r = Math.floor(Math.random() * activeLocations.length);
-try{
-npc.location = activeLocations[r].id;
+}},
 
-}catch{console.error('No Active subLocations here.')}
-});
+getAmbiencefromTag(obj, keywords){
 
-if(subLocations.length === 0){
-console.log('no subLocations')
-subLocations.push(locObj)}
- 
+if(obj.key === 'ambience'){
+const ambienceObj = obj;
+let ambienceDesc = helper.filterRandomOptions(ambienceObj);
+
+//Add Keywords
+let hyperDesc = expandable.findKeywords(ambienceDesc, keywords);
+
+//Ambience Wrapper
+let ambienceWrapper = 
+`<span class="expandable"
+style="color:${ambienceObj.color}"
+id="${ambienceObj.id}"
+key="${ambienceObj.key}"> ${hyperDesc} </span>`
+this.eventDesc += ambienceWrapper;
+
+}},
+
+makeSubLocations(locObj, subLocations, keywords, floatNPCs){
+
 subLocations.forEach((subLocation) =>{
 
 let subLocHR 
 
 if(subLocation.image !== ''){
-    subLocHR = subLocation.image;
+subLocHR = subLocation.image;
 }else{
-    subLocHR = "subLocHR"
+subLocHR = "subLocHR"
 }
 
 //SubLocation Header
@@ -179,10 +233,8 @@ style="color:${subLocation.color}"
 id="${subLocation.id}"
 key="${subLocation.key}"> ${subLocation.name} </span> </h2>`
 
-
 this.eventDesc += subLocHeader;
 this.eventDesc += `<hr name="${subLocHR}" style="background-color:${subLocation.color}"><br>`;
-
 
 //SubLocation Description
 let subLocDesc = helper.filterRandomOptions(subLocation);
@@ -208,41 +260,70 @@ Events.getSubLocDetails(subLocation, floatNPCs, keywords, locObj);
 
 });
 
+
+
 },
+
+// _________________________________________________
 
 getSubLocDetails(subLocation, floatNPCs, keywords, locObj) {
 
-let bundle = []
-let itemBundles = []
+let allObjs = Events.getAllObjs(subLocation)
 
-//Get all objs from tags and put into a big bundle.
-subLocation.tags.forEach(subLocTag => {
+let bundle = allObjs.bundle
+let itemBundles = allObjs.containers
+let npcBundle = Events.mergeNPCs(subLocation, bundle.npcs, floatNPCs)
 
-let itemBundle = [];
-//Tags in subLocation
-if(subLocTag.key !== 'locations'){
+if(bundle.ambience){
+bundle.ambience.forEach(ambience => {
+this.eventDesc += `<br><br>`
+Events.getAmbiencefromTag(ambience, keywords);
+})
+};
+
+if(npcBundle){
+this.getNPCEvents(bundle.npcs, keywords, subLocation, locObj);
+this.eventDesc += `<br>`;
+}
+
+itemBundles.forEach(entry => {
+Events.generateLocItems(entry.bundle, entry.tagObj);
+})
+
+},
+
+getAllObjs(subLocation){
+
+let subLocTags = subLocation.tags.filter(tag => tag.key !== 'locations');
+let containers = [];
+let bundle = {};
+
+bundle.npcs = [];
+
+subLocTags.forEach(subLocTag => {
+
 let tagObj = helper.getObjfromTag(subLocTag);
-if(tagObj === undefined){console.error('No tagObj')}
 
+if(tagObj === undefined){return}
+    
+//Factor in Chance of NPCs from Tags Appearing.
 if(tagObj.key === 'tags'){
-//console.log(tagObj.name)
-//Resolve Chance of Appearing
-
+    
 if(tagObj.chance === 'or'){
-
-    //Only One NPC from this tag will appear.
-
-    let orObj = { ...tagObj };
+//Only One NPC from this tag will appear.
     
-    const orNPCs = orObj.tags.filter(tag => tag.key === 'npcs');
-    const randNPC = Math.floor(Math.random() * orNPCs.length);
-    const newOrNPCs = orNPCs.filter(npc => npc === orNPCs[randNPC]);
-    orObj.tags = orObj.tags.filter(tag => tag.key !== 'npcs');
-    orObj.tags = [...orObj.tags, ...newOrNPCs]
-    tagObj = orObj
-    console.log(tagObj)
+let orObj = { ...tagObj };
     
-    }else{
+const orNPCs = orObj.tags.filter(tag => tag.key === 'npcs');
+const randNPC = Math.floor(Math.random() * orNPCs.length);
+const newOrNPCs = orNPCs.filter(npc => npc === orNPCs[randNPC]);
+orObj.tags = orObj.tags.filter(tag => tag.key !== 'npcs');
+orObj.tags = [...orObj.tags, ...newOrNPCs]
+tagObj = orObj
+console.log(tagObj)
+    
+}else{
+//Only one chance that Tag will appear.
 
 let chanceRoll = helper.rollDice(100);
 let toBeat = parseInt(tagObj.chance)
@@ -252,61 +333,62 @@ return
 }
 }
 }
-
-//Add Item Containers to subLocation
+    
+//Add to Bundle
 let tags = tagObj.tags;
+let itemsHere = [];
 
 tags.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
-bundle.push(tagObj)
 
+if (!bundle[tagObj.key]) {
+    bundle[tagObj.key] = []; 
+}
+
+bundle[tagObj.key].push(tagObj);
+
+//If it is a Container
 if(tag.key === 'items' && subLocTag.key === 'tags'){
 
-//Resolve Chance of Appearing
+//Factor in Chance of Item appearing in the Container
 const chance = parseInt(tag.chance)
 const roll = helper.rollDice(100)
-//console.log(tag)
 if(roll > chance && !tag.special ){return}
 
-itemBundle.push(tagObj)}
+itemsHere.push(tagObj)}
 })
 
-itemBundles.push({bundle: itemBundle, tagObj: tagObj});
-
-
-}
+containers.push({bundle: itemsHere, tagObj: tagObj});
+    
 });
 
-//Filter out empty entries.
-bundle = bundle.filter(entry => entry !== undefined);
+for (let key in bundle) {
+    if (bundle[key] === undefined) {
+      delete bundle[key];
+    }
+  }
 
-//Parse out different bundles from big bundle.
-let npcBundle = bundle.filter(obj => obj.key === 'npcs');
-let ambienceBundle = bundle.filter(obj => obj.key === 'ambience' && parseInt(obj.active) === 1);
+return {containers, bundle}
 
+},
 
-//Use ambienceBundle for subLocation ambience.
-ambienceBundle.forEach(tag => {
-this.eventDesc += `<br><br>`
-Events.getAmbiencefromTag(tag, keywords);
-
-});
+mergeNPCs(subLocation, npcBundle, floatNPCs){
 
 //Add NPCs tagged directly to subLocation.
-let npcTags = subLocation.tags.filter(obj => obj.key === 'npcs');
+let directNPCs = subLocation.tags.filter(obj => obj.key === 'npcs');
 
-if(npcTags.length > 0){
+if(directNPCs.length > 0){
 
-   npcTags.forEach(tag => {
-    let subLocNPC = helper.getObjfromTag(tag);
-    npcBundle.push(subLocNPC)
+directNPCs.forEach(tag => {
+let directNPC = helper.getObjfromTag(tag);
+npcBundle.push(directNPC);
 })  
 };
 
-//Add floatNPCs.
+//Add NPCs appearing through Tag or from Location
 floatNPCs.forEach(npc => {
-if(npc.location === subLocation.id){npcBundle.push(npc)}
+if(npc.location === subLocation.id){npcBundle.npcs.push(npc)}
 })
 
 //Remove NPCs who are in the [P]arty.
@@ -316,14 +398,7 @@ let filterBundle = npcBundle.filter(npc => npc.id !== parseInt(member.id));
 npcBundle = filterBundle;
 });
 
-this.getNPCEvents(npcBundle, keywords, subLocation, locObj);
-this.eventDesc += `<br>`;
-
-itemBundles.forEach(entry => {
-
-Events.generateLocItems(entry.bundle, entry.tagObj);
-
-})
+return npcBundle
 
 },
 
@@ -361,7 +436,7 @@ style="font-family:'SoutaneBlack';
 color: ${npc.color}" key="${npc.key}" 
 id="${npc.id}"> 
 ${npc.name} is here.</span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npcArmourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
-   
+
 //Insert NPC
 this.eventDesc +=`${npcHTML}`;
 
@@ -452,10 +527,10 @@ let uniqueEventIds = new Set();
 
 
 eventBundle.forEach(obj => {
-    if (!uniqueEventIds.has(obj.id)) {
-        uniqueEventIds.add(obj.id);
-        uniqueEvents.push(obj);
-    }
+if (!uniqueEventIds.has(obj.id)) {
+uniqueEventIds.add(obj.id);
+uniqueEvents.push(obj);
+}
 
 });
 
@@ -490,12 +565,12 @@ options.forEach(option => {
 
 const newObj = {
 
-    id: event.id,
-    npcId: npc.id,
-    key: event.key,
-    name: event.name, 
-    color: event.color,
-    description: option
+id: event.id,
+npcId: npc.id,
+key: event.key,
+name: event.name, 
+color: event.color,
+description: option
 
 }
 
@@ -521,32 +596,32 @@ let lineBreak = `<div style="margin-top: 5px;"></div>`
 
 if(npcActions.length > 0){
 
-    //Set starting event content. 
-    const firstAction = npcActions[0]
-    let selectedAction = 'You should not be able to see this!'
-    
-    //Tee up for Dialogue
-    if(npcActions.length > 1){
-    
-    const randomIndex = Math.floor(Math.random() * npcActions.length);
-    selectedAction = npcActions[randomIndex].description.trim();
-    const color = firstAction.color? firstAction.color: "lime";
-    this.eventDesc += `<span class="npcAction" style="color:${color}" npcId="${firstAction.npcId}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
-    this.eventDesc += lineBreak
-    //Update Global Array for helper.updateEventContent();
-    // this.eventsDialogue = npcActions
-    
-    //Event only has one, permanent description.
-    }else{
-    
-    selectedAction = npcActions[0].description.trim();
-    const color = firstAction.color? firstAction.color: "whitesmoke";
-    this.eventDesc += `<span class="npcAction" style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
-    this.eventDesc += lineBreak
-    
-    }
+//Set starting event content. 
+const firstAction = npcActions[0]
+let selectedAction = 'You should not be able to see this!'
 
-    
+//Tee up for Dialogue
+if(npcActions.length > 1){
+
+const randomIndex = Math.floor(Math.random() * npcActions.length);
+selectedAction = npcActions[randomIndex].description.trim();
+const color = firstAction.color? firstAction.color: "lime";
+this.eventDesc += `<span class="npcAction" style="color:${color}" npcId="${firstAction.npcId}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
+this.eventDesc += lineBreak
+//Update Global Array for helper.updateEventContent();
+// this.eventsDialogue = npcActions
+
+//Event only has one, permanent description.
+}else{
+
+selectedAction = npcActions[0].description.trim();
+const color = firstAction.color? firstAction.color: "whitesmoke";
+this.eventDesc += `<span class="npcAction" style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
+this.eventDesc += lineBreak
+
+}
+
+
 }
 
 if(npcDialogue.length > 0){
@@ -578,7 +653,6 @@ this.eventDesc += lineBreak
 
 }}
 
-
 //Insert first sentence of Backstory
 let firstPeriodIndex = npc.description.indexOf('.');
 let elipsis = npc.description.length > 130? '...': ''
@@ -597,25 +671,6 @@ id="${npc.id}">${hyperDesc} </span> <br><br>`
 
 });
 },
-
-getAmbiencefromTag(obj, keywords){
-
-if(obj.key === 'ambience'){
-const ambienceObj = obj;
-let ambienceDesc = helper.filterRandomOptions(ambienceObj);
-
-//Add Keywords
-let hyperDesc = expandable.findKeywords(ambienceDesc, keywords);
-
-//Ambience Wrapper
-let ambienceWrapper = 
-`<span class="expandable"
-style="color:${ambienceObj.color}"
-id="${ambienceObj.id}"
-key="${ambienceObj.key}"> ${hyperDesc} </span>`
-this.eventDesc += ambienceWrapper;
-
-}},
 
 generateLocItems(bundle, tag){
 
@@ -748,15 +803,15 @@ const itemTags = npc.tags.filter(tag => tag.key === 'items')
 let keyTags = npc.tags.filter(entry => entry.key === "tags");
 keyTags.forEach(tag => {
 
-    const tagObj = helper.getObjfromTag(tag);
-    let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
-    
-    associatedTags.forEach(tag => {
+const tagObj = helper.getObjfromTag(tag);
+let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
 
-    //Add into NPC's tags
-    itemTags.push(tag);
+associatedTags.forEach(tag => {
 
-    }) })
+//Add into NPC's tags
+itemTags.push(tag);
+
+}) })
 
 
 let npcArmourClass = npc.armourClass; //Default Value
