@@ -430,8 +430,10 @@ colorWheel.addEventListener('input', handleColorChange);
 if(obj.key === 'npcs'){
 
 //Hide Access
-const accessDiv = document.getElementById('accessContainer')
+try{
+let accessDiv = document.getElementById('accessContainer')
 accessDiv.style.display = 'none';
+}catch{}
 
 //Add Class, Level, and Species
 if(obj){
