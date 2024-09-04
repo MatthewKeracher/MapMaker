@@ -27,7 +27,7 @@ existingMap.remove();
 let imageBlob;
 
 if(url){
-console.log('Receievd URL', url)
+//console.log('Recieved URL', url)
 // Fetch the image from the URL if provided
 const response = await fetch(url);
 imageBlob = await response.blob();

@@ -13,7 +13,7 @@ this.id = data.id;
 
 //Character Sheet
 this.name = data.name;
-
+this.access = data.acess;
 this.class = data.class === ''? 'Fighter' : data.class;
 this.level = data.level === ''? 1 : parseInt(data.level);
 this.color = data.color,

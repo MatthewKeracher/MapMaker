@@ -106,6 +106,15 @@ getFloatingNPCs(locObj, locNPCs, subLocations){
 let locNPCSearch = locObj.tags.filter(obj => obj.key === 'npcs');
 let floatNPCs = [];
 
+//get NPCs attached to the parentID
+let parentId = parseInt(locObj.parentId)
+let parentObj = load.Data.locations.find(entry => parseInt(entry.id) === parentId);
+
+if(parentObj && parentObj.tags){
+    let parentNPCs = parentObj.tags.filter(obj => obj.key === 'npcs');
+    locNPCSearch = [...new Set([...locNPCSearch, ...parentNPCs])];
+}
+
 //Add NPCs in Location Tags to a random subLocation. NEED TO UPDATE
 locNPCs.forEach(locNPC => {
 const locTagObj = helper.getObjfromTag(locNPC);
@@ -136,12 +145,22 @@ floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
 });
 
 floatNPCs.forEach(npc => {
-let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1);
+let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 1 || subLoc.key === 'locations');
+
+//Filter for NPC Access
+if(npc.access !== '*'){
+
+activeLocations = activeLocations.filter(loc => parseInt(loc.access) === parseInt(npc.access) || loc.access === '*');
+if(activeLocations.length === 0){
+//console.log(npc.name + ' does not have correct access.')
+}
+
+}
+
 let r = Math.floor(Math.random() * activeLocations.length);
 try{
 npc.location = activeLocations[r].id;
-
-}catch{console.error('No Active subLocations here.')}
+}catch{}
 });
 
 return floatNPCs
@@ -272,7 +291,9 @@ let allObjs = Events.getAllObjs(subLocation)
 
 let bundle = allObjs.bundle
 let itemBundles = allObjs.containers
-let npcBundle = Events.mergeNPCs(subLocation, bundle.npcs, floatNPCs)
+let locAccess = locObj.access
+let npcBundle = Events.mergeNPCs(subLocation, bundle.npcs, floatNPCs, locAccess)
+
 
 if(bundle.ambience){
 bundle.ambience.forEach(ambience => {
@@ -282,7 +303,7 @@ Events.getAmbiencefromTag(ambience, keywords);
 };
 
 if(npcBundle){
-this.getNPCEvents(bundle.npcs, keywords, subLocation, locObj);
+this.getNPCEvents(npcBundle, keywords, subLocation, locObj);
 this.eventDesc += `<br>`;
 }
 
@@ -294,7 +315,7 @@ Events.generateLocItems(entry.bundle, entry.tagObj);
 
 getAllObjs(subLocation){
 
-let subLocTags = subLocation.tags.filter(tag => tag.key !== 'locations');
+let subLocTags = subLocation.tags.filter(tag => tag.key !== "locations");
 let containers = [];
 let bundle = {};
 
@@ -373,7 +394,7 @@ return {containers, bundle}
 
 },
 
-mergeNPCs(subLocation, npcBundle, floatNPCs){
+mergeNPCs(subLocation, npcBundle, floatNPCs, locAccess){
 
 //Add NPCs tagged directly to subLocation.
 let directNPCs = subLocation.tags.filter(obj => obj.key === 'npcs');
@@ -386,9 +407,10 @@ npcBundle.push(directNPC);
 })  
 };
 
+
 //Add NPCs appearing through Tag or from Location
 floatNPCs.forEach(npc => {
-if(npc.location === subLocation.id){npcBundle.npcs.push(npc)}
+if(npc.location === subLocation.id){npcBundle.push(npc)}
 })
 
 //Remove NPCs who are in the [P]arty.
@@ -398,14 +420,22 @@ let filterBundle = npcBundle.filter(npc => npc.id !== parseInt(member.id));
 npcBundle = filterBundle;
 });
 
+
+//Remove Duplicate NPCs
+const npcMap = new Map(npcBundle.map(npc => [npc.id, npc]));
+npcBundle = [...npcMap.values()];
+//console.log(npcBundle.length + ' NPCs Merged')
+
 return npcBundle
 
 },
 
 getNPCEvents(npcBundle, keywords, subLocation, locObj){
+
+//console.log('Recieved ' + npcBundle.length + ' NPCs')
+
 //loop through npcBundle.
 npcBundle.forEach(npc => {
-
 //Add NPC to Storyteller.
 if(npc){
 //Insert NPC Image

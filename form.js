@@ -80,7 +80,7 @@ if (obj) {
 //Define key groups for different areas of the form.
 const excludedKeys = ['id','name', 'description', 'key', 'tags', 'color']; 
 const invisibleKeys = ['type', 'subType'];
-const universalKeys = ['order','subGroup', 'group', 'image'];
+const universalKeys = ['order', 'access', 'subGroup', 'group', 'image'];
 const monsterKeys = [
     'encounter',
     'wild',
@@ -428,6 +428,10 @@ colorWheel.addEventListener('input', handleColorChange);
 
 //Add NPC Form Elements
 if(obj.key === 'npcs'){
+
+//Hide Access
+const accessDiv = document.getElementById('accessContainer')
+accessDiv.style.display = 'none';
 
 //Add Class, Level, and Species
 if(obj){
@@ -1158,8 +1162,103 @@ let rowHTML = `
     });
 
 
-} else{
-//If tag is not an item.
+} else if(key === 'npcs' && visibleKeys.includes('npcs')){
+
+const npcsTable = document.createElement('div');
+
+let npcsTableHTML =  `
+<div class="item-table">
+</div>`
+
+npcsTable.innerHTML = npcsTableHTML;
+container.appendChild(npcsTable);
+
+tagsToAdd.forEach(tag => {
+
+if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+
+const npcsRow = document.createElement('div');
+
+let tagObj = helper.getObjfromTag(tag);
+
+let tagName = tagObj.name
+
+let rowHTML = `
+
+<div id="${tagObj.name}Container" 
+class = "tag item-row"
+instName = "${tagObj.special? tagObj.name: ''}" 
+instType = "${tagObj.special? tagObj.type: ''}" 
+instGroup = "${tagObj.special && tagObj.group? tagObj.group: ''}" 
+instid = "${tag.instruction? tag.instruction: ''}" 
+tagid = ${tag.id} 
+tagkey = ${tag.key}
+tagsave = ${tag.save}
+tagaccess = ${(tag.access === "" || tag.access === undefined) ? '*' : tag.access}
+>
+
+<label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
+${tagName}
+</label>
+
+<input 
+id="${tagObj.name}Access" 
+type="text" 
+class="item-quant-cell item-quant-column"
+value="${(tag.access === "" || tag.access === undefined) ? '*' : tag.access}">
+
+
+</div>`
+
+npcsRow.innerHTML = rowHTML;
+npcsTable.appendChild(npcsRow);
+
+const itemRow = document.getElementById(tagObj.name + "Container")
+const accessInput = document.getElementById(tagObj.name + "Access");
+
+
+accessInput.addEventListener('input', function(){
+itemRow.setAttribute('tagaccess', accessInput.value);
+//console.log(itemRow);
+});
+
+
+let tagEventDiv = document.getElementById('Item' + tag.id);
+
+tagEventDiv.addEventListener('click', function(event){
+
+if(event.shiftKey){ //shift-click
+//Remove tag from item.
+event.preventDefault();
+console.log(tag, tagObj)
+obj.tags = obj.tags.filter(item => item.id !== tag.id);
+
+//Remove item from other item's tags.
+if(!tagObj.special){
+
+let delTags = tagObj.tags
+//console.log(delTags, obj.id)
+delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
+//console.log(delTags)
+tagObj.tags = delTags;
+}
+
+//Repackage.
+NPCs.buildNPC();
+form.createForm(obj);
+//Storyteller.refreshLocation();  
+}
+
+else if(event.button === 0 && !tagObj.special){ //left-click
+//find tagObj based on Name!
+form.createForm(tagObj);   
+}
+});
+});
+
+
+}else{
+
 tagsToAdd.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);

@@ -13,7 +13,7 @@ const helper = {
     for (const key in data) {
     let obj = data[key];
     
-    if (key !== 'miscInfo') {
+    if (key === 'locations' || key === 'subLocations') {
     obj = obj.map(entry => {
     // Remove some fields
     // delete entry.key;
@@ -22,11 +22,7 @@ const helper = {
     // entry.key = '';
     //entry.active = 1;
     
-    if(entry.chance){
-
-      entry.condition = "and"
-
-    }
+    entry.access = '*'
     
     //entry.chance = 100;
     
@@ -1089,6 +1085,8 @@ return obj
 }else{
 let index = load.Data[tag.key].findIndex(obj => parseInt(obj.id) === parseInt(tag.id));
 let obj = load.Data[tag.key][index];
+
+if(obj.key === 'npcs'){obj.access = tag.access}
 
 if(obj === undefined){console.error("Object does not exist at " + tag.key + ':' + tag.id)}
 

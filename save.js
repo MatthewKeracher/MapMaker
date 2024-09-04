@@ -160,6 +160,12 @@ if(iCheck === 'i'){
 
         taggedObj.tags[mirrorIndex] = newTag;
 
+    }else if (tagKey === 'npcs'){
+        const tagAccess = row.getAttribute('tagaccess');
+        console.log(tagAccess)
+        
+        tags.push({key: tagKey, id: tagId, access: tagAccess})
+
     }else if(!keyChain.includes(tagKey)){
         
         tags.push({key: tagKey, id: tagId});
