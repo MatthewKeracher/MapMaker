@@ -1469,6 +1469,7 @@ if(copy === undefined){
     newEntry.active = 1;
     newEntry.order = 1;
 
+    if(key === 'subLocations'){newEntry.access = "*"}
     if(key === 'tags'){newEntry.chance = 100}
 
     //Add new Tag to curent Object
