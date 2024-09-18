@@ -8,33 +8,33 @@ import Events from "./events.js";
 
 const helper = {
 
-  sortData(data){
+sortData(data){
 
-    for (const key in data) {
-    let obj = data[key];
-    
-    if (key === 'locations' || key === 'subLocations') {
-    obj = obj.map(entry => {
-    // Remove some fields
-    // delete entry.key;
-    
-    // Add new fields
-    // entry.key = '';
-    //entry.active = 1;
-    
-    entry.access = '*'
-    
-    //entry.chance = 100;
-    
-    return entry
-    
-    })
-    }
-    
-    data[key] = obj;
-    console.log(obj)
-    }
-    },
+for (const key in data) {
+let obj = data[key];
+
+if (key === 'locations' || key === 'subLocations') {
+obj = obj.map(entry => {
+// Remove some fields
+// delete entry.key;
+
+// Add new fields
+// entry.key = '';
+//entry.active = 1;
+
+entry.access = '*'
+
+//entry.chance = 100;
+
+return entry
+
+})
+}
+
+data[key] = obj;
+console.log(obj)
+}
+},
 
 followInstructions(instruction, obj) {
 
@@ -613,27 +613,32 @@ const npcId = div.getAttribute("npcId")
 
 const options = Events.eventDialogue.filter(event => parseInt(event.npcId) == parseInt(npcId));
 
-if(options === undefined){return}
+//prepare fixedText
+let fixedOptions = options.filter(option => option.type === 'fixed');
+let fixedText = fixedOptions.map(option => option.description).join(' ');
+
+
+if(options === undefined || options.length < 2){return}
 
 const currentOption = options.findIndex(option => option.description === div.textContent)
 
 let newOption = "I got nothing to say to you."
 
-    
 if(currentOption === options.length - 1){
 newOption = options[0]
 }else{
-let nextOptions = options.filter(option => option.eventID !== eventID); //options[currentOption + 1]
+let nextOptions = options.filter(option => option.eventID !== eventID && option.type === 'random'); //options[currentOption + 1]
 const randomIndex = Math.floor(Math.random() * nextOptions.length);
 newOption = nextOptions[randomIndex]
 }
 
 //const color = newOption.color? newOption.color: "lime";
 //div.setAttribute("style", `color:${color}`);
+
 div.setAttribute("eventID", newOption.id)
 div.textContent = ''
 
-const newEventDesc = newOption.description;
+const newEventDesc = fixedText + ' ' + newOption.description;
 
 
 for (let i = 0; i < newEventDesc.length; i++) {
@@ -650,6 +655,10 @@ npcActions.forEach(div => {
     const npcId = div.getAttribute("npcId")
     
     const options = Events.eventActions.filter(event => parseInt(event.npcId) == parseInt(npcId));
+
+        //prepare fixedText
+    let fixedOptions = options.filter(option => option.type === 'fixed');
+    let fixedText = fixedOptions.map(option => option.description).join(' ');
     
     if(options === undefined){return}
     
@@ -660,7 +669,7 @@ npcActions.forEach(div => {
     if(currentOption === options.length - 1){
     newOption = options[0]
     }else{
-    let nextOptions = options.filter(option => option.eventID !== eventID); //options[currentOption + 1]
+    let nextOptions = options.filter(option => option.eventID !== eventID && option.type === 'random'); //options[currentOption + 1]
     const randomIndex = Math.floor(Math.random() * nextOptions.length);
     newOption = nextOptions[randomIndex]
     }
@@ -672,7 +681,7 @@ npcActions.forEach(div => {
     div.setAttribute("eventID", newOption.id)
     div.textContent = ''
     
-    const newEventDesc = newOption.description;
+    const newEventDesc = fixedText + ' ' + newOption.description;
     
     div.textContent = newEventDesc;
     }catch{}
@@ -940,17 +949,44 @@ filterRandomOptions(obj, npc){
 
 let returnDesc
 
-//Filter if use of <<??>> in description.
-const options = obj.description.split('??').filter(Boolean);
+ // Initialize arrays to store statements beginning with ?? and --
+ const randomOptions = [];
+ const stickOptions = [];
 
-if (options.length > 1) {
-const randomIndex = Math.floor(Math.random() * options.length);
-const selectedOption = options[randomIndex].trim();
-const npcEvent = npc? 'npcEvent' : 'notNPC'
+ // Split the description into lines
+ const lines = obj.description.split('\n');
 
-returnDesc = `<span class="${npcEvent}" eventID="${obj.id}"> ${selectedOption} </span>`;
+ // Filter lines based on their starting characters
+ lines.forEach(line => {
+     const trimmedLine = line.trim();
+
+     if (trimmedLine.startsWith('??')) {
+         // Add to randomOptions array, removing the '??' prefix
+         randomOptions.push(trimmedLine.substring(2).trim());
+     } else if (trimmedLine.startsWith('**')) {
+         // Add to dashOptions array, removing the '**' prefix
+         stickOptions.push(trimmedLine.substring(2).trim());
+     }
+ });
+
+// Choose a random option from the randomOptions array if available
+if (randomOptions.length > 0) {
+    const randomIndex = Math.floor(Math.random() * randomOptions.length);
+    const selectedOption = randomOptions[randomIndex];
+    const npcEvent = npc ? 'npcEvent' : 'notNPC';
+
+    // console.log(stickOptions)
+    // if (stickOptions.length > 0) {
+    // let stickDesc = stickOptions.join('<br>');
+    // returnDesc = `<span>${stickDesc}</span>`;
+    // }
+
+    returnDesc = `<span class="${npcEvent}" eventID="${obj.id}">${selectedOption}</span>`;
+
 } else {
+
 returnDesc = `${obj.description}`;
+
 }
 
 return returnDesc;

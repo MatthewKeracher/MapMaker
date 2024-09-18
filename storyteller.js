@@ -66,6 +66,7 @@ expandable.showFloatingExpandable();
 //window.speechSynthesis.cancel();
 //this.textToSpeech(ref.Storyteller.textContent);
 helper.addEventsToStoryteller();
+helper.updateEventContent();
 
 };
 }, 

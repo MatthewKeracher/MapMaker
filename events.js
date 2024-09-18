@@ -584,8 +584,15 @@ return
 //Check to see if Event is Active
 if(parseInt(event.active) === 0){return}
 
-//Filter if use of <<??>> in description.
-let options = event.description.split('??').filter(Boolean);
+//Parse out options.
+const options = []; //??
+const lines = event.description.split('\n');
+
+// Filter lines based on their starting characters
+lines.forEach(line => {
+const trimmedLine = line.trim();
+options.push(trimmedLine);
+});
 
 let dialogueToAdd = []
 let actionsToAdd = []
@@ -593,8 +600,20 @@ let actionsToAdd = []
 //Repackage each option as own object. 
 options.forEach(option => {
 
+let type
+
+//Check Random or Fixed
+if (option.startsWith('??')) {
+    type = 'random'
+} else if (option.startsWith('**')) {
+    type = 'fixed'
+}
+
+option = option.substring(2).trim();
+
 const newObj = {
 
+type: type,
 id: event.id,
 npcId: npc.id,
 key: event.key,
