@@ -171,8 +171,6 @@ outline: none;
 border-radius: 0;
 }
 
-
-
 .Storyteller{
 /* Position */
 position: absolute;
@@ -185,7 +183,7 @@ z-index:3;
 /* Text 'CenturyGothic', */  
 font-family: monospace;
 color: whitesmoke;
-font-size: 2vh;
+font-size: 1.9vh;
 line-height: 1.5; 
 text-align: left;
 

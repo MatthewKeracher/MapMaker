@@ -17,6 +17,7 @@ miscInfo: '',
 currentLocationId: '',
 parentLocationId: '',
 grandParentLocationId: '',
+speaking: true,
 
 async changeContent(locId) {
 
@@ -64,9 +65,9 @@ expandable.expandExtend(ref.Storyteller, ref.Centre);
 expandable.showFloatingExpandable();
 //---
 //window.speechSynthesis.cancel();
-//this.textToSpeech(ref.Storyteller.textContent);
+
 helper.addEventsToStoryteller();
-helper.updateEventContent();
+//helper.updateEventContent();
 
 };
 }, 
@@ -114,20 +115,23 @@ container.appendChild(img);
 
 // Replace the <hr> element with the container
 hr.replaceWith(container);
+
+container.addEventListener('click', () => { 
+
+    });
+    
+    container.addEventListener('mouseover', function() {
+    this.classList.add('highlight');
+    });
+    
+    container.addEventListener('mouseout', function() {
+    this.classList.remove('highlight');
+    });
 });
 },
 
 textToSpeech(text){
 
-//Add Button
-const speakButton = document.createElement('div');
-let buttonHTML =  `<button id="fullScreenButton" class="speakButton">[Speak]</button>`;
-speakButton.innerHTML = buttonHTML;
-document.body.appendChild(speakButton);
-
-let speaking = false;
-
-speakButton.addEventListener('click',() => {
 // Check if the browser supports the SpeechSynthesis API
 if ('speechSynthesis' in window) {
 const synth = window.speechSynthesis;
@@ -141,23 +145,23 @@ const utterance = new SpeechSynthesisUtterance(text);
 synth.speak(utterance);
 }
 
-if(speaking === false){
+if(Storyteller.speaking === false){
 speak(text);
-speaking = true
 }else{
 window.speechSynthesis.cancel();
-speaking = false
 }
 
 } else {
 // Browser doesn't support SpeechSynthesis API
 console.error('Speech synthesis is not supported in this browser.');
 }
-});
+
 
 },
 
 refreshLocation(){
+
+
 
 if(Storyteller.returnLocation !== ''){
 const returnLocation = Storyteller.returnLocation;

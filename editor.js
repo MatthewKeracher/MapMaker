@@ -293,6 +293,7 @@ this.listEvents(entry, nameDiv, key);
 
 //Add Option to import extra Data to project.
 editor.addLibrary();
+editor.runQuery();
 
 },
 
@@ -679,6 +680,34 @@ this.loadList(resultsByKeys);
 
 },
 
+runQuery(){
+
+//list Title
+const div = document.createElement('div');
+
+div.innerHTML = 
+`<h2>
+<span
+style="color:orange; display: block; letter-spacing: 0.18vw;">
+Run Query
+</span></h2>`;
+
+ref.Editor.appendChild(div)
+
+div.addEventListener('click', function() {
+ref.queryWindow.style.display = 'flex';
+});
+
+div.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+});
+
+div.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+});
+
+},
+
 addLibrary(){
 
 //list Title
@@ -713,6 +742,7 @@ importData.click();
 });
 
 },
+
 
 };
 

@@ -139,7 +139,7 @@ itemsHTML += `${itemInfo}`;
 //Title for Expanded Backstory Entry.
 //<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
 
-element.innerHTML += `${itemsHTML} <hr name="blank" style="background-color:${obj.color}">` //Add breaker line.
+element.innerHTML += `${itemsHTML}` //<hr name="blank" style="background-color:${obj.color}">` //Add breaker line.
 
 }} else {
 // Show only the first sentence.

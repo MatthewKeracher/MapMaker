@@ -465,7 +465,7 @@ class="expandable"
 style="font-family:'SoutaneBlack'; 
 color: ${npc.color}" key="${npc.key}" 
 id="${npc.id}"> 
-${npc.name} is here.</span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npcArmourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
+${npc.name} is here. </span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npcArmourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
 
 //Insert NPC
 this.eventDesc +=`${npcHTML}`;
@@ -736,7 +736,7 @@ itemHR = 'itemHR'
 //Header Wrapper
 let header = 
 `<h3><span 
-class="expandable" 
+class="expandable treasureChest" 
 style='color:${tag.color}'
 id="${tag.id}"
 key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}"> <br>`;
@@ -813,6 +813,8 @@ key="${item.key}">${itemInfo}</span>`;
 this.eventDesc += wrapper;
 
 })
+
+this.eventDesc += `<br>`;
 
 },
 

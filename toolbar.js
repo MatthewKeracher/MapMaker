@@ -17,6 +17,8 @@ init() {
 
 load.loadDefault();
 load.checkStoredData();
+toolbar.loadQuery();
+
 setInterval(helper.updateEventContent, 10000);
 
 
@@ -41,10 +43,96 @@ ref.copyButton.addEventListener('click', this.copyButton);
 ref.newButton.addEventListener('click', this.newButton); 
 ref.deleteButton.addEventListener('click', this.deleteButton);
 ref.moveButton.addEventListener('click', this.moveButton);
+ref.queryButton.addEventListener('click', this.queryButton);
+ref.queryCloseButton.addEventListener('click', this.queryCloseButton);
+ref.speakButton.addEventListener('click', this.speakButton);
 
 load.saveToBrowser();
 
 };
+
+speakButton(){
+
+    if(Storyteller.speaking === false){
+        
+        Storyteller.speaking = true
+        Storyteller.textToSpeech(ref.Storyteller.textContent, Storyteller.speaking);
+        }else{
+        
+        Storyteller.speaking = false
+        Storyteller.textToSpeech(ref.Storyteller.textContent, Storyteller.speaking);
+        }
+
+}
+
+loadQuery(){
+
+ref.queryPre.innerHTML = 
+`<pre>
+<span class = "hotpink"> Warning! Back up your data.</span> 
+
+<code>
+function sortData(data) {
+for (const key in data) {
+let obj = data[key];
+
+obj = obj.map(entry => {
+</code>
+</pre>`
+
+ref.queryPost.innerHTML = 
+
+`<pre>
+<code>
+return entry;
+});
+
+data[key] = obj;
+console.log(data[key]);
+}}
+</code>
+</pre>`
+
+
+
+};
+
+queryCloseButton(){
+ref.queryWindow.style.display = "none";
+}
+
+queryButton() {
+    const codeInput = document.getElementById('queryText').value; // Get the user-provided code
+    const data = load.Data; // Assume load.Data is your data object
+
+    for (const key in data) {
+        let obj = data[key];
+
+            try {
+
+                if(key !== 'miscInfo'){
+                // Create a new function with the user code integrated into the predefined structure
+                const userFunction = new Function('obj', `
+                    return obj.map(entry => {
+                        ${codeInput} // Inject user-provided code here
+                        return entry;
+                    });
+                `);
+
+                // Apply the user code to the obj array
+                data[key] = userFunction(obj);
+
+                }
+
+            } catch (error) {
+                console.error('Error executing user code:', error);
+            }
+    
+    }
+
+    editor.loadList(load.Data);
+};
+
 
 partyButton(){
 

@@ -15,16 +15,8 @@ let obj = data[key];
 
 if (key === 'locations' || key === 'subLocations') {
 obj = obj.map(entry => {
-// Remove some fields
-// delete entry.key;
 
-// Add new fields
-// entry.key = '';
-//entry.active = 1;
-
-entry.access = '*'
-
-//entry.chance = 100;
+//
 
 return entry
 

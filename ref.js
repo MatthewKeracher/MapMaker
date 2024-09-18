@@ -38,8 +38,16 @@ importData: document.getElementById('importData'),
 newButton: document.getElementById('newButton'),
 deleteButton: document.getElementById('deleteButton'),
 moveButton: document.getElementById('moveButton'),
-
 promptBox: document.getElementById('promptBox'),
+speakButton: document.getElementById('speakButton'),
+
+//Query
+queryWindow: document.getElementById('queryWindow'),
+queryText: document.getElementById('queryText'),
+queryButton: document.getElementById('queryButton'),
+queryCloseButton: document.getElementById('queryCloseButton'),
+queryPre: document.getElementById('queryPre'),
+queryPost: document.getElementById('queryPost'),
 
 
 };

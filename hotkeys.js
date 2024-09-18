@@ -16,13 +16,16 @@ if (key === 'escape') {
 toolbar.escButton();
 }
 
+
 if (
     !Ref.Centre.contains(document.activeElement) && 
     !Ref.Right.contains(document.activeElement) &&
     !Ref.Storyteller.contains(document.activeElement) &&
     !Ref.Left.contains(document.activeElement) &&
     !Ref.leftParty.contains(document.activeElement) &&
-    !Ref.promptBox.contains(document.activeElement)
+    !Ref.promptBox.contains(document.activeElement) && 
+    !Ref.queryWindow.contains(document.activeElement)
+
     ) {
 
 switch (key) {
@@ -56,6 +59,13 @@ case ',':
 case 'd':
     deleteButton.click();
     break;
+case 'q':
+    if(Ref.queryWindow.style.display === 'flex'){
+    Ref.queryWindow.style.display = 'none'; 
+    }else{
+    Ref.queryWindow.style.display = 'flex';
+    }
+break;
 
 }
 
