@@ -5,6 +5,7 @@ import form from "./form.js";
 import NPCs from "./npcs.js";
 import ref from "./ref.js";
 import Events from "./events.js";
+import expandable from "./expandable.js";
 
 const helper = {
 
@@ -536,6 +537,23 @@ return returnObj
 
 },
 
+handleSpanClickEvent() {
+    const key = "events";
+    const id = this.getAttribute('id');
+    let index = load.Data[key].findIndex(entry => parseInt(entry.id) === parseInt(id));
+
+    // console.log(key, id, index);
+    form.createForm(load.Data[key][index]);
+},
+
+handleMouseOverEvent() {
+this.classList.add('highlight');
+},
+
+handleMouseOutEvent() {
+this.classList.remove('highlight');
+},
+
 addEventsToStoryteller(){
 
 const storyNameCell = document.querySelectorAll(".story-name-cell")
@@ -564,31 +582,20 @@ this.classList.remove('highlight');
 })
 
 const npcDialogue = document.querySelectorAll(".npcDialogue");
-const npcActions = document.querySelectorAll(".npcAction");
+const npcActions = document.querySelectorAll(".npcActionSpan");
 const npcEvents = [...npcDialogue, ...npcActions]
 
 npcEvents.forEach(div => {
+    // First, remove existing listeners
+    div.removeEventListener('click', helper.handleSpanClickEvent);
+    div.removeEventListener('mouseover', helper.handleMouseOverEvent);
+    div.removeEventListener('mouseout', helper.handleMouseOutEvent);
 
-div.addEventListener('click', () => {
-
-const key = "events"
-const id = div.getAttribute('eventID')
-let index = load.Data[key].findIndex(entry => parseInt(entry.id) === parseInt(id));
-
-//console.log(key, id, index)
-form.createForm(load.Data[key][index]);
-
+    // Then, add new listeners using the named functions
+    div.addEventListener('click', helper.handleSpanClickEvent);
+    div.addEventListener('mouseover', helper.handleMouseOverEvent);
+    div.addEventListener('mouseout', helper.handleMouseOutEvent);
 });
-
-div.addEventListener('mouseover', function() {
-this.classList.add('highlight');
-});
-
-div.addEventListener('mouseout', function() {
-this.classList.remove('highlight');
-});
-
-})
 
 
 },
@@ -627,7 +634,8 @@ newOption = nextOptions[randomIndex]
 //const color = newOption.color? newOption.color: "lime";
 //div.setAttribute("style", `color:${color}`);
 
-div.setAttribute("eventID", newOption.id)
+div.setAttribute("id", newOption.id)
+div.setAttribute("key", "events")
 div.textContent = ''
 
 const newEventDesc = fixedText + ' ' + newOption.description;
@@ -650,7 +658,9 @@ npcActions.forEach(div => {
 
         //prepare fixedText
     let fixedOptions = options.filter(option => option.type === 'fixed');
-    let fixedText = fixedOptions.map(option => option.description).join(' ');
+    let fixedText = fixedOptions
+    .map(option => `<span id=${option.id} key="events" class='npcActionSpan'>${option.description}</span>`)
+    .join(' ');
     
     if(options === undefined){return}
     
@@ -670,15 +680,18 @@ npcActions.forEach(div => {
     //div.setAttribute("style", `color:${color}`);
 
     try{
-    div.setAttribute("eventID", newOption.id)
+    //div.setAttribute("eventID", newOption.id)
     div.textContent = ''
     
-    const newEventDesc = fixedText + ' ' + newOption.description;
+    const newEventDesc = `${fixedText} <span id=${newOption.id} key="events" class='npcActionSpan'>${newOption.description}</span>`;
     
-    div.textContent = newEventDesc;
+    div.innerHTML = `${newEventDesc}`
+
     }catch{}
       
     })
+
+    helper.addEventsToStoryteller();
 },
 
 getDecimalPlaces(value) {
@@ -740,7 +753,9 @@ ${itemInfo}</label>
 
 </div>`
 
-return itemHTML
+let itemObj = {color: item.color, id: item.id, key: item.key, description: itemHTML}
+
+return itemObj
 
 },
 
@@ -973,7 +988,18 @@ if (randomOptions.length > 0) {
     // returnDesc = `<span>${stickDesc}</span>`;
     // }
 
-    returnDesc = `<span class="${npcEvent}" eventID="${obj.id}">${selectedOption}</span>`;
+    let key
+    let id
+
+    if(npcEvent === 'npcEvent'){
+    key = npc.key
+    id = npc.id
+    }else{
+    key = obj.key
+    id = obj.id
+    }
+
+    returnDesc = `<span id=${id} key=${key} class="${npcEvent}" eventID="${obj.id}">${selectedOption}</span>`;
 
 } else {
 
@@ -1157,6 +1183,58 @@ array.push(tagObj);
 //console.log(array)
 return array;
 
+},
+
+showInventory(obj){
+
+    let inventoryObj = {
+        key: 'inventory',
+        id: obj.id, 
+        color: obj.color,
+    }
+
+    // Gather data on NPC's Inventory
+    const itemsTags = obj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
+
+    //Add tags from Tags of same key, so an item or spell gained through a Tag.
+    let keyTags = obj.tags.filter(entry => entry.key === "tags");
+    keyTags.forEach(tag => {
+
+    const tagObj = helper.getObjfromTag(tag);
+    let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
+
+    associatedTags.forEach(tag => {
+
+    //Add into NPC's tags
+    itemsTags.push(tag);
+
+    }) })
+
+    //If there is an Inventory to show...
+    if(itemsTags.length > 0){
+    
+    Events.makeDiv('header', inventoryObj, obj)
+    
+    //Loop for Inventory
+    itemsTags.forEach(tag => {
+    
+    //Exclude metaTags
+    let iCheck = tag.id.toString().charAt(0); 
+    if(iCheck === 'i'){return}
+    
+    //Resolve Chance of Appearing
+    const chance = parseInt(tag.chance)
+    const roll = helper.rollDice(100)
+    
+    if(roll > chance){return}
+    
+    //Add Item
+    let item = helper.getObjfromTag(tag)
+    let itemObj = helper.makeIteminfo(item, tag);
+    Events.makeDiv("item", itemObj, inventoryObj);
+    })
+    }
+    
 },
 
 tidyTags(tags) {

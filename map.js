@@ -170,7 +170,7 @@ const locationData = {key,
 //Add Location to load.Data
 load.Data.locations.push(locationData);
 //Make Default subLocation and tag to Location.
-form.makeNewObj(locationData, 'subLocations');
+//form.makeNewObj(locationData, 'subLocations');
 
 //Open form to edit location.
 form.createForm(locationData);

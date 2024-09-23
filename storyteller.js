@@ -24,6 +24,7 @@ async changeContent(locId) {
 //console.log('Loading Location Id:', locId)
 
 let Story = ``
+ref.Storyteller.innerHTML = '';
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 const locName = locObj.name
@@ -57,7 +58,7 @@ Story += `
 `;
 
 //Finish Up.
-ref.Storyteller.innerHTML = Story;
+//ref.Storyteller.innerHTML = Story;
 this.addImagestoStory();
 
 //Tell expandable Divs what to show.
@@ -85,12 +86,12 @@ const name = hr.getAttribute('name');
 if(name === 'blank'){return};
 
 const gifBox = [
-    {name: "subLocHR", src: 'gifs/door.gif'},
+    {name: "subLocationsHR", src: 'gifs/door.gif'},
     {name: "inventHR", src: 'gifs/backpack.png'},
-    {name: "npcHR", src:  'gifs/goblin.gif'},
-    {name: "tagHR", src: 'gifs/scroll.png'},
-    {name: "itemHR", src: 'gifs/chest.gif'},
-    {name: "fighterHR", src: 'gifs/blankHead.png'},
+    {name: "monstersHR", src:  'gifs/goblin.gif'},
+    {name: "tagsHR", src: 'gifs/book.gif'},
+    {name: "itemsHR", src: 'gifs/chest.gif'},
+    {name: "npcsHR", src: 'gifs/blankHead.png'},
     {name: "clericHR", src: 'gifs/cleric.gif'},
     {name: "thiefHR", src: 'gifs/thief.gif'},
     {name: "magicuserHR", src: 'gifs/magicuser.gif'},

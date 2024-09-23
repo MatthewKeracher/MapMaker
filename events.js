@@ -17,10 +17,151 @@ eventActions: [],
 
 // _________________________________________________
 
-async getEvent(locObj) {
+makeDiv(type, obj, parent, color){
 
-this.eventDesc = '';
-let keywords = expandable.generateKeyWords(load.Data);
+    const childDiv = document.createElement('div');
+    let lineBreak = `<div style="margin-top: 5px;"></div>`
+    
+    //Add Div Attributes
+    childDiv.id = obj.id;
+    childDiv.setAttribute('key', obj.key);
+    childDiv.setAttribute('type', type);
+    childDiv.setAttribute("showHide", 'hide');
+    
+    //Prepare Content
+    let divContent = `You should not be able to read this.`
+
+    if(type === "header"){
+    
+        //Add Classes
+        childDiv.classList.add("expandable");
+        
+        
+        //Add Style
+        //style="font-family:'SoutaneBlack'; 
+        
+        //Add Image
+        let headerHR 
+        
+        if(obj.image !== ''){
+        headerHR = obj.image;
+        }else{
+        headerHR = obj.key + "HR"
+        };
+        
+        if(obj.key === 'inventory'){
+        
+        divContent = `<br><h3 key="inventory" id="${obj.id}" style="color:${obj.color}">Inventory:</h3><hr name="inventHR" style="background-color:${obj.color}">`;
+        
+        }else if(obj.key === 'npcs'){
+        
+                //Gather data on NPC.
+                const npcArmourClass = this.getCurrentAC(obj)
+        
+                //Generate hitPointBoxes at HTML obj.
+                const hitPointsBox = `<input 
+                id="${obj.id}CurrentHP" 
+                type="number" 
+                class="hitPointBox"
+                style="color: ${obj.color}"
+                value="${obj.hitPoints}">`
+        
+        divContent = `<br><br>
+        <h3>
+        
+        <span class="extendable" style="color:${obj.color}" key="${obj.key}" 
+        id="${obj.id}" type="${type}"> 
+        ${obj.name} is here. </span>
+        
+        <hr name="${headerHR}" style="background-color:${obj.color}">
+        
+        LV: ${obj.level}| AC: ${npcArmourClass} |   XP: ${obj.experience} | HP: ${hitPointsBox}
+        
+        </span></h3>`
+        
+        }else{
+        
+        divContent = `<br><br>
+        <h2 id=${obj.id} key=${obj.key} style="color:${obj.color}"> ${obj.name} </h2>
+        <hr name="${headerHR}" style="background-color:${obj.color}"> ${lineBreak}
+        `
+        }
+        
+        }
+    
+    if(type === "child" || type === "backstory" || type === "item"){
+    
+    let keywords = expandable.generateKeyWords(load.Data);
+    let chosenDesc = helper.filterRandomOptions(obj)
+    let hyperDesc = expandable.findKeywords(chosenDesc, keywords);
+    
+    childDiv.classList.add("expandable");
+    childDiv.classList.add("extendable");
+    childDiv.classList.add("withbreak");
+    
+    //Add Style
+    if(color){childDiv.style.color = obj.color};
+    
+    if(type === 'backstory'){
+    
+    //Insert first sentence of Backstory
+    let elipsis = obj.description.length > 130? '...': ''
+    let firstSentence = obj.description.substring(0, 130) + elipsis;
+    hyperDesc = expandable.findKeywords(firstSentence, keywords);
+    
+    divContent = `<span id=${obj.id} key=${obj.key} showHide="hide" class='backstory'>${hyperDesc}</span>`;
+        
+    }else if(type === "item"){
+    
+    childDiv.classList.remove("withbreak");
+    divContent = obj.description;   
+        
+    }else{
+    
+    divContent = hyperDesc + `<br><br>`;
+    
+    }
+    
+    }
+    
+    if(type === 'action'){
+    
+    divContent = `${lineBreak}
+    <span class="npcAction" style="color:${color}" npcId="${obj.npcId}" eventID="${obj.id}"> ${obj.description.trim()} </span>`
+    
+    }
+    
+    if(type === 'dialogue'){
+    
+    divContent = `${lineBreak}
+    <span class="npcDialogue" style="color:lime" npcId="${obj.npcId}" eventID="${obj.id}"> ${obj.description.trim()} </span>`
+    
+    }
+    
+    
+    childDiv.innerHTML = divContent;
+    
+    //Look for Header
+    let parentKey = obj.key
+    let parentId = obj.id
+    
+    if(parent.key){
+    parentKey = parent.key
+    parentId = parent.id
+    }
+    
+    let foundHeader = ref.Storyteller.querySelector(`[key="${parentKey}"][id="${parentId}"][type="header"]`);
+    
+    if (foundHeader) {
+        foundHeader.appendChild(childDiv);
+    } else {
+        parent.appendChild(childDiv);
+    }
+    
+    },
+
+
+async getEvent(locObj) {
 
 let allTags = Events.getAllTags(locObj);
 let locAmbience = Events.filterKeyTag(allTags, "ambience");
@@ -29,9 +170,10 @@ let subLocations = Events.getAllSubLocations(locObj);
 let floatNPCs = Events.getFloatingNPCs(locObj, locNPCs, subLocations);
 
 
-Events.getLocationDescription(locObj, keywords);
-Events.getLocationAmbience(locAmbience, keywords);
-Events.makeSubLocations(locObj, subLocations, keywords, floatNPCs);
+
+Events.getLocationAmbience(locAmbience);
+Events.getLocationDescription(locObj);
+Events.makeSubLocations(locObj, subLocations, floatNPCs);
 
 },
 
@@ -94,7 +236,9 @@ subLocations.sort((a, b) => a.order - b.order);
 
 if(subLocations.length === 0){
 //console.log('No Sublocations')
-subLocations.push(locObj)}
+const { description, ...locObjAsSubLoc } = locObj;
+
+subLocations.push(locObjAsSubLoc)}
 
 return subLocations;
 
@@ -168,26 +312,16 @@ return floatNPCs
 
 },
 
-getLocationDescription(locObj, keywords){
+getLocationDescription(locObj){
 
 //1. Get Location description.
 if(locObj){
-let locObjDesc = helper.filterRandomOptions(locObj);
-let hyperDesc = expandable.findKeywords(locObjDesc, keywords);
-
-let locWrapper = 
-`<span class="expandable extendable"
-id="${locObj.id}"
-key="${locObj.key}"> ${hyperDesc} </span> `
-
-this.eventDesc += locWrapper;
-this.eventDesc += `<br>`
-this.eventDesc += `<br>`
+this.makeDiv("child", locObj, ref.Storyteller);
 };
 
 },
 
-getLocationAmbience(locAmbience, keywords){
+getLocationAmbience(locAmbience){
 
 //Takes an array of tags and passes the ambience descriptions on.
 
@@ -201,9 +335,7 @@ let ambTags = tagObj.tags.filter(entry => entry.key === 'ambience');
 ambTags.forEach(tag => {
 
 let ambObj = helper.getObjfromTag(tag);
-
-Events.getAmbiencefromTag(ambObj, keywords);
-this.eventDesc += `<div style="margin-top: 5px;"></div>`
+this.makeDiv("child", ambObj, ref.Storyteller, "color");
 
 })
 
@@ -213,79 +345,25 @@ locAmbience.sort((a, b) => a.order - b.order);
 
 }},
 
-getAmbiencefromTag(obj, keywords){
-
-if(obj.key === 'ambience'){
-const ambienceObj = obj;
-let ambienceDesc = helper.filterRandomOptions(ambienceObj);
-
-//Add Keywords
-let hyperDesc = expandable.findKeywords(ambienceDesc, keywords);
-
-//Ambience Wrapper
-let ambienceWrapper = 
-`<span class="expandable"
-style="color:${ambienceObj.color}"
-id="${ambienceObj.id}"
-key="${ambienceObj.key}"> ${hyperDesc} </span>`
-this.eventDesc += ambienceWrapper;
-
-}},
-
-makeSubLocations(locObj, subLocations, keywords, floatNPCs){
+makeSubLocations(locObj, subLocations, floatNPCs){
 
 subLocations.forEach((subLocation) =>{
 
-let subLocHR 
-
-if(subLocation.image !== ''){
-subLocHR = subLocation.image;
-}else{
-subLocHR = "subLocHR"
-}
-
 //SubLocation Header
 if(subLocation.key === 'subLocations'){
-let subLocHeader = 
-`<br><h2> <span class="expandable"
-style="color:${subLocation.color}"
-id="${subLocation.id}"
-key="${subLocation.key}"> ${subLocation.name} </span> </h2>`
-
-this.eventDesc += subLocHeader;
-this.eventDesc += `<hr name="${subLocHR}" style="background-color:${subLocation.color}"><br>`;
-
-//SubLocation Description
-let subLocDesc = helper.filterRandomOptions(subLocation);
-
-//Add Keywords
-let hyperDesc = expandable.findKeywords(subLocDesc, keywords);
-
-//subLoc Wrapper
-let subLocWrapper = 
-`<span class="expandable extendable"
-id="${subLocation.id}"
-key="${subLocation.key}"> ${hyperDesc} </span> `
-
-// this.eventDesc += `<br>`
-this.eventDesc += subLocWrapper;
+this.makeDiv("header", subLocation, ref.Storyteller, "color");
 }
-//this.eventDesc += `<br><br>`
 
 //Add NPCs to SubLocation
-Events.getSubLocDetails(subLocation, floatNPCs, keywords, locObj);
+Events.getSubLocDetails(subLocation, floatNPCs, locObj);
 
-//Events.addLocDetails(locNPCs);
 
 });
-
-
-
 },
 
 // _________________________________________________
 
-getSubLocDetails(subLocation, floatNPCs, keywords, locObj) {
+getSubLocDetails(subLocation, floatNPCs, locObj) {
 
 let allObjs = Events.getAllObjs(subLocation)
 
@@ -294,17 +372,16 @@ let itemBundles = allObjs.containers
 let locAccess = locObj.access
 let npcBundle = Events.mergeNPCs(subLocation, bundle.npcs, floatNPCs, locAccess)
 
-
 if(bundle.ambience){
 bundle.ambience.forEach(ambience => {
-this.eventDesc += `<br><br>`
-Events.getAmbiencefromTag(ambience, keywords);
+this.makeDiv("child", ambience, subLocation, "color");
 })
 };
 
+this.makeDiv("child", subLocation, ref.Storyteller);
+
 if(npcBundle){
-this.getNPCEvents(npcBundle, keywords, subLocation, locObj);
-this.eventDesc += `<br>`;
+this.getNPCEvents(npcBundle, subLocation, locObj);
 }
 
 itemBundles.forEach(entry => {
@@ -430,7 +507,7 @@ return npcBundle
 
 },
 
-getNPCEvents(npcBundle, keywords, subLocation, locObj){
+getNPCEvents(npcBundle, subLocation, locObj){
 
 //console.log('Recieved ' + npcBundle.length + ' NPCs')
 
@@ -438,38 +515,8 @@ getNPCEvents(npcBundle, keywords, subLocation, locObj){
 npcBundle.forEach(npc => {
 //Add NPC to Storyteller.
 if(npc){
-//Insert NPC Image
-let npcHR 
 
-if(npc.image !== ''){
-npcHR = npc.image;
-}else{
-npcHR = 'fighterHR' //npc.class.toLowerCase().replace(/\s+/g, '') + 'HR';
-}
-
-//Gather data on NPC.
-const npcArmourClass = this.getCurrentAC(npc)
-
-
-//Generate hitPointBoxes at HTML obj.
-const hitPointsBox = `<input 
-id="${npc.id}CurrentHP" 
-type="number" 
-class="hitPointBox"
-style="color: ${npc.color}"
-value="${npc.hitPoints}">`
-
-const npcHTML = `
-<h3><span 
-class="expandable" 
-style="font-family:'SoutaneBlack'; 
-color: ${npc.color}" key="${npc.key}" 
-id="${npc.id}"> 
-${npc.name} is here. </span><hr name="${npcHR}" style="background-color:${npc.color}">LV: ${npc.level}| AC: ${npcArmourClass} |   XP: ${npc.experience} | HP: ${hitPointsBox}</span> </h3> <br>`;
-
-//Insert NPC
-this.eventDesc +=`${npcHTML}`;
-
+this.makeDiv("header", npc, ref.Storyteller, "color")
 
 //Make eventBundle with events tagged to NPC directly.
 let eventBundle = [] //npc.tags.filter(tag => tag.key === 'events');
@@ -641,8 +688,6 @@ this.eventActions  = [...this.eventActions, ...actionsToAdd];
 
 });
 
-let lineBreak = `<div style="margin-top: 5px;"></div>`
-
 if(npcActions.length > 0){
 
 //Set starting event content. 
@@ -655,23 +700,23 @@ if(npcActions.length > 1){
 const randomIndex = Math.floor(Math.random() * npcActions.length);
 selectedAction = npcActions[randomIndex].description.trim();
 const color = firstAction.color? firstAction.color: "lime";
-this.eventDesc += `<span class="npcAction" style="color:${color}" npcId="${firstAction.npcId}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
-this.eventDesc += lineBreak
-//Update Global Array for helper.updateEventContent();
-// this.eventsDialogue = npcActions
+
+this.makeDiv("action", firstAction, npc, color)
 
 //Event only has one, permanent description.
 }else{
 
 selectedAction = npcActions[0].description.trim();
 const color = firstAction.color? firstAction.color: "whitesmoke";
-this.eventDesc += `<span class="npcAction" style="color:${color}" eventID="${firstAction.id}"> ${selectedAction} </span>`;
-this.eventDesc += lineBreak
+this.makeDiv("child", firstAction, npc, color)
 
 }
 
 
 }
+
+//Insert NPC Backstory
+this.makeDiv("backstory", npc, npc)
 
 if(npcDialogue.length > 0){
 
@@ -685,11 +730,8 @@ if(npcDialogue.length > 1){
 const randomIndex = Math.floor(Math.random() * npcDialogue.length);
 selectedOption = npcDialogue[randomIndex].description.trim();
 const color = firstEvent.color? firstEvent.color: "lime";
-this.eventDesc += `<span class="npcDialogue" style="color:lime" npcId="${firstEvent.npcId}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
-this.eventDesc += lineBreak
 
-// //Update Global Array for helper.updateEventContent();
-// this.eventsDialogue = npcDialogue
+this.makeDiv('dialogue', firstEvent, npc, color)
 
 
 //Event only has one, permanent description.
@@ -697,66 +739,25 @@ this.eventDesc += lineBreak
 
 selectedOption = npcDialogue[0].description.trim();
 const color = firstEvent.color? firstEvent.color: "whitesmoke";
-this.eventDesc += `<span class="npcDialogue" style="color:${color}" eventID="${firstEvent.id}"> ${selectedOption} </span>`;
-this.eventDesc += lineBreak
+this.makeDiv("child", firstEvent, npc, color)
 
 }}
 
-//Insert first sentence of Backstory
-let firstPeriodIndex = npc.description.indexOf('.');
-let elipsis = npc.description.length > 130? '...': ''
-let firstSentence = npc.description.substring(0, 130) + elipsis; //slice(0, firstPeriodIndex + 1);
-//Add Keywords
-let hyperDesc = expandable.findKeywords(firstSentence, keywords);
 
-//Insert NPC Information
-this.eventDesc += `<span
-class="extendable"
-showHide="hide"
-key="${npc.key}" 
-style="color:whitesmoke" 
-id="${npc.id}">${hyperDesc} </span> <br><br>`
+
 }
+
+
 
 });
 },
 
 generateLocItems(bundle, tag){
 
-//console.log(bundle, tag)
-//Resolve Image
-let itemHR
-
-if(tag.image && tag.image !== ''){
-itemHR = tag.image;
-}else{
-itemHR = 'itemHR'
+if(bundle.length > 0){
+this.makeDiv('header', tag, ref.Storyteller, "color")
+this.makeDiv('item', tag, tag)
 }
-
-//Header Wrapper
-let header = 
-`<h3><span 
-class="expandable treasureChest" 
-style='color:${tag.color}'
-id="${tag.id}"
-key="${tag.key}"> ${tag.name}</span></h3><hr name=${itemHR} style="background-color:${tag.color}"> <br>`;
-
-if(bundle.length > 0){
-this.eventDesc += `<br><br>`
-this.eventDesc += header
-};
-
-//Description Wrapper
-let descWrapper = 
-`<span 
-class="expandable" 
-id="${tag.id}"
-key="${tag.key}"> ${tag.description}</span>`
-
-if(bundle.length > 0){
-this.eventDesc += descWrapper
-this.eventDesc += `<br>`;
-};
 
 //Takes tag.filter for items and returns Div.
 
@@ -777,15 +778,9 @@ const roll = helper.rollDice(100)
 //console.log(tag)
 if(roll > chance){return}
 
-let itemInfo = helper.makeIteminfo(entry.item, entry.tag)
+let itemObj = helper.makeIteminfo(entry.item, entry.tag)
 
-let wrapper = 
-`<span class="expandable"
-style="color:${entry.item.color}"
-id="${entry.item.id}"
-key="${entry.item.key}">${itemInfo}</span>`;
-
-this.eventDesc += wrapper;
+this.makeDiv("item", itemObj, tag)
 
 
 })
@@ -802,19 +797,12 @@ if(item.special){return}
 //Get Quantity and Bonus from Tag
 const address = item.tags.find(address => parseInt(address.id) === parseInt(tag.id));
 //console.log(item, address)
-let itemInfo = helper.makeIteminfo(item, address)
+let itemObj = helper.makeIteminfo(item, address)
 
-let wrapper = 
-`<span class="expandable"
-style="color:${item.color}"
-id="${item.id}"
-key="${item.key}">${itemInfo}</span>`;
-
-this.eventDesc += wrapper;
+this.makeDiv("item", itemObj, tag)
 
 })
 
-this.eventDesc += `<br>`;
 
 },
 

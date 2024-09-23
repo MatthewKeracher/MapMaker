@@ -7,7 +7,7 @@ import NPCs from "./npcs.js";
 import helper from "./helper.js";
 import party from "./party.js";
 import Storyteller from "./storyteller.js";
-import save from "./save.js";
+import events from "./events.js";
 
 
 const expandable = {
@@ -50,103 +50,67 @@ form.createForm(obj);
 extend(source){
 
 const extendableElements = source.querySelectorAll('.extendable');
+const backstories = source.querySelectorAll('.backstory')
+
+backstories.forEach(element => {element.addEventListener('mouseover', function() {
+this.classList.add('highlight');
+})});
+
+backstories.forEach(element => {element.addEventListener('mouseout', function() {
+this.classList.remove('highlight');
+})});
+    
 
 extendableElements.forEach(element => {element.addEventListener('click', (event) => {
 
 const key = event.target.getAttribute('key');
-const id = event.target.getAttribute('id');
+const type = event.target.getAttribute('type');
+const id = event.target.getAttribute('id')
 const index = helper.getIndex(key, id);
 const obj = load.Data[key][index];
 const keywords = expandable.generateKeyWords(load.Data);
 const hyperDesc = expandable.findKeywords(obj.description, keywords, "nested");
 
-// Insert first sentence of Backstory
-let firstPeriodIndex = hyperDesc.indexOf('.');
-let elipsis = hyperDesc.length > 130? '...': ''
-let firstSentence = hyperDesc.substring(0, 130) + elipsis//slice(0, firstPeriodIndex + 1);
 
 if (event.shiftKey) {
 form.createForm(obj);
 
-//EXPAND NPC ENTRY IN STORYTELLER
-} else if(key === 'npcs'){
-
-// Define booleon.
+}else if(type === "header" && key === "npcs"){
+    
 const showHide = element.getAttribute("showHide");
-// console.log(element.getAttribute("showHide"));
 
-//Show expanded NPC entry.
 if (showHide === 'hide') {
 
-//obj == NPC
-console.log(obj)
-
-//Blank Element
 element.setAttribute('showHide', 'show')
-//element.innerHTML = ``
+helper.showInventory(obj)
 
-//Add whole backstory.
-element.innerHTML = `${hyperDesc}`
+} else {
 
-// Gather data on NPC's Inventory
-const itemsTags = obj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
-
-//Add tags from Tags of same key, so an item or spell gained through a Tag.
-let keyTags = obj.tags.filter(entry => entry.key === "tags");
-keyTags.forEach(tag => {
-
-const tagObj = helper.getObjfromTag(tag);
-let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
-
-associatedTags.forEach(tag => {
-
-//Add into NPC's tags
-itemsTags.push(tag);
-
-}) })
-
-let itemsHTML = ''
-
-//If there is an Inventory to show...
-if(itemsTags.length > 0){itemsHTML = `<br><br><h3 style="color:${obj.color}">Inventory:</h3><hr name="inventHR" style="background-color:${obj.color}">`;
-
-//Loop for Inventory
-itemsTags.forEach(tag => {
-
-//Exclude metaTags
-//console.log('iCheck', tag.id)
-
-let iCheck = tag.id.toString().charAt(0); 
-
-if(iCheck === 'i'){return}
-
-
-//Resolve Chance of Appearing
-const chance = parseInt(tag.chance)
-const roll = helper.rollDice(100)
-
-if(roll > chance){return}
-
-//Add Item
-let item = helper.getObjfromTag(tag)
-let itemInfo = helper.makeIteminfo(item, tag);
-itemsHTML += `${itemInfo}`;
-})
-
-//Format inventory items.
-//itemsHTML += `<br>`;
-
-//Title for Expanded Backstory Entry.
-//<h3 style="color:${obj.color}">${obj.name}'s Backstory.</h3><hr name="tagHR" style="background-color:${obj.color}">
-
-element.innerHTML += `${itemsHTML}` //<hr name="blank" style="background-color:${obj.color}">` //Add breaker line.
-
-}} else {
-// Show only the first sentence.
 element.setAttribute('showHide', 'hide')
-element.innerHTML = `${firstSentence}`;
+
+try{
+let inventory = ref.Storyteller.querySelector(`[key="inventory"][id="${obj.id}"][type="header"]`);
+inventory.remove();
+}catch{}
+    
 this.expand(element)
 }
+
+}else if (type ==="backstory" && key === "npcs"){
+
+let elipsis = hyperDesc.length > 130? '...': ''
+let firstSentence = hyperDesc.substring(0, 130) + elipsis
+    
+const showHide = element.getAttribute("showHide");
+
+if (showHide === 'hide') {
+element.setAttribute('showHide', 'show');
+element.innerHTML = hyperDesc;  
+} else {
+element.setAttribute('showHide', 'hide');
+element.innerHTML = firstSentence;  
+}
+
 
 }else if (event.target.classList.contains("nested")){
 // Tags within tagEntries: Show tagged entry after the element.
@@ -166,10 +130,9 @@ showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"
 style="color:${obj.color}">
-${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
+${obj.name}:</h3><hr name="tagsHR" style="background-color:${obj.color}">
 <span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>
-
-<hr name="blank" style="background-color:${obj.color}">`;
+`;
 
 element.appendChild(tagEntry);
 Storyteller.addImagestoStory();
@@ -194,10 +157,9 @@ showHide="hide"
 id="${obj.id}" 
 key="${obj.key}"s
 style="color:${obj.color}">
-${obj.name}:</h3><hr name="tagHR" style="background-color:${obj.color}">
+${obj.name}:</h3><hr name="tagsHR" style="background-color:${obj.color}">
 <span class="nested deleteMe" style="font-family:monospace; color: lightgray; font-size: 1.9vh; ">${hyperDesc}</span>
-
-<hr name="blank" style="background-color:${obj.color}">`;
+`;
 
 const parent = event.target.parentNode;
 parent.appendChild(tagEntry);
