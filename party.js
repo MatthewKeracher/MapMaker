@@ -4,6 +4,7 @@ import form from "./form.js";
 import helper from "./helper.js";
 import events from "./events.js";
 import Storyteller from "./storyteller.js";
+import battleMap from "./battleMap.js";
 
 const party = {
 
@@ -19,6 +20,9 @@ let member = helper.getObjfromTag(element);
 members.push(member);
 
 });
+
+const drawingCanvas = document.getElementById('drawingCanvas')
+battleMap.enableMovableIcons(drawingCanvas, members)
 
 ref.Left.style.display = "none";
 ref.Centre.style.display = "none";

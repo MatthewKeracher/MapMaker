@@ -1,6 +1,6 @@
 
 import form from "./form.js";
-import helper from "./helper.js";
+import battleMap from "./battleMap.js";
 import load from "./load.js";
 import ref from "./ref.js";
 import Storyteller from "./storyteller.js";
@@ -63,8 +63,6 @@ if (imageBlob) {
 
 processImageBlob(imageBlob) {
 
-////console.log('Recieved Image Blob')
-
 const blobUrl = URL.createObjectURL(imageBlob);
 const mapElement = new Image();
 mapElement.src = blobUrl;
@@ -79,14 +77,26 @@ imageContainer.id = "imageContainer"
 imageContainer.className = "image-container";
 imageContainer.appendChild(mapElement);
 
-// Add the container to the body
 ref.mapContainer.appendChild(imageContainer);
 
-// this.mapHeight = mapElement.naturalHeight;
-// this.mapWidth  = mapElement.naturalWidth;
+mapElement.onload = () => {
+  const canvas = document.createElement('canvas');
+  canvas.id = "drawingCanvas";
+  canvas.style.position = "absolute";
+  canvas.style.top = "0";
+  canvas.style.left = "0";
+  
+  // Set canvas dimensions to match the image
+  canvas.width = mapElement.width;
+  canvas.height = mapElement.height;
 
-// mapElement.style.height = `${ref.mapContainer.offsetHeight}px`;
-// mapElement.style.width = `${ref.mapContainer.offsetWidth}px`;
+  // Append canvas to the container
+  imageContainer.appendChild(canvas);
+
+  // Enable pencil tool for drawing on the canvas
+  battleMap.enablePencilTool(canvas);
+};
+
 
 if (localStorage.getItem('myData')) {
 load.displayLocations(load.Data.locations);
@@ -199,6 +209,7 @@ const newOpacity = isNaN(currentOpacity) ? 0.1 : currentOpacity - 0.1;
 location.style.opacity = newOpacity;
 });
 },
+
 
 };
 

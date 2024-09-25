@@ -223,8 +223,14 @@ right: 2vw;
 height: 8vh;
 }
 
+.backpack{
+position: relative;
+height: 8vh;
+}
 
-#Storyteller hr{
+
+#Storyteller hr,
+#leftExpand hr{
 position: absolute;
 width: 32vw;
 height: 0.4vh;

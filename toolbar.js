@@ -151,6 +151,12 @@ escButton(){
 //console.log('esc')
 window.speechSynthesis.cancel();
 
+if(ref.leftExpand.style.display !== 'none'){
+ref.leftExpand.style.display = "none";
+ref.leftExpand.innerHTML = ``;
+return
+}
+
 //Close search and empty search box.
 ref.eventManager.value = '';
 ref.Editor.style.display = 'none';

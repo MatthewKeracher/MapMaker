@@ -26,12 +26,11 @@ makeDiv(type, obj, parent, color){
     childDiv.id = obj.id;
     childDiv.setAttribute('key', obj.key);
     childDiv.setAttribute('type', type);
-    childDiv.setAttribute("showHide", 'hide');
     
     //Prepare Content
     let divContent = `You should not be able to read this.`
 
-    if(type === "header"){
+    if(type === "header" || type == "inventory"){
     
         //Add Classes
         childDiv.classList.add("expandable");
@@ -48,11 +47,15 @@ makeDiv(type, obj, parent, color){
         }else{
         headerHR = obj.key + "HR"
         };
-        
-        if(obj.key === 'inventory'){
-        
-        divContent = `<br><h3 key="inventory" id="${obj.id}" style="color:${obj.color}">Inventory:</h3><hr name="inventHR" style="background-color:${obj.color}">`;
-        
+
+        if(type === 'inventory'){
+
+        divContent = `<br><h3>
+        <span class="inventoryHeader" key="${obj.key}" id="${obj.id}" style="color:${obj.color}">
+        ${obj.name}'s Inventory: </span>
+ 
+        <hr name="${headerHR}" style="background-color:${obj.color}"><br>`;
+
         }else if(obj.key === 'npcs'){
         
                 //Gather data on NPC.
@@ -69,16 +72,27 @@ makeDiv(type, obj, parent, color){
         divContent = `<br><br>
         <h3>
         
-        <span class="extendable" style="color:${obj.color}" key="${obj.key}" 
+        <span class="npcName" style="color:${obj.color}" key="${obj.key}" 
         id="${obj.id}" type="${type}"> 
         ${obj.name} is here. </span>
+
+        <span>
+        <img class="inventory backpack" key="${obj.key}" id="${obj.id}" src="gifs/backpack.png" alt="Inventory" />
+        </span>
         
         <hr name="${headerHR}" style="background-color:${obj.color}">
         
-        LV: ${obj.level}| AC: ${npcArmourClass} |   XP: ${obj.experience} | HP: ${hitPointsBox}
+        LV: ${obj.level}| AC: ${npcArmourClass} | XP: ${obj.experience} | HP: ${hitPointsBox}
         
         </span></h3>`
         
+        }else if(obj.key === 'tags'){
+
+        divContent = `
+        <h2 class="tagHead" id=${obj.id} key=${obj.key} style="color:${obj.color}"> ${obj.name} </h2>
+        <hr name="${headerHR}" style="background-color:${obj.color}"> ${lineBreak}
+        `
+
         }else{
         
         divContent = `<br><br>
@@ -87,57 +101,65 @@ makeDiv(type, obj, parent, color){
         `
         }
         
-        }
     
-    if(type === "child" || type === "backstory" || type === "item"){
+    }else{
     
     let keywords = expandable.generateKeyWords(load.Data);
     let chosenDesc = helper.filterRandomOptions(obj)
     let hyperDesc = expandable.findKeywords(chosenDesc, keywords);
     
-    childDiv.classList.add("expandable");
-    childDiv.classList.add("extendable");
-    childDiv.classList.add("withbreak");
+   childDiv.classList.add("expandable");
+   childDiv.classList.add("withbreak");
     
     //Add Style
-    if(color){childDiv.style.color = obj.color};
+    if(color){
+    color = obj.color;
+    };
     
     if(type === 'backstory'){
     
     //Insert first sentence of Backstory
     let elipsis = obj.description.length > 130? '...': ''
-    let firstSentence = obj.description.substring(0, 130) + elipsis;
-    hyperDesc = expandable.findKeywords(firstSentence, keywords);
+    let backStory = obj.description;
     
-    divContent = `<span id=${obj.id} key=${obj.key} showHide="hide" class='backstory'>${hyperDesc}</span>`;
+        let extended = true;
+
+        if(obj.description.length > 130){
+        backStory = obj.description.substring(0, 130) + elipsis;
+        extended = false;
+        }
+
+    hyperDesc = expandable.findKeywords(backStory, keywords);
+    
+    divContent = `<span id=${obj.id} key=${obj.key} extended=${extended} class='backstory'>${hyperDesc}</span>`;
         
     }else if(type === "item"){
     
     childDiv.classList.remove("withbreak");
     divContent = obj.description;   
         
-    }else{
+    }else if(type === 'action'){
     
-    divContent = hyperDesc + `<br><br>`;
+    divContent = `<span class="npcAction" style="color:${color}" npcId="${obj.npcId}" eventID="${obj.id}"> ${obj.description.trim()} </span>`
     
-    }
+    }else if(type === 'dialogue'){
     
-    }
-    
-    if(type === 'action'){
-    
-    divContent = `${lineBreak}
-    <span class="npcAction" style="color:${color}" npcId="${obj.npcId}" eventID="${obj.id}"> ${obj.description.trim()} </span>`
-    
-    }
-    
-    if(type === 'dialogue'){
-    
-    divContent = `${lineBreak}
+    divContent = `${lineBreak}They say:
     <span class="npcDialogue" style="color:lime" npcId="${obj.npcId}" eventID="${obj.id}"> ${obj.description.trim()} </span>`
     
+    }else if(type === 'ambience'){
+    
+    divContent = `<span class="ambience" style="color:${color}" id="${obj.id}" key="${obj.key}"> ${hyperDesc} </span>`
+        
+    }else{
+
+    divContent = `<span class="description" id="${obj.id}" key="${obj.key}"> ${hyperDesc} </span> 
+    ${lineBreak}`
+     
     }
     
+    }
+  
     
     childDiv.innerHTML = divContent;
     
@@ -152,9 +174,10 @@ makeDiv(type, obj, parent, color){
     
     let foundHeader = ref.Storyteller.querySelector(`[key="${parentKey}"][id="${parentId}"][type="header"]`);
     
-    if (foundHeader) {
+    if (foundHeader && parent.id !== 'leftExpand') {
+        
         foundHeader.appendChild(childDiv);
-    } else {
+    } else {    
         parent.appendChild(childDiv);
     }
     
@@ -169,11 +192,12 @@ let locNPCs = Events.filterKeyTag(allTags, "npcs");
 let subLocations = Events.getAllSubLocations(locObj);
 let floatNPCs = Events.getFloatingNPCs(locObj, locNPCs, subLocations);
 
-
-
 Events.getLocationAmbience(locAmbience);
 Events.getLocationDescription(locObj);
+
+if(subLocations.length > 0){
 Events.makeSubLocations(locObj, subLocations, floatNPCs);
+}
 
 },
 
@@ -237,6 +261,7 @@ subLocations.sort((a, b) => a.order - b.order);
 if(subLocations.length === 0){
 //console.log('No Sublocations')
 const { description, ...locObjAsSubLoc } = locObj;
+locObjAsSubLoc.description = '';
 
 subLocations.push(locObjAsSubLoc)}
 
@@ -335,7 +360,7 @@ let ambTags = tagObj.tags.filter(entry => entry.key === 'ambience');
 ambTags.forEach(tag => {
 
 let ambObj = helper.getObjfromTag(tag);
-this.makeDiv("child", ambObj, ref.Storyteller, "color");
+this.makeDiv("ambience", ambObj, ref.Storyteller, "color");
 
 })
 
@@ -374,7 +399,7 @@ let npcBundle = Events.mergeNPCs(subLocation, bundle.npcs, floatNPCs, locAccess)
 
 if(bundle.ambience){
 bundle.ambience.forEach(ambience => {
-this.makeDiv("child", ambience, subLocation, "color");
+this.makeDiv("ambience", ambience, subLocation, "color");
 })
 };
 

@@ -62,12 +62,12 @@ Story += `
 this.addImagestoStory();
 
 //Tell expandable Divs what to show.
-expandable.expandExtend(ref.Storyteller, ref.Centre);
+expandable.expandExtend(ref.Storyteller);
 expandable.showFloatingExpandable();
 //---
 //window.speechSynthesis.cancel();
 
-helper.addEventsToStoryteller();
+expandable.goToEdit();
 //helper.updateEventContent();
 
 };
@@ -75,7 +75,7 @@ helper.addEventsToStoryteller();
 
 addImagestoStory() {
 // Get all <hr> elements in the Storyteller
-const hrElements = ref.Storyteller.querySelectorAll('hr');
+const hrElements = [...ref.Storyteller.querySelectorAll('hr'), ...ref.leftExpand.querySelectorAll('hr')]
 
 // Iterate over each <hr> element
 hrElements.forEach(hr => {

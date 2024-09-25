@@ -17,6 +17,9 @@ createForm: function (obj){
 let color
 let fullScreen = false
 
+//Disable Expandable Elements
+ref.leftExpand.style.display = "none";
+
 //Initialise Form.
 if(obj){
 //0.1. Set Colour of Form
@@ -1266,6 +1269,7 @@ tagsToAdd.forEach(tag => {
 let tagObj = helper.getObjfromTag(tag);
 
 if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+if(tagObj === undefined){return}
 
 let tagName = tagObj.name
 

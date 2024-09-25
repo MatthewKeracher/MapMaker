@@ -22,6 +22,7 @@ expandableElements: document.querySelectorAll('.expandable'),
 Right: document.getElementById('Right'),
 Centre: document.querySelector('.Centre'),
 Left: document.querySelector('.Left'),
+leftExpand: document.getElementById('leftExpand'),
 leftParty: document.getElementById('leftParty'),
 
 //Toolbar
