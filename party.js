@@ -5,10 +5,39 @@ import helper from "./helper.js";
 import events from "./events.js";
 import Storyteller from "./storyteller.js";
 import battleMap from "./battleMap.js";
+import NPCbuild from "./classes.js";
 
 const party = {
 
-loadParty(){
+currentParty: [],
+
+makeMonsterNPC(member, i) {
+
+let skillNames = ["Strength", "Dexterity", "Wisdom", "Intelligence", "Constitution", "Charisma"];
+let skills = {};
+
+skillNames.forEach(skillName => {
+let skill = helper.rollMultipleDice('3d6');
+skills[skillName] = skill; 
+skills['mod'+skillName] = NPCbuild.getModifier(parseInt(skill));
+});
+
+const newMonster = {
+...member,
+...skills,
+class: "Monster",
+x: 200 + (i * 40),
+y: 100,
+name: member.name + ' ' + i,
+initiative: 0,
+hitPoints: helper.rollMultipleDice(member.level + 'd8'),
+};
+
+return newMonster
+},
+    
+
+buildParty(){
 
 ref.leftParty.innerHTML = '';
 let membersList = load.Data.miscInfo.party;
@@ -17,12 +46,36 @@ let members = [];
 membersList.forEach(element => {
     
 let member = helper.getObjfromTag(element);
+
+if(member.key === 'monsters'){
+
+let noAppearing = 1;
+if (member.encounter.includes('d')) {
+noAppearing = helper.rollMultipleDice(member.encounter); 
+}else{
+noAppearing = member.encounter;
+}
+
+for (let i = 0; i < noAppearing; i++) {
+let monster = this.makeMonsterNPC(member, i + 1); 
+members.push(monster); 
+}
+
+}else{
 members.push(member);
+}
 
 });
 
-const drawingCanvas = document.getElementById('drawingCanvas')
-battleMap.enableMovableIcons(drawingCanvas, members)
+this.currentParty = members
+
+},
+
+loadParty(){
+
+let members = this.currentParty;
+let membersList = load.Data.miscInfo.party;
+ref.leftParty.innerHTML = ``;
 
 ref.Left.style.display = "none";
 ref.Centre.style.display = "none";
@@ -89,16 +142,16 @@ membersList = membersList.filter(members => parseInt(members.id) !== parseInt(me
 load.Data.miscInfo.party = membersList;
 
 //Repackage.
-party.loadParty();
-Storyteller.refreshLocation();
+refreshButton.click();
 
 }
 
 else if(event.button === 0){ //left-click
-console.log('load NPC form.')
-ref.leftParty.style.display = "none";
-partyButton.classList.remove('click-button')
-let memberObj = load.Data.npcs.find(npc => npc.name === member.name);
+// ref.leftParty.style.display = "none";
+// partyButton.classList.remove('click-button')
+partyButton.click()
+let memberObj = load.Data[member.key].find(entry => entry.id === member.id);
+console.log(memberObj)
 form.createForm(memberObj);
 }
 
@@ -133,12 +186,32 @@ let buttonHTML =
     <option value="none" selected>Raw</option>
 </select>
 
-<button id="rollButton" class="partyButton">Roll</button>`;
+<button id="rollButton" class="partyButton">Roll</button>
+<button id="clearButton" class="partyButton">Clear</button>
+<button id="refreshButton" class="partyButton">Refresh</button>`;
 
 buttonDiv.innerHTML = buttonHTML;
 ref.leftParty.appendChild(buttonDiv);
 const rollButton = document.getElementById("rollButton");
+const clearButton = document.getElementById("clearButton");
+const refreshButton = document.getElementById("refreshButton");
 
+refreshButton.addEventListener('click', () => {
+
+    this.buildParty();
+    party.loadParty();
+    Storyteller.refreshLocation();
+
+});
+
+clearButton.addEventListener('click', () => {
+
+    membersList = membersList.filter(members => members.key === 'npcs');
+    load.Data.miscInfo.party = membersList;
+
+    refreshButton.click();
+
+});
 
 rollButton.addEventListener('click', () => {
 let sides  = document.getElementById("partyDice").value;
@@ -158,7 +231,7 @@ rows.forEach(row => {
 //Fetch npcObj
 const nameCol = row.getElementsByClassName('name-column');
 const name = nameCol[0].id;
-const npcObj = load.Data.npcs.find(npc => npc.name === name)
+const npcObj = members.find(npc => npc.name === name)
 
 //Roll Dice with  Modifier.
 const initCol = row.getElementsByClassName('init-column');

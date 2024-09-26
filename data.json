@@ -42,7 +42,7 @@
       "id": 1000,
       "parentId": "1000",
       "type": "group",
-      "subType": "color",
+      "subType": "subGroup",
       "name": "New Adventure",
       "image": "",
       "order": "0",

@@ -136,13 +136,23 @@ queryButton() {
 
 partyButton(){
 
+//Get stuck icons from behind labels.
+const imageContainer = document.getElementById('imageContainer')
+let labels = document.querySelectorAll('.position-div');
+
 if(ref.leftParty.style.display === 'block'){
 partyButton.classList.remove('click-button')
 ref.leftParty.style.display = 'none'
 
+labels.forEach(div => {div.style.display = 'block'});
+
+
 }else{
 partyButton.classList.add('click-button')
 party.loadParty()
+
+labels.forEach(div => {div.style.display = 'none'});
+
 }
 
 }
@@ -154,6 +164,11 @@ window.speechSynthesis.cancel();
 if(ref.leftExpand.style.display !== 'none'){
 ref.leftExpand.style.display = "none";
 ref.leftExpand.innerHTML = ``;
+return
+}
+
+if(Add.addMode){
+addButton.click();
 return
 }
 
@@ -258,14 +273,16 @@ save.deleteDataEntry();
 moveButton() {
 console.log('moveButton Clicked')
 const mapElement = document.getElementById('mapElement');
+let canvas = document.getElementById('drawingCanvas');
+
 
 if(!Add.moveMode){
 Add.moveMode = true;
-
+canvas.style.display = "none";
 console.log('Adding Map Events Listeners')
-
 mapElement.addEventListener('mousedown', Add.handleMouseDown);
-mapElement.addEventListener('mousemove', Add.handleMouseMove);   
+mapElement.addEventListener('mousemove', Add.handleMouseMove); 
+  
 ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
 });
@@ -273,11 +290,11 @@ selection.style.pointerEvents = 'none';
 }else{if(Add.moveMode){
 
 Add.moveMode = false;
-
+canvas.style.display = "block";
 console.log('Removing Map Events Listeners')
-
 mapElement.removeEventListener('mousedown', Add.handleMouseDown);
-mapElement.removeEventListener('mousemove', Add.handleMouseMove);   
+mapElement.removeEventListener('mousemove', Add.handleMouseMove); 
+ 
 ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'auto';
 });
@@ -287,11 +304,13 @@ selection.style.pointerEvents = 'auto';
 addButton() {
 console.log('addButton Clicked')
 const mapElement = document.getElementById('mapElement');
+let canvas = document.getElementById('drawingCanvas');
 
 
 if(!Add.addMode){
 Add.addMode = true;
 addButton.classList.add('click-button');
+canvas.style.display = "none";
 
 // Add the event listeners
 mapElement.addEventListener('mousedown', Add.handleMouseDown);
@@ -304,6 +323,7 @@ selection.style.pointerEvents = 'none';
 }else{if(Add.addMode){
 
 Add.addMode = false;
+canvas.style.display = "block";
 addButton.classList.remove('click-button');
 
 // Remove the event listeners

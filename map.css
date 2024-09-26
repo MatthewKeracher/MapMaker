@@ -30,11 +30,21 @@ z-index: 0;
 #drawingCanvas {
 border: 1px solid red; /* Optional */
 pointer-events: auto;
+z-index: 0;
 /* position : absolute;
 top:0;
 left:0;
 width: 100%;
 height: 100%; */
+}
+
+.icon-label {
+z-index: 200;
+background-color: black;
+border: 1px solid teal; 
+padding: 2px;
+font-size: 1vw;
+pointer-events: none;  /* Prevent the label from interfering with mouse events */
 }
 
 .overlay-layer {

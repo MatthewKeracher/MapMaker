@@ -106,7 +106,7 @@ makeDiv(type, obj, parent, color){
     
     let keywords = expandable.generateKeyWords(load.Data);
     let chosenDesc = helper.filterRandomOptions(obj)
-    let hyperDesc = expandable.findKeywords(chosenDesc, keywords);
+    let hyperDesc = expandable.findKeywords(chosenDesc, keywords, obj.name);
     
    childDiv.classList.add("expandable");
    childDiv.classList.add("withbreak");
@@ -129,7 +129,7 @@ makeDiv(type, obj, parent, color){
         extended = false;
         }
 
-    hyperDesc = expandable.findKeywords(backStory, keywords);
+    hyperDesc = expandable.findKeywords(backStory, keywords, obj.name);
     
     divContent = `<span id=${obj.id} key=${obj.key} extended=${extended} class='backstory'>${hyperDesc}</span>`;
         
@@ -149,7 +149,7 @@ makeDiv(type, obj, parent, color){
     
     }else if(type === 'ambience'){
     
-    divContent = `<span class="ambience" style="color:${color}" id="${obj.id}" key="${obj.key}"> ${hyperDesc} </span>`
+    divContent = `<span class="ambience" style="color:${color}" id="${obj.id}" key="${obj.key}"> ${hyperDesc} </span>${lineBreak}`
         
     }else{
 
@@ -352,6 +352,8 @@ getLocationAmbience(locAmbience){
 
 if(locAmbience.length > 0){
 
+let ambObjs = [];
+
 locAmbience.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
@@ -360,13 +362,22 @@ let ambTags = tagObj.tags.filter(entry => entry.key === 'ambience');
 ambTags.forEach(tag => {
 
 let ambObj = helper.getObjfromTag(tag);
-this.makeDiv("ambience", ambObj, ref.Storyteller, "color");
+ambObjs.push(ambObj)
+
+})
+
+ambObjs.sort((a, b) => a.order - b.order);
+
+ambObjs.forEach(ambObj => {
+
+
+this.makeDiv("ambience", ambObj, ref.Storyteller);
 
 })
 
 });
 
-locAmbience.sort((a, b) => a.order - b.order);
+
 
 }},
 
@@ -860,6 +871,7 @@ this.EntryDisplay = 'none'
 },
 
 getCurrentAC(npc){
+
 //Check for Highest AC Value.
 const itemTags = npc.tags.filter(tag => tag.key === 'items')
 

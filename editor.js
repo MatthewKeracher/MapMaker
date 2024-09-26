@@ -64,7 +64,7 @@ if(obj[0]){
 const type = obj[0].type;
 const subType = obj[0].subType;
 
-if(key !== 'locations'){
+// if(key !== 'locations'){
 
 if(obj.length < 2){
 
@@ -122,23 +122,23 @@ result.push({subSectionHead: true, [type]: currentEntry[type], [subType]: curren
 result.push(currentEntry);
 return result;
 }, []);
-}else{
+// }else{
 
-//For Locations, sort by Order.
-if(obj.length < 2){
+// //For Locations, sort by Order.
+// if(obj.length < 2){
 
-    //Not enough entries to run comparison. No need to either.
-    }else{
+//     //Not enough entries to run comparison. No need to either.
+//     }else{
 
-        //Sort by Order
-        obj.sort((a, b) => {
+//         //Sort by Order
+//         obj.sort((a, b) => {
          
-            return parseInt(a.order) - parseInt(b.order);
+//             return parseInt(a.order) - parseInt(b.order);
             
-            });
+//             });
 
-    }
-}
+//     }
+// }
 
 
 //list Title
@@ -223,16 +223,16 @@ style="font-family:'SoutaneBlack'">
 nameDiv.setAttribute('id', entry.id)
 nameDiv.setAttribute('style', "display:" + subSectionEntryDisplay)
 
-if(key === 'locations'){
+// if(key === 'locations'){
 
-nameDiv.innerHTML = 
-`<span 
-id = "${entry.id}"
-style ="color: ${entry.color}">
-&nbsp;${entry.order + '. ' + entry.name}
-</span>`;
+// nameDiv.innerHTML = 
+// `<span 
+// id = "${entry.id}"
+// style ="color: ${entry.color}">
+// &nbsp;${entry.order + '. ' + entry.name}
+// </span>`;
 
-}else{
+// }else{
 
 nameDiv.innerHTML = 
 `<span 
@@ -242,7 +242,7 @@ style ="color: ${entry.color}">
 </span>`;
 
 
-}
+// }
 
 //3.4 no subSection
 }else if (entry[type]){
@@ -571,11 +571,12 @@ event.preventDefault();
 const clickId = div.getAttribute('id')
 const clickKey = div.getAttribute('key')
 
-if(clickKey === 'npcs'){
+if(clickKey === 'npcs' || clickKey ==='monsters'){
 load.Data.miscInfo.party.push({key: clickKey, id: clickId})
 }
 
 //Repackage.
+party.buildParty();
 party.loadParty();
 
 }

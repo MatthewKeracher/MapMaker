@@ -27,6 +27,9 @@ let Story = ``
 ref.Storyteller.innerHTML = '';
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
+
+if(!locObj){this.changeContent(this.parentLocationId)}
+
 const locName = locObj.name
 this.currentLocationId = locId
 

@@ -100,7 +100,7 @@ console.log('Unknown content type');
 });
 },
 
-findKeywords(text, keywords, nested) {
+findKeywords(text, keywords, omit) {
 const regex = new RegExp(
 keywords.map(keyword => `\\b${keyword.name}\\b`).join("|"), 
 "gi"
@@ -109,7 +109,7 @@ keywords.map(keyword => `\\b${keyword.name}\\b`).join("|"),
 return text.replace(regex, match => {
 const keyword = keywords.find(kw => kw.name.toLowerCase() === match.toLowerCase());
 
-if (keyword) {
+if (keyword && keyword.name !== omit) {
 
 return `<span 
 class="extendable"
@@ -345,7 +345,7 @@ let id = div.getAttribute('id');
 let key = div.getAttribute('key');
 let obj = helper.getObjfromTag({key: key, id: id});
 let keywords = expandable.generateKeyWords(load.Data);
-let hyperDesc = expandable.findKeywords(obj.description, keywords);
+let hyperDesc = expandable.findKeywords(obj.description, keywords, obj.name);
 
 div.setAttribute("extended", "true");
 

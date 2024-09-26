@@ -4,6 +4,7 @@ import battleMap from "./battleMap.js";
 import load from "./load.js";
 import ref from "./ref.js";
 import Storyteller from "./storyteller.js";
+import helper from "./helper.js";
 
 
 
@@ -93,8 +94,9 @@ mapElement.onload = () => {
   // Append canvas to the container
   imageContainer.appendChild(canvas);
 
-  // Enable pencil tool for drawing on the canvas
-  battleMap.enablePencilTool(canvas);
+  // Enable battleMap when new map loads.
+  //battleMap.enablePencilTool(canvas);
+  battleMap.enableMovableIcons()
 };
 
 
@@ -141,12 +143,16 @@ addNewLocation(location) {
 const rect = location.getBoundingClientRect();
 
 //Ingredients for a Location
-console.log(Storyteller.parentLocationId)
+let grandParentObj = helper.getObjfromTag({key:"locations", id:Storyteller.grandParentLocationId})
+let parentObj = helper.getObjfromTag({key:"locations", id:Storyteller.parentLocationId})
+
+if(parentObj === grandParentObj){grandParentObj = null}
 
 const key = "locations";
 const type = "group";
 const subType = "color";
-const group = "Default"; 
+const group = grandParentObj? grandParentObj.name: parentObj? parentObj.name : "";
+const subGroup = grandParentObj? parentObj.name: "World";
 const color = "#f4d50b";
 const id = load.generateUniqueId(load.Data.locations, 'entry'); 
 const parentId = Storyteller.parentLocationId;
@@ -164,6 +170,7 @@ const locationData = {key,
   type,
   subType,
   group,
+  subGroup,
   color,
   id,
   parentId,
