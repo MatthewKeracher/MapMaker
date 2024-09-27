@@ -95,8 +95,8 @@ mapElement.onload = () => {
   imageContainer.appendChild(canvas);
 
   // Enable battleMap when new map loads.
-  //battleMap.enablePencilTool(canvas);
-  battleMap.enableMovableIcons()
+  battleMap.enablePencilTool(canvas);
+  //battleMap.loadIcons()
 };
 
 

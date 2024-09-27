@@ -160,7 +160,7 @@ const obj = load.Data[key][index];
 
 if(event.shiftKey){
 if(key === 'npcs' && ref.leftParty.style.display === 'block'){
-load.Data.miscInfo.party.push({key, id});
+load.Data.miscInfo.party.push({key, id, type: 'hero'});
 party.loadParty();
 Storyteller.refreshLocation();
 }
@@ -293,6 +293,36 @@ const tagHeader = ref.leftExpand.querySelector(".tagHead");
     tagHeader.addEventListener('mouseover', expandable.addHighlight);
     tagHeader.addEventListener('mouseout', expandable.removeHighlight);
     
+},
+
+showIcon(){
+
+    const npcNames = ref.Storyteller.querySelectorAll(".npcBlock"); 
+
+    npcNames.forEach(npcName => {
+
+        npcName.addEventListener('mouseover', () => {
+        const iconId = npcName.getAttribute('data-icon-id');   
+        console.log(iconId)
+        const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);
+    
+        if (icon) {
+            icon.classList.add('icon-highlight');  // Add the highlight class
+        }
+        
+    });
+    
+    npcName.addEventListener('mouseout', () => {
+        const iconId = npcName.getAttribute('data-icon-id'); 
+        const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);  // Find the corresponding icon
+    
+        if (icon) {
+            icon.classList.remove('icon-highlight');  // Remove the highlight class
+        }
+    });
+
+})
+
 },
 
 goToEdit(){

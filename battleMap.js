@@ -3,7 +3,7 @@ import form from "./form.js";
 import helper from "./helper.js";
 import load from "./load.js";
 import ref from "./ref.js";
-import Storyteller from "./storyteller.js";
+import expandable from "./expandable.js";
 import party from "./party.js";
 
 
@@ -48,7 +48,7 @@ enablePencilTool(canvas) {
   canvas.addEventListener('mouseout', stopDrawing);
 },
 
-enableMovableIcons() {
+loadIcons() {
 
     let members = party.currentParty;
     
@@ -69,7 +69,7 @@ enableMovableIcons() {
         const existingIcons = document.querySelectorAll('.icon');
         existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
     
-    
+console.log(icons)
 // Function to create and position icons as HTML elements
 icons.forEach(icon => {
     // Create img element for each icon
@@ -95,6 +95,18 @@ icons.forEach(icon => {
     // Hover label handling
     imgElement.addEventListener('mouseover', (event) => {
         showLabel(icon, event.clientX, event.clientY);
+
+        try{
+        const nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
+        console.log(nameDiv)
+
+        nameDiv.scrollIntoView({ 
+            behavior: 'smooth', // Smooth scrolling effect
+            block: 'start',     // Align the nameDiv to the top of storyteller
+            inline: 'nearest'   // Optional for horizontal scrolling
+        });
+    }catch{}
+
     });
 
     imgElement.addEventListener('mouseleave', () => {
@@ -155,8 +167,13 @@ function startDragging(event) {
         selectedIcon = icon;
         offsetX = event.clientX - icon.x;
         offsetY = event.clientY - icon.y;
+
+
  // Bring the icon to the front
  iconElement.style.zIndex = 1000;
+
+ const iconLabels = document.querySelectorAll(".icon-label")
+ iconLabels.forEach(label => {label.style.display = 'none'})
 
  event.preventDefault(); // Prevent default behavior
     }
@@ -187,9 +204,11 @@ function drag(event) {
     selectedIcon.imgElement.style.top = `${newY}px`;
 }
 
-// No need to redraw the canvas, as icons are now HTML elements
+
+expandable.showIcon()
 
 }
+
 
 
 };

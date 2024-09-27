@@ -8,6 +8,7 @@ import Map from "./map.js";
 import editor from "./editor.js"; 
 import form from "./form.js";
 import ref from "./ref.js";
+import battleMap from "./battleMap.js";
 
 const Storyteller = {
 
@@ -46,7 +47,7 @@ Map.fetchAndProcessImage(locObj.image)
 ref.locationLabel.value = locName;
 ref.locationLabel.setAttribute('id', locId)
 ref.locationLabel.setAttribute('key', locObj.key)
-console.log(ref.locationLabel)
+
 helper.adjustFontSize();
 ref.locationLabel.disabled = true;
 ref.locationLabel.style.color = locObj.color;
@@ -74,6 +75,11 @@ expandable.showFloatingExpandable();
 //window.speechSynthesis.cancel();
 
 expandable.goToEdit();
+
+// if(locObj.image !== ''){
+// console.log('loading Icons...')
+// battleMap.loadIcons();
+// }
 //helper.updateEventContent();
 
 };

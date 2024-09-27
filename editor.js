@@ -572,7 +572,7 @@ const clickId = div.getAttribute('id')
 const clickKey = div.getAttribute('key')
 
 if(clickKey === 'npcs' || clickKey ==='monsters'){
-load.Data.miscInfo.party.push({key: clickKey, id: clickId})
+load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'hero'})
 }
 
 //Repackage.

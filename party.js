@@ -42,29 +42,32 @@ ref.leftParty.innerHTML = '';
 let membersList = load.Data.miscInfo.party;
 let members = [];
 
-membersList.forEach(element => {
-    
-let member = helper.getObjfromTag(element);
+//console.log(membersList)
 
-if(member.key === 'monsters'){
+membersList.forEach(memberTag => {
+    
+let memberObj = helper.getObjfromTag(memberTag);
+
+if(memberObj.key === 'monsters'){
 
 let noAppearing = 1;
 
-if (member.encounter.includes('d')) {
-const appearing = element.appearing.toLowerCase();
-console.log(appearing, member[appearing])
-noAppearing = helper.rollMultipleDice(member[appearing]); 
+if (memberObj.encounter.includes('d')) {
+const appearing = memberTag.appearing.toLowerCase();
+console.log(appearing, memberObj[appearing])
+noAppearing = helper.rollMultipleDice(memberObj[appearing]); 
 }else{
-noAppearing = member.encounter;
+noAppearing = memberObj.encounter;
 }
 
 for (let i = 0; i < noAppearing; i++) {
-let monster = this.makeMonsterNPC(member, i + 1); 
+let monster = this.makeMonsterNPC(memberObj, i + 1); 
 members.push(monster); 
 }
 
 }else{
-members.push(member);
+//console.log('Adding ' + memberObj.name + ' to party.')
+members.push(memberObj)
 }
 
 });
@@ -240,7 +243,8 @@ refreshButton.addEventListener('click', () => {
 
     this.buildParty();
     party.loadParty();
-    Storyteller.refreshLocation();
+    battleMap.loadIcons();
+    //Storyteller.refreshLocation();
 
 });
 

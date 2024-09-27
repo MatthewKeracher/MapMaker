@@ -15,6 +15,7 @@ eventDesc: "",
 eventsArray: [],
 searchArray: [],
 eventActions: [],
+partyNPCs: [],
 
 // _________________________________________________
 
@@ -58,6 +59,7 @@ makeDiv(type, obj, parent, color){
         <hr name="${headerHR}" style="background-color:${obj.color}"><br>`;
 
         }else if(obj.key === 'npcs'){
+       
         
                 //Gather data on NPC.
                 const npcArmourClass = this.getCurrentAC(obj)
@@ -71,7 +73,7 @@ makeDiv(type, obj, parent, color){
                 value="${obj.hitPoints}">`
         
         divContent = `<br><br>
-        <h3>
+        <h3 class='npcBlock'data-icon-id="icon-${obj.name}">
         
         <span class="npcName" style="color:${obj.color}" key="${obj.key}" 
         id="${obj.id}" type="${type}"> 
@@ -182,8 +184,27 @@ makeDiv(type, obj, parent, color){
         parent.appendChild(childDiv);
     }
     
-    },
+},
 
+
+addToParty(){
+
+//Erase npcs from Party
+load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.type !== "npc")
+
+//Add npcs to Party
+this.partyNPCs.forEach(npc => {
+load.Data.miscInfo.party.push({key: 'npcs', type: 'npc', id: npc.id});
+})
+
+const partyDisplay = ref.leftParty.style.display;
+
+party.buildParty();
+party.loadParty();
+
+ref.leftParty.style.display = partyDisplay;
+
+},
 
 async getEvent(locObj) {
 
@@ -194,6 +215,8 @@ let locNPCs = Events.filterKeyTag(allTags, "npcs");
 let subLocations = Events.getAllSubLocations(locObj);
 let floatNPCs = Events.getFloatingNPCs(locObj, locNPCs, subLocations);
 
+this.partyNPCs = [];
+
 Events.getLocationAmbience(locAmbience);
 Events.getLocationDescription(locObj);
 Events.getLocationMonsters(monsters)
@@ -201,6 +224,8 @@ Events.getLocationMonsters(monsters)
 if(subLocations.length > 0){
 Events.makeSubLocations(locObj, subLocations, floatNPCs);
 }
+
+this.addToParty();
 
 },
 
@@ -244,7 +269,7 @@ getLocationMonsters(monsters){
  //Takes an array of tags and passes the ambience descriptions on.
 
 
-    let monstObjs = [];
+    let monstPartyTags = [];
     
     monsters.forEach(tag => {
     
@@ -252,10 +277,7 @@ getLocationMonsters(monsters){
         let monstTags = tagObj.tags.filter(entry => entry.key === 'monsters');
         
         monstTags.forEach(tag => {
-        
-        let monstObj = helper.getObjfromTag(tag);
-        monstObjs.push(tag)
-        
+        monstPartyTags.push(tag)
         })
     })
 
@@ -263,9 +285,9 @@ getLocationMonsters(monsters){
     load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
 
     //Add monsters to Party
-    monstObjs.forEach(monster => {
+    monstPartyTags.forEach(monster => {
 
-    load.Data.miscInfo.party.push(monster);
+    load.Data.miscInfo.party.push({key: 'monsters', id: monster.id, type:'monster'});
 
     })
 
@@ -371,12 +393,15 @@ let tagChance = locTagObj.chance
 npcFilter.forEach(tag => {
 
 const npc = helper.getObjfromTag(tag);
+npc.access = tag.access;
+
+//console.log(tag, npc)
 
 //Roll for chance.
 let chanceRoll = helper.rollDice(100);
 let toBeat = parseInt(tagChance)
 if(chanceRoll > toBeat){
-console.log(npc.name + ' failed roll', toBeat, chanceRoll)
+//console.log(npc.name + ' failed roll', toBeat, chanceRoll)
 return  
 }
 
@@ -388,6 +413,7 @@ floatNPCs.push(JSON.parse(JSON.stringify(npc)))
 
 locNPCSearch.forEach(npc => {
 let npcObj = helper.getObjfromTag(npc);
+npcObj.access = npc.access;
 floatNPCs.push(JSON.parse(JSON.stringify(npcObj))); // Deep copy each object
 });
 
@@ -396,7 +422,6 @@ let activeLocations = subLocations.filter(subLoc => parseInt(subLoc.active) === 
 
 //Filter for NPC Access
 if(npc.access !== '*'){
-
 activeLocations = activeLocations.filter(loc => parseInt(loc.access) === parseInt(npc.access) || loc.access === '*');
 if(activeLocations.length === 0){
 //console.log(npc.name + ' does not have correct access.')
@@ -405,9 +430,10 @@ if(activeLocations.length === 0){
 }
 
 let r = Math.floor(Math.random() * activeLocations.length);
+
 try{
 npc.location = activeLocations[r].id;
-}catch{}
+}catch{console.error('Could not assign npc.location to ' + npc.name)}
 });
 
 return floatNPCs
@@ -423,8 +449,6 @@ this.makeDiv("child", locObj, ref.Storyteller);
 };
 
 },
-
-
 
 makeSubLocations(locObj, subLocations, floatNPCs){
 
@@ -554,6 +578,8 @@ return {containers, bundle}
 
 mergeNPCs(subLocation, npcBundle, floatNPCs, locAccess){
 
+//console.log(subLocation.name, floatNPCs)
+
 //Add NPCs tagged directly to subLocation.
 let directNPCs = subLocation.tags.filter(obj => obj.key === 'npcs');
 
@@ -571,8 +597,11 @@ floatNPCs.forEach(npc => {
 if(npc.location === subLocation.id){npcBundle.push(npc)}
 })
 
-//Remove NPCs who are in the [P]arty.
-let partyMembers = load.Data.miscInfo.party;
+// Remove NPCs who are in the [P]arty.
+let party = load.Data.miscInfo.party;
+let partyMembers = party.filter(member => member.type === 'npc')
+//console.log(partyMembers)
+
 partyMembers.forEach(member => {
 let filterBundle = npcBundle.filter(npc => npc.id !== parseInt(member.id));
 npcBundle = filterBundle;
@@ -590,7 +619,9 @@ return npcBundle
 
 getNPCEvents(npcBundle, subLocation, locObj){
 
-//console.log('Recieved ' + npcBundle.length + ' NPCs')
+npcBundle.forEach(npc => {
+this.partyNPCs.push({key: 'npcs', type: 'npc', id: npc.id});
+})
 
 //loop through npcBundle.
 npcBundle.forEach(npc => {
