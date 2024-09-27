@@ -18,6 +18,7 @@ init() {
 load.loadDefault();
 load.checkStoredData();
 toolbar.loadQuery();
+party.dragPartyScreen();
 
 setInterval(helper.updateEventContent, 10000);
 

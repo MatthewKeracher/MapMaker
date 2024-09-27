@@ -10,6 +10,7 @@ locationDivs: document.querySelectorAll('.selection'),
 eventManager: document.getElementById('eventManager'),
 
 //Storyteller
+labelContainer : document.getElementById('labelContainer'),
 locationLabel: document.getElementById('locationLabel'),
 Storyteller: document.getElementById('Storyteller'),
 

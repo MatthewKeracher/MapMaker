@@ -44,6 +44,9 @@ Map.fetchAndProcessImage(locObj.image)
 
 //Change Location Label Contents
 ref.locationLabel.value = locName;
+ref.locationLabel.setAttribute('id', locId)
+ref.locationLabel.setAttribute('key', locObj.key)
+console.log(ref.locationLabel)
 helper.adjustFontSize();
 ref.locationLabel.disabled = true;
 ref.locationLabel.style.color = locObj.color;

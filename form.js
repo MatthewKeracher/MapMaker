@@ -1293,7 +1293,7 @@ else if(key === 'monsters' && visibleKeys.includes('monsters')){
     tagid = ${tag.id} 
     tagkey = ${tag.key}
     tagsave = ${tag.save}
-    tagAppearing = ${(tag.access === "" || tag.access === undefined) ? '*' : tag.appearing}
+    tagAppearing = ${(tag.appearing === "" || tag.appearing === undefined) ? 'Encounter' : tag.appearing}
     >
     
     <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">

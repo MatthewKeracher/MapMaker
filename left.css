@@ -34,9 +34,10 @@ outline: 0.4vh solid teal;
 
 /* Position */
 position: fixed;
+cursor: move;
 top:1vh;  
 right: 0.2vw; 
-width: 50vw;
+width: 55vw;
 height: auto;
 max-height: 89.5vh;
 z-index:10;

@@ -52,7 +52,7 @@ let noAppearing = 1;
 
 if (member.encounter.includes('d')) {
 const appearing = element.appearing.toLowerCase();
-console.log(member)
+console.log(appearing, member[appearing])
 noAppearing = helper.rollMultipleDice(member[appearing]); 
 }else{
 noAppearing = member.encounter;
@@ -92,6 +92,8 @@ let headerHTML = `
         <div id="headerRow" class="header-row">
             <div id="nameColumn" class="member-cell name-column" style="color:rgba(255, 255, 255, 0.376)">Name</div>
             <div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AB</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">M</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">HP</div>
@@ -115,6 +117,8 @@ let memberHTML = `
         <div id="${member.name}Row" class="member-row">
             <div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
             <div class="member-cell class-column">${member.class}</div>
+            <div class="member-cell init-columnn">+${member.attackBonus}</div>
+            <div class="member-cell init-columnn">${member.morale}</div>
             <div class="member-cell init-column">${member.initiative}</div>
             <div class="member-cell init-column">${memberAC}</div>
             <div class="member-cell init-column">
@@ -305,6 +309,31 @@ document.getElementById("partyMod").value = 'none'
 });
 
 },
+
+dragPartyScreen(){
+
+let isDragging = false;
+let offsetX, offsetY;
+
+ref.leftParty.addEventListener('mousedown', (event) => {
+    isDragging = true;
+    // Calculate the offset between the mouse position and the element's top-left corner
+    offsetX = event.clientX - ref.leftParty.getBoundingClientRect().left;
+    offsetY = event.clientY - ref.leftParty.getBoundingClientRect().top;
+});
+
+document.addEventListener('mousemove', (event) => {
+    if (isDragging) {
+        // Update the position of the element
+        ref.leftParty.style.left = `${event.clientX - offsetX}px`;
+        ref.leftParty.style.top = `${event.clientY - offsetY}px`;
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false; // Stop dragging when the mouse is released
+});
+}
 
 };
 

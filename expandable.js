@@ -305,6 +305,7 @@ const ambience = ref.Storyteller.querySelectorAll(".ambience");
 const backstories = ref.Storyteller.querySelectorAll(".backstory");
 const itemNames = document.querySelectorAll(".story-name-cell");
 
+
 const divs = [
 ...npcDialogue, 
 ...npcActions, 
@@ -312,7 +313,8 @@ const divs = [
 ...backstories, 
 ...npcNames, 
 ...itemNames,
-...locDescriptions]
+...locDescriptions,
+ref.locationLabel]
 
 divs.forEach(div => {
 
@@ -366,7 +368,6 @@ return
 };
 
 }
-
 form.createForm(load.Data[key][index]);
 },
 

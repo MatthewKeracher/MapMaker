@@ -35,7 +35,7 @@ outline: 0.4vh solid teal;
 position: absolute;
 top: 0vh;
 right: 0vw;
-z-index: 10;
+z-index: 0;
 
 /* Text */
 font-family: 'SoutaneBlack';
