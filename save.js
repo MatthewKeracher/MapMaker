@@ -166,6 +166,12 @@ if(iCheck === 'i'){
         
         tags.push({key: tagKey, id: tagId, access: tagAccess})
 
+    }else if (tagKey === 'monsters'){
+        const tagAppearing = row.getAttribute('tagAppearing');
+        console.log(tagAppearing)
+        
+        tags.push({key: tagKey, id: tagId, appearing: tagAppearing})
+
     }else if(!keyChain.includes(tagKey)){
         
         tags.push({key: tagKey, id: tagId});

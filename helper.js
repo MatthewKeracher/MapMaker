@@ -1171,6 +1171,15 @@ return results;
 rollDice(sides) {
 
 return Math.floor(Math.random() * sides) + 1;
+},
+
+updateDomIconPosition(iconElement, icon) {
+    const canvas = document.getElementById('drawingCanvas')
+    const canvasRect = canvas.getBoundingClientRect(); // Get the canvas position and size
+
+    // Calculate the correct position of the icon relative to the canvas and the viewport
+    iconElement.style.left = `${canvasRect.left + icon.x}px`;  // Adjust by canvas offset
+    iconElement.style.top = `${canvasRect.top + icon.y}px`;    // Adjust by canvas offset
 }
 
 }

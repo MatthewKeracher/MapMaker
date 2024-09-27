@@ -5,6 +5,7 @@ import NPCs from "./npcs.js";
 import load from "./load.js";
 import helper from "./helper.js";
 import expandable from "./expandable.js";
+import party from "./party.js";
 
 
 
@@ -188,17 +189,94 @@ async getEvent(locObj) {
 
 let allTags = Events.getAllTags(locObj);
 let locAmbience = Events.filterKeyTag(allTags, "ambience");
+let monsters = Events.filterKeyTag(allTags,"monsters");
 let locNPCs = Events.filterKeyTag(allTags, "npcs");
 let subLocations = Events.getAllSubLocations(locObj);
 let floatNPCs = Events.getFloatingNPCs(locObj, locNPCs, subLocations);
 
 Events.getLocationAmbience(locAmbience);
 Events.getLocationDescription(locObj);
+Events.getLocationMonsters(monsters)
 
 if(subLocations.length > 0){
 Events.makeSubLocations(locObj, subLocations, floatNPCs);
 }
 
+},
+
+getLocationAmbience(locAmbience){
+
+    //Takes an array of tags and passes the ambience descriptions on.
+    
+    if(locAmbience.length > 0){
+    
+    let ambObjs = [];
+    
+    locAmbience.forEach(tag => {
+    
+    let tagObj = helper.getObjfromTag(tag);
+    let ambTags = tagObj.tags.filter(entry => entry.key === 'ambience');
+    
+    ambTags.forEach(tag => {
+    
+    let ambObj = helper.getObjfromTag(tag);
+    ambObjs.push(ambObj)
+    
+    })
+    
+    ambObjs.sort((a, b) => a.order - b.order);
+    
+    ambObjs.forEach(ambObj => {
+    
+    
+    this.makeDiv("ambience", ambObj, ref.Storyteller);
+    
+    })
+    
+    });
+    
+    
+    
+    }},
+
+getLocationMonsters(monsters){
+
+ //Takes an array of tags and passes the ambience descriptions on.
+
+
+    let monstObjs = [];
+    
+    monsters.forEach(tag => {
+    
+        let tagObj = helper.getObjfromTag(tag);
+        let monstTags = tagObj.tags.filter(entry => entry.key === 'monsters');
+        
+        monstTags.forEach(tag => {
+        
+        let monstObj = helper.getObjfromTag(tag);
+        monstObjs.push(tag)
+        
+        })
+    })
+
+    //Erase monsters from Party
+    load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
+
+    //Add monsters to Party
+    monstObjs.forEach(monster => {
+
+    load.Data.miscInfo.party.push(monster);
+
+    })
+
+    const partyDisplay = ref.leftParty.style.display;
+
+    party.buildParty();
+    party.loadParty();
+
+    ref.leftParty.style.display = partyDisplay;
+    
+        
 },
 
 getAllTags(locObj){
@@ -346,40 +424,7 @@ this.makeDiv("child", locObj, ref.Storyteller);
 
 },
 
-getLocationAmbience(locAmbience){
 
-//Takes an array of tags and passes the ambience descriptions on.
-
-if(locAmbience.length > 0){
-
-let ambObjs = [];
-
-locAmbience.forEach(tag => {
-
-let tagObj = helper.getObjfromTag(tag);
-let ambTags = tagObj.tags.filter(entry => entry.key === 'ambience');
-
-ambTags.forEach(tag => {
-
-let ambObj = helper.getObjfromTag(tag);
-ambObjs.push(ambObj)
-
-})
-
-ambObjs.sort((a, b) => a.order - b.order);
-
-ambObjs.forEach(ambObj => {
-
-
-this.makeDiv("ambience", ambObj, ref.Storyteller);
-
-})
-
-});
-
-
-
-}},
 
 makeSubLocations(locObj, subLocations, floatNPCs){
 

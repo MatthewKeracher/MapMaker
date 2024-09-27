@@ -1260,8 +1260,102 @@ form.createForm(tagObj);
 }
 });
 });
+}
+else if(key === 'monsters' && visibleKeys.includes('monsters')){
 
-
+    const monstersTable = document.createElement('div');
+    
+    let monstersTableHTML =  `
+    <div class="item-table">
+    </div>`
+    
+    monstersTable.innerHTML = monstersTableHTML;
+    container.appendChild(monstersTable);
+    
+    tagsToAdd.forEach(tag => {
+    
+    if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+    
+    const monstersRow = document.createElement('div');
+    
+    let tagObj = helper.getObjfromTag(tag);
+    
+    let tagName = tagObj.name
+    
+    let rowHTML = `
+    
+    <div id="${tagObj.name}Container" 
+    class = "tag item-row"
+    instName = "${tagObj.special? tagObj.name: ''}" 
+    instType = "${tagObj.special? tagObj.type: ''}" 
+    instGroup = "${tagObj.special && tagObj.group? tagObj.group: ''}" 
+    instid = "${tag.instruction? tag.instruction: ''}" 
+    tagid = ${tag.id} 
+    tagkey = ${tag.key}
+    tagsave = ${tag.save}
+    tagAppearing = ${(tag.access === "" || tag.access === undefined) ? '*' : tag.appearing}
+    >
+    
+    <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
+    ${tagName}
+    </label>
+    
+    <select 
+    id="${tagObj.name}Appearing" 
+    class="item-dropdown-cell item-dropdown-column">
+    <option value="Encounter" ${(tag.appearing === 'Encounter') ? 'selected' : ''}>Encounter</option>
+    <option value="Wild" ${(tag.appearing === 'Wild') ? 'selected' : ''}>Wild</option>
+    <option value="Lair" ${(tag.appearing === 'Lair') ? 'selected' : ''}>Lair</option>
+    </select>
+    
+    
+    </div>`
+    
+    monstersRow.innerHTML = rowHTML;
+    monstersTable.appendChild(monstersRow);
+    
+    const itemRow = document.getElementById(tagObj.name + "Container")
+    const appearingInput = document.getElementById(tagObj.name + "Appearing");
+    
+    
+    appearingInput.addEventListener('change', function() {
+        itemRow.setAttribute('tagAppearing', appearingInput.value);
+    });
+    
+    
+    let tagEventDiv = document.getElementById('Item' + tag.id);
+    
+    tagEventDiv.addEventListener('click', function(event){
+    
+    if(event.shiftKey){ //shift-click
+    //Remove tag from item.
+    event.preventDefault();
+    console.log(tag, tagObj)
+    obj.tags = obj.tags.filter(item => item.id !== tag.id);
+    
+    //Remove item from other item's tags.
+    if(!tagObj.special){
+    
+    let delTags = tagObj.tags
+    //console.log(delTags, obj.id)
+    delTags = delTags.filter(item => parseInt(item.id) !== obj.id);
+    //console.log(delTags)
+    tagObj.tags = delTags;
+    }
+    
+    //Repackage.
+    NPCs.buildNPC();
+    form.createForm(obj);
+    //Storyteller.refreshLocation();  
+    }
+    
+    else if(event.button === 0 && !tagObj.special){ //left-click
+    //find tagObj based on Name!
+    form.createForm(tagObj);   
+    }
+    });
+    });
+       
 }else{
 
 tagsToAdd.forEach(tag => {

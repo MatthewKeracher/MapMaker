@@ -51,153 +51,145 @@ enablePencilTool(canvas) {
 enableMovableIcons() {
 
     let members = party.currentParty;
-
-    let canvas = document.getElementById('drawingCanvas');
-
-        const ctx = canvas.getContext('2d');
-        let isDragging = false;
-        let selectedIcon = null;
-        let offsetX, offsetY;
     
         // Map members to icons with necessary properties
-        let icons = members.map(member => ({
+        let icons = members.map((member,index) => ({
             id:member.id,
             name: member.name,
             color: member.color,
             img: new Image(),
-            x: member.x || 200,   // Center horizontally
-            y: member.y || 200, // Center vertically
+            x: member.x || 80,   // Center horizontally
+            y: member.y || 40 * (index + 1), // Center vertically
             width: member.width || 40,  // Default icon size
             height: member.height || 40,
-            src: member.image !== ''? member.image: 'gifs/goblin.gif'    // Image source from member object
+            src: member.image === ''? 'gifs/blankhead.png' : member.image     // Image source from member object
         }));
-    
-        // Load all member icons and draw them on the canvas
-        icons.forEach(icon => {
-            icon.img.src = icon.src;
-            icon.img.onload = () => {
-                ctx.drawImage(icon.img, icon.x, icon.y, icon.width, icon.height);
-            };
-        });
-    
-        // Helper function to check if mouse is over an icon
-        function isMouseOverIcon(mouseX, mouseY, icon) {
-            return mouseX >= icon.x && mouseX <= icon.x + icon.width &&
-                   mouseY >= icon.y && mouseY <= icon.y + icon.height;
-        }
-    
-        // Display the label near the icon when hovered
-        function showLabel(icon, x, y) {
-
-            const container = document.getElementById('imageContainer');
-            const scrollX = container.scrollLeft;
-            const scrollY = container.scrollTop;
 
 
-            const label = document.createElement('div');
-            label.textContent = icon.name;
-            label.className = 'icon-label';
-            label.style.position = 'absolute';
-            label.style.color = icon.color;
-            label.style.left = `${x - scrollX}px`;  // Position label near the icon
-            label.style.top = `${y - scrollY}px`;
-            document.body.appendChild(label);
+        const existingIcons = document.querySelectorAll('.icon');
+        existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
     
-            // Store the reference to label for later removal
-            icon.label = label;
-        }
     
-        // Remove label when not hovering over the icon
-        function clearLabels() {
-            icons.forEach(icon => {
-                if (icon.label) {
-                    document.body.removeChild(icon.label);
-                    icon.label = null;
-                }
-            });
-        }
-    
-        // Start dragging an icon
-        function startDragging(event) {
-            const canvasRect = canvas.getBoundingClientRect();
-            const mouseX = event.clientX - canvasRect.left;
-            const mouseY = event.clientY - canvasRect.top;
-            canvas.style.zIndex = 1000;
-    
-            // Check if the mouse is over any icon
-            icons.forEach(icon => {
-                if (isMouseOverIcon(mouseX, mouseY, icon)) {
-                    isDragging = true;
-                    selectedIcon = icon;
-                    offsetX = mouseX - icon.x;
-                    offsetY = mouseY - icon.y;
-                }
-            });
-        }
-    
-        // Stop dragging
-        function stopDragging() {
-            isDragging = false;
-            selectedIcon = null;
-            canvas.style.zIndex = 0;
-        }
-    
-        // Drag an icon
-        function drag(event) {
-            if (!isDragging || !selectedIcon) return;
-    
-            const canvasRect = canvas.getBoundingClientRect();
-            const mouseX = event.clientX - canvasRect.left;
-            const mouseY = event.clientY - canvasRect.top;
+// Function to create and position icons as HTML elements
+icons.forEach(icon => {
+    // Create img element for each icon
+    const imgElement = document.createElement('img');
+    imgElement.src = icon.src;
+    imgElement.classList.add('icon'); 
+    imgElement.dataset.iconId = `icon-${icon.name}`;
 
-            //Remove Labels
-            clearLabels();
-    
-            // Update the icon's position
-            selectedIcon.x = mouseX - offsetX;
-            selectedIcon.y = mouseY - offsetY;
-    
-            // Redraw the canvas with updated icon positions
-            redrawCanvas();
-        }
-    
-        // Redraw all icons on the canvas
-        function redrawCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            icons.forEach(icon => {
-                ctx.drawImage(icon.img, icon.x, icon.y, icon.width, icon.height);
-                let saveIcon = party.currentParty.find(member => member.name === icon.name);
-                saveIcon.x = icon.x;
-                saveIcon.y = icon.y;
+    // Set initial position and size based on icon data
+    imgElement.style.position = 'absolute';
+    imgElement.style.left = `${icon.x}px`;
+    imgElement.style.top = `${icon.y}px`;
+    imgElement.style.width = `${icon.width}px`;
+    imgElement.style.height = `${icon.height}px`;
 
-            });
+    // Add the img element to the document
+    const container = document.getElementById('imageContainer');
+    container.appendChild(imgElement);
+
+    // Save a reference to the img element inside the icon object for later use
+    icon.imgElement = imgElement;
+
+    // Hover label handling
+    imgElement.addEventListener('mouseover', (event) => {
+        showLabel(icon, event.clientX, event.clientY);
+    });
+
+    imgElement.addEventListener('mouseleave', () => {
+        clearLabels();
+    });
+
+    // Add drag functionality to each icon
+    imgElement.addEventListener('mousedown', startDragging);
+    imgElement.addEventListener('mousemove', drag);
+    imgElement.addEventListener('mouseup', stopDragging);
+    imgElement.addEventListener('mouseleave', stopDragging);
+});
+
+// Helper function to check if mouse is over an icon (No longer needed for HTML elements)
+
+// Display the label near the icon when hovered
+function showLabel(icon, x, y) {
+    const container = document.getElementById('imageContainer');
+    const scrollX = container.scrollLeft;
+    const scrollY = container.scrollTop;
+
+    const label = document.createElement('div');
+    label.textContent = icon.name;
+    label.className = 'icon-label';
+    label.style.position = 'absolute';
+    label.style.color = icon.color;
+    label.style.left = `${x - scrollX}px`;  // Position label near the icon
+    label.style.top = `${y - scrollY}px`;
+    document.body.appendChild(label);
+
+    // Store the reference to the label for later removal
+    icon.label = label;
+}
+
+// Remove label when not hovering over the icon
+function clearLabels() {
+    icons.forEach(icon => {
+        if (icon.label) {
+            document.body.removeChild(icon.label);
+            icon.label = null;
         }
-    
-        // Handle mouse movement for hover labels
-        canvas.addEventListener('mousemove', (event) => {
-            const canvasRect = canvas.getBoundingClientRect();
-            const mouseX = event.clientX - canvasRect.left;
-            const mouseY = event.clientY - canvasRect.top;
-    
-            // Clear any previous labels
-            clearLabels();
-    
-            // Check if hovering over any icon
-            icons.forEach(icon => {
-                if (isMouseOverIcon(mouseX, mouseY, icon)) {
-                    showLabel(icon, mouseX, mouseY);
-                }
-            });
-        });
-    
-        // Attach event listeners to the canvas
-        canvas.addEventListener('mousedown', startDragging);
-        canvas.addEventListener('mousemove', drag);
-        canvas.addEventListener('mouseup', stopDragging);
-        canvas.addEventListener('mouseleave', stopDragging);
+    });
+}
+
+// Variables for dragging
+let isDragging = false;
+let selectedIcon = null;
+let offsetX = 0;
+let offsetY = 0;
+
+// Start dragging an icon
+function startDragging(event) {
+    const iconElement = event.target;
+    const icon = icons.find(icon => icon.imgElement === iconElement);
+
+    if (icon) {
+        isDragging = true;
+        selectedIcon = icon;
+        offsetX = event.clientX - icon.x;
+        offsetY = event.clientY - icon.y;
+ // Bring the icon to the front
+ iconElement.style.zIndex = 1000;
+
+ event.preventDefault(); // Prevent default behavior
     }
-    
+}
 
+// Stop dragging
+function stopDragging() {
+    if (selectedIcon) {
+        selectedIcon.imgElement.style.zIndex = 0;
+        isDragging = false;
+        selectedIcon = null;
+    }
+}
+
+// Drag an icon
+function drag(event) {
+    if (!isDragging || !selectedIcon) return;
+
+    // Update the icon's position
+    const newX = event.clientX - offsetX;
+    const newY = event.clientY - offsetY;
+
+    selectedIcon.x = newX;
+    selectedIcon.y = newY;
+
+    // Update the position of the img element
+    selectedIcon.imgElement.style.left = `${newX}px`;
+    selectedIcon.imgElement.style.top = `${newY}px`;
+}
+
+// No need to redraw the canvas, as icons are now HTML elements
+
+}
 
 
 };

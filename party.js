@@ -26,8 +26,8 @@ const newMonster = {
 ...member,
 ...skills,
 class: "Monster",
-x: 200 + (i * 40),
-y: 100,
+x: 40,
+y: 40 + (i * 40),
 name: member.name + ' ' + i,
 initiative: 0,
 hitPoints: helper.rollMultipleDice(member.level + 'd8'),
@@ -36,7 +36,6 @@ hitPoints: helper.rollMultipleDice(member.level + 'd8'),
 return newMonster
 },
     
-
 buildParty(){
 
 ref.leftParty.innerHTML = '';
@@ -50,8 +49,11 @@ let member = helper.getObjfromTag(element);
 if(member.key === 'monsters'){
 
 let noAppearing = 1;
+
 if (member.encounter.includes('d')) {
-noAppearing = helper.rollMultipleDice(member.encounter); 
+const appearing = element.appearing.toLowerCase();
+console.log(member)
+noAppearing = helper.rollMultipleDice(member[appearing]); 
 }else{
 noAppearing = member.encounter;
 }
@@ -116,7 +118,7 @@ let memberHTML = `
             <div class="member-cell init-column">${member.initiative}</div>
             <div class="member-cell init-column">${memberAC}</div>
             <div class="member-cell init-column">
-            <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" id="${member.name}-hitpoints">
+            <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
             </div>
         </div>
     </div>
@@ -132,6 +134,40 @@ let memberHTML = `
 memberDiv.innerHTML = memberHTML;
 memberRows.appendChild(memberDiv);
 const nameDiv = document.getElementById(member.name);
+nameDiv.dataset.iconId = `icon-${member.name}`;
+
+const hitPointBoxes = document.querySelectorAll('.hitPointBox');
+
+hitPointBoxes.forEach(box => {
+    box.addEventListener('change', (event) => {
+       
+        const newValue = event.target.value; 
+        const findName = box.getAttribute('member')
+        const member = members.find(member => member.name === findName)
+        member.hitPoints = newValue
+        
+    });
+});
+
+
+nameDiv.addEventListener('mouseover', () => {
+    const iconId = nameDiv.getAttribute('data-icon-id');  
+    const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);
+
+    if (icon) {
+        icon.classList.add('icon-highlight');  // Add the highlight class
+    }
+    
+});
+
+nameDiv.addEventListener('mouseout', () => {
+    const iconId = nameDiv.getAttribute('data-icon-id');  // Get the associated icon ID
+    const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);  // Find the corresponding icon
+
+    if (icon) {
+        icon.classList.remove('icon-highlight');  // Remove the highlight class
+    }
+});
 
 nameDiv.addEventListener('click', (event) => {
 
