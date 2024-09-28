@@ -289,7 +289,7 @@ getLocationMonsters(monsters){
     //Add monsters to Party
     monstPartyTags.forEach(monster => {
 
-    load.Data.miscInfo.party.push({key: 'monsters', id: monster.id, type:'monster'});
+    load.Data.miscInfo.party.push({key: 'monsters', id: monster.id, type:'monster', appearing: 'Wild'})
 
     })
 
