@@ -82,8 +82,8 @@ let members = this.currentParty;
 let membersList = load.Data.miscInfo.party;
 ref.leftParty.innerHTML = ``;
 
-ref.Left.style.display = "none";
-ref.Centre.style.display = "none";
+//ref.Left.style.display = "none";
+//ref.Centre.style.display = "none";
 ref.leftParty.style.display = "block";
 
 //Table Headers
