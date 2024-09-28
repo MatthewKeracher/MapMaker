@@ -576,7 +576,7 @@ load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'hero'})
 }
 
 if(clickKey ==='monsters'){
-load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'monster'})
+load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'monster', appearing: 'Wild'})
 }
 
 //Repackage.
