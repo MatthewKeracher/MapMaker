@@ -181,7 +181,9 @@ makeDiv(type, obj, parent, color){
         
         foundHeader.appendChild(childDiv);
     } else {    
+        try{
         parent.appendChild(childDiv);
+        }catch{console.log('Could not makeDiv:', type, obj, parent, color)}
     }
     
 },
