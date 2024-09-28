@@ -565,14 +565,18 @@ this.classList.add('misc');
 div.addEventListener('click', (event) => {
 
 //... if shift-click
-//...add NPC to Party
 if(event.shiftKey && ref.leftParty.style.display === 'block'){
 event.preventDefault();
 const clickId = div.getAttribute('id')
 const clickKey = div.getAttribute('key')
 
-if(clickKey === 'npcs' || clickKey ==='monsters'){
+//...add NPC to Party
+if(clickKey === 'npcs'){
 load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'hero'})
+}
+
+if(clickKey ==='monsters'){
+load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'monster'})
 }
 
 //Repackage.
