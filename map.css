@@ -22,8 +22,9 @@ border: 0.4vh solid teal;
 width: 0px; /* Set the width of the scrollbar */
 }
 
-.map-image {
+#mapElement {
 position: relative;
+opacity: 1;
 z-index: 0;
 }
 
@@ -31,6 +32,7 @@ z-index: 0;
 border: 1px solid red; /* Optional */
 pointer-events: auto;
 z-index: 0;
+stroke: teal;
 /* position : absolute;
 top:0;
 left:0;

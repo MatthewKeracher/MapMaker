@@ -10,6 +10,8 @@ import party from "./party.js";
 
 const battleMap = {
 
+hexCenters: [],
+
 enablePencilTool(canvas) {
   const ctx = canvas.getContext('2d');
   let isDrawing = false;
@@ -205,7 +207,60 @@ function drag(event) {
 
 
 expandable.showIcon()
+  // Draw the hex grid
+  battleMap.drawGrid();
 
+},
+
+
+// Function to draw the hex grid
+drawGrid() {
+
+    const canvas = document.getElementById('drawingCanvas');
+    this.hexCenters = [];
+    
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const mapElement = document.getElementById('mapElement');
+    mapElement.style.opacity = 0.8;
+   
+    const width = canvas.width;
+    const height = canvas.height;
+    const a = Math.PI / 3;
+    const r= 25;
+
+    for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
+        for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
+          
+          // Calculate the center of the hexagon
+          const centerX = x + (j % 2) * (r * (1 + Math.cos(a)) / 2); // Offset for staggered rows
+          const centerY = y;
+
+          // Store the center coordinates
+          this.hexCenters.push({ x: centerX, y: centerY });
+
+          this.drawHexagon(x, y, a, r);
+          
+        }
+      }
+
+      //console.log(this.hexCenters)
+  },
+
+// Function to draw a single hexagon
+drawHexagon(x, y, a, r) {
+
+    const canvas = document.getElementById('drawingCanvas')
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = "gold"
+
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
+    }
+    ctx.closePath();
+    ctx.stroke();
 }
 
 

@@ -5,6 +5,7 @@ mapContainer: document.getElementById('mapContainer'),
 imageContainer: document.querySelector('.image-container'),
 mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
+Banner: document.getElementById('Banner'),
 
 //SearchBar
 eventManager: document.getElementById('eventManager'),

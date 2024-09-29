@@ -72,6 +72,8 @@ mapElement.id = "mapElement";
 // Add a class to the <img> element for styling
 mapElement.className = "map-image";
 
+ref.Banner.style.display = "none";
+
 // Create a container div for the image
 const imageContainer = document.createElement('div');
 imageContainer.id = "imageContainer"
@@ -96,7 +98,8 @@ mapElement.onload = () => {
 
   // Enable battleMap when new map loads.
   battleMap.enablePencilTool(canvas);
-  //battleMap.loadIcons()
+
+
 };
 
 
