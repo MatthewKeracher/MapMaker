@@ -131,7 +131,9 @@ queryButton() {
     
     }
 
-    editor.loadList(load.Data);
+    if(Edit.editMode){
+    editor.loadList(load.Data)
+    }
 };
 
 

@@ -3,7 +3,7 @@ import load from "./load.js";
 import form from "./form.js";
 import helper from "./helper.js";
 import events from "./events.js";
-import Storyteller from "./storyteller.js";
+import classes from "./classes.js";
 import battleMap from "./battleMap.js";
 import NPCbuild from "./classes.js";
 
@@ -22,10 +22,13 @@ skills[skillName] = skill;
 skills['mod'+skillName] = NPCbuild.getModifier(parseInt(skill));
 });
 
+const rolledLevel = helper.rollMultipleDice(member.level);
+
 const newMonster = {
 ...member,
 ...skills,
-class: "Monster",
+level:  rolledLevel,
+attackBonus: classes.getAttackBonus({class: member.class, level:rolledLevel}),
 x: 40,
 y: 40 + (i * 40),
 name: member.name + ' ' + i,
@@ -48,13 +51,13 @@ membersList.forEach(memberTag => {
     
 let memberObj = helper.getObjfromTag(memberTag);
 
-if(memberObj.key === 'monsters'){
+if(memberTag.type === 'monster'){
 
 let noAppearing = 1;
 
 if (memberObj.encounter.includes('d')) {
 const appearing = memberTag.appearing.toLowerCase();
-console.log(appearing, memberObj[appearing])
+//console.log(appearing, memberObj[appearing])
 noAppearing = helper.rollMultipleDice(memberObj[appearing]); 
 }else{
 noAppearing = memberObj.encounter;
@@ -95,6 +98,7 @@ let headerHTML = `
         <div id="headerRow" class="header-row">
             <div id="nameColumn" class="member-cell name-column" style="color:rgba(255, 255, 255, 0.376)">Name</div>
             <div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">L</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AB</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">M</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
@@ -120,6 +124,7 @@ let memberHTML = `
         <div id="${member.name}Row" class="member-row">
             <div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
             <div class="member-cell class-column">${member.class}</div>
+             <div class="member-cell init-columnn">${member.level}</div>
             <div class="member-cell init-columnn">+${member.attackBonus}</div>
             <div class="member-cell init-columnn">${member.morale}</div>
             <div class="member-cell init-column">${member.initiative}</div>

@@ -6,6 +6,7 @@ import load from "./load.js";
 import helper from "./helper.js";
 import expandable from "./expandable.js";
 import party from "./party.js";
+import battleMap from "./battleMap.js";
 
 
 
@@ -203,6 +204,7 @@ const partyDisplay = ref.leftParty.style.display;
 
 party.buildParty();
 party.loadParty();
+//battleMap.loadIcons();
 
 ref.leftParty.style.display = partyDisplay;
 
@@ -250,17 +252,18 @@ getLocationAmbience(locAmbience){
     ambObjs.push(ambObj)
     
     })
+    });
     
     ambObjs.sort((a, b) => a.order - b.order);
+   
     
     ambObjs.forEach(ambObj => {
     
-    
-    this.makeDiv("ambience", ambObj, ref.Storyteller);
+    this.makeDiv("ambience", ambObj, ref.Storyteller, "color");
     
     })
     
-    });
+  
     
     
     
@@ -360,12 +363,12 @@ filterData.push(JSON.parse(JSON.stringify(subLoc))); // Deep copy each object
 let subLocations = [...filterData];
 subLocations.sort((a, b) => a.order - b.order);
 
-if(subLocations.length === 0){
-//console.log('No Sublocations')
-const { description, ...locObjAsSubLoc } = locObj;
-locObjAsSubLoc.description = '';
+// if(subLocations.length === 0){
+// //console.log('No Sublocations')
+// const { description, ...locObjAsSubLoc } = locObj;
+// locObjAsSubLoc.description = '';
 
-subLocations.push(locObjAsSubLoc)}
+// subLocations.push(locObjAsSubLoc)}
 
 return subLocations;
 

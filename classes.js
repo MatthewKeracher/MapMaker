@@ -22,7 +22,7 @@ this.alignment = data.alignment,
 this.species = data.species,
 this.tags = NPCbuild.followInstructions(data.tags, data.class, data.level);
 NPCbuild.getHitPoints(this);
-NPCbuild.getAttackBonus(this);
+this.attackBonus = NPCbuild.getAttackBonus(this);
 try{NPCbuild.getSpeciesData(this)}catch{this.species = 'Human'}
 this.group = data.group,
 this.subGroup = data.subGroup,
@@ -552,7 +552,8 @@ return null;
 }
 
 let tableReturn = NPCbuild.mapSkills(Table, level, ['attackBonus']);
-npc.attackBonus = tableReturn.attackBonus;
+let attackBonus = tableReturn.attackBonus;
+return attackBonus;
 }
 
 static getSpellSlots(npcClass, npcLevel) {

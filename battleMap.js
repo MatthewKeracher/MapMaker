@@ -98,7 +98,6 @@ icons.forEach(icon => {
 
         try{
         const nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
-        console.log(nameDiv)
 
         nameDiv.scrollIntoView({ 
             behavior: 'smooth', // Smooth scrolling effect

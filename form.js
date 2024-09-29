@@ -679,7 +679,7 @@ if(obj.key !== 'npcs'){
 const properKey = helper.proper(obj.key);
 const container = document.getElementById(this.buildSection(properKey + ' Settings', obj));
 
-for (const key in obj) {
+for (let key in obj) {
     if (
         obj.hasOwnProperty(key) && 
         !excludedKeys.includes(key) && 
@@ -688,21 +688,42 @@ for (const key in obj) {
         !monsterKeys.includes(key)
     ) {  // Check if key is not excluded
 
+//Add Class Dropdown to Monsters.
+if(key === 'class'){key = {name: "class", options: ["Fighter", "Thief", "Magic User", "Cleric", "Assassin","Ranger"]}}
+
 const elementContainer = document.createElement('div');
 
 let elementContent =  `
 <div class="field-table">
 
-    <div id="${[key]}Row" class="field-row">
+   
+    ${
+        key.options ? 
+        ` <div id="${[key.name]}Row" class="field-row">
 
-    <label divId="${[key]}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">
-    ${helper.proper(key)}
-    </label>
+        <label divId="${[key.name]}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">
+        ${helper.proper(key.name)}
+        </label>
 
-    <input 
-    id="edit${[key]}" 
-    type="text" 
-    class="field-cell field-column leftTextshort entry-input">
+        <select 
+        id="${key.name}Select" 
+        class="field-cell field-column leftTextshort entry-input">
+        ${key.options.map(option => `<option value="${option}" ${option === obj[key.name] ? 'selected' : ''}>${option}</option>`).join('')}
+        </select>` :
+       
+        ` <div id="${[key]}Row" class="field-row">
+
+        <label divId="${[key]}" class="field-cell fieldName-column entry-label" style="color:${obj.color}">
+        ${helper.proper(key)}
+        </label>
+
+        <input 
+        id="edit${[key]}" 
+        type="text" 
+        class="field-cell field-column leftTextshort entry-input">`
+    }
+
+    
 
     </div>
 
@@ -711,6 +732,8 @@ let elementContent =  `
 
 elementContainer.innerHTML = elementContent;
 container.appendChild(elementContainer);
+
+if(!key.options){
 
 const elementText = document.getElementById('edit' + key);
 const lineHeight = parseFloat(window.getComputedStyle(elementText).lineHeight);
@@ -736,6 +759,8 @@ elementContainer.querySelector('.leftTextshort').focus();
 elementContainer.querySelector('.leftTextshort').select();
 });
 
+
+}
 }
 }
 }

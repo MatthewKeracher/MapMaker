@@ -31,9 +31,9 @@
 }
 
 /* Set individual column widths */
-.name-column { width: 40%; }
+.name-column { width: 30%; }
 .class-column { width: 20%; }
-.init-column { width: 8%; }
+.init-column { width:calc(50% / 6); }
 
 
 /* NPC SCORES */

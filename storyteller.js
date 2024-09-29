@@ -78,7 +78,7 @@ expandable.goToEdit();
 
 // if(locObj.image !== ''){
 // console.log('loading Icons...')
-// battleMap.loadIcons();
+
 // }
 //helper.updateEventContent();
 
