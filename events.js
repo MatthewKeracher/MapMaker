@@ -206,11 +206,6 @@ party.buildParty();
 party.loadParty();
 
 
-setTimeout(() => {
-   battleMap.loadIcons()
-}, 500); 
-
-
 ref.leftParty.style.display = partyDisplay;
 
 },

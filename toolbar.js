@@ -36,7 +36,7 @@ Events.loadEventListeners();
 
 //mainToolbar
 ref.partyButton.addEventListener('click', this.partyButton);
-ref.mapButton.addEventListener('click', this.mapButton);
+ref.gridButton.addEventListener('click', this.gridButton);
 ref.dataButton.addEventListener('click', this.dataButton);
 ref.addButton.addEventListener('click', this.addButton); 
 ref.editButton.addEventListener('click', this.editButton);
@@ -55,15 +55,15 @@ load.saveToBrowser();
 
 speakButton(){
 
-    if(Storyteller.speaking === false){
-        
-        Storyteller.speaking = true
-        Storyteller.textToSpeech(ref.Storyteller.textContent, Storyteller.speaking);
-        }else{
-        
-        Storyteller.speaking = false
-        Storyteller.textToSpeech(ref.Storyteller.textContent, Storyteller.speaking);
-        }
+if(Storyteller.speaking === false){
+
+Storyteller.speaking = true
+Storyteller.textToSpeech(ref.Storyteller.textContent, Storyteller.speaking);
+}else{
+
+Storyteller.speaking = false
+Storyteller.textToSpeech(ref.Storyteller.textContent, Storyteller.speaking);
+}
 
 }
 
@@ -104,73 +104,81 @@ ref.queryWindow.style.display = "none";
 }
 
 queryButton() {
-    const codeInput = document.getElementById('queryText').value; // Get the user-provided code
-    const data = load.Data; // Assume load.Data is your data object
+const codeInput = document.getElementById('queryText').value; // Get the user-provided code
+const data = load.Data; // Assume load.Data is your data object
 
-    for (const key in data) {
-        let obj = data[key];
+for (const key in data) {
+let obj = data[key];
 
-            try {
+try {
 
-                if(key !== 'miscInfo'){
-                // Create a new function with the user code integrated into the predefined structure
-                const userFunction = new Function('obj', `
-                    return obj.map(entry => {
-                        ${codeInput} // Inject user-provided code here
-                        return entry;
-                    });
-                `);
+if(key !== 'miscInfo'){
+// Create a new function with the user code integrated into the predefined structure
+const userFunction = new Function('obj', `
+    return obj.map(entry => {
+        ${codeInput} // Inject user-provided code here
+        return entry;
+    });
+`);
 
-                // Apply the user code to the obj array
-                data[key] = userFunction(obj);
+// Apply the user code to the obj array
+data[key] = userFunction(obj);
 
-                }
+}
 
-            } catch (error) {
-                console.error('Error executing user code:', error);
-            }
-    
-    }
+} catch (error) {
+console.error('Error executing user code:', error);
+}
 
-    if(Edit.editMode){
-    editor.loadList(load.Data)
-    }
+}
+
+if(Edit.editMode){
+editor.loadList(load.Data)
+}
+};
+
+gridButton() {  
+
+const mapElement = document.getElementById('mapElement');
+const canvas = document.getElementById('drawingCanvas');
+let labels = document.querySelectorAll('.position-div');
+const ctx = canvas.getContext('2d');
+
+if(battleMap.gridShowing === false){
+
+battleMap.gridShowing = true;
+battleMap.drawGrid();
+canvas.style.backgroundColor = 'black';
+labels.forEach(div => {div.style.display = 'none'});
+battleMap.loadIcons()
+
+}else{
+
+battleMap.gridShowing = false;
+canvas.style.backgroundColor = 'transparent';
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+mapElement.style.opacity = 1;
+labels.forEach(div => {div.style.display = 'block'});
+
+const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
+existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
+
+}
 };
 
 
 partyButton(){
 
-//Get stuck icons from behind labels.
-const imageContainer = document.getElementById('imageContainer')
-let labels = document.querySelectorAll('.position-div');
-
 if(ref.leftParty.style.display === 'block'){
 partyButton.classList.remove('click-button')
 ref.leftParty.style.display = 'none'
-
-//Erase Grid
-const canvas = document.getElementById('drawingCanvas');
-const ctx = canvas.getContext('2d');
-
-const mapElement = document.getElementById('mapElement');
-mapElement.style.opacity = 1;
-
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-labels.forEach(div => {div.style.display = 'block'});
 
 
 }else{
 partyButton.classList.add('click-button')
 party.loadParty()
 
-// Draw the hex grid
-battleMap.drawGrid();
 
-const mapElement = document.getElementById('mapElement');
-mapElement.style.opacity = 0.7;
-
-labels.forEach(div => {div.style.display = 'none'});
 
 }
 
@@ -183,6 +191,12 @@ window.speechSynthesis.pause();
 if(ref.leftExpand.style.display !== 'none'){
 ref.leftExpand.style.display = "none";
 ref.leftExpand.innerHTML = ``;
+return
+}
+
+
+if(battleMap.gridShowing === true){
+gridButton.click();
 return
 }
 
@@ -212,17 +226,17 @@ if(ref.Left.style.display === "none" && ref.Centre.style.display === "none"){
 
 if(Storyteller.currentLocationId === Storyteller.grandParentLocationId){
 
-    helper.showPrompt('Do you want to create a new outer level?', 'yesNo');
+helper.showPrompt('Do you want to create a new outer level?', 'yesNo');
 
-    helper.handleConfirm = function(confirmation) {
-    const promptBox = document.querySelector('.prompt');
-        
-    if (confirmation) {
-    Map.newMasterLocation();
-    promptBox.style.display = 'none';
-    } else{
-    promptBox.style.display = 'none';
-    }
+helper.handleConfirm = function(confirmation) {
+const promptBox = document.querySelector('.prompt');
+
+if (confirmation) {
+Map.newMasterLocation();
+promptBox.style.display = 'none';
+} else{
+promptBox.style.display = 'none';
+}
 
 };
 
@@ -242,13 +256,7 @@ ref.Left.style.display = "none";
 
 };
 
-mapButton() {  
-Map.fetchAndProcessImage()
-document.getElementById('Banner').style.display = "none";
-ref.Right.style.display = 'block';
-ref.Storyteller.display = 'block';
 
-};
 
 dataButton() {
 ref.fileInput.addEventListener('change', (event) => {
@@ -301,7 +309,7 @@ canvas.style.display = "none";
 console.log('Adding Map Events Listeners')
 mapElement.addEventListener('mousedown', Add.handleMouseDown);
 mapElement.addEventListener('mousemove', Add.handleMouseMove); 
-  
+
 ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'none';
 });
@@ -313,7 +321,7 @@ canvas.style.display = "block";
 console.log('Removing Map Events Listeners')
 mapElement.removeEventListener('mousedown', Add.handleMouseDown);
 mapElement.removeEventListener('mousemove', Add.handleMouseMove); 
- 
+
 ref.locationDivs.forEach((selection) => {
 selection.style.pointerEvents = 'auto';
 });

@@ -32,8 +32,8 @@ switch (key) {
 case 'p':
 partyButton.click();
 break;
-case 'm':
-    mapButton.click();
+case 'g':
+    gridButton.click();
     break;
 case 'a':
     addButton.click();
@@ -56,6 +56,9 @@ case ',':
  case 'n':
     newButton.click();
     break;
+case 'c':
+copyButton.click();
+break;
 case 'd':
     deleteButton.click();
     break;

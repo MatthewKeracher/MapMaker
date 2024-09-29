@@ -30,7 +30,7 @@ leftParty: document.getElementById('leftParty'),
 //Toolbar
 mainToolbar: document.getElementById('mainToolbar'),
 partyButton: document.getElementById('partyButton'),
-mapButton: document.getElementById('mapButton'),
+gridButton: document.getElementById('gridButton'),
 dataButton: document.getElementById('dataButton'),
 addButton: document.getElementById('addButton'),
 editButton: document.getElementById('editButton'),

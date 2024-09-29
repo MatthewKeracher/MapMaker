@@ -1607,7 +1607,7 @@ if(copy === undefined){
     
     //Define what values for copies.
     newEntry.id = newId,
-    newEntry.name = obj.name + ' (Copy)'
+    newEntry.name = obj.name 
     newEntry.order = parseInt(copy) + parseInt(obj.order);
 
     //Special rules from Locations and subLocations

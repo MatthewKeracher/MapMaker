@@ -19,6 +19,7 @@ currentLocationId: '',
 parentLocationId: '',
 grandParentLocationId: '',
 speaking: false,
+gridColour: 'black',
 
 async changeContent(locId) {
 
@@ -29,21 +30,17 @@ ref.Storyteller.innerHTML = '';
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 
-if(!locObj){this.changeContent(1000)}
+if(!locObj){this.changeContent(this.parentLocationId)}
 
 const locName = locObj.name
 this.currentLocationId = locId
 
-this.parentLocationId = locId
-this.grandParentLocationId = locObj.parentId
-
 if(locObj.image && locObj.image !== ""){
 
+
+this.parentLocationId = locId
+this.grandParentLocationId = locObj.parentId
 Map.fetchAndProcessImage(locObj.image)   
-
-}else{
-
-Map.fetchAndProcessImage('https://i.postimg.cc/13qcWPm1/image.png')  
 
 }
 
@@ -71,6 +68,8 @@ this.addImagestoStory();
 expandable.expandExtend(ref.Storyteller);
 expandable.showFloatingExpandable();
 expandable.goToEdit();
+
+Storyteller.gridColour = locObj.color;
 
 };
 }, 

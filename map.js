@@ -18,6 +18,7 @@ async fetchAndProcessImage(url) {
   
 //console.log('Receievd URL', url)
 
+
 // Remove the existing map and its associated elements
 const existingMap = document.getElementById('imageContainer');
 

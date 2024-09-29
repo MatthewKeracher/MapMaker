@@ -5,12 +5,15 @@ import load from "./load.js";
 import ref from "./ref.js";
 import expandable from "./expandable.js";
 import party from "./party.js";
+import Map from "./map.js";
+import Storyteller from "./storyteller.js";
 
 
 
 const battleMap = {
 
 hexCenters: [],
+gridShowing: false,
 
 enablePencilTool(canvas) {
   const ctx = canvas.getContext('2d');
@@ -26,10 +29,10 @@ enablePencilTool(canvas) {
   function draw(e) {
       if (!isDrawing) return;
       
-      ctx.strokeStyle = 'red'; // Pencil color
+      ctx.strokeStyle = Storyteller.gridColour; // Pencil color
       ctx.lineJoin = 'round';    // Smooth line joins
       ctx.lineCap = 'round';     // Smooth line ends
-      ctx.lineWidth = 3;         // Pencil thickness
+      ctx.lineWidth = 6;         // Pencil thickness
       
       ctx.beginPath();
       ctx.moveTo(lastX, lastY); // Move to the last point
@@ -213,7 +216,7 @@ expandable.showIcon()
 
 
 // Function to draw the hex grid
-drawGrid() {
+drawGrid() { 
 
     const canvas = document.getElementById('drawingCanvas');
     this.hexCenters = [];
@@ -252,9 +255,9 @@ drawHexagon(x, y, a, r) {
     const ctx = canvas.getContext('2d');
 
     //Drawing Style
-    ctx.strokeStyle = "rgba(39, 215, 215, 0.611)"
+    ctx.strokeStyle = Storyteller.gridColour;
     ctx.lineWidth = 2;
-    ctx.globalAlpha = 0.7;
+    ctx.globalAlpha = 0.5;
 
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
