@@ -28,12 +28,13 @@
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Prevent overflow */
     text-overflow: ellipsis; /* Show ellipsis for overflow */
+    color: rgba(39, 215, 215, 0.611)
 }
 
 /* Set individual column widths */
 .name-column { width: 30%; }
-.class-column { width: 20%; }
-.init-column { width:calc(50% / 6); }
+.class-column { width: 15%; }
+.init-column { width:calc(55% / 7); }
 
 
 /* NPC SCORES */

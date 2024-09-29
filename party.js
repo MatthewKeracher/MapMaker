@@ -98,8 +98,9 @@ let headerHTML = `
         <div id="headerRow" class="header-row">
             <div id="nameColumn" class="member-cell name-column" style="color:rgba(255, 255, 255, 0.376)">Name</div>
             <div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">L</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Lvl</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AB</div>
+            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Dam</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">M</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
             <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
@@ -126,6 +127,7 @@ let memberHTML = `
             <div class="member-cell class-column">${member.class}</div>
              <div class="member-cell init-columnn">${member.level}</div>
             <div class="member-cell init-columnn">+${member.attackBonus}</div>
+             <div class="member-cell init-columnn">${member.damage}</div>
             <div class="member-cell init-columnn">${member.morale}</div>
             <div class="member-cell init-column">${member.initiative}</div>
             <div class="member-cell init-column">${memberAC}</div>

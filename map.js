@@ -90,8 +90,8 @@ mapElement.onload = () => {
   canvas.style.left = "0";
   
   // Set canvas dimensions to match the image
-  canvas.width = mapElement.width;
-  canvas.height = mapElement.height;
+  canvas.width = 1200;
+  canvas.height = 800;
 
   // Append canvas to the container
   imageContainer.appendChild(canvas);

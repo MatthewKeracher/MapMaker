@@ -204,7 +204,12 @@ const partyDisplay = ref.leftParty.style.display;
 
 party.buildParty();
 party.loadParty();
-//battleMap.loadIcons();
+
+
+setTimeout(() => {
+   battleMap.loadIcons()
+}, 500); 
+
 
 ref.leftParty.style.display = partyDisplay;
 
@@ -953,6 +958,8 @@ this.EntryDisplay = 'none'
 
 getCurrentAC(npc){
 
+if(npc.key === 'monsters'){return npc.armourClass};
+
 //Check for Highest AC Value.
 const itemTags = npc.tags.filter(tag => tag.key === 'items')
 
@@ -981,8 +988,10 @@ const optionAC = optionObj.armourClass;
 const shieldCheck = optionAC? optionAC.toString().charAt(0) : '';
 const isShield = shieldCheck === '+'
 
+
 if(isShield){
-npcArmourBonus = +npcArmourBonus + +optionAC;
+let shieldAC = optionAC.slice(1);
+npcArmourBonus =  npcArmourBonus + shieldAC;
 return
 }
 
@@ -991,7 +1000,9 @@ npcArmourClass = optionObj.armourClass
 }
 })
 
-return npcArmourClass + npcArmourBonus;
+let finalAC = parseInt(npcArmourClass) + parseInt(npcArmourBonus);
+
+return finalAC;
 }
 
 }

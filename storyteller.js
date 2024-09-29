@@ -18,7 +18,7 @@ miscInfo: '',
 currentLocationId: '',
 parentLocationId: '',
 grandParentLocationId: '',
-speaking: true,
+speaking: false,
 
 async changeContent(locId) {
 
@@ -29,17 +29,21 @@ ref.Storyteller.innerHTML = '';
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 
-if(!locObj){this.changeContent(this.parentLocationId)}
+if(!locObj){this.changeContent(1000)}
 
 const locName = locObj.name
 this.currentLocationId = locId
 
-if(locObj.image && locObj.image !== ""){
-
 this.parentLocationId = locId
 this.grandParentLocationId = locObj.parentId
 
-Map.fetchAndProcessImage(locObj.image)
+if(locObj.image && locObj.image !== ""){
+
+Map.fetchAndProcessImage(locObj.image)   
+
+}else{
+
+Map.fetchAndProcessImage('https://i.postimg.cc/13qcWPm1/image.png')  
 
 }
 
@@ -60,27 +64,13 @@ Events.eventDialogue = [];
 Events.eventActions = [];
 Events.getEvent(locObj);
 
-Story += `
-<span class="withbreak">${Events.eventDesc}</span>
-`;
-
 //Finish Up.
-//ref.Storyteller.innerHTML = Story;
 this.addImagestoStory();
 
 //Tell expandable Divs what to show.
 expandable.expandExtend(ref.Storyteller);
 expandable.showFloatingExpandable();
-//---
-//window.speechSynthesis.cancel();
-
 expandable.goToEdit();
-
-// if(locObj.image !== ''){
-// console.log('loading Icons...')
-
-// }
-//helper.updateEventContent();
 
 };
 }, 

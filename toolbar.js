@@ -10,6 +10,7 @@ import save   from "./save.js";
 import Storyteller from "./storyteller.js";
 import party from "./party.js";
 import helper from "./helper.js";
+import battleMap from "./battleMap.js";
 
 class Toolbar{
 
@@ -147,12 +148,27 @@ if(ref.leftParty.style.display === 'block'){
 partyButton.classList.remove('click-button')
 ref.leftParty.style.display = 'none'
 
+//Erase Grid
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas.getContext('2d');
+
+const mapElement = document.getElementById('mapElement');
+mapElement.style.opacity = 1;
+
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 labels.forEach(div => {div.style.display = 'block'});
 
 
 }else{
 partyButton.classList.add('click-button')
 party.loadParty()
+
+// Draw the hex grid
+battleMap.drawGrid();
+
+const mapElement = document.getElementById('mapElement');
+mapElement.style.opacity = 0.7;
 
 labels.forEach(div => {div.style.display = 'none'});
 
@@ -162,7 +178,7 @@ labels.forEach(div => {div.style.display = 'none'});
 
 escButton(){
 //console.log('esc')
-window.speechSynthesis.cancel();
+window.speechSynthesis.pause();
 
 if(ref.leftExpand.style.display !== 'none'){
 ref.leftExpand.style.display = "none";

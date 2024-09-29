@@ -68,7 +68,7 @@ loadIcons() {
         }));
 
 
-        const existingIcons = document.querySelectorAll('.icon');
+        const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
         existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
     
 console.log(icons)
@@ -207,8 +207,7 @@ function drag(event) {
 
 
 expandable.showIcon()
-  // Draw the hex grid
-  battleMap.drawGrid();
+
 
 },
 
@@ -221,12 +220,10 @@ drawGrid() {
     
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const mapElement = document.getElementById('mapElement');
-    mapElement.style.opacity = 0.8;
    
     const width = canvas.width;
     const height = canvas.height;
+    //console.log(width, height)
     const a = Math.PI / 3;
     const r= 25;
 
@@ -253,7 +250,11 @@ drawHexagon(x, y, a, r) {
 
     const canvas = document.getElementById('drawingCanvas')
     const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = "gold"
+
+    //Drawing Style
+    ctx.strokeStyle = "rgba(39, 215, 215, 0.611)"
+    ctx.lineWidth = 2;
+    ctx.globalAlpha = 0.7;
 
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
@@ -261,9 +262,7 @@ drawHexagon(x, y, a, r) {
     }
     ctx.closePath();
     ctx.stroke();
-}
-
-
+},
 
 };
 

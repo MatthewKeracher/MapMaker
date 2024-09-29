@@ -403,19 +403,24 @@ checkStoredData(){
 
 if (localStorage.getItem('myData')) {
 
-helper.showPrompt('Do you want to load autosave?', 'yesNo');
+// helper.showPrompt('Do you want to load autosave?', 'yesNo');
 
-    helper.handleConfirm = function(confirmation) {
-    const promptBox = document.querySelector('.prompt');
+//     helper.handleConfirm = function(confirmation) {
+//     const promptBox = document.querySelector('.prompt');
         
-    if (confirmation) {
+//     if (confirmation) {
+//     load.getStoredData();
+//     promptBox.style.display = 'none';
+//     } else{
+//     promptBox.style.display = 'none';
+//     }}
+
+
+setTimeout(() => {
     load.getStoredData();
-    promptBox.style.display = 'none';
-    } else{
-    promptBox.style.display = 'none';
-    }
+}, 500); // 3000 milliseconds = 3 seconds
     
-}}
+}
 },
 
 getStoredData(){
