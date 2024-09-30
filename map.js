@@ -83,27 +83,6 @@ imageContainer.appendChild(mapElement);
 
 ref.mapContainer.appendChild(imageContainer);
 
-mapElement.onload = () => {
-  const canvas = document.createElement('canvas');
-  canvas.id = "drawingCanvas";
-  canvas.style.position = "absolute";
-  canvas.style.top = "0";
-  canvas.style.left = "0";
-  
-  // Set canvas dimensions to match the image
-  canvas.width = 1200;
-  canvas.height = 800;
-
-  // Append canvas to the container
-  imageContainer.appendChild(canvas);
-
-  // Enable battleMap when new map loads.
-  battleMap.enablePencilTool(canvas);
-
-
-};
-
-
 if (localStorage.getItem('myData')) {
 load.displayLocations(load.Data.locations);
 }

@@ -5,6 +5,7 @@ import editor from "./editor.js";
 import form from "./form.js";
 import Storyteller from "./storyteller.js";
 import helper from "./helper.js";
+import battleMap from "./battleMap.js";
 
 
 const save = {
@@ -233,6 +234,40 @@ Storyteller.refreshLocation();
 }},
 
 deleteDataEntry: function(){
+
+    if(battleMap.gridShowing === true){
+
+        helper.showPrompt('Are you sure you want to delete your drawing?', 'yesNo');
+
+        helper.handleConfirm = function(confirmation) {
+        const promptBox = document.querySelector('.prompt');
+
+    if (confirmation) {
+
+
+        const locId = parseInt(Storyteller.currentLocationId);
+        const saveEntry = battleMap.canvasData.findIndex(entry => parseInt(entry.id) === locId);
+        //console.log(saveEntry)
+        
+        try{
+        battleMap.canvasData.splice(saveEntry,1);
+        //console.log('Deleted', battleMap.canvasData)
+        }catch{console.log('Could not Delete Image')}
+        
+        const ctx = ref.annotations.getContext('2d');
+        ctx.clearRect(0, 0, ref.annotations.width, ref.annotations.height);
+        
+        
+        promptBox.style.display = 'none';
+
+        // Refresh or update UI as needed
+        } else {
+        console.log('Deletion canceled.');
+        promptBox.style.display = 'none';
+        }
+    }
+    return
+}
 
 //Retrieve key and id of entry for deletion.
 const key = document.getElementById('key').getAttribute('pair');

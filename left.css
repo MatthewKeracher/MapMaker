@@ -4,12 +4,12 @@
 
 /* Position */
 position: fixed;
-top:1vh;  
+top:0.4vh;  
 left: 0.2vw; 
 width: 30vw;
 height: auto;
 max-height: 89.5vh;
-z-index:10;
+z-index:1000;
 
 /* Text */  
 font-family: monospace;
@@ -35,7 +35,7 @@ outline: 0.4vh solid teal;
 /* Position */
 position: absolute;
 cursor: move;
-top:90vh;  
+top:50vh;  
 left: 5vw; 
 width: 55vw;
 height: auto;
@@ -51,7 +51,6 @@ text-align: left;
 
 /* Appearance */
 background-color: black;
-opacity: 0.85;
 display: none;
 padding: 1vh; 
 overflow-y: auto;

@@ -14,145 +14,179 @@ const battleMap = {
 
 hexCenters: [],
 gridShowing: false,
+canvasData: [],
+erasing: false,
 
 enablePencilTool(canvas) {
-  const ctx = canvas.getContext('2d');
-  let isDrawing = false;
-  let lastX = 0;
-  let lastY = 0;
+const ctx = canvas.getContext('2d');
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
 
-  function startDrawing(e) {
-      isDrawing = true;
-      [lastX, lastY] = [e.offsetX, e.offsetY]; // Start drawing from the current position
-  }
+function startDrawing(e) {
+isDrawing = true;
+[lastX, lastY] = [e.offsetX, e.offsetY]; // Start drawing from the current position
+}
 
-  function draw(e) {
-      if (!isDrawing) return;
-      
-      ctx.strokeStyle = Storyteller.gridColour; // Pencil color
-      ctx.lineJoin = 'round';    // Smooth line joins
-      ctx.lineCap = 'round';     // Smooth line ends
-      ctx.lineWidth = 6;         // Pencil thickness
-      
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY); // Move to the last point
-      ctx.lineTo(e.offsetX, e.offsetY); // Draw to the new point
-      ctx.stroke();
-      [lastX, lastY] = [e.offsetX, e.offsetY]; // Update last position
-  }
+function draw(e) {
+if (!isDrawing) return;
 
-  function stopDrawing() {
-      isDrawing = false;
-      ctx.beginPath(); // Reset the path
-  }
+if (battleMap.erasing) {
+    ctx.globalCompositeOperation = 'destination-out'; // Set to erase mode
+    ctx.lineWidth = 20; // Pencil thickness
+} else {
+    ctx.strokeStyle = Storyteller.gridColour; // Pencil color
+    ctx.globalCompositeOperation = 'source-over'; // Set to normal drawing mode
+    ctx.lineWidth = 6; // Pencil thickness
+}
 
-  // Attach event listeners for drawing
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
+ctx.lineJoin = 'round';    // Smooth line joins
+ctx.lineCap = 'round';     // Smooth line ends
+
+
+ctx.beginPath();
+ctx.moveTo(lastX, lastY); // Move to the last point
+ctx.lineTo(e.offsetX, e.offsetY); // Draw to the new point
+ctx.stroke();
+[lastX, lastY] = [e.offsetX, e.offsetY]; // Update last position
+}
+
+function stopDrawing() {
+isDrawing = false;
+ctx.beginPath(); // Reset the path
+}
+
+// Attach event listeners for drawing
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+// Create and add the button
+const button = document.createElement('button');
+button.id = 'drawToolButton'; // Button ID
+button.style.display = 'none';
+
+// Set initial icon for drawing mode (pencil icon)
+button.style.backgroundImage = 'url("gifs/pencil.png")';
+button.style.backgroundSize = 'cover'; // Adjust size to cover the button
+button.style.backgroundRepeat = 'no-repeat'; // Prevent repeat of the image
+button.style.backgroundPosition = 'center'; // Center the image
+
+button.addEventListener('click', () => {
+
+if(this.erasing === true){
+    this.erasing = false
+    button.style.backgroundImage = 'url("gifs/pencil.png")'; 
+}else{
+    this.erasing = true
+    button.style.backgroundImage = 'url("gifs/eraser.png")'; 
+};
+
+});
+
+// Append the button to the icon container
+ref.iconContainer.appendChild(button);
+
 },
 
 loadIcons() {
 
-    let members = party.currentParty;
-    
-        // Map members to icons with necessary properties
-        let icons = members.map((member,index) => ({
-            id:member.id,
-            name: member.name,
-            color: member.color,
-            img: new Image(),
-            x: member.x || 80,   // Center horizontally
-            y: member.y || 40 * (index + 1), // Center vertically
-            width: member.width || 40,  // Default icon size
-            height: member.height || 40,
-            src: member.image === ''? 'gifs/blankhead.png' : member.image     // Image source from member object
-        }));
+let members = party.currentParty;
 
+// Map members to icons with necessary properties
+let icons = members.map((member,index) => ({
+id:member.id,
+name: member.name,
+color: member.color,
+img: new Image(),
+x: member.x || 80,   // Center horizontally
+y: member.y || 40 * (index + 1), // Center vertically
+width: member.width || 40,  // Default icon size
+height: member.height || 40,
+src: member.image === ''? 'gifs/blankhead.png' : member.image     // Image source from member object
+}));
 
-        const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
-        existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
-    
-console.log(icons)
+const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
+existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
+
 // Function to create and position icons as HTML elements
 icons.forEach(icon => {
-    // Create img element for each icon
-    const imgElement = document.createElement('img');
-    imgElement.src = icon.src;
-    imgElement.classList.add('icon'); 
-    imgElement.dataset.iconId = `icon-${icon.name}`;
+// Create img element for each icon
+const imgElement = document.createElement('img');
+imgElement.src = icon.src;
+imgElement.classList.add('icon'); 
+imgElement.dataset.iconId = `icon-${icon.name}`;
 
-    // Set initial position and size based on icon data
-    imgElement.style.position = 'absolute';
-    imgElement.style.left = `${icon.x}px`;
-    imgElement.style.top = `${icon.y}px`;
-    imgElement.style.width = `${icon.width}px`;
-    imgElement.style.height = `${icon.height}px`;
+// Set initial position and size based on icon data
+imgElement.style.position = 'absolute';
+imgElement.style.left = `${icon.x}px`;
+imgElement.style.top = `${icon.y}px`;
+imgElement.style.width = `${icon.width}px`;
+imgElement.style.height = `${icon.height}px`;
 
-    // Add the img element to the document
-    const container = document.getElementById('imageContainer');
-    container.appendChild(imgElement);
+// Add the img element to the document
+ref.iconContainer.appendChild(imgElement);
 
-    // Save a reference to the img element inside the icon object for later use
-    icon.imgElement = imgElement;
+// Save a reference to the img element inside the icon object for later use
+icon.imgElement = imgElement;
 
-    // Hover label handling
-    imgElement.addEventListener('mouseover', (event) => {
-        showLabel(icon, event.clientX, event.clientY);
+// Hover label handling
+imgElement.addEventListener('mouseover', (event) => {
+showLabel(icon, event.clientX, event.clientY);
 
-        try{
-        const nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
+try{
+const nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
 
-        nameDiv.scrollIntoView({ 
-            behavior: 'smooth', // Smooth scrolling effect
-            block: 'start',     // Align the nameDiv to the top of storyteller
-            inline: 'nearest'   // Optional for horizontal scrolling
-        });
-    }catch{}
+nameDiv.scrollIntoView({ 
+behavior: 'smooth', // Smooth scrolling effect
+block: 'start',     // Align the nameDiv to the top of storyteller
+inline: 'nearest'   // Optional for horizontal scrolling
+});
+}catch{}
 
-    });
+});
 
-    imgElement.addEventListener('mouseleave', () => {
-        clearLabels();
-    });
+imgElement.addEventListener('mouseleave', () => {
+clearLabels();
+});
 
-    // Add drag functionality to each icon
-    imgElement.addEventListener('mousedown', startDragging);
-    imgElement.addEventListener('mousemove', drag);
-    imgElement.addEventListener('mouseup', stopDragging);
-    imgElement.addEventListener('mouseleave', stopDragging);
+// Add drag functionality to each icon
+imgElement.addEventListener('mousedown', startDragging);
+imgElement.addEventListener('mousemove', drag);
+imgElement.addEventListener('mouseup', stopDragging);
+imgElement.addEventListener('mouseleave', stopDragging);
 });
 
 // Helper function to check if mouse is over an icon (No longer needed for HTML elements)
 
 // Display the label near the icon when hovered
 function showLabel(icon, x, y) {
-    const container = document.getElementById('imageContainer');
-    const scrollX = container.scrollLeft;
-    const scrollY = container.scrollTop;
+const container = document.getElementById('imageContainer');
+const scrollX = container.scrollLeft;
+const scrollY = container.scrollTop;
 
-    const label = document.createElement('div');
-    label.textContent = icon.name;
-    label.className = 'icon-label';
-    label.style.position = 'absolute';
-    label.style.color = icon.color;
-    label.style.left = `${x - scrollX}px`;  // Position label near the icon
-    label.style.top = `${y - scrollY}px`;
-    document.body.appendChild(label);
+const label = document.createElement('div');
+label.textContent = icon.name;
+label.className = 'icon-label';
+label.style.position = 'absolute';
+label.style.color = icon.color;
+label.style.left = `${x - scrollX}px`;  // Position label near the icon
+label.style.top = `${y - scrollY}px`;
+document.body.appendChild(label);
 
-    // Store the reference to the label for later removal
-    icon.label = label;
+// Store the reference to the label for later removal
+icon.label = label;
 }
 
 // Remove label when not hovering over the icon
 function clearLabels() {
-    icons.forEach(icon => {
-        if (icon.label) {
-            document.body.removeChild(icon.label);
-            icon.label = null;
-        }
-    });
+icons.forEach(icon => {
+if (icon.label) {
+document.body.removeChild(icon.label);
+icon.label = null;
+}
+});
 }
 
 // Variables for dragging
@@ -163,109 +197,141 @@ let offsetY = 0;
 
 // Start dragging an icon
 function startDragging(event) {
-    const iconElement = event.target;
-    const icon = icons.find(icon => icon.imgElement === iconElement);
+const iconElement = event.target;
+const icon = icons.find(icon => icon.imgElement === iconElement);
 
-    if (icon) {
-        isDragging = true;
-        selectedIcon = icon;
-        offsetX = event.clientX - icon.x;
-        offsetY = event.clientY - icon.y;
+if (icon) {
+isDragging = true;
+selectedIcon = icon;
+offsetX = event.clientX - icon.x;
+offsetY = event.clientY - icon.y;
 
 
- // Bring the icon to the front
- iconElement.style.zIndex = 1000;
+// Bring the icon to the front
+iconElement.style.zIndex = 1000;
 
- const iconLabels = document.querySelectorAll(".icon-label")
- iconLabels.forEach(label => {label.style.display = 'none'})
+const iconLabels = document.querySelectorAll(".icon-label")
+iconLabels.forEach(label => {label.style.display = 'none'})
 
- event.preventDefault(); // Prevent default behavior
-    }
+event.preventDefault(); // Prevent default behavior
+}
 }
 
 // Stop dragging
 function stopDragging() {
-    if (selectedIcon) {
-        selectedIcon.imgElement.style.zIndex = 0;
-        isDragging = false;
-        selectedIcon = null;
-    }
+if (selectedIcon) {
+//selectedIcon.imgElement.style.zIndex = 0;
+isDragging = false;
+selectedIcon = null;
+}
 }
 
 // Drag an icon
 function drag(event) {
-    if (!isDragging || !selectedIcon) return;
+if (!isDragging || !selectedIcon) return;
 
-    // Update the icon's position
-    const newX = event.clientX - offsetX;
-    const newY = event.clientY - offsetY;
+// Update the icon's position
+const newX = event.clientX - offsetX;
+const newY = event.clientY - offsetY;
 
-    selectedIcon.x = newX;
-    selectedIcon.y = newY;
+selectedIcon.x = newX;
+selectedIcon.y = newY;
 
-    // Update the position of the img element
-    selectedIcon.imgElement.style.left = `${newX}px`;
-    selectedIcon.imgElement.style.top = `${newY}px`;
+// Update the position of the img element
+selectedIcon.imgElement.style.left = `${newX}px`;
+selectedIcon.imgElement.style.top = `${newY}px`;
 }
 
-
 expandable.showIcon()
+},
 
+saveDrawing(canvas){
+
+const drawingDataURL = canvas.toDataURL('image/png'); 
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+const isEmpty = imageData.data.every((value) => value === 0);
+
+if(!isEmpty){
+
+const savedDrawing = {
+    id: Storyteller.currentLocationId,
+    drawing: drawingDataURL
+};
+
+let exists = this.canvasData.find(entry => entry.id === savedDrawing.id);
+
+if(exists){exists = savedDrawing}else{this.canvasData.push(savedDrawing)}
+
+console.log(this.canvasData)
+console.log(helper.getSize(this.canvasData))
+
+
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
 },
 
+loadDrawing(){
+
+if(this.canvasData.length > 0){
+
+const locId = parseInt(Storyteller.currentLocationId);
+
+const savedDrawing = this.canvasData.find(entry => parseInt(entry.id) === locId)
+
+if (savedDrawing) {
+   
+    const img = new Image();
+    img.src = savedDrawing.drawing; 
+    
+    img.onload = () => {
+        const canvas = ref.annotations; 
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0); 
+    };
+
+
+}}},
 
 // Function to draw the hex grid
-drawGrid() { 
+drawGrid(canvas) { 
 
-    const canvas = document.getElementById('drawingCanvas');
-    this.hexCenters = [];
-    
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-   
-    const width = canvas.width;
-    const height = canvas.height;
-    //console.log(width, height)
-    const a = Math.PI / 3;
-    const r= 25;
+this.hexCenters = [];
 
-    for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
-        for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
-          
-          // Calculate the center of the hexagon
-          const centerX = x + (j % 2) * (r * (1 + Math.cos(a)) / 2); // Offset for staggered rows
-          const centerY = y;
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+this.loadDrawing();
 
-          // Store the center coordinates
-          this.hexCenters.push({ x: centerX, y: centerY });
+const a = Math.PI / 3;
+const r= 25;
 
-          this.drawHexagon(x, y, a, r);
-          
-        }
-      }
+const width = canvas.width;
+const height = canvas.height;
 
-      //console.log(this.hexCenters)
-  },
+for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
+for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
 
-// Function to draw a single hexagon
-drawHexagon(x, y, a, r) {
+// Calculate the center of the hexagon
+const centerX = x + (j % 2) * (r * (1 + Math.cos(a)) / 2); // Offset for staggered rows
+const centerY = y;
 
-    const canvas = document.getElementById('drawingCanvas')
-    const ctx = canvas.getContext('2d');
+// Store the center coordinates
+//this.hexCenters.push({ x: centerX, y: centerY });
 
-    //Drawing Style
-    ctx.strokeStyle = Storyteller.gridColour;
-    ctx.lineWidth = 2;
-    ctx.globalAlpha = 0.5;
+//Drawing Style
+ctx.strokeStyle = Storyteller.gridColour;
+ctx.lineWidth = 2;
+ctx.globalAlpha = 0.5;
 
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-      ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
-    }
-    ctx.closePath();
-    ctx.stroke();
-},
+ctx.beginPath();
+for (let i = 0; i < 6; i++) {
+ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
+}
+ctx.closePath();
+ctx.stroke();
+
+}}},
 
 };
 

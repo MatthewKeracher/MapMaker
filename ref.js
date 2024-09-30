@@ -7,6 +7,13 @@ mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
 Banner: document.getElementById('Banner'),
 
+
+//battleMap
+gridContainer: document.getElementById('gridContainer'),
+iconContainer: document.getElementById('iconContainer'),
+battleMap: document.getElementById('battleMap'),
+annotations: document.getElementById('annotations'),
+
 //SearchBar
 eventManager: document.getElementById('eventManager'),
 

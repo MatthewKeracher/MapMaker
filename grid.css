@@ -1,0 +1,74 @@
+#gridContainer{
+position:fixed;
+top: 0;
+left: 0;
+width: 0;
+height: 0;
+
+overflow: auto;
+}
+
+
+#battleMap{
+position: absolute;
+display: none;
+
+top: 0; 
+left: 0;
+
+border: 0.4vh solid teal;
+stroke: teal;
+background-color: black;
+}
+
+#annotations{
+position: absolute;
+display: none;
+cursor: crosshair;
+
+top: 0; 
+left: 0;
+
+background-color: transparent;
+}
+
+
+#drawToolButton{
+position: fixed;
+top:0.4vw;
+left:0.4vw;
+z-index: 201;
+width: 6vh;
+height: 6vh; 
+font-size: 2.2vh; 
+border: 0.1vh solid teal; 
+font-family: 'SoutaneBlack';
+color: cyan;
+background-color: rgb(1, 51, 51);;
+transition: background-color 0.3s; 
+}
+
+
+.icon {
+z-index: 199;
+cursor: grab; /* Indicate that the icon is draggable */
+}
+
+.icon:active {
+cursor: grabbing; /* Change cursor when dragging */
+}
+
+.icon-label {
+z-index: 200;
+background-color: black;
+border: 1px solid teal; 
+padding: 2px;
+font-size: 1vw;
+pointer-events: none;  /* Prevent the label from interfering with mouse events */
+}
+
+.icon-highlight{
+background-color: rgba(255, 255, 0, 0.5); /* Yellow background with some transparency */
+border-radius: 5px; /* Optional: make it look nicer */
+}
+

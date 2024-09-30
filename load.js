@@ -27,9 +27,7 @@ ref.Storyteller.style.display = 'block';
 load.fileName = "Untitled Project"
 toolbar.showMasterLocation();
 
-console.log(load.Data)
-
-console.log(this.Data);
+//console.log(load.Data)
 })
 .catch(error => {
 console.error('Error fetching data:', error);
@@ -162,7 +160,6 @@ console.error('Error parsing JSON:', error);
 
 },
     
-
 handleFileLoad(fileContent) {
 return new Promise((resolve, reject) => {
 
@@ -184,7 +181,6 @@ load.Data = JSON.parse(fileContent);
 //----
 
 toolbar.showMasterLocation();
-
 
 try {
 load.displayLocations(load.Data.locations);

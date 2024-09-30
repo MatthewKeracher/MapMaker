@@ -24,7 +24,8 @@ if (
     !Ref.Left.contains(document.activeElement) &&
     !Ref.leftParty.contains(document.activeElement) &&
     !Ref.promptBox.contains(document.activeElement) && 
-    !Ref.queryWindow.contains(document.activeElement)
+    !Ref.queryWindow.contains(document.activeElement) &&
+    !Ref.eventManager.contains(document.activeElement)
 
     ) {
 

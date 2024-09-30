@@ -6,6 +6,7 @@ import events from "./events.js";
 import classes from "./classes.js";
 import battleMap from "./battleMap.js";
 import NPCbuild from "./classes.js";
+import NPCs from "./npcs.js";
 
 const party = {
 
@@ -38,7 +39,62 @@ hitPoints: helper.rollMultipleDice(member.level + 'd8'),
 
 return newMonster
 },
-    
+
+
+getLocationMonsters(monsters){
+let monstPartyTags = [];
+
+monsters.forEach(tag => {
+
+let tagObj = helper.getObjfromTag(tag);
+let monstTags = tagObj.tags.filter(entry => entry.key === 'monsters');
+
+monstTags.forEach(tag => {
+monstPartyTags.push(tag)
+})
+})
+
+//Erase monsters from Party
+load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
+
+//Add monsters to Party
+monstPartyTags.forEach(monster => {
+
+load.Data.miscInfo.party.push({key: 'monsters', id: monster.id, type:'monster', appearing: 'Wild'})
+
+})
+
+const partyDisplay = ref.leftParty.style.display;
+
+party.buildParty();
+party.loadParty();
+
+ref.leftParty.style.display = partyDisplay;
+
+
+},
+
+addToParty(){
+
+//Erase npcs from Party
+load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.type !== "npc")
+
+//Add npcs to Party
+events.partyNPCs.forEach(npc => {
+load.Data.miscInfo.party.push({key: 'npcs', type: 'npc', id: npc.id});
+})
+
+const partyDisplay = ref.leftParty.style.display;
+
+party.buildParty();
+party.loadParty();
+
+
+ref.leftParty.style.display = partyDisplay;
+
+},
+
+
 buildParty(){
 
 ref.leftParty.innerHTML = '';
@@ -48,7 +104,7 @@ let members = [];
 //console.log(membersList)
 
 membersList.forEach(memberTag => {
-    
+
 let memberObj = helper.getObjfromTag(memberTag);
 
 if(memberTag.type === 'monster'){
@@ -94,19 +150,19 @@ const headerDiv = document.createElement('div');
 const memberRows = document.createElement('div');
 
 let headerHTML = `
-    <div class="member-table">
-        <div id="headerRow" class="header-row">
-            <div id="nameColumn" class="member-cell name-column" style="color:rgba(255, 255, 255, 0.376)">Name</div>
-            <div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Lvl</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AB</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Dam</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">M</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
-            <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">HP</div>
-        </div>
-    </div>
+<div class="member-table">
+<div id="headerRow" class="header-row">
+<div id="nameColumn" class="member-cell name-column" style="color:rgba(255, 255, 255, 0.376)">Name</div>
+<div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Lvl</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AB</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Dam</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">M</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">HP</div>
+</div>
+</div>
 `;
 
 headerDiv.innerHTML = headerHTML;
@@ -118,24 +174,24 @@ members.forEach(member => {
 
 // Inside the loop that creates memberDiv elements
 const memberDiv = document.createElement('div');
-const memberAC = events.getCurrentAC(member);
+const memberAC = helper.getCurrentAC(member);
 
 let memberHTML = `
-    <div class="member-table">
-        <div id="${member.name}Row" class="member-row">
-            <div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
-            <div class="member-cell class-column">${member.class}</div>
-             <div class="member-cell init-columnn">${member.level}</div>
-            <div class="member-cell init-columnn">+${member.attackBonus}</div>
-             <div class="member-cell init-columnn">${member.damage}</div>
-            <div class="member-cell init-columnn">${member.morale}</div>
-            <div class="member-cell init-column">${member.initiative}</div>
-            <div class="member-cell init-column">${memberAC}</div>
-            <div class="member-cell init-column">
-            <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
-            </div>
-        </div>
-    </div>
+<div class="member-table">
+<div id="${member.name}Row" class="member-row">
+<div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
+<div class="member-cell class-column">${member.class}</div>
+    <div class="member-cell init-columnn">${member.level}</div>
+<div class="member-cell init-columnn">+${member.attackBonus}</div>
+    <div class="member-cell init-columnn">${member.damage}</div>
+<div class="member-cell init-columnn">${member.morale}</div>
+<div class="member-cell init-column">${member.initiative}</div>
+<div class="member-cell init-column">${memberAC}</div>
+<div class="member-cell init-column">
+<input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
+</div>
+</div>
+</div>
 `;
 
 // `<input 
@@ -153,34 +209,34 @@ nameDiv.dataset.iconId = `icon-${member.name}`;
 const hitPointBoxes = document.querySelectorAll('.hitPointBox');
 
 hitPointBoxes.forEach(box => {
-    box.addEventListener('change', (event) => {
-       
-        const newValue = event.target.value; 
-        const findName = box.getAttribute('member')
-        const member = members.find(member => member.name === findName)
-        member.hitPoints = newValue
-        
-    });
+box.addEventListener('change', (event) => {
+
+const newValue = event.target.value; 
+const findName = box.getAttribute('member')
+const member = members.find(member => member.name === findName)
+member.hitPoints = newValue
+
+});
 });
 
 
 nameDiv.addEventListener('mouseover', () => {
-    const iconId = nameDiv.getAttribute('data-icon-id');  
-    const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);
+const iconId = nameDiv.getAttribute('data-icon-id');  
+const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);
 
-    if (icon) {
-        icon.classList.add('icon-highlight');  // Add the highlight class
-    }
-    
+if (icon) {
+icon.classList.add('icon-highlight');  // Add the highlight class
+}
+
 });
 
 nameDiv.addEventListener('mouseout', () => {
-    const iconId = nameDiv.getAttribute('data-icon-id');  // Get the associated icon ID
-    const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);  // Find the corresponding icon
+const iconId = nameDiv.getAttribute('data-icon-id');  // Get the associated icon ID
+const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);  // Find the corresponding icon
 
-    if (icon) {
-        icon.classList.remove('icon-highlight');  // Remove the highlight class
-    }
+if (icon) {
+icon.classList.remove('icon-highlight');  // Remove the highlight class
+}
 });
 
 nameDiv.addEventListener('click', (event) => {
@@ -216,24 +272,24 @@ const buttonDiv = document.createElement('div');
 let buttonHTML = 
 `<br>
 <select id="partyDice" class="partyNumber">
-    <option value=4>4</option>
-    <option value=6>6</option>
-    <option value=8>8</option>
-    <option value=10>10</option>
-    <option value=12>12</option>
-    <option value=20 selected>20</option>
-    <option value=100>100</option>
+<option value=4>4</option>
+<option value=6>6</option>
+<option value=8>8</option>
+<option value=10>10</option>
+<option value=12>12</option>
+<option value=20 selected>20</option>
+<option value=100>100</option>
 </select>
 
 <select id="partyMod" class="partyText">
-    <option value="rollInit" selected>Initiative</option>
-    <option value="modStrength">Strength</option>
-    <option value="modDexterity">Dexterity</option>
-    <option value="modWisdom">Wisdom</option>
-    <option value="modIntelligence">Intelligence</option>
-    <option value="modConstitution">Constitution</option>
-    <option value="modCharisma">Charisma</option>
-    <option value="none" selected>Raw</option>
+<option value="rollInit" selected>Initiative</option>
+<option value="modStrength">Strength</option>
+<option value="modDexterity">Dexterity</option>
+<option value="modWisdom">Wisdom</option>
+<option value="modIntelligence">Intelligence</option>
+<option value="modConstitution">Constitution</option>
+<option value="modCharisma">Charisma</option>
+<option value="none" selected>Raw</option>
 </select>
 
 <button id="rollButton" class="partyButton">Roll</button>
@@ -248,19 +304,20 @@ const refreshButton = document.getElementById("refreshButton");
 
 refreshButton.addEventListener('click', () => {
 
-    this.buildParty();
-    party.loadParty();
-    battleMap.loadIcons();
-    //Storyteller.refreshLocation();
+battleMap.drawGrid(ref.battleMap);
+this.buildParty();
+party.loadParty();
+battleMap.loadIcons();
+//Storyteller.refreshLocation();
 
 });
 
 clearButton.addEventListener('click', () => {
 
-    membersList = membersList.filter(members => members.key === 'npcs');
-    load.Data.miscInfo.party = membersList;
+membersList = membersList.filter(members => members.key === 'npcs');
+load.Data.miscInfo.party = membersList;
 
-    refreshButton.click();
+refreshButton.click();
 
 });
 
@@ -327,22 +384,22 @@ let isDragging = false;
 let offsetX, offsetY;
 
 ref.leftParty.addEventListener('mousedown', (event) => {
-    isDragging = true;
-    // Calculate the offset between the mouse position and the element's top-left corner
-    offsetX = event.clientX - ref.leftParty.getBoundingClientRect().left;
-    offsetY = event.clientY - ref.leftParty.getBoundingClientRect().top;
+isDragging = true;
+// Calculate the offset between the mouse position and the element's top-left corner
+offsetX = event.clientX - ref.leftParty.getBoundingClientRect().left;
+offsetY = event.clientY - ref.leftParty.getBoundingClientRect().top;
 });
 
 document.addEventListener('mousemove', (event) => {
-    if (isDragging) {
-        // Update the position of the element
-        ref.leftParty.style.left = `${event.clientX - offsetX}px`;
-        ref.leftParty.style.top = `${event.clientY - offsetY}px`;
-    }
+if (isDragging) {
+// Update the position of the element
+ref.leftParty.style.left = `${event.clientX - offsetX}px`;
+ref.leftParty.style.top = `${event.clientY - offsetY}px`;
+}
 });
 
 document.addEventListener('mouseup', () => {
-    isDragging = false; // Stop dragging when the mouse is released
+isDragging = false; // Stop dragging when the mouse is released
 });
 }
 

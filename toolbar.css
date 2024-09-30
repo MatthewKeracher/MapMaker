@@ -1,21 +1,43 @@
 
-.mainToolbar{
-position: absolute;
-bottom: 1vh; 
-left: 0.2vw; 
-height: 6vh;
-width: 64.7vw;
-z-index: 5;
-display: flex; 
-flex-direction: row; 
-outline: 0.4vh solid teal;
-
+.mainToolbar {
+    position: fixed;
+    bottom: 0.4vh; 
+    left: 0.2vw; 
+    height: 5vh;
+    width: 99.6vw;
+    z-index: 100;
+    display: flex;  /* Use flexbox */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space between buttons and search bar */
+    outline: 0.5vh solid teal;
+    background-color: black;
 }
+
+.buttonContainer {
+    display: flex; /* Keep the buttons in a row */
+    flex-direction: row; /* Horizontal alignment */
+    width: 65.5vw;
+}
+
+#eventManager {
+    height: 4vh; /* Adjust height */
+    width: 33.5vw; /* Width of the search bar */
+    font-size: 2.2vh;
+    font-family: monospace;
+    color: cyan;
+    text-align: left;
+    background-color: rgba(0, 128, 128, 0.276);
+    border-color: transparent;
+    outline: 0.4vh solid teal;
+    border-radius: 0;
+    padding: 0.4vh;
+} 
+
 
 .button {
 width: 100%; /* Make each button fill the width of the toolbar */
-height: 6vh; 
-font-size: 2.2vh; 
+height: 5vh; 
+font-size: 2vh; 
 padding: 1vh 1vw; 
 margin: 0.0vh 0; /* Add margin to control spacing */
 border: 0.1vh solid teal; 
@@ -103,11 +125,12 @@ transition: background-color 0.3s;
 #speakButton {
 position: absolute;
 bottom: 2.2vh;
+display: none;
 top: 0;
 right: 0;
 z-index: 1000;
 width: auto; 
-height: 8vh; 
+height: 6vh; 
 font-size: 2.2vh; 
 padding: 1vh 1vw; 
 margin: 0.0vh 0; /* Add margin to control spacing */
@@ -123,7 +146,8 @@ transition: background-color 0.3s;
 .speakButton:hover,
 .partyButton:hover,
 .ledgerButton:hover,
-.prompt-button:hover {
+.prompt-button:hover,
+#drawToolButton:hover {
 background-color: cyan; /* Change the background color when hovering */
 color: teal;
 }                       

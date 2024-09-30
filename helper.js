@@ -95,6 +95,68 @@ return madeItems
 
 },
 
+getSize(jsonObject) {
+   // Convert the JSON object to a string
+   const jsonString = JSON.stringify(jsonObject);
+    
+   // Calculate the size in bytes
+   const sizeInBytes = new TextEncoder().encode(jsonString).length;
+
+   // Convert bytes to megabytes
+   const sizeInMB = sizeInBytes / (1024 * 1024);
+
+   return sizeInMB.toFixed(2) + ' megaBytes'; // Return the size in MB
+},
+
+getCurrentAC(npc){
+
+    if(npc.key === 'monsters'){return npc.armourClass};
+    
+    //Check for Highest AC Value.
+    const itemTags = npc.tags.filter(tag => tag.key === 'items')
+    
+    //Add tags from Tags of same key, so an item or spell gained through a Tag.
+    let keyTags = npc.tags.filter(entry => entry.key === "tags");
+    keyTags.forEach(tag => {
+    
+    const tagObj = helper.getObjfromTag(tag);
+    let associatedTags = tagObj.tags.filter(tag => tag.key === 'items' || tag.key === 'spells');
+    
+    associatedTags.forEach(tag => {
+    
+    //Add into NPC's tags
+    itemTags.push(tag);
+    
+    }) })
+    
+    
+    let npcArmourClass = npc.armourClass; //Default Value
+    let npcArmourBonus = 0;
+    
+    itemTags.forEach(option => {
+    
+    const optionObj = helper.getObjfromTag(option);
+    const optionAC = optionObj.armourClass;
+    const shieldCheck = optionAC? optionAC.toString().charAt(0) : '';
+    const isShield = shieldCheck === '+'
+    
+    
+    if(isShield){
+    let shieldAC = optionAC.slice(1);
+    npcArmourBonus =  npcArmourBonus + shieldAC;
+    return
+    }
+    
+    if(npc.armourClass < optionObj.armourClass){
+    npcArmourClass = optionObj.armourClass
+    }
+    })
+    
+    let finalAC = parseInt(npcArmourClass) + parseInt(npcArmourBonus);
+    
+    return finalAC;
+},
+
 genPotions(){
 
   const potions = [
@@ -1053,6 +1115,49 @@ form.createForm(load.Data[currentKey][currentIndex]);
 
 },
 
+getAllTags(locObj){
+
+let allTags = helper.getTagsfromObj(locObj);
+allTags = allTags.filter(obj => obj.key === 'tags');
+
+let childTags = [];
+allTags.forEach(objTag => {
+let tagEvents = helper.getTagsfromObj(objTag);
+let hasChildren = tagEvents.filter(obj => obj.key === 'tags' && parseInt(obj.order) > parseInt(objTag.order));
+
+if(hasChildren.length > 0){
+hasChildren.forEach(tag => {
+childTags.push(tag);
+})};
+});
+
+allTags = [...allTags, ...childTags];
+
+return allTags
+    
+    },
+
+    
+filterKeyTag(allTags, key){
+
+    let keyTags = [];
+    
+    allTags.forEach(objTag => {
+    
+    let newTag = {key: objTag.key, id: objTag.id};
+    let tagEvents = helper.getTagsfromObj(objTag);
+    let hasKey = tagEvents.filter(obj => obj.key === key);
+    
+    if(hasKey.length > 0){
+    keyTags.push(newTag)
+    }
+    });
+    
+    keyTags = keyTags.concat();
+    return keyTags
+    
+    },
+
 getObjfromTag(tag){
 
 //Instruction Tags
@@ -1084,6 +1189,14 @@ if(obj.key === 'npcs' && obj.access){obj.access = tag.access}
 
 return obj
 }
+
+},
+
+changeIconVis(change){
+
+const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
+existingIcons.forEach(icon => icon.style.display = change //remove()); // Remove each existing icon element
+)
 
 },
 
@@ -1174,8 +1287,7 @@ return Math.floor(Math.random() * sides) + 1;
 },
 
 updateDomIconPosition(iconElement, icon) {
-    const canvas = document.getElementById('drawingCanvas')
-    const canvasRect = canvas.getBoundingClientRect(); // Get the canvas position and size
+    const canvasRect = ref.battleMap.getBoundingClientRect(); // Get the canvas position and size
 
     // Calculate the correct position of the icon relative to the canvas and the viewport
     iconElement.style.left = `${canvasRect.left + icon.x}px`;  // Adjust by canvas offset

@@ -7,7 +7,8 @@
 
 <!-- STYLESHEETS -->
 <link rel="stylesheet" href="main.css">
-<link rel="stylesheet" href="map.css">    
+<link rel="stylesheet" href="map.css">  
+<link rel="stylesheet" href="grid.css">  
 <link rel="stylesheet" href="toolbar.css">
 <link rel="stylesheet" href="right.css">
 <link rel="stylesheet" href="centre.css">
@@ -44,7 +45,12 @@
 </div>
 
 <!-- MAP -->
-<div class="mapContainer" id="mapContainer">
+<div id="mapContainer"></div>
+
+<div id="gridContainer"></div>
+    <div id="iconContainer"></div>
+    <canvas id="battleMap" width="2400" height="2400"></canvas>
+    <canvas id="annotations"width="2400" height="2400"></canvas>
 </div>
     
 <main>
@@ -54,32 +60,34 @@
 </div>
 
 
-<div class = "mainToolbar" id="mainToolbar">
-
+<div class="mainToolbar" id="mainToolbar">
     <!-- Add this hidden input element -->
     <input type="file" id="fileInput" style="display: none">
     <input type="file" id="importData" style="display: none">
-    <button class= "button" id="moveButton" style="display: none" >[M]ove]</button>
-    <button class= "button" id="partyButton"  >[P]arty</button>
-    <button class= "button" id="gridButton"  >[G]rid</button>
-    <button class= "button" id="editButton" >[E]dit </button>
-    <button class= "button" id="saveButton" >[S]ave </button>
-    <button class= "button" id="copyButton" >[C]opy </button>
-    <button class= "button" id="newButton"  >[N]ew  </button>
-    <button class= "button" id="addButton"  >[A]dd  </button>
-    <button class= "button" id="deleteButton" >[D]elete </button>
-    <button class= "button" id="dataButton" >[L]oad </button>
 
+    <div class="buttonContainer"> <!-- Wrap buttons in a div -->
+        <button class="button" id="moveButton" style="display: none">[M]ove</button>
+        <button class="button" id="partyButton">[P]arty</button>
+        <button class="button" id="gridButton">[G]rid</button>
+        <button class="button" id="editButton">[E]dit</button>
+        <button class="button" id="saveButton">[S]ave</button>
+        <button class="button" id="copyButton">[C]opy</button>
+        <button class="button" id="newButton">[N]ew</button>
+        <button class="button" id="addButton">[A]dd</button>
+        <button class="button" id="deleteButton">[D]elete</button>
+        <button class="button" id="dataButton">[L]oad</button>
     </div>
+
+    <input type="text" id="eventManager" name="eventManager" placeholder="Search for something...">
+
+
+</div> 
 
 <div class=  "Right"  id="Right" >
 
 <!-- EVENTS MANAGER -->
 <input class="locationLabel" id = "locationLabel"></input>
 <button id="speakButton"> <img src="gifs/speaker.png" alt="Button Image" width="30" height="30">  </button>
-
-
-<input class="eventManager" type="textarea" id="eventManager" name="eventManager" placeholder="Search for something..."> </div>
 
 <!-- STORYTELLER -->
 <div class="Storyteller" id="Storyteller">
@@ -118,9 +126,9 @@
 <script type="module" src="form.js"></script>
 <script type="module" src="events.js"></script> 
 <script type="module" src="npcs.js"></script> 
-<script type="module" src="ref.js"></script>
 <script type="module" src="battleMap.js"></script>
 <script type="module" src="classes.js"></script>
+<script type="module" src="ref.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 

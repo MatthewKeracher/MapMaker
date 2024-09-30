@@ -4,6 +4,10 @@ font-family: monospace;
 margin: 0; /* Remove default margin */
 }
 
+body::-webkit-scrollbar {
+width: 0; /* Set the width of the scrollbar */
+}
+
 .top-right {
 position: absolute;
 top: 0vh;

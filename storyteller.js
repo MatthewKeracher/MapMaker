@@ -19,7 +19,7 @@ currentLocationId: '',
 parentLocationId: '',
 grandParentLocationId: '',
 speaking: false,
-gridColour: 'black',
+gridColour: 'teal',
 
 async changeContent(locId) {
 
@@ -27,6 +27,8 @@ async changeContent(locId) {
 
 let Story = ``
 ref.Storyteller.innerHTML = '';
+
+battleMap.saveDrawing(ref.annotations)
 
 const locObj = load.Data.locations.find(entry => parseInt(entry.id) === parseInt(locId));
 
@@ -41,7 +43,6 @@ if(locObj.image && locObj.image !== ""){
 this.parentLocationId = locId
 this.grandParentLocationId = locObj.parentId
 Map.fetchAndProcessImage(locObj.image)   
-
 }
 
 //Change Location Label Contents
@@ -69,7 +70,12 @@ expandable.expandExtend(ref.Storyteller);
 expandable.showFloatingExpandable();
 expandable.goToEdit();
 
+//Figure battleMap
 Storyteller.gridColour = locObj.color;
+battleMap.drawGrid(ref.battleMap);
+
+battleMap.loadIcons()
+helper.changeIconVis('none')
 
 };
 }, 

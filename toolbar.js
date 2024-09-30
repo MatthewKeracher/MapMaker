@@ -20,7 +20,9 @@ load.loadDefault();
 load.checkStoredData();
 toolbar.loadQuery();
 party.dragPartyScreen();
+battleMap.enablePencilTool(ref.annotations);
 
+//Enable Persistent Loops
 setInterval(helper.updateEventContent, 10000);
 
 
@@ -31,8 +33,6 @@ helper.adjustFontSize();
 
 
 Events.loadEventListeners();
-
-//Ambience.getAmbience();
 
 //mainToolbar
 ref.partyButton.addEventListener('click', this.partyButton);
@@ -132,7 +132,7 @@ console.error('Error executing user code:', error);
 
 }
 
-if(Edit.editMode){
+if(editor.editMode){
 editor.loadList(load.Data)
 }
 };
@@ -140,30 +140,29 @@ editor.loadList(load.Data)
 gridButton() {  
 
 const mapElement = document.getElementById('mapElement');
-const canvas = document.getElementById('drawingCanvas');
 let labels = document.querySelectorAll('.position-div');
-const ctx = canvas.getContext('2d');
+const drawToolButton = document.getElementById('drawToolButton')
 
 if(battleMap.gridShowing === false){
 
 battleMap.gridShowing = true;
-battleMap.drawGrid();
-canvas.style.backgroundColor = 'black';
+ref.battleMap.style.display = 'block';
+ref.iconContainer.style.display = 'block';
+ref.annotations.style.display = 'block';
+drawToolButton.style.display = 'block';
 labels.forEach(div => {div.style.display = 'none'});
-battleMap.loadIcons()
+helper.changeIconVis('block')
 
 }else{
 
 battleMap.gridShowing = false;
-canvas.style.backgroundColor = 'transparent';
-ctx.clearRect(0, 0, canvas.width, canvas.height);
+ref.battleMap.style.display = 'none';
+ref.iconContainer.style.display = 'none';
+ref.annotations.style.display = 'none';
+drawToolButton.style.display = 'none';
 mapElement.style.opacity = 1;
 labels.forEach(div => {div.style.display = 'block'});
-
-const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
-existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
-
-}
+helper.changeIconVis('none')}
 };
 
 
@@ -300,12 +299,10 @@ save.deleteDataEntry();
 moveButton() {
 console.log('moveButton Clicked')
 const mapElement = document.getElementById('mapElement');
-let canvas = document.getElementById('drawingCanvas');
 
 
 if(!Add.moveMode){
 Add.moveMode = true;
-canvas.style.display = "none";
 console.log('Adding Map Events Listeners')
 mapElement.addEventListener('mousedown', Add.handleMouseDown);
 mapElement.addEventListener('mousemove', Add.handleMouseMove); 
@@ -317,7 +314,6 @@ selection.style.pointerEvents = 'none';
 }else{if(Add.moveMode){
 
 Add.moveMode = false;
-canvas.style.display = "block";
 console.log('Removing Map Events Listeners')
 mapElement.removeEventListener('mousedown', Add.handleMouseDown);
 mapElement.removeEventListener('mousemove', Add.handleMouseMove); 
@@ -331,13 +327,11 @@ selection.style.pointerEvents = 'auto';
 addButton() {
 console.log('addButton Clicked')
 const mapElement = document.getElementById('mapElement');
-let canvas = document.getElementById('drawingCanvas');
 
 
 if(!Add.addMode){
 Add.addMode = true;
 addButton.classList.add('click-button');
-canvas.style.display = "none";
 
 // Add the event listeners
 mapElement.addEventListener('mousedown', Add.handleMouseDown);
@@ -350,7 +344,6 @@ selection.style.pointerEvents = 'none';
 }else{if(Add.addMode){
 
 Add.addMode = false;
-canvas.style.display = "block";
 addButton.classList.remove('click-button');
 
 // Remove the event listeners
