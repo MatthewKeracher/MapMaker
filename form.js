@@ -215,6 +215,10 @@ descriptionText.style.height = descriptionText.scrollHeight + 'px';
 };
 });
 
+//Hide FullScreen Button
+const hideButton = document.getElementById('fullScreenButton')
+hideButton.style.display = 'none';
+
 const descriptionText = document.getElementById('descriptionText');
 descriptionText.textContent = obj.description || 'Insert information about ' + obj.name + ' here.';
 

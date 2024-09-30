@@ -153,6 +153,19 @@ drawToolButton.style.display = 'block';
 labels.forEach(div => {div.style.display = 'none'});
 helper.changeIconVis('block')
 
+//ref.Right.style.display = 'none';
+//ref.mainToolbar.style.display = 'none';
+
+// let secondWindow = window.open('', '', 'width=400,height=600');
+
+// secondWindow.document.write(`
+//   <html>
+//   <head><title>Mirrored Party</title></head>
+//   <body>${ref.battleMap.innerHTML}</body>
+//   </html>
+// `);
+
+
 }else{
 
 battleMap.gridShowing = false;
@@ -162,8 +175,12 @@ ref.annotations.style.display = 'none';
 drawToolButton.style.display = 'none';
 mapElement.style.opacity = 1;
 labels.forEach(div => {div.style.display = 'block'});
-helper.changeIconVis('none')}
-};
+helper.changeIconVis('none')
+
+//ref.Right.style.display = 'block';
+//ref.mainToolbar.style.display = 'block';
+
+}};
 
 
 partyButton(){
@@ -193,11 +210,10 @@ ref.leftExpand.innerHTML = ``;
 return
 }
 
-
-if(battleMap.gridShowing === true){
-gridButton.click();
-return
-}
+// if(battleMap.gridShowing === true){
+//     gridButton.click();
+//     return
+//     }
 
 if(Add.addMode){
 addButton.click();
