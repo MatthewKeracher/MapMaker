@@ -65,7 +65,7 @@ editor.projecting = true
 let secondWindow = window.open('', '', `width=${screen.availWidth},height=${screen.availHeight}`);
 toolbar.secondWindow = secondWindow;
 
-// Fetch the HTML file from your directory
+    // Fetch the HTML file from your directory
 fetch('player.html')
 .then(response => response.text()) // Convert the response to text
 .then(html => {
@@ -74,17 +74,22 @@ fetch('player.html')
 
   // Once the content is loaded, you can call the drawGrid function
   const battleMapPlayer = secondWindow.document.getElementById('battleMap-player')
+  battleMapPlayer.style.display = 'block';
   const annotationsPlayer = secondWindow.document.getElementById('annotations-player')
   annotationsPlayer.style.display = 'block';
-  battleMapPlayer.style.display = 'block';
+ 
   battleMap.drawGrid(battleMapPlayer);
 
 })
 .catch(error => console.error('Error loading player.html:', error));
     
+}else if (!toolbar.secondWindow || toolbar.secondWindow.closed) {
+        editor.projecting = false
+        toolbar.projectButton()
 }else{
-editor.projecting = false
-console.log(this.secondWindow)
+    const battleMapPlayer = toolbar.secondWindow.document.getElementById('battleMap-player')
+    battleMap.drawGrid(battleMapPlayer);
+
 }
 
 };

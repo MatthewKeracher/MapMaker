@@ -391,7 +391,14 @@ ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
 ctx.closePath();
 ctx.stroke();
 
-}}},
+}}
+
+// if(toolbar.secondWindow){
+// const battleMapPlayer = toolbar.secondWindow.document.getElementById('battleMap-player');
+// battleMap.drawGrid(battleMapPlayer);
+// }
+
+},
 
 };
 
