@@ -36,8 +36,8 @@ position: fixed;
 top:0.4vh; 
 min-height: 10vh; 
 max-height: 89.5vh;
-right: 34.5vw; 
-width: 33vw;
+right: 34.7vw; 
+width: 32.1vw;
 height: auto;
 z-index:1000;
 
@@ -59,7 +59,8 @@ flex-direction: column;
 outline: 0.4vh solid teal;
 } 
 
-.Centre::-webkit-scrollbar {
+.Centre::-webkit-scrollbar,
+.leftExpand::-webkit-scrollbar {
 width: 0; /* Set the width of the scrollbar */
 }
 

@@ -300,6 +300,7 @@ imageContainer.insertBefore(newLoc,firstChild);
 //Add Events to Divs
 this.addLocationEvents()
 
+
 });
 
 },

@@ -1200,6 +1200,18 @@ existingIcons.forEach(icon => icon.style.display = change //remove()); // Remove
 
 },
 
+checkLabelVis(){
+
+const locationDivs = document.querySelectorAll('.selection')
+
+if(battleMap.gridShowing === true){
+    locationDivs.forEach(div => {div.style.display = 'none'})
+    }else{
+    locationDivs.forEach(div => {div.style.display = 'block'})
+    }
+    
+},
+
 getChildren(tagObj){
 
 //Take a tag and return all child tags.

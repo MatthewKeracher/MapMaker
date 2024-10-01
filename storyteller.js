@@ -74,6 +74,10 @@ expandable.goToEdit();
 Storyteller.gridColour = locObj.color;
 battleMap.drawGrid(ref.battleMap);
 
+if(battleMap.gridShowing = true){
+gridButton.click();
+}
+
 battleMap.loadIcons()
 helper.changeIconVis('none')
 

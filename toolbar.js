@@ -37,6 +37,7 @@ Events.loadEventListeners();
 //mainToolbar
 ref.partyButton.addEventListener('click', this.partyButton);
 ref.gridButton.addEventListener('click', this.gridButton);
+ref.hideButton.addEventListener('click', this.hideButton);
 ref.dataButton.addEventListener('click', this.dataButton);
 ref.addButton.addEventListener('click', this.addButton); 
 ref.editButton.addEventListener('click', this.editButton);
@@ -52,6 +53,18 @@ ref.speakButton.addEventListener('click', this.speakButton);
 load.saveToBrowser();
 
 };
+
+hideButton(){
+    
+    if(editor.showingRight === true){
+    editor.showingRight = false
+    ref.Right.style.display = 'none';
+    
+    }else{
+    editor.showingRight = true
+    ref.Right.style.display = 'block';
+ 
+    }};
 
 speakButton(){
 
@@ -151,20 +164,18 @@ ref.iconContainer.style.display = 'block';
 ref.annotations.style.display = 'block';
 drawToolButton.style.display = 'block';
 labels.forEach(div => {div.style.display = 'none'});
-helper.changeIconVis('block')
+helper.changeIconVis('block');
 
-//ref.Right.style.display = 'none';
-//ref.mainToolbar.style.display = 'none';
+let secondWindow = window.open('', '', `width=${screen.availWidth},height=${screen.availHeight}`);
 
-// let secondWindow = window.open('', '', 'width=400,height=600');
-
-// secondWindow.document.write(`
-//   <html>
-//   <head><title>Mirrored Party</title></head>
-//   <body>${ref.battleMap.innerHTML}</body>
-//   </html>
-// `);
-
+// Fetch the HTML file from your directory
+fetch('player.html')
+  .then(response => response.text()) // Convert the response to text
+  .then(html => {
+    // Write the fetched HTML content to the new window
+    secondWindow.document.write(html);
+  })
+  .catch(error => console.error('Error loading player.html:', error));
 
 }else{
 
@@ -173,12 +184,8 @@ ref.battleMap.style.display = 'none';
 ref.iconContainer.style.display = 'none';
 ref.annotations.style.display = 'none';
 drawToolButton.style.display = 'none';
-mapElement.style.opacity = 1;
 labels.forEach(div => {div.style.display = 'block'});
 helper.changeIconVis('none')
-
-//ref.Right.style.display = 'block';
-//ref.mainToolbar.style.display = 'block';
 
 }};
 
@@ -450,6 +457,9 @@ ref.locationDivs.forEach((div) => {
 div.removeEventListener('mouseenter', editor.handleMouseHover);
 div.removeEventListener('mouseleave', editor.handleMouseHover);
 });
+
+
+
 }
 }
 

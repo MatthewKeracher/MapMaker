@@ -72,6 +72,7 @@ party.loadParty();
 ref.leftParty.style.display = partyDisplay;
 
 
+
 },
 
 addToParty(){

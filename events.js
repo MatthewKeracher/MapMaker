@@ -15,6 +15,7 @@ eventsArray: [],
 searchArray: [],
 eventActions: [],
 partyNPCs: [],
+subLocMonsterTags: [],
 
 // _________________________________________________
 
@@ -22,7 +23,7 @@ async getEvent(locObj) {
 
 let allTags = helper.getAllTags(locObj);
 let locAmbience = helper.filterKeyTag(allTags, "ambience");
-let tagsWithMonsters = helper.filterKeyTag(allTags,"monsters");
+let locMonsterTags = helper.filterKeyTag(allTags,"monsters");
 let tagsWithNPCs = helper.filterKeyTag(allTags, "npcs");
 let subLocations = Events.getAllSubLocations(locObj);
 let floatNPCs = Events.getFloatingNPCs(locObj, tagsWithNPCs, subLocations);
@@ -31,7 +32,7 @@ this.partyNPCs = [];
 
 Events.getLocationAmbience(locAmbience);
 Events.getLocationDescription(locObj);
-party.getLocationMonsters(tagsWithMonsters);
+
 
 //console.log(subLocations.length + ' subLocations found.')
 
@@ -39,6 +40,9 @@ if(subLocations.length > 0){
 Events.makeSubLocations(locObj, subLocations, floatNPCs);
 }
 
+const monsters = [...locMonsterTags, ...this.subLocMonsterTags];
+
+party.getLocationMonsters(monsters);
 party.addToParty();
 
 },
@@ -187,6 +191,13 @@ subLocations.forEach((subLocation) =>{
 if(subLocation.key === 'subLocations'){
 this.makeDiv("header", subLocation, ref.Storyteller, "color");
 }
+
+//Rip Monster Rags
+let allTags = helper.getAllTags(subLocation);
+const subLocMonsters = helper.filterKeyTag(allTags,"monsters");
+console.log(subLocMonsters)
+this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
+
 
 //Add NPCs to SubLocation
 Events.getSubLocDetails(subLocation, floatNPCs, locObj);

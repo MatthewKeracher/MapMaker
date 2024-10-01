@@ -223,10 +223,8 @@ if(editor.editMode === false){
 ref.Editor.style.display = 'none';
 }
 
-
 //Reload Map to reflect changes.
 load.displayLocations(load.Data.locations);
-
 
 //Reload location to reflect changes.
 Storyteller.refreshLocation();

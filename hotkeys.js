@@ -51,6 +51,9 @@ case 'l':
 case ',':
     Map.increaseOpacity();
     break
+case 'h':
+    hideButton.click();
+    break
  case '.':
     Map.decreaseOpacity();
  break;
