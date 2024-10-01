@@ -7,7 +7,6 @@ mapElement: document.getElementById('mapElement'),
 locationDivs: document.querySelectorAll('.selection'), 
 Banner: document.getElementById('Banner'),
 
-
 //battleMap
 gridContainer: document.getElementById('gridContainer'),
 iconContainer: document.getElementById('iconContainer'),
@@ -38,7 +37,7 @@ leftParty: document.getElementById('leftParty'),
 mainToolbar: document.getElementById('mainToolbar'),
 partyButton: document.getElementById('partyButton'),
 gridButton: document.getElementById('gridButton'),
-hideButton: document.getElementById('hideButton'),
+projectButton: document.getElementById('projectButton'),
 dataButton: document.getElementById('dataButton'),
 addButton: document.getElementById('addButton'),
 editButton: document.getElementById('editButton'),

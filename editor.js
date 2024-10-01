@@ -13,7 +13,7 @@ import form from "./form.js";
 const editor = {
 
 editMode : false,
-showingRight: true,
+projecting: false,
 makeNew: false,
 moveMode: false,
 addItem: false,

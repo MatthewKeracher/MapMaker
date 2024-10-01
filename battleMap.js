@@ -7,7 +7,7 @@ import expandable from "./expandable.js";
 import party from "./party.js";
 import Map from "./map.js";
 import Storyteller from "./storyteller.js";
-
+import toolbar from "./toolbar.js";
 
 
 const battleMap = {
@@ -54,6 +54,7 @@ ctx.stroke();
 function stopDrawing() {
 isDrawing = false;
 ctx.beginPath(); // Reset the path
+battleMap.cloneDrawingToSecondWindow();
 }
 
 // Attach event listeners for drawing
@@ -88,6 +89,31 @@ if(this.erasing === true){
 // Append the button to the icon container
 ref.iconContainer.appendChild(button);
 
+},
+
+cloneDrawingToSecondWindow() {
+    if (!toolbar.secondWindow || toolbar.secondWindow.closed) {
+        console.error('Second window is not open');
+        return;
+    }
+
+    // Get the data URL from the main canvas
+    const dataURL = ref.annotations.toDataURL();
+
+    // Create a new image in the second window
+    const img = toolbar.secondWindow.document.createElement('img');
+    img.src = dataURL;
+
+    img.onload = () => {
+        const secondCanvas = toolbar.secondWindow.document.getElementById('annotations-player'); // Ensure this ID matches the second window's canvas ID
+        const ctx = secondCanvas.getContext('2d');
+        
+        // Clear the second canvas before drawing
+        ctx.clearRect(0, 0, secondCanvas.width, secondCanvas.height);
+
+        // Draw the image onto the second canvas
+        ctx.drawImage(img, 0, 0);
+    };
 },
 
 loadIcons() {
@@ -240,9 +266,38 @@ selectedIcon.y = newY;
 // Update the position of the img element
 selectedIcon.imgElement.style.left = `${newX}px`;
 selectedIcon.imgElement.style.top = `${newY}px`;
+
+battleMap.projectIcon(newX, newY, selectedIcon);
+
 }
 
 expandable.showIcon()
+},
+
+projectIcon(newX, newY, selectedIcon){
+
+if (toolbar.secondWindow && !selectedIcon.duplicate) {
+// Clone the selectedIcon's div
+const clonedIcon = selectedIcon.imgElement.cloneNode(true);
+
+// Apply any styles or attributes that are required for the cloned icon
+clonedIcon.style.position = 'absolute'; // Make sure it's positioned absolutely
+clonedIcon.style.left = `${newX}px`; // Set initial position
+clonedIcon.style.top = `${newY}px`;
+
+// Append the cloned icon to the secondWindow's document
+toolbar.secondWindow.document.body.appendChild(clonedIcon);
+
+// Store reference to the cloned icon for future updates
+selectedIcon.duplicate = clonedIcon;
+}
+
+// If the duplicate exists, update its position as well
+if (selectedIcon.duplicate) {
+selectedIcon.duplicate.style.left = `${newX}px`;
+selectedIcon.duplicate.style.top = `${newY}px`;
+}
+
 },
 
 saveDrawing(canvas){
@@ -309,6 +364,8 @@ const r= 25;
 const width = canvas.width;
 const height = canvas.height;
 
+
+
 for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
 for (let x = r, j = 0; x + r * (1 + Math.cos(a)) < width; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
 
@@ -320,6 +377,7 @@ const centerY = y;
 //this.hexCenters.push({ x: centerX, y: centerY });
 
 //Drawing Style
+
 ctx.strokeStyle = Storyteller.gridColour;
 ctx.lineWidth = 2;
 ctx.globalAlpha = 0.5;

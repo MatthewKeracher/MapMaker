@@ -1,4 +1,5 @@
-#gridContainer{
+#gridContainer,
+#gridContainer-player{
 position:fixed;
 top: 0;
 left: 0;
@@ -9,7 +10,8 @@ overflow: auto;
 }
 
 
-#battleMap{
+#battleMap,
+#battleMap-player{
 position: absolute;
 display: none;
 
@@ -21,7 +23,8 @@ stroke: teal;
 background-color: black;
 }
 
-#annotations{
+#annotations,
+#annotations-player{
 position: absolute;
 display: none;
 cursor: crosshair;

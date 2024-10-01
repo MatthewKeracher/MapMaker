@@ -14,6 +14,7 @@ import battleMap from "./battleMap.js";
 
 class Toolbar{
 
+
 init() {  
 
 load.loadDefault();
@@ -21,6 +22,7 @@ load.checkStoredData();
 toolbar.loadQuery();
 party.dragPartyScreen();
 battleMap.enablePencilTool(ref.annotations);
+
 
 //Enable Persistent Loops
 setInterval(helper.updateEventContent, 10000);
@@ -37,7 +39,7 @@ Events.loadEventListeners();
 //mainToolbar
 ref.partyButton.addEventListener('click', this.partyButton);
 ref.gridButton.addEventListener('click', this.gridButton);
-ref.hideButton.addEventListener('click', this.hideButton);
+ref.projectButton.addEventListener('click', this.projectButton);
 ref.dataButton.addEventListener('click', this.dataButton);
 ref.addButton.addEventListener('click', this.addButton); 
 ref.editButton.addEventListener('click', this.editButton);
@@ -54,17 +56,38 @@ load.saveToBrowser();
 
 };
 
-hideButton(){
+projectButton(){
+
+if(editor.projecting === false){
+
+editor.projecting = true
     
-    if(editor.showingRight === true){
-    editor.showingRight = false
-    ref.Right.style.display = 'none';
+let secondWindow = window.open('', '', `width=${screen.availWidth},height=${screen.availHeight}`);
+toolbar.secondWindow = secondWindow;
+
+    // Fetch the HTML file from your directory
+fetch('player.html')
+.then(response => response.text()) // Convert the response to text
+.then(html => {
+  // Write the fetched HTML content to the new window
+  secondWindow.document.write(html);
+
+  // Once the content is loaded, you can call the drawGrid function
+  const battleMapPlayer = secondWindow.document.getElementById('battleMap-player')
+  const annotationsPlayer = secondWindow.document.getElementById('annotations-player')
+  annotationsPlayer.style.display = 'block';
+  battleMapPlayer.style.display = 'block';
+  battleMap.drawGrid(battleMapPlayer);
+
+})
+.catch(error => console.error('Error loading player.html:', error));
     
-    }else{
-    editor.showingRight = true
-    ref.Right.style.display = 'block';
- 
-    }};
+}else{
+editor.projecting = false
+console.log(this.secondWindow)
+}
+
+};
 
 speakButton(){
 
@@ -165,17 +188,6 @@ ref.annotations.style.display = 'block';
 drawToolButton.style.display = 'block';
 labels.forEach(div => {div.style.display = 'none'});
 helper.changeIconVis('block');
-
-let secondWindow = window.open('', '', `width=${screen.availWidth},height=${screen.availHeight}`);
-
-// Fetch the HTML file from your directory
-fetch('player.html')
-  .then(response => response.text()) // Convert the response to text
-  .then(html => {
-    // Write the fetched HTML content to the new window
-    secondWindow.document.write(html);
-  })
-  .catch(error => console.error('Error loading player.html:', error));
 
 }else{
 
