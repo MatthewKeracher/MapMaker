@@ -65,7 +65,7 @@ editor.projecting = true
 let secondWindow = window.open('', '', `width=${screen.availWidth},height=${screen.availHeight}`);
 toolbar.secondWindow = secondWindow;
 
-    // Fetch the HTML file from your directory
+// Fetch the HTML file from your directory
 fetch('player.html')
 .then(response => response.text()) // Convert the response to text
 .then(html => {

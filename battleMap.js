@@ -133,7 +133,9 @@ height: member.height || 40,
 src: member.image === ''? 'gifs/blankhead.png' : member.image     // Image source from member object
 }));
 
-const existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
+let existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
+const secondWindowIcons = toolbar.secondWindow? toolbar.secondWindow.document.querySelectorAll('.icon'): [];
+existingIcons = [...existingIcons, ...secondWindowIcons]
 existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
 
 // Function to create and position icons as HTML elements
