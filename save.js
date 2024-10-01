@@ -244,12 +244,12 @@ deleteDataEntry: function(){
 
 
         const locId = parseInt(Storyteller.currentLocationId);
-        const saveEntry = battleMap.canvasData.findIndex(entry => parseInt(entry.id) === locId);
+        const saveEntry = load.Data.miscInfo.canvasData.findIndex(entry => parseInt(entry.id) === locId);
         //console.log(saveEntry)
         
         try{
-        battleMap.canvasData.splice(saveEntry,1);
-        //console.log('Deleted', battleMap.canvasData)
+            load.Data.miscInfo.canvasData.splice(saveEntry,1);
+        //console.log('Deleted', load.Data.miscInfo.canvasData)
         }catch{console.log('Could not Delete Image')}
         
         const ctx = ref.annotations.getContext('2d');

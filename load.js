@@ -178,6 +178,8 @@ load.Data = JSON.parse(fileContent);
 //helper.genGems(load.Data);
 //helper.genJewelry(load.Data);
 //helper.genPotions();
+if(!load.Data.miscInfo.canvasData){load.Data.miscInfo.canvasData = []}
+console.log(load.Data.miscInfo)
 //----
 
 toolbar.showMasterLocation();

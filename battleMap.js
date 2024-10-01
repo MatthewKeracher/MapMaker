@@ -14,7 +14,6 @@ const battleMap = {
 
 hexCenters: [],
 gridShowing: false,
-canvasData: [],
 erasing: false,
 
 enablePencilTool(canvas) {
@@ -316,12 +315,12 @@ const savedDrawing = {
     drawing: drawingDataURL
 };
 
-let exists = this.canvasData.find(entry => entry.id === savedDrawing.id);
+let exists = load.Data.miscInfo.canvasData.find(entry => entry.id === savedDrawing.id);
 
-if(exists){exists = savedDrawing}else{this.canvasData.push(savedDrawing)}
+if(exists){exists = savedDrawing}else{load.Data.miscInfo.canvasData.push(savedDrawing)}
 
-console.log(this.canvasData)
-console.log(helper.getSize(this.canvasData))
+console.log(load.Data.miscInfo.canvasData)
+console.log(helper.getSize(load.Data.miscInfo.canvasData))
 
 
 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -331,11 +330,11 @@ ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 loadDrawing(){
 
-if(this.canvasData.length > 0){
+if(load.Data.miscInfo.canvasData.length > 0){
 
 const locId = parseInt(Storyteller.currentLocationId);
 
-const savedDrawing = this.canvasData.find(entry => parseInt(entry.id) === locId)
+const savedDrawing = load.Data.miscInfo.canvasData.find(entry => parseInt(entry.id) === locId)
 
 if (savedDrawing) {
    
