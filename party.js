@@ -155,6 +155,7 @@ this.currentParty = members
 
 makeDamageEntry(member){
 
+console.log(member)
 const weapons = member.items.filter(entry => entry.damage !== "");
 console.log(weapons);
 const attacks = ':)';
