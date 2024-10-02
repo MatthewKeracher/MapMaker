@@ -23,18 +23,28 @@ skills[skillName] = skill;
 skills['mod'+skillName] = NPCbuild.getModifier(parseInt(skill));
 });
 
-const rolledLevel = helper.rollMultipleDice(member.level);
+//Monster Level can be in several formats.
+//Default is an integer.
+let monsterLevel = monster.level;
+//Check for Dice Noation
+if(monsterLevel.includes('d')){
+monsterLevel = helper.rollMultipleDice(monsterLevel)
+//Check for Range
+}else if(monsterLevel.includes('-')){
+const [min, max] = monsterLevel.split('-').map(Number); // Split by '-' and convert to numbers
+monsterLevel = Math.floor(Math.random() * (max - min + 1)) + min; // Generate random number in range
+}
 
 const newMonster = {
 ...member,
 ...skills,
-level:  rolledLevel,
-attackBonus: classes.getAttackBonus({class: member.class, level:rolledLevel}),
+level:  monsterLevel,
+attackBonus: classes.getAttackBonus({class: member.class, level:monsterLevel}),
 x: 40,
 y: 40 + (i * 40),
 name: member.name + ' ' + i,
 initiative: 0,
-hitPoints: helper.rollMultipleDice(rolledLevel + 'd8'),
+hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 };
 
 return newMonster
