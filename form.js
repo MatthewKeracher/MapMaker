@@ -1323,8 +1323,13 @@ else if(key === 'monsters' && visibleKeys.includes('monsters')){
     tagkey = ${tag.key}
     tagsave = ${tag.save}
     tagAppearing = ${(tag.appearing === "" || tag.appearing === undefined) ? 'Encounter' : tag.appearing}
+    tagchance = ${(tag.chance === "" || tag.chance === undefined) ? 100 : tag.chance}
     >
     
+    <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
+    ${tagName}
+    </label>
+
     <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
     ${tagName}
     </label>
@@ -1345,6 +1350,13 @@ else if(key === 'monsters' && visibleKeys.includes('monsters')){
     
     const itemRow = document.getElementById(tagObj.name + "Container")
     const appearingInput = document.getElementById(tagObj.name + "Appearing");
+    const chanceInput = document.getElementById(tagObj.name + "Chance");
+
+
+    chanceInput.addEventListener('input', function(){
+    itemRow.setAttribute('tagchance', chanceInput.value);
+    //console.log(itemRow);
+    });
     
     
     appearingInput.addEventListener('change', function() {
