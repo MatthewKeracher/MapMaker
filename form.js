@@ -1330,9 +1330,11 @@ else if(key === 'monsters' && visibleKeys.includes('monsters')){
     ${tagName}
     </label>
 
-    <label id="Item${tag.id}" class="item-name-cell item-column" style="color:${tagObj.color}">
-    ${tagName}
-    </label>
+    <input 
+    id="${tagObj.name}Chance" 
+    type="text" 
+    class="item-quant-cell item-quant-column"
+    value="${(tag.chance === "" || tag.chance === undefined) ? 100 : tag.chance}">
     
     <select 
     id="${tagObj.name}Appearing" 
