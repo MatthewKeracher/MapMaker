@@ -179,8 +179,9 @@ itemTags.forEach(tag => {
 })
 
 let attackEntries = this.attacks.filter(entry => entry.id === member.id);
+let returnEntry = attackEntries[0]? attackEntries[0].entry : "No Weapon";
 
-return attackEntries[0].entry
+return returnEntry;
 
 },
 
