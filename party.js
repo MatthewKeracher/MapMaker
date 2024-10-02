@@ -248,7 +248,7 @@ let memberHTML = `
 <div class="member-cell init-column">
 <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
 </div>
-<div class="member-cell init-columnn">${this.makeDamageEntry(member)}</div>
+<div npcId="${member.id}" class="member-cell init-columnn partyAttack">${this.makeDamageEntry(member)}</div>
 </div>
 </div>
 `;

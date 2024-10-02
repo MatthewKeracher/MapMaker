@@ -26,6 +26,7 @@ battleMap.enablePencilTool(ref.annotations);
 
 //Enable Persistent Loops
 setInterval(helper.updateEventContent, 10000);
+setInterval(helper.updateAttackContent, 10000);
 
 
 // Add an input event listener to ref.locationLabel
