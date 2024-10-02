@@ -11,6 +11,7 @@ import NPCs from "./npcs.js";
 const party = {
 
 currentParty: [],
+attacks: [],
 
 makeMonsterNPC(member, i) {
 
@@ -119,6 +120,7 @@ ref.leftParty.innerHTML = '';
 let membersList = load.Data.miscInfo.party;
 let members = [];
 
+
 //console.log(membersList)
 
 membersList.forEach(memberTag => {
@@ -162,21 +164,29 @@ itemTags.forEach(tag => {
     
     let tagObj = helper.getObjfromTag(tag);
 
-    if(tagObj.damage !== ''){weapons.push(tagObj)}
+    if(tagObj.damage !== ''){
+        
+        let attackEntry = {
+            
+            member: member.id,
+            entry: tagObj.name + ': ' + tagObj.damage
+
+        }
+        
+        this.attacks.push(attackEntry)
+    }
 
 })
 
-console.log(weapons)
+let attackEntries = this.attacks.filter(entry => entry.id === member.id);
 
-const attacks = ':)';
-
-
-return attacks
+return attackEntries[0].entry
 
 },
 
 loadParty(){
 
+this.attacks = [];
 let members = this.currentParty;
 let membersList = load.Data.miscInfo.party;
 ref.leftParty.innerHTML = ``;
