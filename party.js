@@ -64,7 +64,7 @@ monstTags.forEach(tag => {
 //Factor in Chance of Item appearing in the Container
 const chance = parseInt(tag.chance)
 const roll = helper.rollDice(100)
-console.log(chance, roll)
+//console.log(chance, roll)
 if(roll > chance && !tag.special ){return}
 
 monstPartyTags.push(tag)
