@@ -50,6 +50,13 @@ let tagObj = helper.getObjfromTag(tag);
 let monstTags = tagObj.tags.filter(entry => entry.key === 'monsters');
 
 monstTags.forEach(tag => {
+//Check Monster Chance
+//Factor in Chance of Item appearing in the Container
+const chance = parseInt(tag.chance)
+const roll = helper.rollDice(100)
+console.log(chance, roll)
+if(roll > chance && !tag.special ){return}
+
 monstPartyTags.push(tag)
 })
 })
