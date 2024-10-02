@@ -153,6 +153,17 @@ this.currentParty = members
 
 },
 
+makeDamageEntry(member){
+
+const weapons = member.items.filter(entry => entry.damage !== "");
+console.log(weapons);
+const attacks = ':)';
+
+
+return attacks
+
+},
+
 loadParty(){
 
 let members = this.currentParty;
@@ -174,11 +185,11 @@ let headerHTML = `
 <div class="member-cell class-column" style="color:rgba(255, 255, 255, 0.376)">Class</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Lvl</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AB</div>
-<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Dam</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">M</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">HP</div>
+<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Dam</div>
 </div>
 </div>
 `;
@@ -201,12 +212,12 @@ let memberHTML = `
 <div class="member-cell class-column">${member.class}</div>
     <div class="member-cell init-columnn">${member.level}</div>
 <div class="member-cell init-columnn">+${member.attackBonus}</div>
-    <div class="member-cell init-columnn">${member.damage}</div>
 <div class="member-cell init-columnn">${member.morale}</div>
 <div class="member-cell init-column">${member.initiative}</div>
 <div class="member-cell init-column">${memberAC}</div>
 <div class="member-cell init-column">
 <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
+ <div class="member-cell init-columnn">${this.makeDamageEntry(member)}</div>
 </div>
 </div>
 </div>
