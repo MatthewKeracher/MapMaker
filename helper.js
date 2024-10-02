@@ -607,8 +607,8 @@ updateAttackContent(){
     divs.forEach(div => {
     
     const npcId = div.getAttribute("npcId")
-    
-    const options = party.Attacks.filter(entry => parseInt(entry.member) === parseInt(npcId));
+        
+    const options = party.attacks.filter(entry => parseInt(entry.member) === parseInt(npcId));
       
     if(options === undefined || options.length < 2){return}
     
@@ -617,17 +617,19 @@ updateAttackContent(){
     let newOption = "Uh Oh!"
     
     if(currentOption === options.length - 1){
-    newOption = options[0]
+    newOption = options[0].entry
     }else{
     const randomIndex = Math.floor(Math.random() * options.length);
-    newOption = options[randomIndex]
+    newOption = options[randomIndex].entry
     }
+
+    console.log(newOption, newOption.length)
      
     div.textContent = ''
     
-    for (let i = 0; i < newEventDesc.length; i++) {
+    for (let i = 0; i < newOption.length; i++) {
       setTimeout(() => {
-        div.textContent += newOption.entry.charAt(i);
+        div.textContent += newOption.charAt(i);
       }, i * 50); // delay increases with each iteration
     }
     
