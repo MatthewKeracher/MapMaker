@@ -833,7 +833,7 @@ if(obj.key === 'npcs'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'ambience'){visibleKeys = ['tags']};
 if(obj.key === 'locations'){visibleKeys = ['npcs', 'tags', 'subLocations']};
 if(obj.key === 'subLocations'){visibleKeys = ['npcs', 'tags', 'locations']};
-if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
+if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'items', 'spells', 'monsters']};
 if(obj.key === 'spells'){visibleKeys = ['tags', 'npcs', 'items']};
 if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs','items']};
 if(obj.key === 'events'){visibleKeys = ['tags']};
