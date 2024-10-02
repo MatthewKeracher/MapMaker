@@ -155,9 +155,19 @@ this.currentParty = members
 
 makeDamageEntry(member){
 
-console.log(member)
-const weapons = member.items.filter(entry => entry.damage !== "");
-console.log(weapons);
+const itemTags = member.tags.filter(entry => entry.key === "items");
+let weapons = [];
+
+itemTags.forEach(tag => {
+    
+    let tagObj = helper.getObjfromTag(tag);
+
+    if(tagObj.damage !== ''){weapons.push(tagObj)}
+
+})
+
+console.log(weapons)
+
 const attacks = ':)';
 
 
