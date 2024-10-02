@@ -238,8 +238,8 @@ let memberHTML = `
 <div class="member-cell init-column">${memberAC}</div>
 <div class="member-cell init-column">
 <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
- <div class="member-cell init-columnn">${this.makeDamageEntry(member)}</div>
 </div>
+<div class="member-cell init-columnn">${this.makeDamageEntry(member)}</div>
 </div>
 </div>
 `;
