@@ -608,7 +608,7 @@ updateAttackContent(){
     
     const npcId = div.getAttribute("npcId")
     
-    const options = party.Attacks.filter(entry => parseInt(entry.member) == parseInt(npcId));
+    const options = party.Attacks.filter(entry => parseInt(entry.member) === parseInt(npcId));
       
     if(options === undefined || options.length < 2){return}
     
