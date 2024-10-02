@@ -835,7 +835,7 @@ if(obj.key === 'locations'){visibleKeys = ['npcs', 'tags', 'subLocations']};
 if(obj.key === 'subLocations'){visibleKeys = ['npcs', 'tags', 'locations']};
 if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
 if(obj.key === 'spells'){visibleKeys = ['tags', 'npcs', 'items']};
-if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs']};
+if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs','items']};
 if(obj.key === 'events'){visibleKeys = ['tags']};
 
 keys.forEach(key => {
