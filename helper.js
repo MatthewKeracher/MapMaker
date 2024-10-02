@@ -6,6 +6,7 @@ import NPCs from "./npcs.js";
 import ref from "./ref.js";
 import Events from "./events.js";
 import expandable from "./expandable.js";
+import party from "./party.js";
 
 const helper = {
 
