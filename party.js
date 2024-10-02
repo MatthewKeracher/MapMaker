@@ -178,8 +178,16 @@ itemTags.forEach(tag => {
 
 })
 
-let attackEntries = this.attacks.filter(entry => entry.id === member.id);
-let returnEntry = attackEntries[0]? attackEntries[0].entry : "No Weapon";
+let attackEntries = this.attacks.filter(entry => entry.member === member.id);
+console.log(member.id, member.name)
+console.log(this.attacks)
+console.log(attackEntries)
+    
+let returnEntry = 'No Weapon'
+    
+if(attackEntries.length > 0){ 
+    returnEntry = attackEntries[0].entry
+}
 
 return returnEntry;
 
