@@ -172,7 +172,7 @@ bottom: 40vh;
 left: 19vw; 
 height: auto;
 width: 25vw;
-z-index: 15;
+z-index: 2000;
 outline: 0.4vh solid teal;
 background-color: black;
 text-align: center;
