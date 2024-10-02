@@ -1118,6 +1118,7 @@ form.createForm(load.Data[currentKey][currentIndex]);
 getAllTags(locObj){
 
 let allTags = helper.getTagsfromObj(locObj);
+let returnTags = [];
 allTags = allTags.filter(obj => obj.key === 'tags');
 
 let childTags = [];
@@ -1133,7 +1134,17 @@ childTags.push(tag);
 
 allTags = [...allTags, ...childTags];
 
-return allTags
+allTags.forEach(tag => {
+
+//Factor in Chance of Item appearing in the Container
+const chance = parseInt(tag.chance)
+const roll = helper.rollDice(100)
+console.log(chance, roll)
+if(roll > chance && !tag.special ){return}
+returnTags.push(tag)
+})
+    
+return returnTags
     
     },
 
