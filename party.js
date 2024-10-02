@@ -25,7 +25,7 @@ skills['mod'+skillName] = NPCbuild.getModifier(parseInt(skill));
 
 //Monster Level can be in several formats.
 //Default is an integer.
-let monsterLevel = monster.level;
+let monsterLevel = member.level;
 //Check for Dice Noation
 if(monsterLevel.includes('d')){
 monsterLevel = helper.rollMultipleDice(monsterLevel)
