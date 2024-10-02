@@ -34,7 +34,7 @@ x: 40,
 y: 40 + (i * 40),
 name: member.name + ' ' + i,
 initiative: 0,
-hitPoints: helper.rollMultipleDice(member.level + 'd8'),
+hitPoints: helper.rollMultipleDice(rolledLevel + 'd8'),
 };
 
 return newMonster
