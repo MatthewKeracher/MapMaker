@@ -22,7 +22,7 @@ load.checkStoredData();
 toolbar.loadQuery();
 party.dragPartyScreen();
 battleMap.enablePencilTool(ref.annotations);
-console.log('Updated!')
+console.log('Updated!!')
 
 
 //Enable Persistent Loops
