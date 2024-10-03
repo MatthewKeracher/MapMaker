@@ -159,10 +159,17 @@ this.currentParty = members
 
 makeDamageEntry(member){
 
-const itemTags = member.tags.filter(entry => entry.key === "items");
+let itemTags = member.tags.filter(entry => entry.key === "items" && !entry.special);
+let instructions = member.tags.filter(entry => entry.key === "items" && entry.special);
 let weapons = [];
 
+instructions.forEach(instruction => {
+    let madeItems = helper.followInstructions(instruction, member)   
+    itemTags = [...itemTags, ...madeItems]
+    })
+
 itemTags.forEach(tag => { 
+
 let tagObj = helper.getObjfromTag(tag);
     if(tagObj.damage !== ''){   
         let attackEntry = {       
