@@ -289,6 +289,10 @@ if(member.treasure){
 let treasure = party.getTreasure(member)
 partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${treasure}`
 }
+
+if(member.experience){
+partyBox.innerHTML += `<h3 class='member-cell'> Experience Points: </h3> ${member.experience}`
+}
     
 let attackEntries = this.attacks.filter(entry => entry.member === member.id);
 
@@ -464,19 +468,28 @@ getTreasure(monster){
 //console.log('getting treasure...')
 const lootEntry = monster.treasure;
 const lootObj = load.Data.tags.find(entry => entry.name === lootEntry);
-const lootTags = lootObj.tags.filter(tag => tag.key === 'items' && !tag.special);
-const instructions = lootObj.tags.filter(tag => tag.key === 'items' && tag.special);
+let lootTags = lootObj.tags.filter(tag => tag.key === 'items' && !tag.special);
+let instructions = lootObj.tags.filter(tag => tag.key === 'items' && tag.special);
 let lootItems = ''
 
 instructions.forEach(instruction => {
-helper.followInstructions(instruction, monster)   
+let madeItems = helper.followInstructions(instruction, monster)   
+lootTags = [...lootTags, ...madeItems]
 })
 
-lootTags.forEach(tag => {   
+lootTags.forEach(tag => {  
+
+//Check Item Chance
+//Factor in Chance of Item appearing in the Loot
+const chance = parseInt(tag.chance)
+const roll = helper.rollDice(100)
+console.log(chance, roll)
+if(roll < chance){
 const quantity = tag.quantity;
 const tagItem = helper.getObjfromTag(tag);
 let lootItem = helper.makeIteminfo(tagItem, tag)
 lootItems += lootItem.short
+}
 });
 
 return lootItems
