@@ -70,26 +70,20 @@ options.splice(randomIndex, 1)
 
 }
 
-// }else if(instruction.type === 'group'){
+}else if(instruction.type === 'group'){
+    
+const options = load.Data[instruction.key].filter(item => item[instruction.type] === instruction.name)
 
-// const options = load.Data[tag.key].filter(item => item[tag.type] === tag.name)
-// const subGroups = [...new Set(options.map(item => item.subGroup))];
+for (let i = quantityRemaining; i > 0; i--) {
 
-// for (let i = quantityRemaining; i > 0; i--) {
+const randomIndex = Math.floor(Math.random() * options.length);
+const randomObj = options[randomIndex];
 
-// let randSubGroup = Math.floor(Math.random() * subGroups.length);
-
-// let options = load.Data[tag.key].filter(item => item.subGroup === subGroups[randSubGroup] && item.group === tag.name)
-
-// const randomIndex = Math.floor(Math.random() * options.length);
-// const randomObj = options[randomIndex];
-
-// const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
-// madeItems.push(newTag)
-
-// }
+const newTag = {key: randomObj.key, id: randomObj.id, instruction: tag.id}
+madeItems.push(newTag)
 
 
+}
 }
 
 return madeItems
@@ -534,6 +528,9 @@ return checkboxesHTML;
 },
 
 coinLogic(item,itemQuant){
+
+if(item.special){return}
+    
 let itemValue = item.cost.toString()
 let costValue = itemValue
 let color = ''
@@ -752,9 +749,13 @@ makeIteminfo(item, tag){
 let itemQuant = tag.quantity && tag.quantity > 1? tag.quantity : tag.quantity && tag.quantity.includes('d')? helper.rollMultipleDice(tag.quantity) : '';
 let itemBonus = tag.bonus && tag.bonus !== '-'? ' (' + tag.bonus + ')' : '';
 let itemName = itemQuant + ' ' + item.name;
-let typeInfo = item.damage? 'Weapon' : item.armourClass? 'Armour' : item.key === 'spells'? 'Spell' : 'misc';
+let typeInfo = item.special? 'Instruction' : item.damage? 'Weapon' : item.armourClass? 'Armour' : item.key === 'spells'? 'Spell' : 'misc';
 let itemInfo = '';
 let color = item.color;
+
+if(typeInfo === 'Instruction'){
+console.error(item, tag)
+}
 
 if(typeInfo === 'Weapon'){
 itemInfo += item.damage + itemBonus + ' Damage' }

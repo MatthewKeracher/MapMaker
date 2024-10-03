@@ -464,10 +464,15 @@ getTreasure(monster){
 console.log('getting treasure...')
 const lootEntry = monster.treasure;
 const lootObj = load.Data.tags.find(entry => entry.name === lootEntry);
-const lootTags = lootObj.tags.filter(tag => tag.key === 'items');
+const lootTags = lootObj.tags.filter(tag => tag.key === 'items' && !tag.special);
+const instructions = lootObj.tags.filter(tag => tag.key === 'items' && tag.special);
 let lootItems = ''
 
-lootTags.forEach(tag => {
+instructions.forEach(instruction => {
+helper.followInstructions(instruction, monster)   
+})
+
+lootTags.forEach(tag => {   
 const quantity = tag.quantity;
 const tagItem = helper.getObjfromTag(tag);
 let lootItem = helper.makeIteminfo(tagItem, tag)
