@@ -172,21 +172,21 @@ itemTags.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
     if(tagObj.damage !== ''){   
-        let attackEntry = {       
-            member: member.id,
+        let attackEntry = {
+            member: member.name,
             entry: tagObj.name + ': ' + tagObj.damage
         }  
 
         //Check for Duplicates!
-        let duplicateEntry = this.attacks.find(entry => entry.entry === attackEntry.entry);
+        //let duplicateEntry = this.attacks.find(entry => entry.entry === attackEntry.entry);
 
-        if(!duplicateEntry){        
+        //if(!duplicateEntry){        
         this.attacks.push(attackEntry)
-        }
+        //}
     }
 });
 
-let attackEntries = this.attacks.filter(entry => entry.member === member.id);   
+let attackEntries = this.attacks.filter(entry => entry.member === member.name);   
 let returnEntry = 'No Weapon'
     
 if(attackEntries.length > 0){ 
@@ -302,7 +302,7 @@ if(member.experience){
 partyBox.innerHTML += `<h3 class='member-cell'> Experience Points: </h3> ${member.experience}`
 }
     
-let attackEntries = this.attacks.filter(entry => entry.member === member.id);
+let attackEntries = this.attacks.filter(entry => entry.member === member.name);
 
 if(attackEntries.length > 0){partyBox.innerHTML += `<h3 class='member-cell'> Weapons: </h3>`}
 
