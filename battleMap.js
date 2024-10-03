@@ -92,7 +92,6 @@ ref.iconContainer.appendChild(button);
 
 cloneDrawingToSecondWindow() {
     if (!toolbar.secondWindow || toolbar.secondWindow.closed) {
-        console.error('Second window is not open');
         return;
     }
 
@@ -185,21 +184,19 @@ imgElement.addEventListener('mouseup', stopDragging);
 imgElement.addEventListener('mouseleave', stopDragging);
 });
 
-// Helper function to check if mouse is over an icon (No longer needed for HTML elements)
-
 // Display the label near the icon when hovered
 function showLabel(icon, x, y) {
-const container = document.getElementById('imageContainer');
-const scrollX = container.scrollLeft;
-const scrollY = container.scrollTop;
+const container = document.getElementById('battleMap');
+const scrollX = window.scrollLeft;
+const scrollY = window.scrollTop;
 
 const label = document.createElement('div');
 label.textContent = icon.name;
 label.className = 'icon-label';
 label.style.position = 'absolute';
 label.style.color = icon.color;
-label.style.left = `${x - scrollX}px`;  // Position label near the icon
-label.style.top = `${y - scrollY}px`;
+label.style.left = `${icon.x}px`; 
+label.style.top = `${icon.y}px`;
 document.body.appendChild(label);
 
 // Store the reference to the label for later removal
