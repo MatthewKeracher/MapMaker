@@ -48,6 +48,8 @@ initiative: 0,
 hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 };
 
+newMonster.treasure = party.getTreasure(member),
+
 return newMonster
 },
 
@@ -286,10 +288,7 @@ partyBox.innerHTML = `
 `
 
 if(member.treasure){
-let treasure = party.getTreasure(member)
-if(treasure){
-partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${treasure}`
-}
+partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${member.treasure}`
 }
 
 if(member.experience){
