@@ -991,7 +991,7 @@ container.appendChild(itemsTable);
 
 tagsToAdd.forEach(tag => {
 
-if(tag.special === 'instruction' && obj.key !== 'tags'){return}
+//if(tag.special === 'instruction' && obj.key !== 'tags'){return}
 
 const itemsRow = document.createElement('div');
 

@@ -396,11 +396,9 @@ helper.handleConfirm = function(confirmation) {
     let sectionName = sectionDiv[0].getAttribute("name")
 
     //If onto a tag, store the instruction to apply random item to inheritors of that tag.
-    if(leftKey.value.trim() === 'Tags'){
+    if(leftKey.value.trim() === 'Tags' || leftKey.value.trim() === 'Monsters'){
     
     helper.addInstruction(entryName, key, 'group', sectionName)
-
-    
 
     //Else, deal out a random item.
     }else{

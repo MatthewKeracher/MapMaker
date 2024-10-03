@@ -1132,7 +1132,7 @@ const currentIndex = load.Data[currentKey].findIndex(item => parseInt(item.id) =
 let tag = {special: "instruction", id: "i" + Math.floor(Math.random() * 1000), key: key, type: type, name: entryName, group: sectionName}
 
 load.Data[currentKey][currentIndex].tags.push(tag)
-
+console.log(load.Data[currentKey][currentIndex])
 //Finally, Repackage to reflect change.
 NPCs.buildNPC();
 form.createForm(load.Data[currentKey][currentIndex]);
