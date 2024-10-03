@@ -5,7 +5,7 @@
     left: 0.2vw; 
     height: 5vh;
     width: 99.6vw;
-    z-index: 100;
+    z-index: 301;
     display: flex;  /* Use flexbox */
     align-items: center; /* Center items vertically */
     justify-content: space-between; /* Space between buttons and search bar */
