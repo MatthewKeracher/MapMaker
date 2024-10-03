@@ -48,7 +48,7 @@ initiative: 0,
 hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 };
 
-newMonster.treasure = party.getTreasure(member),
+newMonster.treasure = party.getTreasure(member)
 
 return newMonster
 },
