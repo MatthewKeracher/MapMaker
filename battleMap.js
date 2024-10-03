@@ -318,15 +318,15 @@ const savedDrawing = {
 let exists = load.Data.miscInfo.canvasData.find(entry => entry.id === savedDrawing.id);
 
 if(exists){
-    console.log(exists, savedDrawing)
+    //console.log(exists, savedDrawing)
     exists.drawing = savedDrawing.drawing
    
 }else{
     load.Data.miscInfo.canvasData.push(savedDrawing)
 }
 
-console.log(load.Data.miscInfo.canvasData)
-console.log(helper.getSize(load.Data.miscInfo.canvasData))
+//console.log(load.Data.miscInfo.canvasData)
+//console.log(helper.getSize(load.Data.miscInfo.canvasData))
 
 if(!stay){
 ctx.clearRect(0, 0, canvas.width, canvas.height);
