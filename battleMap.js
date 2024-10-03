@@ -235,7 +235,7 @@ offsetY = event.clientY - icon.y;
 
 
 // Bring the icon to the front
-//iconElement.style.zIndex = 100;
+iconElement.style.zIndex = 100;
 
 const iconLabels = document.querySelectorAll(".icon-label")
 iconLabels.forEach(label => {label.style.display = 'none'})
@@ -317,7 +317,13 @@ const savedDrawing = {
 
 let exists = load.Data.miscInfo.canvasData.find(entry => entry.id === savedDrawing.id);
 
-if(exists){exists = savedDrawing}else{load.Data.miscInfo.canvasData.push(savedDrawing)}
+if(exists){
+    console.log(exists, savedDrawing)
+    exists.drawing = savedDrawing.drawing
+   
+}else{
+    load.Data.miscInfo.canvasData.push(savedDrawing)
+}
 
 console.log(load.Data.miscInfo.canvasData)
 console.log(helper.getSize(load.Data.miscInfo.canvasData))
