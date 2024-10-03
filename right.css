@@ -8,7 +8,7 @@ top:0.4vh;
 right: 0.2vw; 
 width: 33vw;
 height: 100vh;
-z-index:3;
+z-index:300;
 resize: horizontal;
 
 /* Text */  
