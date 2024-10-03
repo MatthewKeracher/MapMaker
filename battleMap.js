@@ -127,8 +127,8 @@ color: member.color,
 img: new Image(),
 x: member.x || 80,   // Center horizontally
 y: member.y || 40 * (index + 1), // Center vertically
-width: member.width || 40,  // Default icon size
-height: member.height || 40,
+width: member.width || 40 * (member.size && member.size === 'L'? 2.5 : 1),  // Default icon size
+height: member.height || 40 * (member.size && member.size === 'L'? 2.5 : 1),
 src: member.image === ''? 'https://i.postimg.cc/1XsgW0Kf/image.png' : member.image     // Image source from member object
 }));
 
