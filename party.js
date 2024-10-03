@@ -461,7 +461,7 @@ document.getElementById("partyMod").value = 'none'
 },
 
 getTreasure(monster){
-console.log('getting treasure...')
+//console.log('getting treasure...')
 const lootEntry = monster.treasure;
 const lootObj = load.Data.tags.find(entry => entry.name === lootEntry);
 const lootTags = lootObj.tags.filter(tag => tag.key === 'items' && !tag.special);
