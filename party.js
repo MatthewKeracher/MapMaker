@@ -289,28 +289,34 @@ if (icon) {
 icon.classList.add('icon-highlight');  // Add the highlight class
 }
 
-partyBox.innerHTML = `
-<h3 class='member-cell'> # Attacks: </h3> ${member.attacks}
-<h3 class='member-cell'> Damage: </h3> ${member.damage}
-`
+    let attackEntries = this.attacks.filter(entry => entry.member === member.name);
 
-if(member.treasure){
-partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${member.treasure}`
+if(member.attacks !== '1'){
+partyBox.innerHTML += `<h3 class='member-cell'> # Attacks: </h3> ${member.attacks}`   
 }
 
-if(member.experience){
-partyBox.innerHTML += `<h3 class='member-cell'> Experience Points: </h3> ${member.experience}`
+if(attackEntries.length > 0){
+    partyBox.innerHTML += `<h3 class='member-cell'> Attacks: </h3>`
+}else{
+    partyBox.innerHTML += `<h3 class='member-cell'> Damage: </h3> ${member.damage}`
 }
-    
-let attackEntries = this.attacks.filter(entry => entry.member === member.name);
-
-if(attackEntries.length > 0){partyBox.innerHTML += `<h3 class='member-cell'> Weapons: </h3>`}
 
 attackEntries.forEach(attack => {
 
 partyBox.innerHTML += `${attack.entry}<br>`
    
 })
+
+if(member.treasure){
+partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${member.treasure}`
+console.log(member.treasure)
+}
+
+if(member.experience && member.key === 'monsters'){
+partyBox.innerHTML += `<h3 class='member-cell' style='color:cyan'> ${member.experience} Experience Points </h3><br>`
+}
+    
+
 
 
 
