@@ -235,7 +235,7 @@ offsetY = event.clientY - icon.y;
 
 
 // Bring the icon to the front
-iconElement.style.zIndex = 100;
+//iconElement.style.zIndex = 100;
 
 const iconLabels = document.querySelectorAll(".icon-label")
 iconLabels.forEach(label => {label.style.display = 'none'})
