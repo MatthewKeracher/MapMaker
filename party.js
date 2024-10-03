@@ -160,33 +160,22 @@ makeDamageEntry(member){
 const itemTags = member.tags.filter(entry => entry.key === "items");
 let weapons = [];
 
-itemTags.forEach(tag => {
-    
-    let tagObj = helper.getObjfromTag(tag);
-
-    if(tagObj.damage !== ''){
-        
-        let attackEntry = {
-            
+itemTags.forEach(tag => { 
+let tagObj = helper.getObjfromTag(tag);
+    if(tagObj.damage !== ''){   
+        let attackEntry = {       
             member: member.id,
             entry: tagObj.name + ': ' + tagObj.damage
-
-        }
-        
+        }  
         this.attacks.push(attackEntry)
     }
+});
 
-})
-
-let attackEntries = this.attacks.filter(entry => entry.member === member.id);
-console.log(member.id, member.name)
-console.log(this.attacks)
-console.log(attackEntries)
-    
+let attackEntries = this.attacks.filter(entry => entry.member === member.id);   
 let returnEntry = 'No Weapon'
     
 if(attackEntries.length > 0){ 
-    returnEntry = attackEntries[0].entry
+returnEntry = attackEntries[0].entry
 }
 
 return returnEntry;
@@ -200,11 +189,16 @@ let members = this.currentParty;
 let membersList = load.Data.miscInfo.party;
 ref.leftParty.innerHTML = ``;
 
+const leftPartyContainer = document.createElement('div');
+leftPartyContainer.id = "leftPartyContainer"
+leftParty.appendChild(leftPartyContainer)
+
 //ref.Left.style.display = "none";
 //ref.Centre.style.display = "none";
 ref.leftParty.style.display = "block";
 
 //Table Headers
+const tableContainer = document.createElement('div');
 const headerDiv = document.createElement('div');
 const memberRows = document.createElement('div');
 
@@ -219,17 +213,19 @@ let headerHTML = `
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">#</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">AC</div>
 <div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">HP</div>
-<div class="member-cell init-column"  style="color:rgba(255, 255, 255, 0.376)">Dam</div>
 </div>
 </div>
 `;
 
 headerDiv.innerHTML = headerHTML;
-ref.leftParty.appendChild(headerDiv);
-ref.leftParty.appendChild(memberRows);
+tableContainer.appendChild(headerDiv);
+tableContainer.appendChild(memberRows);
+leftPartyContainer.appendChild(tableContainer)
 
 //Add party members.
 members.forEach(member => {
+
+this.makeDamageEntry(member)
 
 // Inside the loop that creates memberDiv elements
 const memberDiv = document.createElement('div');
@@ -240,7 +236,7 @@ let memberHTML = `
 <div id="${member.name}Row" class="member-row">
 <div id="${member.name}" class="member-cell name-column" style="color:${member.color}">${member.name}</div>
 <div class="member-cell class-column">${member.class}</div>
-    <div class="member-cell init-columnn">${member.level}</div>
+<div class="member-cell init-columnn">${member.level}</div>
 <div class="member-cell init-columnn">+${member.attackBonus}</div>
 <div class="member-cell init-columnn">${member.morale}</div>
 <div class="member-cell init-column">${member.initiative}</div>
@@ -248,17 +244,9 @@ let memberHTML = `
 <div class="member-cell init-column">
 <input type="text" value="${member.hitPoints}" style="color: ${member.color}" class="hitPointBox" member="${member.name}">
 </div>
-<div npcId="${member.id}" class="member-cell init-columnn partyAttack">${this.makeDamageEntry(member)}</div>
 </div>
 </div>
 `;
-
-// `<input 
-// id="${npc.id}CurrentHP" 
-// type="number" 
-// class="hitPointBox"
-// style="color: ${npc.color}"
-// value="${npc.hitPoints}">`
 
 memberDiv.innerHTML = memberHTML;
 memberRows.appendChild(memberDiv);
@@ -278,7 +266,6 @@ member.hitPoints = newValue
 });
 });
 
-
 nameDiv.addEventListener('mouseover', () => {
 const iconId = nameDiv.getAttribute('data-icon-id');  
 const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);
@@ -286,6 +273,28 @@ const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);
 if (icon) {
 icon.classList.add('icon-highlight');  // Add the highlight class
 }
+
+partyBox.innerHTML = `
+<h3 class='member-cell'> # Attacks: </h3> ${member.attacks}
+<h3 class='member-cell'> Damage: </h3> ${member.damage}
+`
+
+if(member.treasure){
+let treasure = party.getTreasure(member)
+partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${treasure}`
+}
+    
+let attackEntries = this.attacks.filter(entry => entry.member === member.id);
+
+if(attackEntries.length > 0){partyBox.innerHTML += `<h3 class='member-cell'> Weapons: </h3>`}
+
+attackEntries.forEach(attack => {
+
+partyBox.innerHTML += `${attack.entry}<br>`
+   
+})
+
+
 
 });
 
@@ -296,6 +305,8 @@ const icon = document.querySelector(`.icon[data-icon-id="${iconId}"]`);  // Find
 if (icon) {
 icon.classList.remove('icon-highlight');  // Remove the highlight class
 }
+
+partyBox.innerHTML = '';
 });
 
 nameDiv.addEventListener('click', (event) => {
@@ -323,6 +334,12 @@ form.createForm(memberObj);
 });
 
 })
+
+// Create and append the partyBox to the right
+const boxDiv = document.createElement('div');
+let boxHTML = `<div id="partyBox"></div>`;
+boxDiv.innerHTML = boxHTML;
+leftPartyContainer.appendChild(boxDiv)
 
 
 // Create button row
@@ -434,6 +451,15 @@ document.getElementById("partyMod").value = 'none'
 
 
 });
+
+},
+
+getTreasure(monster){
+console.log('getting treasure...')
+const lootEntry = monster.treasure;
+const lootObj = load.Data.tags.find(entry => entry.name === lootEntry);
+
+return lootObj.name
 
 },
 

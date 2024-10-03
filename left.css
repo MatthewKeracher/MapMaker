@@ -37,7 +37,7 @@ position: absolute;
 cursor: move;
 top:50vh;  
 left: 5vw; 
-width: 55vw;
+width: 60vw;
 height: auto;
 max-height: 89.5vh;
 z-index:10;
@@ -59,6 +59,17 @@ scrollbar-color: black;
 flex-direction: column;
 outline: 0.4vh solid teal;
 } 
+
+#leftPartyContainer{
+    display: flex; /* Flexbox to position elements horizontally */
+    align-items: stretch; /* Make all children the same height */
+}
+
+#partyBox {
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 20vw; /* Specify a width for the partyBox */
+    background-color: black;
+}
 
 
 #Left::-webkit-scrollbar {
