@@ -287,7 +287,9 @@ partyBox.innerHTML = `
 
 if(member.treasure){
 let treasure = party.getTreasure(member)
+if(treasure){
 partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${treasure}`
+}
 }
 
 if(member.experience){
