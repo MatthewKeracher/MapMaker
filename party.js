@@ -167,7 +167,13 @@ let tagObj = helper.getObjfromTag(tag);
             member: member.id,
             entry: tagObj.name + ': ' + tagObj.damage
         }  
+
+        //Check for Duplicates!
+        let duplicateEntry = this.attacks.find(entry => entry.entry === attackEntry.entry);
+
+        if(!duplicateEntry){        
         this.attacks.push(attackEntry)
+        }
     }
 });
 
@@ -458,8 +464,17 @@ getTreasure(monster){
 console.log('getting treasure...')
 const lootEntry = monster.treasure;
 const lootObj = load.Data.tags.find(entry => entry.name === lootEntry);
+const lootTags = lootObj.tags.filter(tag => tag.key === 'items');
+let lootItems = ''
 
-return lootObj.name
+lootTags.forEach(tag => {
+const quantity = tag.quantity;
+const tagItem = helper.getObjfromTag(tag);
+let lootItem = helper.makeIteminfo(tagItem, tag)
+lootItems += lootItem.short
+});
+
+return lootItems
 
 },
 

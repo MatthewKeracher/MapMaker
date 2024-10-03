@@ -13,7 +13,12 @@ const save = {
 
 saveDataEntry: function() {
     
-if(ref.Centre.style.display !== 'block'){
+if(battleMap.gridShowing === true){
+    
+    battleMap.saveDrawing(ref.annotations, "stay")
+    return
+
+}else if(ref.Centre.style.display !== 'block'){
 //Save whole file.
 save.exportArray();
 }else{

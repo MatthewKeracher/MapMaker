@@ -129,7 +129,7 @@ x: member.x || 80,   // Center horizontally
 y: member.y || 40 * (index + 1), // Center vertically
 width: member.width || 40,  // Default icon size
 height: member.height || 40,
-src: member.image === ''? 'gifs/blankhead.png' : member.image     // Image source from member object
+src: member.image === ''? 'https://i.postimg.cc/1XsgW0Kf/image.png' : member.image     // Image source from member object
 }));
 
 let existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
@@ -235,7 +235,7 @@ offsetY = event.clientY - icon.y;
 
 
 // Bring the icon to the front
-iconElement.style.zIndex = 1000;
+iconElement.style.zIndex = 100;
 
 const iconLabels = document.querySelectorAll(".icon-label")
 iconLabels.forEach(label => {label.style.display = 'none'})
@@ -301,7 +301,7 @@ selectedIcon.duplicate.style.top = `${newY}px`;
 
 },
 
-saveDrawing(canvas){
+saveDrawing(canvas, stay){
 
 const drawingDataURL = canvas.toDataURL('image/png'); 
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -322,8 +322,9 @@ if(exists){exists = savedDrawing}else{load.Data.miscInfo.canvasData.push(savedDr
 console.log(load.Data.miscInfo.canvasData)
 console.log(helper.getSize(load.Data.miscInfo.canvasData))
 
-
+if(!stay){
 ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 }
 
 },
@@ -378,10 +379,9 @@ const centerY = y;
 //this.hexCenters.push({ x: centerX, y: centerY });
 
 //Drawing Style
-
 ctx.strokeStyle = Storyteller.gridColour;
 ctx.lineWidth = 2;
-ctx.globalAlpha = 0.5;
+ctx.globalAlpha = 0.1;
 
 ctx.beginPath();
 for (let i = 0; i < 6; i++) {

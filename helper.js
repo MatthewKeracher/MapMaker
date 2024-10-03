@@ -773,6 +773,19 @@ itemInfo += itemValue;
 
 }
 
+let shortHTML = `
+<div id="${item.name}Row" 
+class = "story-item-row"
+tagid = ${tag.id} 
+tagkey = ${tag.key}>
+
+<label key= ${item.key} id="${item.id}" class="member-cell" style="color:${item.color}">
+${itemName}
+</label>
+
+</div>`
+
+
 let itemHTML = `
 <div id="${item.name}Row" 
 class = "story-item-row"
@@ -791,7 +804,7 @@ ${itemInfo}</label>
 
 </div>`
 
-let itemObj = {color: item.color, id: item.id, key: item.key, description: itemHTML}
+let itemObj = {color: item.color, id: item.id, key: item.key, description: itemHTML, short: shortHTML}
 
 return itemObj
 
