@@ -568,6 +568,7 @@ if(event.shiftKey && ref.leftParty.style.display === 'block'){
 event.preventDefault();
 const clickId = div.getAttribute('id')
 const clickKey = div.getAttribute('key')
+console.log('shift-click')
 
 //...add NPC to Party
 if(clickKey === 'npcs'){
@@ -576,6 +577,24 @@ load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'hero'})
 
 if(clickKey ==='monsters'){
 load.Data.miscInfo.party.push({key: clickKey, id: clickId, type: 'monster', appearing: 'Wild'})
+}
+
+
+if(clickKey ==='tags'){
+console.log('clicked Tag')
+const clickObj = helper.getObjfromTag({key: clickKey, id: clickId});
+
+clickObj.tags.forEach(tag => {
+
+if(tag.key === 'monsters'){
+load.Data.miscInfo.party.push({key: tag.key, id: tag.id, type: 'monster', appearing: 'Wild'})
+}
+
+if(tag.key === 'npcs'){
+load.Data.miscInfo.party.push({key: tag.key, id: tag.id, type: 'hero'})
+}
+    
+})
 }
 
 //Repackage.

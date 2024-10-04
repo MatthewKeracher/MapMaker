@@ -132,7 +132,9 @@ let memberObj = helper.getObjfromTag(memberTag);
 if(memberTag.type === 'monster'){
 
 let noAppearing = 1;
+console.log(memberObj.name, memberObj.encounter)
 
+try{
 if (memberObj.encounter.includes('d')) {
 const appearing = memberTag.appearing.toLowerCase();
 //console.log(appearing, memberObj[appearing])
@@ -140,6 +142,8 @@ noAppearing = helper.rollMultipleDice(memberObj[appearing]);
 }else{
 noAppearing = memberObj.encounter;
 }
+}catch{noAppearing = memberObj.encounter;}
+
 
 for (let i = 0; i < noAppearing; i++) {
 let monster = this.makeMonsterNPC(memberObj, i + 1); 
