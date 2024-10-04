@@ -145,7 +145,7 @@ imgElement.classList.add('icon');
 imgElement.dataset.iconId = `icon-${icon.name}`;
 
 // Set initial position and size based on icon data
-imgElement.style.position = 'absolute';
+imgElement.style.position = 'fixed';
 imgElement.style.left = `${icon.x}px`;
 imgElement.style.top = `${icon.y}px`;
 imgElement.style.width = `${icon.width}px`;
@@ -227,9 +227,14 @@ const icon = icons.find(icon => icon.imgElement === iconElement);
 if (icon) {
 isDragging = true;
 selectedIcon = icon;
+
+if(icon.imgElement.style.position === 'absolute'){
 offsetX = event.clientX - icon.x;
 offsetY = event.clientY - icon.y;
-
+}else{
+offsetX = event.clientX - (scrollX + icon.x);
+offsetY = event.clientY - (scrollY + icon.y); 
+}
 
 // Bring the icon to the front
 iconElement.style.zIndex = 100;
@@ -245,6 +250,7 @@ event.preventDefault(); // Prevent default behavior
 function stopDragging() {
 if (selectedIcon) {
 //selectedIcon.imgElement.style.zIndex = 0;
+selectedIcon.imgElement.style.position = 'absolute';
 isDragging = false;
 selectedIcon = null;
 }

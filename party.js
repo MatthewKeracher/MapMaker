@@ -479,19 +479,27 @@ document.getElementById("partyMod").value = 'none'
 },
 
 getTreasure(monster){
-//console.log('getting treasure...')
-const lootEntry = monster.treasure;
-const lootObj = load.Data.tags.find(entry => entry.name === lootEntry);
-let lootTags = lootObj.tags.filter(tag => tag.key === 'items' && !tag.special);
-let instructions = lootObj.tags.filter(tag => tag.key === 'items' && tag.special);
-let lootItems = ''
+const allTags = helper.getAllTags(monster);
+const itemTags = helper.filterKeyTag(allTags, "items");
+const inventory = [];
+let lootItems = '';
 
-instructions.forEach(instruction => {
-let madeItems = helper.followInstructions(instruction, monster)   
-lootTags = [...lootTags, ...madeItems]
-})
+itemTags.forEach(itemTag => {
 
-lootTags.forEach(tag => {  
+const tagObj = helper.getObjfromTag(itemTag);
+const invTags = tagObj.tags.filter(tag => tag.key === "items")
+
+invTags.forEach(invTag => {
+
+if(invTag.special){
+let madeItems = helper.followInstructions(invTag, monster)   
+inventory = [...inventory, ...madeItems]           
+}else{
+inventory.push(invTag)
+}  
+});
+
+inventory.forEach(tag => {  
 
 //Check Item Chance
 //Factor in Chance of Item appearing in the Loot
@@ -505,6 +513,8 @@ let lootItem = helper.makeIteminfo(tagItem, tag)
 lootItems += lootItem.short
 }
 });
+    
+})
 
 return lootItems
 
