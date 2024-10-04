@@ -484,7 +484,7 @@ itemTags.forEach(itemTag => {
 
 const tagObj = helper.getObjfromTag(itemTag);
 const invTags = tagObj.tags.filter(tag => tag.key === "items");
-const inventory = [];
+let inventory = [];
 
 invTags.forEach((invTag,i) => {
     
