@@ -69,7 +69,7 @@ static getSpeciesData(npc){
   //addTags
   //Add Tags from Class, Species, etc.
   obj.tags.forEach(tag => {
-  console.log(tag)
+  //console.log(tag)
   
   const tagCheck = npc.tags.filter(entry => parseInt(entry.id) === parseInt(tag.id)).length
 

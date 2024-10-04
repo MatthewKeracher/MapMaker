@@ -309,15 +309,12 @@ partyBox.innerHTML += `${attack.entry}<br>`
 
 if(member.treasure){
 partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${member.treasure}`
-console.log(member.treasure)
 }
 
 if(member.experience && member.key === 'monsters'){
 partyBox.innerHTML += `<h3 class='member-cell' style='color:cyan'> ${member.experience} Experience Points </h3><br>`
 }
     
-
-
 
 
 });
@@ -481,16 +478,16 @@ document.getElementById("partyMod").value = 'none'
 getTreasure(monster){
 const allTags = helper.getAllTags(monster);
 const itemTags = helper.filterKeyTag(allTags, "items");
-const inventory = [];
 let lootItems = '';
 
 itemTags.forEach(itemTag => {
 
 const tagObj = helper.getObjfromTag(itemTag);
-const invTags = tagObj.tags.filter(tag => tag.key === "items")
+const invTags = tagObj.tags.filter(tag => tag.key === "items");
+const inventory = [];
 
-invTags.forEach(invTag => {
-
+invTags.forEach((invTag,i) => {
+    
 if(invTag.special){
 let madeItems = helper.followInstructions(invTag, monster)   
 inventory = [...inventory, ...madeItems]           
@@ -499,13 +496,12 @@ inventory.push(invTag)
 }  
 });
 
-inventory.forEach(tag => {  
-
+inventory.forEach((tag,i) => {  
+console.log(`Child Iteration ${i}:`, tag);
 //Check Item Chance
 //Factor in Chance of Item appearing in the Loot
 const chance = parseInt(tag.chance)
 const roll = helper.rollDice(100)
-console.log(chance, roll)
 if(roll < chance){
 const quantity = tag.quantity;
 const tagItem = helper.getObjfromTag(tag);
