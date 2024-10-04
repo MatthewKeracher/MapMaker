@@ -185,8 +185,8 @@ color: lime;
 /* Set individual column widths */
 .item-column { width: 16vw;}
 .item-dropdown-column { width: 8vw;}
-.item-bonus-column { width: 4vw;}
-.item-quant-column { width: 4vw;}
+.item-bonus-column { width: 2vw;}
+.item-quant-column { width: 5vw;}
 
 /* STORYTELLER ITEMS */
 
