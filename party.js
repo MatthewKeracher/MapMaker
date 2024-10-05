@@ -87,15 +87,6 @@ load.Data.miscInfo.party.push({key: 'monsters', id: monster.id, type:'monster', 
 
 })
 
-const partyDisplay = ref.leftParty.style.display;
-
-party.buildParty();
-party.loadParty();
-
-ref.leftParty.style.display = partyDisplay;
-
-
-
 },
 
 addToParty(){
