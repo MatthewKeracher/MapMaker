@@ -317,25 +317,6 @@ event.preventDefault(); // Prevent default behavior
 function stopDragging() {
 if (selectedIcon) {
 selectedIcon.imgElement.style.position = 'absolute';
-
-const iconPosition = {
-location: selectedIcon.location,
-key: selectedIcon.key,
-id: selectedIcon.id,
-x: selectedIcon.x,
-y: selectedIcon.y,  
-}
-
-let obj = helper.getObjfromTag(iconPosition);
-if(!obj.position){obj.position = []}
-
-let exists = obj.position.find(entry => entry.location === iconPosition.location);
-
-if(exists){
-exists = iconPosition
-}else{
-obj.position.push(iconPosition)
-};
     
 isDragging = false;
 selectedIcon = null;
@@ -361,6 +342,35 @@ battleMap.projectIcon(newX, newY, selectedIcon);
 }
 
 expandable.showIcon()
+},
+
+updateIconPosition(){
+
+const icons = document.querySelectorAll(".icon")
+console.log(icons)
+
+icons.forEach(icon => {
+console.log(icon)
+
+const iconPosition = {
+location: icon.location,
+key: icon.key,
+id: icon.id,
+x: icon.x,
+y: icon.y,  
+}
+
+let obj = helper.getObjfromTag(iconPosition);
+if(!obj.position){obj.position = []}
+
+let exists = obj.position.find(entry => entry.location === iconPosition.location);
+
+if(exists){
+exists = iconPosition
+}else{
+obj.position.push(iconPosition)
+}
+});
 },
 
 projectIcon(newX, newY, selectedIcon){
@@ -395,6 +405,8 @@ const drawingDataURL = canvas.toDataURL('image/png');
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 const isEmpty = imageData.data.every((value) => value === 0);
+
+battleMap.updateIconPosition()
 
 if(!isEmpty){
 
