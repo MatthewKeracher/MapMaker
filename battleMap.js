@@ -408,12 +408,38 @@ selectedIcon.duplicate.style.top = `${newY}px`;
 
 },
 
+updateIconPosition(){
+    const icons = document.querySelectorAll(".icon")
+    console.log(icons)
+    icons.forEach(icon => {
+    console.log(icon)
+    const iconPosition = {
+    location: icon.location,
+    key: icon.key,
+    id: icon.id,
+    x: icon.x,
+    y: icon.y,  
+    }
+    let obj = helper.getObjfromTag(iconPosition);
+    if(!obj.position){obj.position = []}
+    let exists = obj.position.find(entry => entry.location === iconPosition.location);
+    if(exists){
+    exists = iconPosition
+    }else{
+    obj.position.push(iconPosition)
+    }
+    });
+    },
+    
+
 saveDrawing(canvas, stay){
 
 const drawingDataURL = canvas.toDataURL('image/png'); 
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 const isEmpty = imageData.data.every((value) => value === 0);
+
+this.updateIconPosition();
 
 if(!isEmpty){
 
