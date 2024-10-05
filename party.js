@@ -50,6 +50,9 @@ hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 
 newMonster.treasure = party.getTreasure(member)
 
+events.makeDiv("header", newMonster, ref.Storyteller, "color")
+events.makeDiv("backstory", member, ref.Storyteller, "color")
+
 return newMonster
 },
 

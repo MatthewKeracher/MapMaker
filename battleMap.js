@@ -245,7 +245,7 @@ showLabel(icon, event.clientX, event.clientY);
 try{
 let nameDiv
 
-if(icon.key === "npcs"){
+if(icon.key === "npcs" || icon.key === "monsters"){
 nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
 }
 
