@@ -693,7 +693,7 @@ ${obj.name}'s Inventory: </span>
 
 <hr name="${headerHR}" style="background-color:${obj.color}"><br>`;
 
-}else if(obj.key === 'npcs'){
+}else if(obj.key === 'npcs' || obj.key === 'monsters'){
 
 
 //Gather data on NPC.
