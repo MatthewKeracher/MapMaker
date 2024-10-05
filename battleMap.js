@@ -21,93 +21,78 @@ enablePencilTool(canvas) {
     let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
-    let startSet = false; // Tracks if the start point is set
-    let previewX = 0;
-    let previewY = 0;
-    let isShiftPressed = false; // Track if Shift is pressed for preview mode
-
-    // Handle Shift key press and release
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Shift') {
-            isShiftPressed = true;
-        }
-    });
-
-    document.addEventListener('keyup', (e) => {
-        if (e.key === 'Shift') {
-            isShiftPressed = false;
-        }
-    });
+    let isShiftPressed = false;
 
     function startDrawing(e) {
-        if (!startSet) {
-            // First tap sets the starting point
-            startSet = true;
-            [lastX, lastY] = [e.offsetX, e.offsetY];
-        } else {
-            // Second tap completes the line
-            drawFinalLine(e.offsetX, e.offsetY);
-            startSet = false; // Reset for the next line
-            ctx.beginPath();  // Reset the path
-            battleMap.cloneDrawingToSecondWindow(); // Optional
-        }
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY]; // Start drawing from the current position
     }
 
-    function drawFinalLine(endX, endY) {
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = Storyteller.gridColour;
-        ctx.lineWidth = 6; // Pencil thickness
+    function draw(e) {
+        if (!isDrawing) return;
+
+        if (battleMap.erasing) {
+            ctx.globalCompositeOperation = 'destination-out'; // Set to erase mode
+            ctx.lineWidth = 20; // Eraser thickness
+        } else {
+            ctx.strokeStyle = Storyteller.gridColour; // Pencil color
+            ctx.globalCompositeOperation = 'source-over'; // Set to normal drawing mode
+            ctx.lineWidth = 6; // Pencil thickness
+        }
+
+        ctx.lineJoin = 'round';    // Smooth line joins
+        ctx.lineCap = 'round';     // Smooth line ends
 
         ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
+        ctx.moveTo(lastX, lastY); // Move to the last point
 
-        // Draw a straight line
-        const dx = Math.abs(endX - lastX);
-        const dy = Math.abs(endY - lastY);
         if (isShiftPressed) {
+            // Draw a preview straight line
+            const dx = Math.abs(e.offsetX - lastX);
+            const dy = Math.abs(e.offsetY - lastY);
+
             if (dx > dy) {
                 // Constrain to horizontal line
-                ctx.lineTo(endX, lastY);
+                ctx.lineTo(e.offsetX, lastY);
             } else {
                 // Constrain to vertical line
-                ctx.lineTo(lastX, endY);
+                ctx.lineTo(lastX, e.offsetY);
             }
         } else {
-            // Free line
-            ctx.lineTo(endX, endY);
-        }
-        ctx.stroke();
-    }
-
-    function previewLine(e) {
-        if (startSet) {
-            // Clear the canvas to avoid ghosting effect of the preview line
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            //battleMap.redrawEverything();  // Optional: Redraw other content
-
-            // Preview line from the last set point to the current cursor position
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';  // Semi-transparent for preview
-            ctx.lineWidth = 6;
-
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
+            // Normal drawing behavior
             ctx.lineTo(e.offsetX, e.offsetY);
-            ctx.stroke();
+        }
+
+        ctx.stroke();
+
+        // Update last position for normal drawing
+        if (!isShiftPressed) {
+            [lastX, lastY] = [e.offsetX, e.offsetY]; // Update last position only if not drawing straight
         }
     }
 
-    // Stop drawing when mouse is released or leaves canvas
     function stopDrawing() {
         isDrawing = false;
         ctx.beginPath(); // Reset the path
+        battleMap.cloneDrawingToSecondWindow();
     }
+
+    // Listen for keydown and keyup events to track Shift key state
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Shift') {
+            isShiftPressed = true; // Shift key is held down
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.key === 'Shift') {
+            isShiftPressed = false; // Shift key is released
+        }
+    });
 
     // Attach event listeners for drawing
     canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', previewLine);
+    canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
 
@@ -125,10 +110,10 @@ enablePencilTool(canvas) {
     button.addEventListener('click', () => {
         if (this.erasing === true) {
             this.erasing = false;
-            button.style.backgroundImage = 'url("gifs/pencil.png")';
+            button.style.backgroundImage = 'url("gifs/pencil.png")'; 
         } else {
             this.erasing = true;
-            button.style.backgroundImage = 'url("gifs/eraser.png")';
+            button.style.backgroundImage = 'url("gifs/eraser.png")'; 
         }
     });
 
@@ -184,7 +169,6 @@ let icons = members.map((member, index) => {
         
     if(member.position){
         position = member.position.find(entry => entry.location === Storyteller.currentLocationId)
-        console.log(position)
     };
     
     
