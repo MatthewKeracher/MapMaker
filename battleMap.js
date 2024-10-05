@@ -131,19 +131,25 @@ members.push(obj);
 })
 
 
-// Map members to icons with necessary properties
-let icons = members.map((member,index) => ({
-id:member.id,
-key: member.key,
-name: member.name,
-color: member.color,
-img: new Image(),
-x: member.x || 80,   // Center horizontally
-y: member.y || 40 * (index + 1), // Center vertically
-width: member.width || 40 * (member.size && member.size === 'L'? 2.5 : 1),  // Default icon size
-height: member.height || 40 * (member.size && member.size === 'L'? 2.5 : 1),
-src: member.image === ''? 'https://i.postimg.cc/1XsgW0Kf/image.png' : member.image     // Image source from member object
-}));
+let icons = members.map((member, index) => {
+    // Find the position matching the current location
+    let position = member.positions.find(pos => pos.location === Storyteller.currentLocationId);
+
+    return {
+        location: Storyteller.currentLocationId,
+        id: member.id,
+        key: member.key,
+        name: member.name,
+        color: member.color,
+        img: new Image(),
+        x: position ? position.x : (member.x || 80),   // Use position.x if found, else default
+        y: position ? position.y : (member.y || 40 * (index + 1)), // Use position.y if found, else default
+        width: member.width || 40 * (member.size && member.size === 'L' ? 2.5 : 1),  // Default icon size
+        height: member.height || 40 * (member.size && member.size === 'L' ? 2.5 : 1),
+        src: member.image === '' ? 'https://i.postimg.cc/1XsgW0Kf/image.png' : member.image // Image source
+    };
+});
+
 
 let existingIcons = [...document.querySelectorAll('.icon'), ...document.querySelectorAll('.icon-label')];
 const secondWindowIcons = toolbar.secondWindow? toolbar.secondWindow.document.querySelectorAll('.icon'): [];
@@ -271,8 +277,20 @@ event.preventDefault(); // Prevent default behavior
 // Stop dragging
 function stopDragging() {
 if (selectedIcon) {
-this.updateMemberPosition(selectedIcon);
 selectedIcon.imgElement.style.position = 'absolute';
+
+const iconPosition = {
+location: selectionIcon.location,
+key: selectedIcon.key,
+id: selectedIcon.id,
+x: selectedIcon.x,
+y: selectedIcon.y,  
+}
+
+let obj = load.Data[iconPosition.key].findIndex(entry => entry.id === iconPosition.id);
+obj.position.push(iconPosition);
+console.log(obj);
+    
 isDragging = false;
 selectedIcon = null;
 }
@@ -298,12 +316,6 @@ battleMap.projectIcon(newX, newY, selectedIcon);
 }
 
 expandable.showIcon()
-},
-
-updateMemberPosition(icon){
-
-console.log(icon)
-    
 },
 
 projectIcon(newX, newY, selectedIcon){
