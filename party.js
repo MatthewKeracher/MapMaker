@@ -189,8 +189,10 @@ itemTags.forEach(tag => {
 let tagObj = helper.getObjfromTag(tag);
     if(tagObj.damage !== ''){   
         let attackEntry = {
+            tag: tag,
             member: member.name,
-            entry: tagObj.name + ': ' + tagObj.damage
+            obj: tagObj,
+            
         }  
 
         //Check for Duplicates!
@@ -198,18 +200,19 @@ let tagObj = helper.getObjfromTag(tag);
 
         //if(!duplicateEntry){        
         this.attacks.push(attackEntry)
+      
         //}
     }
 });
 
-let attackEntries = this.attacks.filter(entry => entry.member === member.name);   
-let returnEntry = 'No Weapon'
+//let attackEntries = this.attacks.filter(entry => entry.member === member.name);   
+// let returnEntry = 'No Weapon'
     
-if(attackEntries.length > 0){ 
-returnEntry = attackEntries[0].entry
-}
+// if(attackEntries.length > 0){ 
+// returnEntry = attackEntries[0].entry
+// }
 
-return returnEntry;
+// return returnEntry;
 
 },
 
@@ -311,16 +314,20 @@ if(member.attacks !== '1'){
 partyBox.innerHTML += `<h3 class='member-cell'> # Attacks: </h3> ${member.attacks}`   
 }
 
+    let lineBreak = `<div></div>`
+
 if(attackEntries.length > 0){
-    partyBox.innerHTML += `<h3 class='member-cell'> Attacks: </h3>`
+    partyBox.innerHTML += `<h3 class='member-cell'> Attacks </h3> ${lineBreak}`
 }else{
     partyBox.innerHTML += `<h3 class='member-cell'> Damage: </h3> ${member.damage}`
 }
 
 attackEntries.forEach(attack => {
+console.log(attack.obj)
+const attackItem = helper.makeIteminfo(attack.obj, attack.tag)
+partyBox.innerHTML += attackItem.short;
+//`<h3 class="member-cell" style="color:${attack.color}"> ${attack.entry} </h3> ${lineBreak}`
 
-partyBox.innerHTML += `${attack.entry}<br>`
-   
 })
 
 if(member.treasure){
@@ -513,7 +520,7 @@ inventory.push(invTag)
 });
 
 inventory.forEach((tag,i) => {  
-console.log(`Child Iteration ${i}:`, tag);
+//console.log(`Child Iteration ${i}:`, tag);
 //Check Item Chance
 //Factor in Chance of Item appearing in the Loot
 const chance = parseInt(tag.chance)
