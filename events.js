@@ -195,7 +195,7 @@ this.makeDiv("header", subLocation, ref.Storyteller, "color");
 //Rip Monster Rags
 let allTags = helper.getAllTags(subLocation);
 const subLocMonsters = helper.filterKeyTag(allTags,"monsters");
-console.log(subLocMonsters)
+//console.log(subLocMonsters)
 this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
 
 

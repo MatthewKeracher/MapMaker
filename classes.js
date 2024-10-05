@@ -27,6 +27,7 @@ try{NPCbuild.getSpeciesData(this)}catch{this.species = 'Human'}
 this.group = data.group,
 this.subGroup = data.subGroup,
 this.description = data.description;
+this.position = data.position? data.position: [];
 
 
 
