@@ -17,78 +17,106 @@ gridShowing: false,
 erasing: false,
 
 enablePencilTool(canvas) {
-const ctx = canvas.getContext('2d');
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let isShiftPressed = false; // Track if Shift is pressed
 
-function startDrawing(e) {
-isDrawing = true;
-[lastX, lastY] = [e.offsetX, e.offsetY]; // Start drawing from the current position
-}
+    // Handle Shift key press and release
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Shift') {
+            isShiftPressed = true;
+        }
+    });
 
-function draw(e) {
-if (!isDrawing) return;
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'Shift') {
+            isShiftPressed = false;
+        }
+    });
 
-if (battleMap.erasing) {
-    ctx.globalCompositeOperation = 'destination-out'; // Set to erase mode
-    ctx.lineWidth = 20; // Pencil thickness
-} else {
-    ctx.strokeStyle = Storyteller.gridColour; // Pencil color
-    ctx.globalCompositeOperation = 'source-over'; // Set to normal drawing mode
-    ctx.lineWidth = 6; // Pencil thickness
-}
+    function startDrawing(e) {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY]; // Start drawing from the current position
+    }
 
-ctx.lineJoin = 'round';    // Smooth line joins
-ctx.lineCap = 'round';     // Smooth line ends
+    function draw(e) {
+        if (!isDrawing) return;
 
+        ctx.lineJoin = 'round';    // Smooth line joins
+        ctx.lineCap = 'round';     // Smooth line ends
 
-ctx.beginPath();
-ctx.moveTo(lastX, lastY); // Move to the last point
-ctx.lineTo(e.offsetX, e.offsetY); // Draw to the new point
-ctx.stroke();
-[lastX, lastY] = [e.offsetX, e.offsetY]; // Update last position
-}
+        if (battleMap.erasing) {
+            ctx.globalCompositeOperation = 'destination-out'; // Set to erase mode
+            ctx.lineWidth = 20; // Eraser thickness
+        } else {
+            ctx.strokeStyle = Storyteller.gridColour; // Pencil color
+            ctx.globalCompositeOperation = 'source-over'; // Normal drawing mode
+            ctx.lineWidth = 6; // Pencil thickness
+        }
 
-function stopDrawing() {
-isDrawing = false;
-ctx.beginPath(); // Reset the path
-battleMap.cloneDrawingToSecondWindow();
-}
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY); // Move to the last point
 
-// Attach event listeners for drawing
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
+        // Draw straight lines if Shift is pressed
+        if (isShiftPressed) {
+            const dx = Math.abs(e.offsetX - lastX);
+            const dy = Math.abs(e.offsetY - lastY);
 
-// Create and add the button
-const button = document.createElement('button');
-button.id = 'drawToolButton'; // Button ID
-button.style.display = 'none';
+            if (dx > dy) {
+                // Constrain to horizontal line
+                ctx.lineTo(e.offsetX, lastY);
+            } else {
+                // Constrain to vertical line
+                ctx.lineTo(lastX, e.offsetY);
+            }
+        } else {
+            // Normal free drawing
+            ctx.lineTo(e.offsetX, e.offsetY);
+        }
 
-// Set initial icon for drawing mode (pencil icon)
-button.style.backgroundImage = 'url("gifs/pencil.png")';
-button.style.backgroundSize = 'cover'; // Adjust size to cover the button
-button.style.backgroundRepeat = 'no-repeat'; // Prevent repeat of the image
-button.style.backgroundPosition = 'center'; // Center the image
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY]; // Update last position
+    }
 
-button.addEventListener('click', () => {
+    function stopDrawing() {
+        isDrawing = false;
+        ctx.beginPath(); // Reset the path
+        battleMap.cloneDrawingToSecondWindow();
+    }
 
-if(this.erasing === true){
-    this.erasing = false
-    button.style.backgroundImage = 'url("gifs/pencil.png")'; 
-}else{
-    this.erasing = true
-    button.style.backgroundImage = 'url("gifs/eraser.png")'; 
-};
+    // Attach event listeners for drawing
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
 
-});
+    // Create and add the button
+    const button = document.createElement('button');
+    button.id = 'drawToolButton'; // Button ID
+    button.style.display = 'none';
 
-// Append the button to the icon container
-ref.iconContainer.appendChild(button);
+    // Set initial icon for drawing mode (pencil icon)
+    button.style.backgroundImage = 'url("gifs/pencil.png")';
+    button.style.backgroundSize = 'cover'; // Adjust size to cover the button
+    button.style.backgroundRepeat = 'no-repeat'; // Prevent repeat of the image
+    button.style.backgroundPosition = 'center'; // Center the image
 
+    button.addEventListener('click', () => {
+        if (this.erasing === true) {
+            this.erasing = false;
+            button.style.backgroundImage = 'url("gifs/pencil.png")';
+        } else {
+            this.erasing = true;
+            button.style.backgroundImage = 'url("gifs/eraser.png")';
+        }
+    });
+
+    // Append the button to the icon container
+    ref.iconContainer.appendChild(button);
 },
+
 
 cloneDrawingToSecondWindow() {
     if (!toolbar.secondWindow || toolbar.secondWindow.closed) {
