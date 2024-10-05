@@ -311,7 +311,7 @@ icon.classList.add('icon-highlight');  // Add the highlight class
     let attackEntries = this.attacks.filter(entry => entry.member === member.name);
 
 if(member.attacks !== '1'){
-partyBox.innerHTML += `<h3 class='member-cell'> # Attacks: </h3> ${member.attacks}`   
+partyBox.innerHTML += `<h3 color:rgba(255, 255, 255, 0.376) class='member-cell'> # Attacks: </h3> ${member.attacks}`   
 }
 
     let lineBreak = `<div></div>`

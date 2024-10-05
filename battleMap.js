@@ -196,11 +196,11 @@ let icons = members.map((member, index) => {
         color: member.color,
         img: new Image(),
         position: position? 'absolute' : 'fixed',
-        x: position ? position.x : (member.x || 80),   // Use position.x if found, else default
-        y: position ? position.y : (member.y || 40 * (index + 1)), // Use position.y if found, else default
-        width: member.width || 40 * (member.size && member.size === 'L' ? 2.5 : 1),  // Default icon size
-        height: member.height || 40 * (member.size && member.size === 'L' ? 2.5 : 1),
-        src: member.image === '' ? defaultImage : member.image // Image source
+        x: position ? position.x :  80,   
+        y: (position ? position.y :  40 )* (index + 1), 
+        width: member.width || 40 * (member.size? member.size : 1),  
+        height: member.height || 40 * (member.size? member.size : 1),
+        src: member.image === '' ? defaultImage : member.image 
     };
 });
 
