@@ -33,7 +33,7 @@ outline: 0.4vh solid teal;
 .leftParty {
 
 /* Position */
-position: absolute;
+position: fixed;
 cursor: move;
 top:50vh;  
 left: 5vw; 

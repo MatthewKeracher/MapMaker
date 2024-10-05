@@ -133,8 +133,13 @@ members.push(obj);
 
 let icons = members.map((member, index) => {
     // Find the position matching the current location
-    let position = member.positions.find(pos => pos.location === Storyteller.currentLocationId);
-
+    let position = '';
+        
+    if(member.position){
+        position = member.position.find(entry => entry.location === Storyteller.currentLocationId)
+    };
+    
+    
     return {
         location: Storyteller.currentLocationId,
         id: member.id,
@@ -142,6 +147,7 @@ let icons = members.map((member, index) => {
         name: member.name,
         color: member.color,
         img: new Image(),
+        position: position? 'absolute' : 'fixed',
         x: position ? position.x : (member.x || 80),   // Use position.x if found, else default
         y: position ? position.y : (member.y || 40 * (index + 1)), // Use position.y if found, else default
         width: member.width || 40 * (member.size && member.size === 'L' ? 2.5 : 1),  // Default icon size
@@ -165,7 +171,7 @@ imgElement.classList.add('icon');
 imgElement.dataset.iconId = `icon-${icon.name}`;
 
 // Set initial position and size based on icon data
-imgElement.style.position = 'fixed';
+imgElement.style.position = `${icon.position}`;
 imgElement.style.left = `${icon.x}px`;
 imgElement.style.top = `${icon.y}px`;
 imgElement.style.width = `${icon.width}px`;
@@ -176,6 +182,11 @@ ref.iconContainer.appendChild(imgElement);
 
 // Save a reference to the img element inside the icon object for later use
 icon.imgElement = imgElement;
+
+//Project Icons
+if(imgElement.style.position === 'absolute'){
+battleMap.projectIcon(icon.x, icon.y, icon)
+};
 
 // Hover label handling
 imgElement.addEventListener('mouseover', (event) => {
@@ -280,16 +291,23 @@ if (selectedIcon) {
 selectedIcon.imgElement.style.position = 'absolute';
 
 const iconPosition = {
-location: selectionIcon.location,
+location: selectedIcon.location,
 key: selectedIcon.key,
 id: selectedIcon.id,
 x: selectedIcon.x,
 y: selectedIcon.y,  
 }
 
-let obj = load.Data[iconPosition.key].findIndex(entry => entry.id === iconPosition.id);
-obj.position.push(iconPosition);
-console.log(obj);
+let obj = helper.getObjfromTag(iconPosition);
+if(!obj.position){obj.position = []}
+
+let exists = obj.position.find(entry => entry.location === iconPosition.location);
+
+if(exists){
+exists = iconPosition
+}else{
+obj.position.push(iconPosition)
+};
     
 isDragging = false;
 selectedIcon = null;
@@ -310,7 +328,6 @@ selectedIcon.y = newY;
 // Update the position of the img element
 selectedIcon.imgElement.style.left = `${newX}px`;
 selectedIcon.imgElement.style.top = `${newY}px`;
-
 battleMap.projectIcon(newX, newY, selectedIcon);
 
 }
