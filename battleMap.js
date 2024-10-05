@@ -84,7 +84,7 @@ enablePencilTool(canvas) {
         if (startSet) {
             // Clear the canvas to avoid ghosting effect of the preview line
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            battleMap.redrawEverything();  // Optional: Redraw other content
+            //battleMap.redrawEverything();  // Optional: Redraw other content
 
             // Preview line from the last set point to the current cursor position
             ctx.lineJoin = 'round';
@@ -184,6 +184,7 @@ let icons = members.map((member, index) => {
         
     if(member.position){
         position = member.position.find(entry => entry.location === Storyteller.currentLocationId)
+        console.log(position)
     };
     
     
@@ -214,6 +215,8 @@ icons.forEach(icon => {
 // Create img element for each icon
 const imgElement = document.createElement('img');
 imgElement.src = icon.src;
+imgElement.setAttribute('key', icon.key);
+imgElement.id = icon.id;
 imgElement.classList.add('icon'); 
 imgElement.dataset.iconId = `icon-${icon.name}`;
 
@@ -335,27 +338,7 @@ event.preventDefault(); // Prevent default behavior
 // Stop dragging
 function stopDragging() {
 if (selectedIcon) {
-selectedIcon.imgElement.style.position = 'absolute';
-
-const iconPosition = {
-location: selectedIcon.location,
-key: selectedIcon.key,
-id: selectedIcon.id,
-x: selectedIcon.x,
-y: selectedIcon.y,  
-}
-
-let obj = helper.getObjfromTag(iconPosition);
-if(!obj.position){obj.position = []}
-
-let exists = obj.position.find(entry => entry.location === iconPosition.location);
-
-if(exists){
-exists = iconPosition
-}else{
-obj.position.push(iconPosition)
-};
-    
+selectedIcon.imgElement.style.position = 'absolute'; 
 isDragging = false;
 selectedIcon = null;
 }
@@ -410,23 +393,32 @@ selectedIcon.duplicate.style.top = `${newY}px`;
 
 updateIconPosition(){
     const icons = document.querySelectorAll(".icon")
-    console.log(icons)
+    
     icons.forEach(icon => {
-    console.log(icon)
+    
+const position = icon.style.position;
+const display = icon.style.display;
+
+if(position === "absolute" && display !== "none"){
+
+    let x = icon.style.left
+    let y = icon.style.top
+
     const iconPosition = {
-    location: icon.location,
-    key: icon.key,
+    location: Storyteller.currentLocationId,
+    key: icon.getAttribute('key'),
     id: icon.id,
-    x: icon.x,
-    y: icon.y,  
+    x: x.slice(0, -2),
+    y: y.slice(0, -2),  
     }
+    
     let obj = helper.getObjfromTag(iconPosition);
     if(!obj.position){obj.position = []}
     let exists = obj.position.find(entry => entry.location === iconPosition.location);
-    if(exists){
-    exists = iconPosition
-    }else{
-    obj.position.push(iconPosition)
+    if(exists){ //delete!
+    obj.position = obj.position.filter(entry => entry.location !== iconPosition.location);   
+    }
+    obj.position.push(iconPosition);
     }
     });
     },
