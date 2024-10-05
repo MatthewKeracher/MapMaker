@@ -784,6 +784,8 @@ tagkey = ${tag.key}>
 ${itemName}
 </label>
 
+${item.damage !== ""? item.damage : ''}
+
 </div>`
 
 

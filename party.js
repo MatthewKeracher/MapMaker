@@ -317,9 +317,9 @@ partyBox.innerHTML += `<h3 class='member-cell'> # Attacks: </h3> ${member.attack
     let lineBreak = `<div></div>`
 
 if(attackEntries.length > 0){
-    partyBox.innerHTML += `<h3 class='member-cell'> Attacks </h3> ${lineBreak}`
+    partyBox.innerHTML += `<h3 style="color:rgba(255, 255, 255, 0.376)" class='member-cell'> Attacks: </h3> ${lineBreak}`
 }else{
-    partyBox.innerHTML += `<h3 class='member-cell'> Damage: </h3> ${member.damage}`
+    partyBox.innerHTML += `<h3 style="color:rgba(255, 255, 255, 0.376)" class='member-cell'> Damage: </h3> ${member.damage}`
 }
 
 attackEntries.forEach(attack => {
@@ -331,7 +331,7 @@ partyBox.innerHTML += attackItem.short;
 })
 
 if(member.treasure){
-partyBox.innerHTML += `<h3 class='member-cell'> Treasure: </h3> ${member.treasure}`
+partyBox.innerHTML += `<h3 style="color:rgba(255, 255, 255, 0.376)" class='member-cell'> Treasure: </h3> ${member.treasure}`
 }
 
 if(member.experience && member.key === 'monsters'){

@@ -116,11 +116,25 @@ cloneDrawingToSecondWindow() {
 
 loadIcons() {
 
-let members = party.currentParty;
+let members = [...party.currentParty];
+
+//add subLocations
+const subLocationHeaders = document.querySelectorAll('h2[key="subLocations"]');
+subLocationHeaders.forEach(div => {
+
+const id = div.getAttribute('id');
+const key = div.getAttribute('key');
+const obj = helper.getObjfromTag({key: key, id: id});
+
+members.push(obj);
+    
+})
+
 
 // Map members to icons with necessary properties
 let icons = members.map((member,index) => ({
 id:member.id,
+key: member.key,
 name: member.name,
 color: member.color,
 img: new Image(),
@@ -162,7 +176,15 @@ imgElement.addEventListener('mouseover', (event) => {
 showLabel(icon, event.clientX, event.clientY);
 
 try{
-const nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
+let nameDiv
+
+if(icon.key === "npcs"){
+nameDiv = ref.Storyteller.querySelector(`.npcBlock[data-icon-id="icon-${icon.name}"]`);
+}
+
+if(icon.key === "subLocations"){
+nameDiv = ref.Storyteller.querySelector(`h2[key="subLocations"][id="${icon.id}"]`);
+}
 
 nameDiv.scrollIntoView({ 
 behavior: 'smooth', // Smooth scrolling effect
@@ -249,7 +271,7 @@ event.preventDefault(); // Prevent default behavior
 // Stop dragging
 function stopDragging() {
 if (selectedIcon) {
-//selectedIcon.imgElement.style.zIndex = 0;
+this.updateMemberPosition(selectedIcon);
 selectedIcon.imgElement.style.position = 'absolute';
 isDragging = false;
 selectedIcon = null;
@@ -276,6 +298,12 @@ battleMap.projectIcon(newX, newY, selectedIcon);
 }
 
 expandable.showIcon()
+},
+
+updateMemberPosition(icon){
+
+console.log(icon)
+    
 },
 
 projectIcon(newX, newY, selectedIcon){
