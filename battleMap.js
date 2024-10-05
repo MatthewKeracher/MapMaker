@@ -197,7 +197,7 @@ let icons = members.map((member, index) => {
         img: new Image(),
         position: position? 'absolute' : 'fixed',
         x: position ? position.x :  80,   
-        y: (position ? position.y :  40 )* (index + 1), 
+        y: position ? position.y : 40, 
         width: member.width || 40 * (member.size? member.size : 1),  
         height: member.height || 40 * (member.size? member.size : 1),
         src: member.image === '' ? defaultImage : member.image 
