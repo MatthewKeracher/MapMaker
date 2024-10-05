@@ -170,6 +170,22 @@ let icons = members.map((member, index) => {
     if(member.position){
         position = member.position.find(entry => entry.location === Storyteller.currentLocationId)
     };
+
+    let defaultImage = '';
+
+    console.log(member.key)
+
+    switch (member.key) {
+    case 'monsters':
+    defaultImage = 'gifs/goblin.gif';
+    break;
+    case 'npcs':
+    defaultImage = 'gifs/blankHead.png';
+    break;
+    case 'subLocations':
+    defaultImage = 'gifs/door.gif';
+    break;
+    };
     
     
     return {
@@ -184,7 +200,7 @@ let icons = members.map((member, index) => {
         y: position ? position.y : (member.y || 40 * (index + 1)), // Use position.y if found, else default
         width: member.width || 40 * (member.size && member.size === 'L' ? 2.5 : 1),  // Default icon size
         height: member.height || 40 * (member.size && member.size === 'L' ? 2.5 : 1),
-        src: member.image === '' ? 'https://i.postimg.cc/1XsgW0Kf/image.png' : member.image // Image source
+        src: member.image === '' ? defaultImage : member.image // Image source
     };
 });
 
