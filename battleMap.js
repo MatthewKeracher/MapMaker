@@ -223,7 +223,7 @@ imgElement.dataset.iconId = `icon-${icon.name}`;
 // Set initial position and size based on icon data
 imgElement.style.position = `${icon.position}`;
 imgElement.style.left = `${icon.x}px`;
-imgElement.style.top = `${icon.y}px`;
+imgElement.style.top = `${icon.y === 40? 40 * (index + 1) : icon.y}px`;
 imgElement.style.width = `${icon.width}px`;
 imgElement.style.height = `${icon.height}px`;
 
