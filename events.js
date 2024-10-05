@@ -707,7 +707,7 @@ class="hitPointBox"
 style="color: ${obj.color}"
 value="${obj.hitPoints}">`
 
-divContent = `<br><br>
+divContent = `<br>
 <h3 class='npcBlock'data-icon-id="icon-${obj.name}">
 
 <span class="npcName" style="color:${obj.color}" key="${obj.key}" 

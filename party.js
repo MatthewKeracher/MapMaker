@@ -151,9 +151,9 @@ members.push(monster);
 }
 
 }else{
-//console.log('Adding ' + memberObj.name + ' to party.')
-members.push(memberObj)
-}
+memberObj.treasure = party.getTreasure(memberObj)
+members.push(memberObj);
+} 
 
 });
 
@@ -162,10 +162,22 @@ this.currentParty = members
 },
 
 makeDamageEntry(member){
-
+    
 let itemTags = member.tags.filter(entry => entry.key === "items" && !entry.special);
 let instructions = member.tags.filter(entry => entry.key === "items" && entry.special);
 let weapons = [];
+
+//get Items from tags
+let allTags = helper.getAllTags(member);
+allTags.forEach(tag =>{
+    const tagObj = helper.getObjfromTag(tag);
+    const tagObjItems = tagObj.tags.filter(entry => entry.key === "items" && !entry.special);
+    itemTags = [...itemTags, ...tagObjItems];
+    let tagObjInstructions = tagObj.tags.filter(entry => entry.key === "items" && entry.special);
+    instructions = [...instructions, ...tagObjInstructions];
+    
+    
+})
 
 instructions.forEach(instruction => {
     let madeItems = helper.followInstructions(instruction, member)   
@@ -509,8 +521,10 @@ const roll = helper.rollDice(100)
 if(roll < chance){
 const quantity = tag.quantity;
 const tagItem = helper.getObjfromTag(tag);
+if(tagItem.damage === ""){
 let lootItem = helper.makeIteminfo(tagItem, tag)
 lootItems += lootItem.short
+}
 }
 });
     
