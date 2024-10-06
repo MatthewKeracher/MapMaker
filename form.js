@@ -830,12 +830,12 @@ let display = '';
 //For each kind of form, what kinds of tags are available?
 if(obj.key === 'tags'){visibleKeys = ['tags', 'ambience', 'locations', 'subLocations', 'events', 'npcs', 'items', 'spells', 'monsters']};
 if(obj.key === 'npcs'){visibleKeys = ['tags', 'npcs', 'items', 'spells']};
-if(obj.key === 'ambience'){visibleKeys = ['tags']};
+if(obj.key === 'ambience'){visibleKeys = ['tags', 'monsters']};
 if(obj.key === 'locations'){visibleKeys = ['npcs', 'tags', 'subLocations']};
 if(obj.key === 'subLocations'){visibleKeys = ['npcs', 'tags', 'locations']};
 if(obj.key === 'items'){visibleKeys = ['tags', 'npcs', 'items', 'spells', 'monsters']};
 if(obj.key === 'spells'){visibleKeys = ['tags', 'npcs', 'items']};
-if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs','items']};
+if(obj.key === 'monsters'){visibleKeys = ['tags', 'npcs','items', 'ambience']};
 if(obj.key === 'events'){visibleKeys = ['tags']};
 
 keys.forEach(key => {

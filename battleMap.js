@@ -152,7 +152,12 @@ let members = [...party.currentParty];
 
 //add subLocations
 const subLocationHeaders = document.querySelectorAll('h2[key="subLocations"]');
-subLocationHeaders.forEach(div => {
+const chestHeaders = document.querySelectorAll('h2[key="tags"]');
+console.log(chestHeaders);
+
+const battleMapIcons = [...subLocationHeaders, ...chestHeaders];
+    
+battleMapIcons.forEach(div => {
 
 const id = div.getAttribute('id');
 const key = div.getAttribute('key');
@@ -185,6 +190,9 @@ let icons = members.map((member, index) => {
     case 'subLocations':
     defaultImage = 'gifs/door.gif';
     break;
+    case 'tags':
+    defaultImage = 'gifs/chest.gif';
+    break;
     };
     
     
@@ -197,7 +205,7 @@ let icons = members.map((member, index) => {
         img: new Image(),
         position: position? 'absolute' : 'fixed',
         x: position ? position.x :  80,   
-        y: position ? position.y : 40, 
+        y: position ? position.y : 40 * (index + 1), 
         width: member.width || 40 * (member.size? member.size : 1),  
         height: member.height || 40 * (member.size? member.size : 1),
         src: member.image === '' ? defaultImage : member.image 
@@ -211,7 +219,7 @@ existingIcons = [...existingIcons, ...secondWindowIcons]
 existingIcons.forEach(icon => icon.remove()); // Remove each existing icon element
 
 // Function to create and position icons as HTML elements
-icons.forEach(icon => {
+icons.forEach((icon, index) => {
 // Create img element for each icon
 const imgElement = document.createElement('img');
 imgElement.src = icon.src;
@@ -223,7 +231,7 @@ imgElement.dataset.iconId = `icon-${icon.name}`;
 // Set initial position and size based on icon data
 imgElement.style.position = `${icon.position}`;
 imgElement.style.left = `${icon.x}px`;
-imgElement.style.top = `${icon.y === 40? 40 * (index + 1) : icon.y}px`;
+imgElement.style.top = `${icon.y}px`;
 imgElement.style.width = `${icon.width}px`;
 imgElement.style.height = `${icon.height}px`;
 

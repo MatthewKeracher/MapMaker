@@ -50,6 +50,20 @@ hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 
 newMonster.treasure = party.getTreasure(member)
 
+if( i === 1){
+
+const ambience = member.tags.filter(tag => tag.key === "ambience");
+
+ambience.forEach(tag => {
+
+const obj = helper.getObjfromTag(tag);
+events.makeDiv("header", obj, ref.Storyteller, "color");
+events.makeDiv("ambience", obj, obj);
+    
+})
+
+}
+    
 events.makeDiv("header", newMonster, ref.Storyteller, "color")
 events.makeDiv("backstory", member, ref.Storyteller, "color")
 
