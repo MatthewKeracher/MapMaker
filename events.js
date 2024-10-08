@@ -201,34 +201,12 @@ this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
 
 //Add NPCs to SubLocation
 Events.getSubLocDetails(subLocation, floatNPCs, locObj);
-Events.addMonsterDetails(subLocation, subLocMonsters, locObj)
 
 
 });
 },
 
 // _________________________________________________
-
-addMonsterDetails(subL, monsters, loc){
-
-monsters.forEach(monster => {
-
-const ambience = monster.tags.filter(tag => tag.key === "ambience");
-
-ambience.forEach(tag => {
-
-const obj = helper.getObjfromTag(tag);
-events.makeDiv("header", obj, ref.Storyteller, "color");
-events.makeDiv("ambience", obj, obj);
-    
-});
-    
-events.makeDiv("header", monster, ref.Storyteller, "color")
-events.makeDiv("backstory", monster, monster, "color")
-   
-})  
-},
-
     
 getSubLocDetails(subLocation, floatNPCs, locObj) {
 
