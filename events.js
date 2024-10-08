@@ -32,6 +32,7 @@ this.partyNPCs = [];
 
 Events.getLocationAmbience(locAmbience);
 Events.getLocationDescription(locObj);
+party.getLocationMonsters(locMonsterTags, locObj);
 
 
 //console.log(subLocations.length + ' subLocations found.')
@@ -40,9 +41,9 @@ if(subLocations.length > 0){
 Events.makeSubLocations(locObj, subLocations, floatNPCs);
 }
 
-const monsters = [...locMonsterTags, ...this.subLocMonsterTags];
+//const monsters = [...locMonsterTags, ...this.subLocMonsterTags];
 
-party.getLocationMonsters(monsters);
+
 party.addToParty();
 
 },
@@ -196,7 +197,8 @@ this.makeDiv("header", subLocation, ref.Storyteller, "color");
 let allTags = helper.getAllTags(subLocation);
 const subLocMonsters = helper.filterKeyTag(allTags,"monsters");
 //console.log(subLocMonsters)
-this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
+party.getLocationMonsters(subLocMonsters, subLocation);
+//this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
 
 
 //Add NPCs to SubLocation
