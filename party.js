@@ -53,18 +53,18 @@ newMonster.treasure = party.getTreasure(member)
 
 if( i === 1){
 
+events.makeDiv("header", member, parent, "color");
+
 const ambience = member.tags.filter(tag => tag.key === "ambience");
 
 ambience.forEach(tag => {
 
 const obj = helper.getObjfromTag(tag);
-events.makeDiv("header", obj, parent, "color");
-events.makeDiv("ambience", obj, obj);
+events.makeDiv("ambience", obj, member, "color");
     
 })
 
-events.makeDiv("header", member, parent, "color")
-events.makeDiv("backstory", member, member, "color")
+events.makeDiv("child", member, parent, "color")
 
 }
 

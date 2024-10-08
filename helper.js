@@ -79,7 +79,13 @@ for (let i = quantityRemaining; i > 0; i--) {
 const randomIndex = Math.floor(Math.random() * options.length);
 const randomObj = options[randomIndex];
 
-const newTag = {key: randomObj.key, id: randomObj.id, instruction: instruction.id, chance: instruction.chance}
+const newTag = {
+    key: randomObj.key, 
+    id: randomObj.id, 
+    instruction: instruction.id, 
+    chance: instruction.chance,
+    quanitity: instruction.quantity
+}
 madeItems.push(newTag)
 
 

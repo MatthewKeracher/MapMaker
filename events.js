@@ -198,10 +198,10 @@ if(subLocation.key === 'subLocations'){
 this.makeDiv("header", subLocation, ref.Storyteller, "color");
 }
 
-//Rip Monster Rags
+//Rip Monster Tags
 let allTags = helper.getAllTags(subLocation);
 const subLocMonsters = helper.filterKeyTag(allTags,"monsters");
-//console.log(subLocMonsters)
+    
 party.getLocationMonsters(subLocMonsters, {key:subLocation.key, id:subLocation.id});
 //this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
 
@@ -296,7 +296,11 @@ if (!bundle[tagObj.key]) {
 bundle[tagObj.key] = []; 
 }
 
+if(tag.key === 'ambience' && subLocTag.key === 'monsters'){
+//Do Nothing
+}else{
 bundle[tagObj.key].push(tagObj);
+}
 
 //If it is a Container
 if(tag.key === 'items' && subLocTag.key === 'tags'){
@@ -700,7 +704,7 @@ ${obj.name}'s Inventory: </span>
 
 <hr name="${headerHR}" style="background-color:${obj.color}"><br>`;
 
-}else if(obj.key === 'npcs' || obj.key === 'monsters'){
+}else if(obj.key === 'npcs'){
 
 
 //Gather data on NPC.
@@ -781,7 +785,9 @@ divContent = `<span id=${obj.id} key=${obj.key} extended=${extended} class='back
 }else if(type === "item"){
 
 childDiv.classList.remove("withbreak");
-divContent = obj.description;   
+divContent = obj.description;
+    //`<span class="chests" style="color:${color}" id="${obj.id}" key="${obj.key}"> ${obj.description} </span>${lineBreak}`
+  
 
 }else if(type === 'action'){
 
