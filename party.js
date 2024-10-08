@@ -7,6 +7,7 @@ import classes from "./classes.js";
 import battleMap from "./battleMap.js";
 import NPCbuild from "./classes.js";
 import NPCs from "./npcs.js";
+import Storyteller from "./storyteller.js";
 
 const party = {
 
@@ -72,6 +73,7 @@ return newMonster
 
 
 getLocationMonsters(monsters){
+console.log('getLocationMonsters')
 let monstPartyTags = [];
 
 monsters.forEach(tag => {
@@ -93,6 +95,9 @@ monstPartyTags.push(tag)
 
 //Erase monsters from Party
 load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
+
+//Erase Monster Entries from Storyteller.
+console.log(load.Data.miscInfo.party)
 
 //Add monsters to Party
 monstPartyTags.forEach(monster => {
@@ -127,11 +132,21 @@ ref.leftParty.style.display = partyDisplay;
 buildParty(){
 
 ref.leftParty.innerHTML = '';
-let membersList = load.Data.miscInfo.party;
+let membersList = [];
 let members = [];
 
+//filter for unique entries only:
+load.Data.miscInfo.party.forEach(member => {
 
-//console.log(membersList)
+const alreadyExists = membersList.filter(
+    entry => entry.id === member.id && 
+             entry.key === member.key);
+    
+if(alreadyExists.length === 0)
+membersList.push(member); 
+})
+
+load.Data.miscInfo.party = membersList; 
 
 membersList.forEach(memberTag => {
 
@@ -436,7 +451,7 @@ battleMap.drawGrid(ref.battleMap);
 this.buildParty();
 party.loadParty();
 battleMap.loadIcons();
-//Storyteller.refreshLocation();
+Storyteller.refreshLocation();
 
 });
 
