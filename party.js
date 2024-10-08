@@ -73,15 +73,20 @@ return newMonster
 
 
 getLocationMonsters(monsters, parent){
-console.log('getLocationMonsters')
+
 let monstPartyTags = [];
+parent = helper.getObjfromTag(parent);
+let locMonsters = parent.tags.filter(entry => entry.key === 'monsters');
 
 monsters.forEach(tag => {
 
 let tagObj = helper.getObjfromTag(tag);
 let monstTags = tagObj.tags.filter(entry => entry.key === 'monsters');
+locMonsters = [... locMonsters, ...monstTags];
 
-monstTags.forEach(tag => {
+});
+
+locMonsters.forEach(tag => {
 //Check Monster Chance
 //Factor in Chance of Item appearing in the Container
 const chance = parseInt(tag.chance)
@@ -92,7 +97,7 @@ if(roll > chance && !tag.special ){return}
 const newTag = {...tag, parent:parent};
 
 monstPartyTags.push(newTag)
-})
+
 })
 
 
@@ -147,7 +152,6 @@ membersList.push(member);
 load.Data.miscInfo.party = membersList; 
 
 membersList.forEach(memberTag => {
-console.log(memberTag)
 let memberObj = helper.getObjfromTag(memberTag);
 
 if(memberTag.type === 'monster'){
@@ -346,7 +350,6 @@ if(attackEntries.length > 0){
 }
 
 attackEntries.forEach(attack => {
-console.log(attack.obj)
 const attackItem = helper.makeIteminfo(attack.obj, attack.tag)
 partyBox.innerHTML += attackItem.short;
 //`<h3 class="member-cell" style="color:${attack.color}"> ${attack.entry} </h3> ${lineBreak}`
