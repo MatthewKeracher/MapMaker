@@ -32,7 +32,12 @@ this.partyNPCs = [];
 
 Events.getLocationAmbience(locAmbience);
 Events.getLocationDescription(locObj);
-party.getLocationMonsters(locMonsterTags, locObj);
+
+//Erase monsters from Party
+load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
+
+    
+party.getLocationMonsters(locMonsterTags, {key:locObj.key, id:locObj.id});
 
 
 //console.log(subLocations.length + ' subLocations found.')
@@ -197,7 +202,7 @@ this.makeDiv("header", subLocation, ref.Storyteller, "color");
 let allTags = helper.getAllTags(subLocation);
 const subLocMonsters = helper.filterKeyTag(allTags,"monsters");
 //console.log(subLocMonsters)
-party.getLocationMonsters(subLocMonsters, subLocation);
+party.getLocationMonsters(subLocMonsters, {key:subLocation.key, id:subLocation.id});
 //this.subLocMonsterTags = [...this.subLocMonsterTags, ...subLocMonsters]
 
 

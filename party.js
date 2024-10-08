@@ -14,7 +14,7 @@ const party = {
 currentParty: [],
 attacks: [],
 
-makeMonsterNPC(member, i) {
+makeMonsterNPC(member, i, parent) {
 
 let skillNames = ["Strength", "Dexterity", "Wisdom", "Intelligence", "Constitution", "Charisma"];
 let skills = {};
@@ -58,21 +58,21 @@ const ambience = member.tags.filter(tag => tag.key === "ambience");
 ambience.forEach(tag => {
 
 const obj = helper.getObjfromTag(tag);
-events.makeDiv("header", obj, ref.Storyteller, "color");
+events.makeDiv("header", obj, parent, "color");
 events.makeDiv("ambience", obj, obj);
     
 })
 
+events.makeDiv("header", member, parent, "color")
+events.makeDiv("backstory", member, member, "color")
+
 }
-    
-events.makeDiv("header", newMonster, ref.Storyteller, "color")
-events.makeDiv("backstory", member, ref.Storyteller, "color")
 
 return newMonster
 },
 
 
-getLocationMonsters(monsters){
+getLocationMonsters(monsters, parent){
 console.log('getLocationMonsters')
 let monstPartyTags = [];
 
@@ -89,20 +89,18 @@ const roll = helper.rollDice(100)
 //console.log(chance, roll)
 if(roll > chance && !tag.special ){return}
 
-monstPartyTags.push(tag)
+const newTag = {...tag, parent:parent};
+
+monstPartyTags.push(newTag)
 })
 })
 
-//Erase monsters from Party
-load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
-
-//Erase Monster Entries from Storyteller.
-console.log(load.Data.miscInfo.party)
 
 //Add monsters to Party
 monstPartyTags.forEach(monster => {
 
-load.Data.miscInfo.party.push({key: 'monsters', id: monster.id, type:'monster', appearing: 'Wild'})
+load.Data.miscInfo.party.push({...monster, type: "monster"})
+console.log(load.Data.miscInfo.party)
 
 })
 
@@ -149,12 +147,14 @@ membersList.push(member);
 load.Data.miscInfo.party = membersList; 
 
 membersList.forEach(memberTag => {
-
+console.log(memberTag)
 let memberObj = helper.getObjfromTag(memberTag);
 
 if(memberTag.type === 'monster'){
 
 let noAppearing = 1;
+let parent = memberTag.parent;
+console.log(parent);
 console.log(memberObj.name, memberObj.encounter)
 
 try{
@@ -169,7 +169,7 @@ noAppearing = memberObj.encounter;
 
 
 for (let i = 0; i < noAppearing; i++) {
-let monster = this.makeMonsterNPC(memberObj, i + 1); 
+let monster = this.makeMonsterNPC(memberObj, i + 1, parent); 
 members.push(monster); 
 }
 
