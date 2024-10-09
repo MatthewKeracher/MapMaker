@@ -81,7 +81,7 @@ obj = newObj
 if (obj) {
 
 //Define key groups for different areas of the form.
-const excludedKeys = ['id','name', 'description', 'key', 'tags', 'color']; 
+const excludedKeys = ['id','name', 'description', 'key', 'tags', 'color', 'position']; 
 const invisibleKeys = ['type', 'subType'];
 const universalKeys = ['order', 'access', 'subGroup', 'group', 'image'];
 const monsterKeys = [
