@@ -173,7 +173,11 @@ let icons = members.map((member, index) => {
     let position = '';
         
     if(member.position){
-        position = member.position.find(entry => entry.location === Storyteller.currentLocationId)
+        try{
+            position = member.position.find(entry => entry.location === Storyteller.currentLocationId)
+        }catch{
+            position = ''
+        }
     };
 
     let defaultImage = '';
