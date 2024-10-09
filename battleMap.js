@@ -232,7 +232,7 @@ imgElement.dataset.iconId = `icon-${icon.name}`;
 imgElement.style.position = `${icon.position}`;
 imgElement.style.left = `${icon.x}px`;
 imgElement.style.top = `${icon.y}px`;
-imgElement.style.width = `${icon.width}px`;
+// imgElement.style.width = `${icon.width}px`;
 imgElement.style.height = `${icon.height}px`;
 
 // Add the img element to the document

@@ -52,7 +52,6 @@ hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 newMonster.treasure = party.getTreasure(member)
 
 if( i === 1){
-
 events.makeDiv("header", member, parent, "color");
 
 const ambience = member.tags.filter(tag => tag.key === "ambience");
@@ -75,6 +74,7 @@ return newMonster
 getLocationMonsters(monsters, parent){
 
 let monstPartyTags = [];
+    
 parent = helper.getObjfromTag(parent);
 let locMonsters = parent.tags.filter(entry => entry.key === 'monsters');
 

@@ -35,8 +35,6 @@ Events.getLocationDescription(locObj);
 
 //Erase monsters from Party
 load.Data.miscInfo.party = load.Data.miscInfo.party.filter(member => member.key !== "monsters")
-
-    
 party.getLocationMonsters(locMonsterTags, {key:locObj.key, id:locObj.id});
 
 
@@ -831,8 +829,9 @@ foundHeader.appendChild(childDiv);
 } else {    
 try{
 parent.appendChild(childDiv);
-}catch{console.log('Could not makeDiv:', type, obj, parent, color)}
-}
+}catch{
+ref.Storyteller.appendChild(childDiv)
+}}
 
 },
 
