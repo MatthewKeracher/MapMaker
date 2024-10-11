@@ -63,7 +63,7 @@ const newItem = helper.getObjfromTag(newItemTag)
 // obj.tags.push(newItemTag)
 // newItem.tags.push({key: obj.key, id: obj.id, quantity: "1", chance: instruction.chance})
 
-madeItems.push({item: newItem, tag: newItemTag})
+madeItems.push(newItemTag)
 
 options.splice(randomIndex, 1)
 
@@ -89,7 +89,7 @@ const newItemTag = {
 
 const newItem = helper.getObjfromTag(newItemTag)
     
-madeItems.push({item: newItem, tag: newItemTag})
+madeItems.push(newItemTag)
 
 
 }
