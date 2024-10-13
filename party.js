@@ -49,6 +49,13 @@ initiative: 0,
 hitPoints: helper.rollMultipleDice(monsterLevel + 'd8'),
 };
 
+if(parent === undefined){
+
+const locId = Storyteller.currentLocationId;
+parent = {key: 'locations', id: locId}
+    
+}
+
 newMonster.treasure = party.getTreasure(member)
 
 if( i === 1){
